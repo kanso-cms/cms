@@ -1,0 +1,35 @@
+/* NOTIFICATIONS */
+.nofif-wrap {
+    @extend %fixed;
+    @extend %top-0;
+    @extend %right-0;
+    z-index: 99999;
+}
+.nofif-wrap .message {
+    @extend %cursor-pointer;
+    margin: 20px;
+    max-width: 400px;
+}
+.nofif-wrap .message.message-confirm {
+    @extend %cursor-default;
+}
+.nofif-wrap .message .message-body {
+    @extend %font-size-12;
+    @extend %bold;
+    padding: 10px 20px;
+    line-height: 19px;
+}
+.global-progress {
+	@extend %fixed;
+	@extend %top-0;
+	@extend %left-0;
+	@extend %full-width;
+	z-index: 99999;
+}
+.global-progress .progress {
+	@extend %block;
+	@extend %bg-brand-primary;
+	width: 0px;
+  	height: 3px;
+}
+  

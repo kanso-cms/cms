@@ -1,0 +1,86 @@
+/* MESSAGES */
+.message {
+    @extend %color-white;
+    @extend %relative;
+    @extend %mini-border-radius;
+    @extend %hide-overflow;
+}
+.message .icon,
+.message .message-icon,
+.message svg {
+    @extend %fill-white;
+}
+.message .message-icon {
+    @extend %text-center;
+    vertical-align: middle;
+    width: 60px;
+    padding: 30px;
+    background-color: rgba(0,0,0,0.25);
+}
+
+.message .message-icon,
+.message .message-body {
+    display: table-cell;
+}
+.message-icon .icon {
+    width: 20px;
+    height: 20px;
+}
+
+.message .message-body {
+    vertical-align: middle;
+    padding: 30px 20px 30px 30px;
+}
+
+.message p {
+    margin: 0 !important;
+}
+
+.message.info {
+    background: #86BBDC;
+}
+
+.message.success {
+    background: #A5DC86;
+}
+
+.message.error {
+    background: #F66E6E;
+}
+.message.alert {
+    background: #FDD072;
+}
+.message .button {
+    margin-right: 5px;
+}
+.message .button.cancel {
+    background: rgba(0, 0, 0, 0.18);
+    border-color: transparent;
+    @extend %color-white;
+}
+.message .button.cancel:hover {
+    border-bottom-color: rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.16);
+}
+
+.message.plain {
+    @extend %bg-white;
+    border: 1px solid #5182e5;
+    color: #818181;
+}
+.message.plain .message-icon {
+    background-color: #5182e5;
+}
+.message.small {
+    width: 60%;
+    line-height: 15px;
+    @extend %margin-center;
+    @extend %font-size-12;
+}
+.message.small .message-icon {
+    padding: 18px;
+}
+.message.small .message-body {
+    padding: 18px 30px 18px 30px
+}
+

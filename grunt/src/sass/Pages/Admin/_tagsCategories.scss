@@ -1,0 +1,171 @@
+/* TAGS AND CATEGORIES */
+
+// search posts
+body[data-user-role="writer"] .tag-actions .delete {
+    @extend %no-display;
+}
+.tag-table {
+    border-collapse: separate;
+    border-spacing: 0 2px;
+}
+.tag-table .tag {
+    -moz-transition: background 0.2s ease;
+    -o-transition: background 0.2s ease;
+    -webkit-transition: background 0.2s ease;
+    transition: background 0.2s ease;
+    margin-bottom: 2px solid #fff;
+}
+.tag-table .tag > td {
+    @extend %relative;
+    @extend %hide-overflow;
+    zoom: 1;
+    padding: 14px 0 2px !important;
+    border: none !important;
+}
+
+.tag-table .tag .title {
+    @extend %text-ellipsis;
+    @extend %font-size-16;
+    @extend %demi-bold;
+    margin-left: 35px;
+    margin-bottom: 0.5em;
+}
+.tag-table .tag .tag-body {
+    @extend %relative;
+    margin: 0 10px 0 0;
+    padding: 0 0 0 35px;
+}
+.tag-table .tag .tag-meta {
+    @extend %font-size-12;
+    margin-bottom: 3px;
+}
+.tag-table .tag .tag-meta .label {
+    color: #b0b0b0;
+}
+.tag-table .bullet {
+    color: #888;
+}
+.tag-table .tag .articles-list .article {
+    @extend %block;
+    @extend %text-ellipsis;
+}
+.tag-table  .tag .tag-body .tag-actions {
+    @extend %hide-overflow;
+    @extend %opacity-hide;
+    @extend %ease-mini;
+    margin: 0 0 0 -1px;
+    zoom: 1;
+    padding: 4px 0 10px 0;
+}
+
+.tag:hover .tag-body .tag-actions {
+    @extend %opacity-show;
+}
+.tag .tag-body .tag-actions li {
+    margin: 0 20px 0 0;
+    @extend %float-left;
+    @extend %font-size-11;
+}
+.tag .tag-body .tag-actions li a {
+    @extend %relative;
+    @extend %color-grey;
+    padding: 0 0 0 18px;
+}
+.tag .tag-body .tag-actions li a svg {
+    @extend %absolute;
+    @extend %left-0;
+    @extend %fill-grey;
+    top: -1px;
+}
+.tag .tag-body .tag-actions li a:hover {
+    @extend %color-brand-primary;
+}
+.tag .tag-body .tag-actions li a:hover svg {
+    @extend %fill-brand-primary;
+}
+.tag .tag-body .tag-actions li.disabled a,
+.tag .tag-body .tag-actions li.disabled a:hover {
+    @extend %cursor-default;
+    @extend %no-text-decoration;
+    color: #D5D5D5 !important;
+}
+.tag .tag-body .tag-actions li.disabled a svg,
+.tag .tag-body .tag-actions li.disabled a:hover svg {
+    fill: #D5D5D5 !important;
+}
+
+.tag .tag-body .check-wrap {
+    @extend %block;
+    @extend %absolute;
+    @extend %left-0;
+    @extend %width-auto;
+    top: -32px;
+    padding: 10px 10px 30px 10px;
+}
+.tag .tag-body .check-wrap label {
+    @extend %no-margin;
+}
+.tag .tag-body .more,
+.tag .tag-body .less {
+    @extend %font-size-11;
+    padding: 0 5px;
+}
+.tag .tag-body .item-preview,
+.tag .tag-body .item-full {
+    padding: 10px 0;
+    line-height: 19px;
+}
+.tag .tagslist {
+    padding: 6px 0 0 0;
+}
+.tag .edit-tag {
+    @extend %no-display;
+    max-width: 450px;
+}
+.tag.edit .edit-tag {
+    @extend %block;
+}
+.tag .edit-tag .input-wrap {
+    margin-bottom: 12px;
+}
+.tag .edit-tag .input-wrap .save-edit {
+    margin-right: 3px;
+}
+.tag .edit-tag .input-wrap input,
+.tag .edit-tag .input-wrap label {
+    @extend %inline-block;
+    @extend %float-left;
+    @extend %width-auto;
+}
+.tag .edit-tag .input-wrap label {
+    @extend %demi-bold;
+    line-height: 28px;
+    width: 48px;
+    margin-bottom: 0;
+}
+.tag .tag-actions .delete:hover a svg,
+.tag .tag-actions .delete a:hover svg {
+    fill: #F36B5C !important;
+}
+.tag .tag-actions .delete:hover a,
+.tag .tag-actions .delete a:hover {
+    color: #F36B5C !important;
+}
+
+.tag .tag-actions .clear-item:hover a svg,
+.tag .tag-actions .clear-item a:hover svg {
+    fill: #A5DC86 !important;
+}
+.tag .tag-actions .clear-item:hover a,
+.tag .tag-actions .clear-item a:hover {
+    color: #A5DC86 !important;
+}
+
+.tag .tag-actions .edit:hover a svg,
+.tag .tag-actions .edit a:hover svg {
+    fill: #5182e5 !important;
+}
+.tag .tag-actions .edit:hover a,
+.tag .tag-actions .edit a:hover {
+    color: #5182e5 !important;
+}

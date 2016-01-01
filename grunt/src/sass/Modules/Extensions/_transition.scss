@@ -1,0 +1,36 @@
+/* TRANSITIONS */
+%init-web-gl {
+	-webkit-transform: translate3d(0,0,0);
+	-moz-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+}
+%ease-mini {
+	-moz-transition: 0.2s ease;
+	-o-transition: 0.2s ease;
+	-webkit-transition: 0.2s ease;
+	transition: 0.2s ease;
+}
+%ease {
+	-moz-transition: 0.3s ease;
+	-o-transition: 0.3s ease;
+	-webkit-transition: 0.3s ease;
+	transition: 0.3s ease;
+}
+%ease-big {
+	-moz-transition: 0.5s ease;
+	-o-transition: 0.5s ease;
+	-webkit-transition: 0.5s ease;
+	transition: 0.5s ease;
+}
+%ease-huge {
+	-moz-transition: 1.5s ease;
+	-o-transition: 1.5s ease;
+	-webkit-transition: 1.5s ease;
+	transition: 1.5s ease;
+}
+%no-transition {
+	-moz-transition: 0s linear;
+	-o-transition: 0s linear;
+	-webkit-transition: 0s linear;
+	transition: 0s linear;
+}

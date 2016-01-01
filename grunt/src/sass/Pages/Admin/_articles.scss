@@ -1,0 +1,150 @@
+/* ARTICLES */
+.article-table {
+    border-collapse: separate;
+    border-spacing: 0 2px;
+}
+body[data-user-role="writer"] .article-actions .delete {
+    @extend %no-display;
+}
+
+.article-table .article {
+    -moz-transition: background 0.2s ease;
+    -o-transition: background 0.2s ease;
+    -webkit-transition: background 0.2s ease;
+    transition: background 0.2s ease;
+    margin-bottom: 2px solid #fff;
+}
+.article-table .article > td {
+    @extend %relative;
+    @extend %hide-overflow;
+    zoom: 1;
+    padding: 14px 0 2px !important;
+    border: none !important;
+}
+
+.article-table .article .title {
+    @extend %text-ellipsis;
+    @extend %font-size-16;
+    @extend %demi-bold;
+    margin-left: 35px;
+    margin-bottom: 0.5em;
+}
+.article-table .article .article-body {
+    @extend %relative;
+    margin: 0 10px 0 0;
+    padding: 0 0 0 35px;
+}
+.article-table .article .article-meta {
+    @extend %font-size-12;
+    margin-bottom: 3px;
+}
+.article-table .article .article-name {
+    @extend %bold;
+}
+.article-table .bullet {
+    color: #888;
+}
+.article-table  .article .article-body .article-actions {
+    @extend %hide-overflow;
+    @extend %opacity-hide;
+    @extend %ease-mini;
+    margin: 0 0 0 -1px;
+    zoom: 1;
+    padding: 10px 0 4px 0;
+}
+
+.article:hover .article-body .article-actions {
+    @extend %opacity-show;
+}
+.article .article-body .article-actions li {
+    margin: 0 20px 0 0;
+    @extend %float-left;
+    @extend %font-size-11;
+}
+.article .article-body .article-actions li a {
+    @extend %relative;
+    @extend %color-grey;
+    padding: 0 0 0 18px;
+}
+.article .article-body .article-actions li a svg {
+    @extend %absolute;
+    @extend %left-0;
+    @extend %fill-grey;
+    top: -1px;
+}
+.article .article-body .article-actions li a:hover {
+    @extend %color-brand-primary;
+}
+.article .article-body .article-actions li a:hover svg {
+    @extend %fill-brand-primary;
+}
+.article .article-body .article-actions li.disabled a,
+.article .article-body .article-actions li.disabled a:hover {
+    @extend %cursor-default;
+    @extend %no-text-decoration;
+    color: #D5D5D5 !important;
+}
+.article .article-body .article-actions li.disabled a svg,
+.article .article-body .article-actions li.disabled a:hover svg {
+    fill: #D5D5D5 !important;
+}
+
+.article .article-body .check-wrap {
+    @extend %block;
+    @extend %absolute;
+    @extend %left-0;
+    @extend %width-auto;
+    top: -32px;
+    padding: 10px 10px 30px 10px;
+}
+.article .article-body .check-wrap label {
+    @extend %no-margin;
+}
+.article .article-body .more,
+.article .article-body .less {
+    @extend %font-size-11;
+    padding: 0 5px;
+}
+.article .article-body .item-preview,
+.article .article-body .item-full {
+    padding: 10px 0;
+    line-height: 19px;
+}
+.article .tagslist {
+    padding: 6px 0 0 0;
+}
+.article .article-actions .delete:hover a svg,
+.article .article-actions .delete a:hover svg {
+    fill: #F36B5C !important;
+}
+.article .article-actions .delete:hover a,
+.article .article-actions .delete a:hover {
+    color: #F36B5C !important;
+} 
+
+.article .article-actions .unpublish:hover a svg,
+.article .article-actions .unpublish a:hover svg {
+    fill: #FDD072 !important;
+}
+.article .article-actions .unpublish:hover a,
+.article .article-actions .unpublish a:hover {
+    color: #FDD072 !important;
+}
+
+.article .article-actions .publish:hover a svg,
+.article .article-actions .publish a:hover svg {
+    fill: #A5DC86 !important;
+}
+.article .article-actions .publish:hover a,
+.article .article-actions .publish a:hover {
+    color: #A5DC86 !important;
+}
+
+.article .article-actions .edit:hover a svg,
+.article .article-actions .edit a:hover svg {
+    fill: #5182e5 !important;
+}
+.article .article-actions .edit:hover a,
+.article .article-actions .edit a:hover {
+    color: #5182e5 !important;
+}

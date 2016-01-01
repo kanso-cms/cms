@@ -1,0 +1,70 @@
+.ease {
+    -moz-transition: 0.3s ease;
+    -o-transition: 0.3s ease;
+    -webkit-transition: 0.3s ease;
+    transition: 0.3s ease;
+}
+
+.bold {
+    font-weight: 900;
+}
+
+.demi-bold {
+    font-weight: 500;
+}
+
+.regular {
+    font-weight: 400;
+}
+
+.thin {
+    font-weight: 300;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+.text-masked {
+    color: #a5a5a5;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.center {
+    margin: 0 auto;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+.hidden.active {
+    opacity: 1;
+}

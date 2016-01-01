@@ -1,0 +1,44 @@
+/* DISPLAYS */
+%hide-overflow {
+	overflow: hidden;
+}
+%show-overflow {
+	overflow: visible;
+}
+%scroll-overflow {
+	overflow: scroll;
+}
+%block {
+	display: block;
+}
+%inline-block {
+	display: inline-block;
+}
+%table {
+	display: table;
+}
+%table-cell {
+	display: table-cell;
+}
+%no-display {
+	display: none;
+}
+%visibility-show {
+	visibility: visible;
+}
+%visibility-hide {
+	visibility: hidden;
+}
+%opacity-hide {
+	opacity: 0;
+}
+%opacity-show {
+	opacity: 1;
+}
+%no-select {
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}

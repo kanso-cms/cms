@@ -1,0 +1,19 @@
+# BEGIN Kanso
+<IfModule mod_rewrite.c>
+	
+
+	Options +FollowSymlinks
+	
+	RewriteEngine on
+	RewriteBase /
+	
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_URI} ^admin/.*$
+  	RewriteRule ^(.*)([^/])$        /$1$2/ [L,R=301]
+
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(.*)$ index.php?/$1 [L]
+
+</IfModule>
+# END Kanso

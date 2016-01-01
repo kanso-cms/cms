@@ -1,0 +1,77 @@
+/* LISTS */
+.list-wrap .list-powers > .col > *{
+	padding: 5px 0;
+}
+
+.list-wrap .list-powers .check-wrap .checkbox {
+	margin-bottom: 0;
+	width: 28px;
+}
+.list-wrap .search-wrap input,
+.list-wrap .list-powers .check-wrap .checkbox {
+	height: 28px;
+}
+.list-wrap .list-powers .button-dropdown .button {
+	@extend %font-size-12;
+	padding: 9px 38px 9px 10px;
+    line-height: 8px;
+}
+.list-wrap .list-powers .button-dropdown .button svg {
+	top: 9px;
+    right: 9px;
+}
+.list-wrap .list-powers .search-wrap,
+.list-wrap .list-powers .segmented-buttons {
+	@extend %float-left;
+	@extend %inline-block;
+}
+.list-wrap .list-powers .segmented-buttons {
+    margin-right: 12px;
+}
+
+.list-wrap .search-wrap .search-icon,
+.list-wrap .search-wrap .close-icon {
+	top: 12px !important;
+    right: 7px !important;
+}
+.list-wrap .list-powers .expand-list,
+.list-wrap .list-powers .label {
+	@extend %font-size-12;
+	@extend %inline-block;
+}
+.list-wrap .list-powers .label {
+	margin: 0 0 0 5px;
+    padding-right: 4px;
+}
+
+.list-wrap .list-powers .expand-list {
+	margin: 0 0 0 10px;
+    border-right: 1px dotted #ccc;
+    color: #888;
+    padding-right: 10px;
+}
+
+.list-wrap .list-item .item-full {
+	@extend %no-display;
+}
+
+.list-wrap .list-item.expanded .item-preview {
+	@extend %no-display;
+}
+
+.list-wrap .list-item.expanded .item-full {
+	@extend %block;
+}
+.list-wrap .list-nav .page-input-wrap {
+    @extend %font-size-11;
+}
+.list-wrap .list-nav .page-input-wrap input {
+    width: 28px;
+    height: 28px;
+    @extend %no-padding;
+	@extend %font-size-13;
+	@extend %text-center;
+}
+body[data-user-role="writer"] .list-powers .delete {
+    @extend %no-display;
+}

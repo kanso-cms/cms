@@ -1,0 +1,267 @@
+/* ANIMATIONS */
+.animated {
+    -webkit-animation-duration: .5s;
+    animation-duration: .5s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.flipInX {
+    -webkit-backface-visibility: visible !important;
+    backface-visibility: visible !important;
+    -webkit-animation-name: flipInX;
+    animation-name: flipInX;
+}
+
+@-webkit-keyframes flipInX {
+    0% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+        opacity: 0;
+    }
+
+    40% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+    }
+
+    60% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+        opacity: 1;
+    }
+
+    80% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+    }
+
+    100% {
+        -webkit-transform: perspective(400px);
+        transform: perspective(400px);
+    };
+}
+
+@keyframes flipInX {
+    0% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+        opacity: 0;
+    }
+
+    40% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+        -webkit-animation-timing-function: ease-in;
+        animation-timing-function: ease-in;
+    }
+
+    60% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+        opacity: 1;
+    }
+
+    80% {
+        -webkit-transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+        transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+    }
+
+    100% {
+        -webkit-transform: perspective(400px);
+        transform: perspective(400px);
+    };
+}
+
+@-webkit-keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    };
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    };
+}
+.fadeOut {
+    -webkit-animation-name: fadeOut !important;
+    animation-name: fadeOut !important;
+}
+
+@-webkit-keyframes loader1 {
+    0% {
+        -wbkit-transform:scale(0.3) rotate(0); 
+        transform:scale(0.3) rotate(0); 
+        opacity: 0;
+    }
+    80% {
+        -webkit-transform:scale(1) rotate(1200deg);
+        transform:scale(1) rotate(1200deg);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform:scale(1) rotate(1200deg); 
+        transform:scale(1) rotate(1200deg); 
+        opacity: 0;
+    }
+}
+@keyframes loader1 {
+    0% {
+        -wbkit-transform:scale(0.3) rotate(0); 
+        transform:scale(0.3) rotate(0); 
+        opacity: 0;
+    }
+    80% {
+        -webkit-transform:scale(1) rotate(1200deg);
+        transform:scale(1) rotate(1200deg);
+        opacity: 1;
+    }
+    100% {
+        -webkit-transform:scale(1) rotate(1200deg); 
+        transform:scale(1) rotate(1200deg); 
+        opacity: 0;
+    }
+}
+@-webkit-keyframes loader2 {
+     0% {
+        -webkit-transform:scale(0);
+        transform:scale(0);
+        opacity: 0; 
+        border-width:8px; 
+    }
+    10% {
+        opacity: 1;
+    }
+    60% {
+        -webkit-transform:scale(1);
+        transform:scale(1); 
+        opacity: 1; 
+        border-width:2px; 
+    }
+    100% {
+        -webkit-transform:scale(1); 
+        transform:scale(1); 
+        opacity: 0; 
+        border-width:2px; 
+    }
+}
+@keyframes loader2 {
+     0% {
+        -webkit-transform:scale(0);
+        transform:scale(0);
+        opacity: 0; 
+        border-width:8px; 
+    }
+    10% {
+        opacity: 1;
+    }
+    60% {
+        -webkit-transform:scale(1);
+        transform:scale(1); 
+        opacity: 1; 
+        border-width:2px; 
+    }
+    100% {
+        -webkit-transform:scale(1); 
+        transform:scale(1); 
+        opacity: 0; 
+        border-width:2px; 
+    }
+}
+.spinner1 {
+    border-top: 2px solid #fff;
+    border-left: 2px solid rgba(255,255,255,0.3);
+    border-right: 2px solid rgba(255,255,255,0.3);
+    border-bottom: 2px solid rgba(255,255,255,0.3);
+    border-radius: 100%;
+    height: 32px;
+    width: 32px;
+    -webkit-animation: loader1 1.3s infinite ease;
+    animation: loader1 1.3s infinite ease;
+}
+.spinner2 {
+    border: 2px solid #fff;
+    border-radius: 100%;
+    height: 32px;
+    width: 32px;
+    -webkit-animation: loader2 1.3s infinite ease .3s;
+    animation: loader2 1.3s infinite ease .3s;
+}
+.global-spinner {
+    @extend %no-display;
+    @extend %fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 99999;
+    width: 32px;
+    height: 32px;
+}
+.global-spinner .spinner1 {
+    @extend %absolute;
+    border-top: 2px solid $brand-primary;
+    border-left: 2px solid rgba(98, 196, 182, 0.3);
+    border-right: 2px solid rgba(98, 196, 182, 0.3);
+    border-bottom: 2px solid rgba(98, 196, 182, 0.3);
+}
+.global-spinner .spinner2 {
+    @extend %absolute;
+    border: 2px solid $brand-primary;
+}
+.global-spinner.active {
+    @extend %block;
+}
+
+.div-spinner {
+    @extend %no-display;
+    @extend %absolute;
+    left: 50%;
+    top: 50%; 
+    margin-left: -26px;
+    margin-top: -26px;
+    z-index: 99999;
+    width: 52px;
+    height: 52px;
+}
+.div-spinner svg {
+    @extend %absolute;
+    width: 28px;
+    height: 28px;
+    left: 50%;
+    top: 50%;
+    margin-left: -14px;
+    margin-top: -14px;
+    opacity: 0.3;
+}
+.div-spinner .spinner1 {
+    @extend %absolute;
+    border-top: 2px solid $brand-primary;
+    border-left: 2px solid rgba(98, 196, 182, 0.3);
+    border-right: 2px solid rgba(98, 196, 182, 0.3);
+    border-bottom: 2px solid rgba(98, 196, 182, 0.3);
+    width: 52px;
+    height: 52px;
+}
+.div-spinner .spinner2 {
+    @extend %absolute;
+    border: 2px solid $brand-primary;
+    width: 52px;
+    height: 52px;
+}
+.div-spinner.active {
+    @extend %block;
+}
