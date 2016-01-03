@@ -29,7 +29,7 @@ class Kanso
 	/**
 	 * @var string    The Kanso application version
 	 */
-	public $Version = '0.0.1';
+	public $Version = '0.0.01';
 
 	/**
 	 * @var string    The Kanso application name
