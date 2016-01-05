@@ -37,6 +37,11 @@ class Kanso
 	protected $name;
 
 	/**
+	 * @var string    The body for a 500 Server Error
+	 */
+	protected $onServerError;
+
+	/**
 	 * @var array     List of classes loaded by Kanso
 	 */
 	protected static $loadedClasses = [];
@@ -183,6 +188,13 @@ class Kanso
 		$this->Container->singleton('Events', function () {
 			return \Kanso\Events::getInstance();
 		});
+
+		# Default CRUD
+		$this->Container->set('CRUD', function ($c) {
+			return new Database\CRUD\CRUD($c->Database);
+		});
+
+
 
 		# Make default if first instance
 		if (is_null(static::getInstance())) {
@@ -561,7 +573,7 @@ class Kanso
 	 */
 	public function CRUD($db = null)
 	{
-		return new Database\CRUD\CRUD($db);
+		return $this->CRUD;
 	}
 
 
@@ -758,7 +770,7 @@ class Kanso
 		if (!($errno & error_reporting()))  return;
 		
 		\Kanso\Events::fire('error', [$errstr, $errno, $errfile, $errline, time()]);
-		
+
 		throw new \Kanso\Exception\Error($errstr, $errno, $errfile, $errline);
 	}
 
@@ -797,6 +809,7 @@ class Kanso
 	 */
 	public function serverError($body = null) 
 	{
+		if ($this->onServerError) $body = $this->onServerError;
 		if (!$body) $body = '<html><head><title>500 Internal Server Error</title></head><body><h1>Internal Server Error</h1>The server encountered an internal error ormisconfiguration and was unable to completeyour request.<p>Please contact the server administrator to inform of the time the error occurredand of anything you might have done that may havecaused the error.</p><p>More information about this error may be availablein the server error log.</p><p></p><hr></body></html>';
 		$this->Response->setStatus(500);
 		$this->Response->setBody($body); 

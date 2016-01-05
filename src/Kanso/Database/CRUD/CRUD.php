@@ -210,7 +210,7 @@ class CRUD
     }
 
     /**
-     * Execute an INSERT, DELETE, SET statement
+     * Execute an INSERT, DELETE, UPDATE, SET statement
      *
      * @return array   Result from the SQL query
      */

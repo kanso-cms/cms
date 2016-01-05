@@ -1,7 +1,6 @@
 # BEGIN Kanso
 <IfModule mod_rewrite.c>
 	
-
 	Options +FollowSymlinks
 	
 	RewriteEngine on

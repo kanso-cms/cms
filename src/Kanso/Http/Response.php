@@ -320,6 +320,134 @@ class Response {
     }
 
     /**
+     * Redirect
+     *
+     * This method prepares this response to return an HTTP Redirect response
+     * to the HTTP client.
+     *
+     * @param string $url    The redirect destination
+     * @param int    $status The redirect HTTP status code
+     */
+    public function redirect ($url, $status = 302)
+    {
+        $this->setStatus($status);
+        $this->headers->set('Location', $url);
+    }
+    /**
+     * Helpers: Empty?
+     * @return bool
+     */
+    public function isEmpty()
+    {
+        return in_array($this->status, array(201, 204, 304));
+    }
+    /**
+     * Helpers: Informational?
+     * @return bool
+     */
+    public function isInformational()
+    {
+        return $this->status >= 100 && $this->status < 200;
+    }
+    /**
+     * Helpers: OK?
+     * @return bool
+     */
+    public function isOk()
+    {
+        return $this->status === 200;
+    }
+    /**
+     * Helpers: Successful?
+     * @return bool
+     */
+    public function isSuccessful()
+    {
+        return $this->status >= 200 && $this->status < 300;
+    }
+    /**
+     * Helpers: Redirect?
+     * @return bool
+     */
+    public function isRedirect()
+    {
+        return in_array($this->status, array(301, 302, 303, 307));
+    }
+    /**
+     * Helpers: Redirection?
+     * @return bool
+     */
+    public function isRedirection()
+    {
+        return $this->status >= 300 && $this->status < 400;
+    }
+    /**
+     * Helpers: Forbidden?
+     * @return bool
+     */
+    public function isForbidden()
+    {
+        return $this->status === 403;
+    }
+    /**
+     * Helpers: Not Found?
+     * @return bool
+     */
+    public function isNotFound()
+    {
+        return $this->status === 404;
+    }
+    /**
+     * Helpers: Client error?
+     * @return bool
+     */
+    public function isClientError()
+    {
+        return $this->status >= 400 && $this->status < 500;
+    }
+    /**
+     * Helpers: Server Error?
+     * @return bool
+     */
+    public function isServerError()
+    {
+        return $this->status >= 500 && $this->status < 600;
+    }
+    /**
+     * DEPRECATION WARNING! ArrayAccess interface will be removed from \Slim\Http\Response.
+     * Iterate `headers` or `cookies` properties directly.
+     */
+    /**
+     * Array Access: Offset Exists
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->headers[$offset]);
+    }
+    /**
+     * Array Access: Offset Get
+     */
+    public function offsetGet($offset)
+    {
+        return $this->headers[$offset];
+    }
+    /**
+     * Array Access: Offset Set
+     */
+    public function offsetSet($offset, $value)
+    {
+        $this->headers[$offset] = $value;
+    }
+    /**
+     * Array Access: Offset Unset
+     */
+    public function offsetUnset($offset)
+    {
+        unset($this->headers[$offset]);
+    }
+
+
+    /**
      * Helper function for zip downloads
      *
      * This method prepares this response headers to return
