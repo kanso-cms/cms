@@ -168,67 +168,67 @@ class Installer
         # Re-connect to the database
         $db = new \Kanso\Database\Database($this->config);
 
-        # Get a new CRUD
-        $CRUD = new \Kanso\Database\CRUD\CRUD($db);
+        # Get a new Query Builder
+        $Query = new \Kanso\Database\Query\Builder($db);
 
         # Include default Kanso Settings
         include 'KansoDefaults.php';
 
         # Create new tables
-        $CRUD->CREATE_TABLE('posts', $KANSO_DEFAULTS_POSTS_TABLE);
+        $Query->CREATE_TABLE('posts', $KANSO_DEFAULTS_POSTS_TABLE);
 
-        $CRUD->CREATE_TABLE('tags', $KANSO_DEFAULTS_TAGS_TABLE);
+        $Query->CREATE_TABLE('tags', $KANSO_DEFAULTS_TAGS_TABLE);
 
-        $CRUD->CREATE_TABLE('categories', $KANSO_DEFAULTS_CATEGORIES_TABLE);
+        $Query->CREATE_TABLE('categories', $KANSO_DEFAULTS_CATEGORIES_TABLE);
 
-        $CRUD->CREATE_TABLE('authors', $KANSO_DEFAULTS_AUTHORS_TABLE);
+        $Query->CREATE_TABLE('authors', $KANSO_DEFAULTS_AUTHORS_TABLE);
 
-        $CRUD->CREATE_TABLE('comments', $KANSO_DEFAULTS_COMMENTS_TABLE);
+        $Query->CREATE_TABLE('comments', $KANSO_DEFAULTS_COMMENTS_TABLE);
 
-        $CRUD->CREATE_TABLE('tags_to_posts', $KANSO_DEFAULTS_TAGS_TO_POSTS_TABLE);
+        $Query->CREATE_TABLE('tags_to_posts', $KANSO_DEFAULTS_TAGS_TO_POSTS_TABLE);
 
-        $CRUD->CREATE_TABLE('content_to_posts', $KANSO_DEFAULTS_CONTENT_TO_POSTS_TABLE);
+        $Query->CREATE_TABLE('content_to_posts', $KANSO_DEFAULTS_CONTENT_TO_POSTS_TABLE);
 
-        $CRUD->ALTER_TABLE('tags_to_posts')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
-        $CRUD->ALTER_TABLE('tags_to_posts')->MODIFY_COLUMN('tag_id')->ADD_FOREIGN_KEY('tags', 'id');
+        $Query->ALTER_TABLE('tags_to_posts')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
+        $Query->ALTER_TABLE('tags_to_posts')->MODIFY_COLUMN('tag_id')->ADD_FOREIGN_KEY('tags', 'id');
 
-        $CRUD->ALTER_TABLE('posts')->MODIFY_COLUMN('category_id')->ADD_FOREIGN_KEY('categories', 'id');
+        $Query->ALTER_TABLE('posts')->MODIFY_COLUMN('category_id')->ADD_FOREIGN_KEY('categories', 'id');
         
-        $CRUD->ALTER_TABLE('posts')->MODIFY_COLUMN('author_id')->ADD_FOREIGN_KEY('authors', 'id');
+        $Query->ALTER_TABLE('posts')->MODIFY_COLUMN('author_id')->ADD_FOREIGN_KEY('authors', 'id');
 
-        $CRUD->ALTER_TABLE('comments')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
+        $Query->ALTER_TABLE('comments')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
 
-        $CRUD->ALTER_TABLE('content_to_posts')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
+        $Query->ALTER_TABLE('content_to_posts')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
         
         # Populate tables
 
         # Default Author
-        $CRUD->INSERT_INTO('authors')->VALUES($KANSO_DEFAULT_AUTHOR)->QUERY();
+        $Query->INSERT_INTO('authors')->VALUES($KANSO_DEFAULT_AUTHOR)->QUERY();
 
         # Default Tags
         foreach ($KANSO_DEFAULT_TAGS as $i => $tag) {
-            $CRUD->INSERT_INTO('tags')->VALUES($tag)->QUERY();
+            $Query->INSERT_INTO('tags')->VALUES($tag)->QUERY();
         }
 
         # Default categories
         foreach ($KANSO_DEFAULT_CATEGORIES as $i => $category) {
-            $CRUD->INSERT_INTO('categories')->VALUES($category)->QUERY();
+            $Query->INSERT_INTO('categories')->VALUES($category)->QUERY();
         }        
 
         # Default Articles
         foreach ($KANSO_DEFAULT_ARTICLES as $i => $article) {
-            $CRUD->INSERT_INTO('posts')->VALUES($article)->QUERY();
+            $Query->INSERT_INTO('posts')->VALUES($article)->QUERY();
             foreach ($KANSO_DEFAULT_TAGS as $t => $tag) {
                 # skip untagged
                 if ($t === 0) continue;
-                $CRUD->INSERT_INTO('tags_to_posts')->VALUES(['post_id' => $i+1, 'tag_id' => $t+1])->QUERY();
+                $Query->INSERT_INTO('tags_to_posts')->VALUES(['post_id' => $i+1, 'tag_id' => $t+1])->QUERY();
             }
-            $CRUD->INSERT_INTO('content_to_posts')->VALUES(['post_id' => $i+1, 'content' => $KANSO_DEFAULT_ARTICLE_CONTENT[$i]])->QUERY();
+            $Query->INSERT_INTO('content_to_posts')->VALUES(['post_id' => $i+1, 'content' => $KANSO_DEFAULT_ARTICLE_CONTENT[$i]])->QUERY();
         }
         
         # Default comments
         foreach ($KANSO_DEFAULT_COMMENTS as $comment) {
-            $CRUD->INSERT_INTO('comments')->VALUES($comment)->QUERY();
+            $Query->INSERT_INTO('comments')->VALUES($comment)->QUERY();
         }
 
     }

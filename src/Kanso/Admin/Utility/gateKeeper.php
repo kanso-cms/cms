@@ -36,7 +36,7 @@ class gateKeeper
         if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
 
         # Get the user's row 
-        $userRow = self::$Kanso->CRUD()->SELECT('*')->FROM('authors')->WHERE('username', '=', $username)->AND_WHERE('status', '=', 'confirmed')->FIND();
+        $userRow = self::$Kanso->Database()->Builder()->SELECT('*')->FROM('authors')->WHERE('username', '=', $username)->AND_WHERE('status', '=', 'confirmed')->FIND();
 
         # Validate the user exists
         if (!$userRow || empty($userRow)) return false;
@@ -68,14 +68,14 @@ class gateKeeper
         if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
 
         # Get the user's row 
-        $userRow = self::$Kanso->CRUD()->SELECT('*')->FROM('authors')->WHERE('username', '=', $username)->FIND();
+        $userRow = self::$Kanso->Database()->Builder()->SELECT('*')->FROM('authors')->WHERE('username', '=', $username)->FIND();
 
         # Validate the user exists
         if (!$userRow || empty($userRow)) return false;
 
         # Create and save a new reset-password key 
         $newKey   = \Kanso\Utility\Str::generateRandom(85, true);
-        $savedRow = self::$Kanso->CRUD()->UPDATE('authors')->SET(['kanso_password_key' => $newKey])->WHERE('username', '=', $username)->QUERY();
+        $savedRow = self::$Kanso->Database()->Builder()->UPDATE('authors')->SET(['kanso_password_key' => $newKey])->WHERE('username', '=', $username)->QUERY();
 
         if ($savedRow) {
             
@@ -114,7 +114,7 @@ class gateKeeper
         if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
 
         # Get the user's row 
-        $userRow = self::$Kanso->CRUD()->SELECT('*')->FROM('authors')->WHERE('email', '=', $email)->FIND();
+        $userRow = self::$Kanso->Database()->Builder()->SELECT('*')->FROM('authors')->WHERE('email', '=', $email)->FIND();
 
         # Validate the user exists
         if (!$userRow || empty($userRow)) return false;
@@ -155,7 +155,7 @@ class gateKeeper
         if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
 
         # Get the user's row 
-        $userRow = self::$Kanso->CRUD()->SELECT('*')->FROM('authors')->WHERE('kanso_register_key', '=', $key)->AND_WHERE('status', '=', 'pending')->FIND();
+        $userRow = self::$Kanso->Database()->Builder()->SELECT('*')->FROM('authors')->WHERE('kanso_register_key', '=', $key)->AND_WHERE('status', '=', 'pending')->FIND();
 
         # Validate the user exists
         if (!$userRow || empty($userRow)) return false;
@@ -164,7 +164,7 @@ class gateKeeper
         if ($userRow['email'] !== $email) return 'The email you entered is not the email you were invited from.';
 
         # Validate another user with the same username doeesn't already exist
-        $userExists = self::$Kanso->CRUD()->SELECT('*')->FROM('authors')->WHERE('username', '=', $username)->AND_WHERE('status', '=', 'confirmed')->FIND();
+        $userExists = self::$Kanso->Database()->Builder()->SELECT('*')->FROM('authors')->WHERE('username', '=', $username)->AND_WHERE('status', '=', 'confirmed')->FIND();
         if ($userExists || !empty($userExists)) return 'Another user is already using that username.';
 
         # Create the new user
@@ -175,7 +175,7 @@ class gateKeeper
         $userRow['slug']         = $slug;
         $userRow['status']       = 'confirmed';
         $userRow['kanso_register_key']  = '';
-        $userRow = self::$Kanso->CRUD()->UPDATE('authors')->SET($userRow)->WHERE('id', '=', $userRow['id'])->QUERY();
+        $userRow = self::$Kanso->Database()->Builder()->UPDATE('authors')->SET($userRow)->WHERE('id', '=', $userRow['id'])->QUERY();
         
         if ($userRow) {
 
@@ -226,7 +226,7 @@ class gateKeeper
         if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
 
         # Get the user's row 
-        $userRow = self::$Kanso->CRUD()->SELECT('*')->FROM('authors')->WHERE('kanso_password_key', '=', $key)->FIND();
+        $userRow = self::$Kanso->Database()->Builder()->SELECT('*')->FROM('authors')->WHERE('kanso_password_key', '=', $key)->FIND();
 
         # Validate the user exists
         if (!$userRow || empty($userRow)) return false;

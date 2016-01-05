@@ -79,8 +79,8 @@ class CommentManager
         # Validate that a kanso instance has been called
         if (is_null(self::$Kanso)) self::$Kanso = \Kanso\Kanso::getInstance();
 
-        # Get a new CRUD
-        $CRUD = self::$Kanso->CRUD();
+        # Get a new Query builder
+        $Query = self::$Kanso->Database()->Builder();
 
         # Validate the input array
         $commentData = self::validateInputData($commentData);
@@ -129,13 +129,13 @@ class CommentManager
         }
 
         # Find the existing article
-        $articleRow = $CRUD->SELECT('*')->FROM('posts')->WHERE('id', '=', (int)$commentData['postID'])->FIND();
+        $articleRow = $Query->SELECT('*')->FROM('posts')->WHERE('id', '=', (int)$commentData['postID'])->FIND();
 
         # If the article doesn't exist return false
         if (!$articleRow) return false;
 
         # Save existing comment id's on article locally
-        $existingComments = $CRUD->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$commentData['postID'])->FIND_ALL();
+        $existingComments = $Query->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$commentData['postID'])->FIND_ALL();
 
         # Is this a reply comment ?
         $parentID = isset($commentData['replyID']) && 
@@ -163,13 +163,13 @@ class CommentManager
         ];
 
         # Validate the parent exists
-        $parentRow = $parentID ? $CRUD->SELECT('*')->FROM('comments')->WHERE('id', '=', (int)$parentID)->FIND() : null;
+        $parentRow = $parentID ? $Query->SELECT('*')->FROM('comments')->WHERE('id', '=', (int)$parentID)->FIND() : null;
         
         # You cannot reply to spam, deleted or pending comment
         if ($parentRow && $parentRow['status'] !== 'approved') return false;
 
         # insert new comment
-        $CRUD->INSERT_INTO('comments')->VALUES($commentRow)->QUERY();
+        $Query->INSERT_INTO('comments')->VALUES($commentRow)->QUERY();
 
         # Get the comment id
         $id = self::$Kanso->Database->lastInsertId();
@@ -196,21 +196,21 @@ class CommentManager
         # Validate that a kanso instance has been called
         if (is_null(self::$Kanso)) self::$Kanso = \Kanso\Kanso::getInstance();
 
-        # Get a new CRUD
-        $CRUD = self::$Kanso->CRUD();
+        # Get a new Query builder
+        $Query = self::$Kanso->Database()->Builder();
 
         # Validate the status is allowed
         $statuses = ['approved', 'spam', 'deleted', 'pending'];
         if (!in_array($status, $statuses)) return false;
 
         # Get the comment row from the database
-        $commentRow = $CRUD->SELECT('*')->FROM('comments')->where('id', '=', (int)$commentID)->FIND();
+        $commentRow = $Query->SELECT('*')->FROM('comments')->where('id', '=', (int)$commentID)->FIND();
 
         # Validate the row exists
         if (!$commentRow) return false;
 
         # Change and save the status
-        $CRUD->UPDATE('comments')->SET(['status' => $status])->WHERE('id', '=', (int)$commentID)->QUERY();
+        $Query->UPDATE('comments')->SET(['status' => $status])->WHERE('id', '=', (int)$commentID)->QUERY();
         
         return true;
     }
@@ -296,8 +296,8 @@ class CommentManager
     	# Is this a reply comment
     	$isReply = $newComment['type'] === 'reply';
 
-        # Get a new CRUD
-        $CRUD = self::$Kanso->CRUD();
+        # Get a new Query builder
+        $Query = self::$Kanso->Database()->Builder();
 
         # Get all the comments from the article into a multi-array
         $allComments = self::buildCommentTree(self::$Kanso->Query->get_comments((int)$articleRow['id'], false));
@@ -306,7 +306,7 @@ class CommentManager
         $allEmails = self::getAllCommentEmails($allComments);
 
     	# Get all the admin email address 
-        $adminEmails = $CRUD->SELECT('email')->FROM('authors')->WHERE('status', '=', 'confirmed')->AND_WHERE('role', '=', 'administrator')->AND_WHERE('email_notifications', '=', true)->FIND_ALL();
+        $adminEmails = $Query->SELECT('email')->FROM('authors')->WHERE('status', '=', 'confirmed')->AND_WHERE('role', '=', 'administrator')->AND_WHERE('email_notifications', '=', true)->FIND_ALL();
 
         # Get all the emails that are subscribed to the thread
         $threadEmails  = [];
@@ -394,7 +394,7 @@ class CommentManager
         }
 
         # Send the email to all the admins on the Kanso blog
-        $admins = $CRUD->SELECT('*')->FROM('authors')->WHERE('status', '=', 'confirmed')->AND_WHERE('role', '=', 'administrator')->FIND_ALL();
+        $admins = $Query->SELECT('*')->FROM('authors')->WHERE('status', '=', 'confirmed')->AND_WHERE('role', '=', 'administrator')->FIND_ALL();
 
         foreach ($admins as $admin) {
 

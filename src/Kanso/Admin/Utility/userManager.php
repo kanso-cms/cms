@@ -34,8 +34,8 @@ class userManager
         # Get a Kanso instance
         if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
 
-        # Get a new CRUD
-        $CRUD = self::$Kanso->CRUD();
+        # Get a new Query Builder
+        $Query = self::$Kanso->Database()->Builder();
 
         # Grab the user's row from the session
         $sessionRow = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
@@ -43,16 +43,16 @@ class userManager
         # Validate that the username/ email doesn't exist already
         # only if the user has changed either value
         if ($email !== $sessionRow['email']) {
-            $emailExists = $CRUD->SELECT('*')->FROM('authors')->WHERE('email', '=', $email)->FIND();
+            $emailExists = $Query->SELECT('*')->FROM('authors')->WHERE('email', '=', $email)->FIND();
             if ($emailExists) return 'email_exists';
         }
         if ($username !== $sessionRow['username']) {
-            $usernameExists = $CRUD->SELECT('*')->FROM('authors')->WHERE('username', '=', $username)->FIND();
+            $usernameExists = $Query->SELECT('*')->FROM('authors')->WHERE('username', '=', $username)->FIND();
             if ($usernameExists) return 'username_exists';
         }
 
         # Grab the user's row from the database
-        $userRow = $CRUD->SELECT('*')->FROM('authors')->WHERE('username', '=', $sessionRow['username'])->AND_WHERE('email', '=', $sessionRow['email'])->AND_WHERE('status', '=', 'confirmed')->FIND();
+        $userRow = $Query->SELECT('*')->FROM('authors')->WHERE('username', '=', $sessionRow['username'])->AND_WHERE('email', '=', $sessionRow['email'])->AND_WHERE('status', '=', 'confirmed')->FIND();
         if (!$userRow || empty($userRow)) return false;
 
         # Sanitize email notifications
@@ -74,7 +74,7 @@ class userManager
         if ($password !== '' && !empty($password)) $row['hashed_pass'] = utf8_encode(\Kanso\Security\Encrypt::encrypt($password));
 
         # Save to the databse and refresh the client's session
-        $CRUD->UPDATE('authors')->SET($row)->WHERE('id', '=', $userRow['id'])->QUERY();
+        $Query->UPDATE('authors')->SET($row)->WHERE('id', '=', $userRow['id'])->QUERY();
         \Kanso\Admin\Security\sessionManager::logClientIn(array_merge($userRow, $row));
         return "valid";
 
@@ -96,14 +96,14 @@ class userManager
         # Get a Kanso instance
         if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
 
-        # Get a new CRUD
-        $CRUD = self::$Kanso->CRUD();
+        # Get a new Query Builder
+        $Query = self::$Kanso->Database()->Builder();
 
         # Grab the user's row from the session
         $sessionRow = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
 
         # Grab the Row and update settings
-        $userRow   = $CRUD->SELECT('*')->FROM('authors')->WHERE('username', '=', $sessionRow['username'])->FIND();
+        $userRow   = $Query->SELECT('*')->FROM('authors')->WHERE('username', '=', $sessionRow['username'])->FIND();
         if (!$userRow) return false;
 
         # Change authors details
@@ -116,7 +116,7 @@ class userManager
         $userRow['description'] = $bio;
 
         # Save to the databse and refresh the client's session
-        $CRUD->UPDATE('authors')->SET($userRow)->WHERE('id', '=', $userRow['id'])->QUERY();
+        $Query->UPDATE('authors')->SET($userRow)->WHERE('id', '=', $userRow['id'])->QUERY();
         
         \Kanso\Admin\Security\sessionManager::logClientIn($userRow);
         
@@ -144,8 +144,8 @@ class userManager
         # Get a Kanso instance
         if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
 
-        # Get a new CRUD
-        $CRUD = self::$Kanso->CRUD();
+        # Get a new Query Builder
+        $Query = self::$Kanso->Database()->Builder();
 
         # If the invitee was not provided get it from the session
         # Validate the user is an admin
@@ -156,7 +156,7 @@ class userManager
         if ($invitee['email'] === $email) return "already_member";
             
         # A user can't invite someone who is already confirmed member
-        $userRow = $CRUD->SELECT('*')->FROM('authors')->WHERE('email', '=', $email)->FIND();
+        $userRow = $Query->SELECT('*')->FROM('authors')->WHERE('email', '=', $email)->FIND();
         if ($userRow && $userRow['status'] === 'confirmed') return "already_member";
 
         # Generate a random string for the register link
@@ -171,7 +171,7 @@ class userManager
                 'role'               => $role,
                 'status'             => 'pending',
             ];
-            $CRUD->INSERT_INTO('authors')->VALUES($newUser)->QUERY();
+            $Query->INSERT_INTO('authors')->VALUES($newUser)->QUERY();
         }
         # If the user is already invited, change their role and update with a new register key
         else {
@@ -179,7 +179,7 @@ class userManager
             $values['kanso_register_key'] = $registerKey;
             $values['role']               = $role;
             $values['status']             = 'pending';
-            $CRUD->UPDATE('authors')->SET($values)->WHERE('id', '=', $userRow['id'])->QUERY();
+            $Query->UPDATE('authors')->SET($values)->WHERE('id', '=', $userRow['id'])->QUERY();
         }
 
         # Create array of data for email template
@@ -224,8 +224,8 @@ class userManager
         # Get a Kanso instance
         if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
 
-        # Get a new CRUD
-        $CRUD = self::$Kanso->CRUD();
+        # Get a new Query Builder
+        $Query = self::$Kanso->Database()->Builder();
 
         # If the user was not provided get it from the session
         # Validate the user is an admin
@@ -236,7 +236,7 @@ class userManager
         if ($id === $currentUser['id']) return false;
 
         # Validate the user exists
-        $userRow = $CRUD->SELECT('*')->FROM('authors')->where('id', '=', $id)->FIND();
+        $userRow = $Query->SELECT('*')->FROM('authors')->where('id', '=', $id)->FIND();
         if (!$userRow) return false;
 
         # Set the user's status to deleted 
@@ -252,7 +252,7 @@ class userManager
         $userRow['kanso_public_salt']   = null;
         $userRow['kanso_keys_time']     = null;
 
-        $CRUD->UPDATE('authors')->SET($userRow)->WHERE('id', '=', $userRow['id'])->QUERY();
+        $Query->UPDATE('authors')->SET($userRow)->WHERE('id', '=', $userRow['id'])->QUERY();
 
         self::removeAuthorSlug($slug);
             
@@ -280,8 +280,8 @@ class userManager
         # Get a Kanso instance
         if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
 
-        # Get a new CRUD
-        $CRUD = self::$Kanso->CRUD();
+        # Get a new Query Builder
+        $Query = self::$Kanso->Database()->Builder();
 
         # If the operator was not provided get it from the session
         # Validate the user is an admin
@@ -292,11 +292,11 @@ class userManager
         if ($id === $currentUser['id']) return false;
 
         # Validate the user exists
-        $userRow = $CRUD->SELECT('*')->FROM('authors')->WHERE('id', '=', $id)->FIND();
+        $userRow = $Query->SELECT('*')->FROM('authors')->WHERE('id', '=', $id)->FIND();
         if (!$userRow) return false;
 
         # Change the authors role
-        $CRUD->UPDATE('authors')->SET(['role' => $role])->WHERE('id', '=', $userRow['id'])->QUERY();
+        $Query->UPDATE('authors')->SET(['role' => $role])->WHERE('id', '=', $userRow['id'])->QUERY();
         return 'valid';
         
     }

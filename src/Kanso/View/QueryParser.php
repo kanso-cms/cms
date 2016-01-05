@@ -107,7 +107,7 @@ class QueryParser {
      */
     private function queryAllPosts()
     {
-        return \Kanso\Kanso::getInstance()->CRUD()->getArticlesByIndex(null, null, null, ['tags', 'category', 'author', 'comments']);
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->getArticlesByIndex(null, null, null, ['tags', 'category', 'author', 'comments']);
     }
 
     /**
@@ -117,49 +117,49 @@ class QueryParser {
      */
     private function executeQuery() 
     {
-        $CRUD = \Kanso\Kanso::getInstance()->CRUD();
+        $Query = \Kanso\Kanso::getInstance()->Database()->Builder();
 
-        $CRUD->SELECT("posts.*");
+        $Query->SELECT("posts.*");
 
-        $CRUD->FROM($this->QueryVars['FROM']);
+        $Query->FROM($this->QueryVars['FROM']);
 
         if (!empty($this->QueryVars['AND_WHERE'])) {
             foreach ($this->QueryVars['AND_WHERE'] as $condition) {
                 if ($condition['op'] === 'LIKE') $condition['val'] = '%'.str_replace('%', '', $condition['val']).'%';
-                $CRUD->AND_WHERE($condition['field'], $condition['op'], $condition['val']);
+                $Query->AND_WHERE($condition['field'], $condition['op'], $condition['val']);
             }
         }
         if (!empty($this->QueryVars['OR_WHERE'])) {
             foreach ($this->QueryVars['OR_WHERE'] as $condition) {
                 if ($condition['op'] === 'LIKE') $condition['val'] = '%'.str_replace('%', '', $condition['val']).'%';
-                $CRUD->OR_WHERE($condition['field'], $condition['op'], $condition['val']);
+                $Query->OR_WHERE($condition['field'], $condition['op'], $condition['val']);
             }
         }
 
-        $CRUD->LEFT_JOIN_ON('authors', 'authors.id = posts.author_id');
+        $Query->LEFT_JOIN_ON('authors', 'authors.id = posts.author_id');
 
-        $CRUD->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id');
+        $Query->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id');
 
-        $CRUD->LEFT_JOIN_ON('categories', 'posts.category_id = categories.id');
+        $Query->LEFT_JOIN_ON('categories', 'posts.category_id = categories.id');
 
-        $CRUD->LEFT_JOIN_ON('tags_to_posts', 'posts.id = tags_to_posts.post_id');
+        $Query->LEFT_JOIN_ON('tags_to_posts', 'posts.id = tags_to_posts.post_id');
 
-        $CRUD->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id');
+        $Query->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id');
 
-        $CRUD->GROUP_BY('posts.id');
+        $Query->GROUP_BY('posts.id');
 
-        if (!empty($this->QueryVars['ORDER_BY'])) $CRUD->ORDER_BY($this->QueryVars['ORDER_BY'][0], $this->QueryVars['ORDER_BY'][1]);
-        if (!empty($this->QueryVars['LIMIT'])) $CRUD->LIMIT($this->QueryVars['LIMIT']);
+        if (!empty($this->QueryVars['ORDER_BY'])) $Query->ORDER_BY($this->QueryVars['ORDER_BY'][0], $this->QueryVars['ORDER_BY'][1]);
+        if (!empty($this->QueryVars['LIMIT'])) $Query->LIMIT($this->QueryVars['LIMIT']);
 
-        $articles = $CRUD->FIND_ALL();
+        $articles = $Query->FIND_ALL();
 
         # Loop the article, adding content, tags, category, comments, author
         if (!empty($articles)) {
             foreach ($articles as $i => $article) {
-                $articles[$i]['tags']     = $CRUD->SELECT('tags.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id')->WHERE('post_id', '=', (int)$article['id'])->FIND_ALL();
-                $articles[$i]['category'] = $CRUD->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$article['category_id'])->FIND();
-                $articles[$i]['comments'] = $CRUD->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$article['id'])->FIND_ALL();
-                $articles[$i]['author']   = $CRUD->SELECT('*')->FROM('authors')->WHERE('id', '=', (int)$article['author_id'])->FIND();
+                $articles[$i]['tags']     = $Query->SELECT('tags.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id')->WHERE('post_id', '=', (int)$article['id'])->FIND_ALL();
+                $articles[$i]['category'] = $Query->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$article['category_id'])->FIND();
+                $articles[$i]['comments'] = $Query->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$article['id'])->FIND_ALL();
+                $articles[$i]['author']   = $Query->SELECT('*')->FROM('authors')->WHERE('id', '=', (int)$article['author_id'])->FIND();
             }
         }
         return $articles;

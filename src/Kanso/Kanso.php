@@ -189,13 +189,6 @@ class Kanso
 			return \Kanso\Events::getInstance();
 		});
 
-		# Default CRUD
-		$this->Container->set('CRUD', function ($c) {
-			return new Database\CRUD\CRUD($c->Database);
-		});
-
-
-
 		# Make default if first instance
 		if (is_null(static::getInstance())) {
 			$this->setName('default');
@@ -563,17 +556,6 @@ class Kanso
 	public function Database()
 	{
 		return $this->Database;
-	}
-
-	/**
-	 * Get a new CRUD object
-	 *
-	 * @param  \Kanso\Database\Database (optional)
-	 * @return \Kanso\Database\CRUD\CRUD
-	 */
-	public function CRUD($db = null)
-	{
-		return $this->CRUD;
 	}
 
 

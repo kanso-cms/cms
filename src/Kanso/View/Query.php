@@ -196,7 +196,7 @@ class Query {
     {
         $index    = is_numeric($tag_name) ? 'id' : 'name';
         $tag_name = is_numeric($tag_name) ? (int)$tag_name : $tag_name;
-        return !empty(\Kanso\Kanso::getInstance()->CRUD()->SELECT('*')->FROM('tags')->WHERE($index, '=', $tag_name)->FIND());
+        return !empty(\Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('tags')->WHERE($index, '=', $tag_name)->FIND());
     }
 
     /**
@@ -209,7 +209,7 @@ class Query {
     {
         $index       = is_numeric($author_name) ? 'id' : 'name';
         $author_name = is_numeric($author_name) ? (int)$author_name : $author_name;
-        return !empty(\Kanso\Kanso::getInstance()->CRUD()->SELECT('*')->FROM('authors')->WHERE($index, '=', $author_name)->FIND());
+        return !empty(\Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('authors')->WHERE($index, '=', $author_name)->FIND());
     }
 
     /**
@@ -222,7 +222,7 @@ class Query {
     {
         $index         = is_numeric($category_name) ? 'id' : 'name';
         $category_name = is_numeric($category_name) ? (int)$category_name : $category_name;
-        return !empty(\Kanso\Kanso::getInstance()->CRUD()->SELECT('*')->FROM('categories')->WHERE($index, '=', $category_name)->FIND());
+        return !empty(\Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('categories')->WHERE($index, '=', $category_name)->FIND());
     }
 
     /**
@@ -678,7 +678,7 @@ class Query {
     public function the_author_posts($author_id)
     {
         if ($this->author_exists($author_id)) {
-            return \Kanso\Kanso::getInstance()->CRUD()->getArticlesByIndex('author_id', (int)$author_id);
+            return \Kanso\Kanso::getInstance()->Database()->Builder()->getArticlesByIndex('author_id', (int)$author_id);
         }
         return false;
     }
@@ -692,7 +692,7 @@ class Query {
     public function the_category_posts($category_id)
     {
         if ($this->category_exists($category_id)) {
-            return \Kanso\Kanso::getInstance()->CRUD()->getArticlesByIndex('category_id', (int)$category_id);
+            return \Kanso\Kanso::getInstance()->Database()->Builder()->getArticlesByIndex('category_id', (int)$category_id);
         }
         return false;
     }
@@ -706,7 +706,7 @@ class Query {
     public function the_tag_posts($tag_id)
     {
         if ($this->tag_exists($tag_id)) {
-            return \Kanso\Kanso::getInstance()->CRUD()->getArticlesByIndex('tags.id', (int)$tag_id);
+            return \Kanso\Kanso::getInstance()->Database()->Builder()->getArticlesByIndex('tags.id', (int)$tag_id);
         }
     }
 
@@ -1148,7 +1148,7 @@ class Query {
      */
     public function all_the_tags()
     {
-        return \Kanso\Kanso::getInstance()->CRUD()->SELECT('*')->FROM('tags')->FIND_ALL();
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('tags')->FIND_ALL();
     }
 
     /**
@@ -1157,7 +1157,7 @@ class Query {
      */
     public function all_the_categories()
     {
-        return \Kanso\Kanso::getInstance()->CRUD()->SELECT('*')->FROM('categories')->FIND_ALL();
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('categories')->FIND_ALL();
     }
 
     /**
@@ -1166,7 +1166,7 @@ class Query {
      */
     public function all_the_authors()
     {
-        return \Kanso\Kanso::getInstance()->CRUD()->SELECT('*')->FROM('authors')->FIND_ALL();
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('authors')->FIND_ALL();
     }
 
     /**
@@ -1289,7 +1289,7 @@ class Query {
     public function static_pages() 
     {
 
-        $articles = \Kanso\Kanso::getInstance()->CRUD()->getArticlesByIndex('type', '=', 'page');
+        $articles = \Kanso\Kanso::getInstance()->Database()->Builder()->getArticlesByIndex('type', '=', 'page');
         foreach ($articles as $i => $article) {
             if ($article['status'] !== 'published') unset($articles[$i]);
         }
@@ -1368,7 +1368,7 @@ class Query {
      */
     public function get_comment($comment_id)
     {
-        return \Kanso\Kanso::getInstance()->CRUD()->SELECT('*')->FROM('comments')->WHERE('id', '=', $comment_id)->LIMIT(1)->FIND();
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('comments')->WHERE('id', '=', $comment_id)->LIMIT(1)->FIND();
     }
 
     /**
@@ -1380,10 +1380,10 @@ class Query {
         
         if ($this->have_posts($post_id)) {
             $post_id  = !$post_id ? $this->posts[$this->pageIndex][$this->postIndex]['id'] : $post_id;
-            $CRUD     = \Kanso\Kanso::getInstance()->CRUD();
-            $CRUD->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$post_id);
-            if ($approvedOnly) $CRUD->AND_WHERE('status', '=', 'approved');
-            return $CRUD->FIND_ALL();
+            $Query     = \Kanso\Kanso::getInstance()->Database()->Builder();
+            $Query->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$post_id);
+            if ($approvedOnly) $Query->AND_WHERE('status', '=', 'approved');
+            return $Query->FIND_ALL();
         }
         return [];
     }
@@ -1906,7 +1906,7 @@ class Query {
      */
     private function findNextPost($post)
     {
-        $next = \Kanso\Kanso::getInstance()->CRUD()->SELECT('id')->FROM('posts')->WHERE('created', '>=', $post['created'])->AND_WHERE('status', '=', 'published')->FIND_ALL();
+        $next = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('id')->FROM('posts')->WHERE('created', '>=', $post['created'])->AND_WHERE('status', '=', 'published')->FIND_ALL();
         if (!empty($next)) {
             foreach ($next as $i => $nextPost) {
                 if ($nextPost['id'] === $post['id']) {
@@ -1929,7 +1929,7 @@ class Query {
      */
     private function findPrevPost($post)
     {
-        $next = \Kanso\Kanso::getInstance()->CRUD()->SELECT('id')->FROM('posts')->WHERE('created', '<=', $post['created'])->AND_WHERE('status', '=', 'published')->FIND_ALL();
+        $next = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('id')->FROM('posts')->WHERE('created', '<=', $post['created'])->AND_WHERE('status', '=', 'published')->FIND_ALL();
         if (!empty($next)) {
             $next = array_reverse($next);
             foreach ($next as $i => $nextPost) {
@@ -1955,42 +1955,42 @@ class Query {
 
     private function getPostByID($post_id)
     {
-        return \Kanso\Kanso::getInstance()->CRUD()->getArticlesByIndex('id', $post_id, 1);
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->getArticlesByIndex('id', $post_id, 1);
     }
 
     private function getPostContent($post_id)
     {
-        return \Kanso\Kanso::getInstance()->CRUD()->SELECT('content')->FROM('content_to_posts')->WHERE('post_id', '=', $post_id)->LIMIT(1)->FIND();
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('content')->FROM('content_to_posts')->WHERE('post_id', '=', $post_id)->LIMIT(1)->FIND();
     }
 
     private function getAuthorById($author_id)
     {
-        return \Kanso\Kanso::getInstance()->CRUD()->SELECT('*')->FROM('authors')->WHERE('id', '=', $author_id)->FIND();
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('authors')->WHERE('id', '=', $author_id)->FIND();
     }
 
     private function getAuthorByName($author_name)
     {
-        return \Kanso\Kanso::getInstance()->CRUD()->SELECT('*')->FROM('authors')->WHERE('name', '=', $author_name)->LIMIT(1)->FIND();
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('authors')->WHERE('name', '=', $author_name)->LIMIT(1)->FIND();
     }
 
     private function getTagById($tag_id)
     {
-        return \Kanso\Kanso::getInstance()->CRUD()->SELECT('*')->FROM('tags')->WHERE('id', '=', $tag_id)->LIMIT(1)->FIND();
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('tags')->WHERE('id', '=', $tag_id)->LIMIT(1)->FIND();
     }
 
     private function getTagByName($tag_name)
     {
-        return \Kanso\Kanso::getInstance()->CRUD()->SELECT('*')->FROM('tags')->WHERE('name', '=', $tag_name)->LIMIT(1)->FIND();
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('tags')->WHERE('name', '=', $tag_name)->LIMIT(1)->FIND();
     }
 
     private function getCategoryById($category_id)
     {
-        return \Kanso\Kanso::getInstance()->CRUD()->SELECT('*')->FROM('categories')->WHERE('id', '=', $category_id)->LIMIT(1)->FIND();
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('categories')->WHERE('id', '=', $category_id)->LIMIT(1)->FIND();
     }
 
     private function getCategoryByName($category_name)
     {
-        return \Kanso\Kanso::getInstance()->CRUD()->SELECT('*')->FROM('categories')->WHERE('name', '=', $category_name)->LIMIT(1)->FIND();
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('categories')->WHERE('name', '=', $category_name)->LIMIT(1)->FIND();
     }
 
 }

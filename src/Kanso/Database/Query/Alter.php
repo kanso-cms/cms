@@ -1,11 +1,11 @@
 <?php
 
-namespace Kanso\Database\CRUD;
+namespace Kanso\Database\Query;
 
 /**
  * Alter Database Class
  *
- * This class is used by CRUD to alter, create, delete
+ * This class is used by Builder to alter, create, delete
  * tables and columns
  */
 

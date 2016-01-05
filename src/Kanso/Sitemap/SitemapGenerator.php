@@ -26,11 +26,11 @@ class SitemapGenerator
 		# Get a Kanso instance
         $Kanso = \Kanso\Kanso::getInstance();
 
-        # Get a new CRUD
-        $CRUD = $Kanso->CRUD();
+        # Get a new Query Builder
+        $Query = $Kanso->Database()->Builder();
 
         # Get required data from the database
-        $articles    = $CRUD->SELECT('*')->FROM('posts')->WHERE('status', '=', 'published')->FIND_ALL();
+        $articles    = $Query->SELECT('*')->FROM('posts')->WHERE('status', '=', 'published')->FIND_ALL();
         $tags        = [];
         $categories  = [];
         $authors     = [];
@@ -38,17 +38,17 @@ class SitemapGenerator
 
         # Only load the tags if tags are being routed
         if ($Kanso->Config['KANSO_ROUTE_TAGS']) {
-            $tags = $CRUD->SELECT('*')->FROM('tags')->WHERE('id', '!=', 1)->FIND_ALL();
+            $tags = $Query->SELECT('*')->FROM('tags')->WHERE('id', '!=', 1)->FIND_ALL();
         }
         
         # Only load the categories if categories are being routed
         if ($Kanso->Config['KANSO_ROUTE_CATEGORIES']) {
-            $categories = $CRUD->SELECT('*')->FROM('categories')->WHERE('id', '!=', 1)->FIND_ALL();
+            $categories = $Query->SELECT('*')->FROM('categories')->WHERE('id', '!=', 1)->FIND_ALL();
         }
         
         # Only load the authors if authors are being routed
         if ($Kanso->Config['KANSO_ROUTE_AUTHORS']) {
-            $authors = $CRUD->SELECT('*')->FROM('authors')->WHERE('status', '=', 'confirmed')->FIND_ALL();
+            $authors = $Query->SELECT('*')->FROM('authors')->WHERE('status', '=', 'confirmed')->FIND_ALL();
         }
 
 		$now    = date("Y-m-d", time());

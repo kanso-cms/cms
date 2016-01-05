@@ -25,9 +25,9 @@ class GETdispatcher
 	protected $Kanso;
 
 	/**
-	 * @var \Kanso\Database\CRUD
+	 * @var \Kanso\Database\Query\Builder
 	 */
-	protected $CRUD;
+	protected $Query;
 	/**
 	 * @var bool
 	 */
@@ -112,7 +112,7 @@ class GETdispatcher
 		# Dispatch the method if it callable
 		$method = [$this, $pageRequest];
 
-		$this->CRUD = $this->Kanso->CRUD();
+		$this->Query = $this->Kanso->Database->Builder();
 
 		if (is_callable($method)) return call_user_func($method);
 
@@ -301,19 +301,19 @@ class GETdispatcher
 		$slug = trim($request, '/').'/';
 
 		# Get the article based on the slug
-		$articleRow = $this->CRUD->SELECT('*')->FROM('posts')->WHERE('slug', '=', $slug)->FIND();
+		$articleRow = $this->Query->SELECT('*')->FROM('posts')->WHERE('slug', '=', $slug)->FIND();
 		
 		# Validate the article exists
 		if (!$articleRow || empty($articleRow)) return false;
 
 		# Get the content
-		$content = $this->CRUD->SELECT('*')->FROM('content_to_posts')->WHERE('post_id', '=', (int)$articleRow['id'])->FIND();
+		$content = $this->Query->SELECT('*')->FROM('content_to_posts')->WHERE('post_id', '=', (int)$articleRow['id'])->FIND();
 		
 		# Get the category
-		$category = $this->CRUD->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$articleRow['category_id'])->FIND();
+		$category = $this->Query->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$articleRow['category_id'])->FIND();
 
 		# Get the tags
-		$tags = $this->CRUD->SELECT('tags.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id' )->WHERE('post_id', '=', (int)$articleRow['id'])->FIND_ALL();
+		$tags = $this->Query->SELECT('tags.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id' )->WHERE('post_id', '=', (int)$articleRow['id'])->FIND_ALL();
 		
 		# List the tags as comma seperated list
 		$articleRow['tags'] = '';
@@ -354,7 +354,7 @@ class GETdispatcher
 		if (!$key) return false;
 
 		# Find the key in the database
-		$keyRow = $this->CRUD->SELECT('*')->FROM('authors')->WHERE('kanso_register_key', '=', $key)->FIND();
+		$keyRow = $this->Query->SELECT('*')->FROM('authors')->WHERE('kanso_register_key', '=', $key)->FIND();
 
 		# Validate the key exists
 		if (!$keyRow || empty($keyRow)) return false;
@@ -385,7 +385,7 @@ class GETdispatcher
 		if (!$key || trim($key) === '' || $key === 'null' ) return false;
 
 		# Find the key in the database
-		$keyRow = $this->CRUD->SELECT('*')->FROM('authors')->WHERE('kanso_password_key', '=', $key)->FIND();
+		$keyRow = $this->Query->SELECT('*')->FROM('authors')->WHERE('kanso_password_key', '=', $key)->FIND();
 
 		# Validate the key exists
 		if (!$keyRow || empty($keyRow)) return false;
@@ -437,7 +437,7 @@ class GETdispatcher
 		$vars['themeRadios']      = $this->buildThemeRadios();
 		$vars['KansoPages']       = implode(', ', $vars['KANSO_STATIC_PAGES']);
 		$vars['authorImg']        = $ADMIN_USER_DATA['thumbnail'] === '' ? '' : '<img src="'.$this->Kanso->Environment['KANSO_IMGS_URL'].$ADMIN_USER_DATA['thumbnail'].'" />';
-		$vars['allAuthors']       = $this->CRUD->SELECT("*")->FROM('authors')->FIND_ALL();
+		$vars['allAuthors']       = $this->Query->SELECT("*")->FROM('authors')->FIND_ALL();
 
 		return $vars;
 	}

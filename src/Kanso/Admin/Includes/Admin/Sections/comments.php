@@ -1,5 +1,5 @@
 <?php
-$pending      = count($Kanso->CRUD()->SELECT('*')->FROM('comments')->WHERE('status','=','pending')->FIND_ALL());
+$pending      = count($Kanso->Database()->Builder()->SELECT('*')->FROM('comments')->WHERE('status','=','pending')->FIND_ALL());
 $pendingCount = $pending > 0 ? '('+$pending+')' : '';
 ?>
 

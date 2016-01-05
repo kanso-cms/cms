@@ -32,9 +32,9 @@ class KeyManager
 {
 
     /**
-     * @var \Kanso\Database\CRUD
+     * @var \Kanso\Database\Query\Builder
      */
-    protected static $CRUD;
+    protected static $Query;
 
     /**
      * Get a clients public key and salt
@@ -45,7 +45,7 @@ class KeyManager
     {
 
         # Get the database instance
-        if (!self::$CRUD) self::$CRUD = \Kanso\Kanso::getInstance()->CRUD();
+        if (!self::$Query) self::$Query = \Kanso\Kanso::getInstance()->Database()->Builder();
 
         # Declare an array for the key variables
         $userKeys = [
@@ -59,7 +59,7 @@ class KeyManager
         if (\Kanso\Admin\Security\sessionManager::isLoggedIn()) {
 
             $clientID    = \Kanso\Admin\Security\sessionManager::get('id');
-            $clientEntry = self::$CRUD->SELECT('*')->FROM('authors')->where('id', '=', (int)$clientID)->FIND();
+            $clientEntry = self::$Query->SELECT('*')->FROM('authors')->where('id', '=', (int)$clientID)->FIND();
 
             # If it doesn't exist return false
             if ($clientEntry) {
@@ -98,7 +98,7 @@ class KeyManager
     {
 
         # Get the database instance
-        if (!self::$CRUD) self::$CRUD = \Kanso\Kanso::getInstance()->CRUD();
+        if (!self::$Query) self::$Query = \Kanso\Kanso::getInstance()->Database()->Builder();
 
         $publicKey    = \Kanso\Utility\Str::generateRandom(850);
         $publicSalt   = \Kanso\Utility\Str::generateRandom(100);
@@ -126,11 +126,11 @@ class KeyManager
     {
 
         # Get the database instance
-        if (!self::$CRUD) self::$CRUD  = \Kanso\Database\Database::getInstance()->CRUD();
+        if (!self::$Query) self::$Query = \Kanso\Kanso::getInstance()->Database()->Builder();
 
         $clientID = \Kanso\Admin\Security\sessionManager::get('id');
 
-        $clientRow = self::$CRUD->SELECT('*')->FROM('authors')->WHERE('id', '=', (int)$clientID )->FIND();
+        $clientRow = self::$Query->SELECT('*')->FROM('authors')->WHERE('id', '=', (int)$clientID )->FIND();
 
         if (!$clientEntry->matchedQuery()) return false;
 

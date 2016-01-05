@@ -37,9 +37,9 @@ class POSTdispatcher
     protected $GUMP;
 
      /**
-     * @var \Kanso\Database\CRUD
+     * @var \Kanso\Database\Query\Builder
      */
-    protected $CRUD;
+    protected $Query;
 
     /**
      * constructor
@@ -49,7 +49,7 @@ class POSTdispatcher
     {
         $this->Kanso           = \Kanso\Kanso::getInstance();
         $this->GUMP            = new \Kanso\Utility\GUMP();
-        $this->CRUD            = $this->Kanso->CRUD();
+        $this->Query           = $this->Kanso->Database->Builder();
         \Kanso\Admin\Security\sessionManager::init(false, false, $this->Kanso->Environment['REQUEST_URL']);
         $this->isLoggedIn      = \Kanso\Admin\Security\sessionManager::isLoggedIn();
     }
@@ -653,7 +653,7 @@ class POSTdispatcher
 
         if ($validated_data) {
             if ($validated_data['email'] === $user['email']) return "already_member";
-            $email = $this->CRUD->SELECT('*')->FROM('authors')->WHERE('email', '=', $validated_data['email'])->FIND();
+            $email = $this->Query->SELECT('*')->FROM('authors')->WHERE('email', '=', $validated_data['email'])->FIND();
             if (!$email || empty($email) || ($email && $email['status'] === 'deleted')) return \Kanso\Admin\Utility\userManager::inviteNewUser($validated_data['email'], $validated_data['role'], $user);
             if ($email && $email['status'] === 'confirmed') return 'already_member';
         }
@@ -690,7 +690,7 @@ class POSTdispatcher
         if ($validated_data) {
             if ($validated_data['id'] === $user['id']) return false;
             if ((int)$validated_data['id'] === 1) return false;
-            $userExists = $this->CRUD->SELECT('*')->FROM('authors')->WHERE('id', '=', $validated_data['id'])->FIND();
+            $userExists = $this->Query->SELECT('*')->FROM('authors')->WHERE('id', '=', $validated_data['id'])->FIND();
             if (empty($userExists)) return false;
             return \Kanso\Admin\Utility\userManager::deleteUser($validated_data['id']); 
         }
@@ -725,7 +725,7 @@ class POSTdispatcher
         if ($validated_data) {
             if ((int)$validated_data['id'] === (int)$client['id']) return false;
             if ((int)$validated_data['id'] === 1) return false;
-            $userExists = $this->CRUD->SELECT('*')->FROM('authors')->WHERE('id', '=', $validated_data['id'])->FIND();
+            $userExists = $this->Query->SELECT('*')->FROM('authors')->WHERE('id', '=', $validated_data['id'])->FIND();
             if (empty($userExists)) return false;
             return \Kanso\Admin\Utility\userManager::changeUserRole($validated_data['id'], $validated_data['role']); 
         }
@@ -822,7 +822,7 @@ class POSTdispatcher
         if ($isAuthor) {
             $author = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
             $author['author'] = substr($imgurl, strrpos($imgurl, '/') + 1);
-            $this->CRUD->UPDATE('authors')->SET(['thumbnail' => substr($imgurl, strrpos($imgurl, '/') + 1)])->WHERE('id', '=', $author['id'])->QUERY();
+            $this->Query->UPDATE('authors')->SET(['thumbnail' => substr($imgurl, strrpos($imgurl, '/') + 1)])->WHERE('id', '=', $author['id'])->QUERY();
             \Kanso\Admin\Security\sessionManager::logClientIn($author);
         }
 
@@ -997,7 +997,7 @@ class POSTdispatcher
 
         # If this is an existing article, get the status from the databse
         if (!$isNewArticle) {
-            $status = $this->CRUD->SELECT('status')->FROM('posts')->WHERE('id', '=', (int)$validated_data['id'])->FIND();
+            $status = $this->Query->SELECT('status')->FROM('posts')->WHERE('id', '=', (int)$validated_data['id'])->FIND();
             $validated_data['status'] = $status['status'];
         }
 
@@ -1258,7 +1258,7 @@ class POSTdispatcher
         if ($validated_data['sortBy'] === 'title')     $sortKey   = 'posts.title';
 
         # Get all the articles
-        $articles = $this->CRUD->getArticlesByIndex(null, null, null, ['tags', 'category', 'author']);
+        $articles = $this->Query->getArticlesByIndex(null, null, null, ['tags', 'category', 'author']);
 
         # Pre validate there are actually some articles to process
         if (empty($articles)) return [];
@@ -1371,8 +1371,8 @@ class POSTdispatcher
 
         if (!$validated_data) return false;
             
-        $categories   = $this->CRUD->SELECT('*')->FROM('categories')->FIND_ALL();
-        $tags         = $this->CRUD->SELECT('*')->FROM('tags')->FIND_ALL();
+        $categories   = $this->Query->SELECT('*')->FROM('categories')->FIND_ALL();
+        $tags         = $this->Query->SELECT('*')->FROM('tags')->FIND_ALL();
 
         $isSearch     = $validated_data['search'] !== 'false';
         $searchValue  = false;
@@ -1383,7 +1383,7 @@ class POSTdispatcher
 
         foreach ($tags as $i => $tag) {
             $tags[$i]['permalink'] = $this->Kanso->Query->the_tag_url($tag['id']);
-            $tagPosts = $this->CRUD->SELECT('posts.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('posts', 'tags_to_posts.post_id = posts.id')->WHERE('tags_to_posts.tag_id', '=', (int)$tag['id'])->FIND_ALL();
+            $tagPosts = $this->Query->SELECT('posts.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('posts', 'tags_to_posts.post_id = posts.id')->WHERE('tags_to_posts.tag_id', '=', (int)$tag['id'])->FIND_ALL();
             $tags[$i]['posts'] = [];
             foreach ($tagPosts as $post) {
                 $tags[$i]['posts'][] = [
@@ -1396,7 +1396,7 @@ class POSTdispatcher
 
         foreach ($categories as $i => $category) {
             $categories[$i]['permalink'] = $this->Kanso->Query->the_category_url($category['id']);
-            $categoryPosts = $this->CRUD->SELECT('*')->FROM('posts')->WHERE('category_id', '=', (int)$category['id'])->FIND_ALL();
+            $categoryPosts = $this->Query->SELECT('*')->FROM('posts')->WHERE('category_id', '=', (int)$category['id'])->FIND_ALL();
             $categories[$i]['posts'] = [];
             foreach ($categoryPosts as $post) {
                 $categories[$i]['posts'][] = [
@@ -1652,27 +1652,27 @@ class POSTdispatcher
                 }
 
                 if ($searchKey) {
-                    $comments = $this->CRUD->SELECT('*')->FROM('comments')->WHERE($searchKey, '=', $searchValue)->FIND_ALL();
+                    $comments = $this->Query->SELECT('*')->FROM('comments')->WHERE($searchKey, '=', $searchValue)->FIND_ALL();
                 }
                 else {
-                    $comments = $this->CRUD->SELECT('*')->FROM('comments')->WHERE('content', 'LIKE', "%$searchValue%")->FIND_ALL();
+                    $comments = $this->Query->SELECT('*')->FROM('comments')->WHERE('content', 'LIKE', "%$searchValue%")->FIND_ALL();
                 }
             }
             else {
                 if ($filter === 'all') {
-                    $comments = $this->CRUD->SELECT('*')->FROM('comments')->ORDER_BY('date', $sort)->FIND_ALL();
+                    $comments = $this->Query->SELECT('*')->FROM('comments')->ORDER_BY('date', $sort)->FIND_ALL();
                 }
                 if ($filter === 'approved') {
-                    $comments = $this->CRUD->SELECT('*')->FROM('comments')->WHERE('status', '=', 'approved')->ORDER_BY('date', $sort)->FIND_ALL();
+                    $comments = $this->Query->SELECT('*')->FROM('comments')->WHERE('status', '=', 'approved')->ORDER_BY('date', $sort)->FIND_ALL();
                 }
                 if ($filter === 'spam') {
-                    $comments = $this->CRUD->SELECT('*')->FROM('comments')->WHERE('status', '=', 'spam')->ORDER_BY('date', $sort)->FIND_ALL();
+                    $comments = $this->Query->SELECT('*')->FROM('comments')->WHERE('status', '=', 'spam')->ORDER_BY('date', $sort)->FIND_ALL();
                 }
                 if ($filter === 'pending') {
-                    $comments = $this->CRUD->SELECT('*')->FROM('comments')->WHERE('status', '=', 'pending')->ORDER_BY('date', $sort)->FIND_ALL();
+                    $comments = $this->Query->SELECT('*')->FROM('comments')->WHERE('status', '=', 'pending')->ORDER_BY('date', $sort)->FIND_ALL();
                 }
                 if ($filter === 'deleted') {
-                    $comments = $this->CRUD->SELECT('*')->FROM('comments')->WHERE('status', '=', 'deleted')->ORDER_BY('date', $sort)->FIND_ALL();
+                    $comments = $this->Query->SELECT('*')->FROM('comments')->WHERE('status', '=', 'deleted')->ORDER_BY('date', $sort)->FIND_ALL();
                 }
             }
 
@@ -1718,7 +1718,7 @@ class POSTdispatcher
 
         if ($validated_data) {
             
-            $commentRow  = $this->CRUD->SELECT('*')->FROM('comments')->WHERE('id', '=', (int)$validated_data['comment_id'])->FIND();
+            $commentRow  = $this->Query->SELECT('*')->FROM('comments')->WHERE('id', '=', (int)$validated_data['comment_id'])->FIND();
 
             # If it doesn't exist return false
             if (!$commentRow) return false;
@@ -1728,7 +1728,7 @@ class POSTdispatcher
             $email        = $commentRow['email'];
 
             # Get all the user's comments
-            $userComments = $this->CRUD->SELECT('*')->FROM('comments')->WHERE('ip_address', '=', $ip_address)->OR_WHERE('email', '=', $email)->OR_WHERE('name', '=', $name)->FIND_ALL();
+            $userComments = $this->Query->SELECT('*')->FROM('comments')->WHERE('ip_address', '=', $ip_address)->OR_WHERE('email', '=', $email)->OR_WHERE('name', '=', $name)->FIND_ALL();
 
             $response     = [
                 'reputation'   => 0,
@@ -1799,7 +1799,7 @@ class POSTdispatcher
 
         if ($validated_data) {
 
-            $commentRow  = $this->CRUD->SELECT('*')->FROM('comments')->WHERE('id', '=', (int)$validated_data['comment_id'])->FIND();
+            $commentRow  = $this->Query->SELECT('*')->FROM('comments')->WHERE('id', '=', (int)$validated_data['comment_id'])->FIND();
 
             # If it doesn't exist return false
             if (!$commentRow) return false;
@@ -1807,7 +1807,7 @@ class POSTdispatcher
             $HTMLContent                = $Parser->text($validated_data['content']);
             $commentRow['content']      = $validated_data['content'];
             $commentRow['html_content'] = $HTMLContent;
-            $this->CRUD->UPDATE('comments')->SET(['content' => $validated_data['content'], 'html_content' => $HTMLContent])->WHERE('id', '=', $commentRow['id'])->QUERY();
+            $this->Query->UPDATE('comments')->SET(['content' => $validated_data['content'], 'html_content' => $HTMLContent])->WHERE('id', '=', $commentRow['id'])->QUERY();
 
             return $HTMLContent;
         }
@@ -1843,7 +1843,7 @@ class POSTdispatcher
 
         if (!$validated_data) return false;
 
-        $parentComment = $this->CRUD->SELECT('*')->FROM('comments')->WHERE('id', '=', (int)$validated_data['comment_id'])->FIND();
+        $parentComment = $this->Query->SELECT('*')->FROM('comments')->WHERE('id', '=', (int)$validated_data['comment_id'])->FIND();
 
         # If it doesn't exist return false
         if (!$parentComment) return false;

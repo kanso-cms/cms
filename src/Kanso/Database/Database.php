@@ -52,14 +52,23 @@ class Database
 		$this->parameters = array();
 	}
 
-       /**
-	*	This method makes connection to the database.
-	*	
-	*	1. Reads the database settings from a ini file. 
-	*	2. Puts  the ini content into the settings array.
-	*	3. Tries to connect to the database.
-	*	4. If connection failed, exception is displayed and a log file gets created.
-	*/
+	/**
+	 *	Get a new Query builder instance
+	 *	
+	 */
+	public function Builder()
+	{
+		return new \Kanso\Database\Query\Builder($this);
+	}
+
+    /**
+	 *	This method makes connection to the database.
+	 *	
+	 *	1. Reads the database settings from a ini file. 
+	 *	2. Puts  the ini content into the settings array.
+	 *	3. Tries to connect to the database.
+	 *	4. If connection failed, exception is displayed and a log file gets created.
+	 */
 	private function Connect()
 	{
 		

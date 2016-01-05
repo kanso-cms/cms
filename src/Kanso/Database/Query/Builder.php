@@ -1,22 +1,20 @@
 <?php
 
-namespace Kanso\Database\CRUD;
+namespace Kanso\Database\Query;
 
 /**
- * Database CRUD class
+ * Database Builder class
  *
- * This class isnt so much as a real CRUD class as 
- * consistant way to query the databse using PHP
+ * This serves as a consistant way to query the databse using PHP
  * without having to write messy SQL everywhere.
  *
  * It provides a centralized way to execute queries
- * on the databse. For the sake of not having
- * a better name its called CRUD. 
+ * on the databse.
  *
  * Most methods are chainable to easily execute multiple
  * SQL satements
  */
-class CRUD
+class Builder
 {
 
     /**

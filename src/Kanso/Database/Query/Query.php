@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanso\Database\CRUD;
+namespace Kanso\Database\Query;
 
 /**
  * Database Query

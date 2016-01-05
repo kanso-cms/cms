@@ -35,11 +35,11 @@ class articlesManager
   		# Get a Kanso instance
         if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
 
-        # Get a new CRUD
-        $CRUD = self::$Kanso->CRUD();
+        # Get a new Query Builder
+        $Query = self::$Kanso->Database()->Builder();
 
   		# Find the existing article
-    	$articleRow = $CRUD->getArticleById($articleID);
+    	$articleRow = $Query->getArticleById($articleID);
 
     	# If it doesn't exist return false
     	if (!$articleRow || empty($articleRow)) return false;
@@ -51,7 +51,7 @@ class articlesManager
     	\Kanso\Admin\Utility\settingsManager::addToStaticPages($articleRow['slug']);
 
     	# Save the entry
-    	$save = $CRUD->UPDATE('posts')->SET(['status' => $status])->WHERE('id', '=', $articleID)->QUERY();
+    	$save = $Query->UPDATE('posts')->SET(['status' => $status])->WHERE('id', '=', $articleID)->QUERY();
 
     	return 'valid';
 
@@ -71,11 +71,11 @@ class articlesManager
   		# Get a Kanso instance
         if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
 
-        # Get a new CRUD
-        $CRUD = self::$Kanso->CRUD();
+        # Get a new Query Builder
+        $Query = self::$Kanso->Database()->Builder();
 
     	# Find the existing article
-    	$articleRow = $CRUD->getArticleById($articleID);
+    	$articleRow = $Query->getArticleById($articleID);
 
     	# If it doesn't exist return false
     	if (!$articleRow || empty($articleRow)) return false;
@@ -84,19 +84,19 @@ class articlesManager
     	$id = (int)$articleRow['id'];
 
     	# Remove comments associated with the article
-    	$CRUD->DELETE_FROM('comments')->WHERE('post_id', '=', $id)->QUERY();
+    	$Query->DELETE_FROM('comments')->WHERE('post_id', '=', $id)->QUERY();
 
     	# Remove the tags associated with the article
-    	$CRUD->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', $id)->QUERY();
+    	$Query->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', $id)->QUERY();
 
     	# Remove the content associated with the article
-    	$CRUD->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $id)->QUERY();
+    	$Query->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $id)->QUERY();
 
     	# Clear the cache
     	self::$Kanso->Cache->clearCache($articleRow['slug']);
 
     	# Delete the article entry
-    	$CRUD->DELETE_FROM('posts')->WHERE('id', '=', (int)$articleRow['id'])->QUERY();
+    	$Query->DELETE_FROM('posts')->WHERE('id', '=', (int)$articleRow['id'])->QUERY();
 
     	# If the article was a published page, update kanso's static pages
     	if ($articleRow['type'] === 'page' && $articleRow['status'] === 'published') self::removeFromStaticPages($articleRow['slug']);
@@ -125,8 +125,8 @@ class articlesManager
   		# Get a Kanso instance
         if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
 
-        # Get a new CRUD
-        $CRUD = self::$Kanso->CRUD();
+       	# Get a new Query Builder
+        $Query = self::$Kanso->Database()->Builder();
 
 		# Can't or clear delete 'Untagged' or 'Uncategorized'
 		if ($tagID === 1) return false;
@@ -136,32 +136,32 @@ class articlesManager
 		if ($tagType === 'tag') {
 
 			# Get the tag row
-			$tagRow = $CRUD->SELECT('*')->FROM('tags')->WHERE('id', '=', (int)$tagID)->FIND();
+			$tagRow = $Query->SELECT('*')->FROM('tags')->WHERE('id', '=', (int)$tagID)->FIND();
 			
 			# If it doesn't exist return false
     		if (!$tagRow || empty($tagRow)) return false;
 
     		# Find articles from tag
-    		$tagArticles = $CRUD->SELECT('posts.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('posts', 'tags_to_posts.post_id = posts.id')->WHERE('tags_to_posts.tag_id', '=', (int)$tagID)->FIND_ALL();
+    		$tagArticles = $Query->SELECT('posts.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('posts', 'tags_to_posts.post_id = posts.id')->WHERE('tags_to_posts.tag_id', '=', (int)$tagID)->FIND_ALL();
 
 			# If the tag has articles, loop through the articles
 			# If an article will be left with no tags, set it as untagged
 			if ($tagArticles && !empty($tagArticles)) {
 
 				foreach ($tagArticles as $article) {
-					$articleTags = $CRUD->SELECT('*')->FROM('tags_to_posts')->WHERE('post_id', '=', (int)$article['id'])->FIND_ALL();
+					$articleTags = $Query->SELECT('*')->FROM('tags_to_posts')->WHERE('post_id', '=', (int)$article['id'])->FIND_ALL();
 					if (count($articleTags) === 1) {
-						$CRUD->INSERT_INTO('tags_to_posts')->VALUES(['post_id' => (int)$article['id'], 'tag_id' => 1])->QUERY();
+						$Query->INSERT_INTO('tags_to_posts')->VALUES(['post_id' => (int)$article['id'], 'tag_id' => 1])->QUERY();
 					}
 				}
 
 			}
 
 			# Remove joins
-			$CRUD->DELETE_FROM('tags_to_posts')->WHERE('tag_id', '=', (int)$tagID)->QUERY();
+			$Query->DELETE_FROM('tags_to_posts')->WHERE('tag_id', '=', (int)$tagID)->QUERY();
 
 			# Delete the tag
-			if ($deleteTag) $CRUD->DELETE_FROM('tags')->WHERE('id', '=', (int)$tagID)->QUERY();
+			if ($deleteTag) $Query->DELETE_FROM('tags')->WHERE('id', '=', (int)$tagID)->QUERY();
 
 			return "valid"; 	
 		}
@@ -171,25 +171,25 @@ class articlesManager
 
 
 			# Get the tag row
-			$catRow = $CRUD->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$tagID)->FIND();
+			$catRow = $Query->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$tagID)->FIND();
 			
 			# If it doesn't exist return false
     		if (!$catRow || empty($catRow)) return false;
 
     		# Find articles from tag
-    		$catArticles = $CRUD->SELECT('*')->FROM('posts')->WHERE('category_id', '=', (int)$tagID)->FIND_ALL();
+    		$catArticles = $Query->SELECT('*')->FROM('posts')->WHERE('category_id', '=', (int)$tagID)->FIND_ALL();
 
 			# If the tag has articles, loop through the articles
 			# Loop through articles and set the category to id 1
     		if (!empty($catArticles)) {
 
     			foreach ($catArticles as $article) {
-    				$CRUD->UPDATE('posts')->SET(['category_id' => 1])->WHERE('id', '=', (int)$article['id'])->QUERY();
+    				$Query->UPDATE('posts')->SET(['category_id' => 1])->WHERE('id', '=', (int)$article['id'])->QUERY();
 				}
     		}
 
 			# Delete the category
-			if ($deleteTag) $CRUD->DELETE_FROM('categories')->WHERE('id', '=', (int)$tagID)->QUERY();
+			if ($deleteTag) $Query->DELETE_FROM('categories')->WHERE('id', '=', (int)$tagID)->QUERY();
 
 			return "valid";
 		}
@@ -215,8 +215,8 @@ class articlesManager
   		# Get a Kanso instance
         if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
 
-        # Get a new CRUD
-        $CRUD = self::$Kanso->CRUD();
+        # Get a new Query Builder
+        $Query = self::$Kanso->Database()->Builder();
 
 		# Can't change 'Untagged' or 'Uncategorized'
 		if ($tagID === 1) return false;
@@ -225,7 +225,7 @@ class articlesManager
 		$slug  = \Kanso\Utility\Str::slugFilter($slug);
 
 		# Get the tag row
-		$tagRow = $CRUD->SELECT('*')->FROM($table)->WHERE('id', '=', $tagID)->FIND();
+		$tagRow = $Query->SELECT('*')->FROM($table)->WHERE('id', '=', $tagID)->FIND();
 
 		# If it doesn't exist return false
     	if (!$tagRow) return false;
@@ -234,8 +234,8 @@ class articlesManager
     	if ($tagRow['slug'] === $slug && $tagRow['name'] === $name) return true;
 
     	# Get the tag based on the new slug and name
-    	$slugRow = $CRUD->SELECT('*')->FROM($table)->WHERE('slug', '=', $slug)->FIND();
-    	$nameRow = $CRUD->SELECT('*')->FROM($table)->WHERE('name', '=', $name)->FIND();
+    	$slugRow = $Query->SELECT('*')->FROM($table)->WHERE('slug', '=', $slug)->FIND();
+    	$nameRow = $Query->SELECT('*')->FROM($table)->WHERE('name', '=', $name)->FIND();
 		
 		# If there is another tag with the same slug - return false;
     	if ($slugRow) return 'slug_exists';
@@ -244,7 +244,7 @@ class articlesManager
     	if ($nameRow) return  'name_exists';
  		
     	# Update the tag/category
- 		$CRUD->UPDATE($table)->SET(['name' => $name, 'slug' => $slug])->WHERE('id', '=', (int)$tagRow['id'])->QUERY();
+ 		$Query->UPDATE($table)->SET(['name' => $name, 'slug' => $slug])->WHERE('id', '=', (int)$tagRow['id'])->QUERY();
 
     	return true;
 
@@ -263,14 +263,14 @@ class articlesManager
 		# Get a Kanso instance
         if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
 
-        # Get a new CRUD
-        $CRUD = self::$Kanso->CRUD();
+        # Get a new Query Builder
+        $Query = self::$Kanso->Database()->Builder();
 
         # If we are saving an existing article, use the article's row
         # instead of the table
 		if (!$newArticle) {
 			if (!isset($articleInfo['id']) || ($articleInfo['id']) && (int)$articleInfo['id'] < 1) return false;
-			$row = $CRUD->getArticleById((int)$articleInfo['id']);
+			$row = $Query->getArticleById((int)$articleInfo['id']);
 			
 			# If it doesn't exist return false
     		if (!$row) return false;
@@ -299,7 +299,7 @@ class articlesManager
 
 		if ($title === 'Untitled' && !$newArticle) {
 			$title 	     = $row['title'];
-			$titleExists = $CRUD->SELECT('title')->FROM('posts')->where('title', '=', $title)->AND_WHERE('id', '!=', (int)$articleInfo['id'])->FIND();
+			$titleExists = $Query->SELECT('title')->FROM('posts')->where('title', '=', $title)->AND_WHERE('id', '!=', (int)$articleInfo['id'])->FIND();
 			if ($titleExists) $title = self::uniqueBaseTitle('Untitled');
 		}
 
@@ -312,7 +312,7 @@ class articlesManager
 		# Validate the author if it was provied
 		$author   = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
 		if (isset($articleInfo['author_id'])) {
-			$authorExists = $CRUD->SELECT('*')->FROM('authors')->WHERE('id', '=', $articleInfo['author_id'])->FIND();
+			$authorExists = $Query->SELECT('*')->FROM('authors')->WHERE('id', '=', $articleInfo['author_id'])->FIND();
 			if ($authorExists)  $author = $authorExists;
 		}
 
@@ -343,28 +343,28 @@ class articlesManager
 		$row['modified']    = $modified;
 		$row['comments_enabled'] = isset($articleInfo['comments']) && $articleInfo['comments'] === 'true' ? true : false;
 
-		$articleExists = isset($row['id']) ? $CRUD->SELECT('*')->FROM('posts')->WHERE('id', '=', (int)$row['id'])->FIND() : false;
+		$articleExists = isset($row['id']) ? $Query->SELECT('*')->FROM('posts')->WHERE('id', '=', (int)$row['id'])->FIND() : false;
 
 		# If the article does not exist insert a new row
 		if (!$articleExists || empty($articleExists)) {
-			$CRUD->INSERT_INTO('posts')->VALUES($row)->QUERY();
+			$Query->INSERT_INTO('posts')->VALUES($row)->QUERY();
 			$row['id'] = (int) self::$Kanso->Database->lastInsertId();
 		}
 		# Otherwise update the existing article and delete the tags
 		else {
 			$insertRow = \Kanso\Utility\Arr::unsetMultiple(['tags', 'category', 'content', 'comments', 'author'], $row);
-			$CRUD->UPDATE('posts')->SET($insertRow)->WHERE('id', '=', (int)$articleExists['id'])->QUERY();
-			$CRUD->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', $row['id'])->QUERY();
-			$CRUD->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $row['id'])->QUERY();
+			$Query->UPDATE('posts')->SET($insertRow)->WHERE('id', '=', (int)$articleExists['id'])->QUERY();
+			$Query->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', $row['id'])->QUERY();
+			$Query->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $row['id'])->QUERY();
 		}
 
 		# Join the tags
 		foreach ($tags as $tagId) {
-			$CRUD->INSERT_INTO('tags_to_posts')->VALUES(['post_id' => $row['id'], 'tag_id' => $tagId])->QUERY();
+			$Query->INSERT_INTO('tags_to_posts')->VALUES(['post_id' => $row['id'], 'tag_id' => $tagId])->QUERY();
 		}
 
 		# Join the content
-		$CRUD->INSERT_INTO('content_to_posts')->VALUES(['post_id' => $row['id'], 'content' => $content])->QUERY();
+		$Query->INSERT_INTO('content_to_posts')->VALUES(['post_id' => $row['id'], 'content' => $content])->QUERY();
 
 		# Fire the event
 		\Kanso\Events::fire('newArticle', [$row]);
@@ -466,11 +466,11 @@ class articlesManager
 	  		'slug' => 'uncategorized',
 	  	];
 	  	
-	  	# Get a new CRUD
-        $CRUD = self::$Kanso->CRUD();
+	    # Get a new Query Builder
+        $Query = self::$Kanso->Database()->Builder();
 
         # Check if the category exists
-	  	$catRow = $CRUD->SELECT('*')->FROM('categories')->WHERE('name', '=', $category)->FIND();
+	  	$catRow = $Query->SELECT('*')->FROM('categories')->WHERE('name', '=', $category)->FIND();
 
 	  	# If it exists return it
 	  	if ($catRow) return $catRow;
@@ -480,7 +480,7 @@ class articlesManager
 	  		'name' => $category,
 	  		'slug' => \Kanso\Utility\Str::slugFilter($category),
 	  	];
-	  	$CRUD->INSERT_INTO('categories')->VALUES($row)->QUERY();
+	  	$Query->INSERT_INTO('categories')->VALUES($row)->QUERY();
 	  	$row['id'] = (int) self::$Kanso->Database->lastInsertId();
 	  	return $row;
 	}
@@ -496,14 +496,14 @@ class articlesManager
     	# Return untagged if nothing was provided
 	   	if (empty($tags) || !is_array($tags)) return ['1'];
 
-	   	# Get a new CRUD
-        $CRUD = self::$Kanso->CRUD();
+	    # Get a new Query Builder
+        $Query = self::$Kanso->Database()->Builder();
 
         # Set an empty list
 	   	$tagsList = [];
 
 	   	foreach ($tags as $tag) {
-	   		$tagExists  = $CRUD->SELECT('*')->FROM('tags')->WHERE('name', '=', $tag)->FIND();
+	   		$tagExists  = $Query->SELECT('*')->FROM('tags')->WHERE('name', '=', $tag)->FIND();
 	   		if ($tagExists) {
 	   			$tagsList[] = (int)$tagExists['id'];
 	   		}
@@ -512,7 +512,7 @@ class articlesManager
 			  		'name' => $tag,
 			  		'slug' => \Kanso\Utility\Str::slugFilter($tag),
 			  	];
-			  	$CRUD->INSERT_INTO('tags')->VALUES($row)->QUERY();
+			  	$Query->INSERT_INTO('tags')->VALUES($row)->QUERY();
 			  	$row['id']  = (int)self::$Kanso->Database->lastInsertId();
 			  	$tagsList[] = $row['id'];
 	   		}
@@ -535,11 +535,11 @@ class articlesManager
     	# Counter
     	$i = 1;
 
-    	# Get a new CRUD
-        $CRUD = self::$Kanso->CRUD();
+    	# Get a new Query Builder
+        $Query = self::$Kanso->Database()->Builder();
 
         # Loop and append number
-    	while(!empty($CRUD->SELECT('*')->FROM('posts')->WHERE('title', '=', $title)->FIND())) {
+    	while(!empty($Query->SELECT('*')->FROM('posts')->WHERE('title', '=', $title)->FIND())) {
     		$title = preg_replace("/(".$baseTitle.")(-\d+)/", "$1"."", $title).'-'.$i;
     		$i++;
     	}
