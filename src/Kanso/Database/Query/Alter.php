@@ -59,7 +59,7 @@ class Alter
      *
      * @param  string    $column
      * @param  string    $dataType    The column parameters
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function ADD_COLUMN($column, $dataType)
     {
@@ -84,7 +84,7 @@ class Alter
      * Drop an existing column from the current table
      *
      * @param  string    $column
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function DROP_COLUMN($column)
     {
@@ -113,7 +113,7 @@ class Alter
      *
      * @param  string    $column
      * @param  string    $dataType (optional)
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function MODIFY_COLUMN($column, $dataType = null)
     {
@@ -142,7 +142,7 @@ class Alter
     /**
      * Add a primary key to the current column
      *
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function ADD_PRIMARY_KEY()
     {
@@ -170,7 +170,7 @@ class Alter
     /**
      * Drop the table's current primary key
      *
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function DROP_PRIMARY_KEY()
     {
@@ -191,7 +191,7 @@ class Alter
      * Add not null to a column
      *
      * @param $notNull  mixed (optional) Value to set null values to 
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function ADD_NOT_NULL($notNull = 0)
     {
@@ -221,7 +221,7 @@ class Alter
     /**
      * Drop not null on a column
      *
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function DROP_NOT_NULL()
     {
@@ -250,7 +250,7 @@ class Alter
     /**
      * Add unsinged to an integer or number based column
      *
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function ADD_UNSIGNED()
     {
@@ -277,7 +277,7 @@ class Alter
     /**
      * Drop unsinged on an integer or number based column
      *
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function DROP_UNSIGNED()
     {
@@ -306,7 +306,7 @@ class Alter
     /**
      * Add auto increment to an integer primary key column
      *
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function SET_AUTO_INCREMENT()
     {
@@ -345,7 +345,7 @@ class Alter
     /**
      * DROP auto increment on an integer primary key column
      *
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function DROP_AUTO_INCREMENT()
     {
@@ -369,7 +369,7 @@ class Alter
     /**
      * Set default value for column
      *
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function SET_DEFAULT($value = 'NULL')
     {
@@ -386,7 +386,7 @@ class Alter
     /**
      * Drop default value for column
      *
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function DROP_DEFAULT()
     {
@@ -406,7 +406,7 @@ class Alter
     /**
      * Add unique contraint on column
      *
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function ADD_UNIQUE()
     {
@@ -430,7 +430,7 @@ class Alter
     /**
      * Drop unique contraint on column
      *
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function DROP_UNIQUE()
     {
@@ -460,7 +460,7 @@ class Alter
      * @param string    $referenceKey
      * @param string    $constraint (optional)
      *
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function ADD_FOREIGN_KEY($referenceTable, $referenceKey, $constraint = null) 
     {
@@ -491,7 +491,7 @@ class Alter
      * @param string    $referenceKey
      * @param string    $constraint (optional)
      *
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function DROP_FOREIGN_KEY($referenceTable, $referenceKey, $constraint = null)
     {

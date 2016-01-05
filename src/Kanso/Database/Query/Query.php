@@ -5,8 +5,8 @@ namespace Kanso\Database\Query;
 /**
  * Database Query
  *
- * This class acts as a way for CRUD to query the database
- * Each CRUD instance has it's own Query object for building
+ * This class acts as a way for Builder to query the database
+ * Each Builder instance has it's own Query object for building
  * and executing SQL on the database.
  */
 

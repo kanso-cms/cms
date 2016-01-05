@@ -23,7 +23,7 @@ class Builder
 	private $Database;
 
     /**
-     * @var \Kanso\Database\CRUD\Query
+     * @var \Kanso\Database\Query\Query
      */ 
 	private $Query;
 	
@@ -50,7 +50,7 @@ class Builder
      *
      * @param  string    $tableName
      * @param  array     $params
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function CREATE_TABLE($tableName, $params)
     {
@@ -79,7 +79,7 @@ class Builder
         # Set the table in the query
         $this->Query->setTable($tableName);
 
-        # Return CRUD for chaining
+        # Return Builder for chaining
         return $this;
     }
 
@@ -87,7 +87,7 @@ class Builder
      * Drop an existing table
      *
      * @param  string    $tableName
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function DROP_TABLE($tableName)
     {
@@ -101,7 +101,7 @@ class Builder
      * Truncate an existing table
      *
      * @param  string    $tableName
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function TRUNCATE_TABLE($tableName)
     {
@@ -115,7 +115,7 @@ class Builder
      * Initialize an alter statement
      *
      * @param  string    $tableName
-     * @return \Kanso\Database\CRUD\Alter
+     * @return \Kanso\Database\Query\Alter
      */
     public function ALTER_TABLE($tableName)
     {
@@ -132,7 +132,7 @@ class Builder
      * Set the query to query a given table
      *
      * @param  string    $table
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function FROM($table)
     {
@@ -146,7 +146,7 @@ class Builder
      * Set the query to UPDATE a given table
      *
      * @param  string    $table
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function UPDATE($table)
     {
@@ -159,7 +159,7 @@ class Builder
      * Set the query to INSERT INTO a given table
      *
      * @param  string    $table
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function INSERT_INTO($table)
     {
@@ -173,7 +173,7 @@ class Builder
      * Set the query to INSERT INTO and load values
      *
      * @param  string    $values
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function VALUES($values)
     {
@@ -185,7 +185,7 @@ class Builder
      * Set the query to SET and load values
      *
      * @param  string    $values
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function SET($values) 
     {
@@ -197,7 +197,7 @@ class Builder
      * Set the query to DELETE and load table
      *
      * @param  string    $table
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function DELETE_FROM($table)
     {
@@ -225,7 +225,7 @@ class Builder
      * Select values from a table
      *
      * @param  string    $values
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function SELECT($values)
     {
@@ -239,7 +239,7 @@ class Builder
      * @param  string    $column
      * @param  string    $op
      * @param  string    $value
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function WHERE($column, $op, $value)
     {
@@ -253,7 +253,7 @@ class Builder
      * @param  string    $column
      * @param  string    $op
      * @param  string    $value
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function AND_WHERE($column, $op, $value)
     {
@@ -267,7 +267,7 @@ class Builder
      * @param  string    $column
      * @param  string    $op
      * @param  string    $value
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function OR_WHERE($column, $op, $value)
     {
@@ -280,7 +280,7 @@ class Builder
      *
      * @param  string    $table
      * @param  string    $query
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function JOIN_ON($table, $query)
     {
@@ -293,7 +293,7 @@ class Builder
      *
      * @param  string    $table
      * @param  string    $query
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function INNER_JOIN_ON($table, $query)
     {
@@ -306,7 +306,7 @@ class Builder
      *
      * @param  string    $table
      * @param  string    $query
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function LEFT_JOIN_ON($table, $query)
     {
@@ -319,7 +319,7 @@ class Builder
      *
      * @param  string    $table
      * @param  string    $query
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function RIGHT_JOIN_ON($table, $query)
     {
@@ -332,7 +332,7 @@ class Builder
      *
      * @param  string    $table
      * @param  string    $query
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function OUTER_JOIN_ON($table, $query)
     {
@@ -345,7 +345,7 @@ class Builder
      *
      * @param  string    $key
      * @param  string    $direction
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function ORDER_BY($key, $direction = 'DESC')
     {
@@ -358,7 +358,7 @@ class Builder
      *
      * @param  string    $key
      * @param  string    $direction
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function GROUP_BY($key)
     {
@@ -371,7 +371,7 @@ class Builder
      *
      * @param  string    $keys
      * @param  string    $as
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function GROUP_CONCAT($keys, $as)
     {
@@ -384,7 +384,7 @@ class Builder
      *
      * @param  string    $keys
      * @param  string    $as
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function LIMIT($value)
     {
@@ -395,7 +395,7 @@ class Builder
     /**
      * Execute a query and limit to single row
      *
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function ROW()
     {
@@ -407,7 +407,7 @@ class Builder
      * and/or find a single row by id
      *
      * @param  int    $id
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function FIND($id = null)
     {
@@ -417,7 +417,7 @@ class Builder
     /**
      * Execute a query and find all rows
      *
-     * @return \Kanso\Database\CRUD\CRUD
+     * @return \Kanso\Database\Query\Builder
      */
     public function FIND_ALL()
     {
@@ -442,20 +442,20 @@ class Builder
     public function getArticlesByIndex($index = null, $value = null, $limit = null, $joins = [])
     {
      
-        # Get a new CRUD 
-        $CRUD = new CRUD();
+        # Get a new Builder 
+        $Query = new Builder();
 
         # Select the posts
-        $CRUD->SELECT('*')->FROM('posts');
+        $Query->SELECT('*')->FROM('posts');
 
         # If clauses were supplied, set queries
-        if ($index && $value) $CRUD->WHERE($index, '=', $value);
+        if ($index && $value) $Query->WHERE($index, '=', $value);
 
         # If a limit was supplied set a limit
-        if ($limit) $CRUD->LIMIT((int)$limit);
+        if ($limit) $Query->LIMIT((int)$limit);
 
         # Find the articles
-        $articles = $CRUD->FIND_ALL();
+        $articles = $Query->FIND_ALL();
 
         if (!empty($joins)) {
 
@@ -472,20 +472,20 @@ class Builder
             # Loop the article, adding content, tags, category, comments, author
             if (!empty($articles)) {
                 if (!$this->isMulti($articles)) {
-                    if ($joinTags)   $articles['tags']     = $CRUD->SELECT('tags.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id')->WHERE('tags_to_posts.post_id', '=', (int)$articles['id'])->FIND_ALL();
-                    if ($joinCats)   $articles['category'] = $CRUD->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$articles['category_id'])->FIND();
-                    if ($joinCont)   $articles['content']  = $CRUD->SELECT('content')->FROM('content_to_posts')->WHERE('post_id', '=', (int)$articles['id'])->FIND()['content'];
-                    if ($joinComts)  $articles['comments'] = $CRUD->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$articles['id'])->FIND_ALL();
-                    if ($joinAuthor) $articles['author']   = $CRUD->SELECT('*')->FROM('authors')->WHERE('id', '=', (int)$articles['author_id'])->FIND();
+                    if ($joinTags)   $articles['tags']     = $Query->SELECT('tags.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id')->WHERE('tags_to_posts.post_id', '=', (int)$articles['id'])->FIND_ALL();
+                    if ($joinCats)   $articles['category'] = $Query->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$articles['category_id'])->FIND();
+                    if ($joinCont)   $articles['content']  = $Query->SELECT('content')->FROM('content_to_posts')->WHERE('post_id', '=', (int)$articles['id'])->FIND()['content'];
+                    if ($joinComts)  $articles['comments'] = $Query->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$articles['id'])->FIND_ALL();
+                    if ($joinAuthor) $articles['author']   = $Query->SELECT('*')->FROM('authors')->WHERE('id', '=', (int)$articles['author_id'])->FIND();
 
                 }
                 else {
                     foreach ($articles as $i => $article) {
-                        if ($joinTags)   $articles[$i]['tags']     = $CRUD->SELECT('tags.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id')->WHERE('post_id', '=', (int)$article['id'])->FIND_ALL();
-                        if ($joinCats)   $articles[$i]['category'] = $CRUD->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$article['category_id'])->FIND();
-                        if ($joinCont)   $articles[$i]['content']  = $CRUD->SELECT('content')->FROM('content_to_posts')->WHERE('post_id', '=', (int)$article['id'])->FIND()['content'];
-                        if ($joinComts)  $articles[$i]['comments'] = $CRUD->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$article['id'])->FIND_ALL();
-                        if ($joinAuthor) $articles[$i]['author']   = $CRUD->SELECT('*')->FROM('authors')->WHERE('id', '=', (int)$article['author_id'])->FIND();
+                        if ($joinTags)   $articles[$i]['tags']     = $Query->SELECT('tags.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id')->WHERE('post_id', '=', (int)$article['id'])->FIND_ALL();
+                        if ($joinCats)   $articles[$i]['category'] = $Query->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$article['category_id'])->FIND();
+                        if ($joinCont)   $articles[$i]['content']  = $Query->SELECT('content')->FROM('content_to_posts')->WHERE('post_id', '=', (int)$article['id'])->FIND()['content'];
+                        if ($joinComts)  $articles[$i]['comments'] = $Query->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$article['id'])->FIND_ALL();
+                        if ($joinAuthor) $articles[$i]['author']   = $Query->SELECT('*')->FROM('authors')->WHERE('id', '=', (int)$article['author_id'])->FIND();
                     }
                 }
             }
