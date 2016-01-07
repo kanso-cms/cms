@@ -463,13 +463,16 @@ class Alter
      * @return \Kanso\Database\Query\Alter
      */
     public function ADD_FOREIGN_KEY($referenceTable, $referenceKey, $constraint = null) 
-    {
+    {   
+
+        # Prefix the reference table
+        $referenceTable = $this->Database->tablePrefix.$this->indexFilter($referenceTable);
 
         # Create a constraint if it was not provided
-        $kCol   = substr($this->column, 0, 3);
-        $ktble  = substr($referenceTable, 0, 3);
-        $ktble2 = substr($this->tableName, 0, 3);
-        $kkey   = substr($referenceKey, 0, 3);
+        $kCol   = substr(str_replace($this->Database->tablePrefix, '', $this->column), 0, 3);
+        $ktble  = substr(str_replace($this->Database->tablePrefix, '', $referenceTable), 0, 3);
+        $ktble2 = substr(str_replace($this->Database->tablePrefix, '', $this->tableName), 0, 3);
+        $kkey   = substr(str_replace($this->Database->tablePrefix, '', $referenceKey), 0, 3);
         $constraint   = $constraint ? $constraint : str_replace(" ", "_", "fk $kCol toTable $ktble fromT $ktble2 onCol $kkey");
 
         $SQL = "ALTER TABLE `$this->tableName` ADD CONSTRAINT `$constraint` FOREIGN KEY (`$this->column`) REFERENCES $referenceTable(`$referenceKey`)";
@@ -495,12 +498,14 @@ class Alter
      */
     public function DROP_FOREIGN_KEY($referenceTable, $referenceKey, $constraint = null)
     {
+        # Prefix the reference table
+        $referenceTable = $this->Database->tablePrefix.$this->indexFilter($referenceTable);
 
         # Create a constraint if it was not provided
-        $kCol   = substr($this->column, 0, 3);
-        $ktble  = substr($referenceTable, 0, 3);
-        $ktble2 = substr($this->tableName, 0, 3);
-        $kkey   = substr($referenceKey, 0, 3);
+        $kCol   = substr(str_replace($this->Database->tablePrefix, '', $this->column), 0, 3);
+        $ktble  = substr(str_replace($this->Database->tablePrefix, '', $referenceTable), 0, 3);
+        $ktble2 = substr(str_replace($this->Database->tablePrefix, '', $this->tableName), 0, 3);
+        $kkey   = substr(str_replace($this->Database->tablePrefix, '', $referenceKey), 0, 3);
         $constraint   = $constraint ? $constraint : str_replace(" ", "_", "fk $kCol toTable $ktble fromT $ktble2 onCol $kkey");
 
         # Remove the FK

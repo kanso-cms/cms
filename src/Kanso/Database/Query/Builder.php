@@ -66,7 +66,7 @@ class Builder
         
         # Loop the columns
         foreach ($params as $name => $params) {
-            $name  = $this->indexFilter($name);
+            $name  = strtolower(str_replace(' ', '_', $name));
             $SQL[] = "`$name` ".str_replace('|', '', $params).',';
         }
 
@@ -150,7 +150,7 @@ class Builder
      */
     public function UPDATE($table)
     {
-        $table  = $this->indexFilter($table);
+        $table = $this->indexFilter($table);
         $this->Query->setTable($table);
         return $this;
     }
@@ -201,7 +201,7 @@ class Builder
      */
     public function DELETE_FROM($table)
     {
-        $table  = $this->indexFilter($table);
+        $table = $this->indexFilter($table);
         $this->Query->setTable($table);
         $this->Query->setOperation('DELETE');
         return $this;
@@ -229,6 +229,7 @@ class Builder
      */
     public function SELECT($values)
     {
+        $values = $this->queryFilter($values);
         $this->Query->select($values);
         return $this;
     }
@@ -243,6 +244,7 @@ class Builder
      */
     public function WHERE($column, $op, $value)
     {
+        $column = $this->queryFilter($column);
         $this->Query->where($column, $op, $value);
         return $this;
     }
@@ -257,6 +259,7 @@ class Builder
      */
     public function AND_WHERE($column, $op, $value)
     {
+        $column = $this->queryFilter($column);
         $this->Query->and_where($column, $op, $value);
         return $this;
     }
@@ -271,6 +274,7 @@ class Builder
      */
     public function OR_WHERE($column, $op, $value)
     {
+        $column = $this->queryFilter($column);
         $this->Query->or_where($column, $op, $value);
         return $this;
     }   
@@ -284,6 +288,8 @@ class Builder
      */
     public function JOIN_ON($table, $query)
     {
+        $table = $this->indexFilter($table);
+        $query = $this->queryFilter($query);
         $this->Query->join($table, $query);
         return $this;
     }
@@ -297,6 +303,8 @@ class Builder
      */
     public function INNER_JOIN_ON($table, $query)
     {
+        $table = $this->indexFilter($table);
+        $query = $this->queryFilter($query);
         $this->Query->join($table, $query);
         return $this;
     }
@@ -310,6 +318,8 @@ class Builder
      */
     public function LEFT_JOIN_ON($table, $query)
     {
+        $table = $this->indexFilter($table);
+        $query = $this->queryFilter($query);
         $this->Query->left_join($table, $query);
         return $this;
     }
@@ -323,6 +333,8 @@ class Builder
      */
     public function RIGHT_JOIN_ON($table, $query)
     {
+        $table = $this->indexFilter($table);
+        $query = $this->queryFilter($query);
         $this->Query->right_join($table, $query);
         return $this;
     }
@@ -336,6 +348,8 @@ class Builder
      */
     public function OUTER_JOIN_ON($table, $query)
     {
+        $table = $this->indexFilter($table);
+        $query = $this->queryFilter($query);
         $this->Query->full_outer_join($table, $query);
         return $this;
     }
@@ -349,6 +363,7 @@ class Builder
      */
     public function ORDER_BY($key, $direction = 'DESC')
     {
+        $key = $this->queryFilter($key);
         $this->Query->order_by($key, $direction);
         return $this;
     }
@@ -362,6 +377,7 @@ class Builder
      */
     public function GROUP_BY($key)
     {
+        $key = $this->queryFilter($key);
         $this->Query->group_by($key);
         return $this;
     }
@@ -375,6 +391,7 @@ class Builder
      */
     public function GROUP_CONCAT($keys, $as)
     {
+        $keys = $this->queryFilter($keys);
         $this->Query->group_concat($keys, $as);
         return $this;
     }
@@ -476,7 +493,7 @@ class Builder
                     if ($joinCats)   $articles['category'] = $Query->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$articles['category_id'])->FIND();
                     if ($joinCont)   $articles['content']  = $Query->SELECT('content')->FROM('content_to_posts')->WHERE('post_id', '=', (int)$articles['id'])->FIND()['content'];
                     if ($joinComts)  $articles['comments'] = $Query->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$articles['id'])->FIND_ALL();
-                    if ($joinAuthor) $articles['author']   = $Query->SELECT('*')->FROM('authors')->WHERE('id', '=', (int)$articles['author_id'])->FIND();
+                    if ($joinAuthor) $articles['author']   = $Query->SELECT('*')->FROM('users')->WHERE('id', '=', (int)$articles['author_id'])->FIND();
 
                 }
                 else {
@@ -485,7 +502,7 @@ class Builder
                         if ($joinCats)   $articles[$i]['category'] = $Query->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$article['category_id'])->FIND();
                         if ($joinCont)   $articles[$i]['content']  = $Query->SELECT('content')->FROM('content_to_posts')->WHERE('post_id', '=', (int)$article['id'])->FIND()['content'];
                         if ($joinComts)  $articles[$i]['comments'] = $Query->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$article['id'])->FIND_ALL();
-                        if ($joinAuthor) $articles[$i]['author']   = $Query->SELECT('*')->FROM('authors')->WHERE('id', '=', (int)$article['author_id'])->FIND();
+                        if ($joinAuthor) $articles[$i]['author']   = $Query->SELECT('*')->FROM('users')->WHERE('id', '=', (int)$article['author_id'])->FIND();
                     }
                 }
             }
@@ -531,7 +548,19 @@ class Builder
      */
     private function indexFilter($str)
     {
-        return strtolower(str_replace(' ', '_', $str));
+        # append the table prefix
+        return $this->Database->tablePrefix.strtolower(str_replace(' ', '_', $str));
+    }
+
+    private function queryFilter($query)
+    {
+        # Check that the the query is using a dot notatation
+        # on a column
+        # e.g turn  posts.id -> kanso_posts.id
+        if (strpos($query, '.') !== false) {
+            return preg_replace('/(\w+\.)/', $this->Database->tablePrefix."$1", $query);
+        }
+        return $query;
     }
 
 

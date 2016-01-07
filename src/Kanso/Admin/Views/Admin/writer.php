@@ -1,7 +1,7 @@
 	<div class="site-container cleafix">
 
 		<div class="writer active">
-		<textarea data-id="<?php echo $postID;?>" data-post="<?php echo $ajax_type;?>" id="writer"><?php echo $writer_content;?></textarea>
+		<textarea data-id="<?php echo adminWriterPostId();?>" data-post="<?php echo adminWriterAjaxType();?>" id="writer"><?php echo adminWriterContent();?></textarea>
 		</div>
 
 		<div class="reader markdown-body">
@@ -13,13 +13,13 @@
 				<div class="row">
 					<h6 class="label">Hero Image</h6>
 					<div class="row js-hero-drop hero-drop-zone">
-						<form class="<?php echo $hero_active;?>">
+						<form class="<?php echo adminHeroDZActive();?>">
 							<div class="upload-bar js-upload-bar"><span style="width:0%;" class="progress"></span></div>
 							<div class="upload-prompt dz-message">
 								<p>Drop image here or click to upload</p>
 								<svg viewBox="0 0 100 100"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#image"></use></svg>
 							</div>
-							<?php echo $article_img;?>
+							<?php echo adminWriterHeroImg();?>
 						</form>
 					</div>
 				</div>
@@ -28,43 +28,40 @@
 
 					<div class="input-wrap">
 						<label class="bold">Title</label>
-						<input class="input-default small" type="text" name="title" value="<?php echo $the_title;?>" autocomplete="off"/>
+						<input class="input-default small" type="text" name="title" value="<?php echo adminWriterTheTitle();?>" autocomplete="off"/>
 					</div>
 
 					<div class="input-wrap">
 						<label class="bold">Category</label>
-						<input class="input-default small" type="text" name="category" value="<?php echo $the_category;?>" autocomplete="off"/>
+						<input class="input-default small" type="text" name="category" value="<?php echo adminWriterTheCategory();?>" autocomplete="off"/>
 					</div>
 
 					<div class="input-wrap">
 						<label class="bold">Tags</label>
-						<input class="input-default small" type="text" name="tags" value="<?php echo $the_tags;?>" autocomplete="off"/>
+						<input class="input-default small" type="text" name="tags" value="<?php echo adminWriterTheTags();?>" autocomplete="off"/>
 					</div>
 
 					<div class="input-wrap">
 						<label class="bold">Excerpt</label>
-						<textarea class="input-default small" type="text" name="excerpt" value="<?php echo $the_excerpt;?>"><?php echo $the_excerpt;?></textarea>
+						<textarea class="input-default small" type="text" name="excerpt" value="<?php echo adminWriterTheExcerpt();?>"><?php echo adminWriterTheExcerpt();?></textarea>
 					</div>
 
 					<div class="input-wrap">
 						<label class="bold">Type</label>
 						<span class="select-wrap">
-							<select class="input-default small" name="type">
-								<option value="post" <?php echo $selectedPost;?>>Post</option>
-					  			<option value="page" <?php echo $selectedPage;?>>Page</option>
-							</select>
+							<?php echo adminWriterPostTypeSelect();?>
 						</span>
 					</div>
 
 					<div class="input-wrap">
 						<div class="check-wrap">
 							<p class="bold label">Enable Comments</p>
-							<input id="commentsCheck" type="checkbox" name="comments" <?php echo $enabledComments;?>>
+							<input id="commentsCheck" type="checkbox" name="comments" <?php echo adminWriterEnabledComments();?>>
 							<label class="checkbox small" for="commentsCheck"></label>
 						</div>
 					</div>
 
-					<input type="hidden" style="display:none" name="thumbnail" class="js-thumbnail" value="<?php echo $thumbnail;?>"/>
+					<input type="hidden" style="display:none" name="thumbnail" class="js-thumbnail" value="<?php echo adminWriterHeroSrc();?>"/>
 
 
 					<div class="input-wrap">

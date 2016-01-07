@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanso\Admin\Utility;
+namespace Kanso\Articles;
 
 /**
  * Articles Manager
@@ -11,13 +11,13 @@ namespace Kanso\Admin\Utility;
  * statically from the router.
  *
  */
-class articlesManager
+class Bookkeeper
 {
 
-  	/**
-  	 * @var \Kanso\Kanso
-  	 */
-  	protected static $Kanso;
+	public function __construct()
+	{
+
+	}
 
   	/**
    	 * Change an articles status
@@ -26,20 +26,17 @@ class articlesManager
      * @param  string    $status      The article status to change
      * @return string|boolean
      */
-  	public static function changeArticleStatus($articleID, $status) 
+  	public function changeStatus($articleID, $status) 
   	{
   		
   		# Convert the article ID to an integer
   		$articleID = (int)$articleID;
 
-  		# Get a Kanso instance
-        if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
-
         # Get a new Query Builder
-        $Query = self::$Kanso->Database()->Builder();
+        $Query =  \Kanso\Kanso::getInstance()->Database()->Builder();
 
   		# Find the existing article
-    	$articleRow = $Query->getArticleById($articleID);
+    	$articleRow = $Query->SELECT('*')->FROM('posts')->WHERE('id', '=', $articleID)->ROW();
 
     	# If it doesn't exist return false
     	if (!$articleRow || empty($articleRow)) return false;
@@ -48,12 +45,15 @@ class articlesManager
     	if ($articleRow['status'] === $status) return true;
 
     	# If the article is a published page, update kanso's static pages
-    	\Kanso\Admin\Utility\settingsManager::addToStaticPages($articleRow['slug']);
+    	if ($status === 'published' && $articleRow['type'] === 'published') {
+    		$this->addToStaticPages($articleRow['slug']);
+    	}
+    	else {
+    		$this->removeFromStaticPages($articleRow['slug']);
+    	}
 
     	# Save the entry
-    	$save = $Query->UPDATE('posts')->SET(['status' => $status])->WHERE('id', '=', $articleID)->QUERY();
-
-    	return 'valid';
+    	return $Query->UPDATE('posts')->SET(['status' => $status])->WHERE('id', '=', $articleID)->QUERY();
 
   	}
 
@@ -62,49 +62,43 @@ class articlesManager
    	 *
      * @param  int    $articleID   The article id from the database to be deleted
      */
-    public static function deleteArticle($articleID) 
+    public function delete($articleID) 
     {
 
     	# Convert the article ID to an integer
   		$articleID = (int)$articleID;
 
-  		# Get a Kanso instance
-        if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
-
         # Get a new Query Builder
-        $Query = self::$Kanso->Database()->Builder();
+        $Query = \Kanso\Kanso::getInstance()->Database->Builder();
 
     	# Find the existing article
-    	$articleRow = $Query->getArticleById($articleID);
+    	$articleRow = $Query->SELECT('*')->FROM('posts')->WHERE('id', '=', $articleID)->ROW();
 
     	# If it doesn't exist return false
     	if (!$articleRow || empty($articleRow)) return false;
 
-    	# Store the id
-    	$id = (int)$articleRow['id'];
-
     	# Remove comments associated with the article
-    	$Query->DELETE_FROM('comments')->WHERE('post_id', '=', $id)->QUERY();
+    	$Query->DELETE_FROM('comments')->WHERE('post_id', '=', $articleID)->QUERY();
 
     	# Remove the tags associated with the article
-    	$Query->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', $id)->QUERY();
+    	$Query->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', $articleID)->QUERY();
 
     	# Remove the content associated with the article
-    	$Query->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $id)->QUERY();
+    	$Query->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $articleID)->QUERY();
 
     	# Clear the cache
-    	self::$Kanso->Cache->clearCache($articleRow['slug']);
+    	\Kanso\Kanso::getInstance()->Cache->clearCache($articleRow['slug']);
 
     	# Delete the article entry
-    	$Query->DELETE_FROM('posts')->WHERE('id', '=', (int)$articleRow['id'])->QUERY();
+    	$Query->DELETE_FROM('posts')->WHERE('id', '=', $articleID)->QUERY();
 
     	# If the article was a published page, update kanso's static pages
-    	if ($articleRow['type'] === 'page' && $articleRow['status'] === 'published') self::removeFromStaticPages($articleRow['slug']);
+    	if ($articleRow['type'] === 'page' && $articleRow['status'] === 'published') $this->removeFromStaticPages($articleRow['slug']);
 
     	# Fire the article delete event
     	\Kanso\Events::fire('articleDelete', [$articleRow]);
 
-    	return 'valid';
+    	return true;
 
     }
 
@@ -116,17 +110,17 @@ class articlesManager
 	 * @param  boolean    $deleteTag    Should the tag be deleted after clearing it
 	 * @return string|boolean
 	*/
-	public static function clearTag($tagID, $tagType, $deleteTag = false) 
+	public function clearTaxonomy($tagID, $tagType, $deleteTag = false) 
 	{
 
 		# Convert the article ID to an integer
   		$tagID = (int)$tagID;
 
   		# Get a Kanso instance
-        if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
+        if (!$this->Kanso) $this->Kanso = \Kanso\Kanso::getInstance();
 
        	# Get a new Query Builder
-        $Query = self::$Kanso->Database()->Builder();
+        $Query = $this->Kanso->Database()->Builder();
 
 		# Can't or clear delete 'Untagged' or 'Uncategorized'
 		if ($tagID === 1) return false;
@@ -206,17 +200,17 @@ class articlesManager
 	 * @param  string     $name         The tags name
 	 * @return string|boolean
 	*/
-	public static function editTag($tagID, $tagType, $slug, $name)
+	public function editTaxonomy($tagID, $tagType, $slug, $name)
 	{
 
 		# Convert the article ID to an integer
   		$tagID = (int)$tagID;
 
   		# Get a Kanso instance
-        if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
+        if (!$this->Kanso) $this->Kanso = \Kanso\Kanso::getInstance();
 
         # Get a new Query Builder
-        $Query = self::$Kanso->Database()->Builder();
+        $Query = $this->Kanso->Database()->Builder();
 
 		# Can't change 'Untagged' or 'Uncategorized'
 		if ($tagID === 1) return false;
@@ -255,22 +249,19 @@ class articlesManager
 	 *
 	 * @param   array      $articleInfo        Associative array of the article data
 	 * @param   bool       $newArticle         Is this a new article (otional) Defaults to true
-	 * @param   bool       $isImport           Is this an import (otional) Defaults to false
 	 * @return  bool|array
 	 */
-	public static function saveArticle($articleInfo, $newArticle = true) 
+	public function save($articleInfo, $newArticle = true) 
 	{
-		# Get a Kanso instance
-        if (!self::$Kanso) self::$Kanso = \Kanso\Kanso::getInstance();
 
         # Get a new Query Builder
-        $Query = self::$Kanso->Database()->Builder();
+        $Query = \Kanso\Kanso::getInstance()->Database->Builder();
 
         # If we are saving an existing article, use the article's row
         # instead of the table
 		if (!$newArticle) {
 			if (!isset($articleInfo['id']) || ($articleInfo['id']) && (int)$articleInfo['id'] < 1) return false;
-			$row = $Query->getArticleById((int)$articleInfo['id']);
+			$row = $Query->SELECT('*')->FROM('posts')->WHERE('id', '=', (int)$articleInfo['id'])->ROW();
 			
 			# If it doesn't exist return false
     		if (!$row) return false;
@@ -283,11 +274,11 @@ class articlesManager
 		$category = $articleInfo['category'];
 		if (\Kanso\Utility\Str::contains($category, ',')) $category = trim(\Kanso\Utility\Str::getBeforeFirstChar($articleInfo['category'], ','));
 		if ($category === '') $category = 'Uncategorized';
-		$category = self::createCategory($category);
+		$category = $this->createCategory($category);
 
 		# Convert the tags to an array of ids. If the tag don't exist - create them
 		$tags = $articleInfo['tags'] !== '' ? array_filter(array_map('trim', explode(',', $articleInfo['tags']))) : ['Untagged'];
-		$tags  = self::createTags($tags);
+		$tags  = $this->createTags($tags);
 
 		# Validate the content
 		$content = $articleInfo['content'];
@@ -295,12 +286,12 @@ class articlesManager
 
 		# Validate the title
 		$title = trim($articleInfo['title']) === '' ? 'Untitled' : $articleInfo['title'];
-		$title = $newArticle ? self::uniqueBaseTitle($title) : $title;
+		$title = $newArticle ? $this->uniqueBaseTitle($title) : $title;
 
 		if ($title === 'Untitled' && !$newArticle) {
 			$title 	     = $row['title'];
 			$titleExists = $Query->SELECT('title')->FROM('posts')->where('title', '=', $title)->AND_WHERE('id', '!=', (int)$articleInfo['id'])->FIND();
-			if ($titleExists) $title = self::uniqueBaseTitle('Untitled');
+			if ($titleExists) $title = $this->uniqueBaseTitle('Untitled');
 		}
 
 		# Validate the created and modified times if they were provided
@@ -310,9 +301,9 @@ class articlesManager
 		$modified = !isset($articleInfo['modified']) ? time() : $articleInfo['modified'];		
 
 		# Validate the author if it was provied
-		$author   = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
+		$author = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');;
 		if (isset($articleInfo['author_id'])) {
-			$authorExists = $Query->SELECT('*')->FROM('authors')->WHERE('id', '=', $articleInfo['author_id'])->FIND();
+			$authorExists = $Query->SELECT('*')->FROM('users')->WHERE('id', '=', $articleInfo['author_id'])->FIND();
 			if ($authorExists)  $author = $authorExists;
 		}
 
@@ -328,7 +319,7 @@ class articlesManager
 		$articleInfo['thumbnail'] = \Kanso\Utility\Str::getAfterLastChar( rtrim($articleInfo['thumbnail'], '/'), '/');
 
 		# Create a slug based on the category, tags, slug, author
-		$slug  = self::titleToSlug($title, $category['slug'], $author['slug'], $created, $articleInfo['type']);
+		$slug  = $this->titleToSlug($title, $category['slug'], $author['slug'], $created, $articleInfo['type']);
 
 		# Insert new post into the database and grab the ID
 		$row['status']      = $status;
@@ -348,7 +339,7 @@ class articlesManager
 		# If the article does not exist insert a new row
 		if (!$articleExists || empty($articleExists)) {
 			$Query->INSERT_INTO('posts')->VALUES($row)->QUERY();
-			$row['id'] = (int) self::$Kanso->Database->lastInsertId();
+			$row['id'] = intval(\Kanso\Kanso::getInstance()->Database->lastInsertId());
 		}
 		# Otherwise update the existing article and delete the tags
 		else {
@@ -370,7 +361,7 @@ class articlesManager
 		\Kanso\Events::fire('newArticle', [$row]);
 		
 		# If the article is a page, update the static pages list
-		if ($row['type'] === 'page') self::addToStaticPages($row['slug']);
+		if ($row['type'] === 'page') $this->addToStaticPages($row['slug']);
 
 		# return the id
 		return ['id' => $row['id'], 'slug' => $row['slug']];
@@ -383,7 +374,7 @@ class articlesManager
 	 * @param  array    $articles    Associative array of the articles
 	 * @return string
 	*/
-	public static function batchImport($articles) 
+	public function batchImport($articles) 
 	{
 
 
@@ -408,12 +399,157 @@ class articlesManager
 	  		$articles[$i]['modified']    = (int)$articles[$i]['modified'];
 	  		if (isset($articles[$i]['author_id'])) $articles[$i]['author_id'] = (int)$articles[$i]['author_id'];
 
-	  		if (!self::saveArticle($articles[$i], true, false))  return "invalid_json"; 
+	  		if (!$this->save($articles[$i], true))  return "invalid_json"; 
 
 	  	}
 
 	  	return 'valid';
 	}
+
+	/**
+	 * Clear or Delete a tag or category
+	 *
+	 * @param  int        $tagID        The tag id to remove
+	 * @param  string     $tagType      'category' or 'tag'
+	 * @param  boolean    $deleteTag    Should the tag be deleted after clearing it
+	 * @return string|boolean
+	*/
+	public function clearTag($tagID, $tagType, $deleteTag = false) 
+	{
+
+		# Convert the article ID to an integer
+  		$tagID = (int)$tagID;
+
+       	# Get a new Query Builder
+        $Query = \Kanso\Kanso::getInstance()->Database()->Builder();
+
+		# Can't or clear delete 'Untagged' or 'Uncategorized'
+		if ($tagID === 1) return false;
+
+		# If this is a tag delete. Note tags have a junction table 
+		# i.e many posts to 1 tag.
+		if ($tagType === 'tag') {
+
+			# Get the tag row
+			$tagRow = $Query->SELECT('*')->FROM('tags')->WHERE('id', '=', (int)$tagID)->ROW();
+			
+			# If it doesn't exist return false
+    		if (!$tagRow || empty($tagRow)) return false;
+
+    		# Find articles from tag
+    		$tagArticles = $Query->SELECT('posts.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('posts', 'tags_to_posts.post_id = posts.id')->WHERE('tags_to_posts.tag_id', '=', (int)$tagID)->FIND_ALL();
+
+			# If the tag has articles, loop through the articles
+			# If an article will be left with no tags, set it as untagged
+			if ($tagArticles && !empty($tagArticles)) {
+
+				foreach ($tagArticles as $article) {
+					$articleTags = $Query->SELECT('*')->FROM('tags_to_posts')->WHERE('post_id', '=', (int)$article['id'])->FIND_ALL();
+					if (count($articleTags) === 1) {
+						$Query->INSERT_INTO('tags_to_posts')->VALUES(['post_id' => (int)$article['id'], 'tag_id' => 1])->QUERY();
+					}
+				}
+
+			}
+
+			# Remove joins
+			$Query->DELETE_FROM('tags_to_posts')->WHERE('tag_id', '=', (int)$tagID)->QUERY();
+
+			# Delete the tag
+			if ($deleteTag) $Query->DELETE_FROM('tags')->WHERE('id', '=', (int)$tagID)->QUERY();
+
+			return true;	
+		}
+
+		# Otherwise if this is a category delete
+		else if ($tagType === 'category') {
+
+
+			# Get the tag row
+			$catRow = $Query->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$tagID)->FIND();
+			
+			# If it doesn't exist return false
+    		if (!$catRow || empty($catRow)) return false;
+
+    		# Find articles from tag
+    		$catArticles = $Query->SELECT('*')->FROM('posts')->WHERE('category_id', '=', (int)$tagID)->FIND_ALL();
+
+			# If the tag has articles, loop through the articles
+			# Loop through articles and set the category to id 1
+    		if (!empty($catArticles)) {
+
+    			foreach ($catArticles as $article) {
+    				$Query->UPDATE('posts')->SET(['category_id' => 1])->WHERE('id', '=', (int)$article['id'])->QUERY();
+				}
+    		}
+
+			# Delete the category
+			if ($deleteTag) $Query->DELETE_FROM('categories')->WHERE('id', '=', (int)$tagID)->QUERY();
+
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Change a tag's slug/and/or name
+	 *
+	 * @param  int        $tagID        The tag id to remove
+	 * @param  string     $tagType      'category' or 'tag'
+	 * @param  string     $slug         The tags slug
+	 * @param  string     $name         The tags name
+	 * @return string|boolean
+	*/
+	public function editTag($tagID, $tagType, $slug, $name)
+	{
+
+		# Convert the article ID to an integer
+  		$tagID = (int)$tagID;
+
+        # Get a new Query Builder
+        $Query = \Kanso\Kanso::getInstance()->Database()->Builder();
+
+		# Can't change 'Untagged' or 'Uncategorized'
+		if ($tagID === 1) return false;
+
+		$table = $tagType === 'tag' ? 'tags' : 'categories';
+		$slug  = \Kanso\Utility\Str::slugFilter($slug);
+
+		# Get the tag row
+		$tagRow = $Query->SELECT('*')->FROM($table)->WHERE('id', '=', $tagID)->ROW();
+
+		# If it doesn't exist return false
+    	if (!$tagRow) return false;
+
+    	# If no changes are needed return true
+    	if ($tagRow['slug'] === $slug && $tagRow['name'] === $name) return true;
+
+    	# Get the tag based on the new slug and name
+    	$slugRow = $Query->SELECT('*')->FROM($table)->WHERE('slug', '=', $slug)->ROW();
+    	$nameRow = $Query->SELECT('*')->FROM($table)->WHERE('name', '=', $name)->ROW();
+		
+		# If there is another tag with the same slug - return false;
+    	if ($slugRow && $slugRow['id'] !== $tagID) return 'slug_exists';
+
+    	# If there is another tag with the same name - return false;
+    	if ($nameRow && $nameRow['id'] !== $tagID) return  'name_exists';
+ 		
+    	# Update the tag/category
+ 		$update = $Query->UPDATE($table)->SET(['name' => $name, 'slug' => $slug])->WHERE('id', '=', (int)$tagRow['id'])->QUERY();
+
+ 		if ($update) return true;
+ 		
+ 		# Update all the permalinks
+ 		/*if ($update) {
+ 			$allPosts = $Query->SELECT('*')->FROM('posts')->FIND_ALL();
+
+
+ 		}*/
+
+    	return true;
+
+	} 
 
 	/**
 	 * Convert a title to a slug with permalink structure
@@ -424,10 +560,10 @@ class articlesManager
 	 * @param  int       $created           A unix timestamp of when the article was created
 	 * @return string                       The slug to the article             
 	 */
-	private static function titleToSlug($title, $categorySlug, $authorSlug, $created, $type) 
+	private function titleToSlug($title, $categorySlug, $authorSlug, $created, $type) 
 	{
 	  	if ($type === 'page') return \Kanso\Utility\Str::slugFilter($title).'/';
-	  	$format = self::$Kanso->Config['KANSO_PERMALINKS'];
+	  	$format = \Kanso\Kanso::getInstance()->Config['KANSO_PERMALINKS'];
 	  	$dateMap = [
 	  		'year'     => 'Y',
 	  		'month'    => 'm',
@@ -457,7 +593,7 @@ class articlesManager
 	 * @param  string   $category       Category name
 	 * @return array             
 	 */
-	private static function createCategory($category) 
+	private function createCategory($category) 
 	{
 
 		$default = [
@@ -467,7 +603,7 @@ class articlesManager
 	  	];
 	  	
 	    # Get a new Query Builder
-        $Query = self::$Kanso->Database()->Builder();
+        $Query = \Kanso\Kanso::getInstance()->Database->Builder();
 
         # Check if the category exists
 	  	$catRow = $Query->SELECT('*')->FROM('categories')->WHERE('name', '=', $category)->FIND();
@@ -481,7 +617,7 @@ class articlesManager
 	  		'slug' => \Kanso\Utility\Str::slugFilter($category),
 	  	];
 	  	$Query->INSERT_INTO('categories')->VALUES($row)->QUERY();
-	  	$row['id'] = (int) self::$Kanso->Database->lastInsertId();
+	  	$row['id'] = intval(\Kanso\Kanso::getInstance()->Database->lastInsertId());
 	  	return $row;
 	}
 
@@ -491,13 +627,13 @@ class articlesManager
 	 * @param  array   $tags       Array of tag names to be created
 	 * @return array             
 	 */
-    private static function createTags($tags) 
+    private function createTags($tags) 
     {
     	# Return untagged if nothing was provided
 	   	if (empty($tags) || !is_array($tags)) return ['1'];
 
 	    # Get a new Query Builder
-        $Query = self::$Kanso->Database()->Builder();
+        $Query = \Kanso\Kanso::getInstance()->Database->Builder();
 
         # Set an empty list
 	   	$tagsList = [];
@@ -513,7 +649,7 @@ class articlesManager
 			  		'slug' => \Kanso\Utility\Str::slugFilter($tag),
 			  	];
 			  	$Query->INSERT_INTO('tags')->VALUES($row)->QUERY();
-			  	$row['id']  = (int)self::$Kanso->Database->lastInsertId();
+			  	$row['id']  = intval(\Kanso\Kanso::getInstance()->Database->lastInsertId());
 			  	$tagsList[] = $row['id'];
 	   		}
 	   	}
@@ -526,7 +662,7 @@ class articlesManager
 	 * @param  string    $path    The input title
 	 * @return string             The output title
 	 */
-	private static function uniqueBaseTitle($title)
+	private function uniqueBaseTitle($title)
 	{
 
 		# Set the base title
@@ -536,7 +672,7 @@ class articlesManager
     	$i = 1;
 
     	# Get a new Query Builder
-        $Query = self::$Kanso->Database()->Builder();
+        $Query = \Kanso\Kanso::getInstance()->Database->Builder();
 
         # Loop and append number
     	while(!empty($Query->SELECT('*')->FROM('posts')->WHERE('title', '=', $title)->FIND())) {
@@ -547,22 +683,25 @@ class articlesManager
     	return $title;
 	}
 
-	private static function removeFromStaticPages($slug)
+	private function removeFromStaticPages($slug)
 	{
-		$staticPages = self::$Kanso->Config()['KANSO_STATIC_PAGES'];
-		foreach ($staticPages as $i => $value) {
-			if ($value === $slug) unset($staticPages[$i]);
-		}
-		self::$Kanso->setConfigPair('KANSO_STATIC_PAGES', $staticPages);
-		return true;
+		# Get the config
+        $slugs = \Kanso\Kanso::getInstance()->Config['KANSO_STATIC_PAGES'];
+
+        if(($key = array_search($slug, $slugs)) !== false) {
+            unset($slugs[$key]);
+        }
+        \Kanso\Kanso::getInstance()->setConfigPair('KANSO_STATIC_PAGES', array_values($slugs));
 	}
 
-	private static function addToStaticPages($slug)
+	private function addToStaticPages($slug)
 	{
-		$staticPages = self::$Kanso->Config()['KANSO_STATIC_PAGES'];
-		if (in_array($slug, $staticPages)) return true;
-		$staticPages[] = $slug;
-		self::$Kanso->setConfigPair('KANSO_STATIC_PAGES', $staticPages);
+		# Get the slugs
+        $slugs = \Kanso\Kanso::getInstance()->Config['KANSO_STATIC_PAGES'];
+
+        $slugs[] = $slug;
+
+        \Kanso\Kanso::getInstance()->setConfigPair('KANSO_STATIC_PAGES', array_unique(array_values($slugs)));
 	}
 
 }

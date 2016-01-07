@@ -1,7 +1,11 @@
 <h3>Administrator Settings</h3>
 
-<?php // <!-- IF USERNAME IS STILL ADMIN PUT A NOTIFICATION --> ?> 
-<?php if ($ADMIN_USER_DATA['username'] === 'admin') : ?>
+<?php // <!-- IF USERNAME IS STILL ADMIN PUT A NOTIFICATION --> ?>
+<?php 
+	$adminUser = adminGetUser();
+?>
+
+<?php if ($adminUser['username'] === 'admin') : ?>
 	<div class="row">
 		<div class="message info">
 			<div class="message-icon">
@@ -24,14 +28,14 @@
 	
 	<div class="input-wrap">
 		<label class="bold">Username</label>
-		<input class="input-default small" type="text" name="username" data-js-required="true" data-js-validation="no-spaces-text" data-js-min-legnth="5" data-js-max-legnth="30" maxlength="30" value="<?php echo $ADMIN_USER_DATA['username']?>" placeholder="John-Appleseed" autocomplete="off"/>
+		<input class="input-default small" type="text" name="username" data-js-required="true" data-js-validation="no-spaces-text" data-js-min-legnth="5" data-js-max-legnth="30" maxlength="30" value="<?php echo $adminUser['username']?>" placeholder="John-Appleseed" autocomplete="off"/>
 		<p class="input-error">* Your username needs to be at least five characters long, no spaces or special characters.</p>
 	</div>
 
 	
 	<div class="input-wrap">
 		<label class="bold">Email</label>
-		<input class="input-default small" type="text" name="email" data-js-validation="email" data-js-max-legnth="100" data-js-required="true" maxlength="100" value="<?php echo $ADMIN_USER_DATA['email']?>" placeholder="John@Appleseed.com" autocomplete="off"/>
+		<input class="input-default small" type="text" name="email" data-js-validation="email" data-js-max-legnth="100" data-js-required="true" maxlength="100" value="<?php echo $adminUser['email']?>" placeholder="John@Appleseed.com" autocomplete="off"/>
 		<p class="input-error">* Please enter a valid email address.</p>
 	</div>
 
@@ -47,7 +51,7 @@
 			<p class="info text-masked">
 				Do you want to receive email notifications whenever a new comment is made.
 			</p>
-			<input id="notificationsCheck" type="checkbox" name="email_notifications" <?php if ( (bool) $ADMIN_USER_DATA['email_notifications'] ) echo 'checked=""'; ?>>
+			<input id="notificationsCheck" type="checkbox" name="email_notifications" <?php if ( (bool) $adminUser['email_notifications'] ) echo 'checked=""'; ?>>
 			<label class="checkbox small" for="notificationsCheck"></label>
 		</div>
 	</div>

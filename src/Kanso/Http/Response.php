@@ -318,21 +318,7 @@ class Response {
             return null;
         }
     }
-
-    /**
-     * Redirect
-     *
-     * This method prepares this response to return an HTTP Redirect response
-     * to the HTTP client.
-     *
-     * @param string $url    The redirect destination
-     * @param int    $status The redirect HTTP status code
-     */
-    public function redirect ($url, $status = 302)
-    {
-        $this->setStatus($status);
-        $this->headers->set('Location', $url);
-    }
+    
     /**
      * Helpers: Empty?
      * @return bool

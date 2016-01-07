@@ -179,7 +179,8 @@ class Router
                     
                 }
             }
-        } else {
+        } 
+        else {
             # check if defined with regex
             $pos = 0;
             foreach (self::$routes as $route) {

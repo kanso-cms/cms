@@ -306,7 +306,7 @@ class CommentManager
         $allEmails = self::getAllCommentEmails($allComments);
 
     	# Get all the admin email address 
-        $adminEmails = $Query->SELECT('email')->FROM('authors')->WHERE('status', '=', 'confirmed')->AND_WHERE('role', '=', 'administrator')->AND_WHERE('email_notifications', '=', true)->FIND_ALL();
+        $adminEmails = $Query->SELECT('email')->FROM('users')->WHERE('status', '=', 'confirmed')->AND_WHERE('role', '=', 'administrator')->AND_WHERE('email_notifications', '=', true)->FIND_ALL();
 
         # Get all the emails that are subscribed to the thread
         $threadEmails  = [];
@@ -394,7 +394,7 @@ class CommentManager
         }
 
         # Send the email to all the admins on the Kanso blog
-        $admins = $Query->SELECT('*')->FROM('authors')->WHERE('status', '=', 'confirmed')->AND_WHERE('role', '=', 'administrator')->FIND_ALL();
+        $admins = $Query->SELECT('*')->FROM('users')->WHERE('status', '=', 'confirmed')->AND_WHERE('role', '=', 'administrator')->FIND_ALL();
 
         foreach ($admins as $admin) {
 

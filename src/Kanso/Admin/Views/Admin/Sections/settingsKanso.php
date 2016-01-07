@@ -1,3 +1,7 @@
+<?php
+	$kansoConfig = adminKansoConfig();
+?>
+
 <h3>Kanso Settings</h3>
 
 <p class="info text-masked" style="margin-bottom:25px;">
@@ -12,7 +16,7 @@
 		<p class="info text-masked">
 			The name of your website. This is used by Kanso to stucture page titles.
 		</p>
-		<input class="input-default small" type="text" name="site-title" data-js-required="true"  data-js-min-legnth="1" data-js-max-legnth="50" maxlength="50" value="<?php echo $KANSO_SITE_TITLE?>" placeholder="My Website" autocomplete="off"/>
+		<input class="input-default small" type="text" name="site-title" data-js-required="true"  data-js-min-legnth="1" data-js-max-legnth="50" maxlength="50" value="<?php echo $kansoConfig['KANSO_SITE_TITLE']; ?>" placeholder="My Website" autocomplete="off"/>
 		<p class="input-error">* Please enter a site title.</p>
 	</div>
 
@@ -21,7 +25,7 @@
 		<p class="info text-masked">
 			Your website description is used by Kanso to output SEO data amongst other things.
 		</p>
-		<input class="input-default small" type="text" name="site-description" data-js-required="true" data-js-min-legnth="1" data-js-max-legnth="300" maxlength="300" value="<?php echo $KANSO_SITE_DESCRIPTION?>" placeholder="My Website is awesome" autocomplete="off"/>
+		<input class="input-default small" type="text" name="site-description" data-js-required="true" data-js-min-legnth="1" data-js-max-legnth="300" maxlength="300" value="<?php echo $kansoConfig['KANSO_SITE_DESCRIPTION']; ?>" placeholder="My Website is awesome" autocomplete="off"/>
 		<p class="input-error">* Please enter a site description.</p>
 	</div>
 
@@ -31,7 +35,7 @@
 			This is where Kanso will look for your theme files. To add a new theme, drop a new folder in the themes directory with 
 			the appropriate templates.
 		</p>
-		<?php echo $themeRadios;?>
+		<?php echo adminThemeRadios();?>
 	</div>
 
 	<div class="input-wrap">
@@ -40,7 +44,7 @@
 			Permalinks are used to structure article urls. The postname is mandatory.
 			Full options are / postname / category / author / year / month / day / hour / minute / second
 		</p>
-		<input class="input-default small" type="text" name="permalinks" data-js-required="true" data-js-validation="permalinks" value="<?php echo $KANSO_PERMALINKS;?>" autocomplete="off"/>
+		<input class="input-default small" type="text" name="permalinks" data-js-required="true" data-js-validation="permalinks" value="<?php echo $kansoConfig['KANSO_PERMALINKS'];?>" autocomplete="off"/>
 		<p class="input-error">* Please enter a valid permalinks url.</p>
 	</div>
 
@@ -49,7 +53,7 @@
 		<p class="info text-masked">
 			How many posts should Kanso display per page. Defaults to 10.
 		</p>
-		<input class="input-default small js-input-mask-number" type="text" name="posts-per-page" data-js-required="true" data-js-validation="numbers" value="<?php echo $KANSO_POSTS_PER_PAGE;?>" autocomplete="off"/>
+		<input class="input-default small js-input-mask-number" type="text" name="posts-per-page" data-js-required="true" data-js-validation="numbers" value="<?php echo $kansoConfig['KANSO_POSTS_PER_PAGE'];?>" autocomplete="off"/>
 		<p class="input-error">* Please a number of how many posts to show.</p>
 	</div>
 
@@ -60,7 +64,7 @@
 			Specify a comma seperated list of sizes with width and height (in px). e.g 400 200, 800 600. 
 			To resize without cropping, specify only the width.
 		</p>
-		<input class="input-default small" type="text" name="thumbnail-sizes" data-js-required="true" data-js-validation="comma-list-numbers" value="<?php echo $thumbnailSizes;?>" autocomplete="off"/>
+		<input class="input-default small" type="text" name="thumbnail-sizes" data-js-required="true" data-js-validation="comma-list-numbers" value="<?php echo adminSettingsThumbnailSizes();?>" autocomplete="off"/>
 		<p class="input-error">* Please a comma separated list of sizes.</p>
 	</div>
 
@@ -70,7 +74,7 @@
 			What image quality should Kanso use. 0 is terrible. 100 is awesome.
 		</p>
 		<p class="info text-masked"></p> 
-		<input class="input-default small js-input-mask-number" type="text" name="thumbnail-quality" data-js-required="true" data-js-validation="numbers" value="<?php echo $KANSO_IMG_QUALITY;?>" autocomplete="off"/>
+		<input class="input-default small js-input-mask-number" type="text" name="thumbnail-quality" data-js-required="true" data-js-validation="numbers" value="<?php echo $kansoConfig['KANSO_IMG_QUALITY'];?>" autocomplete="off"/>
 		<p class="input-error">* Please enter a number between 1 and 100</p>
 	</div>
 
@@ -80,7 +84,7 @@
 		<p class="info text-masked">
 			Where should Kanso route your sitemap to for search engines. Defaults to sitemap.xml.
 		</p>
-		<input class="input-default small" type="text" name="sitemap-url" data-js-required="true" data-js-validation="url-path" value="<?php echo $KANSO_SITEMAP;?>" autocomplete="off"/>
+		<input class="input-default small" type="text" name="sitemap-url" data-js-required="true" data-js-validation="url-path" value="<?php echo $kansoConfig['KANSO_SITEMAP'];?>" autocomplete="off"/>
 		<p class="input-error">* Please enter a valid path to your sitemap.</p>
 	</div>
 
@@ -90,7 +94,7 @@
 			<p class="info text-masked">
 				Do you want all of your tags to have their own article listings.
 			</p>
-			<input id="tagsCheck" type="checkbox" name="route-tags" <?php echo ($KANSO_ROUTE_TAGS === true ? 'checked' : '');?> />
+			<input id="tagsCheck" type="checkbox" name="route-tags" <?php echo ($kansoConfig['KANSO_ROUTE_TAGS'] === true ? 'checked' : '');?> />
 			<label class="checkbox small" for="tagsCheck"></label>
 		</div>
 	</div>
@@ -101,7 +105,7 @@
 			<p class="info text-masked">
 				Do you want all of your categories to have their own article listings.
 			</p>
-			<input id="categoriesCheck" type="checkbox" name="route-categories" <?php echo ($KANSO_ROUTE_CATEGORIES === true ? 'checked' : '');?>>
+			<input id="categoriesCheck" type="checkbox" name="route-categories" <?php echo ($kansoConfig['KANSO_ROUTE_CATEGORIES'] === true ? 'checked' : '');?>>
 			<label class="checkbox small" for="categoriesCheck"></label>
 		</div>
 	</div>
@@ -113,7 +117,7 @@
 			<p class="info text-masked">
 				Do you want all of your authors to have their own article listings.
 			</p>
-			<input id="authorsCheck" type="checkbox" name="route-authors" <?php echo ($KANSO_ROUTE_AUTHORS === true ? 'checked' : '');?> />
+			<input id="authorsCheck" type="checkbox" name="route-authors" <?php echo ($kansoConfig['KANSO_ROUTE_AUTHORS'] === true ? 'checked' : '');?> />
 			<label class="checkbox small" for="authorsCheck"></label>
 		</div>
 	</div>
@@ -125,7 +129,7 @@
 			<p class="info text-masked">
 				Do you want visitors to be able to post comments through Kanso's native comments system.
 			</p>
-			<input id="commentsCheck" type="checkbox" name="enable-comments" <?php echo ($KANSO_COMMENTS_OPEN === true ? 'checked' : '');?> />
+			<input id="commentsCheck" type="checkbox" name="enable-comments" <?php echo ($kansoConfig['KANSO_COMMENTS_OPEN'] === true ? 'checked' : '');?> />
 			<label class="checkbox small" for="commentsCheck"></label>
 		</div>
 	</div>
@@ -136,14 +140,14 @@
 			<p class="info text-masked">
 				If you want to use a CDN, Kanso will automatically replace all asset urls (including images) with your CDN url.
 			</p>
-			<input id="CDNcheck" type="checkbox" name="use-CDN" <?php echo ($KANSO_USE_CDN === true ? 'checked' : '');?> />
+			<input id="CDNcheck" type="checkbox" name="use-CDN" <?php echo ($kansoConfig['KANSO_USE_CDN'] === true ? 'checked' : '');?> />
 			<label class="checkbox small" for="CDNcheck"></label>
 		</div>
 
-		<div class="hidden <?php echo ($KANSO_USE_CDN === true ? 'active' : '');?>">
+		<div class="hidden <?php echo ($kansoConfig['KANSO_USE_CDN'] === true ? 'active' : '');?>">
 			<div class="input-wrap">
 				<label class="bold">CDN URL</label>
-				<input class="input-default small" type="text" name="CDN-url" data-js-validation="website" placeholder="cdn.example.com" value="<?php echo $KASNO_CDN_URL;?>">
+				<input class="input-default small" type="text" name="CDN-url" data-js-validation="website" placeholder="cdn.example.com" value="<?php echo $kansoConfig['KASNO_CDN_URL'];?>">
 				<p class="input-error">* If you're using a CDN, you need to enter the CDN's URL.</p>
 				<div class="clearfix" style="height:20px"></div>
 			</div>
@@ -159,17 +163,17 @@
 				Kanso loads the HTML directly from the file without having to run a through variable processing, loops etc... 
 				This greatly improves Kanso's performance and load times.
 			</p>
-			<input id="cacheCheck" type="checkbox" name="use-cache" <?php echo ($KANSO_USE_CACHE === true ? 'checked' : '');?> />
+			<input id="cacheCheck" type="checkbox" name="use-cache" <?php echo ($kansoConfig['KANSO_USE_CACHE'] === true ? 'checked' : '');?> />
 			<label class="checkbox small" for="cacheCheck"></label>
 		</div>
 
-		<div class="hidden <?php echo ($KANSO_USE_CACHE === true ? 'active' : '');?>">
+		<div class="hidden <?php echo ($kansoConfig['KANSO_USE_CACHE'] === true ? 'active' : '');?>">
 			<div class="input-wrap">
 				<label class="bold">Cache Life</label>
 				<p class="info text-masked">
 					How long should Kanso keep cached page versions before creating a new one. e.g 1 minute, 2 hours, 1 week, 3 months.
 				</p>
-				<input class="input-default small" type="text" name="cache-life" value="<?php echo $KANSO_CACHE_LIFE;?>"/>
+				<input class="input-default small" type="text" name="cache-life" value="<?php echo $kansoConfig['KANSO_CACHE_LIFE'];?>"/>
 				<p class="input-error">* If you're using a Kanso's cache, you need to specify a cache lifetime.</p>
 			</div>
 			<div class="input-wrap">

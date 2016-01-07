@@ -26,6 +26,7 @@ return
 'user'	   => 'root',
 'password' => 'root',
 'dbname'   => 'Kanso',
+'table_prefix' => 'kanso_',
 
 /********************************************************************************
 * KANSO DEFAULT AUTHOR
@@ -34,16 +35,13 @@ return
 /**
  * Default author configuration.
  */
-'KANSO_AUTHOR_USERNAME' => 'admin',
-'KANSO_AUTHOR_EMAIL'    => 'admin@example.com',
-'KANSO_AUTHOR_PASSWORD' => 'password1',
+'KANSO_OWNER_USERNAME' => 'admin',
+'KANSO_OWNER_EMAIL'    => 'admin@example.com',
+'KANSO_OWNER_PASSWORD' => 'password1',
 
 /********************************************************************************
 * KANSO DEFAULT CONFIGURATION
 ********************************************************************************/
-
-/* Kanso run mode */
-'KANSO_RUN_MODE' => 'CMS',
 
 /* Default theme */
 'KANSO_THEME_NAME' => 'Roshi',

@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanso\Admin\Dispatch;
+namespace Kanso\Admin\Controllers;
 
 /**
  * GET Dispatcher
@@ -10,10 +10,8 @@ namespace Kanso\Admin\Dispatch;
  * with a variable indicating what kind of request was made. The router
  * will then call the validation method.
  *
- * @package Kanso
- * @author  Joe Howard
  */
-class POSTdispatcher
+class PostController
 {
 
     /**
@@ -36,10 +34,20 @@ class POSTdispatcher
      */
     protected $GUMP;
 
-     /**
+    /**
      * @var \Kanso\Database\Query\Builder
      */
     protected $Query;
+
+    /**
+     * @var \Kanso\Auth\Helper\User
+     */
+    protected $user;
+
+    /**
+     * @var \Kanso\Admin\Models\Ajax
+     */
+    protected $model;
 
     /**
      * constructor
@@ -47,11 +55,23 @@ class POSTdispatcher
      */
     public function __construct()
     {
-        $this->Kanso           = \Kanso\Kanso::getInstance();
-        $this->GUMP            = new \Kanso\Utility\GUMP();
-        $this->Query           = $this->Kanso->Database->Builder();
-        \Kanso\Admin\Security\sessionManager::init(false, false, $this->Kanso->Environment['REQUEST_URL']);
-        $this->isLoggedIn      = \Kanso\Admin\Security\sessionManager::isLoggedIn();
+        # Fire the admin ajax event
+        \Kanso\Events::fire('adminAjax', $_POST);
+
+        # Get a new GUMP instance
+        $this->GUMP = new \Kanso\Utility\GUMP();
+
+        # Get a new query builder
+        $this->Query = \Kanso\Kanso::getInstance()->Database->Builder();
+
+        # Save the logged in status
+        $this->isLoggedIn = \Kanso\Kanso::getInstance()->Gatekeeper->isLoggedIn();
+
+        # Save the user
+        $this->user = \Kanso\Kanso::getInstance()->Gatekeeper->getUser();
+
+        # Load the model
+        $this->model = new \Kanso\Admin\Models\Ajax();
     }
 
     /********************************************************************************
@@ -74,10 +94,16 @@ class POSTdispatcher
         $validRequest = false;
 
         # Only ajax requests are allowed, with a valid HTTP ajax header
-        if (!$this->Kanso->Request->isAjax()) $validRequest = false;
+        if (!\Kanso\Kanso::getInstance()->Request->isAjax()) $validRequest = false;
 
-        # Get the post variables
-        $this->postVars = $this->Kanso->Request->fetch();
+        # A valid user must exist
+        if (!$this->user) {
+            \Kanso\Kanso::getInstance()->Response->setStatus(404);
+            return;
+        }
+
+        # Get the POST variables
+        $this->postVars = \Kanso\Kanso::getInstance()->Request->fetch();
 
         # Ajax requests all carry the same key/value of "ajaxRequest", which
         # indicates what to dispatch
@@ -86,18 +112,22 @@ class POSTdispatcher
         # Validate that the request came from the admin panel
         # All ajax request must have both a refferer and a reffer
         # in the clients session
-        if (!$this->validateRefferer())  $validRequest = false;
+        if (!$this->validateReferrer())  $validRequest = false;
 
-        # If this is a request for a public key we can serv the client
+        # If this is a request for a public key we can serve the client
         # their key/salt
-        if ($this->postVars['ajaxRequest'] === 'public_key') $validRequest = true;
-
-        # If the request has a valid public key, we can dispatch their request
-        if ($this->validateKeySignature()) $validRequest = true;
+        if ($this->postVars['ajaxRequest'] === 'public_key') {
+            $validRequest = true;
+        }
+        # If the request has a valid public key validate the 
+        # token signature
+        else {
+            if ($this->validateKeySignature()) $validRequest = true;
+        }
 
         # If the request was invalid, respond with a 404.
         if (!$validRequest) {
-            $this->Kanso->Response->setStatus(404);
+            \Kanso\Kanso::getInstance()->Response->setStatus(404);
             return;
         }
 
@@ -106,13 +136,14 @@ class POSTdispatcher
         
         # If the request was processed, return a valid JSON object
         if ($response || is_array($response)) {
-            $this->Kanso->Response->setBody( json_encode( ['response' => 'processed', 'details' => $response] ) );
-            $this->Kanso->Response->setheaders(['Content-Type' => 'application/json']);
+            $Response = \Kanso\Kanso::getInstance()->Response;
+            $Response->setheaders(['Content-Type' => 'application/json']);
+            $Response->setBody( json_encode( ['response' => 'processed', 'details' => $response] ) );
             return;
         }
 
         # 404 on fallback
-        $this->Kanso->Response->setStatus(404);
+        \Kanso\Kanso::getInstance()->Response->setStatus(404);
        
     }
 
@@ -150,15 +181,10 @@ class POSTdispatcher
         if ($ajaxRequest === 'admin_restore_kanso') return $this->restorKansoDefaults();
         if ($ajaxRequest === 'admin_batch_image') return $this->batchUploadImages();
 
-        # Articles
-        if ($ajaxRequest === 'admin_delete_article') return $this->deleteArticle();
-        if ($ajaxRequest === 'admin_delete_tag') return $this->deleteTag();
-
         # Writer
         if ($ajaxRequest === 'writer_publish_article') return $this->publishArticle();
         if ($ajaxRequest === 'writer_save_existing_article') return $this->saveArticle(false);
         if ($ajaxRequest === 'writer_save_new_article') return $this->saveArticle(true);
-
 
         # Images
         if ($ajaxRequest === 'admin_author_image') return  $this->uploadImage(true);
@@ -201,21 +227,18 @@ class POSTdispatcher
     private function validateKeySignature() 
     {
         if (!isset($this->postVars['public_key'])) return false;
-        return \Kanso\Admin\Security\keyManager::authenticateSignature($this->postVars['public_key']);
+        return \Kanso\Kanso::getInstance()->Gatekeeper->verifyAjaxToken($this->postVars['public_key']);
     }
 
     /**
-    * Send public key/salt to the client
+     * Send public key/salt to the client
      *
      * @return array|false
      */
     private function sendPublicKey() 
     {
-
-        $clientKeys = \Kanso\Admin\Security\keyManager::getPublicKeys();
-        if (!\Kanso\Utility\Arr::issets(['KANSO_PUBLIC_KEY','KANSO_PUBLIC_SALT','KANSO_KEYS_TIME'], $clientKeys)) return false;
-        return ['k' => $clientKeys['KANSO_PUBLIC_KEY'], 's' => $clientKeys['KANSO_PUBLIC_SALT']];
-
+        $keys = $this->user->getToken('ajax');
+        return ['k' => $keys['key'], 's' => $keys['salt']];
     }
 
     /**
@@ -223,11 +246,11 @@ class POSTdispatcher
      *
      * @return bool
      */
-    private function validateRefferer() 
+    private function validateReferrer() 
     {
-        $KASNO_HTTP_REFERER = \Kanso\Admin\Security\sessionManager::get('KASNO_HTTP_REFERER');
-        if (!$KASNO_HTTP_REFERER) $KASNO_HTTP_REFERER = $_SERVER['HTTP_REFERER'];
-        if (strpos($KASNO_HTTP_REFERER, $this->Kanso->Environment['KANSO_ADMIN_URI']) !== false) return true;
+        $referrer = \Kanso\Kanso::getInstance()->Session->getReferrer();
+        if (!$referrer) return false;
+        if (strpos($referrer, \Kanso\Kanso::getInstance()->Environment['KANSO_ADMIN_URI']) !== false) return true;
         return false;
     }
 
@@ -246,7 +269,6 @@ class POSTdispatcher
      */
     private function login() 
     {
-
         # If the user is logged in return 404
         if ($this->isLoggedIn) return false;
 
@@ -270,16 +292,9 @@ class POSTdispatcher
 
         # Validate the login credentials
         # returns false or the clients row from the database
-        $validate = \Kanso\Admin\Utility\gateKeeper::validateLoginCredentials($validated_data['username'], $validated_data['password']);
+        $login = \Kanso\Kanso::getInstance()->Gatekeeper->login($validated_data['username'], $validated_data['password']);
 
-        if ($validate) {
-            
-            # Log the client in
-            \Kanso\Admin\Security\sessionManager::logClientIn($validate);
-
-            return 'valid';
-
-        }
+        if ($login) return 'valid';
 
         return 'invalid';
     }
@@ -296,14 +311,14 @@ class POSTdispatcher
         if ($this->isLoggedIn) return false;
 
         # Get the key from the user's session
-        $sessionKey = \Kanso\Admin\Security\sessionManager::get('KANSO_REGISTER_KEY');
+        $sessionKey = \Kanso\Kanso::getInstance()->Session->get('KANSO_REGISTER_KEY');
 
         # Get the key from the ajax request
         if (!isset($this->postVars['referer'])) return false;
         $ajaxKey = \Kanso\Utility\Str::getAfterLastChar($this->postVars['referer'], '?');
 
         # Get the HTTP REFERRER from the session
-        $HTTPkey = \Kanso\Admin\Security\sessionManager::get('KASNO_HTTP_REFERER');
+        $HTTPkey = Kanso\Kanso::getInstance()->Session->getReferrer();
         if (!$HTTPkey) return false;
         $HTTPkey = \Kanso\Utility\Str::getAfterLastChar($HTTPkey, '?');
 
@@ -327,8 +342,12 @@ class POSTdispatcher
         
         if (!$validated_data) return false;
 
-        # Validate the request
-        return \Kanso\Admin\Utility\gateKeeper::validateRegister($validated_data['username'], $validated_data['email'], $validated_data['password'], $ajaxKey); 
+        # Activate the user
+        $activate = \Kanso\Kanso::getInstance()->Gatekeeper->activateUser($validated_data['username'], $validated_data['email'], $validated_data['password'], $ajaxKey);
+
+        if ($activate) return 'valid';
+
+        return false;
 
     }
 
@@ -344,6 +363,7 @@ class POSTdispatcher
     private function forgotPassword() 
     {
 
+        # Logged in users can't user forgot password page
         if ($this->isLoggedIn) return true;
 
         $postVars = $this->GUMP->sanitize($this->postVars);
@@ -358,7 +378,9 @@ class POSTdispatcher
 
         $validated_data = $this->GUMP->run($postVars);
 
-        if ($validated_data)  \Kanso\Admin\Utility\gateKeeper::validateForgotPassword($validated_data['username']); 
+        if ($validated_data) {
+            \Kanso\Kanso::getInstance()->Gatekeeper->forgotPassword($validated_data['username']); 
+        }
 
         return true;
 
@@ -392,9 +414,9 @@ class POSTdispatcher
 
         $validated_data = $this->GUMP->run($postVars);
 
-        if (!$validated_data) return false;
-
-        \Kanso\Admin\Utility\gateKeeper::validateForgotUsername($validated_data['email']); 
+        if ($validated_data) {
+            \Kanso\Kanso::getInstance()->Gatekeeper->forgotUsername($validated_data['email']); 
+        }
 
         return true;
     }
@@ -415,14 +437,14 @@ class POSTdispatcher
         if ($this->isLoggedIn) return false;
 
         # Get the key from the user's session
-        $sessionKey = \Kanso\Admin\Security\sessionManager::get('KANSO_PASSWORD_KEY');
+        $sessionKey = \Kanso\Kanso::getInstance()->Session->get('KANSO_PASSWORD_KEY');
 
         # Get the key from the ajax request
         if (!isset($this->postVars['referer'])) return false;
         $ajaxKey = \Kanso\Utility\Str::getAfterLastChar($this->postVars['referer'], '?');
 
         # Get the HTTP REFERRER from the session
-        $HTTPkey = \Kanso\Admin\Security\sessionManager::get('KASNO_HTTP_REFERER');
+        $HTTPkey = Kanso\Kanso::getInstance()->Session->getReferrer();
         if (!$HTTPkey) return false;
         $HTTPkey = \Kanso\Utility\Str::getAfterLastChar($HTTPkey, '?');
 
@@ -444,7 +466,11 @@ class POSTdispatcher
 
         if (!$validated_data) return false;
 
-        return \Kanso\Admin\Utility\gateKeeper::validateResetPassword($validated_data['password'], $ajaxKey); 
+        $change = \Kanso\Kanso::getInstance()->Gatekeeper->resetPassword($validated_data['password'], $ajaxKey); 
+        
+        if ($change) {
+            return 'valid';
+        }
 
         return false;
 
@@ -481,7 +507,7 @@ class POSTdispatcher
 
         $validated_data = $this->GUMP->run($postVars);
 
-        if ($validated_data) return \Kanso\Admin\Utility\userManager::updateAccountDetails($validated_data['username'], $validated_data['email'], $validated_data['password'], $validated_data['email_notifications']); 
+        if ($validated_data) return $this->model->updateAccountDetails($validated_data['username'], $validated_data['email'], $validated_data['password'], $validated_data['email_notifications']); 
 
         return true;
 
@@ -494,8 +520,10 @@ class POSTdispatcher
     */
     private function updateAuthorInfo() 
     {
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
 
+        # Validate post variables
         $postVars = $this->GUMP->sanitize($this->postVars);
 
         $this->GUMP->validation_rules([
@@ -518,7 +546,7 @@ class POSTdispatcher
 
         $validated_data = $this->GUMP->run($postVars);
 
-        if ($validated_data) return \Kanso\Admin\Utility\userManager::updateAuthorDetails($validated_data['name'], $validated_data['slug'], $validated_data['bio'], $validated_data['facebook'], $validated_data['twitter'], $validated_data['google']); 
+        if ($validated_data) return $this->model->updateAuthorDetails($validated_data['name'], $validated_data['slug'], $validated_data['bio'], $validated_data['facebook'], $validated_data['twitter'], $validated_data['google']); 
 
         return true;
     }
@@ -534,8 +562,9 @@ class POSTdispatcher
         if (!$this->isLoggedIn) return false;
 
         # Validate the user is an admin
-        $author            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-        if ($author['role'] !== 'administrator') return false;
+        # Grab the user's row from the session
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
+        if ($user['role'] !== 'administrator') return false;
 
         # Validate post variables
         $postVars = $this->GUMP->sanitize($this->postVars);
@@ -574,7 +603,7 @@ class POSTdispatcher
 
         $validated_data = $this->GUMP->run($postVars);
 
-        if ($validated_data) return \Kanso\Admin\Utility\settingsManager::updateKansoSettings($validated_data); 
+        if ($validated_data) return $this->model->updateKansoSettings($validated_data); 
 
         return true;
 
@@ -607,13 +636,13 @@ class POSTdispatcher
     private function restorKansoDefaults()
     {
 
-        if (!$this->isLoggedIn) return false;
+        # Grab the user's row from the session
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
 
         # Validate the user is an admin
-        $client            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-        if ($client['role'] !== 'administrator') return false;
+        if ($user['role'] !== 'administrator') return false;
 
-        return \Kanso\Admin\Utility\settingsManager::restoreKanso();
+        return $this->model->restoreKanso();
 
         return false;
 
@@ -631,12 +660,16 @@ class POSTdispatcher
     private function inviteNewUser() 
     {
 
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
 
+        # Grab the user's row from the session
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
+
         # Validate the user is an admin
-        $user            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
         if ($user['role'] !== 'administrator') return false;
 
+        # Validate the POST variables
         $postVars = $this->GUMP->sanitize($this->postVars);
 
         $this->GUMP->validation_rules([
@@ -652,10 +685,24 @@ class POSTdispatcher
         $validated_data = $this->GUMP->run($postVars);
 
         if ($validated_data) {
+
+            # User's cant invite themselves
             if ($validated_data['email'] === $user['email']) return "already_member";
-            $email = $this->Query->SELECT('*')->FROM('authors')->WHERE('email', '=', $validated_data['email'])->FIND();
-            if (!$email || empty($email) || ($email && $email['status'] === 'deleted')) return \Kanso\Admin\Utility\userManager::inviteNewUser($validated_data['email'], $validated_data['role'], $user);
-            if ($email && $email['status'] === 'confirmed') return 'already_member';
+
+            # Get the user's row if it exists
+            $userRow = $this->Query->SELECT('*')->FROM('users')->WHERE('email', '=', $validated_data['email'])->FIND();
+
+            # Validate they are not already confirmed
+            if ($userRow && $userRow['status'] === 'confirmed') return 'already_member';
+
+            # If theyre deleted or pending re-invite them
+            if (!$userRow || empty($userRow) || ($userRow && $userRow['status'] === 'deleted')) {
+                
+                $invite = \Kanso\Kanso::getInstance()->Gatekeeper->registerUser($validated_data['email'], $validated_data['role'], $user);
+
+                if ($invite) return "valid";
+            }
+            
         }
 
         return false;
@@ -669,14 +716,16 @@ class POSTdispatcher
      */
     private function deleteUser() 
     {
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
 
         # Validate the user is an admin
-        $user            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
+        # Grab the user's row from the session
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
         if ($user['role'] !== 'administrator') return false;
 
+        # Validate the POST variables
         $postVars = $this->GUMP->sanitize($this->postVars);
-
         $this->GUMP->validation_rules([
             'id'       => 'required|integer',
         ]);
@@ -688,11 +737,21 @@ class POSTdispatcher
         $validated_data = $this->GUMP->run($postVars);
 
         if ($validated_data) {
+
+            # The user cannot delete themself
             if ($validated_data['id'] === $user['id']) return false;
+
+            # Noone can delete user id 1
             if ((int)$validated_data['id'] === 1) return false;
-            $userExists = $this->Query->SELECT('*')->FROM('authors')->WHERE('id', '=', $validated_data['id'])->FIND();
+
+            # Validate the user actually exists
+            $userExists = $this->Query->SELECT('*')->FROM('users')->WHERE('id', '=', $validated_data['id'])->FIND();
             if (empty($userExists)) return false;
-            return \Kanso\Admin\Utility\userManager::deleteUser($validated_data['id']); 
+
+            # Delete the user
+            $delete = \Kanso\Kanso::getInstance()->Gatekeeper->deleteUser($validated_data['id']);
+
+            if ($delete) return "valid";
         }
         return false;
     }
@@ -704,12 +763,15 @@ class POSTdispatcher
      */
     private function changeUserRole() 
     {
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
 
         # Validate the user is an admin
-        $client            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-        if ($client['role'] !== 'administrator') return false;
+        # Grab the user's row from the session
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
+        if ($user['role'] !== 'administrator') return false;
 
+        # Validate the POST variables
         $postVars = $this->GUMP->sanitize($this->postVars);
 
         $this->GUMP->validation_rules([
@@ -723,14 +785,25 @@ class POSTdispatcher
         $validated_data = $this->GUMP->run($postVars);
 
         if ($validated_data) {
-            if ((int)$validated_data['id'] === (int)$client['id']) return false;
-            if ((int)$validated_data['id'] === 1) return false;
-            $userExists = $this->Query->SELECT('*')->FROM('authors')->WHERE('id', '=', $validated_data['id'])->FIND();
-            if (empty($userExists)) return false;
-            return \Kanso\Admin\Utility\userManager::changeUserRole($validated_data['id'], $validated_data['role']); 
-        }
-        return false;
 
+            # The user cannot change their own role
+            if ((int)$validated_data['id'] === (int)$user['id']) return false;
+
+            # Noone can change user id 1's role
+            if ((int)$validated_data['id'] === 1) return false;
+
+            # Validate the user actually exists
+            $userExists = $this->Query->SELECT('*')->FROM('users')->WHERE('id', '=', (int)$validated_data['id'])->FIND();
+            if (empty($userExists)) return false;
+            
+            # Change their role
+            $update = \Kanso\Kanso::getInstance()->Gatekeeper->changeUserRole((int)$validated_data['id'], $validated_data['role']);
+
+            if ($update) return "valid";
+
+        }
+
+        return false;
     }
 
     /********************************************************************************
@@ -763,8 +836,14 @@ class POSTdispatcher
         if ($postVars['file']['type'] !== 'image/png' && $postVars['file']['type'] !== 'image/jpeg') return false;
 
         # Convert the mime to an extension
-        $mime = $this->Kanso->Request->mimeToExt($postVars['file']['type']);
+        $mime = \Kanso\Kanso::getInstance()->Request->mimeToExt($postVars['file']['type']);
         if ($mime !== 'jpg' && $mime !== 'png') return false;
+
+        # Get the environment
+        $env = \Kanso\Kanso::getInstance()->Environment;
+
+        # Get the config
+        $config = \Kanso\Kanso::getInstance()->Config;
 
         # Declare size suffixes for resizing
         $sizes  = ["small", "medium", "large"];
@@ -773,7 +852,7 @@ class POSTdispatcher
         $Imager = new \Kanso\Utility\Images($this->postVars['file']['tmp_name']);
 
         # Declare config sizes locally
-        $configSizes = $this->Kanso->Config['KANSO_THUMBNAILS'];
+        $configSizes = $config['KANSO_THUMBNAILS'];
 
         # If this is a author thumbnail crop to square
         $imgurl = '';
@@ -794,8 +873,8 @@ class POSTdispatcher
             $name  = explode('.'.$ext, $name)[0];
 
             # Set the destination and quality
-            $dst   = $this->Kanso->Environment['KANSO_UPLOADS_DIR'].'/Images/'.$name.'_'.$sizes[$i].'.'.$ext;
-            $qual  = $this->Kanso->Config['KANSO_IMG_QUALITY'];
+            $dst   = $env['KANSO_UPLOADS_DIR'].'/Images/'.$name.'_'.$sizes[$i].'.'.$ext;
+            $qual  = $config['KANSO_IMG_QUALITY'];
 
             $qual  = ($mime === 'png' ? ($qual/10) : $qual);
 
@@ -813,17 +892,21 @@ class POSTdispatcher
 
             if (!$saved) return false;
 
-            $imgurl = str_replace($this->Kanso->Environment['DOCUMENT_ROOT'], $this->Kanso->Environment['HTTP_HOST'], $dst);
+            $imgurl = str_replace($env['DOCUMENT_ROOT'], $env['HTTP_HOST'], $dst);
 
             \Kanso\Events::fire('imageUpload', [$dst]);
         }
 
         # If this was an author avatar, update the database
         if ($isAuthor) {
-            $author = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-            $author['author'] = substr($imgurl, strrpos($imgurl, '/') + 1);
-            $this->Query->UPDATE('authors')->SET(['thumbnail' => substr($imgurl, strrpos($imgurl, '/') + 1)])->WHERE('id', '=', $author['id'])->QUERY();
-            \Kanso\Admin\Security\sessionManager::logClientIn($author);
+
+            $author = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
+
+            $author['thumbnail'] = substr($imgurl, strrpos($imgurl, '/') + 1);
+
+            $this->Query->UPDATE('users')->SET(['thumbnail' => $author['thumbnail']])->WHERE('id', '=', $author['id'])->QUERY();
+
+            \Kanso\Kanso::getInstance()->Gatekeeper->logClientIn($author);
         }
 
         return $imgurl;
@@ -838,12 +921,13 @@ class POSTdispatcher
     private function batchUploadImages() 
     {
 
-        # Validate the client is logged in
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
-
-        # Validate the client is an admin
-        $client            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-        if ($client['role'] !== 'administrator') return false;
+        
+        # Grab the user's row from the session
+        # Validate the user is an admin
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
+        if ($user['role'] !== 'administrator') return false;
 
         # Declare the POST variables locally
         $postVars = $this->postVars;
@@ -870,8 +954,14 @@ class POSTdispatcher
         # Declare size suffixes for resizing
         $sizes  = ["small", "medium", "large"];
 
+        # Get the environment
+        $env = \Kanso\Kanso::getInstance()->Environment;
+
+        # Get the config
+        $config = \Kanso\Kanso::getInstance()->Config;
+
         # Declare config sizes locally
-        $configSizes = $this->Kanso->Config['KANSO_THUMBNAILS'];
+        $configSizes = $config['KANSO_THUMBNAILS'];
 
         # Upload the images
         foreach ($postVars['file']['tmp_name'] as $f => $tmpFile) {
@@ -891,8 +981,8 @@ class POSTdispatcher
                 $name  = substr($name, 0,strrpos($name, '.'));
 
                 # Set the destination and quality
-                $dst   = $this->Kanso->Environment['KANSO_UPLOADS_DIR'].'/Images/'.$name.'_'.$sizes[$i].'.'.$ext;
-                $qual  = $this->Kanso->Config['KANSO_IMG_QUALITY'];
+                $dst   = $env['KANSO_UPLOADS_DIR'].'/Images/'.$name.'_'.$sizes[$i].'.'.$ext;
+                $qual  = $config['KANSO_IMG_QUALITY'];
                 $qual  = $ext === 'png' ? ($qual/10) : $qual;
 
                 # If sizes are declared with width & Height - resize to those dimensions
@@ -924,37 +1014,6 @@ class POSTdispatcher
     /********************************************************************************
     * ARTICLES
     *******************************************************************************/
-  
-    /**
-     * Delete an article validation
-     *
-     * @return bool
-     */
-    private function deleteArticle() 
-    {
-
-        if (!$this->isLoggedIn) return false;
-
-        # Validate the user is an admin
-        $client            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-        if ($client['role'] !== 'administrator') return false;
-
-        $postVars = $this->GUMP->sanitize($this->postVars);
-
-        $this->GUMP->validation_rules([
-            'id'       => 'required|integer',
-        ]);
-
-        $this->GUMP->filter_rules([
-            'id'      => 'sanitize_numbers',
-        ]);
-
-        $validated_data = $this->GUMP->run($postVars);
-
-        if ($validated_data) return \Kanso\Admin\Utility\articlesManager::deleteArticle($validated_data['id']);
-
-        return false;
-    }
 
     /**
      * Save a new or existing article
@@ -1002,7 +1061,9 @@ class POSTdispatcher
         }
 
         # save the article
-        return \Kanso\Admin\Utility\articlesManager::saveArticle($validated_data, $isNewArticle);
+        $save = \Kanso\Kanso::getInstance()->Bookkeeper->save($validated_data, $isNewArticle);
+
+        if ($save) return $save;
 
         return false;
 
@@ -1016,12 +1077,13 @@ class POSTdispatcher
     private function publishArticle() 
     {
 
-        # Only logged in users can write articles
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
 
         # Sanitize and validate the POST variables
         $postVars = $this->GUMP->sanitize($this->postVars);
 
+        # Filter and sanitize the POST variables
         $this->GUMP->validation_rules([
             'type'      => 'required|contains,post page',
         ]);
@@ -1053,7 +1115,9 @@ class POSTdispatcher
         }
 
         # save the article
-        return \Kanso\Admin\Utility\articlesManager::saveArticle($validated_data, $newArticle);
+        $save = \Kanso\Kanso::getInstance()->Bookkeeper->save($validated_data, $newArticle);
+
+        if ($save) return $save;
 
         return false;
     }
@@ -1065,8 +1129,16 @@ class POSTdispatcher
      */
     private function changeArticleStatus($status) 
     {
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
 
+        # Grab the user's row from the session
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
+
+        # Validate the user is an admin
+        if ($user['role'] !== 'administrator') return false;
+
+        # Filter and sanitize the POST variables
         $postVars = $this->GUMP->sanitize($this->postVars);
 
         $this->GUMP->validation_rules([
@@ -1084,10 +1156,10 @@ class POSTdispatcher
         $articles = array_map('trim', explode(',', $validated_data['article_ids'])); 
 
         foreach ($articles as $id) {
-            if (! \Kanso\Admin\Utility\articlesManager::changeArticleStatus( (int)$id, $status)) return false;
+            if (! \Kanso\Kanso::getInstance()->Bookkeeper->changeStatus((int)$id, $status)) return false;
         }
         
-        return true;
+        return 'valid';
 
     }
 
@@ -1098,12 +1170,16 @@ class POSTdispatcher
      */
     private function deleteArticles() 
     {
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
 
-        # Validate the user is an admin
-        $client            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-        if ($client['role'] !== 'administrator') return false;
+        # Grab the user's row from the session
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
 
+        # Validate the user is an admin
+        if ($user['role'] !== 'administrator') return false;
+
+        # Filter and sanitize the POST variables
         $postVars = $this->GUMP->sanitize($this->postVars);
 
         $this->GUMP->validation_rules([
@@ -1121,10 +1197,10 @@ class POSTdispatcher
         $articles = array_map('trim', explode(',', $validated_data['article_ids'])); 
 
         foreach ($articles as $id) {
-            if (! \Kanso\Admin\Utility\articlesManager::deleteArticle( (int)$id) ) return false;
+            if (! \Kanso\Kanso::getInstance()->Bookkeeper->delete($id)) return false;
         }
-        
-        return true;
+
+        return 'valid';
     }
 
     /**
@@ -1135,13 +1211,16 @@ class POSTdispatcher
     private function importArticles() 
     {
 
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
 
-        # Validate the user is an admin
-        $client            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-        if ($client['role'] !== 'administrator') return false;
+        # Grab the user's row from the session
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
 
-        # Declare the POST variables locally
+        # Validate the user is an admin
+        if ($user['role'] !== 'administrator') return false;
+
+        # Filter and sanitize the POST variables
         $postVars = $this->postVars;
 
         # Validate a file was sent
@@ -1154,7 +1233,7 @@ class POSTdispatcher
         if ($postVars['file']['type'][0] !== 'application/json') return 'invalid_json';
 
         # Convert the mime to an extension
-        $mime = $this->Kanso->Request->mimeToExt($postVars['file']['type'][0]);
+        $mime = \Kanso\Kanso::getInstance()->Request->mimeToExt($postVars['file']['type'][0]);
         if ($mime !== 'json') return 'invalid_json';
 
         # Validate the file is a valid json
@@ -1164,7 +1243,9 @@ class POSTdispatcher
         $articles = json_decode(file_get_contents($postVars['file']['tmp_name'][0]), true);
 
         # Import the articles
-        return \Kanso\Admin\Utility\articlesManager::batchImport($articles);
+        $import = \Kanso\Kanso::getInstance()->Bookkeeper->batchImport($articles);
+
+        if ($import) return 'valid';
 
         return false;
     }
@@ -1257,6 +1338,9 @@ class POSTdispatcher
         if ($validated_data['sortBy'] === 'type')      $sortKey   = 'posts.type';
         if ($validated_data['sortBy'] === 'title')     $sortKey   = 'posts.title';
 
+        # Get the Kanso Query object
+        $Query = \Kanso\Kanso::getInstance()->Query();
+
         # Get all the articles
         $articles = $this->Query->getArticlesByIndex(null, null, null, ['tags', 'category', 'author']);
 
@@ -1284,22 +1368,22 @@ class POSTdispatcher
             }
 
             if ( $article['status'] === 'draft') {
-                $articles[$i]['permalink'] = rtrim($this->Kanso->Query->the_permalink($article['id']), '/').'?draft';
+                $articles[$i]['permalink'] = rtrim($Query->the_permalink($article['id']), '/').'?draft';
             }
             else {
-                $articles[$i]['permalink'] = $this->Kanso->Query->the_permalink($article['id']);
+                $articles[$i]['permalink'] = $Query->the_permalink($article['id']);
             }
 
-            $articles[$i]['edit_permalink'] = '/admin/write/'.$this->Kanso->Query->the_slug($article['id']);
+            $articles[$i]['edit_permalink'] = '/admin/write/'.$Query->the_slug($article['id']);
 
-            $articles[$i]['category']['permalink'] = $this->Kanso->Query->the_category_url($articles[$i]['category_id']);
+            $articles[$i]['category']['permalink'] = $Query->the_category_url($articles[$i]['category_id']);
 
 
             foreach ($article['tags'] as $t => $tag) {
-                $articles[$i]['tags'][$t]['permalink'] = $this->Kanso->Query->the_tag_url($tag['id']);
+                $articles[$i]['tags'][$t]['permalink'] = $Query->the_tag_url($tag['id']);
             }
             
-            $articles[$i]['author']['permalink'] = $this->Kanso->Query->the_author_url($article['author_id']);
+            $articles[$i]['author']['permalink'] = $Query->the_author_url($article['author_id']);
 
         }
 
@@ -1312,37 +1396,6 @@ class POSTdispatcher
     * TAGS AND CATEGORIES
     *******************************************************************************/
   
-    /**
-     * Delete a tag or category validation
-     *
-     * @return bool
-     */
-    private function deleteTag() 
-    {
-        if (!$this->isLoggedIn) return false;
-
-        # Validate the user is an admin
-        $client            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-        if ($client['role'] !== 'administrator') return false;
-
-        $postVars = $this->GUMP->sanitize($this->postVars);
-
-        $this->GUMP->validation_rules([
-            'id'       => 'required|integer',
-            'type'     => 'required|contains,tag category',
-        ]);
-
-        $this->GUMP->filter_rules([
-            'id'       => 'sanitize_numbers',
-            'type'     => 'trim|sanitize_string',
-        ]);
-
-        $validated_data = $this->GUMP->run($postVars);
-
-        if ($validated_data) return \Kanso\Admin\Utility\articlesManager::deleteTag($validated_data['id'], $validated_data['type']);
-
-        return false;
-    }
 
     /**
      * Load tags and categories for ajax
@@ -1370,7 +1423,10 @@ class POSTdispatcher
         $validated_data = $this->GUMP->run($postVars);
 
         if (!$validated_data) return false;
-            
+        
+        # Get the Kanso Query object
+        $Query = \Kanso\Kanso::getInstance()->Query();
+
         $categories   = $this->Query->SELECT('*')->FROM('categories')->FIND_ALL();
         $tags         = $this->Query->SELECT('*')->FROM('tags')->FIND_ALL();
 
@@ -1382,26 +1438,26 @@ class POSTdispatcher
         $sortKey      = isset($validated_data['sortBy']) ? $validated_data['sortBy'] : 'name';
 
         foreach ($tags as $i => $tag) {
-            $tags[$i]['permalink'] = $this->Kanso->Query->the_tag_url($tag['id']);
+            $tags[$i]['permalink'] = $Query->the_tag_url($tag['id']);
             $tagPosts = $this->Query->SELECT('posts.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('posts', 'tags_to_posts.post_id = posts.id')->WHERE('tags_to_posts.tag_id', '=', (int)$tag['id'])->FIND_ALL();
             $tags[$i]['posts'] = [];
             foreach ($tagPosts as $post) {
                 $tags[$i]['posts'][] = [
                     'name'      => $post['title'],
-                    'permalink' => $this->Kanso->Query->the_permalink($post['id']),
+                    'permalink' => $Query->the_permalink($post['id']),
                 ];
             }
             $tags[$i]['type'] = 'tag';
         }
 
         foreach ($categories as $i => $category) {
-            $categories[$i]['permalink'] = $this->Kanso->Query->the_category_url($category['id']);
+            $categories[$i]['permalink'] = $Query->the_category_url($category['id']);
             $categoryPosts = $this->Query->SELECT('*')->FROM('posts')->WHERE('category_id', '=', (int)$category['id'])->FIND_ALL();
             $categories[$i]['posts'] = [];
             foreach ($categoryPosts as $post) {
                 $categories[$i]['posts'][] = [
                     'name'      => $post['title'],
-                    'permalink' => $this->Kanso->Query->the_permalink($post['id']),
+                    'permalink' => $Query->the_permalink($post['id']),
                 ];
             }
             $categories[$i]['type'] = 'category';
@@ -1470,12 +1526,16 @@ class POSTdispatcher
     private function deleteTagOrCategories() 
     {
 
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
 
-        # Validate the user is an admin
-        $client            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-        if ($client['role'] !== 'administrator') return false;
+        # Grab the user's row from the session
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
 
+        # Validate the user is an admin
+        if ($user['role'] !== 'administrator') return false;
+
+        # Filter and sanitize the POST variables
         $postVars = $this->GUMP->sanitize($this->postVars);
 
         $this->GUMP->validation_rules([
@@ -1495,10 +1555,10 @@ class POSTdispatcher
         $entries = json_decode($this->postVars['entries']);
 
         foreach ($entries as $entry) {
-            if (!\Kanso\Admin\Utility\articlesManager::clearTag( (int)$entry->id, $entry->type, true)) return false; 
+            if (!\Kanso\Kanso::getInstance()->Bookkeeper->clearTag( (int)$entry->id, $entry->type, true)) return false; 
         }
 
-        return true;
+        return 'valid';
 
     }
 
@@ -1509,12 +1569,16 @@ class POSTdispatcher
      */
     private function clearTagOrCategories() 
     {
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
 
-        # Validate the user is an admin
-        $client            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-        if ($client['role'] !== 'administrator') return false;
+        # Grab the user's row from the session
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
 
+        # Validate the user is an admin
+        if ($user['role'] !== 'administrator') return false;
+
+        # Filter and sanitize the POST variables
         $postVars = $this->GUMP->sanitize($this->postVars);
 
         $this->GUMP->validation_rules([
@@ -1534,10 +1598,10 @@ class POSTdispatcher
         $entries = json_decode($this->postVars['entries']);
 
         foreach ($entries as $entry) {
-            if (! \Kanso\Admin\Utility\articlesManager::clearTag( (int)$entry->id, $entry->type)) return false; 
+            if (!\Kanso\Kanso::getInstance()->Bookkeeper->clearTag( (int)$entry->id, $entry->type)) return false; 
         }
 
-        return true;
+        return 'valid';
 
     }
 
@@ -1549,12 +1613,16 @@ class POSTdispatcher
     private function editTagOrCategory() 
     {
         
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
 
-        # Validate the user is an admin
-        $client            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-        if ($client['role'] !== 'administrator') return false;
+        # Grab the user's row from the session
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
 
+        # Validate the user is an admin
+        if ($user['role'] !== 'administrator') return false;
+
+        # Filter and sanitize the POST variables
         if (!$this->isJson($this->postVars['entries'])) return false;
 
         $entries = json_decode($this->postVars['entries'], true);
@@ -1581,7 +1649,11 @@ class POSTdispatcher
 
         if (!$validated_data) return false;
 
-        return \Kanso\Admin\Utility\articlesManager::editTag($validated_data['id'], $validated_data['type'], $validated_data['slug'], $validated_data['name']);
+        $update = \Kanso\Kanso::getInstance()->Bookkeeper->editTag($validated_data['id'], $validated_data['type'], $validated_data['slug'], $validated_data['name']);
+
+        if ($update === true) return true;
+
+        if (is_string($update)) return $update;
 
         return false;
 
@@ -1599,12 +1671,16 @@ class POSTdispatcher
      */
     private function loadComments($filter) {
 
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
 
-        # Validate the user is an admin
-        $client            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-        if ($client['role'] !== 'administrator') return false;
+        # Grab the user's row from the session
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
 
+        # Validate the user is an admin
+        if ($user['role'] !== 'administrator') return false;
+
+        # Filter and sanitize the POST variables
         $postVars = $this->GUMP->sanitize($this->postVars);
 
         $this->GUMP->validation_rules([
@@ -1622,6 +1698,9 @@ class POSTdispatcher
         $validated_data = $this->GUMP->run($postVars);
 
         if ($validated_data) {
+
+            # Get the Kanso Query object
+            $Query = \Kanso\Kanso::getInstance()->Query();
             
             $isSearch = $validated_data['search'] !== 'false';
             $page     = ((int)$validated_data['page']) -1;
@@ -1652,11 +1731,28 @@ class POSTdispatcher
                 }
 
                 if ($searchKey) {
-                    $comments = $this->Query->SELECT('*')->FROM('comments')->WHERE($searchKey, '=', $searchValue)->FIND_ALL();
+                    $comments = $this->Query->SELECT('*')->FROM('comments')->WHERE($searchKey, '=', $searchValue);
                 }
                 else {
-                    $comments = $this->Query->SELECT('*')->FROM('comments')->WHERE('content', 'LIKE', "%$searchValue%")->FIND_ALL();
+                    $comments = $this->Query->SELECT('*')->FROM('comments')->WHERE('content', 'LIKE', "%$searchValue%");
                 }
+
+                if ($filter === 'all') {
+                    $comments = $comments->ORDER_BY('date', $sort)->FIND_ALL();
+                }
+                if ($filter === 'approved') {
+                    $comments = $comments->WHERE('status', '=', 'approved')->ORDER_BY('date', $sort)->FIND_ALL();
+                }
+                if ($filter === 'spam') {
+                    $comments = $comments->WHERE('status', '=', 'spam')->ORDER_BY('date', $sort)->FIND_ALL();
+                }
+                if ($filter === 'pending') {
+                    $comments = $comments->WHERE('status', '=', 'pending')->ORDER_BY('date', $sort)->FIND_ALL();
+                }
+                if ($filter === 'deleted') {
+                    $comments = $comments->WHERE('status', '=', 'deleted')->ORDER_BY('date', $sort)->FIND_ALL();
+                }
+
             }
             else {
                 if ($filter === 'all') {
@@ -1677,9 +1773,9 @@ class POSTdispatcher
             }
 
             foreach ($comments as $key => $comment) {
-                $comments[$key]['permalink'] = $this->Kanso->Query->the_permalink($comment['post_id']);
-                $comments[$key]['title']     = $this->Kanso->Query->the_title($comment['post_id']);
-                $comments[$key]['avatar']    = $this->Kanso->Query->get_avatar($comment['email'], 100, true);
+                $comments[$key]['permalink'] = $Query->the_permalink($comment['post_id']);
+                $comments[$key]['title']     = $Query->the_title($comment['post_id']);
+                $comments[$key]['avatar']    = $Query->get_avatar($comment['email'], 100, true);
             }
 
             $comments = \Kanso\Utility\Arr::paginate($comments, $page, 10);
@@ -1698,12 +1794,16 @@ class POSTdispatcher
      */
     private function loadCommentInfo() 
     {
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
 
-        # Validate the user is an admin
-        $client            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-        if ($client['role'] !== 'administrator') return false;
+        # Grab the user's row from the session
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
 
+        # Validate the user is an admin
+        if ($user['role'] !== 'administrator') return false;
+
+        # Filter and sanitize the POST variables
         $postVars = $this->GUMP->sanitize($this->postVars);
 
         $this->GUMP->validation_rules([
@@ -1717,7 +1817,7 @@ class POSTdispatcher
         $validated_data = $this->GUMP->run($postVars);
 
         if ($validated_data) {
-            
+
             $commentRow  = $this->Query->SELECT('*')->FROM('comments')->WHERE('id', '=', (int)$validated_data['comment_id'])->FIND();
 
             # If it doesn't exist return false
@@ -1740,7 +1840,7 @@ class POSTdispatcher
                 'ip_address'   => $ip_address,
                 'name'         => $name,
                 'email'        => $email,
-                'avatar'       => $this->Kanso->Query->get_avatar($email, 150, true),
+                'avatar'       => \Kanso\Kanso::getInstance()->Query->get_avatar($email, 150, true),
                 'status'       => $commentRow['status'],
                 'content'      => $commentRow['content'],
                 'html_content' => $commentRow['html_content'],
@@ -1776,12 +1876,16 @@ class POSTdispatcher
     private function editComment() 
     {
 
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
 
-        # Validate the user is an admin
-        $client            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-        if ($client['role'] !== 'administrator') return false;
+        # Grab the user's row from the session
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
 
+        # Validate the user is an admin
+        if ($user['role'] !== 'administrator') return false;
+
+        # Filter and sanitize the POST variables
         $postVars = $this->GUMP->sanitize($this->postVars);
 
         $this->GUMP->validation_rules([
@@ -1799,12 +1903,12 @@ class POSTdispatcher
 
         if ($validated_data) {
 
-            $commentRow  = $this->Query->SELECT('*')->FROM('comments')->WHERE('id', '=', (int)$validated_data['comment_id'])->FIND();
+            $commentRow  = $this->Query->SELECT('*')->FROM('comments')->WHERE('id', '=', (int)$validated_data['comment_id'])->ROW();
 
             # If it doesn't exist return false
             if (!$commentRow) return false;
-            $Parser                    = new \Kanso\Parsedown\ParsedownExtra();
-            $HTMLContent                = $Parser->text($validated_data['content']);
+            $Parser      = new \Kanso\Parsedown\ParsedownExtra();
+            $HTMLContent = $Parser->text($validated_data['content']);
             $commentRow['content']      = $validated_data['content'];
             $commentRow['html_content'] = $HTMLContent;
             $this->Query->UPDATE('comments')->SET(['content' => $validated_data['content'], 'html_content' => $HTMLContent])->WHERE('id', '=', $commentRow['id'])->QUERY();
@@ -1821,12 +1925,16 @@ class POSTdispatcher
      */
     private function replyComment()
     {
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
 
-        # Validate the user is an admin
-        $client            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-        if ($client['role'] !== 'administrator') return false;
+        # Grab the user's row from the session
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
 
+        # Validate the user is an admin
+        if ($user['role'] !== 'administrator') return false;
+
+        # Filter and sanitize the POST variables
         $postVars = $this->GUMP->sanitize($this->postVars);
 
         $this->GUMP->validation_rules([
@@ -1853,8 +1961,8 @@ class POSTdispatcher
             'postID'       => $parentComment['post_id'],
             'replyID'      => $parentComment['id'],
             'content'      => $validated_data['content'],
-            'name'         => $client['name'],
-            'email'        => $client['email'],
+            'name'         => $user['name'],
+            'email'        => $user['email'],
             'email-reply'  => true,
             'email-thread' => true,
         ];
@@ -1864,7 +1972,6 @@ class POSTdispatcher
         return false;
 
     }
-
     
     /**
      * Moderate an ip address from commenting
@@ -1873,12 +1980,16 @@ class POSTdispatcher
      */
     private function moderateIpAddress() 
     {
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
 
-        # Validate the user is an admin
-        $client            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-        if ($client['role'] !== 'administrator') return false;
+        # Grab the user's row from the session
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
 
+        # Validate the user is an admin
+        if ($user['role'] !== 'administrator') return false;
+
+        # Filter and sanitize the POST variables
         $postVars = $this->GUMP->sanitize($this->postVars);
 
         $this->GUMP->validation_rules([
@@ -1906,12 +2017,16 @@ class POSTdispatcher
      */
     private function actionComments($status) 
     {
+        # Validate the user is logged in
         if (!$this->isLoggedIn) return false;
 
-        # Validate the user is an admin
-        $client            = \Kanso\Admin\Security\sessionManager::get('KANSO_ADMIN_DATA');
-        if ($client['role'] !== 'administrator') return false;
+        # Grab the user's row from the session
+        $user = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');
 
+        # Validate the user is an admin
+        if ($user['role'] !== 'administrator') return false;
+
+        # Filter and sanitize the POST variables
         $postVars = $this->GUMP->sanitize($this->postVars);
 
         $this->GUMP->validation_rules([

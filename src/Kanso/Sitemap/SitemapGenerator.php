@@ -48,7 +48,7 @@ class SitemapGenerator
         
         # Only load the authors if authors are being routed
         if ($Kanso->Config['KANSO_ROUTE_AUTHORS']) {
-            $authors = $Query->SELECT('*')->FROM('authors')->WHERE('status', '=', 'confirmed')->FIND_ALL();
+            $authors = $Query->SELECT('*')->FROM('users')->WHERE('status', '=', 'confirmed')->FIND_ALL();
         }
 
 		$now    = date("Y-m-d", time());

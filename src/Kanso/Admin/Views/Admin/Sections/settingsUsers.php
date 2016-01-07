@@ -36,7 +36,9 @@
 
 </form>
 
-<?php if (count($allAuthors) > 1)  : ?>
+<?php 
+$allAuthors = adminAllUsers();
+if (count($allAuthors) > 1)  : ?>
 	<h3>Manage Authors</h3>
 	<p class="info text-masked" style="margin-bottom:25px;">
 		You can remove other authors here. Their post authorship will be transferred to the user who deletes them.
@@ -51,7 +53,7 @@
 			<th align="right"></th>
 		</tr></thead>
 		<?php foreach ($allAuthors as $author) : ?>
-			<?php if ($author['id'] !== $ADMIN_USER_DATA['id'] && (int)$author['id'] !== 1) : ?>
+			<?php if ($author['id'] !== adminGetUser()['id'] && (int)$author['id'] !== 1) : ?>
 				<?php 
 				$name   	   = $author['name'] === null ? '?': $author['name'];
 				$slectedAdmin  = $author['role'] === 'administrator' ? 'selected' : '';

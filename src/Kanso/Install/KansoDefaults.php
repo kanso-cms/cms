@@ -16,7 +16,7 @@ $keys = [
 ];
 
 # Hashed default admin password
-$hashed = \Kanso\Security\Encrypt::encrypt($this->config['KANSO_AUTHOR_PASSWORD']);
+$hashed = \Kanso\Security\Encrypt::encrypt($this->config['KANSO_OWNER_PASSWORD']);
 
 # Default articles table
 $KANSO_DEFAULTS_POSTS_TABLE = [
@@ -49,7 +49,7 @@ $KANSO_DEFAULTS_CATEGORIES_TABLE = [
 ];
 
 # Default authors table
-$KANSO_DEFAULTS_AUTHORS_TABLE = [
+$KANSO_DEFAULTS_USERS_TABLE = [
 	'id'           => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'username'     => 'VARCHAR(255)',
 	'email'        => 'VARCHAR(255)',
@@ -71,7 +71,7 @@ $KANSO_DEFAULTS_AUTHORS_TABLE = [
 	'KANSO_KEYS_TIME'     => 'INTEGER | UNSIGNED',
 ];
 
-# Default authors table
+# Default comments table
 $KANSO_DEFAULTS_COMMENTS_TABLE = [
 	'id'           => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'parent'  	   => 'INTEGER | UNSIGNED',
@@ -105,10 +105,10 @@ $KANSO_DEFAULTS_CONTENT_TO_POSTS_TABLE = [
 	'post_id'  => 'INTEGER | UNSIGNED',
 ];
 
-# The default author entry
-$KANSO_DEFAULT_AUTHOR = [
-	"username"    		 => $this->config['KANSO_AUTHOR_USERNAME'],
-	"email"       		 => $this->config['KANSO_AUTHOR_EMAIL'],
+# The default user entry
+$KANSO_DEFAULT_USER = [
+	"username"    		 => $this->config['KANSO_OWNER_USERNAME'],
+	"email"       		 => $this->config['KANSO_OWNER_EMAIL'],
 	"hashed_pass" 		 => utf8_encode($hashed),
 	"name"        		 => 'John Appleseed',
 	"slug"        		 => 'john-appleseed',

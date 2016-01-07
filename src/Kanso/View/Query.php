@@ -209,7 +209,7 @@ class Query {
     {
         $index       = is_numeric($author_name) ? 'id' : 'name';
         $author_name = is_numeric($author_name) ? (int)$author_name : $author_name;
-        return !empty(\Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('authors')->WHERE($index, '=', $author_name)->FIND());
+        return !empty(\Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE($index, '=', $author_name)->FIND());
     }
 
     /**
@@ -1166,7 +1166,7 @@ class Query {
      */
     public function all_the_authors()
     {
-        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('authors')->FIND_ALL();
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->FIND_ALL();
     }
 
     /**
@@ -1965,12 +1965,12 @@ class Query {
 
     private function getAuthorById($author_id)
     {
-        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('authors')->WHERE('id', '=', $author_id)->FIND();
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('id', '=', $author_id)->FIND();
     }
 
     private function getAuthorByName($author_name)
     {
-        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('authors')->WHERE('name', '=', $author_name)->LIMIT(1)->FIND();
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('name', '=', $author_name)->LIMIT(1)->FIND();
     }
 
     private function getTagById($tag_id)

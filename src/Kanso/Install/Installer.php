@@ -42,11 +42,11 @@ class Installer
         'user'     => 'root',
         'password' => 'root',
         'dbname'   => 'Kanso',
+        'table_prefix' => 'kanso_',
 
         # Core Kanso configuration
-        'KANSO_RUN_MODE'   => 'CMS',
-        'KANSO_THEME_NAME' => 'Roshi',
-        'KANSO_SITE_TITLE' => 'Kanso',
+        'KANSO_THEME_NAME'       => 'Roshi',
+        'KANSO_SITE_TITLE'       => 'Kanso',
         'KANSO_SITE_DESCRIPTION' => 'Kanso is a lightweight CMS written in PHP with a focus on simplicity, usability and of course writing.',
         'KANSO_SITEMAP'          => 'sitemap.xml',
         'KANSO_PERMALINKS'       => 'year/month/postname/',
@@ -66,9 +66,9 @@ class Installer
         'KANSO_AUTHOR_SLUGS'     => ['john-appleseed'],
 
         # Author login infomation
-        'KANSO_AUTHOR_USERNAME'  => 'admin',
-        'KANSO_AUTHOR_EMAIL'     => 'admin@example.com',
-        'KANSO_AUTHOR_PASSWORD'  => 'password1',
+        'KANSO_OWNER_USERNAME'  => 'admin',
+        'KANSO_OWNER_EMAIL'     => 'admin@example.com',
+        'KANSO_OWNER_PASSWORD'  => 'password1',
 	];
 
 	/**
@@ -121,16 +121,12 @@ class Installer
             $this->config         = $defaults;
     	}
     
-        # The database only needs to be installed if Kanso is being used as CMS
-        if ($this->config['KANSO_RUN_MODE'] === 'CMS') {
-
-            # Do a test connection to the database to validate DB credentials are valid
-            $this->DBConnect();
+        # Do a test connection to the database to validate DB credentials are valid
+        $this->DBConnect();
 
 
-            # Install the Kanso database
-            $this->installDB();
-        }
+        # Install the Kanso database
+        $this->installDB();
 
     	# Save the config
         file_put_contents($this->KansoDir.'/Config.php', "<?php\nreturn\n".var_export($this->config, true).";?>");
@@ -181,7 +177,7 @@ class Installer
 
         $Query->CREATE_TABLE('categories', $KANSO_DEFAULTS_CATEGORIES_TABLE);
 
-        $Query->CREATE_TABLE('authors', $KANSO_DEFAULTS_AUTHORS_TABLE);
+        $Query->CREATE_TABLE('users', $KANSO_DEFAULTS_USERS_TABLE);
 
         $Query->CREATE_TABLE('comments', $KANSO_DEFAULTS_COMMENTS_TABLE);
 
@@ -194,7 +190,7 @@ class Installer
 
         $Query->ALTER_TABLE('posts')->MODIFY_COLUMN('category_id')->ADD_FOREIGN_KEY('categories', 'id');
         
-        $Query->ALTER_TABLE('posts')->MODIFY_COLUMN('author_id')->ADD_FOREIGN_KEY('authors', 'id');
+        $Query->ALTER_TABLE('posts')->MODIFY_COLUMN('author_id')->ADD_FOREIGN_KEY('users', 'id');
 
         $Query->ALTER_TABLE('comments')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
 
@@ -202,8 +198,8 @@ class Installer
         
         # Populate tables
 
-        # Default Author
-        $Query->INSERT_INTO('authors')->VALUES($KANSO_DEFAULT_AUTHOR)->QUERY();
+        # Default user
+        $Query->INSERT_INTO('users')->VALUES($KANSO_DEFAULT_USER)->QUERY();
 
         # Default Tags
         foreach ($KANSO_DEFAULT_TAGS as $i => $tag) {
@@ -275,7 +271,7 @@ class Installer
     	$config['user'] 			 		= filter_var($config['user'], FILTER_SANITIZE_STRING);
     	$config['password']		     		= filter_var($config['password'], FILTER_SANITIZE_STRING);
     	$config['dbname'] 		     		= filter_var($config['dbname'], FILTER_SANITIZE_STRING);
-        $config['KANSO_RUN_MODE']           = strtoupper(filter_var($config['KANSO_RUN_MODE'], FILTER_SANITIZE_STRING));
+        $config['table_prefix']             = filter_var($config['table_prefix'], FILTER_SANITIZE_STRING);
     	$config['KANSO_THEME_NAME']  		= filter_var($config['KANSO_THEME_NAME'], FILTER_SANITIZE_STRING);
     	$config['KANSO_SITE_TITLE']  		= filter_var($config['KANSO_SITE_TITLE'], FILTER_SANITIZE_STRING);
         $config['KANSO_SITE_DESCRIPTION']   = filter_var($config['KANSO_SITE_DESCRIPTION'], FILTER_SANITIZE_STRING);
@@ -293,15 +289,13 @@ class Installer
     	$config['KANSO_USE_CACHE']			= (bool) $config['KANSO_USE_CACHE'];
     	$config['KANSO_CACHE_LIFE']			= filter_var($config['KANSO_CACHE_LIFE'], FILTER_SANITIZE_STRING);
     	$config['KANSO_COMMENTS_OPEN']		= (bool) $config['KANSO_COMMENTS_OPEN'];
-    	$config['KANSO_AUTHOR_USERNAME']	= filter_var($config['KANSO_AUTHOR_USERNAME'], FILTER_SANITIZE_STRING);
-    	$config['KANSO_AUTHOR_EMAIL']		= filter_var($config['KANSO_AUTHOR_EMAIL'], FILTER_SANITIZE_STRING);
-    	$config['KANSO_AUTHOR_PASSWORD']	= filter_var($config['KANSO_AUTHOR_PASSWORD'], FILTER_SANITIZE_STRING);
+    	$config['KANSO_OWNER_USERNAME']	    = filter_var($config['KANSO_OWNER_USERNAME'], FILTER_SANITIZE_STRING);
+    	$config['KANSO_OWNER_EMAIL']		= filter_var($config['KANSO_OWNER_EMAIL'], FILTER_SANITIZE_STRING);
+    	$config['KANSO_OWNER_PASSWORD']	    = filter_var($config['KANSO_OWNER_PASSWORD'], FILTER_SANITIZE_STRING);
         $config['KANSO_STATIC_PAGES']       = $config['KANSO_STATIC_PAGES'];
         $config['KANSO_AUTHOR_SLUGS']       = $config['KANSO_AUTHOR_SLUGS'];
 
-        # Filter and sanitize the run mode
-        if ($config['KANSO_RUN_MODE'] !== 'CMS' && $config['KANSO_RUN_MODE'] !== 'FRAMEWORK') $config['KANSO_RUN_MODE'] = 'CMS';
-
+        
     	# Filter the sanitize the sitemap
     	if (strpos($config['KANSO_SITEMAP'], '.') === false) $config['KANSO_SITEMAP'] = $this->defaults['KANSO_SITEMAP'];
 
@@ -346,7 +340,17 @@ class Installer
         if (!is_array($config['KANSO_AUTHOR_SLUGS'])) $config['KANSO_AUTHOR_SLUGS'] = [];
 
     	# Filter and santize the password
-    	if (empty($config['KANSO_AUTHOR_PASSWORD'])) $config['KANSO_AUTHOR_PASSWORD'] = $this->defaults['KANSO_AUTHOR_PASSWORD'];
+    	if (empty($config['KANSO_OWNER_PASSWORD'])) $config['KANSO_OWNER_PASSWORD'] = $this->defaults['KANSO_OWNER_PASSWORD'];
+
+        # Filter and santize the email
+        if (empty($config['KANSO_OWNER_EMAIL'])) $config['KANSO_OWNER_EMAIL'] = $this->defaults['KANSO_OWNER_EMAIL'];
+
+        # Filter and santize the username
+        if (empty($config['KANSO_OWNER_USERNAME'])) $config['KANSO_OWNER_USERNAME'] = $this->defaults['KANSO_OWNER_USERNAME'];
+
+        # Filter and sanitize the table prefix
+        if (empty($config['table_prefix'])) $config['table_prefix'] = $this->defaults['table_prefix'];
+        $config['table_prefix'] = preg_replace('/[^a-z_-]+/', '_', strtolower($config['table_prefix']));
 
         # Return the config
     	return $config;

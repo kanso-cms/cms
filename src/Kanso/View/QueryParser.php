@@ -136,7 +136,7 @@ class QueryParser {
             }
         }
 
-        $Query->LEFT_JOIN_ON('authors', 'authors.id = posts.author_id');
+        $Query->LEFT_JOIN_ON('users', 'users.id = posts.author_id');
 
         $Query->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id');
 
@@ -159,7 +159,7 @@ class QueryParser {
                 $articles[$i]['tags']     = $Query->SELECT('tags.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id')->WHERE('post_id', '=', (int)$article['id'])->FIND_ALL();
                 $articles[$i]['category'] = $Query->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$article['category_id'])->FIND();
                 $articles[$i]['comments'] = $Query->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$article['id'])->FIND_ALL();
-                $articles[$i]['author']   = $Query->SELECT('*')->FROM('authors')->WHERE('id', '=', (int)$article['author_id'])->FIND();
+                $articles[$i]['author']   = $Query->SELECT('*')->FROM('users')->WHERE('id', '=', (int)$article['author_id'])->FIND();
             }
         }
         return $articles;

@@ -12,6 +12,7 @@ namespace Kanso;
  * @property Request        \Kanso\Http\Request
  * @property Response       \Kanso\Http\Response
  * @property Database       \Kanso\Database\Database
+ * @property Gatekeeper     \Kanso\Auth\Gatekeeper
  * @property Router         \Kanso\Router\Router
  * @property Query          \Kanso\View\Query
  * @property View           \Kanso\View\View
@@ -164,6 +165,16 @@ class Kanso
 			return new \Kanso\Database\Database;
 		});
 
+		# Default Gatekeeper
+		$this->Container->singleton('Gatekeeper', function () {
+			return new \Kanso\Auth\Gatekeeper();
+		});
+
+		# Default Session
+		$this->Container->singleton('Session', function () {
+			return new \Kanso\Auth\Session();
+		});
+
 		# Default router
 		$this->Container->singleton('Router', function () {
 			return new \Kanso\Router\Router();
@@ -189,16 +200,26 @@ class Kanso
 			return \Kanso\Events::getInstance();
 		});
 
+		# Default Filters
+		$this->Container->singleton('Filters', function () {
+			return \Kanso\Filters::getInstance();
+		});
+
+		# Default Articlekeeper
+		$this->Container->singleton('Bookkeeper', function () {
+			return new \Kanso\Articles\Bookkeeper();
+		});
+
 		# Make default if first instance
 		if (is_null(static::getInstance())) {
 			$this->setName('default');
 		}
 
+		# Start the session immediately
+		$this->dispatchSession();
+
 		# Default this is not an admin request
 		$this->is_admin = false;
-
-		# Dispath session
-		$this->dispatchSession();
 		
 	}
 
@@ -558,6 +579,37 @@ class Kanso
 		return $this->Database;
 	}
 
+	/**
+	 * Get the Gatekeeper object
+	 *
+	 * @return \Kanso\Auth\GateKeeper
+	 */
+	public function Gatekeeper()
+	{
+		return $this->Gatekeeper;
+	}
+
+	/**
+	 * Get the Session object
+	 *
+	 * @return \Kanso\Auth\Session
+	 */
+	public function Session()
+	{
+		return $this->Session;
+	}
+
+	/**
+	 * Get the Bookkeeper object
+	 *
+	 * @return \Kanso\Auth\Session
+	 */
+	public function Bookkeeper()
+	{
+		return $this->Bookkeeper;
+	}
+
+	
 
 	/******************************************************************************
 	* RENDERING
@@ -606,37 +658,11 @@ class Kanso
 
 		# Validate the application is installed
 		if (!$this->isInstalled) {
-			
-			$validRequest = false;
 
-			# Get the installation directory
-	        $installDir = rtrim(dirname(__FILE__), '/');
+			$this->runInstall();
 
-	        # Get the request URL
-	        $requestUrl = rtrim($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], '/');
-
-	        # Convert the requested url to a directory
-	        $dirRequest = str_replace($_SERVER['HTTP_HOST'], $_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR.'Kanso', $requestUrl);
-
-	        # Validate the request is for the location
-	        # of the installation
-	        if ($dirRequest === $installDir) {
-
-	        	# Install the application if needed
-				$installer = new \Kanso\Install\Installer();
-				$installed = $installer->installKanso();
-
-				# Show the welcome page
-				include "Install/InstallSplash.php";
-				return;
-	        }
-			
-			# Return the aplication was not installed
 			return;
 		}
-
-		# If Kanso is being used as a framework - there's nothing more to do here
-        if ($this->Config['KANSO_RUN_MODE'] === 'FRAMEWORK') return;
 
 		# Set the default error callback
 		$this->Router->error([$this, 'notFound']);
@@ -692,17 +718,69 @@ class Kanso
 	}
 
 	/**
+	 * Run the install script
+	 *
+	 * This method intializes the install script
+	 * and is called from $Kanso->run() when the application
+	 * is not installed
+	 */
+	private function runInstall()
+	{
+		# Default is to do nothing
+		$validRequest = false;
+
+		# Get the installation directory
+        $installDir = rtrim(dirname(__FILE__), '/');
+
+        # Get the request URL
+        $requestUrl = rtrim($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], '/');
+
+        # Convert the requested url to a directory
+        $dirRequest = str_replace($_SERVER['HTTP_HOST'], $_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR.'Kanso', $requestUrl);
+
+        # Validate the request is for the location
+        # of the installation
+        if ($dirRequest === $installDir) {
+
+        	# Validate the install file exists
+        	if (!file_exists(__DIR__.'/Install.php')) {
+        		throw new \Exception("Could not install Kanso. Install.php was not found on the server. Ensure you have renamed \"Install.sample.php\" to \"Install.php\".");
+        		
+        	}
+
+        	# Install the application if needed
+			$installer = new \Kanso\Install\Installer();
+			$installed = $installer->installKanso();
+
+			# Show the welcome page
+			include "Install/InstallSplash.php";
+		
+        }
+		
+		# Return the aplication was not installed
+	}
+
+
+
+	/**
 	 * Dispatch Session
 	 *
 	 * If a session hasn't been started already, start a new one.
 	 */
 	private function dispatchSession() 
 	{
+		# Start a PHP session
 		if ( session_id() == '' || !isset($_SESSION)) {
 			if (!headers_sent()) { 
 				session_start();
 			}
 		}
+
+		# Instantiate the Kanso session
+		# Note this will also instantiate the gatekeeper
+		$session = $this->Session;
+		$session->init();
+
 	}
 
 
@@ -817,43 +895,43 @@ class Kanso
 		$this->get('/Kanso/(:all).php', [$this, 'notFound']);
 		
 		# Admin settings
-		$this->get('/admin/settings/(:all)/', '\Kanso\Admin\Dispatch\GETdispatcher::dispatch', 'settings');
+		$this->get('/admin/settings/(:all)/', '\Kanso\Admin\Controllers\GetController@dispatch', 'settings');
 		
 		# Admin artciles
-		$this->get('/admin/articles/',  '\Kanso\Admin\Dispatch\GETdispatcher::dispatch', 'articles');
+		$this->get('/admin/articles/',  '\Kanso\Admin\Controllers\GetController@dispatch', 'articles');
 
 		# Admin comments
-		$this->get('/admin/comments/',  '\Kanso\Admin\Dispatch\GETdispatcher::dispatch', 'comments');
+		$this->get('/admin/comments/',  '\Kanso\Admin\Controllers\GetController@dispatch', 'comments');
 
 		# Admin tags
-		$this->get('/admin/taxonomy/',  '\Kanso\Admin\Dispatch\GETdispatcher::dispatch', 'taxonomy');
+		$this->get('/admin/taxonomy/',  '\Kanso\Admin\Controllers\GetController@dispatch', 'taxonomy');
 		
 		# Admin write
-		$this->get('/admin/write/', '\Kanso\Admin\Dispatch\GETdispatcher::dispatch', 'writer');
+		$this->get('/admin/write/', '\Kanso\Admin\Controllers\GetController@dispatch', 'writer');
 
 		# Admin Edits
-		$this->get('/admin/write/(:all)', '\Kanso\Admin\Dispatch\GETdispatcher::dispatch', 'writer');
+		$this->get('/admin/write/(:all)', '\Kanso\Admin\Controllers\GetController@dispatch', 'writer');
 
 		# Admin login
-		$this->get('/admin/login/', '\Kanso\Admin\Dispatch\GETdispatcher::dispatch', 'logIn');
+		$this->get('/admin/login/', 'Kanso\Admin\Controllers\GetController@dispatch', 'logIn');
 
 		# Admin Logout
-		$this->get('/admin/logout/', '\Kanso\Admin\Dispatch\GETdispatcher::dispatch', 'logOut');
+		$this->get('/admin/logout/', '\Kanso\Admin\Controllers\GetController@dispatch', 'logOut');
 
 		# Admin register
-		$this->get('/admin/register?(:all)', '\Kanso\Admin\Dispatch\GETdispatcher::dispatch', 'register');
+		$this->get('/admin/register?(:all)', '\Kanso\Admin\Controllers\GetController@dispatch', 'register');
 
 		# Admin forgot password
-		$this->get('/admin/forgot-password/', '\Kanso\Admin\Dispatch\GETdispatcher::dispatch', 'forgotPassword');
+		$this->get('/admin/forgot-password/', '\Kanso\Admin\Controllers\GetController@dispatch', 'forgotPassword');
 
 		# Admin forgot username
-		$this->get('/admin/forgot-username/', '\Kanso\Admin\Dispatch\GETdispatcher::dispatch', 'forgotUserName');
+		$this->get('/admin/forgot-username/', '\Kanso\Admin\Controllers\GetController@dispatch', 'forgotUserName');
 
 		# Admin Reset password
-		$this->get('/admin/reset-password?(:all)', '\Kanso\Admin\Dispatch\GETdispatcher::dispatch', 'resetPassword');
+		$this->get('/admin/reset-password?(:all)', '\Kanso\Admin\Controllers\GetController@dispatch', 'resetPassword');
 
 		# Admin POST
-		$this->post('/admin/', '\Kanso\Admin\Dispatch\POSTdispatcher@validate');
+		$this->post('/admin/', '\Kanso\Admin\Controllers\PostController@validate');
 
 		# Homepage
 		$this->get('/', '\Kanso\Kanso::loadTemplate', 'home');
@@ -897,7 +975,7 @@ class Kanso
 
 		# Ajax Post Comments
 		if ($this->Config['KANSO_COMMENTS_OPEN'] === true) {
-			$this->post("/comments", '\Kanso\Comments\CommentManager::dispatch');
+			$this->post("/comments", '\Kanso\Comments\CommentManager@dispatch');
 		}
 
 		# Sitemap

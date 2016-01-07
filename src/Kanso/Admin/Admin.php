@@ -10,6 +10,10 @@
 /********************************************************************************
 * Admin includes
 *******************************************************************************/
+$ADMIN_INCLUDES_DIR = dirname(__FILE__).'/Views/';
+
+# Require admin functions
+require_once(dirname(__FILE__).'/functions.php');
 
 # Include the header 
 require_once($ADMIN_INCLUDES_DIR.'header.php');
