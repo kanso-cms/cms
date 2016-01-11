@@ -482,7 +482,7 @@ class Builder
                 $Query->ORDER_BY($orderby[0], $orderby[1]);
             }
             else {
-                $Query->LIMIT($orderby);
+                $Query->ORDER_BY($orderby);
             }
         }
 

@@ -13,11 +13,14 @@ namespace Kanso;
  * @property Response       \Kanso\Http\Response
  * @property Database       \Kanso\Database\Database
  * @property Gatekeeper     \Kanso\Auth\Gatekeeper
+ * @property Session        \Kanso\Auth\Session
+ * @property Bookkeeper     \Kanso\Articles\Bookkeeper
  * @property Router         \Kanso\Router\Router
  * @property Query          \Kanso\View\Query
  * @property View           \Kanso\View\View
  * @property Cache          \Kanso\Cache\Cache
  * @property Events         \Kanso\Events
+ * @property Filters        \Kanso\Filters
  */
 class Kanso 
 {

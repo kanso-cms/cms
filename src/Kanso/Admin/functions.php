@@ -374,7 +374,7 @@ function adminTabPanels()
 		}
 	}
 
-	$panels = \Kanso\Filters::apply('adminTabNav', $panels);
+	$panels = \Kanso\Filters::apply('adminTabPanels', $panels);
 	return $panels;
 
 }

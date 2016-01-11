@@ -210,6 +210,7 @@ class PostController
 
         # Articles
         if ($ajaxRequest === 'admin_all_articles') return $this->loadArticles();
+        if ($ajaxRequest === 'admin_all_article_pages') return $this->countAllArticles();
         if ($ajaxRequest === 'admin_publish_articles') return $this->changeArticleStatus('published');
         if ($ajaxRequest === 'admin_unpublish_articles') return $this->changeArticleStatus('draft');
         if ($ajaxRequest === 'admin_delete_articles') return $this->deleteArticles();
@@ -1402,6 +1403,8 @@ class PostController
         # Get all the articles
         $articles = $this->Query->getArticlesByIndex(null, null, [$offset, $limit], ['tags', 'category', 'author'], [$sortKey, $sort]);
 
+    
+
         # Pre validate there are actually some articles to process
         if (empty($articles)) return [];
 
@@ -1443,7 +1446,22 @@ class PostController
         }
 
         # Pageinate the articles
-        return \Kanso\Utility\Arr::paginate($articles, $page, 10);
+        return [$articles];
+
+    }
+
+    private function countAllArticles()
+    {
+        
+        if (!$this->isLoggedIn) return false;
+        
+        $perPage      = 10;
+        $offset       = 0 * $perPage;
+        $limit        = $perPage;
+
+        $articles = \Kanso\Kanso::getInstance()->Database->Builder()->SELECT('post.id')->FROM('posts')->FIND_ALL();
+
+        return count(\Kanso\Utility\Arr::paginate($articles, 0, 10));
 
     }
 

@@ -45,10 +45,10 @@ class Bookkeeper
     	if ($articleRow['status'] === $status) return true;
 
     	# If the article is a published page, update kanso's static pages
-    	if ($status === 'published' && $articleRow['type'] === 'published') {
+    	if ($status === 'published' && $articleRow['type'] === 'page') {
     		$this->addToStaticPages($articleRow['slug']);
     	}
-    	else {
+    	if ($status === 'draft' && $articleRow['type'] === 'page') {
     		$this->removeFromStaticPages($articleRow['slug']);
     	}
 
@@ -358,7 +358,17 @@ class Bookkeeper
 		$Query->INSERT_INTO('content_to_posts')->VALUES(['post_id' => $row['id'], 'content' => $content])->QUERY();
 
 		# Fire the event
-		\Kanso\Events::fire('newArticle', [$row]);
+		if ($newArticle) {
+			\Kanso\Events::fire('newArticle', [$row]);
+		}
+		else {
+			\Kanso\Events::fire('articleSave', [$row]);
+		}
+
+		if ($row['status'] === 'published') {
+			\Kanso\Events::fire('articlePublish', [$row]);
+		}
+		
 		
 		# If the article is a page, update the static pages list
 		if ($row['type'] === 'page') $this->addToStaticPages($row['slug']);
@@ -376,7 +386,6 @@ class Bookkeeper
 	*/
 	public function batchImport($articles) 
 	{
-
 
 	    # Loop the articles
 	  	foreach ($articles as $i => $article) {
@@ -403,7 +412,7 @@ class Bookkeeper
 
 	  	}
 
-	  	return 'valid';
+	  	return true;
 	}
 
 	/**
@@ -617,7 +626,9 @@ class Bookkeeper
 	  		'slug' => \Kanso\Utility\Str::slugFilter($category),
 	  	];
 	  	$Query->INSERT_INTO('categories')->VALUES($row)->QUERY();
+
 	  	$row['id'] = intval(\Kanso\Kanso::getInstance()->Database->lastInsertId());
+
 	  	return $row;
 	}
 

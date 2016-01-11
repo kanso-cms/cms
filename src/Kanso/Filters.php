@@ -21,12 +21,22 @@ class Filters
      * @var array    Default Kanso event types
      */
     protected static $filters = [
-        'configChange'      => [],
-        'adminArticleTabs'  => [],
-        'adminSettingsTabs' => [],
-        'adminDropDown'     => [],
-        'adminFavicons'     => [],
-        'adminAjaxResponse' => [],
+        'configChange'        => [],
+        'adminArticleTabs'    => [],
+        'adminFavicons'       => [],
+        'adminPageTitle'      => [],
+        'adminSettingsTabs'   => [],
+        'adminHeaderScripts'  => [],
+        'adminBodyClass'      => [],
+        'adminSvgSprites'     => [],
+        'adminHeaderLinks'    => [],
+        'adminHeaderDropdown' => [],
+        'adminTabNav'         => [],
+        'adminTabPanels'      => [],
+        'adminDropDown'       => [],
+        'adminFooterScripts'  => [],
+        'adminPostTypes'      => [],
+        'adminAjaxResponse'   => [],
     ];
 
     /**

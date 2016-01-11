@@ -3020,31 +3020,49 @@ function hideInputErrors(inputs) {
         updateNav: function(items) {
 
             var currentPage = this.currentPage;
-            this.maxPages = count(items);
-            this.node_list_nav_maxPages.innerHTML = 'of ' + this.maxPages;
+            var form = {
+                ajaxRequest: 'admin_all_article_pages',
+                public_key: GLOBAL_PUBLIC_KEY,
+                referer: window.location.href
+            };
+            var _this = this;
+            Ajax.post(GLOBAL_AJAX_URL, form, function(success) {
 
-            if (currentPage >= this.maxPages) {
-                addClass(this.node_list_nav_nextPage, 'disabled');
-            } else {
-                removeClass(this.node_list_nav_nextPage, 'disabled');
-            }
+                    xhr = isJSON(success);
 
-            if (currentPage > 1) {
-                removeClass(this.node_list_nav_prevPage, 'disabled');
-            } else {
-                addClass(this.node_list_nav_prevPage, 'disabled');
-            }
+                    _this.maxPages = parseInt(xhr.details);
+
+                    _this.node_list_nav_maxPages.innerHTML = 'of ' + _this.maxPages;
+
+                    if (currentPage >= _this.maxPages) {
+                        addClass(_this.node_list_nav_nextPage, 'disabled');
+                    } else {
+                        removeClass(_this.node_list_nav_nextPage, 'disabled');
+                    }
+
+                    if (currentPage > 1) {
+                        removeClass(_this.node_list_nav_prevPage, 'disabled');
+                    } else {
+                        addClass(_this.node_list_nav_prevPage, 'disabled');
+                    }
+
+                },
+                function(error) {
+                    _this.maxPages = 1;
+                    addClass(_this.node_list_nav_nextPage, 'disabled');
+                    addClass(_this.node_list_nav_nextPage, 'disabled');
+                });
         },
 
         dispatchList: function(xhr) {
 
             xhr = isJSON(xhr);
-
-            if (xhr && isset(xhr.details[this.currentPage - 1]) && !empty(xhr.details[this.currentPage - 1])) {
+            console.log(xhr);
+            if (xhr && isset(xhr.details) && !empty(xhr.details)) {
                 this.updateNav(xhr.details);
                 this.uncheckAll();
                 this.haveItems = true;
-                this.insertArticles(xhr.details[this.currentPage - 1]);
+                this.insertArticles(xhr.details[0]);
             } else {
                 this.noList();
             }
