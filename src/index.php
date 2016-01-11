@@ -29,6 +29,7 @@
  * A sample htaccess file is included in Kanso's 
  * installation package.
  */
+ 
 # Set the value error reporting configuration to E_ALL
 # on PHP's ini
 # Remove this if you don't want php to output runtime
