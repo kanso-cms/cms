@@ -645,10 +645,16 @@ class PostController
         # Validate the user is an admin
         if ($user['role'] !== 'administrator') return false;
 
-        return $this->model->restoreKanso();
+        # Reinstall from defaults
+        $installer = new \Kanso\Install\Installer();
+        
+        if ($installer->installKanso(true)) {
+
+            # Return
+            return 'valid';
+        }
 
         return false;
-
     }
 
     /********************************************************************************
