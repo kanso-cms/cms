@@ -370,13 +370,13 @@ class GetController
 		if (!$token || trim($token) === '' || $token === 'null' ) return false;
 
 		# Get the user based on their token
-		$user = \Kanso\Kanso::getInstance()->Gatekeeper->getUserProvider()->getByToken($token, 'register');
+		$user = \Kanso\Kanso::getInstance()->Database->Builder()->SELECT('*')->FROM('users')->WHERE('kanso_register_key', '=', $token)->ROW();
 
 		# Validate the token exists
 		if (!$user) return false;
 
 		# Add the token to client's session
-		\Kanso\Kanso::getInstance()->Session->put('KANSO_REGISTER_KEY', $token);
+		\Kanso\Kanso::getInstance()->Session->put('session_kanso_register_key', $token);
 
 		return true;
 		
@@ -401,13 +401,13 @@ class GetController
 		if (!$token || trim($token) === '' || $token === 'null' ) return false;
 
 		# Get the user based on their token
-		$user = \Kanso\Kanso::getInstance()->Gatekeeper->getUserProvider()->getByToken($token, 'password');
+		$user = \Kanso\Kanso::getInstance()->Database->Builder()->SELECT('*')->FROM('users')->WHERE('kanso_password_key', '=', $token)->ROW();
 
 		# Validate the user exists
 		if (!$user) return false;
 
-		# Add the token to client's sessions
-		\Kanso\Kanso::getInstance()->Session->put('KANSO_PASSWORD_KEY', $token);
+		# Add the token to client's session
+		\Kanso\Kanso::getInstance()->Session->put('session_kanso_password_key', $token);
 		
 		return true;
 

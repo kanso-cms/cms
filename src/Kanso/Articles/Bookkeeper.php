@@ -688,20 +688,24 @@ class Bookkeeper
 		# Get the config
         $slugs = \Kanso\Kanso::getInstance()->Config['KANSO_STATIC_PAGES'];
 
-        if(($key = array_search($slug, $slugs)) !== false) {
-            unset($slugs[$key]);
+        # Remove the slug
+        foreach ($slugs as $i => $configSlug) {
+            if ($configSlug === $slug) unset($slugs[$i]);
         }
-        \Kanso\Kanso::getInstance()->setConfigPair('KANSO_STATIC_PAGES', array_values($slugs));
+
+        \Kanso\Kanso::getInstance()->Settings->put('KANSO_STATIC_PAGES', array_values($slugs));
+
 	}
 
 	private function addToStaticPages($slug)
 	{
-		# Get the slugs
+		 # Get the slugs
         $slugs = \Kanso\Kanso::getInstance()->Config['KANSO_STATIC_PAGES'];
 
+        # Add the slug
         $slugs[] = $slug;
 
-        \Kanso\Kanso::getInstance()->setConfigPair('KANSO_STATIC_PAGES', array_unique(array_values($slugs)));
+        \Kanso\Kanso::getInstance()->Settings->put('KANSO_STATIC_PAGES', array_unique(array_values($slugs)));
 	}
 
 }

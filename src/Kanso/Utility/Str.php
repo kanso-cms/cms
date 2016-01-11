@@ -206,4 +206,32 @@ class Str
 		return strtolower(preg_replace("/[^a-zA-Z0-9 -]/", '', str_replace(' ', '-', $str)));
 	}
 
+	/**
+	 * Create a boolean value
+	 *
+	 * @param  string    $str
+	 * @return string
+	 */
+	public static function bool($mixedVar)
+	{
+		if (is_bool($mixedVar)) return (boolean)$mixedVar;
+		if (is_integer($mixedVar)) return (boolean)$mixedVar;
+		if (is_numeric($mixedVar)) {
+			$mixedVar = (int)$mixedVar;
+			return $mixedVar > 0;
+		}
+		if (is_string($mixedVar)) {
+			$mixedVar = trim(strtolower($mixedVar));
+			if ($mixedVar === 'yes') return true;
+			if ($mixedVar === 'on')  return true;
+			if ($mixedVar === 'true') return true;
+
+			if ($mixedVar === 'no')  return false;
+			if ($mixedVar === 'off')  return false;
+			if ($mixedVar === 'false') return false;
+
+		}
+		return (boolean)$mixedVar;
+	}
+
 }

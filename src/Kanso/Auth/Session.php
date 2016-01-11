@@ -236,6 +236,24 @@ class session
     }
 
     /**
+     * Refresh a logged in user's session data
+     *
+     */
+    public function refresh()
+    {
+        $adminData = $this->get('KANSO_ADMIN_DATA');
+        if (!empty($adminData)) {
+        
+            $id = $adminData['id'];
+
+            $row = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('id', '=', $id)->ROW();
+
+            $this->put('KANSO_ADMIN_DATA', $row);
+
+        }
+    }
+
+    /**
      * Destroy the session and start a new one
      *
      */

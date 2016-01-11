@@ -251,6 +251,7 @@ class Gatekeeper
         $row['slug']         = \Kanso\Utility\Str::slugFilter($username);
         $row['status']       = 'confirmed';
         $row['kanso_register_key']  = '';
+        $row['username']     = $username;
 
         # Update the user's row in the database
         $userRow = $Query->UPDATE('users')->SET($row)->WHERE('id', '=', $user['id'])->QUERY();
@@ -264,10 +265,13 @@ class Gatekeeper
         # Create array of data for email template
         $website   = \Kanso\Kanso::getInstance()->Environment['KANSO_WEBSITE_NAME'];
         $emailData = [
-            'name'     => $userRow['name'],
-            'username' => $userRow['username'],
+            'name'     => $username,
+            'username' => $username,
             'website'  => $website,
         ];
+
+        # Remove the password key from the session
+        \Kanso\Kanso::getInstance()->Session->remove('session_kanso_register_key');
 
         # Get the email template
         $msg = \Kanso\Templates\Templater::getTemplate($emailData, 'EmailConfirmNewUser');
@@ -276,7 +280,8 @@ class Gatekeeper
         \Kanso\Utility\Mailer::sendHTMLEmail($userRow['name'], $website, 'no-reply@'.$website, 'Welcome to '.$website, $msg);
 
         # Return the user row
-        return $user;
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('id', '=', $user['id'])->ROW();
+
     }
 
     /**
@@ -348,7 +353,7 @@ class Gatekeeper
     {
 
         # Get a new Query Builder
-        $Query = $Database->Builder();
+        $Query = \Kanso\Kanso::getInstance()->Database->Builder();
 
         # Validate the user exists
         $user = $Query->SELECT('*')->FROM('users')->WHERE('username', '=', $username)->ROW();
@@ -357,26 +362,24 @@ class Gatekeeper
         # generate a token
         $token = \Kanso\Utility\Str::generateRandom(85, true);
 
-        if ($token) {
-            
-            # Create array of data for email template
-            $website   = \Kanso\Kanso::getInstance()->Environment['KANSO_WEBSITE_NAME'];
-            $emailData = [
-                'name'    => $savedRow['name'],
-                'website' => $website,
-                'key'     => $token,
-            ];
+        $Query->UPDATE('users')->SET(['kanso_password_key' => $token])->WHERE('id', '=', $user['id'])->QUERY();
 
-            # Get the email template
-            $msg = \Kanso\Templates\Templater::getTemplate($emailData, 'EmailForgotPassword');
+        # Create array of data for email template
+        $website   = \Kanso\Kanso::getInstance()->Environment['KANSO_WEBSITE_NAME'];
+        $emailData = [
+            'name'    => $user['name'],
+            'website' => $website,
+            'key'     => $token,
+        ];
 
-            # Send email
-            return \Kanso\Utility\Mailer::sendHTMLEmail($userRow['email'], $website, 'no-reply@'.$website, 'A reset password request has been made', $msg);
-        }
+        # Get the email template
+        $msg = \Kanso\Templates\Templater::getTemplate($emailData, 'EmailForgotPassword');
+
+        # Send email
+        return \Kanso\Utility\Mailer::sendHTMLEmail($user['email'], $website, 'no-reply@'.$website, 'A reset password request has been made', $msg);
         
         return false;
     }
-
 
     public function forgotUsername($email)
     {
@@ -398,7 +401,7 @@ class Gatekeeper
         $msg = \Kanso\Templates\Templater::getTemplate($emailData, 'EmailForgotUsername');
         
         # Send the email
-        return \Kanso\Utility\Mailer::sendHTMLEmail($userRow->get('email'), $website, 'no-reply@'.$website, 'A username reminder has been requested', $msg);
+        return \Kanso\Utility\Mailer::sendHTMLEmail($userRow['email'], $website, 'no-reply@'.$website, 'A username reminder has been requested', $msg);
     }
 
     public function resetPassword($password, $token)
@@ -420,7 +423,7 @@ class Gatekeeper
         if (!$update) return false; 
 
         # Remove the password key from the session
-        \Kanso\Kanso::getInstance()->Session->delete('KANSO_PASSWORD_KEY');
+        \Kanso\Kanso::getInstance()->Session->remove('session_kanso_password_key');
 
         # Reset the user's session
         \Kanso\Kanso::getInstance()->Session->freshSession();
@@ -428,8 +431,8 @@ class Gatekeeper
         # Create array of data for email template
         $website   = \Kanso\Kanso::getInstance()->Environment['KANSO_WEBSITE_NAME'];
         $emailData = [
-            'name'     => $userRow['name'],
-            'username' => $userRow['username'],
+            'name'     => $user['name'],
+            'username' => $user['username'],
             'website'  => $website,
         ];
 
@@ -437,7 +440,7 @@ class Gatekeeper
         $msg = \Kanso\Templates\Templater::getTemplate($emailData, 'EmailResetPassword');
 
         # Send the email
-        \Kanso\Utility\Mailer::sendHTMLEmail($userRow['email'], $website, 'no-reply@'.$website, 'Your password was reset at '.$website, $msg);
+        \Kanso\Utility\Mailer::sendHTMLEmail($user['email'], $website, 'no-reply@'.$website, 'Your password was reset at '.$website, $msg);
 
         return true;
     }
@@ -500,9 +503,10 @@ class Gatekeeper
         # Get the slugs
         $slugs = \Kanso\Kanso::getInstance()->Config['KANSO_AUTHOR_SLUGS'];
 
+        # Add the slug
         $slugs[] = $slug;
 
-        \Kanso\Kanso::getInstance()->setConfigPair('KANSO_AUTHOR_SLUGS', array_unique(array_values($slugs)));
+        \Kanso\Kanso::getInstance()->Settings->put('KANSO_AUTHOR_SLUGS', array_unique(array_values($slugs)));
     }
 
     /**
@@ -515,11 +519,12 @@ class Gatekeeper
         # Get the config
         $slugs = \Kanso\Kanso::getInstance()->Config['KANSO_AUTHOR_SLUGS'];
 
-        foreach ($slugs as $key => $value) {
-            if ($slug === $value) unset($slugs[$key]);
+        # Remove the slug
+        foreach ($slugs as $i => $configSlug) {
+            if ($configSlug === $slug) unset($slugs[$i]);
         }
 
-        \Kanso\Kanso::getInstance()->setConfigPair('KANSO_AUTHOR_SLUGS', array_values($slugs));
+        \Kanso\Kanso::getInstance()->Settings->put('KANSO_AUTHOR_SLUGS', array_values($slugs));
     }
 
     /**

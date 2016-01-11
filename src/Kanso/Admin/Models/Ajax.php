@@ -79,7 +79,7 @@ class Ajax
         if ($update) {
 
             # Relog the client in
-            \Kanso\Kanso::getInstance()->Gatekeeper->logClientIn(array_merge($userRow, $row));
+            \Kanso\Kanso::getInstance()->Session->refresh();
 
             return "valid";
         }
@@ -126,7 +126,7 @@ class Ajax
         if ($update) {
 
             # Relog the client in
-            \Kanso\Kanso::getInstance()->Gatekeeper->logClientIn($userRow);
+            \Kanso\Kanso::getInstance()->Session->refresh();
 
             # Remove the old slug
             $this->removeAuthorSlug($oldSlug);
@@ -153,7 +153,7 @@ class Ajax
         # Add the slug
         $slugs[] = $slug;
 
-        \Kanso\Kanso::getInstance()->setConfigPair('KANSO_AUTHOR_SLUGS', array_unique(array_values($slugs)));
+        \Kanso\Kanso::getInstance()->Settings->put('KANSO_AUTHOR_SLUGS', array_unique(array_values($slugs)));
     }
 
     /**
@@ -171,7 +171,7 @@ class Ajax
             if ($configSlug === $slug) unset($slugs[$i]);
         }
 
-        \Kanso\Kanso::getInstance()->setConfigPair('KANSO_AUTHOR_SLUGS', array_values($slugs));
+        \Kanso\Kanso::getInstance()->Settings->put('KANSO_AUTHOR_SLUGS', array_values($slugs));
     }
 
 }

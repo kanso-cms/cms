@@ -314,14 +314,14 @@ class PostController
         if ($this->isLoggedIn) return false;
 
         # Get the key from the user's session
-        $sessionKey = \Kanso\Kanso::getInstance()->Session->get('KANSO_REGISTER_KEY');
+        $sessionKey = \Kanso\Kanso::getInstance()->Session->get('session_kanso_register_key');
 
         # Get the key from the ajax request
         if (!isset($this->postVars['referer'])) return false;
         $ajaxKey = \Kanso\Utility\Str::getAfterLastChar($this->postVars['referer'], '?');
 
         # Get the HTTP REFERRER from the session
-        $HTTPkey = Kanso\Kanso::getInstance()->Session->getReferrer();
+        $HTTPkey = \Kanso\Kanso::getInstance()->Session->getReferrer();
         if (!$HTTPkey) return false;
         $HTTPkey = \Kanso\Utility\Str::getAfterLastChar($HTTPkey, '?');
 
@@ -348,7 +348,10 @@ class PostController
         # Activate the user
         $activate = \Kanso\Kanso::getInstance()->Gatekeeper->activateUser($validated_data['username'], $validated_data['email'], $validated_data['password'], $ajaxKey);
 
-        if ($activate) return 'valid';
+        if ($activate) {
+            \Kanso\Kanso::getInstance()->Gatekeeper->logClientIn($activate);
+            return 'valid';
+        }
 
         return false;
 
@@ -440,14 +443,14 @@ class PostController
         if ($this->isLoggedIn) return false;
 
         # Get the key from the user's session
-        $sessionKey = \Kanso\Kanso::getInstance()->Session->get('KANSO_PASSWORD_KEY');
+        $sessionKey = \Kanso\Kanso::getInstance()->Session->get('session_kanso_password_key');
 
         # Get the key from the ajax request
         if (!isset($this->postVars['referer'])) return false;
         $ajaxKey = \Kanso\Utility\Str::getAfterLastChar($this->postVars['referer'], '?');
 
         # Get the HTTP REFERRER from the session
-        $HTTPkey = Kanso\Kanso::getInstance()->Session->getReferrer();
+        $HTTPkey = \Kanso\Kanso::getInstance()->Session->getReferrer();
         if (!$HTTPkey) return false;
         $HTTPkey = \Kanso\Utility\Str::getAfterLastChar($HTTPkey, '?');
 
@@ -606,9 +609,44 @@ class PostController
 
         $validated_data = $this->GUMP->run($postVars);
 
-        if ($validated_data) return $this->model->updateKansoSettings($validated_data); 
+        if ($validated_data) {
 
-        return true;
+            $config = [
+                "KANSO_THEME_NAME"       => $validated_data['theme'],
+                "KANSO_SITE_TITLE"       => $validated_data['site-title'],
+                "KANSO_SITE_DESCRIPTION" => $validated_data['site-description'], 
+                "KANSO_SITEMAP"          => $validated_data['sitemap-url'],
+                "KANSO_PERMALINKS"       => $validated_data['permalinks'],
+                "KANSO_POSTS_PER_PAGE"   => $validated_data['posts-per-page'] < 1 ? 10 : $validated_data['posts-per-page'],
+                "KANSO_ROUTE_TAGS"       => \Kanso\Utility\Str::bool($validated_data['route-tags']),
+                "KANSO_ROUTE_CATEGORIES" => \Kanso\Utility\Str::bool($validated_data['route-categories']),
+                "KANSO_ROUTE_AUTHORS"    => \Kanso\Utility\Str::bool($validated_data['route-authors']),
+                "KANSO_THUMBNAILS"       => $validated_data['thumbnail-sizes'],
+                "KANSO_IMG_QUALITY"      => (int)$validated_data['thumbnail-quality'],
+                "KANSO_USE_CDN"          => \Kanso\Utility\Str::bool($validated_data['use-CDN']),
+                "KASNO_CDN_URL"          => $validated_data['CDN-url'],
+                "KANSO_USE_CACHE"        => \Kanso\Utility\Str::bool($validated_data['use-cache']),
+                "KANSO_CACHE_LIFE"       => $validated_data['cache-life'],
+                "KANSO_COMMENTS_OPEN"    => \Kanso\Utility\Str::bool($validated_data['enable-comments']),
+            ];
+
+            $update = \Kanso\Kanso::getInstance()->Settings->putMultiple($config, true);
+            
+            if ($update === 700) return 'valid';
+            
+            $response = [
+                100 => 'invalid_theme',
+                200 => 'invalid_permalinks',
+                300 => 'invalid_img_quality',
+                400 => 'invalid_cdn_url',
+                500 => 'invalid_cache_life',
+                600 => 'unknown_error',
+                700 => 'success',
+            ];
+            return $response[$update];
+        }
+
+        return false;
 
     }
 

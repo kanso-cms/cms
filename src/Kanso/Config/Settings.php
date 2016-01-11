@@ -219,11 +219,12 @@ class Settings
         \Kanso\Events::fire('configChange', $this->tempConfig);
 
         # Validate the config if needed
-        if ($throwError) $validation = $this->validateConfig();
-
-        # Validate the config and return 
-        if (is_integer($validation) && in_array($validation, $this->responseCodes) && $throwError === true) {
-            return $validation;
+        if ($throwError) {
+            $validation = $this->validateConfig();
+            if (is_integer($validation) && in_array($validation, $this->responseCodes)) {
+                $this->tempConfig = $this->configData;
+                return $validation;
+            }
         }
 
         # Filter the config internally
@@ -257,6 +258,8 @@ class Settings
         # Update Kanso
         \Kanso\Kanso::getInstance()->Config = $config;
 
+        if ($throwError) return $this->responseCodes['success'];
+
         return true;
     }
 
@@ -284,24 +287,24 @@ class Settings
 
         # Build the new configuration array
         $Kanso_Config = [
-            "KANSO_THEME_NAME"       => str_replace("/", '', $newConfig['theme']),
-            "KANSO_SITE_TITLE"       => $newConfig['site-title'],
-            "KANSO_SITE_DESCRIPTION" => $newConfig['site-description'], 
-            "KANSO_SITEMAP"          => $newConfig['sitemap-url'],
+            "KANSO_THEME_NAME"       => str_replace("/", '', $newConfig['KANSO_THEME_NAME']),
+            "KANSO_SITE_TITLE"       => $newConfig['KANSO_SITE_TITLE'],
+            "KANSO_SITE_DESCRIPTION" => $newConfig['KANSO_SITE_DESCRIPTION'], 
+            "KANSO_SITEMAP"          => $newConfig['KANSO_SITEMAP'],
             "KANSO_PERMALINKS"       => $KansoPermalinks['KANSO_PERMALINKS'],
             "KANSO_PERMALINKS_ROUTE" => $KansoPermalinks['KANSO_PERMALINKS_ROUTE'],
             "KANSO_AUTHOR_SLUGS"     => $existingConfig['KANSO_AUTHOR_SLUGS'],
-            "KANSO_POSTS_PER_PAGE"   => (int)$newConfig['posts-per-page'] < 1 ? 10 : $newConfig['posts-per-page'],
-            "KANSO_ROUTE_TAGS"       => $newConfig['route-tags'] !== 'true' ? false : true,
-            "KANSO_ROUTE_CATEGORIES" => $newConfig['route-categories'] !== 'true' ? false : true,
-            "KANSO_ROUTE_AUTHORS"    => $newConfig['route-authors'] !== 'true' ? false : true,
+            "KANSO_POSTS_PER_PAGE"   => (int)$newConfig['KANSO_POSTS_PER_PAGE'] < 1 ? 10 : $newConfig['KANSO_POSTS_PER_PAGE'],
+            "KANSO_ROUTE_TAGS"       => $newConfig['KANSO_ROUTE_TAGS'],
+            "KANSO_ROUTE_CATEGORIES" => $newConfig['KANSO_ROUTE_CATEGORIES'],
+            "KANSO_ROUTE_AUTHORS"    => $newConfig['KANSO_ROUTE_AUTHORS'],
             "KANSO_THUMBNAILS"       => $KansoThumbnails,
-            "KANSO_IMG_QUALITY"      => (int)$newConfig['thumbnail-quality'],
-            "KANSO_USE_CDN"          => $newConfig['use-CDN'] !== 'true' ? false : true,
-            "KASNO_CDN_URL"          => $newConfig['CDN-url'],
-            "KANSO_USE_CACHE"        => $newConfig['use-cache'] !== 'true' ? false : true,
+            "KANSO_IMG_QUALITY"      => (int)$newConfig['KANSO_IMG_QUALITY'],
+            "KANSO_USE_CDN"          => $newConfig['KANSO_USE_CDN'],
+            "KASNO_CDN_URL"          => $newConfig['KASNO_CDN_URL'],
+            "KANSO_USE_CACHE"        => $newConfig['KANSO_USE_CACHE'],
             "KANSO_CACHE_LIFE"       => $KansoCacheLife,
-            "KANSO_COMMENTS_OPEN"    => $newConfig['enable-comments'] !== 'true' ? false : true,
+            "KANSO_COMMENTS_OPEN"    => $newConfig['KANSO_COMMENTS_OPEN'],
             "KANSO_STATIC_PAGES"     => $existingConfig['KANSO_STATIC_PAGES'],
         ];
 
@@ -311,7 +314,9 @@ class Settings
         if ($Kanso_Config['KANSO_IMG_QUALITY'] < 1 || $Kanso_Config['KANSO_IMG_QUALITY'] > 100)return $this->responseCodes['invalid_img_quality'];
         if ($Kanso_Config['KANSO_USE_CDN'] === true && $Kanso_Config['KASNO_CDN_URL'] === '') return $this->responseCodes['invalid_cdn_url'];
         if ($Kanso_Config['KANSO_USE_CACHE'] === true && !$KansoCacheLife) return $this->responseCodes['invalid_cache_life'];
-  
+
+        $this->tempConfig = array_merge($this->tempConfig, $Kanso_Config);
+
         return true;
     }
 
@@ -338,16 +343,16 @@ class Settings
         $config['KANSO_PERMALINKS']         = filter_var($config['KANSO_PERMALINKS'], FILTER_SANITIZE_STRING);
         $config['KANSO_PERMALINKS_ROUTE']   = filter_var($config['KANSO_PERMALINKS_ROUTE'], FILTER_SANITIZE_STRING);
         $config['KANSO_POSTS_PER_PAGE']     = (int) $config['KANSO_POSTS_PER_PAGE'];
-        $config['KANSO_ROUTE_TAGS']         = (bool) $config['KANSO_ROUTE_TAGS'];
-        $config['KANSO_ROUTE_CATEGORIES']   = (bool) $config['KANSO_ROUTE_CATEGORIES'];
-        $config['KANSO_ROUTE_AUTHORS']      = (bool) $config['KANSO_ROUTE_AUTHORS'];
+        $config['KANSO_ROUTE_TAGS']         = \Kanso\Utility\Str::bool( $config['KANSO_ROUTE_TAGS']);
+        $config['KANSO_ROUTE_CATEGORIES']   = \Kanso\Utility\Str::bool($config['KANSO_ROUTE_CATEGORIES']);
+        $config['KANSO_ROUTE_AUTHORS']      = \Kanso\Utility\Str::bool($config['KANSO_ROUTE_AUTHORS']);
         $config['KANSO_THUMBNAILS']         = $config['KANSO_THUMBNAILS'];
         $config['KANSO_IMG_QUALITY']        = (int) $config['KANSO_IMG_QUALITY'];
-        $config['KANSO_USE_CDN']            = (bool) $config['KANSO_USE_CDN'];
+        $config['KANSO_USE_CDN']            = \Kanso\Utility\Str::bool($config['KANSO_USE_CDN']);
         $config['KASNO_CDN_URL']            = filter_var($config['KASNO_CDN_URL'], FILTER_SANITIZE_STRING);
-        $config['KANSO_USE_CACHE']          = (bool) $config['KANSO_USE_CACHE'];
+        $config['KANSO_USE_CACHE']          = \Kanso\Utility\Str::bool( $config['KANSO_USE_CACHE']);
         $config['KANSO_CACHE_LIFE']         = filter_var($config['KANSO_CACHE_LIFE'], FILTER_SANITIZE_STRING);
-        $config['KANSO_COMMENTS_OPEN']      = (bool) $config['KANSO_COMMENTS_OPEN'];
+        $config['KANSO_COMMENTS_OPEN']      = \Kanso\Utility\Str::bool($config['KANSO_COMMENTS_OPEN']);
         $config['KANSO_OWNER_USERNAME']     = filter_var($config['KANSO_OWNER_USERNAME'], FILTER_SANITIZE_STRING);
         $config['KANSO_OWNER_EMAIL']        = filter_var($config['KANSO_OWNER_EMAIL'], FILTER_SANITIZE_STRING);
         $config['KANSO_OWNER_PASSWORD']     = filter_var($config['KANSO_OWNER_PASSWORD'], FILTER_SANITIZE_STRING);
@@ -368,6 +373,10 @@ class Settings
         if ($config['KANSO_POSTS_PER_PAGE'] <= 0) $config['KANSO_POSTS_PER_PAGE'] = $this->defaults['KANSO_POSTS_PER_PAGE'];
         
         # Fiter and sanitize the thumbnail sizes
+        if (!is_array($config['KANSO_THUMBNAILS'])) {
+            $config['KANSO_THUMBNAILS'] = array_map('trim', explode(',', (string)$config['KANSO_THUMBNAILS']));
+        }
+
         $config['KANSO_THUMBNAILS'] = array_map('intval', $config['KANSO_THUMBNAILS']);
 
         # Fiter and sanitize the image quality 
