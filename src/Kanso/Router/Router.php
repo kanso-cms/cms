@@ -139,44 +139,14 @@ class Router
 
                 if (self::$methods[$route] == $method) {
                     
+                    # Found route
                     $found_route = true;
                     
-                    # is the callback a string
-                    if (is_string(self::$callbacks[$route])) {
-
-                        # Are we calling a static method
-                        if (strpos(self::$callbacks[$route],'::') !== false) {
-
-                            $segments = explode('::',self::$callbacks[$route]);
-
-                            call_user_func($segments[0].'::'.$segments[1], self::$callbackArgs[$route]);
-
-                            if (self::$halts) return;
-                        }
-                        else {
-
-                            # grab all parts based on a / separator 
-                            $parts = explode('/',self::$callbacks[$route]);
-
-                            # collect the last index of the array
-                            $last = end($parts);
-
-                            # grab the controller name and method call
-                            $segments = explode('@',$last);
-
-                            # instanitate controller
-                            $controller = new $segments[0](self::$callbackArgs[$route]);
-
-                            # call method
-                            $controller->$segments[1]();
-                            if (self::$halts) return;
-                        }
-                    }
-                    else {
-                        call_user_func(self::$callbacks[$route], self::$callbackArgs[$route]);
-                        if (self::$halts) return;
-                    }
+                    # Apply the callback
+                    \Kanso\Utility\Callback::apply(self::$callbacks[$route], self::$callbackArgs[$route]);
                     
+                    # Halt on match ?
+                    if (self::$halts) return;
                 }
             }
         } 
@@ -190,51 +160,21 @@ class Router
                 }
 
                 if (preg_match('#^' . $route . '$#', $uri, $matched)) {
+                    
                     if (self::$methods[$pos] == $method) {
                         
+                        # Found route
                         $found_route = true;
 
-                        array_shift($matched); //remove $matched[0] as [1] is the first parameter.
+                        # remove $matched[0] as [1] is the first parameter.
+                        array_shift($matched);
 
-                        # is the callback a string
-                        if (is_string(self::$callbacks[$pos])) {
-
-                            # Are we calling a static method
-                            if (strpos(self::$callbacks[$pos],'::') !== false) {
-
-                                $segments = explode('::',self::$callbacks[$pos]);
-
-                                call_user_func($segments[0].'::'.$segments[1], self::$callbackArgs[$pos]);
-
-                                if (self::$halts) return;
-                            }
-                            else {
-
-                                # grab all parts based on a / separator 
-                                $parts = explode('/',self::$callbacks[$pos]); 
-
-                                # collect the last index of the array
-                                $last = end($parts);
-
-                                # grab the controller name and method call
-                                $segments = explode('@',$last); 
-
-                                # instanitate controller
-                                $controller = new $segments[0](self::$callbackArgs[$pos]);
-
-                                # call method and pass any extra parameters to the method
-                                $controller->$segments[1](implode(",", $matched));
-
-                                if (self::$halts) return;
-                            
-                            }
-
-                        }
-                        else {
-                            call_user_func(self::$callbacks[$pos], self::$callbackArgs[$pos]);
-                            if (self::$halts) return;
-                        }
+                        # Apply the callback
+                        \Kanso\Utility\Callback::apply(self::$callbacks[$pos],  self::$callbackArgs[$pos]);
                         
+                        # Halt on match ?
+                        if (self::$halts) return;
+
                     }
                 }
             $pos++;

@@ -1,11 +1,21 @@
-<?php the_header(); ?>
+<?php
+/**
+ * The main template file
+ *
+ * This is the main template file for the homepage.
+ * This template will be loaded whenever a valid request
+ * for homepage is made.
+ * e.g http://example.com/ or http://example.com/page/3/
+ *
+ */
+ the_header(); ?>
 
-		<!-- Loop Start -->
+		
 		<?php if ( have_posts() ) : ?>
 			
 			<div class="clear">
 			
-			<?php while ( have_posts() ) :   ?>
+			<?php while ( have_posts() ) : the_post();  ?>
 
 				<div class="col-12 clear">
 
@@ -25,7 +35,7 @@
 
 				</div>
 
-			<?php the_post(); endwhile;?>
+			<?php endwhile;?>
 
 			</div>
 		

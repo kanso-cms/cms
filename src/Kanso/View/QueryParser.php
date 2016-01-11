@@ -88,26 +88,73 @@ class QueryParser {
      * @param $QueryStr    The  query string to parse (optional)
      * @return array
      */
-    public function parseQuery($QueryStr = null)
+    public function parseQuery($QueryStr)
     {
+        # Set the query string
+        $this->QueryStr = $QueryStr;
 
-        if ($QueryStr) $this->QueryStr = $QueryStr;
-
-        # If the query is empty or not provided return all the posts
-        if (trim($this->QueryStr) === '' || !$this->QueryStr) return $this->queryAllPosts();
+        if (empty($this->QueryStr)) return [];
 
         # Parse the query and execute the chain
         if ($this->parse()) return $this->executeQuery();
     }
 
     /**
-     * Load all the posts from the database
+     * Count a query
      * 
+     * @param  string    $QueryStr    The  query string to parse (optional)
      * @return array
      */
-    private function queryAllPosts()
+    public function countQuery($QueryStr)
     {
-        return \Kanso\Kanso::getInstance()->Database()->Builder()->getArticlesByIndex(null, null, null, ['tags', 'category', 'author', 'comments']);
+        # Set the query string
+        $this->QueryStr = $QueryStr;
+
+        $Query = \Kanso\Kanso::getInstance()->Database()->Builder();
+
+        $Query->SELECT("posts.id");
+
+        $Query->FROM($this->QueryVars['FROM']);
+
+        if (!empty($this->QueryVars['AND_WHERE'])) {
+            foreach ($this->QueryVars['AND_WHERE'] as $condition) {
+                if ($condition['op'] === 'LIKE') $condition['val'] = '%'.str_replace('%', '', $condition['val']).'%';
+                $Query->AND_WHERE($condition['field'], $condition['op'], $condition['val']);
+            }
+        }
+        if (!empty($this->QueryVars['OR_WHERE'])) {
+            foreach ($this->QueryVars['OR_WHERE'] as $condition) {
+                if ($condition['op'] === 'LIKE') $condition['val'] = '%'.str_replace('%', '', $condition['val']).'%';
+                $Query->OR_WHERE($condition['field'], $condition['op'], $condition['val']);
+            }
+        }
+
+        $Query->LEFT_JOIN_ON('users', 'users.id = posts.author_id');
+
+        $Query->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id');
+
+        $Query->LEFT_JOIN_ON('categories', 'posts.category_id = categories.id');
+
+        $Query->LEFT_JOIN_ON('tags_to_posts', 'posts.id = tags_to_posts.post_id');
+
+        $Query->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id');
+
+        $Query->GROUP_BY('posts.id');
+
+        if (!empty($this->QueryVars['ORDER_BY'])) $Query->ORDER_BY($this->QueryVars['ORDER_BY'][0], $this->QueryVars['ORDER_BY'][1]);
+        if (!empty($this->QueryVars['LIMIT'])) {
+            if (isset($this->QueryVars['LIMIT'][1])) {
+                $Query->LIMIT($this->QueryVars['LIMIT'][0], $this->QueryVars['LIMIT'][1]);
+            }
+            else {
+                $Query->LIMIT($this->QueryVars['LIMIT'][0]);
+            }
+        }
+
+        $articles = $Query->FIND_ALL();
+
+        return $articles;
+
     }
 
     /**
@@ -149,7 +196,14 @@ class QueryParser {
         $Query->GROUP_BY('posts.id');
 
         if (!empty($this->QueryVars['ORDER_BY'])) $Query->ORDER_BY($this->QueryVars['ORDER_BY'][0], $this->QueryVars['ORDER_BY'][1]);
-        if (!empty($this->QueryVars['LIMIT'])) $Query->LIMIT($this->QueryVars['LIMIT']);
+        if (!empty($this->QueryVars['LIMIT'])) {
+            if (isset($this->QueryVars['LIMIT'][1])) {
+                $Query->LIMIT($this->QueryVars['LIMIT'][0], $this->QueryVars['LIMIT'][1]);
+            }
+            else {
+                $Query->LIMIT($this->QueryVars['LIMIT'][0]);
+            }
+        }
 
         $articles = $Query->FIND_ALL();
 
@@ -273,8 +327,9 @@ class QueryParser {
         $val  = $method[2];
 
         # orderBy and limit need in
-        if ($call === 'limit' && is_numeric($val)) {
-            $this->QueryVars['LIMIT'] = (int)$val;
+        if ($call === 'limit') {
+            $limit = array_map('intval', array_map('trim', explode(',', $val)));
+            $this->QueryVars['LIMIT'] = array_map('intval', array_map('trim', explode(',', $val)));
         }
         else if ($call === 'orderBy') {
             if (strpos(strtolower($val),',') !== false ) {

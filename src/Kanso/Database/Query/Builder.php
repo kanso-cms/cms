@@ -403,9 +403,9 @@ class Builder
      * @param  string    $as
      * @return \Kanso\Database\Query\Builder
      */
-    public function LIMIT($value)
+    public function LIMIT($offset, $value = null)
     {
-        $this->Query->limit($value);
+        $this->Query->limit($offset, $value);
         return $this;
     }
 
@@ -456,20 +456,47 @@ class Builder
      * @param   int    $limit
      * @return  array
      */
-    public function getArticlesByIndex($index = null, $value = null, $limit = null, $joins = [])
+    public function getArticlesByIndex($index = null, $value = null, $limit = null, $joins = [], $orderby = null)
     {
      
         # Get a new Builder 
         $Query = new Builder();
 
         # Select the posts
-        $Query->SELECT('*')->FROM('posts');
+        $Query->SELECT('posts.*')->FROM('posts');
 
         # If clauses were supplied, set queries
         if ($index && $value) $Query->WHERE($index, '=', $value);
 
         # If a limit was supplied set a limit
-        if ($limit) $Query->LIMIT((int)$limit);
+        if ($limit) {
+            if (is_array($limit) && isset($limit[1])) {
+                $Query->LIMIT($limit[0], $limit[1]);
+            }
+            else {
+                $Query->LIMIT($limit);
+            }
+        }
+        if ($orderby) {
+            if (is_array($orderby) && isset($orderby[1])) {
+                $Query->ORDER_BY($orderby[0], $orderby[1]);
+            }
+            else {
+                $Query->LIMIT($orderby);
+            }
+        }
+
+        $Query->LEFT_JOIN_ON('users', 'users.id = posts.author_id');
+
+        $Query->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id');
+
+        $Query->LEFT_JOIN_ON('categories', 'posts.category_id = categories.id');
+
+        $Query->LEFT_JOIN_ON('tags_to_posts', 'posts.id = tags_to_posts.post_id');
+
+        $Query->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id');
+
+        $Query->GROUP_BY('posts.id');
 
         # Find the articles
         $articles = $Query->FIND_ALL();

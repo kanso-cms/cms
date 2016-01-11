@@ -5,47 +5,6 @@ namespace Kanso\Auth;
 /**
 * Session manager
 *
-* The session manager is Kanso's main point for interacting with and
-* managing sessions. All session manipulation should go through this class. 
-* It provides 3 layers of security to the admin panel:
-* 
-* 1. PHP NATIVE SESSIONS
-*    The session manager uses PHP's native sessions as a basic layer
-*    of security to ensure the cleint is actually logged in (used in
-*    both POST and GET requests). The session only lasts 12 hours, by 
-*    by which time the session is destoyed.
-*
-* 2. GET HTTP_REFERER
-*    On all GET requests to the admin panel, the URL is stored in the
-*    the cleint's session. This is used as more trusted version of PHP's
-*    HTTP_REFERER to ensure a POST request is actually coming from the
-*    page it should.
-* 
-* 3. PUBLIC KEYS WITH ENCRYPTION
-*    On all GET requests to the admin panel, an additional POST request
-*    is made from the client for their public key and salt. The key is
-*    a random string, encrpyted with another public key (salt) stored in the 
-*    clients's database entry.
-*    
-*    If the user is not logged in, (e.g register and login pages), the keys are 
-*    simply stored in the SESSION.
-*
-*    The client must then decrypt and then re-encrypt their public key, 
-*    with their public salt and sign all POST requests the newly generated key.
-*    When the server receives the public key, it's compared to their existing
-*    public key (which shouldn't be the same since they had to re-encrypt it),
-*    The server then decrypts it for validation.
-*    The keys are reset every 12 hourse on GET requests. 
-*    NOTE that this encryption formula is completely seperate from clients's
-*    password encryption.
-*    Encrption and generation is handled throgh  \Kanso\Admin\Security\keyManager
-* 
-* 4. USERNAME AND IP BLACKLISTING - TODO
-*    For all the account/setup pages (e.g login, register, forgot password etc...)
-*    if a user makes a number of failed attempts to login, access a page, or reset a password
-*    The account they're trying to access will shut-down for a specified amount of time
-*    The suspects ip address will also be blacklistedfor a specified amount of time, 
-*    disabling all GET and POST to the admin panel from that IP Address.
 *
 */
 class session
@@ -65,6 +24,11 @@ class session
      * @var array
      */
     protected $sessionData = [];
+
+    /**
+     * @var array
+     */
+    protected $flashData = [];
 
     /**
      * @var boolean
@@ -88,6 +52,9 @@ class session
 
         # Get the session data if it exists
         if (isset($_SESSION['kanso'])) $this->sessionData = unserialize($_SESSION['kanso']);
+
+        # Get the session data if it exists
+        if (isset($_SESSION['kanso_flash'])) $this->flashData = unserialize($_SESSION['kanso_flash']);
     }
 
     /**
@@ -117,24 +84,27 @@ class session
     public function sessionStart() 
     {
         # If no Kanso session data is present create a new Kanso session
-        if (!isset($_SESSION['kanso'])) $this->freshSession();
+        if (!isset($_SESSION['kanso'])) $this->clear();
 
         # Regenerate the session ID every 20 requests
         if ($this->get('sessionGenCount') + 1  >= 20) {
             
             $this->put('sessionGenCount',  1);
             
-            session_regenerate_id(true);
+            $this->regenerateId(true);
         }
         else {
             $this->put('sessionGenCount',  $this->get('sessionGenCount') + 1);
         }
 
+        # Clean and validate the flash data
+        $this->iterateFlash();
+
         # Get the gatekeeper
         $Gatekeeper = \Kanso\Kanso::getInstance()->Gatekeeper;
 
         # If the session is more than 12 hours old, destroy it
-        if ($this->get('sessionLastActive') < strtotime('-12 hours')) $this->freshSession();
+        if ($this->get('sessionLastActive') < strtotime('-12 hours')) $this->clear();
 
         # If this is a GET request, store the last visited page
         if ($this->isGETrequest && $this->requestURL) $this->setReferrer($this->requestURL);
@@ -145,38 +115,41 @@ class session
         if ($this->isGETrequest && $this->requestURL) {
             
             if (!$this->get('kanso_public_key') || ($this->get('kanso_keys_time') && $this->get('kanso_keys_time') < strtotime('-12 hours')) ) {
-                
-                $keys = Helper\Token::generate();
-                $keys = [
-                    'kanso_public_key'  => $keys['key'],
-                    'kanso_public_salt' => $keys['salt'],
-                    'kanso_keys_time'   => time(),
-                ];
-                $this->putMultiple($keys);
-
-                # If the user IS logged in save the freshly generetaed keys to the databse
-                if ($Gatekeeper->isLoggedIn()) {
-                    \Kanso\Kanso::getInstance()->Database()->Builder()->UPDATE('users')->SET($keys)->WHERE('id', '=', $Gatekeeper->getUser()->getid())->QUERY();
-                }
+                $this->regenerateToken();
             }
         }
 
         $this->instantiated = true;
     }
 
+    /********************************************************************************
+    * SESSION ID MANAGEMENT
+    *******************************************************************************/
+
     /**
-     * Get the ajax tokens
+     * Get the session id
      *
-     * @return  string
+     * @return  integer
      */
-    public function getAjaxTokens()
+    public function getId()
     {
-        return [
-            'kanso_public_key'  => $this->get('kanso_public_key'),
-            'kanso_public_salt' => $this->get('kanso_public_salt'),
-            'kanso_keys_time'   => $this->get('kanso_keys_time'),
-        ];
+        return session_id();
     }
+
+    /**
+     * Regenerate the session id
+     *
+     * @param   boolean $keepData
+     * @return  boolean
+     */
+    public function regenerateId($keepData = false)
+    {
+        return session_regenerate_id($keepData);
+    }
+
+    /********************************************************************************
+    * HTTP REFFERRAL MANAGEMENT
+    *******************************************************************************/
 
     /**
      * Get the HTTP Referrer from the session
@@ -198,21 +171,12 @@ class session
         return $this->put('sessionHttpReferrer', $value);
     }
 
-    /**
-     * Clear the session entirely
-     *
-     */
-    public function clear()
-    {
-        # Clear the data
-        $this->sessionData = [];
-
-        # Create a fresh session
-        $this->freshSession();
-    }
+    /********************************************************************************
+    * SESSION DATA MANAGEMENT
+    *******************************************************************************/
 
     /**
-     * Get a key from the SESSION or the entire SESSION
+     * Get a key from the Session data or the entire Session data
      *
      * @param  string   $key   (optional)
      * @return null|array 
@@ -225,7 +189,17 @@ class session
     }
 
     /**
-     * Save a key/value pair to the SESSION
+     * Check if a key-value exists in the Session data
+     *
+     * @param  string   $key
+     */
+    public function has($key)
+    {
+        return isset($this->sessionData[$key]);
+    }
+
+    /**
+     * Save a key/value pair to the Session data
      *
      * @param  string   $key
      * @param  mixed    $value
@@ -238,7 +212,7 @@ class session
     }
 
     /**
-     * Save an array of key/vals to the SESSION
+     * Save an array of key/vals to the Session data
      *
      * @param  array    $data
      */
@@ -251,18 +225,175 @@ class session
     }
 
     /**
-     * Delete a key-value from the SESSION
+     * Remove a key-value from the Session data
      *
      * @param  string   $key
      */
-    public function delete($key)
+    public function remove($key)
     {
         if (isset($this->sessionData[$key])) unset($this->sessionData[$key]);
         $this->save();
     }
 
     /**
-     * Save the session (used internally only)
+     * Destroy the session and start a new one
+     *
+     */
+    public function clear()
+    {
+        # Clear the data
+        $this->sessionData = [];
+
+        # Clear the flash data
+        $this->flashData = [];
+
+        # Create a fresh session
+        $this->freshSession();
+    }
+
+    /********************************************************************************
+    * FLASH DATA MANAGEMENT
+    *******************************************************************************/
+
+    /**
+     * Get a key from the flash data or the entire flash data
+     *
+     * @param  string   $key   (optional)
+     * @return null|array 
+     */
+    public function getFlash($key = null) 
+    {
+        if (!$key) return $this->flashData;
+        if ($key && isset($this->flashData[$key][$key])) return $this->flashData[$key][$key];
+        return null;
+    }
+
+    /**
+     * Check if a key-value exists in the flash data
+     *
+     * @param  string   $key
+     */
+    public function hasFlash($key)
+    {
+        return isset($this->flashData[$key][$key]);
+    }
+
+    /**
+     * Save a key/value pair to the flash data
+     *
+     * @param  string   $key
+     * @param  mixed    $value
+     */
+    public function putflash($key, $value) 
+    {
+        $this->flashData[$key][$key]    = $value;
+        $this->flashData[$key]['count'] = 0;
+        $this->saveFlash();
+    }
+
+    /**
+     * Remove a key-value from the flash data
+     *
+     * @param  string   $key
+     */
+    public function removeFlash($key)
+    {
+        if (isset($this->flashData[$key])) unset($this->flashData[$key]);
+        $this->saveFlash();
+    }
+
+    /**
+     * Clear the sessions flash data
+     *
+     */
+    public function clearFlash()
+    {
+        $this->flashData = [];
+        $this->saveFlash();
+    }
+
+    /********************************************************************************
+    * AJAX TOKEN MANAGEMENT
+    *******************************************************************************/
+
+    /**
+     * Get the ajax token
+     *
+     * @return  array
+     */
+    public function getToken()
+    {
+        return [
+            'kanso_public_key'  => $this->get('kanso_public_key'),
+            'kanso_public_salt' => $this->get('kanso_public_salt'),
+            'kanso_keys_time'   => $this->get('kanso_keys_time'),
+        ];
+    }
+
+    /**
+     * Verify the ajax token
+     *
+     * @return  boolean
+     */
+    public function validateToken($token)
+    {
+
+        # Get the keys from their session
+        $keys = $this->getToken();
+        
+        # If the user is logged get the keys directly
+        # From the database and make sure theyre the same
+        if (!\Kanso\Kanso::getInstance()->Gatekeeper->isGuest()) {
+            $id = $this->get('KANSO_ADMIN_DATA')['id'];
+
+            $entry = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('id', '=', $id)->ROW();
+            
+            if ($entry['kanso_public_key'] !== $keys['kanso_public_key']) return false;
+        }
+        
+        # Decrypt and verify
+        return Token::verify($token, $keys['kanso_public_key'], $keys['kanso_public_salt']);
+    }
+
+    /**
+     * Regenerate the ajax token
+     *
+     * @return boolean
+     */
+    public function regenerateToken()
+    {
+        # Generate the keys
+        $keys = Token::generate();
+        $keys = [
+            'kanso_public_key'  => $keys['key'],
+            'kanso_public_salt' => $keys['salt'],
+            'kanso_keys_time'   => time(),
+        ];
+
+        # Save to the session
+        $this->putMultiple($keys);
+
+        # If the user is logged in, save the keys to their admin 
+        # data as well
+        $adminData = $this->get('KANSO_ADMIN_DATA');
+        if (!empty($adminData)) {
+        
+            $id = $adminData['id'];
+            \Kanso\Kanso::getInstance()->Database()->Builder()->UPDATE('users')->SET($keys)->WHERE('id', '=', $id)->QUERY();
+
+            $this->put('KANSO_ADMIN_DATA', array_merge($adminData, $keys));
+
+        }
+
+        return true;
+    }
+
+    /********************************************************************************
+    * PRIVATE HELPER METHODS
+    *******************************************************************************/
+
+    /**
+     * Save the session data
      *
      * @param  string   $key
      * @param  mixed    $value
@@ -273,11 +404,40 @@ class session
     }
 
     /**
+     * Save the session flash data
+     *
+     */
+    private function saveFlash() 
+    {
+        $_SESSION['kanso_flash'] = serialize($this->flashData);
+    }
+   
+    /**
+     * Loop over the flash data and remove old data
+     *
+     */
+    private function iterateFlash()
+    {
+        if (empty($this->flashData)) return;
+        foreach ($this->flashData as $key => $data) {
+            $count = $data['count'];
+            if ($data['count'] + 1 > 1 ) {
+                unset($this->flashData[$key]);
+            }
+            else {
+                $this->flashData[$key]['count'] = $count + 1;
+            }
+        }
+        $this->saveFlash();
+    }
+
+    /**
      * Create a fresh Kanso session
      *
      */
     public function freshSession() 
     {
+
         # Clear the SESSION
         $_SESSION = [];
 
@@ -295,6 +455,9 @@ class session
 
         # Append the session count
         $this->put('sessionGenCount', 0);
+
+        # Append the an empty flash storage
+        $_SESSION['kanso_flash'] = serialize([]);
     }
 
 }

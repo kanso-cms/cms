@@ -30,7 +30,7 @@ class Kanso
 	/**
 	 * @var string    The Kanso application version
 	 */
-	public $Version = '0.0.01';
+	public $Version = '0.0.001';
 
 	/**
 	 * @var string    The Kanso application name
@@ -127,7 +127,8 @@ class Kanso
 	 */
 	public function __construct($UserSettings = null)
 	{
-
+		$this->Version = time();
+		
 		# Check if the apllication is installed
 		$this->isInstalled = !file_exists(__DIR__.'/Install.php') && file_exists(__DIR__.'/Config.php');
 
@@ -137,8 +138,13 @@ class Kanso
 		# Setup IoC container
 		$this->Container = new \Kanso\Helper\Container();
 
-		# Initialize application configuration        
-		$this->Container['Config'] = (!$UserSettings ? $this->parseSettings() : $UserSettings );
+		# Default settings  
+		$this->Container->singleton('Settings', function () {
+			return new \Kanso\Config\Settings();
+		});
+
+		# Initialize application configuration  
+		$this->Container['Config'] = $this->Settings->get();
 
 		# Default environment
 		$this->Container->singleton('Environment', function () {
@@ -220,6 +226,10 @@ class Kanso
 
 		# Default this is not an admin request
 		$this->is_admin = false;
+
+		# Include the active theme's plugins.php file if it exists
+		$plugins = $this->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.$this->Config['KANSO_THEME_NAME'].DIRECTORY_SEPARATOR.'plugins.php';
+		if (file_exists($plugins)) require_once($plugins);
 		
 	}
 
@@ -487,6 +497,16 @@ class Kanso
 	public function Config()
 	{
 		return $this->Config;
+	}
+
+	/**
+	 * Get a reference to the Settings object
+	 *
+	 * @return array
+	 */
+	public function Settings()
+	{
+		return $this->Settings;
 	}
 
 	/**

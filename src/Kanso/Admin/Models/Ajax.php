@@ -227,8 +227,6 @@ class Ajax
           # Clear the cache as well
           if ($changedCache) \Kanso\Kanso::getInstance()->Cache->clearCache();
 
-          \Kanso\Events::fire('configChange', [$Kanso_Config]);
-
           return 'valid';
 
         }
@@ -256,7 +254,6 @@ class Ajax
         return false;
 
     }
-
 
     /**
      * Update all the permalinks (slugs) in the database with

@@ -334,9 +334,15 @@ class Query
      *
      * @param  int    $limit
      */
-	public function limit($limit)
-	{   
-		$this->pending['limit'] = (int)$limit;
+	public function limit($offset, $value = null)
+	{
+		if ($value) {
+			$this->pending['limit'] = [(int)$offset, (int)$value];
+		}
+		else {
+			$this->pending['limit'] = (int)$offset;
+		}
+		
 	}
 
 	/**
@@ -479,9 +485,9 @@ class Query
 	{
 		# Execute the SQL
 		$results = $this->Database->query(trim($this->SQL), $this->SQL_bindings);
-
+		
 		# If this was a row query - flatten and return only the first result
-		if (!empty($results) && (int) $this->pending['limit'] === 1 && $this->operation === 'QUERY') return $results[0];
+		if (!empty($results) && count($this->pending['limit']) === 1 && $this->pending['limit'] === 1 && $this->operation === 'QUERY') return $results[0];
 
 		return $results;
 	}
@@ -547,7 +553,13 @@ class Query
      */
 	private function limitPending()
 	{
-		if (!empty($this->pending['limit'])) return "LIMIT ". (int) $this->pending['limit'];
+		if (empty($this->pending['limit'])) return '';
+		if (is_array($this->pending['limit'])) {
+			return "LIMIT ".$this->pending['limit'][0].", ".$this->pending['limit'][1];
+		}
+		else {
+			return "LIMIT ".$this->pending['limit'];
+		}
 		return '';
 	}
 

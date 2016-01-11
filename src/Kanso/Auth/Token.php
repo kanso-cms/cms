@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanso\Auth\Helper;
+namespace Kanso\Auth;
 
 /**
 * Ajax Token 

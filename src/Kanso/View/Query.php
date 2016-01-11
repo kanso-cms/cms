@@ -21,22 +21,22 @@ class Query {
     /**
      * @var    string    The page request type
      */
-    public $requestType;
+    public $requestType = 'custom';
 
     /**
-     * @var    int    The user defined query string
+     * @var    string    The string-query to use on the database
      */
     public $queryStr;
 
     /**
-     * @var    int    Current page index of paginated array of posts
+     * @var    int    Current page request if it exists
      */
-    public $pageIndex;
+    public $pageIndex = 0;
 
     /**
      * @var    int    Current post index of paginated array of posts
      */
-    public $postIndex = 0;
+    public $postIndex = -1;
 
     /**
      * @var    int    Current post count
@@ -44,11 +44,25 @@ class Query {
     public $postCount = 0;
 
     /**
-     * @var    array    paginated array of posts
+     * @var    boolean    Whether the loop has started and the caller is in the loop.
+     */
+    public $inLoop = false;
+
+    /**
+     * @var    array    Array of posts from query result
      */
     public $posts = [];
 
+    /**
+     * @var    array    The current post
+     */
+    public $post = null;
+
+    /**
+     * @var    string    search term if applicable
+     */
     protected $searchQuery;
+
 
     /**
      * Constructor
@@ -57,23 +71,20 @@ class Query {
      * @param  string $requestType    Associative array of data made available to the view (optional)
      * @param  int    $pageIndex      The current page index e.g https://example.com/page3/
      */
-    public function __construct($queryStr = '', $requestType = 'custom', $pageIndex = 0)
+    public function __construct($queryStr = '')
     {
-        # Get the Kanso object instance
-        $Kanso = \Kanso\Kanso::getInstance();
 
         # Set the index
-        $this->postIndex    = 0;
-        $this->pageIndex    = $Kanso->Request()->fetch('page');
+        $this->pageIndex    = \Kanso\Kanso::getInstance()->Request()->fetch('page');
         $this->pageIndex    = $this->pageIndex === 1 || $this->pageIndex === 0 ? 0 : $this->pageIndex-1;
         $this->queryStr     = trim($queryStr);
-        $this->requestType  = $requestType;
 
         # Filter the posts directly from the constructor if
         # this is a custom Query request
-        if ($requestType === 'custom' || empty($requestType) || trim($queryStr) === '') {
-            $parser      = new QueryParser('');
-            $this->posts = [$parser->parseQuery()];
+        if (!empty($queryStr)) {
+            $parser          = new QueryParser($queryStr);
+            $this->posts     = $parser->parseQuery();
+            $this->postCount = count($this->posts);
         }
 
     }
@@ -83,29 +94,25 @@ class Query {
      *
      * @param  string $requestType    The requested page type (optional)
      */
-    public function filterPosts($requestType = 'custom')
+    public function filterPosts($requestType)
     {
         # Load the query parser
-        $parser = new QueryParser($this->queryStr);
+        $parser = new QueryParser();
 
         # Set the request type
         $this->requestType = $requestType;
 
         # Save the requested URL
         $uri = rtrim(\Kanso\Kanso::getInstance()->Environment()['REQUEST_URI'], '/');
-
-        # If the request type is custom load all the posts
-        if ($requestType === 'custom' || empty($requestType)) {
-            $this->posts = [$parser->parseQuery('')];
-            return;
-        }
         
         # Filter and paginate the posts based on the request type
         if ($requestType === 'home') {
-            $this->queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC';
+            $perPage = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
+            $offset  = $this->pageIndex * $perPage;
+            $limit   = $perPage;
+            $this->queryStr  = "post_status = published : post_type = post : orderBy = post_created, DESC : limit = $offset, $perPage";
             $this->posts     = $parser->parseQuery($this->queryStr);
             $this->postCount = count($this->posts);
-            if ($this->posts) $this->posts = \Kanso\Utility\Arr::paginate($this->posts, $this->pageIndex, \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE']);
         }
         else if ($requestType === 'archive') {
             $this->queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC';
@@ -113,30 +120,26 @@ class Query {
             $this->posts     = $parser->parseQuery($this->queryStr);
         }
         else if ($requestType === 'tag') {
-            $this->queryStr = 'post_status = published : post_type = post : orderBy = post_created, DESC : tag_slug = '.explode("/", $uri)[1];
+            $this->queryStr = 'post_status = published : post_type = post : orderBy = post_created, DESC : tag_slug = '.explode("/", $uri)[1]." : limit = $offset, $perPage";
             $this->posts    = $parser->parseQuery($this->queryStr);
             $this->postCount = count($this->posts);
-            if ($this->posts) $this->posts = \Kanso\Utility\Arr::paginate($this->posts, $this->pageIndex, \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE']);
         }
         else if ($requestType === 'category') {
-            $this->queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = '.explode("/", $uri)[1];
+            $this->queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = '.explode("/", $uri)[1]." : limit = $offset, $perPage";
             $this->posts     = $parser->parseQuery($this->queryStr);
             $this->postCount = count($this->posts);
-            if ($this->posts) $this->posts = \Kanso\Utility\Arr::paginate($this->posts, $this->pageIndex, \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE']);
         } 
         else if ($requestType === 'author') {
-            $this->queryStr = ' post_status = published : post_type = post : orderBy = post_created, DESC: author_slug = '.$slug;
+            $this->queryStr = ' post_status = published : post_type = post : orderBy = post_created, DESC: author_slug = '.$slug." : limit = $offset, $perPage";
             $this->posts    = $parser->parseQuery($this->queryStr);
             $this->postCount = count($this->posts);
-            if ($this->posts) $this->posts =  \Kanso\Utility\Arr::paginate($this->posts, $this->pageIndex, \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE']);
         }
         else if ($requestType === 'single') {
             if (strpos($uri,'?draft') !== false) {
                 $uri = str_replace('?draft', '', $uri);
-                $this->queryStr = 'post_status = draft : post_type = post : orderBy = post_created, DESC: post_slug = '.$uri.'/';
-                $this->posts    = $parser->parseQuery($this->queryStr);
+                $this->queryStr  = 'post_status = draft : post_type = post : orderBy = post_created, DESC: post_slug = '.$uri.'/';
+                $this->posts     = [$parser->parseQuery($this->queryStr)];
                 $this->postCount = count($this->posts);
-                $this->posts[0]  = $this->posts;
             }
             else {
                 $uri = \Kanso\Utility\Str::GetBeforeLastWord($uri, '/feed');
@@ -144,16 +147,14 @@ class Query {
                 $this->queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC : post_slug = '.$uri.'/';
                 $this->posts     = $parser->parseQuery($this->queryStr);
                 $this->postCount = count($this->posts);
-                $this->posts[0]  = $this->posts;
             }
         } 
         else if ($requestType === 'static_page') {
             if (strpos($uri,'?draft') !== false) {
                 $uri = str_replace('?draft', '', $uri);
                 $this->queryStr = 'post_status = draft : post_type = page : orderBy = post_created, DESC : post_slug = '.$uri.'/';
-                $this->posts    = $parser->parseQuery($this->queryStr);
+                $this->posts     = $parser->parseQuery($this->queryStr);
                 $this->postCount = count($this->posts);
-                $this->posts[0]  = $this->posts;
             }
             else {
                 $this->queryStr  = 'post_status = published : post_type = page : orderBy = post_created, DESC : post_slug = '.$uri.'/';
@@ -178,10 +179,9 @@ class Query {
             if (empty($query)) return;
 
             # Filter the posts
-            $this->queryStr  = "post_status = published : post_type = post : orderBy = post_created, DESC : post_title LIKE $query || post_excerpt LIKE $query";
+            $this->queryStr  = "post_status = published : post_type = post : orderBy = post_created, DESC : post_title LIKE $query || post_excerpt LIKE $query : limit = $offset, $perPage";
             $this->posts     = $parser->parseQuery($this->queryStr);
             $this->postCount = count($this->posts);
-            if ($this->posts) $this->posts =  \Kanso\Utility\Arr::paginate($this->posts, $this->pageIndex, \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE']);
             $this->searchQuery = $query;
         }
     }
@@ -235,13 +235,9 @@ class Query {
      */
     public function the_post($post_id = null)
     {
-        if ($this->have_posts($post_id)) {
-            if ($post_id) return $this->getPostByID($post_id);
-            $post = $this->posts[$this->pageIndex][$this->postIndex];
-            $this->_next();
-            return $post;
-        }
-        return false;
+        if ($post_id) return $this->getPostByID($post_id);
+        $this->inLoop = true;
+        $this->_next();
     }
 
     /**
@@ -252,11 +248,12 @@ class Query {
      */
     public function the_title($post_id = null)
     {
-
-        if ($this->have_posts($post_id)) {
-            if ($post_id) return $this->getPostByID($post_id)['title'];
-            return $this->posts[$this->pageIndex][$this->postIndex]['title'];
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return $post['title'];
+            return false;
         }
+        if (!empty($this->post)) return $this->post['title'];
         return false;
     }
 
@@ -268,10 +265,12 @@ class Query {
      */
     public function the_permalink($post_id = null)
     {
-        if ($this->have_posts($post_id)) {
-            if ($post_id) return \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'].'/'.trim($this->getPostByID($post_id)['slug'], '/').'/';
-            return \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'].'/'.trim($this->posts[$this->pageIndex][$this->postIndex]['slug'], '/').'/';
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'].'/'.trim($post['slug'], '/').'/';
+            return false;
         }
+        if (!empty($this->post)) return \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'].'/'.trim($this->post['slug'], '/').'/';
         return false;
     }
 
@@ -283,10 +282,12 @@ class Query {
      */
     public function the_slug($post_id = null)
     {
-        if ($this->have_posts($post_id)) {
-            if ($post_id) return trim($this->getPostByID($post_id)['slug'], '/').'/';
-            return trim($this->posts[$this->pageIndex][$this->postIndex]['slug'], '/').'/';
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return trim($post['slug'], '/').'/';
+            return false;
         }
+        if (!empty($this->post)) return trim($this->post['slug'], '/').'/';
         return false;
     }
 
@@ -298,10 +299,12 @@ class Query {
      */
     public function the_excerpt($post_id = null)
     {
-        if ($this->have_posts($post_id)) {
-            $excerpt = $post_id ? $this->getPostByID($post_id)['excerpt'] : $this->posts[$this->pageIndex][$this->postIndex]['excerpt'];
-            return htmlspecialchars_decode($excerpt);
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return htmlspecialchars_decode($post['excerpt']);
+            return false;
         }
+        if (!empty($this->post)) htmlspecialchars_decode($this->post['excerpt']);
         return false;
     }
 
@@ -313,10 +316,12 @@ class Query {
      */
     public function the_category($post_id = null)
     {
-        if ($this->have_posts($post_id)) {
-            if ($post_id) return $this->getPostByID($post_id)['category']['name'];
-            return $this->posts[$this->pageIndex][$this->postIndex]['category']['name'];
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return $post['category']['name'];
+            return false;
         }
+        if (!empty($this->post)) return $this->post['category']['name'];
         return false;
     }
 
@@ -329,7 +334,8 @@ class Query {
     public function the_category_url($category_id = null)
     {
         if (!$category_id) {
-            if ($this->have_posts()) return \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'].'/category/'.$this->posts[$this->pageIndex][$this->postIndex]['category']['slug'].'/';
+            if (!empty($this->post)) return \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'].'/category/'.$this->post['category']['slug'].'/';
+            return false;
         }
         else {
             $category = $this->getCategoryById($category_id);
@@ -347,7 +353,8 @@ class Query {
     public function the_category_slug($category_id = null)
     {
         if (!$category_id) {
-            if ($this->have_posts()) return $this->posts[$this->pageIndex][$this->postIndex]['category']['slug'];
+            if (!empty($this->post)) return $this->post['category']['slug'];
+            return false;
         }
         else {
             $category = $this->getCategoryById($category_id);
@@ -365,7 +372,8 @@ class Query {
     public function the_category_id($category_name = null)
     {
         if (!$category_name) {
-            if ($this->have_posts()) return $this->posts[$this->pageIndex][$this->postIndex]['category']['id'];
+            if (!empty($this->post)) return $this->post['category']['id'];
+            return false;
         }
         else {
             $category = $this->getCategoryByName($category_id);
@@ -382,10 +390,12 @@ class Query {
      */
     public function the_tags($post_id = null) 
     {
-        if ($this->have_posts($post_id)) {
-            if ($post_id) return $this->getPostByID($post_id)['tags'];
-            return $this->posts[$this->pageIndex][$this->postIndex]['tags'];
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return $post['tags'];
+            return [];
         }
+        if (!empty($this->post)) return $this->post['tags'];
         return [];
     }
 
@@ -397,10 +407,12 @@ class Query {
      */
     public function the_tags_list($post_id = null)
     {
-        if ($this->have_posts($post_id)) {
-            if ($post_id) \Kanso\Utility\Arr::implodeByKey('name', $this->getPostByID($post_id)['tags'], ', ');
-            return \Kanso\Utility\Arr::implodeByKey('name', $this->posts[$this->pageIndex][$this->postIndex]['tags'], ', ');
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return \Kanso\Utility\Arr::implodeByKey('name', $post['tags'], ', ');
+            return '';
         }
+        if (!empty($this->post)) \Kanso\Utility\Arr::implodeByKey('name', $this->post['tags'], ', ');
         return '';
     }
 
@@ -438,14 +450,22 @@ class Query {
      */
     public function the_content($post_id = null) 
     {
-        if ($this->have_posts($post_id)) {
-            $content = $post_id ? $this->getPostContent($post_id) : $this->getPostContent($this->posts[$this->pageIndex][$this->postIndex]['id']);
-            if (empty($content)) return '';
-            if (is_array($content) && isset($content['content'])) $content = $content['content'];
-            $Parser  = new \Kanso\Parsedown\ParsedownExtra();
-            return $Parser->text(htmlspecialchars_decode($content));
+        $content = '';
+
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) $content = $this->getPostContent($post['id']);
         }
-        return false;
+        else {
+            if (!empty($this->post)) $content = $this->getPostContent($this->post['id']);
+        }
+        if (empty($content)) return '';
+        
+        if (is_array($content) && isset($content['content'])) $content = $content['content'];
+        
+        $Parser  = new \Kanso\Parsedown\ParsedownExtra();
+        return $Parser->text(htmlspecialchars_decode($content));
+    
     }
     
     /**
@@ -457,13 +477,13 @@ class Query {
      */
     public function the_post_thumbnail($size = 'large', $post_id = null) 
     {
-
-        if ($this->have_posts($post_id)) {
-            if ($this->has_post_thumbnail($post_id)) {
-                if ($post_id) return \Kanso\Kanso::getInstance()->Environment()['KANSO_IMGS_URL'].str_replace('_large', '_'.$size, $this->getPostByID($post_id)['thumbnail']);
-                return \Kanso\Kanso::getInstance()->Environment()['KANSO_IMGS_URL'].str_replace('_large', '_'.$size, $this->posts[$this->pageIndex][$this->postIndex]['thumbnail']);
-            }
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return \Kanso\Kanso::getInstance()->Environment()['KANSO_IMGS_URL'].str_replace('_large', '_'.$size, $post['thumbnail']);
+            return false;
         }
+        if (!empty($this->post)) return \Kanso\Kanso::getInstance()->Environment()['KANSO_IMGS_URL'].str_replace('_large', '_'.$size, $this->post['thumbnail']);
+        
         return false;
     }
 
@@ -475,10 +495,12 @@ class Query {
      */
     public function the_author($post_id = null) 
     {
-        if ($this->have_posts($post_id)) {
-            if ($post_id) return $this->getAuthorById($this->getPostByID($post_id)['author']['name']);
-            return $this->posts[$this->pageIndex][$this->postIndex]['author']['name'];
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return $post['name'];
+            return false;
         }
+        if (!empty($this->post)) return $this->post['author']['name'];
         return false;
     }
 
@@ -493,9 +515,10 @@ class Query {
         if ($author_id) {
             $author = $this->getAuthorById($author_id);
             if ($author) return \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'].'/authors/'.$author['slug'];
+            return false;
         }
-        else if ($this->have_posts()) {
-            return \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'].'/authors/'.$this->posts[$this->pageIndex][$this->postIndex]['author']['slug'];
+        if (!empty($this->post)) {
+            return \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'].'/authors/'.$this->post['author']['slug'];
         }
         return false;
     }
@@ -511,11 +534,12 @@ class Query {
     {
         if ($author_id) {
             $author = $this->getAuthorById($author_id);
-            if ($author) return \Kanso\Kanso::getInstance()->Environment()['KANSO_IMGS_URL'].str_replace('_large', '_'.$size, $author['thumbnail']);
+            if ($author && !empty($author['thumbnail'])) return \Kanso\Kanso::getInstance()->Environment()['KANSO_IMGS_URL'].str_replace('_large', '_'.$size, $author['thumbnail']);
+            return false;
         }
-        if ($this->have_posts()) {
-            if (!empty($this->posts[$this->pageIndex][$this->postIndex]['author']['thumbnail'])) {
-                return \Kanso\Kanso::getInstance()->Environment()['KANSO_IMGS_URL'].str_replace('_large', '_'.$size, $this->posts[$this->pageIndex][$this->postIndex]['author']['thumbnail']);
+        if (!empty($this->post)) {
+            if (!empty($this->post['author']['thumbnail'])) {
+                return \Kanso\Kanso::getInstance()->Environment()['KANSO_IMGS_URL'].str_replace('_large', '_'.$size, $this->post['author']['thumbnail']);
             }
         }
         return false;
@@ -532,9 +556,10 @@ class Query {
         if ($author_id) {
             $author = $this->getAuthorById($author_id);
             if ($author) return $author['description'];
+            return false;
         }
-        if ($this->have_posts()) {
-            return $this->posts[$this->pageIndex][$this->postIndex]['author']['description'];
+        if (!empty($this->post)) {
+            return $this->post['author']['description'];
         }
         return false;
     }
@@ -550,10 +575,10 @@ class Query {
         if ($author_id) {
             $author = $this->getAuthorById($author_id);
             if ($author) return $author['twitter'];
+            return false;
         }
-        if ($this->have_posts()) {
-            $author = $this->getAuthorById($this->posts[$this->pageIndex][$this->postIndex]['author_id']);
-            if ($author) return $author['twitter'];
+        if (!empty($this->post)) {
+            return $this->post['author']['twitter'];
         }
         return false;
     }
@@ -569,10 +594,10 @@ class Query {
         if ($author_id) {
             $author = $this->getAuthorById($author_id);
             if ($author) return $author['gplus'];
+            return false;
         }
-        if ($this->have_posts()) {
-            $author = $this->getAuthorById($this->posts[$this->pageIndex][$this->postIndex]['author_id']);
-            if ($author) return $author['gplus'];
+        if (!empty($this->post)) {
+            return $this->post['author']['gplus'];
         }
         return false;
     }
@@ -589,9 +614,8 @@ class Query {
             $author = $this->getAuthorById($author_id);
             if ($author) return $author['facebook'];
         }
-        if ($this->have_posts()) {
-            $author = $this->getAuthorById($this->posts[$this->pageIndex][$this->postIndex]['author_id']);
-            if ($author) return $author['facebook'];
+        if (!empty($this->post)) {
+            return $this->post['author']['facebook'];
         }
         return false;
     }
@@ -603,7 +627,7 @@ class Query {
      */
     public function the_post_id() 
     {
-        if ($this->have_posts()) return $this->posts[$this->pageIndex][$this->postIndex]['id'];
+        if (!empty($this->post)) return $this->post['id'];
         return false;
     }
 
@@ -615,10 +639,12 @@ class Query {
      */
     public function the_post_status($post_id = null) 
     {
-        if ($this->have_posts($post_id)) {
-            if ($post_id) return $this->getPostByID($post_id)['status'];
-            return $this->posts[$this->pageIndex][$this->postIndex]['status'];
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return $post['status'];
+            return false;
         }
+        if (!empty($this->post)) return $this->post['status'];
         return false;
     }
 
@@ -630,10 +656,12 @@ class Query {
      */
     public function the_post_type($post_id = null)
     {
-        if ($this->have_posts($post_id)) {
-            if ($post_id) return $this->getPostByID($post_id)['type'];
-            return $this->posts[$this->pageIndex][$this->postIndex]['type'];
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return $post['type'];
+            return false;
         }
+        if (!empty($this->post)) return $this->post['type'];
         return false;
     }
 
@@ -646,10 +674,12 @@ class Query {
      */
     public function the_time($format = 'U', $post_id = null)
     {
-        if ($this->have_posts($post_id)) {
-            if ($post_id) return date($format, $this->getPostByID($post_id)['created']);
-            return date($format, $this->posts[$this->pageIndex][$this->postIndex]['created']);
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return date($format, $post['created']);
+            return false;
         }
+        if (!empty($this->post)) return date($format, $this->post['created']);
         return false;
     }
 
@@ -662,10 +692,12 @@ class Query {
      */
     public function the_modified_time($format = 'U', $post_id = null)
     {
-        if ($this->have_posts($post_id)) {
-            if ($post_id) return date($format, $this->getPostByID($post_id)['modified']);
-            return date($format, $this->posts[$this->pageIndex][$this->postIndex]['modified']);
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return date($format, $post['modified']);
+            return false;
         }
+        if (!empty($this->post)) return date($format, $this->post['modified']);
         return false;
     }
 
@@ -828,12 +860,13 @@ class Query {
      */
     public function has_post_thumbnail($post_id = null)
     {
-        if ($this->have_posts($post_id)) {
-            if ($post_id) return trim($this->getPostByID($post_id)['thumbnail']) !== "";
-            return trim($this->posts[$this->pageIndex][$this->postIndex]['thumbnail']) !== "";
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return trim($post['thumbnail']) !== "";
+            return false;
         }
+        if (!empty($this->post)) trim($this->post['thumbnail']) !== "";
         return false;
-
     }
 
     /**
@@ -857,10 +890,12 @@ class Query {
      */
     public function has_excerpt($post_id = null)
     {
-        if ($this->have_posts($post_id)) {
-            if ($post_id) return $this->getPostByID($post_id)['excerpt'] !== '';
-            return $this->posts[$this->pageIndex][$this->postIndex]['excerpt'] !== '';
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return trim($post['excerpt']) !== "";
+            return false;
         }
+        if (!empty($this->post)) trim($this->post['excerpt']) !== "";
         return false;
     }
 
@@ -872,10 +907,21 @@ class Query {
      */
     public function has_tags($post_id = null)
     {
-        if ($this->have_posts($post_id)) {
-            $tags = $post_id ? $this->getPostByID($post_id)['tags'] : $this->posts[$this->pageIndex][$this->postIndex]['tags'];
-            if ($post_id) return count($tags) > 1;
-            return count($tags) > 1;
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) {
+                if (count($post['tags']) === 1) {
+                    if ($post['tags'][0]['id'] === 1) return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        if (!empty($this->post)) {
+            if (count($this->post['tags']) === 1) {
+                if ($this->post['tags'][0]['id'] === 1) return false;
+            }
+            return true;
         }
         return false;
     }
@@ -888,10 +934,12 @@ class Query {
      */
     public function has_category($post_id = null)
     {
-        if ($this->have_posts($post_id)) {
-            if ($post_id) return $this->getPostByID($post_id)['category']['id'] !== 1;
-            return $this->posts[$this->pageIndex][$this->postIndex]['category']['id'] !== 1;
+         if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return $post['category']['id'] !== 1;
+            return false;
         }
+        if (!empty($this->post)) return $this->post['category']['id'] !== 1;
         return false;
     }
 
@@ -909,20 +957,20 @@ class Query {
         $titleTitle = '';
 
         if ($this->is_single()) {
-            $titleTitle = $this->posts[$this->pageIndex][$this->postIndex]['title'].' | ';
+            $titleTitle = $this->post['title'].' | ';
         }
         else if ($this->is_tag()) {
-            foreach ($this->posts[$this->pageIndex][$this->postIndex]['tags'] as $tag) {
+            foreach ($this->post['tags'] as $tag) {
                 if ($tag['slug'] === $uri[1]) {
                     $titleTitle = $tag['name'].' | ';
                 }
             }
         }
         else if ($this->is_category()) {
-            $titleTitle = $this->posts[$this->pageIndex][$this->postIndex]['category']['name'].' | ';
+            $titleTitle = $this->post['category']['name'].' | ';
         }
         else if ($this->is_author()) {
-            $titleTitle = $this->posts[$this->pageIndex][$this->postIndex]['author']['name'].' | ';
+            $titleTitle = $this->post['author']['name'].' | ';
         }
         else if ($this->is_search()) {
             $titleTitle = 'Search Results |';
@@ -943,9 +991,9 @@ class Query {
     {
         if ($this->requestType === 'page') return false;
 
-        if ($this->have_posts()) {
+        /*if ($this->have_posts()) {
             if ($this->is_single()) {
-                return $this->findNextPost($this->posts[$this->pageIndex][$this->postIndex]);
+                return $this->findNextPost($this->posts[$this->postIndex]);
             }
             else if (isset($this->posts[$this->pageIndex+1])) {
                 $nextPage   = $this->pageIndex+2;
@@ -970,7 +1018,7 @@ class Query {
                     'slug'  => $slug,
                 ];
             }
-        }
+        }*/
         return false;
     }
 
@@ -983,35 +1031,31 @@ class Query {
     public function the_previous_page()
     {
         if ($this->requestType === 'page') return false;
+        if ($this->is_single())  return $this->findPrevPost($this->post);
 
-        if ($this->have_posts()) {
-            if ($this->is_single()) {
-                return $this->findPrevPost($this->posts[$this->pageIndex][$this->postIndex]);
+        /*if (isset($this->posts[$this->pageIndex-1])) {
+            $prevPage   = $this->pageIndex;
+            $uri        = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['PATH_INFO'], '/'));
+            $PageType   = $this->requestType;
+            $titleBase  = \Kanso\Kanso::getInstance()->Config()['KANSO_SITE_TITLE'];
+            $titlePage  = $prevPage > 1 ? 'Page '.$prevPage.' | ' : '';
+            $titleTitle = '';
+            if ($this->is_home() ) {
+                $slug =  $prevPage > 1 ? 'page/'.$prevPage.'/' : '';
             }
-            else if (isset($this->posts[$this->pageIndex-1])) {
-                $prevPage   = $this->pageIndex;
-                $uri        = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['PATH_INFO'], '/'));
-                $PageType   = $this->requestType;
-                $titleBase  = \Kanso\Kanso::getInstance()->Config()['KANSO_SITE_TITLE'];
-                $titlePage  = $prevPage > 1 ? 'Page '.$prevPage.' | ' : '';
-                $titleTitle = '';
-                if ($this->is_home() ) {
-                    $slug =  $prevPage > 1 ? 'page/'.$prevPage.'/' : '';
-                }
-                else if ($this->is_tag() || $this->is_category() || $this->is_author()) {
-                    $titleTitle = $uri[1].' | ';
-                    $slug       =  $prevPage > 1 ? $uri[0].'/'.$uri[1].'/page/'.$prevPage.'/' : $uri[0].'/'.$uri[1].'/';
-                }
-                else if ($this->is_search()) {
-                    $titleTitle = 'Search Results | ';
-                    $slug       = $prevPage > 1 ? $uri[0].'/'.$uri[1].'/page/'.$prevPage.'/' : $uri[0].'/'.$uri[1].'/';
-                }
-                return [
-                    'title' => $titleTitle.$titlePage.$titleBase,
-                    'slug'  => $slug,
-                ];
+            else if ($this->is_tag() || $this->is_category() || $this->is_author()) {
+                $titleTitle = $uri[1].' | ';
+                $slug       =  $prevPage > 1 ? $uri[0].'/'.$uri[1].'/page/'.$prevPage.'/' : $uri[0].'/'.$uri[1].'/';
             }
-        }
+            else if ($this->is_search()) {
+                $titleTitle = 'Search Results | ';
+                $slug       = $prevPage > 1 ? $uri[0].'/'.$uri[1].'/page/'.$prevPage.'/' : $uri[0].'/'.$uri[1].'/';
+            }
+            return [
+                'title' => $titleTitle.$titlePage.$titleBase,
+                'slug'  => $slug,
+            ];
+        }*/
         return false;
     }
 
@@ -1105,7 +1149,28 @@ class Query {
     public function have_posts($post_id = null)
     {
         if ($post_id) return !empty($this->getPostByID($post_id));
-        return isset($this->posts[$this->pageIndex][$this->postIndex]);
+
+        if ( $this->postIndex + 1 < $this->postCount ) {
+            return true;
+        } 
+        else if ( $this->postIndex + 1 == $this->postCount && $this->postCount > 0 ) {
+            $this->rewind_posts();
+        }
+
+        $this->inLoop = false;
+
+        return false;
+    }
+
+    /**
+     * Rewind the posts and reset post index.
+     *
+     */
+    public function rewind_posts() {
+        $this->postIndex = -1;
+        if ( $this->postCount > 0 ) {
+            $this->post = $this->posts[0];
+        }
     }
 
     /**
@@ -1114,6 +1179,8 @@ class Query {
     public function _next()
     {
         $this->postIndex++;
+        $this->post = $this->posts[$this->postIndex];
+        return $this->post;
     }
 
     /**
@@ -1122,24 +1189,8 @@ class Query {
     public function previous()
     {
         $this->postIndex--;
-    }
-
-    /**
-     * Next page
-     */
-    public function next_page()
-    {
-        $this->pageIndex++;
-        $this->postIndex = 0;
-    }
-
-    /**
-     * Previous page
-     */
-    public function previus_page()
-    {
-        $this->pageIndex--;
-        $this->postIndex = 0;
+        $this->post = $this->posts[$this->postIndex];
+        return $this->post;
     }
 
     /**
@@ -1288,7 +1339,6 @@ class Query {
      */
     public function static_pages() 
     {
-
         $articles = \Kanso\Kanso::getInstance()->Database()->Builder()->getArticlesByIndex('type', '=', 'page');
         foreach ($articles as $i => $article) {
             if ($article['status'] !== 'published') unset($articles[$i]);
@@ -1303,22 +1353,25 @@ class Query {
      */
     public function get_current_userinfo() 
     {
-
-        if ($this->is_loggedin()) {
-            \Kanso\Admin\Security\sessionManager::init();
-            return \Kanso\Admin\Security\sessionManager::get();
-        }
-        return [];
+        return \Kanso\Kanso::getInstance()->Gatekeeper->getUser();
     }
 
     /**
      * Validate that the current user is logged in to Kanso's admin panel
      * @return bool
      */
-    public function is_loggedin() 
+    public function is_loggedIn() 
     {
-        \Kanso\Admin\Security\sessionManager::init();
-        return \Kanso\Admin\Security\sessionManager::isLoggedIn();
+        return \Kanso\Kanso::getInstance()->Gatekeeper->isLoggedIn();
+    }
+
+    /**
+     * Validate that the current user is logged in to Kanso's admin panel
+     * @return bool
+     */
+    public function user_is_admin() 
+    {
+        return \Kanso\Kanso::getInstance()->Gatekeeper->isAdmin();
     }
 
     /**
@@ -1329,10 +1382,12 @@ class Query {
     public function comments_open($post_id = null) 
     {
         if (\Kanso\Kanso::getInstance()->Config()['KANSO_COMMENTS_OPEN'] === false) return false;
-        if ($this->have_posts($post_id)) {
-            if ($post_id) return $this->getPostByID($post_id)['comments_enabled'];
-            return $this->posts[$this->pageIndex][$this->postIndex]['comments_enabled'];
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return $post['comments_enabled'] == true;
+            return false;
         }
+        if (!empty($this->post)) return $this->post['comments_enabled'] == true;
         return false;
     }
 
@@ -1342,10 +1397,12 @@ class Query {
      */
     public function has_comments($post_id = null) 
     {
-        if ($this->have_posts($post_id)) {
-            if ($post_id) return !empty($this->getPostByID($post_id)['comments']);
-            return !empty($this->posts[$this->pageIndex][$this->postIndex]['comments']);
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return !empty($post['comments']);
+            return false;
         }
+        if (!empty($this->post)) return !empty($this->post['comments']);
         return false;
     }
 
@@ -1355,10 +1412,12 @@ class Query {
      */
     public function comments_number($post_id = null)
     {
-        if ($this->have_posts($post_id)) {
-            if ($post_id) return count($this->getPostByID($post_id)['comments']);
-            return count($this->posts[$this->pageIndex][$this->postIndex]['comments']);
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return count($post['comments']);
+            return 0;
         }
+        if (!empty($this->post)) return count($this->post['comments']);
         return 0;
     }
 
@@ -1377,19 +1436,25 @@ class Query {
      */
     public function get_comments($post_id = null, $approvedOnly = true)
     {
-        
-        if ($this->have_posts($post_id)) {
-            $post_id  = !$post_id ? $this->posts[$this->pageIndex][$this->postIndex]['id'] : $post_id;
-            $Query     = \Kanso\Kanso::getInstance()->Database()->Builder();
-            $Query->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$post_id);
-            if ($approvedOnly) $Query->AND_WHERE('status', '=', 'approved');
-            return $Query->FIND_ALL();
+        $post = [];
+
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if (!$post) return [];
         }
-        return [];
+        if (!empty($this->post)) $post = $this->post;
+        
+        if (empty($post)) return [];
+        
+        $Query = \Kanso\Kanso::getInstance()->Database()->Builder();
+        $Query->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$post['id']);
+        if ($approvedOnly) $Query->AND_WHERE('status', '=', 'approved');
+        return $Query->FIND_ALL();
     }
 
     /**
-     * Get a comment count on a given article
+     * Display the comments
+     *
      * @return int
      */
     public function display_comments($args = null, $post_id = null)
@@ -1405,10 +1470,13 @@ class Query {
         if (!$have_comments) return $HTML;
 
         # Save the article row locally
-        $articleRow  = !$post_id ? $this->posts[$this->pageIndex][$this->postIndex] : $this->getPostByID($post_id);
+        $articleRow  = !$post_id ? $this->post : $this->getPostByID($post_id);
+
+        # Fallback incase nothing is present
+        if (!$articleRow || empty($articleRow)) return '';
 
         # Save the article permalink locally
-        $permalink   = $this->the_permalink($post_id);
+        $permalink   = $this->the_permalink($articleRow['id']);
 
         # Default comment format
         $defaultFormat = '
@@ -1503,13 +1571,16 @@ class Query {
         $HTML = '';
 
         # Save the article row locally
-        $articleRow  = !$post_id ? $this->posts[$this->pageIndex][$this->postIndex] : $this->getPostByID($post_id);
+        $articleRow  = !$post_id ? $this->post : $this->getPostByID($post_id);
 
-        # Save the article permalink locally
-        $permalink   = $this->the_permalink($post_id);
+        # Fallback incase nothing is present
+        if (!$articleRow || empty($articleRow)) return '';
 
         # Save the article id locally
         $postID = $articleRow['id'];
+
+        # Save the article permalink locally
+        $permalink   = $this->the_permalink($postID);
 
         $options = [
 
@@ -1629,11 +1700,23 @@ class Query {
         # Declare the pagination string
         $pagination = '';
 
+        # Replace the query and create a new one to get the post count;
+        $queryStr  = preg_replace('/limit =[^:]+:/', '', $this->queryStr);
+        $queryStr  = trim(preg_replace('/limit =[^:]+/', '', $queryStr));
+        $queryStr  = trim($queryStr, ":");
+        
+        # Load the query parser
+        $parser = new QueryParser();
+
+        # Count the posts
+        $posts = $parser->countQuery($queryStr);
+        $pages = \Kanso\Utility\Arr::paginate($posts, $this->pageIndex, \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE']);
+
         # If no args were defined, Kanso will figure it out for us
         if (!$args || !isset($args['current']) || !isset($args['total'])) {
             # pages here are used as for an array so +1 
             $options['current'] = $this->pageIndex === 0 ? 1 : $this->pageIndex+1;
-            $options['total']   = count($this->posts);
+            $options['total']   = count($pages);
         }
 
         # If options were set, overwrite the dafaults
@@ -1751,7 +1834,6 @@ class Query {
     public function get_archives()
     {
         # Get all the posts
-
         $archive  = [];
         $queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC';
         $parser    = new QueryParser($queryStr);
@@ -1906,7 +1988,7 @@ class Query {
      */
     private function findNextPost($post)
     {
-        $next = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('id')->FROM('posts')->WHERE('created', '>=', $post['created'])->AND_WHERE('status', '=', 'published')->FIND_ALL();
+        $next = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('id')->FROM('posts')->WHERE('created', '>', $post['created'])->AND_WHERE('status', '=', 'published')->LIMIT(3)->FIND_ALL();
         if (!empty($next)) {
             foreach ($next as $i => $nextPost) {
                 if ($nextPost['id'] === $post['id']) {
@@ -1929,7 +2011,7 @@ class Query {
      */
     private function findPrevPost($post)
     {
-        $next = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('id')->FROM('posts')->WHERE('created', '<=', $post['created'])->AND_WHERE('status', '=', 'published')->FIND_ALL();
+        $next = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('id')->FROM('posts')->WHERE('created', '<=', $post['created'])->AND_WHERE('status', '=', 'published')->LIMIT(3)->FIND_ALL();
         if (!empty($next)) {
             $next = array_reverse($next);
             foreach ($next as $i => $nextPost) {

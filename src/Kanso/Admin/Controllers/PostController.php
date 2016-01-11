@@ -55,8 +55,6 @@ class PostController
      */
     public function __construct()
     {
-        # Fire the admin ajax event
-        \Kanso\Events::fire('adminAjax', $_POST);
 
         # Get a new GUMP instance
         $this->GUMP = new \Kanso\Utility\GUMP();
@@ -72,6 +70,9 @@ class PostController
 
         # Load the model
         $this->model = new \Kanso\Admin\Models\Ajax();
+
+        # Fire the admin ajax event
+        \Kanso\Events::fire('adminAjaxInit', $_POST);
     }
 
     /********************************************************************************
@@ -133,6 +134,9 @@ class PostController
 
         # Dispatch the request
         $response = $this->dispatchRequest();
+
+        # Filter the response
+        $response = \Kanso\Filters::apply('adminAjaxResponse', $response);
         
         # If the request was processed, return a valid JSON object
         if ($response || is_array($response)) {
@@ -227,7 +231,7 @@ class PostController
     private function validateKeySignature() 
     {
         if (!isset($this->postVars['public_key'])) return false;
-        return \Kanso\Kanso::getInstance()->Gatekeeper->verifyAjaxToken($this->postVars['public_key']);
+        return \Kanso\Kanso::getInstance()->Session->validateToken($this->postVars['public_key']);
     }
 
     /**
@@ -237,8 +241,7 @@ class PostController
      */
     private function sendPublicKey() 
     {
-        $keys = $this->user->getToken('ajax');
-        return ['k' => $keys['key'], 's' => $keys['salt']];
+        return ['k' => $this->user['kanso_public_key'], 's' => $this->user['kanso_public_salt']];
     }
 
     /**
@@ -690,13 +693,13 @@ class PostController
             if ($validated_data['email'] === $user['email']) return "already_member";
 
             # Get the user's row if it exists
-            $userRow = $this->Query->SELECT('*')->FROM('users')->WHERE('email', '=', $validated_data['email'])->FIND();
+            $userRow = $this->Query->SELECT('*')->FROM('users')->WHERE('email', '=', $validated_data['email'])->ROW();
 
             # Validate they are not already confirmed
             if ($userRow && $userRow['status'] === 'confirmed') return 'already_member';
 
             # If theyre deleted or pending re-invite them
-            if (!$userRow || empty($userRow) || ($userRow && $userRow['status'] === 'deleted')) {
+            if (!$userRow || ($userRow && $userRow['status'] !== 'confirmed')) {
                 
                 $invite = \Kanso\Kanso::getInstance()->Gatekeeper->registerUser($validated_data['email'], $validated_data['role'], $user);
 
@@ -894,7 +897,6 @@ class PostController
 
             $imgurl = str_replace($env['DOCUMENT_ROOT'], $env['HTTP_HOST'], $dst);
 
-            \Kanso\Events::fire('imageUpload', [$dst]);
         }
 
         # If this was an author avatar, update the database
@@ -908,6 +910,8 @@ class PostController
 
             \Kanso\Kanso::getInstance()->Gatekeeper->logClientIn($author);
         }
+
+        \Kanso\Events::fire('imageUpload', str_replace( $env['HTTP_HOST'], $env['DOCUMENT_ROOT'], $imgurl));
 
         return $imgurl;
 
@@ -963,6 +967,9 @@ class PostController
         # Declare config sizes locally
         $configSizes = $config['KANSO_THUMBNAILS'];
 
+        # Destination for event;
+        $dest = '';
+
         # Upload the images
         foreach ($postVars['file']['tmp_name'] as $f => $tmpFile) {
 
@@ -997,15 +1004,17 @@ class PostController
                 # Save the file
                 $saved = $Imager->save($dst, false, $qual);
 
+                $dest = $dst;
+
                 # Return error if file couldnt be saved
                 if (!$saved) return 'server_error';
-
-                # Fire upload event
-                \Kanso\Events::fire('imageUpload', [$dst]);
 
             }
 
         }
+
+        # Fire upload event
+        \Kanso\Events::fire('imageUpload', $dest);
 
         return 'valid';
 
@@ -1288,9 +1297,13 @@ class PostController
         $searchValue  = false;
         $searchKey    = false;
         $leftJoin     = false;
-        $page         = ((int)$validated_data['page']) -1;
+        $page         = ((int)$validated_data['page']);
+        $page         = $page === 1 || $page === 0 ? 0 : $page-1;
         $sort         = 'ASC';
-        $sortKey      = 'created';
+        $sortKey      = 'posts.created';
+        $perPage      = 10;
+        $offset       = $page * $perPage;
+        $limit        = $perPage;
         
         # If this is a search, clean and santize the search keys
         if ($isSearch) {
@@ -1328,10 +1341,11 @@ class PostController
         }
 
         # Filter and sanitize the sort order
-        if ($validated_data['sortBy'] === 'newest' || $validated_data['sortBy'] === 'drafts') $sort = 'DESC';
-        if ($validated_data['sortBy'] === 'oldest' || $validated_data['sortBy'] === 'published') $sort = 'ASC';
+        if ($validated_data['sortBy'] === 'newest' || $validated_data['sortBy'] === 'published') $sort = 'DESC';
+        if ($validated_data['sortBy'] === 'oldest' || $validated_data['sortBy'] === 'drafts') $sort = 'ASC';
 
-        if ($validated_data['sortBy'] === 'category')  $sortKey   = 'category.name';
+
+        if ($validated_data['sortBy'] === 'category')  $sortKey   = 'categories.name';
         if ($validated_data['sortBy'] === 'tags')      $sortKey   = 'tags.name';
         if ($validated_data['sortBy'] === 'drafts')    $sortKey   = 'posts.status';
         if ($validated_data['sortBy'] === 'published') $sortKey   = 'posts.status';
@@ -1342,13 +1356,10 @@ class PostController
         $Query = \Kanso\Kanso::getInstance()->Query();
 
         # Get all the articles
-        $articles = $this->Query->getArticlesByIndex(null, null, null, ['tags', 'category', 'author']);
+        $articles = $this->Query->getArticlesByIndex(null, null, [$offset, $limit], ['tags', 'category', 'author'], [$sortKey, $sort]);
 
         # Pre validate there are actually some articles to process
         if (empty($articles)) return [];
-
-        # Sort the articles by key
-        $articles = \Kanso\Utility\Arr::sortMulti($articles, $sortKey, $sort);
 
         # Loop and filter the articles
         foreach ($articles as $i => $article) {

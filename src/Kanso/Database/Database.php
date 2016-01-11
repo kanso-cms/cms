@@ -135,7 +135,7 @@ class Database
 				$this->pdoStatement->bindParam($parameters[0], $parameters[1]);
 			}		
 		}
-		
+
 		# Execute SQL 
 		$this->succes = $this->pdoStatement->execute();		
 

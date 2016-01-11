@@ -18,65 +18,15 @@ class Filters
     protected static $callbacks = [];
 
     /**
-     * @var mixed Array of callback arguements
-     */
-    protected static $callbackArgs = [];
-
-    /**
      * @var array    Default Kanso event types
      */
     protected static $filters = [
-
-        /**
-         * @var   array              Fired right before a new article is created.
-         * @param array    $Entry    Recieves the article row from the database as a parameter
-         */
-        'newArticle'     => [],
-
-        /**
-         * @var   array              Fired right before an existing article is saved.
-         * @param array    $Entry    Recieves the article row from the database as a parameter
-         */
-        'articleSave'    => [],
-
-        /**
-         * @var   array              Fired right before an existing article is published.
-         * @param array    $Entry    Recieves the article row from the database as a parameter
-         */
-        'articlePublish' => [],
-
-        /**
-         * @var   array              Fired right before an existing article is deleted.
-         * @param array    $Entry    Recieves the article row from the database as a parameter
-         */
-        'articleDelete'  => [],
-
-        /**
-         * @var   array               Fired right before Kanso's configuration is updated
-         * @param array    $Config    Recieves Knaso's configuration as a parameter
-         */
-        'configChange'   => [],
-
-        /**
-         * @var   array               Fired right before Kanso's configuration is updated
-         * @param array    $Config    Recieves Knaso's configuration as a parameter
-         */
-        'adminArticleTabs'   => [],
-
-        /**
-         * @var   array               Fired right before Kanso's configuration is updated
-         * @param array    $Config    Recieves Knaso's configuration as a parameter
-         */
-        'adminSettingsTabs'   => [],
-
-        /**
-         * @var   array               Fired right before Kanso's configuration is updated
-         * @param array    $Config    Recieves Knaso's configuration as a parameter
-         */
-        'adminDropDown'   => [],
-
-        'adminFavicons'   => [],
-    
+        'configChange'      => [],
+        'adminArticleTabs'  => [],
+        'adminSettingsTabs' => [],
+        'adminDropDown'     => [],
+        'adminFavicons'     => [],
+        'adminAjaxResponse' => [],
     ];
 
     /**
@@ -111,12 +61,11 @@ class Filters
      * @param  array     $args         The arguements to be sent to event
      * @return Kanso\Events|false
      */
-    public function on($eventName, $callback, $args = []) {
+    public function on($eventName, $callback) {
         if (!is_array($args)) $args = [$args];
         if (isset(self::$filters[$eventName])) {
             array_push(self::$filters[$eventName], true);
             array_push(self::$callbacks, $callback);
-            array_push(self::$callbackArgs, $args);
             return $this;
         }
         else {
@@ -134,7 +83,7 @@ class Filters
      * @param string    $eventName    The name of the event being fired
      * @param array     $args         The arguements to be sent to event
      */
-    public static function apply($filterName, $filterData, $args = []) 
+    public static function apply($filterName, $filterData) 
     {
         
         # Is there a custom callback for the filter?   
@@ -149,42 +98,9 @@ class Filters
             # Loop the filter callbacks
             foreach ($filters as $filter) {
 
-                # is the callback a string
-                if (is_string(self::$callbacks[$filter])) {
+                # Apply the callback
+                $result = \Kanso\Utility\Callback::apply(self::$callbacks[$filter], $filterData);
 
-                    $callback = self::$callbacks[$filter];
-                    $args     = array_merge($args, self::$callbackArgs[$filter]);
-
-                    # Are we calling a static method
-                    if (strpos($callback, '::') !== false) {
-
-                        $segments = explode('::', $callback);
-
-                        $result = call_user_func($segments[0].'::'.$segments[1], $args);
-
-                    }
-                    else {
-
-                        # grab all parts based on a / separator 
-                        $parts = explode('/', $callback);
-
-                        # collect the last index of the array
-                        $last = end($parts);
-
-                        # grab the controller name and method call
-                        $segments = explode('@', $last);
-
-                        # instanitate controller
-                        $controller = new $segments[0]($args);
-
-                        # call method
-                        $result = $controller->$segments[1]();
-                    }
-                }
-                else {
-
-                    $result = call_user_func(self::$callbacks[$filter], array_merge($args, self::$callbackArgs[$filter]));
-                }
             }
 
             return $result;
