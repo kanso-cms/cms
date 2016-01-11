@@ -1,3 +1,2 @@
-src/Kanso/Admin/assets/images/* linguist-vendored
-src/Kanso/Admin/assets/js/libs/* linguist-vendored
+src/Kanso/Admin/assets/* linguist-vendored
 src/Kanso/Themes/* linguist-vendored
