@@ -1,0 +1,29 @@
+{
+	"name": "kanso/cms",
+	"description": "Kanso CMS",
+	"keywords": ["kanso", "CMS"],
+	"homepage": "http://kanso-cms.github.io/",
+	"license": "GNU",
+	"authors": [
+		{
+			"name": "Joe Howard",
+			"email": "joe@pencilscoop.com"
+		},
+		{
+			"name": "Contributors",
+			"homepage": "https://github.com/kanso-cms/cms/graphs/contributors"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/kanso-cms/cms/graphs/issues",
+		"source": "https://github.com/kanso-cms/cms"
+	},
+	"require": {
+        "php": ">=5.5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kanso\\": "Kanso"
+        }
+    }
+}
