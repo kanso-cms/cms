@@ -16,7 +16,7 @@ $keys = [
 ];
 
 # Hashed default admin password
-$hashed = \Kanso\Security\Encrypt::encrypt($this->config['KANSO_OWNER_PASSWORD']);
+$hashed = \Kanso\Security\Encrypt::hash($this->config['KANSO_OWNER_PASSWORD']);
 
 # Default articles table
 $KANSO_DEFAULTS_POSTS_TABLE = [

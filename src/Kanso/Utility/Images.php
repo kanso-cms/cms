@@ -325,7 +325,7 @@ class Images
     }
 
     /**
-     * Resize to width
+     * Scale image 
      *
      * @param  int    $scale
      * @return Kanso\Helper\Images

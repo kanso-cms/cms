@@ -18,7 +18,7 @@ class Filters
     protected static $callbacks = [];
 
     /**
-     * @var array    Default Kanso event types
+     * @var array    Default Kanso filter types
      */
     protected static $filters = [
         'configChange'        => [],
@@ -37,14 +37,15 @@ class Filters
         'adminFooterScripts'  => [],
         'adminPostTypes'      => [],
         'adminAjaxResponse'   => [],
+        'emailBody'           => [],
     ];
 
     /**
-     * Get Events instance (singleton)
+     * Get Filters instance (singleton)
      *
-     * This creates and/or returns an Events instance (singleton)
+     * This creates and/or returns an Filters instance (singleton)
      *          
-     * @return Kanso\Events
+     * @return Kanso\Filters
      */
     public static function getInstance() 
     {
@@ -63,18 +64,18 @@ class Filters
     }
 
     /**
-     * Hook into an event
+     * Hook into a filter
      *
-     * This function is used to hook into a Kanso event externally
+     * This function is used to hook into a Kanso filter externally
      *
-     * @param  string    $eventName    The name of the event being fired
-     * @param  array     $args         The arguements to be sent to event
+     * @param  string    $filterName    The name of the filter being fired
+     * @param  array     $args         The arguements to be sent to filter
      * @return Kanso\Events|false
      */
-    public function on($eventName, $callback) {
+    public function on($filterName, $callback) {
         if (!is_array($args)) $args = [$args];
-        if (isset(self::$filters[$eventName])) {
-            array_push(self::$filters[$eventName], true);
+        if (isset(self::$filters[$filterName])) {
+            array_push(self::$filters[$filterName], true);
             array_push(self::$callbacks, $callback);
             return $this;
         }
@@ -84,14 +85,14 @@ class Filters
     }
 
     /**
-     * Fire an event
+     * Fire a filter
      *
      * This is used internally to dispatch various events throughout
      * the Kanso application. It should not really be used externally 
      * unless you really know what you're doing.
      *
-     * @param string    $eventName    The name of the event being fired
-     * @param array     $args         The arguements to be sent to event
+     * @param string    $filterName    The name of the filter being fired
+     * @param array     $filterData     The arguements to be sent to filter
      */
     public static function apply($filterName, $filterData) 
     {

@@ -247,7 +247,7 @@ class Gatekeeper
         # Activate the new user and update their 
         # database enties
         $row = [];
-        $row['hashed_pass']  = utf8_encode(\Kanso\Security\Encrypt::encrypt($password));
+        $row['hashed_pass']  = utf8_encode(\Kanso\Security\Encrypt::hash($password));
         $row['slug']         = \Kanso\Utility\Str::slugFilter($username);
         $row['status']       = 'confirmed';
         $row['kanso_register_key']  = '';
@@ -415,7 +415,7 @@ class Gatekeeper
 
         # Change the users password and remove the key from the database
         $row = [];
-        $row['hashed_pass']        = utf8_encode(\Kanso\Security\Encrypt::encrypt($password));
+        $row['hashed_pass']        = utf8_encode(\Kanso\Security\Encrypt::hash($password));
         $row['kanso_password_key'] = null;
         
         $update = $Query->UPDATE('users')->SET($row)->WHERE('id', '=', $user['id'])->QUERY();

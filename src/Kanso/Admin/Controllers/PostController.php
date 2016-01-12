@@ -1403,8 +1403,6 @@ class PostController
         # Get all the articles
         $articles = $this->Query->getArticlesByIndex(null, null, [$offset, $limit], ['tags', 'category', 'author'], [$sortKey, $sort]);
 
-    
-
         # Pre validate there are actually some articles to process
         if (empty($articles)) return [];
 
@@ -2040,7 +2038,7 @@ class PostController
             'email-thread' => true,
         ];
 
-        return  \Kanso\Comments\CommentManager::addComment($postVars, false);
+        return  \Kanso\Comments\CommentManager::add($postVars, false);
 
         return false;
 
@@ -2078,7 +2076,7 @@ class PostController
         $validated_data = $this->GUMP->run($postVars);
 
         if ($validated_data) {
-            \Kanso\Comments\CommentManager::moderateIPAddress($validated_data['ip_address'], $validated_data['action']);
+            \Kanso\Comments\CommentManager::moderateIp($validated_data['ip_address'], $validated_data['action']);
             return true;
         }
     }
@@ -2116,7 +2114,7 @@ class PostController
             $comment_ids = array_map('intval', explode(',', $validated_data['comment_ids']));
             if (empty($comment_ids)) return false;
             foreach ($comment_ids as $id) {
-                if (! \Kanso\Comments\CommentManager::changeCommentStatus($id, $status)) return false;
+                if (! \Kanso\Comments\CommentManager::status($id, $status)) return false;
             }
             return true;
         }

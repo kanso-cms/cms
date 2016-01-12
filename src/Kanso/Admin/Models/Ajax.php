@@ -70,7 +70,7 @@ class Ajax
         ];
 
         # If they changed their password lets update it
-        if ($password !== '' && !empty($password)) $row['hashed_pass'] = utf8_encode(\Kanso\Security\Encrypt::encrypt($password));
+        if ($password !== '' && !empty($password)) $row['hashed_pass'] = utf8_encode(\Kanso\Security\Encrypt::hash($password));
 
         # Save to the databse and refresh the client's session
         $update = $Query->UPDATE('users')->SET($row)->WHERE('id', '=', $userRow['id'])->QUERY();

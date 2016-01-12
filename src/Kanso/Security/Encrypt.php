@@ -18,7 +18,7 @@ class Encrypt {
 	 * @param  string $string
 	 * @return string
 	 */
-	public static function encrypt($string)
+	public static function hash($string)
 	{
 		if (!function_exists('password_hash')) require_once __DIR__.DIRECTORY_SEPARATOR.'password.php';
 		return password_hash($string, PASSWORD_BCRYPT);

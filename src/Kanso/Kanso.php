@@ -219,6 +219,26 @@ class Kanso
 			return new \Kanso\Articles\Bookkeeper();
 		});
 
+		# Default Comment manager
+		$this->Container->singleton('Comments', function () {
+			return new Kanso\Comments\CommentManager();
+		});
+
+		# Default FileSystem
+		$this->Container->singleton('FileSystem', function () {
+			return new Kanso\Utility\FileSystem();
+		});
+
+		# Default Humanizer
+		$this->Container->singleton('Humanizer', function () {
+			return new Kanso\Utility\Humanizer();
+		});
+
+		# Default Mailer
+		$this->Container->singleton('Mailer', function () {
+			return new Kanso\Utility\Mailer();
+		});
+
 		# Make default if first instance
 		if (is_null(static::getInstance())) {
 			$this->setName('default');
@@ -556,6 +576,16 @@ class Kanso
 	public function Bookkeeper()
 	{
 		return $this->Bookkeeper;
+	}
+
+	/**
+	 * Get the Bookkeeper object
+	 *
+	 * @return \Kanso\Comments\CommentManager
+	 */
+	public function Comments()
+	{
+		return $this->Comments;
 	}
 
 	

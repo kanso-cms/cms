@@ -180,7 +180,7 @@ class Str
 	 */
 	public static function compareNumeric($a, $b) 
 	{
-		return (int)$a - (int)$b;
+		return (int)$a  === (int)$b;
 	}
 
 	/**
@@ -192,7 +192,7 @@ class Str
 	 */
 	public static function compareAlphaNumeric($a, $b) 
 	{
-		return strcasecmp($a,$b);
+		return strcasecmp((string)$a, (string)$b);
 	}
 
 	/**

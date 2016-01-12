@@ -28,7 +28,13 @@ class Mailer
 	    $email_headers   = 'MIME-Version: 1.0' . "\r\n";
 	    $email_headers  .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	    $email_headers  .= 'From: '.$emailSender.' <'.$emailFrom.'>' . "\r\n";
+
+	    # Fire the email event
+		\Kanso\Events::fire('htmlEmailSend', [$emailTo, $emailFrom, $emailSender, $emailSubject, $emailMessage]);
+
+		# Filter the email body
+		$email_body   = \Kanso\Filters::apply('emailBody', $email_body);
+
 	    return mail($emailTo, $emailSubject, $email_body, $email_headers);
   	}
-
 }

@@ -9,17 +9,17 @@ namespace Kanso\Comments;
  * for adding/deleteing and interacting with comments in the database
  *
  */
-class CommentManager 
+class CommentManager
 {
-
-    /**
-     * @var \Kanso\Kanso
-     */
-    private static $Kanso;
 
     /********************************************************************************
     * PUBLIC ACCESS FOR ADDING NEW COMMENTS
     *******************************************************************************/
+
+    public function __construct()
+    {
+
+    }
 
     /**
      * Validate HTTP request 
@@ -45,7 +45,7 @@ class CommentManager
         }
 
         # Add the comment
-        $response = self::addComment(self::$Kanso->Request->fetch());
+        $response = self::add(self::$Kanso->Request->fetch());
 
         # If the comment was succesful return a JSON response
         if ($response) {
@@ -73,7 +73,7 @@ class CommentManager
      *                                        (e.g Adding a comment from the admin panel)
      * @return bool   
      */
-    public static function addComment($commentData, $spamValidation = true)
+    public static function add($commentData, $spamValidation = true)
     {
 
         # Validate that a kanso instance has been called
@@ -114,7 +114,7 @@ class CommentManager
             if (!$spamFilter->isWhiteListedIP()) {  
 
                 $isSPAM     = $spamFilter->isSPAM();
-                $spamRating = $spamFilter->getSPAMrating();
+                $spamRating = $spamFilter->getRating();
 
                 if ($isSPAM || $spamRating < 0 ) {
                     $status = 'spam';
@@ -184,6 +184,32 @@ class CommentManager
         return $status;
     }
 
+
+    public static function remove($commentID)
+    {
+
+        # Validate that a kanso instance has been called
+        if (is_null(self::$Kanso)) self::$Kanso = \Kanso\Kanso::getInstance();
+
+        # Get a new Query builder
+        $Query = self::$Kanso->Database()->Builder();
+
+        # Validate the status is allowed
+        $statuses = ['approved', 'spam', 'deleted', 'pending'];
+        if (!in_array($status, $statuses)) return false;
+
+        # Get the comment row from the database
+        $commentRow = $Query->SELECT('*')->FROM('comments')->where('id', '=', (int)$commentID)->FIND();
+
+        # Validate the row exists
+        if (!$commentRow) return false;
+
+        # Change and save the status
+        $Query->UPDATE('comments')->SET(['status' => $status])->WHERE('id', '=', (int)$commentID)->QUERY();
+        
+        return true;
+    }
+
     /**
      * Change the status of an existing comment
      *
@@ -191,7 +217,7 @@ class CommentManager
      * @param  string    $status       The status to be set
      * @return bool   
      */
-    public static function changeCommentStatus($commentID, $status) 
+    public static function status($commentID, $status) 
     {
         # Validate that a kanso instance has been called
         if (is_null(self::$Kanso)) self::$Kanso = \Kanso\Kanso::getInstance();
@@ -221,7 +247,7 @@ class CommentManager
      * @param  array    $comment    The comment array from the database
      * @return null
      */
-    public static function moderateIPAddress($ipAddress, $blackOrWhiteList) 
+    public static function moderateIp($ipAddress, $blackOrWhiteList) 
     {
         if ($blackOrWhiteList === 'whitelist') {
             \Kanso\Comments\Spam\SpamProtector::appendToDictionary($ipAddress, 'whitelist_ip');
@@ -237,6 +263,12 @@ class CommentManager
         }
     }
 
+   
+
+    /********************************************************************************
+    * PRIVATE HELPER METHODS
+    *******************************************************************************/
+    
     /**
      * Validate comment array 
      *
@@ -245,10 +277,10 @@ class CommentManager
      *
      * @return array|bool
      */
-    public static function validateInputData($commentData)
+    private static function validateInputData($commentData)
     {
 
-    	# Set A GUMP object for validation
+        # Set A GUMP object for validation
         $GUMP     = new \Kanso\Utility\GUMP();
 
         # Sanitize the post variables
@@ -278,10 +310,6 @@ class CommentManager
         return $GUMP->run($postVars);
 
     }
-
-    /********************************************************************************
-    * PRIVATE HELPER METHODS
-    *******************************************************************************/
 
     /**
      * Send comment emails to subscribers where needed

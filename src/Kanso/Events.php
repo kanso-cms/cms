@@ -44,6 +44,7 @@ class Events
         'redirect'       => [],
         'adminAjaxInit'  => [],
         'adminInit'      => [],
+        'htmlEmailSend'  => [],
     ];
 
     /**

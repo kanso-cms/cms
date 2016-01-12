@@ -379,7 +379,7 @@ class SpamProtector
      *
      * @return bool
      */
-    public function getSPAMrating()
+    public function getRating()
     {
         # Get statistics
         $linkCount      = $this->countLinks();
