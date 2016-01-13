@@ -3447,9 +3447,13 @@ table thead th {
   margin-top: -250px;
 }
 
+.setup-panel .logo-wrap {
+  padding: 20px;
+}
+
 .setup-panel .logo-wrap svg {
-  width: 100px;
-  height: 100px;
+  width: 45px;
+  height: 45px;
 }
 
 .setup-panel .message p {

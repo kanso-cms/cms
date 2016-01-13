@@ -153,10 +153,10 @@ function adminSvgSprites()
 function adminHeaderLinks()
 {
 	$links = [
-		'<li class="logo"><a href="http://pencilscoop.com/Kanso"><svg viewBox="0 0 512 512"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#logo"></use></svg></a></li>',
-		'<li><a href="http://pencilscoop.com/Kanso/documentation">Documentation</a></li>',
-		'<li><a href="http://pencilscoop.com/Kanso/FAQ">Help</a></li>',
-		'<li><a href="http://pencilscoop.com/Kanso/GitHub">GitHub</a></li>',
+		'<li class="logo"><a href="/admin/settings/account"><svg viewBox="0 0 512 512"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#logo"></use></svg></a></li>',
+		'<li><a href="http://kanso-cms.github.io/">Kanso</a></li>',
+		'<li><a href="http://kanso-cms.github.io/docs/0.0.01/">Documentation</a></li>',
+		'<li><a href="https://github.com/kanso-cms/cms">GitHub</a></li>',
 	];
 
 	$links = \Kanso\Filters::apply('adminHeaderLinks', $links);
