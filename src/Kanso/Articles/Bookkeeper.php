@@ -103,95 +103,6 @@ class Bookkeeper
     }
 
 	/**
-	 * Clear or Delete a tag or category
-	 *
-	 * @param  int        $tagID        The tag id to remove
-	 * @param  string     $tagType      'category' or 'tag'
-	 * @param  boolean    $deleteTag    Should the tag be deleted after clearing it
-	 * @return string|boolean
-	*/
-	public function clearTaxonomy($tagID, $tagType, $deleteTag = false) 
-	{
-
-		# Convert the article ID to an integer
-  		$tagID = (int)$tagID;
-
-  		# Get a Kanso instance
-        if (!$this->Kanso) $this->Kanso = \Kanso\Kanso::getInstance();
-
-       	# Get a new Query Builder
-        $Query = $this->Kanso->Database()->Builder();
-
-		# Can't or clear delete 'Untagged' or 'Uncategorized'
-		if ($tagID === 1) return false;
-
-		# If this is a tag delete. Note tags have a junction table 
-		# i.e many posts to 1 tag.
-		if ($tagType === 'tag') {
-
-			# Get the tag row
-			$tagRow = $Query->SELECT('*')->FROM('tags')->WHERE('id', '=', (int)$tagID)->FIND();
-			
-			# If it doesn't exist return false
-    		if (!$tagRow || empty($tagRow)) return false;
-
-    		# Find articles from tag
-    		$tagArticles = $Query->SELECT('posts.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('posts', 'tags_to_posts.post_id = posts.id')->WHERE('tags_to_posts.tag_id', '=', (int)$tagID)->FIND_ALL();
-
-			# If the tag has articles, loop through the articles
-			# If an article will be left with no tags, set it as untagged
-			if ($tagArticles && !empty($tagArticles)) {
-
-				foreach ($tagArticles as $article) {
-					$articleTags = $Query->SELECT('*')->FROM('tags_to_posts')->WHERE('post_id', '=', (int)$article['id'])->FIND_ALL();
-					if (count($articleTags) === 1) {
-						$Query->INSERT_INTO('tags_to_posts')->VALUES(['post_id' => (int)$article['id'], 'tag_id' => 1])->QUERY();
-					}
-				}
-
-			}
-
-			# Remove joins
-			$Query->DELETE_FROM('tags_to_posts')->WHERE('tag_id', '=', (int)$tagID)->QUERY();
-
-			# Delete the tag
-			if ($deleteTag) $Query->DELETE_FROM('tags')->WHERE('id', '=', (int)$tagID)->QUERY();
-
-			return "valid"; 	
-		}
-
-		# Otherwise if this is a category delete
-		else if ($tagType === 'category') {
-
-
-			# Get the tag row
-			$catRow = $Query->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$tagID)->FIND();
-			
-			# If it doesn't exist return false
-    		if (!$catRow || empty($catRow)) return false;
-
-    		# Find articles from tag
-    		$catArticles = $Query->SELECT('*')->FROM('posts')->WHERE('category_id', '=', (int)$tagID)->FIND_ALL();
-
-			# If the tag has articles, loop through the articles
-			# Loop through articles and set the category to id 1
-    		if (!empty($catArticles)) {
-
-    			foreach ($catArticles as $article) {
-    				$Query->UPDATE('posts')->SET(['category_id' => 1])->WHERE('id', '=', (int)$article['id'])->QUERY();
-				}
-    		}
-
-			# Delete the category
-			if ($deleteTag) $Query->DELETE_FROM('categories')->WHERE('id', '=', (int)$tagID)->QUERY();
-
-			return "valid";
-		}
-
-		return false;
-	}
-
-	/**
 	 * Change a tag's slug/and/or name
 	 *
 	 * @param  int        $tagID        The tag id to remove
@@ -423,7 +334,7 @@ class Bookkeeper
 	 * @param  boolean    $deleteTag    Should the tag be deleted after clearing it
 	 * @return string|boolean
 	*/
-	public function clearTag($tagID, $tagType, $deleteTag = false) 
+	public function clearTaxonomy($tagID, $tagType, $deleteTag = false) 
 	{
 
 		# Convert the article ID to an integer
@@ -501,64 +412,6 @@ class Bookkeeper
 		return false;
 	}
 
-	/**
-	 * Change a tag's slug/and/or name
-	 *
-	 * @param  int        $tagID        The tag id to remove
-	 * @param  string     $tagType      'category' or 'tag'
-	 * @param  string     $slug         The tags slug
-	 * @param  string     $name         The tags name
-	 * @return string|boolean
-	*/
-	public function editTag($tagID, $tagType, $slug, $name)
-	{
-
-		# Convert the article ID to an integer
-  		$tagID = (int)$tagID;
-
-        # Get a new Query Builder
-        $Query = \Kanso\Kanso::getInstance()->Database()->Builder();
-
-		# Can't change 'Untagged' or 'Uncategorized'
-		if ($tagID === 1) return false;
-
-		$table = $tagType === 'tag' ? 'tags' : 'categories';
-		$slug  = \Kanso\Utility\Str::slugFilter($slug);
-
-		# Get the tag row
-		$tagRow = $Query->SELECT('*')->FROM($table)->WHERE('id', '=', $tagID)->ROW();
-
-		# If it doesn't exist return false
-    	if (!$tagRow) return false;
-
-    	# If no changes are needed return true
-    	if ($tagRow['slug'] === $slug && $tagRow['name'] === $name) return true;
-
-    	# Get the tag based on the new slug and name
-    	$slugRow = $Query->SELECT('*')->FROM($table)->WHERE('slug', '=', $slug)->ROW();
-    	$nameRow = $Query->SELECT('*')->FROM($table)->WHERE('name', '=', $name)->ROW();
-		
-		# If there is another tag with the same slug - return false;
-    	if ($slugRow && $slugRow['id'] !== $tagID) return 'slug_exists';
-
-    	# If there is another tag with the same name - return false;
-    	if ($nameRow && $nameRow['id'] !== $tagID) return  'name_exists';
- 		
-    	# Update the tag/category
- 		$update = $Query->UPDATE($table)->SET(['name' => $name, 'slug' => $slug])->WHERE('id', '=', (int)$tagRow['id'])->QUERY();
-
- 		if ($update) return true;
- 		
- 		# Update all the permalinks
- 		/*if ($update) {
- 			$allPosts = $Query->SELECT('*')->FROM('posts')->FIND_ALL();
-
-
- 		}*/
-
-    	return true;
-
-	} 
 
 	/**
 	 * Convert a title to a slug with permalink structure

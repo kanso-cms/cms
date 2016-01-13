@@ -16,6 +16,7 @@ namespace Kanso;
  * @property Session        \Kanso\Auth\Session
  * @property Bookkeeper     \Kanso\Articles\Bookkeeper
  * @property Router         \Kanso\Router\Router
+ * @property Mailer         \Kanso\Utility\Mailer
  * @property Query          \Kanso\View\Query
  * @property View           \Kanso\View\View
  * @property Cache          \Kanso\Cache\Cache
@@ -182,6 +183,11 @@ class Kanso
 		# Default Session
 		$this->Container->singleton('Session', function () {
 			return new \Kanso\Auth\Session();
+		});
+
+		# Default GUMP
+		$this->Container->set('Validation', function() {
+			return new \Kanso\Utility\GUMP();
 		});
 
 		# Default router
@@ -506,6 +512,16 @@ class Kanso
 	public function Router()
 	{
 		return $this->Router;
+	}
+
+	/**
+	 * Get a new GUMP object
+	 *
+	 * @return \Kanso\Utility\GUMP
+	 */
+	public function Validation()
+	{
+		return $this->Validation;
 	}
 
 	/**

@@ -1626,7 +1626,7 @@ class PostController
         $entries = json_decode($this->postVars['entries']);
 
         foreach ($entries as $entry) {
-            if (!\Kanso\Kanso::getInstance()->Bookkeeper->clearTag( (int)$entry->id, $entry->type, true)) return false; 
+            if (!\Kanso\Kanso::getInstance()->Bookkeeper->clearTaxonomy( (int)$entry->id, $entry->type, true)) return false; 
         }
 
         return 'valid';
@@ -1669,7 +1669,7 @@ class PostController
         $entries = json_decode($this->postVars['entries']);
 
         foreach ($entries as $entry) {
-            if (!\Kanso\Kanso::getInstance()->Bookkeeper->clearTag( (int)$entry->id, $entry->type)) return false; 
+            if (!\Kanso\Kanso::getInstance()->Bookkeeper->clearTaxonomy( (int)$entry->id, $entry->type)) return false; 
         }
 
         return 'valid';
@@ -1720,7 +1720,7 @@ class PostController
 
         if (!$validated_data) return false;
 
-        $update = \Kanso\Kanso::getInstance()->Bookkeeper->editTag($validated_data['id'], $validated_data['type'], $validated_data['slug'], $validated_data['name']);
+        $update = \Kanso\Kanso::getInstance()->Bookkeeper->editTaxonomy($validated_data['id'], $validated_data['type'], $validated_data['slug'], $validated_data['name']);
 
         if ($update === true) return true;
 
