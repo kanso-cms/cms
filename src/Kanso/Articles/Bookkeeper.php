@@ -19,142 +19,10 @@ class Bookkeeper
 
 	}
 
-  	/**
-   	 * Change an articles status
-   	 *
-     * @param  int       $articleID   The article id from the database to be deleted
-     * @param  string    $status      The article status to change
-     * @return string|boolean
-     */
-  	public function changeStatus($articleID, $status) 
-  	{
-  		
-  		# Convert the article ID to an integer
-  		$articleID = (int)$articleID;
-
-        # Get a new Query Builder
-        $Query =  \Kanso\Kanso::getInstance()->Database()->Builder();
-
-  		# Find the existing article
-    	$articleRow = $Query->SELECT('*')->FROM('posts')->WHERE('id', '=', $articleID)->ROW();
-
-    	# If it doesn't exist return false
-    	if (!$articleRow || empty($articleRow)) return false;
-
-    	# Return if nothing needs to be changed
-    	if ($articleRow['status'] === $status) return true;
-
-    	# If the article is a published page, update kanso's static pages
-    	if ($status === 'published' && $articleRow['type'] === 'page') {
-    		$this->addToStaticPages($articleRow['slug']);
-    	}
-    	if ($status === 'draft' && $articleRow['type'] === 'page') {
-    		$this->removeFromStaticPages($articleRow['slug']);
-    	}
-
-    	# Save the entry
-    	return $Query->UPDATE('posts')->SET(['status' => $status])->WHERE('id', '=', $articleID)->QUERY();
-
-  	}
-
-    /**
-   	 * Delete an article
-   	 *
-     * @param  int    $articleID   The article id from the database to be deleted
-     */
-    public function delete($articleID) 
-    {
-
-    	# Convert the article ID to an integer
-  		$articleID = (int)$articleID;
-
-        # Get a new Query Builder
-        $Query = \Kanso\Kanso::getInstance()->Database->Builder();
-
-    	# Find the existing article
-    	$articleRow = $Query->SELECT('*')->FROM('posts')->WHERE('id', '=', $articleID)->ROW();
-
-    	# If it doesn't exist return false
-    	if (!$articleRow || empty($articleRow)) return false;
-
-    	# Remove comments associated with the article
-    	$Query->DELETE_FROM('comments')->WHERE('post_id', '=', $articleID)->QUERY();
-
-    	# Remove the tags associated with the article
-    	$Query->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', $articleID)->QUERY();
-
-    	# Remove the content associated with the article
-    	$Query->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $articleID)->QUERY();
-
-    	# Clear the cache
-    	\Kanso\Kanso::getInstance()->Cache->clearCache($articleRow['slug']);
-
-    	# Delete the article entry
-    	$Query->DELETE_FROM('posts')->WHERE('id', '=', $articleID)->QUERY();
-
-    	# If the article was a published page, update kanso's static pages
-    	if ($articleRow['type'] === 'page' && $articleRow['status'] === 'published') $this->removeFromStaticPages($articleRow['slug']);
-
-    	# Fire the article delete event
-    	\Kanso\Events::fire('articleDelete', [$articleRow]);
-
-    	return true;
-
-    }
-
-	/**
-	 * Change a tag's slug/and/or name
-	 *
-	 * @param  int        $tagID        The tag id to remove
-	 * @param  string     $tagType      'category' or 'tag'
-	 * @param  string     $slug         The tags slug
-	 * @param  string     $name         The tags name
-	 * @return string|boolean
-	*/
-	public function editTaxonomy($tagID, $tagType, $slug, $name)
-	{
-
-		# Convert the article ID to an integer
-  		$tagID = (int)$tagID;
-
-  		# Get a Kanso instance
-        if (!$this->Kanso) $this->Kanso = \Kanso\Kanso::getInstance();
-
-        # Get a new Query Builder
-        $Query = $this->Kanso->Database()->Builder();
-
-		# Can't change 'Untagged' or 'Uncategorized'
-		if ($tagID === 1) return false;
-
-		$table = $tagType === 'tag' ? 'tags' : 'categories';
-		$slug  = \Kanso\Utility\Str::slugFilter($slug);
-
-		# Get the tag row
-		$tagRow = $Query->SELECT('*')->FROM($table)->WHERE('id', '=', $tagID)->FIND();
-
-		# If it doesn't exist return false
-    	if (!$tagRow) return false;
-
-    	# If no changes are needed return true
-    	if ($tagRow['slug'] === $slug && $tagRow['name'] === $name) return true;
-
-    	# Get the tag based on the new slug and name
-    	$slugRow = $Query->SELECT('*')->FROM($table)->WHERE('slug', '=', $slug)->FIND();
-    	$nameRow = $Query->SELECT('*')->FROM($table)->WHERE('name', '=', $name)->FIND();
-		
-		# If there is another tag with the same slug - return false;
-    	if ($slugRow) return 'slug_exists';
-
-    	# If there is another tag with the same name - return false;
-    	if ($nameRow) return  'name_exists';
- 		
-    	# Update the tag/category
- 		$Query->UPDATE($table)->SET(['name' => $name, 'slug' => $slug])->WHERE('id', '=', (int)$tagRow['id'])->QUERY();
-
-    	return true;
-
-	} 
-
+	/********************************************************************************
+	* ARTICLE METHODS
+	*******************************************************************************/
+	
 	/**
 	 * Save/Publish/create a new or existing article
 	 *
@@ -289,7 +157,90 @@ class Bookkeeper
 
 	}
 
-	/**
+  	/**
+   	 * Change an articles status
+   	 *
+     * @param  int       $articleID   The article id from the database to be deleted
+     * @param  string    $status      The article status to change
+     * @return string|boolean
+     */
+  	public function changeStatus($articleID, $status) 
+  	{
+  		
+  		# Convert the article ID to an integer
+  		$articleID = (int)$articleID;
+
+        # Get a new Query Builder
+        $Query =  \Kanso\Kanso::getInstance()->Database()->Builder();
+
+  		# Find the existing article
+    	$articleRow = $Query->SELECT('*')->FROM('posts')->WHERE('id', '=', $articleID)->ROW();
+
+    	# If it doesn't exist return false
+    	if (!$articleRow || empty($articleRow)) return false;
+
+    	# Return if nothing needs to be changed
+    	if ($articleRow['status'] === $status) return true;
+
+    	# If the article is a published page, update kanso's static pages
+    	if ($status === 'published' && $articleRow['type'] === 'page') {
+    		$this->addToStaticPages($articleRow['slug']);
+    	}
+    	if ($status === 'draft' && $articleRow['type'] === 'page') {
+    		$this->removeFromStaticPages($articleRow['slug']);
+    	}
+
+    	# Save the entry
+    	return $Query->UPDATE('posts')->SET(['status' => $status])->WHERE('id', '=', $articleID)->QUERY();
+
+  	}
+
+    /**
+   	 * Delete an article
+   	 *
+     * @param  int    $articleID   The article id from the database to be deleted
+     */
+    public function delete($articleID) 
+    {
+
+    	# Convert the article ID to an integer
+  		$articleID = (int)$articleID;
+
+        # Get a new Query Builder
+        $Query = \Kanso\Kanso::getInstance()->Database->Builder();
+
+    	# Find the existing article
+    	$articleRow = $Query->SELECT('*')->FROM('posts')->WHERE('id', '=', $articleID)->ROW();
+
+    	# If it doesn't exist return false
+    	if (!$articleRow || empty($articleRow)) return false;
+
+    	# Remove comments associated with the article
+    	$Query->DELETE_FROM('comments')->WHERE('post_id', '=', $articleID)->QUERY();
+
+    	# Remove the tags associated with the article
+    	$Query->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', $articleID)->QUERY();
+
+    	# Remove the content associated with the article
+    	$Query->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $articleID)->QUERY();
+
+    	# Clear the cache
+    	\Kanso\Kanso::getInstance()->Cache->clearCache($articleRow['slug']);
+
+    	# Delete the article entry
+    	$Query->DELETE_FROM('posts')->WHERE('id', '=', $articleID)->QUERY();
+
+    	# If the article was a published page, update kanso's static pages
+    	if ($articleRow['type'] === 'page' && $articleRow['status'] === 'published') $this->removeFromStaticPages($articleRow['slug']);
+
+    	# Fire the article delete event
+    	\Kanso\Events::fire('articleDelete', [$articleRow]);
+
+    	return true;
+
+    }
+
+    /**
 	 * Batch import an array of articles
 	 *
 	 * @param  array    $articles    Associative array of the articles
@@ -325,6 +276,82 @@ class Bookkeeper
 
 	  	return true;
 	}
+
+    /********************************************************************************
+	* TAXONOMY METHODS
+	*******************************************************************************/
+	
+	/**
+	 * Change a tag or categories slug/and/or name
+	 *
+	 * @param  int        $tagID        The tag id to remove
+	 * @param  string     $tagType      'category' or 'tag'
+	 * @param  string     $slug         The tags slug
+	 * @param  string     $name         The tags name
+	 * @return string|boolean
+	*/
+	public function editTaxonomy($tagID, $tagType, $slug, $name)
+	{
+
+		# Convert the article ID to an integer
+  		$tagID = (int)$tagID;
+
+        # Get a new Query Builder
+        $Query =  \Kanso\Kanso::getInstance()->Database()->Builder();
+
+		# Can't change 'Untagged' or 'Uncategorized'
+		if ($tagID === 1) return false;
+
+		$table = $tagType === 'tag' ? 'tags' : 'categories';
+		$slug  = \Kanso\Utility\Str::slugFilter($slug);
+
+		# Get the tag row
+		$tagRow = $Query->SELECT('*')->FROM($table)->WHERE('id', '=', $tagID)->FIND();
+
+		# If it doesn't exist return false
+    	if (!$tagRow) return false;
+
+    	# If no changes are needed return true
+    	if ($tagRow['slug'] === $slug && $tagRow['name'] === $name) return true;
+
+    	# Get the tag based on the new slug and name
+    	$slugRow = $Query->SELECT('*')->FROM($table)->WHERE('slug', '=', $slug)->FIND();
+    	$nameRow = $Query->SELECT('*')->FROM($table)->WHERE('name', '=', $name)->FIND();
+		
+		# If there is another tag with the same slug - return false;
+    	if ($slugRow && (int)$slugRow['id'] !== $tagID) return 'slug_exists';
+
+    	# If there is another tag with the same name - return false;
+    	if ($nameRow && (int)$nameRow['id'] !== $tagID) return  'name_exists';
+ 		
+    	# Update the tag/category
+ 		$Query->UPDATE($table)->SET(['name' => $name, 'slug' => $slug])->WHERE('id', '=', (int)$tagRow['id'])->QUERY();
+
+ 		# Update all the permalinks
+ 		if ($tagType === 'category') {
+ 			$taxPosts = $Query->SELECT('*')->FROM('posts')->WHERE('category_id', '=', (int)$tagID)->FIND_ALL();
+ 			if ($taxPosts) {
+ 				foreach ($taxPosts as $post) {
+ 					$this->updatePostPermalink($post['id']);
+ 				}
+ 			}
+ 		}
+ 		else {
+ 			# Find articles from tag
+    		$tagPosts = $Query->SELECT('posts.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('posts', 'tags_to_posts.post_id = posts.id')->WHERE('tags_to_posts.tag_id', '=', (int)$tagID)->FIND_ALL();
+
+			# If the tag has articles, loop through the articles
+			# If an article will be left with no tags, set it as untagged
+			if ($tagPosts) {
+				foreach ($tagPosts as $post) {
+					$this->updatePostPermalink($post['id']);
+				}
+
+			}
+ 		}
+
+    	return true;
+	} 
 
 	/**
 	 * Clear or Delete a tag or category
@@ -412,6 +439,9 @@ class Bookkeeper
 		return false;
 	}
 
+	/********************************************************************************
+	* PRIVATE HELPER METHODS
+	*******************************************************************************/
 
 	/**
 	 * Convert a title to a slug with permalink structure
@@ -547,6 +577,12 @@ class Bookkeeper
     	return $title;
 	}
 
+	/**
+	 * Remove a static page from Kanso's config
+	 *
+	 * @param  string    $slug    The slug to remove
+	 * @return boolean
+	 */
 	private function removeFromStaticPages($slug)
 	{
 		# Get the config
@@ -558,9 +594,14 @@ class Bookkeeper
         }
 
         \Kanso\Kanso::getInstance()->Settings->put('KANSO_STATIC_PAGES', array_values($slugs));
-
 	}
 
+	/**
+	 * Add a static page to Kanso's config
+	 *
+	 * @param  string    $slug    The slug to remove
+	 * @return boolean
+	 */
 	private function addToStaticPages($slug)
 	{
 		 # Get the slugs
@@ -571,5 +612,22 @@ class Bookkeeper
 
         \Kanso\Kanso::getInstance()->Settings->put('KANSO_STATIC_PAGES', array_unique(array_values($slugs)));
 	}
+
+	/**
+     * Update a post's permalink
+     */
+    private function updatePostPermalink($id) 
+    {
+    	$query = \Kanso\Kanso::getInstance()->Database->Builder();
+
+        # Get the entry
+        $post = $query->getArticlesByIndex('id', (int)$id, 1, ['tags', 'category', 'content', 'comments', 'author']);
+       
+        # Loop through the articles and update the slug and permalink
+        if ($post) {
+            $newSlug = $this->titleToSlug($post['title'], $post['category']['slug'], $post['author']['slug'], $post['created'], $post['type']);
+            $query->UPDATE('posts')->SET(['slug' => $newSlug])->WHERE('id', '=', (int)$post['id'])->QUERY();
+        }
+    }
 
 }
