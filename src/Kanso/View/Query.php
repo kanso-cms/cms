@@ -96,6 +96,7 @@ class Query {
      */
     public function filterPosts($requestType)
     {
+
         # Load the query parser
         $parser = new QueryParser();
 
@@ -116,35 +117,41 @@ class Query {
         }
         else if ($requestType === 'archive') {
             $this->queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC';
-            $this->postCount = count($this->posts);
             $this->posts     = $parser->parseQuery($this->queryStr);
+            $this->postCount = count($this->posts);
         }
         else if ($requestType === 'tag') {
-            $this->queryStr = 'post_status = published : post_type = post : orderBy = post_created, DESC : tag_slug = '.explode("/", $uri)[1]." : limit = $offset, $perPage";
+            $perPage = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
+            $offset  = $this->pageIndex * $perPage;
+            $this->queryStr = 'post_status = published : post_type = post : orderBy = post_created, DESC : tag_slug = '.explode("/", $uri)[2]." : limit = $offset, $perPage";
             $this->posts    = $parser->parseQuery($this->queryStr);
             $this->postCount = count($this->posts);
         }
         else if ($requestType === 'category') {
-            $this->queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = '.explode("/", $uri)[1]." : limit = $offset, $perPage";
+            $perPage = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
+            $offset  = $this->pageIndex * $perPage;
+            $this->queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = '.explode("/", $uri)[2]." : limit = $offset, $perPage";
             $this->posts     = $parser->parseQuery($this->queryStr);
             $this->postCount = count($this->posts);
         } 
         else if ($requestType === 'author') {
-            $this->queryStr = ' post_status = published : post_type = post : orderBy = post_created, DESC: author_slug = '.$slug." : limit = $offset, $perPage";
+            $perPage = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
+            $offset  = $this->pageIndex * $perPage;
+            $this->queryStr = ' post_status = published : post_type = post : orderBy = post_created, DESC: author_slug = '.explode("/", $uri)[2].": limit = $offset, $perPage";
             $this->posts    = $parser->parseQuery($this->queryStr);
             $this->postCount = count($this->posts);
         }
         else if ($requestType === 'single') {
             if (strpos($uri,'?draft') !== false) {
                 $uri = str_replace('?draft', '', $uri);
-                $this->queryStr  = 'post_status = draft : post_type = post : orderBy = post_created, DESC: post_slug = '.$uri.'/';
+                $this->queryStr  = 'post_status = draft : post_type = post : post_slug = '.$uri.'/';
                 $this->posts     = [$parser->parseQuery($this->queryStr)];
                 $this->postCount = count($this->posts);
             }
             else {
                 $uri = \Kanso\Utility\Str::GetBeforeLastWord($uri, '/feed');
                 $uri = ltrim($uri, '/');
-                $this->queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC : post_slug = '.$uri.'/';
+                $this->queryStr  = 'post_status = published : post_type = post : post_slug = '.$uri.'/';
                 $this->posts     = $parser->parseQuery($this->queryStr);
                 $this->postCount = count($this->posts);
             }
@@ -152,19 +159,23 @@ class Query {
         else if ($requestType === 'static_page') {
             if (strpos($uri,'?draft') !== false) {
                 $uri = str_replace('?draft', '', $uri);
-                $this->queryStr = 'post_status = draft : post_type = page : orderBy = post_created, DESC : post_slug = '.$uri.'/';
-                $this->posts     = $parser->parseQuery($this->queryStr);
+                $this->queryStr  = 'post_status = draft : post_type = page : post_slug = '.$uri.'/';
+                $this->posts     = [$parser->parseQuery($this->queryStr)];
                 $this->postCount = count($this->posts);
             }
             else {
-                $this->queryStr  = 'post_status = published : post_type = page : orderBy = post_created, DESC : post_slug = '.$uri.'/';
+                $uri = \Kanso\Utility\Str::GetBeforeLastWord($uri, '/feed');
+                $uri = ltrim($uri, '/');
+                $this->queryStr  = 'post_status = published : post_type = page : post_slug = '.$uri.'/';
                 $this->posts     = $parser->parseQuery($this->queryStr);
                 $this->postCount = count($this->posts);
-                $this->posts[0]  = $this->posts;
             }
         }
         else if ($requestType === 'search') {
             
+            $perPage = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
+            $offset  = $this->pageIndex * $perPage;
+
             # Get the query
             $query = \Kanso\Kanso::getInstance()->Request()->fetch('query');
             
@@ -304,7 +315,7 @@ class Query {
             if ($post) return htmlspecialchars_decode($post['excerpt']);
             return false;
         }
-        if (!empty($this->post)) htmlspecialchars_decode($this->post['excerpt']);
+        if (!empty($this->post)) return htmlspecialchars_decode($this->post['excerpt']);
         return false;
     }
 
@@ -865,7 +876,7 @@ class Query {
             if ($post) return trim($post['thumbnail']) !== "";
             return false;
         }
-        if (!empty($this->post)) trim($this->post['thumbnail']) !== "";
+        if (!empty($this->post)) return trim($this->post['thumbnail']) !== "";
         return false;
     }
 
@@ -956,27 +967,17 @@ class Query {
         $titlePage  = $this->pageIndex > 0 ? 'Page '.($this->pageIndex+1).' | ' : '';
         $titleTitle = '';
 
-        if ($this->is_single()) {
+        if ($this->is_single() || $this->is_page()) {
             $titleTitle = $this->post['title'].' | ';
         }
-        else if ($this->is_tag()) {
-            foreach ($this->post['tags'] as $tag) {
-                if ($tag['slug'] === $uri[1]) {
-                    $titleTitle = $tag['name'].' | ';
-                }
-            }
-        }
-        else if ($this->is_category()) {
-            $titleTitle = $this->post['category']['name'].' | ';
-        }
-        else if ($this->is_author()) {
-            $titleTitle = $this->post['author']['name'].' | ';
+        else if ($this->is_tag() || $this->is_category() || $this->is_author()) {
+            $titleTitle = $uri[1].' | ';
         }
         else if ($this->is_search()) {
-            $titleTitle = 'Search Results |';
+            $titleTitle = 'Search Results | ';
         }
         else if ($this->is_archive()) {
-            $titleTitle = 'Archive |';
+            $titleTitle = 'Archive | ';
         }
 
         return  $titleTitle.$titlePage.$titleBase;
@@ -1461,7 +1462,7 @@ class Query {
     {
 
         # Are there comments to loop
-        $have_comments = $this->have_posts($post_id) && $this->comments_number($post_id) > 0;
+        $have_comments = $this->comments_number($post_id) > 0;
 
         # HTML string
         $HTML = '';
@@ -1722,7 +1723,7 @@ class Query {
         # If options were set, overwrite the dafaults
         if ($args) $options = array_merge($options, $args);
 
-        #Special case if there is only 1 page
+        # Special case if there is only 1 page
         if ($options['total'] == 1 || $options['total'] == 0 || $options['total'] < 1) return '';
 
         # Clean the base url
@@ -1833,11 +1834,17 @@ class Query {
      */
     public function get_archives()
     {
-        # Get all the posts
         $archive  = [];
-        $queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC';
-        $parser    = new QueryParser($queryStr);
-        $posts     = $parser->parseQuery($queryStr);
+
+        if ($this->is_archive() ) {
+            $posts = $this->posts;
+        }
+        else {
+            $queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC';
+            $parser    = new QueryParser($queryStr);
+            $posts     = $parser->parseQuery($queryStr);
+        }
+
         if (empty($posts)) return [];
         foreach($posts as $post) {
             $year  = date('Y', $post['created']);

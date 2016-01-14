@@ -1,27 +1,44 @@
-	</div><!-- END content container -->
-</div><!-- END content-inner -->
-
-<!-- FOOTER -->
-<div class="footer">
-	<div class="container">
-		<div class="clear">
-			<div class="col-6-desktop">
-				<p>
-					<a href="http://kanso.pencilscoop.com/">Proudly powered by Kanso</a>
-				</p>
-			</div>
-			<div class="col-6-desktop">
-				<ul class="footer-links list-inline text-right-tablet">
-					<li><a href="https://github.com/joey-j/Kanso">View Source on Github</a></li>
-					<li><a href="https://github.com/joey-j/Kanso/issues">Current Issues</a></li>
-					<li><a href="http://pencilscoop.com/Kanso/documentation">Documentation</a></li>
-				</ul>
-			</div>
-		</div>
-	</div>
+<?php
+/**
+ * Footer template file
+ *
+ * This is the main template file for the footer.
+ * This template will be loaded whenever the_footer() is called.
+ *
+ */
+?>
 </div>
 
-<!-- SCRIPTS -->
+<!-- FOOTER -->
+<footer class="row clearfix">
+	<div class="content container clearfix">
+		<p class="info-text text-center">
+			<a href="http://kanso-cms.github.io/" target="_blank">Proudly powered by Kanso</a>
+		</p>
+	</div>
+</footer>
+
+<!-- VENDOR AJAX -->
+<script type="text/javascript" src="<?php theme_url(); ?>/assets/js/vendor/simpleAjax.js"></script>
+
+<!-- VENDOR SMOOTH SCROLL -->
+<script type="text/javascript" src="<?php theme_url(); ?>/assets/js/vendor/smoothScroll.js"></script>
+
+<!-- VENDOR SYNTAX HIGHLGHTING -->
+<script type="text/javascript" src="<?php theme_url(); ?>/assets/js/vendor/highlight.js"></script>
+
+<!-- VENDOR MARKDOWN FOR COMMENTS -->
+<script type="text/javascript" src="<?php theme_url(); ?>/assets/js/vendor/markdown-it.js"></script>
+
+<!-- HELPER FUNCTIONS -->
+<script type="text/javascript" src="<?php theme_url(); ?>/assets/js/helper.js"></script>
+
+<!-- CUSTOM SCRIPTS -->
 <script type="text/javascript" src="<?php theme_url(); ?>/assets/js/scripts.js"></script>
+
+
+
+
+
 </body>
 </html>

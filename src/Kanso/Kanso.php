@@ -1030,7 +1030,7 @@ class Kanso
 
 			# If there are no posts and this is not a request for the
 			# homepage or search pages - retrun a 404 
-			if ($PageType !== 'search' && $PageType !== 'home' && $PageType !== 'archive' && !$_this->Query->have_posts()) {
+			if ($PageType === 'home' && !$_this->Query->have_posts()) {
 				
 				$_this->notFound();
 				

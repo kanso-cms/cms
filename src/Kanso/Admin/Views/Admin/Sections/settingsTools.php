@@ -7,7 +7,7 @@
 	<label class="bold">Batch Import Articles</label>
 	<p class="info text-masked">
 		Use this tool to batch import articles into your Kanso installation by uploading a valid JSON file. 
-		Find out more <strong><a href="#">here</a></strong> on how to create a valid JSON file for importing.
+		Find out more <strong><a href="http://kanso-cms.github.io/docs/0.0.01/admin-panel/tools/#importing">here</a></strong> on how to create a valid JSON file for importing.
 	</p>
 	<div class="clearfix" style="height:10px;"></div>
 	<a class="button file-input submit with-spinner js-batch-import" href="#">

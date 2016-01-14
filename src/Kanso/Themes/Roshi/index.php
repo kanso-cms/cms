@@ -8,51 +8,65 @@
  * e.g http://example.com/ or http://example.com/page/3/
  *
  */
- the_header(); ?>
-
+the_header(); ?>
+			
+	<div class="col col-12 no-gutter tablet-col tablet-huge-gutter tablet-col-9 tablet-right-gutter">
 		
-		<?php if ( have_posts() ) : ?>
-			
-			<div class="clear">
-			
-			<?php while ( have_posts() ) : the_post();  ?>
+		<!-- BEGIN LOOP -->
+		<?php if ( have_posts() ) : while ( have_posts() ) : the_post();  ?>
 
-				<div class="col-12 clear">
+			<div class="col-12 no-gutter clearfix">
 
-					<a href="<?php the_permalink();?>" class="block">
-						<div class="img-responsive bg-img-small" style="background:url(<?php the_post_thumbnail();?>)no-repeat center center;background-size: cover;"></div>
-					</a>
+				<?php if (has_post_thumbnail()) :?>
 
-					<h3 class="font-600"><?php the_title();?></h3>
+				<a href="<?php the_permalink();?>" class="block hide-overflow" style="max-height:250px;">
+					<img src="<?php the_post_thumbnail(); ?>" class="col-12" />
+				</a>
+				
+				<?php endif;?>
 
-					<p class="small"><?php the_time('M d, Y'); ?></p>
+				<a class="block" href="<?php the_permalink();?>"><h3 class="font-600"><?php the_title();?></h3></a>
 
-					<p><?php the_excerpt(); ?> </p>
+				<p class="info-text"><?php the_time('M d, Y'); ?></p>
 
-					<a href="<?php the_permalink();?>" class="button">Read More</a>
-					
-					<hr/>
+				<p><?php echo customExcerpt(150, '...') ?> </p>
 
-				</div>
-
-			<?php endwhile;?>
+				<a href="<?php the_permalink();?>" class="button primary">Read More&nbsp;&nbsp;»</a>
+				
+				<br><br><br>
 
 			</div>
-		
-		<?php endif; ?>
-		<!-- Loop End -->
 
-		<!-- Pagination -->
-		<div class="clear pagination">
-			<div class="col-12">
-				<ul>
-					<?php pagination_links(); ?>
-				</ul>
-			</div>
+		<?php endwhile;
+
+		else : ?>
+
+			<div class="info message">
+	            <div class="message-icon">
+	                <span class="ion">⊝</span>
+	            </div>
+	            <div class="message-body">
+	                <p>Sorry, there are no posts to display.</p>
+	            </div>
+	        </div>
+
+        <?php endif; ?>
+
+
+
+	</div>
+
+	<!-- SIDEBAR -->
+	<?php the_sidebar(); ?>
+
+	<!-- Pagination -->
+	<div class="col col-12 no-gutter">
+		<div class="row pagination">
+			<ul>
+				<?php pagination_links(); ?>
+			</ul>
 		</div>
-
-		<!-- Sidebar -->
-		<?php the_sidebar(); ?>
+	</div>
 
 
 <?php the_footer(); ?>

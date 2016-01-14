@@ -1,46 +1,61 @@
-<?php the_header(); ?>
-		
-		<!-- MAIN CONTENT -->
-		<div class="clear">
+<?php
+/**
+ * The archive page template file
+ *
+ * This file will be loaded whenever a
+ * request for a the archive is made
+ * e.g http://example.com/archive/
+ *
+ */
+the_header(); ?>
 
-			<div class="col-12 clear">
-				
-				<h1>Archives</h1>
+<div class="col col-12 no-gutter tablet-col tablet-huge-gutter tablet-col-9 tablet-right-gutter">
 
-			</div>
+	<h1>Archives</h1>
 
-			<div class="col-12 clear">
+	<?php $archive = get_archives(); ?>
 
-			<?php $archive = get_archives(); ?>
+	<?php if ( have_posts() ) : ?>
 
-			<?php
-				foreach ($archive as $year => $month_group) {
-					echo '<ul class="year">';
-						echo '<li><span>'.$year.'</span>';
-							foreach ($month_group as $month_name => $posts) {
-								echo '<ul>';
-									echo '<li><span>'.$month_name.'</span>';
-										echo '<ol>';
-										$i = count($posts);
-										foreach ($posts as $post) {
-											echo '<li><a href="'.get_the_permalink($post['id']).'">'.get_the_title($post['id']).'</a></li>';
-											$i--;
-										}
-										echo '</ol>';
-									echo '</li>';
-								echo '</ul>';
-							}
-					echo '</li>';
-				echo '</ul>';
-					
-				}
-			?>
-			
-			</div>
+		<?php foreach ($archive as $year => $month_group) : ?>
+			<ul class="year">
+				<li>
+					<span><?php echo $year; ?></span>
+					<?php foreach ($month_group as $month_name => $posts) : ?>
+						<ul>
+							<li>
+								<span><?php echo $month_name; ?></span>
+								<ol>
+									<?php $i = count($posts); ?>
+									<?php foreach ($posts as $post) : ?>
+									<li>
+										<a href="<?php the_permalink($post['id']);?>"><?php the_title($post['id']); ?></a>
+									</li>
+								<?php $i--; endforeach; ?>
+								</ol>
+							</li>
+						</ul>
+					<?php endforeach; ?>
+				</li>
+			</ul>
+		<?php endforeach; ?>
 
-		</div>
 
-		<?php the_sidebar(); ?>
+	<?php else : ?>
 
+		<div class="info message">
+            <div class="message-icon">
+                <span class="ion">⊝</span>
+            </div>
+            <div class="message-body">
+                <p>Sorry, there are no posts to display.</p>
+            </div>
+        </div>
+
+    <?php endif; ?>
+	
+</div>
+
+<?php the_sidebar(); ?>
 
 <?php the_footer(); ?>

@@ -3634,14 +3634,6 @@ body.writing .header {
   color: #000;
 }
 
-body.writing .header .logo {
-  display: none;
-}
-
-body.writing .header .logo-plain {
-  display: inline-block;
-}
-
 body.writing .header li a {
   color: #000;
 }

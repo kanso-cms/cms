@@ -12,6 +12,8 @@ namespace Kanso\Comments;
 class CommentManager
 {
 
+    private static $Kanso;
+
     /********************************************************************************
     * PUBLIC ACCESS FOR ADDING NEW COMMENTS
     *******************************************************************************/
@@ -281,7 +283,7 @@ class CommentManager
     {
 
         # Set A GUMP object for validation
-        $GUMP     = new \Kanso\Utility\GUMP();
+        $GUMP = new \Kanso\Utility\GUMP();
 
         # Sanitize the post variables
         $postVars = $GUMP->sanitize($commentData);

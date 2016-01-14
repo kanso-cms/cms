@@ -61,15 +61,15 @@ class QueryParser {
         'category_name'  => 'categories.name',
         'category_slug'  => 'categories.slug',
 
-        'author_id'       => 'authors.id',
-        'author_username' => 'authors.username',
-        'author_email'    => 'authors.email',
-        'author_name'     => 'authors.name',
-        'author_slug'     => 'authors.slug',
-        'author_facebook' => 'authors.facebook',
-        'author_twitter'  => 'authors.twitter',
-        'author_gplus'    => 'authors.gplus',
-        'author_thumbnail'=> 'authors.thumbnail',
+        'author_id'       => 'users.id',
+        'author_username' => 'users.username',
+        'author_email'    => 'users.email',
+        'author_name'     => 'users.name',
+        'author_slug'     => 'users.slug',
+        'author_facebook' => 'users.facebook',
+        'author_twitter'  => 'users.twitter',
+        'author_gplus'    => 'users.gplus',
+        'author_thumbnail'=> 'users.thumbnail',
     ];
     
     /**

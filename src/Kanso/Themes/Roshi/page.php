@@ -1,28 +1,35 @@
-<?php the_header(); ?>
+<?php
+/**
+ * The static page template file
+ *
+ * This file will be loaded whenever a valid
+ * request for a static post (post with post type "page") is made.
+ *
+ */
+the_header(); ?>
 		
-		<!-- POST CONTENT -->
+<?php if ( have_posts() ) : the_post(); ?>
 
-		<?php if ( have_posts() ) : ?>
+<div class="col col-12 no-gutter tablet-col tablet-huge-gutter tablet-col-9 tablet-right-gutter">
 
-			<div class="clear">
+	<?php if (has_post_thumbnail()) :?>
+	
+	<img src="<?php the_post_thumbnail(); ?>" class="col-12" />
+	
+	<?php endif;?>
 
-				<div class="col-12 clear">
+	<h1><?php the_title();?></h1>
 
-					<h1 class="text-center font-600"><?php the_title();?></h1>
+	<hr>
 
-					<hr>
+	<article class="single-entry row">
+		<?php the_content(); ?>
+	</article>
 
-					<div class="clear">
-						<?php the_content(); ?>
-					</div>
+</div>
 
-				</div>
+<?php endif; ?>
 
-			</div>
-		
-		<?php endif; ?>
-
-		<?php the_sidebar(); ?>
-
+<?php the_sidebar(); ?>
 
 <?php the_footer(); ?>

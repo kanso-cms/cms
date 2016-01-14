@@ -1,8 +1,17 @@
+<?php
+/**
+ * Header template file
+ *
+ * This is the template file for the header.
+ * This template will be loaded whenever the_header() is called.
+ *
+ */
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 
-	<!-- HTML -->
+	<!-- HTML META -->
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,50 +30,20 @@
 <body>
 
 <!-- SITE HEADER -->
-<div class="banner">
-	<div class="container">
-		<div class="header clear">
-			<input type="checkbox" class="menu-checkbox" id="navigation" name="navigation">
-			<label class="menu-label animated fade-in-right" for="navigation" id="toggle-menu">
-				<span class="menu-label-inner">
-					<span class="menu-label-open">Menu</span>
-					<span class="menu-label-close">Close</span>
-				</span>
-			</label>
-			<a class="logo" href="/"><span class="h1 font-900">Kanso</span></a>
-			<div class="navigation" id="menu">
-				<div class="navigation-inner container-full">
-					<div class="menu container">
-						<div class="clear row">
-							<div class="col-4-tablet">
-								<strong class="menu-heading"><a class="menu-heading-link" href="/">Home</a></strong>
-								<ul class="menu-secondary">
-									<li class="menu-item"><a href="https://github.com/joey-j/Kanso/archive/master.zip" class="menu-item-link">Download Latest Build</a></li>
-									<li class="menu-item"><a href="https://github.com/joey-j/Kanso" class="menu-item-link">View Source on Github</a></li>
-									<li class="menu-item"><a href="https://github.com/joey-j/Kanso/issues" class="menu-item-link">Current Issues</a></li>
-								</ul>
-							</div>
-							<div class="col-4-tablet">
-								<strong class="menu-heading"><a class="menu-heading-link active" href="http://pencilscoop.com/Kanso/documentation">Documentation</a></strong>
-								<ul class="menu-secondary">
-									<li class="menu-item"><a href="http://pencilscoop.com/Kanso/documentation" class="menu-item-link">Introduction</a></li>
-									<li class="menu-item"><a href="http://pencilscoop.com/Kanso/documentation" class="menu-item-link">HTML Template</a></li>
-									<li class="menu-item"><a href="http://pencilscoop.com/Kanso/documentation" class="menu-item-link">LESS/SCSS/CSS</a></li>
-									<li class="menu-item"><a href="http://pencilscoop.com/Kanso/documentation" class="menu-item-link">Assets</a></li>
-									<li class="menu-item"><a href="http://pencilscoop.com/Kanso/documentation" class="menu-item-link">Helpers</a></li>
-									<li class="menu-item"><a href="http://pencilscoop.com/Kanso/documentation" class="menu-item-link">The Grid</a></li>
-									<li class="menu-item"><a href="http://pencilscoop.com/Kanso/documentation" class="menu-item-link">Mixins</a></li>
-									<li class="menu-item"><a href="http://pencilscoop.com/Kanso/documentation" class="menu-item-link">Animations</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+<header class="clearfix row">
+	
+	<div class="content container row">
+		<ul class="list-inline left">
+			<li>
+				<a href="/"><h1>Roshi</h1></a>
+				<span class="info-text">Default theme for Kanso CMS.</span>
+			</li>
+		</ul>
+		<div class="clearfix"></div>
+		<hr>
 	</div>
-</div>
+</header>
+
 
 <!-- CONTENT -->
-<div class="content container">
-	<div class="content-inner">
+<div class="content container clearfix">
