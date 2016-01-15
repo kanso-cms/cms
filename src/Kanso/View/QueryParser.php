@@ -110,6 +110,8 @@ class QueryParser {
         # Set the query string
         $this->QueryStr = $QueryStr;
 
+        if (!$this->parse()) return [];
+
         $Query = \Kanso\Kanso::getInstance()->Database()->Builder();
 
         $Query->SELECT("posts.id");

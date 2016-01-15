@@ -5981,6 +5981,8 @@ function insertMessage(type, content, target, size, clearEl) {
         // remove errors and add spinner on submit button
         clearAjaxInputErrors(kansoSettingsForm);
 
+        inputs = getFormInputs(kansoSettingsForm);
+
         // validate the form
         var validator = formValidator(inputs).validateForm();
         validator.formAppend('ajaxRequest', 'admin_update_kanso');

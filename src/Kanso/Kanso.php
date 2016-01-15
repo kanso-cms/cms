@@ -951,6 +951,7 @@ class Kanso
 		if ($this->Config['KANSO_ROUTE_AUTHORS'] === true) {
 			foreach ($this->Config['KANSO_AUTHOR_SLUGS'] as $slug) {
 				$this->get("/authors/$slug/", '\Kanso\Kanso::loadTemplate', 'author');
+				$this->get("/authors/$slug/page/(:num)/", '\Kanso\Kanso::loadTemplate', 'author');
 			}
 		}
 

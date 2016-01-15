@@ -288,15 +288,15 @@ function get_the_content($post_id = null)
  * @param   int      $post_id (optional)
  * @return  string|false
  */
-function the_post_thumbnail($size = 'large', $post_id = null) 
+function the_post_thumbnail($post_id = null, $size = 'large') 
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_post_thumbnail($size, $post_id) ;
+    echo $KANSO_QUERY->the_post_thumbnail($post_id, $size) ;
 }
-function get_the_post_thumbnail($size = 'large', $post_id = null) 
+function get_the_post_thumbnail($post_id = null, $size = 'large') 
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->the_post_thumbnail($size, $post_id) ;
+    return $KANSO_QUERY->the_post_thumbnail($post_id, $size) ;
 }
 
 /**
@@ -728,22 +728,6 @@ function has_category($post_id = null)
 }
 
 /**
- * Get/Echo the page title
- *
- * @return  string
- */
-function the_page_title()
-{
-    global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_page_title();
-}
-function get_the_page_title()
-{
-    global $KANSO_QUERY;
-    return $KANSO_QUERY->the_page_title();
-}
-
-/**
  * Get the next page 
  *
  * @return  array|false   (array of slug/title)
@@ -1088,6 +1072,37 @@ function get_website_description()
     global $KANSO_QUERY;
     return $KANSO_QUERY->website_description();
 }
+
+/**
+ * Get/Echo the page title
+ * @return  string
+ */
+function the_meta_title()
+{
+    global $KANSO_QUERY;
+    echo $KANSO_QUERY->the_meta_title();
+}
+function get_the_meta_title()
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_meta_title();
+}
+
+/**
+ * Get/echo the meta description
+ * @return string
+ */
+function the_meta_description()
+{
+    global $KANSO_QUERY;
+    echo $KANSO_QUERY->the_meta_description();
+}
+function get_the_meta_description()
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_meta_description();
+}
+
 
 /**
  * Get current Kanso logged in user info

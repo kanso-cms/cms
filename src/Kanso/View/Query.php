@@ -63,6 +63,10 @@ class Query {
      */
     protected $searchQuery;
 
+    /**
+     * @var    array     array of previously called methods and results
+     */
+    protected $methodCache = [];
 
     /**
      * Constructor
@@ -198,6 +202,66 @@ class Query {
     }
 
     /**
+     * Add a method result to the cache
+     *
+     * @param   string    $key
+     * @param   mixed     $value
+     */
+    private function cachePut($key, $value)
+    {
+        $this->methodCache[$key] = $value;
+        return $value;
+    }
+
+    /**
+     * Get a method result to the cache
+     *
+     * @param    string    $key
+     * @return   mixed
+     */
+    private function cacheGet($key)
+    {
+        if ($this->cacheHas($key)) return $this->methodCache[$key];
+    }
+
+    /**
+     * Remove a method result from the cache
+     *
+     * @param   string    $key
+     */
+    private function cacheRemove($key)
+    {
+        if ($this->cacheHas($key)) unset($this->methodCache[$key]);
+    }
+
+    /**
+     * Check if a method result exists in the cache
+     *
+     * @param    string    $key
+     * @return   boolean
+     */
+    private function cacheHas($key)
+    {
+        return array_key_exists($key, $this->methodCache);
+    }
+
+    /**
+     * Hash a key for the cache
+     *
+     * @param    string    $key
+     * @return   string
+     */
+    private function cacheKey($func, $arg_list = [], $numargs = 0)
+    {
+        $key = $func;
+        for ($i = 0; $i < $numargs; $i++) {
+            $key .= $i.':'.serialize($arg_list[$i]).';';
+        }
+        return md5($key);
+    }
+
+
+    /**
      * Tag exists
      *
      * @param   string    $tag_name
@@ -246,7 +310,7 @@ class Query {
      */
     public function the_post($post_id = null)
     {
-        if ($post_id) return $this->getPostByID($post_id);
+        if ($post_id) return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('posts')->WHERE('id', '=', $post_id)->AND_WHERE('status', '=', 'published')->ROW();
         $this->inLoop = true;
         $this->_next();
     }
@@ -486,7 +550,7 @@ class Query {
      * @param   int      $post_id (optional)
      * @return  string|false
      */
-    public function the_post_thumbnail($size = 'large', $post_id = null) 
+    public function the_post_thumbnail($post_id = null, $size = 'large') 
     {
         if ($post_id) {
             $post = $this->getPostByID($post_id);
@@ -955,72 +1019,55 @@ class Query {
     }
 
     /**
-     * The page title
-     *
-     * @return  string
-     */
-    public function the_page_title()
-    {
-        $uri        = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['PATH_INFO'], '/'));
-        $PageType   = $this->requestType;
-        $titleBase  = \Kanso\Kanso::getInstance()->Config()['KANSO_SITE_TITLE'];
-        $titlePage  = $this->pageIndex > 0 ? 'Page '.($this->pageIndex+1).' | ' : '';
-        $titleTitle = '';
-
-        if ($this->is_single() || $this->is_page()) {
-            $titleTitle = $this->post['title'].' | ';
-        }
-        else if ($this->is_tag() || $this->is_category() || $this->is_author()) {
-            $titleTitle = $uri[1].' | ';
-        }
-        else if ($this->is_search()) {
-            $titleTitle = 'Search Results | ';
-        }
-        else if ($this->is_archive()) {
-            $titleTitle = 'Archive | ';
-        }
-
-        return  $titleTitle.$titlePage.$titleBase;
-    }
-
-    /**
      * The next page
      *
      * @return  array|false
      */
     public function the_next_page()
     {
-        if ($this->requestType === 'page') return false;
+        $key = $this->cacheKey(__FUNCTION__, func_get_args(), func_num_args());
+        if ($this->cacheHas($key)) return $this->cacheGet($key);
+       
+        if ($this->requestType === 'page') return $this->cachePut($key, false);
+        if ($this->is_single()) {
+            return $this->cachePut($key, $this->findNextPost($this->post));
+        }
 
-        /*if ($this->have_posts()) {
-            if ($this->is_single()) {
-                return $this->findNextPost($this->posts[$this->postIndex]);
+        $perPage  = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
+        $index    = $this->pageIndex + 1;
+        $offset   = $index * $perPage;
+        $limit    = $perPage;
+        $queryStr = preg_replace('/limit.+/', "limit = $offset, $limit", $this->queryStr);
+        
+        # Load the query parser
+        $parser = new QueryParser();
+
+        $posts = $parser->parseQuery($queryStr);
+
+        if (!empty($posts)) {
+            $nextPage   = $this->pageIndex + 2;
+            $uri        = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['PATH_INFO'], '/'));
+            $PageType   = $this->requestType;
+            $titleBase  = \Kanso\Kanso::getInstance()->Config()['KANSO_SITE_TITLE'];
+            $titlePage  = $nextPage > 1 ? 'Page '.$nextPage.' | ' : '';
+            $titleTitle = '';
+            if ($this->is_home() ) {
+                $slug = 'page/'.$nextPage.'/';
             }
-            else if (isset($this->posts[$this->pageIndex+1])) {
-                $nextPage   = $this->pageIndex+2;
-                $uri        = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['PATH_INFO'], '/'));
-                $PageType   = $this->requestType;
-                $titleBase  = \Kanso\Kanso::getInstance()->Config()['KANSO_SITE_TITLE'];
-                $titlePage  = $nextPage > 1 ? 'Page '.$nextPage.' | ' : '';
-                $titleTitle = '';
-                if ($this->is_home() ) {
-                    $slug = 'page/'.$nextPage.'/';
-                }
-                else if ($this->is_tag() || $this->is_category() || $this->is_author() ) {
-                    $titleTitle = $uri[1].' | ';
-                    $slug = $uri[0].'/'.$uri[1].'/page/'.$nextPage.'/';
-                }
-                else if ($this->is_search()) {
-                    $titleTitle = 'Search Results | ';
-                    $slug       = $uri[0].'/'.$uri[1].'/page/'.$nextPage.'/';
-                }
-                return [
-                    'title' => $titleTitle.$titlePage.$titleBase,
-                    'slug'  => $slug,
-                ];
+            else if ($this->is_tag() || $this->is_category() || $this->is_author() ) {
+                $titleTitle = $uri[1].' | ';
+                $slug = $uri[0].'/'.$uri[1].'/page/'.$nextPage.'/';
             }
-        }*/
-        return false;
+            else if ($this->is_search()) {
+                $titleTitle = 'Search Results | ';
+                $slug       = $uri[0].'/'.$uri[1].'/page/'.$nextPage.'/';
+            }
+            return $this->cachePut($key, [
+                'title' => $titleTitle.$titlePage.$titleBase,
+                'slug'  => $slug,
+            ]);
+        }
+        return $this->cachePut($key, false);
     }
 
     /**
@@ -1028,13 +1075,30 @@ class Query {
      *
      * @return  array|false
      */
-
     public function the_previous_page()
     {
-        if ($this->requestType === 'page') return false;
-        if ($this->is_single())  return $this->findPrevPost($this->post);
+        $key = $this->cacheKey(__FUNCTION__, func_get_args(), func_num_args());
+        if ($this->cacheHas($key)) return $this->cacheGet($key);
 
-        /*if (isset($this->posts[$this->pageIndex-1])) {
+        if ($this->requestType === 'page') return $this->cachePut($key,  false);
+        if ($this->is_single()) {
+            
+            return $this->cachePut($key, $this->findPrevPost($this->post));
+        }
+        if ($this->pageIndex === 0 ) return false;
+
+        $perPage  = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
+        $index    = $this->pageIndex - 1;
+        $offset   = $index * $perPage;
+        $limit    = $perPage;
+        $queryStr = preg_replace('/limit.+/', "limit = $offset, $limit", $this->queryStr);
+        
+        # Load the query parser
+        $parser = new QueryParser();
+
+        $posts = $parser->parseQuery($queryStr);
+
+        if (!empty($posts)) {
             $prevPage   = $this->pageIndex;
             $uri        = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['PATH_INFO'], '/'));
             $PageType   = $this->requestType;
@@ -1052,12 +1116,12 @@ class Query {
                 $titleTitle = 'Search Results | ';
                 $slug       = $prevPage > 1 ? $uri[0].'/'.$uri[1].'/page/'.$prevPage.'/' : $uri[0].'/'.$uri[1].'/';
             }
-            return [
+            return $this->cachePut($key, [
                 'title' => $titleTitle.$titlePage.$titleBase,
                 'slug'  => $slug,
-            ];
-        }*/
-        return false;
+            ]);
+        }
+        return $this->cachePut($key, false);
     }
 
     /**
@@ -1331,6 +1395,57 @@ class Query {
     public function website_description() 
     {
         return \Kanso\Kanso::getInstance()->Config()['KANSO_SITE_DESCRIPTION'];
+    }
+
+    /**
+     * Get the meta description
+     *
+     * @return string
+     */
+    public function the_meta_description()
+    {
+        $description = $this->website_description();
+
+        if ($this->is_single() || $this->is_page()) {
+            $description = $this->post['excerpt'];
+        }
+        else if ($this->is_search()) {
+            $meta_description = 'Search Results for: '.$this->search_query().' - '.$this->website_title();
+        }
+
+        return \Kanso\Utility\Str::reduce($description, 180);
+
+    }
+
+    /**
+     * The meta title
+     *
+     * @return  string
+     */
+    public function the_meta_title()
+    {
+        $uri        = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['PATH_INFO'], '/'));
+        $PageType   = $this->requestType;
+        $titleBase  = $this->website_title();
+        $titlePage  = $this->pageIndex > 0 ? 'Page '.($this->pageIndex+1).' | ' : '';
+        $titleTitle = '';
+
+        if ($this->is_single() || $this->is_page()) {
+            if ($this->have_posts()) $this->the_post();
+            $titleTitle = $this->post['title'].' | ';
+            $this->rewind_posts();
+        }
+        else if ($this->is_tag() || $this->is_category() || $this->is_author()) {
+            $titleTitle = ucwords(str_replace(['-', '_'], " ", $uri[1])).' | ';
+        }
+        else if ($this->is_search()) {
+            $titleTitle = 'Search Results | ';
+        }
+        else if ($this->is_archive()) {
+            $titleTitle = 'Archive | ';
+        }
+
+        return  $titleTitle.$titlePage.$titleBase;
     }
 
     /**
@@ -1705,7 +1820,7 @@ class Query {
         $queryStr  = preg_replace('/limit =[^:]+:/', '', $this->queryStr);
         $queryStr  = trim(preg_replace('/limit =[^:]+/', '', $queryStr));
         $queryStr  = trim($queryStr, ":");
-        
+
         # Load the query parser
         $parser = new QueryParser();
 
@@ -1737,13 +1852,13 @@ class Query {
             $options['base'] = $options['base'].DIRECTORY_SEPARATOR.'archive';
         }
         else if ($this->is_tag()) {
-            $options['base'] = $options['base'].DIRECTORY_SEPARATOR.$uri[1];
+            $options['base'] = $options['base'].DIRECTORY_SEPARATOR.$uri[0].DIRECTORY_SEPARATOR.$uri[1];
         }
         else if ($this->is_category()) {
-            $options['base'] = $options['base'].DIRECTORY_SEPARATOR.$uri[1];
+            $options['base'] = $options['base'].DIRECTORY_SEPARATOR.$uri[0].DIRECTORY_SEPARATOR.$uri[1];
         }
         else if ($this->is_author()) {
-            $options['base'] = $options['base'].DIRECTORY_SEPARATOR.$uri[1];
+            $options['base'] = $options['base'].DIRECTORY_SEPARATOR.$uri[0].DIRECTORY_SEPARATOR.$uri[1];
         }
 
         # loop always at the current minus the context, minus 1
@@ -1995,12 +2110,13 @@ class Query {
      */
     private function findNextPost($post)
     {
-        $next = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('id')->FROM('posts')->WHERE('created', '>', $post['created'])->AND_WHERE('status', '=', 'published')->LIMIT(3)->FIND_ALL();
+        $next = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('id')->FROM('posts')->WHERE('created', '>=', $post['created'])->AND_WHERE('status', '=', 'published')->ORDER_BY('created', 'ASC')->FIND_ALL();
         if (!empty($next)) {
-            foreach ($next as $i => $nextPost) {
-                if ($nextPost['id'] === $post['id']) {
+            $next = array_values($next);
+            foreach ($next as $i => $prevPost) {
+                if ((int)$prevPost['id'] === (int)$post['id']) {
                     if (isset($next[$i+1])) {
-                        return $this->getPostByID($next[$i+1]['id']);
+                        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('posts')->WHERE('id', '=', $next[$i+1]['id'])->ROW();
                     }
                 }
             }
@@ -2018,13 +2134,13 @@ class Query {
      */
     private function findPrevPost($post)
     {
-        $next = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('id')->FROM('posts')->WHERE('created', '<=', $post['created'])->AND_WHERE('status', '=', 'published')->LIMIT(3)->FIND_ALL();
+        $next = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('id')->FROM('posts')->WHERE('created', '<=', $post['created'])->AND_WHERE('status', '=', 'published')->ORDER_BY('created', 'DESC')->FIND_ALL();
         if (!empty($next)) {
-            $next = array_reverse($next);
-            foreach ($next as $i => $nextPost) {
-                if ($nextPost['id'] === $post['id']) {
+            $next = array_values($next);
+            foreach ($next as $i => $prevPost) {
+                if ((int)$prevPost['id'] === (int)$post['id']) {
                     if (isset($next[$i+1])) {
-                        return $this->getPostByID($next[$i+1]['id']);
+                        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('posts')->WHERE('id', '=', $next[$i+1]['id'])->ROW();
                     }
                 }
             }

@@ -15,7 +15,11 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title><?php the_page_title();?></title>
+	<title><?php the_meta_title();?></title>
+	<meta name="description" content="<?php the_meta_description();?>">
+	<link rel="prev" title="<?php the_previous_page_title();?> " href="<?php the_previous_page_url();?>">
+	<link rel="next" title="<?php the_next_page_title();?> "     href="<?php the_next_page_url();?>">
+
 
 	<!-- FAVICONS -->
 	<link rel="shortcut icon"                    href="<?php theme_url(); ?>/assets/images/favicon.png">
