@@ -228,7 +228,7 @@
         var inputs = Helper.$All('input, textarea', formEl);
 
         for (var j = 0; j < inputs.length; j++) {
-            if (inputs[j].name === 'postID') continue;
+            if (inputs[j].name === 'postID' || inputs[j].name === 'replyID') continue;
             inputs[j].value = '';
         }
 

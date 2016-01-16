@@ -140,12 +140,12 @@ class CommentManager
         $existingComments = $Query->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$commentData['postID'])->FIND_ALL();
 
         # Is this a reply comment ?
-        $parentID = isset($commentData['replyID']) && 
-                    ($commentData['replyID'] > 0) &&
-                    (!empty(self::$Kanso->Query->get_comment($commentData['replyID'])))
-                    ? $commentData['replyID'] : null;
-        
-        $type     = !$parentID ? 'comment' : 'reply';
+        $parentID = null;
+        if (isset($commentData['replyID'])) {
+            $parent = $Query->SELECT('id')->FROM('comments')->WHERE('id', '=', (int)$commentData['replyID'])->ROW();
+            if ($parent) $parentID = (int)$parent['id'];
+        }
+        $type = !$parentID ? 'comment' : 'reply';
 
         # Prep data for entry
         $commentRow = [

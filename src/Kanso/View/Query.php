@@ -1552,7 +1552,7 @@ class Query {
      */
     public function get_comment($comment_id)
     {
-        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('comments')->WHERE('id', '=', $comment_id)->ROW();
+        return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('comments')->WHERE('id', '=', (int)$comment_id)->ROW();
     }
 
     /**
