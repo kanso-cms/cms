@@ -1103,21 +1103,22 @@ class PostController
 
         # Existing articles must have an id
         if (!$isNewArticle && !isset($validated_data['id'])) return false;
-        if (!$isNewArticle && isset($validated_data['id']) && $validated_data['id'] === 0) return false;
+        if (!$isNewArticle && (int)$validated_data['id'] === 0) return false;
 
         # All new articles are draft by default
         if ($isNewArticle) $validated_data['status'] = 'draft';
 
-        # If this is an existing article, get the status from the databse
-        if (!$isNewArticle) {
-            $status = $this->Query->SELECT('status')->FROM('posts')->WHERE('id', '=', (int)$validated_data['id'])->FIND();
-            $validated_data['status'] = $status['status'];
+        $validated_data['comments_enabled'] = \Kanso\Utility\Str::bool($validated_data['comments']);
+
+        $article = $isNewArticle ? \Kanso\Kanso::getInstance()->Bookkeeper->existing($validated_data['id']) : \Kanso\Kanso::getInstance()->Bookkeeper->create();
+
+        foreach ($validated_data as $key => $value) {
+            $article->$key = $value;
         }
 
-        # save the article
-        $save = \Kanso\Kanso::getInstance()->Bookkeeper->save($validated_data, $isNewArticle);
+        $save = $article->save();
 
-        if ($save) return $save;
+        if ($save) return ['id' => $article->id, 'slug' => $article->slug];
 
         return false;
 
@@ -1168,10 +1169,18 @@ class PostController
             $validated_data['id'] = 0;
         }
 
-        # save the article
-        $save = \Kanso\Kanso::getInstance()->Bookkeeper->save($validated_data, $newArticle);
+        $validated_data['comments_enabled'] = \Kanso\Utility\Str::bool($validated_data['comments']);
 
-        if ($save) return $save;
+        $article = $newArticle ? \Kanso\Kanso::getInstance()->Bookkeeper->create() : \Kanso\Kanso::getInstance()->Bookkeeper->existing($validated_data['id']);
+
+        foreach ($validated_data as $key => $value) {
+            $article->$key = $value;
+        }
+
+        # save the article
+        $save = $article->save();
+
+        if ($save) return ['id' => $article->id, 'slug' => $article->slug];
 
         return false;
     }
@@ -1336,118 +1345,16 @@ class PostController
 
         # Check if they pass validation
         if (!$validated_data) return false;
-        
-        # Default operation values
-        $isSearch     = $validated_data['search'] !== 'false';
-        $searchValue  = false;
-        $searchKey    = false;
-        $leftJoin     = false;
-        $page         = ((int)$validated_data['page']);
-        $page         = $page === 1 || $page === 0 ? 0 : $page-1;
-        $sort         = 'ASC';
-        $sortKey      = 'posts.created';
-        $perPage      = 10;
-        $offset       = $page * $perPage;
-        $limit        = $perPage;
-        
-        # If this is a search, clean and santize the search keys
-        if ($isSearch) {
-            
-            $searchValue = $validated_data['search'];
 
-            $validKeys   = [
-                'title'    => 'title',
-                'author'   => 'author.name',
-                'type'     => 'type',
-                'status'   => 'status',
-                'category' => 'category.name',
-                'tags'     => 'tags.name',
-            ];
-
-            # Validate if the search is specific to a column
-            if (\Kanso\Utility\Str::contains($searchValue, ':')) {
-                
-                $value    = trim(\Kanso\Utility\Str::getAfterFirstChar($searchValue, ':'));
-                $key      = trim(\Kanso\Utility\Str::getBeforeFirstChar($searchValue, ':'));
-                $key      = isset($validKeys[$key]) ? $validKeys[$key] : false;
-
-                # Split comma seperated list of values into a search array
-                if ($key) {
-                    $searchKey   = $key;
-                    $searchValue = [$value];
-                    if (\Kanso\Utility\Str::contains($searchValue[0], ' ')) $searchValue = array_filter(array_map('trim', explode(' ', $searchValue[0])));
-                }
-                else {
-                    // Key doesnt exist
-                    return [];
-                }
-            }
-
-        }
-
-        # Filter and sanitize the sort order
-        if ($validated_data['sortBy'] === 'newest' || $validated_data['sortBy'] === 'published') $sort = 'DESC';
-        if ($validated_data['sortBy'] === 'oldest' || $validated_data['sortBy'] === 'drafts') $sort = 'ASC';
-
-
-        if ($validated_data['sortBy'] === 'category')  $sortKey   = 'categories.name';
-        if ($validated_data['sortBy'] === 'tags')      $sortKey   = 'tags.name';
-        if ($validated_data['sortBy'] === 'drafts')    $sortKey   = 'posts.status';
-        if ($validated_data['sortBy'] === 'published') $sortKey   = 'posts.status';
-        if ($validated_data['sortBy'] === 'type')      $sortKey   = 'posts.type';
-        if ($validated_data['sortBy'] === 'title')     $sortKey   = 'posts.title';
-
-        # Get the Kanso Query object
-        $Query = \Kanso\Kanso::getInstance()->Query();
-
-        # Get all the articles
-        $articles = $this->Query->getArticlesByIndex(null, null, [$offset, $limit], ['tags', 'category', 'author'], [$sortKey, $sort]);
-
-        # Pre validate there are actually some articles to process
-        if (empty($articles)) return [];
-
-        # Loop and filter the articles
-        foreach ($articles as $i => $article) {
-
-            // Search the article
-            if ($isSearch && $searchKey && is_array($searchValue)) {
-                foreach ($searchValue as $query) {
-                    if (isset($article[$searchKey])) {
-                        if (!preg_match($article[$searchKey], "%$query%")) unset($articles[$i]);
-                    }
-                }
-            }
-
-            // Search the 'content' key using regex match
-            else if ($isSearch && !$searchKey && $searchValue) {
-                if (!preg_match($article['excerpt'], "%$searchValue%") || !preg_match($article['title'], "%$searchValue%")) unset($articles[$i]);
-            }
-
-            if ( $article['status'] === 'draft') {
-                $articles[$i]['permalink'] = rtrim($Query->the_permalink($article['id']), '/').'?draft';
-            }
-            else {
-                $articles[$i]['permalink'] = $Query->the_permalink($article['id']);
-            }
-
-            $articles[$i]['edit_permalink'] = '/admin/write/'.$Query->the_slug($article['id']);
-
-            $articles[$i]['category']['permalink'] = $Query->the_category_url($articles[$i]['category_id']);
-
-
-            foreach ($article['tags'] as $t => $tag) {
-                $articles[$i]['tags'][$t]['permalink'] = $Query->the_tag_url($tag['id']);
-            }
-            
-            $articles[$i]['author']['permalink'] = $Query->the_author_url($article['author_id']);
-
-        }
-
-        # Pageinate the articles
-        return [$articles];
+        return $this->model->getAllArticles($validated_data);
 
     }
 
+    /**
+     * Get the count of all the articles for pagination total
+     *
+     * @return int
+     */
     private function countAllArticles()
     {
         
@@ -1494,99 +1401,8 @@ class PostController
         $validated_data = $this->GUMP->run($postVars);
 
         if (!$validated_data) return false;
-        
-        # Get the Kanso Query object
-        $Query = \Kanso\Kanso::getInstance()->Query();
 
-        $categories   = $this->Query->SELECT('*')->FROM('categories')->FIND_ALL();
-        $tags         = $this->Query->SELECT('*')->FROM('tags')->FIND_ALL();
-
-        $isSearch     = $validated_data['search'] !== 'false';
-        $searchValue  = false;
-        $searchKey    = false;
-        $page         = ((int)$validated_data['page']) -1;
-        $sort         = 'DESC';
-        $sortKey      = isset($validated_data['sortBy']) ? $validated_data['sortBy'] : 'name';
-
-        foreach ($tags as $i => $tag) {
-            $tags[$i]['permalink'] = $Query->the_tag_url($tag['id']);
-            $tagPosts = $this->Query->SELECT('posts.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('posts', 'tags_to_posts.post_id = posts.id')->WHERE('tags_to_posts.tag_id', '=', (int)$tag['id'])->FIND_ALL();
-            $tags[$i]['posts'] = [];
-            foreach ($tagPosts as $post) {
-                $tags[$i]['posts'][] = [
-                    'name'      => $post['title'],
-                    'permalink' => $Query->the_permalink($post['id']),
-                ];
-            }
-            $tags[$i]['type'] = 'tag';
-        }
-
-        foreach ($categories as $i => $category) {
-            $categories[$i]['permalink'] = $Query->the_category_url($category['id']);
-            $categoryPosts = $this->Query->SELECT('*')->FROM('posts')->WHERE('category_id', '=', (int)$category['id'])->FIND_ALL();
-            $categories[$i]['posts'] = [];
-            foreach ($categoryPosts as $post) {
-                $categories[$i]['posts'][] = [
-                    'name'      => $post['title'],
-                    'permalink' => $Query->the_permalink($post['id']),
-                ];
-            }
-            $categories[$i]['type'] = 'category';
-        }
-
-        $list = array_merge($tags, $categories);
-
-        if ($isSearch) {
-            
-            $searchValue = $validated_data['search'];
-
-            $validKeys   = [
-                'name'     => 'name',
-                'type'     => 'type',
-            ];
-
-            if (\Kanso\Utility\Str::contains($searchValue, ':')) {
-                
-                $value    = trim(\Kanso\Utility\Str::getAfterFirstChar($searchValue, ':'));
-                $key      = trim(\Kanso\Utility\Str::getBeforeFirstChar($searchValue, ':'));
-                $key      = isset($validKeys[$key]) ? $validKeys[$key] : false;
-                if ($key) {
-                    $searchKey   = $key;
-                    $searchValue = $value;
-                    
-                }
-                else {
-                    // Key doesnt exist
-                    return [];
-                }
-            }
-
-        }
-
-        // Search a table with an array of key/value matches
-        if ($isSearch && $searchKey && $searchValue) {
-            foreach ($list as $i => $item) {
-                if (is_string($item[$searchKey]) && strtolower($item[$searchKey]) !== strtolower($searchValue)) {
-                    unset($list[$i]);
-                }
-            }
-        }
-        else if ($isSearch && !$searchKey && $searchValue) {
-            foreach ($list as $i => $item) {
-                if (strtolower($item['type']) === strtolower($searchValue) || strtolower($item['name']) === strtolower($searchValue)) {
-                    continue;
-                }
-                else {
-                    unset($list[$i]);
-                }
-            }
-        }
-
-        $list = \Kanso\Utility\Arr::sortMulti($list, $sortKey); 
-
-        return  \Kanso\Utility\Arr::paginate($list, $page, 10);
-
-        return false;
+        return $this->model->getAllTaxonomies($validated_data);
     }
 
     /**
@@ -1768,93 +1584,9 @@ class PostController
 
         $validated_data = $this->GUMP->run($postVars);
 
-        if ($validated_data) {
+        if (!$validated_data) return false;
 
-            # Get the Kanso Query object
-            $Query = \Kanso\Kanso::getInstance()->Query();
-            
-            $isSearch = $validated_data['search'] !== 'false';
-            $page     = ((int)$validated_data['page']) -1;
-            $comments = [];
-            $sort     = $validated_data['sortBy'] === 'newest' ? 'DESC' : 'ASC' ;
-
-            if ($isSearch) {
-
-                $validKeys = [
-                    'ip'     => 'ip_address',
-                    'status' => 'status',
-                    'user'   => 'name',
-                    'email'  => 'email',
-                ];
-
-                $searchValue = $validated_data['search'];
-                $searchKey   = false;
-
-                if (\Kanso\Utility\Str::contains($searchValue, ':')) {
-                    
-                    $value    = \Kanso\Utility\Str::getAfterFirstChar($searchValue, ':');
-                    $key      = \Kanso\Utility\Str::getBeforeFirstChar($searchValue, ':');
-                    $key      = isset($validKeys[$key]) ? $validKeys[$key] : false;
-                    if ($key) {
-                        $searchKey   = $key;
-                        $searchValue = $value; 
-                    }
-                }
-
-                if ($searchKey) {
-                    $comments = $this->Query->SELECT('*')->FROM('comments')->WHERE($searchKey, '=', $searchValue);
-                }
-                else {
-                    $comments = $this->Query->SELECT('*')->FROM('comments')->WHERE('content', 'LIKE', "%$searchValue%");
-                }
-
-                if ($filter === 'all') {
-                    $comments = $comments->ORDER_BY('date', $sort)->FIND_ALL();
-                }
-                if ($filter === 'approved') {
-                    $comments = $comments->WHERE('status', '=', 'approved')->ORDER_BY('date', $sort)->FIND_ALL();
-                }
-                if ($filter === 'spam') {
-                    $comments = $comments->WHERE('status', '=', 'spam')->ORDER_BY('date', $sort)->FIND_ALL();
-                }
-                if ($filter === 'pending') {
-                    $comments = $comments->WHERE('status', '=', 'pending')->ORDER_BY('date', $sort)->FIND_ALL();
-                }
-                if ($filter === 'deleted') {
-                    $comments = $comments->WHERE('status', '=', 'deleted')->ORDER_BY('date', $sort)->FIND_ALL();
-                }
-
-            }
-            else {
-                if ($filter === 'all') {
-                    $comments = $this->Query->SELECT('*')->FROM('comments')->ORDER_BY('date', $sort)->FIND_ALL();
-                }
-                if ($filter === 'approved') {
-                    $comments = $this->Query->SELECT('*')->FROM('comments')->WHERE('status', '=', 'approved')->ORDER_BY('date', $sort)->FIND_ALL();
-                }
-                if ($filter === 'spam') {
-                    $comments = $this->Query->SELECT('*')->FROM('comments')->WHERE('status', '=', 'spam')->ORDER_BY('date', $sort)->FIND_ALL();
-                }
-                if ($filter === 'pending') {
-                    $comments = $this->Query->SELECT('*')->FROM('comments')->WHERE('status', '=', 'pending')->ORDER_BY('date', $sort)->FIND_ALL();
-                }
-                if ($filter === 'deleted') {
-                    $comments = $this->Query->SELECT('*')->FROM('comments')->WHERE('status', '=', 'deleted')->ORDER_BY('date', $sort)->FIND_ALL();
-                }
-            }
-
-            foreach ($comments as $key => $comment) {
-                $comments[$key]['permalink'] = $Query->the_permalink($comment['post_id']);
-                $comments[$key]['title']     = $Query->the_title($comment['post_id']);
-                $comments[$key]['avatar']    = $Query->get_avatar($comment['email'], 100, true);
-            }
-
-            $comments = \Kanso\Utility\Arr::paginate($comments, $page, 10);
-            
-            return $comments;
-        }
-
-        return false;
+        return $this->model->loadAllComments($validated_data, $filter);
 
     }
 
@@ -1887,56 +1619,9 @@ class PostController
 
         $validated_data = $this->GUMP->run($postVars);
 
-        if ($validated_data) {
+        if (!$validated_data) return false;
 
-            $commentRow  = $this->Query->SELECT('*')->FROM('comments')->WHERE('id', '=', (int)$validated_data['comment_id'])->FIND();
-
-            # If it doesn't exist return false
-            if (!$commentRow) return false;
-
-            $ip_address   = $commentRow['ip_address'];
-            $name         = $commentRow['name'];
-            $email        = $commentRow['email'];
-
-            # Get all the user's comments
-            $userComments = $this->Query->SELECT('*')->FROM('comments')->WHERE('ip_address', '=', $ip_address)->OR_WHERE('email', '=', $email)->OR_WHERE('name', '=', $name)->FIND_ALL();
-
-            $response     = [
-                'reputation'   => 0,
-                'posted_count' => 0,
-                'spam_count'   => 0,
-                'first_date'   => 0,
-                'blacklisted'  => false,
-                'whitelisted'  => false,
-                'ip_address'   => $ip_address,
-                'name'         => $name,
-                'email'        => $email,
-                'avatar'       => \Kanso\Kanso::getInstance()->Query->get_avatar($email, 150, true),
-                'status'       => $commentRow['status'],
-                'content'      => $commentRow['content'],
-                'html_content' => $commentRow['html_content'],
-            ];
-
-            $blacklistedIps = \Kanso\Comments\Spam\SpamProtector::loadDictionary('blacklist_ip');
-            $whiteListedIps = \Kanso\Comments\Spam\SpamProtector::loadDictionary('whitelist_ip');
-
-            foreach ($userComments as $comment) {
-               $response['reputation']   += $comment['rating'];
-               $response['posted_count'] += 1;
-               if ($comment['status'] === 'spam') $response['spam_count'] += 1;
-               if ($comment['date'] < $response['first_date'] || $response['first_date'] === 0) $response['first_date'] = $comment['date'];
-            }
-            $response['reputation'] = $response['reputation']/ count($userComments);
-
-            if (in_array($ip_address, $blacklistedIps)) $response['blacklisted'] = true;
-            if (in_array($ip_address, $whiteListedIps)) $response['whitelisted'] = true;
-
-
-            return $response;
-
-        }
-
-        return false;
+        return $this->model->getCommentInfo($validated_data);
     }
 
     /**

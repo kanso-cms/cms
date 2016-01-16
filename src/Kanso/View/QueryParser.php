@@ -209,16 +209,14 @@ class QueryParser {
 
         $articles = $Query->FIND_ALL();
 
-        # Loop the article, adding content, tags, category, comments, author
+        $aticleObjs = [];
         if (!empty($articles)) {
-            foreach ($articles as $i => $article) {
-                $articles[$i]['tags']     = $Query->SELECT('tags.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id')->WHERE('post_id', '=', (int)$article['id'])->FIND_ALL();
-                $articles[$i]['category'] = $Query->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$article['category_id'])->FIND();
-                $articles[$i]['comments'] = $Query->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$article['id'])->FIND_ALL();
-                $articles[$i]['author']   = $Query->SELECT('*')->FROM('users')->WHERE('id', '=', (int)$article['author_id'])->FIND();
+            foreach ($articles as $row) {
+                $aticleObjs[] = new \Kanso\Articles\Article($row);
             }
         }
-        return $articles;
+
+        return $aticleObjs;
     }
 
 
@@ -255,7 +253,7 @@ class QueryParser {
         foreach ($statements as $query) {
 
             # Split the string query into an array by any operator
-            $query = array_unique(array_filter(array_map('trim', preg_split("/(\>\=|\<\=|\<|\>|\!\=|\=|\&\&|\|\|)/", $query, NULL, PREG_SPLIT_DELIM_CAPTURE / PREG_SPLIT_NO_EMPTY))));
+            $query = array_filter(array_map('trim', preg_split("/(\>\=|\<\=|\<|\>|\!\=|\=|\&\&|\|\|)/", $query, NULL, PREG_SPLIT_DELIM_CAPTURE / PREG_SPLIT_NO_EMPTY)));
 
             # Check if the query is using regex
             $hasRegex = false;

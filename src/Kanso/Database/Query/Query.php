@@ -21,7 +21,7 @@ class Query
 	/**
 	 * @var string    SQL query bindings
 	 */
-	private $SQLBindings;
+	private $SQL_bindings;
 
 	/**
 	 * @var string    SQL query tabkle
@@ -692,6 +692,14 @@ class Query
 	 */
 	private function queryFilter($str)
 	{
-		return preg_replace('/[^A-Za-z]/', '', $str);
+		$characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		
+		$str = preg_replace('/[^A-Za-z]/', '', $str);
+		
+		while(isset($this->SQL_bindings[$str])) {
+			$str .= $characters[mt_rand(0, strlen($characters))];
+		}
+
+		return $str;
 	}
 }

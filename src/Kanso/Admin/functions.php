@@ -528,7 +528,7 @@ function adminWriterHeroSrc()
 function adminWriterEnabledComments()
 {
 	$entry  = adminWriterEntry();
-	return $entry['comments_enabled'] == true ? 'checked' : '';
+	return intval($entry['comments_enabled']) > 0 ? 'checked' : '';
 }
 function adminWriterPostTypeSelect()
 {

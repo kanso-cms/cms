@@ -65,6 +65,18 @@ function the_post($post_id = null)
 }
 
 /**
+ * The posts
+ *
+ * Get all the posts from the current query
+ * @return  array 
+ */
+function the_posts()
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_posts();
+}
+
+/**
  * Get/Echo the title
  *
  * @param   int    $post_id (optional) 
@@ -340,15 +352,15 @@ function get_the_author_url($author_id = null)
  * @param   int      $author_id (optional)
  * @return  string|false
  */
-function the_author_thumbnail($size = 'small', $author_id = null)
+function the_author_thumbnail($author_id = null, $size = 'small')
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_author_thumbnail($size, $author_id);
+    echo $KANSO_QUERY->the_author_thumbnail($author_id, $size);
 }
-function get_the_author_thumbnail($size = 'small', $author_id = null)
+function get_the_author_thumbnail($author_id = null, $size = 'small')
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->the_author_thumbnail($size, $author_id);
+    return $KANSO_QUERY->the_author_thumbnail($author_id, $size);
 }
 
 /**
@@ -511,10 +523,10 @@ function get_the_modified_time($format = 'U', $post_id = null)
  * @param   int      $author_id
  * @return  array
  */
-function get_the_author_posts($author_id)
+function get_the_author_posts($author_id, $publihsed = true)
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->the_author_posts($author_id);
+    return $KANSO_QUERY->the_author_posts($author_id, $publihsed);
 }
 
 /**
@@ -523,10 +535,10 @@ function get_the_author_posts($author_id)
  * @param   int      $category_id
  * @return  array
  */
-function get_the_category_posts($category_id)
+function get_the_category_posts($category_id, $publihsed = true)
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->the_category_posts($category_id);
+    return $KANSO_QUERY->the_category_posts($category_id, $publihsed);
 }
 
 /**
@@ -535,10 +547,10 @@ function get_the_category_posts($category_id)
  * @param   int      $tag_id
  * @return  array
  */
-function get_the_tag_posts($tag_id)
+function get_the_tag_posts($tag_id, $publihsed = true)
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->the_tag_posts($tag_id);
+    return $KANSO_QUERY->the_tag_posts($tag_id, $publihsed);
 }
 
 /**
@@ -685,7 +697,7 @@ function has_post_thumbnail($post_id = null)
  * @param   int   $post_id   (optional)
  * @return  bool
  */
-function has_author_thumbnail($author_id)
+function has_author_thumbnail($author_id = null)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->has_author_thumbnail($author_id);
@@ -936,10 +948,10 @@ function all_the_authors()
  * All the static pages 
  * @return array
  */
-function all_static_pages() 
+function all_static_pages($publihsed = true) 
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->static_pages();
+    return $KANSO_QUERY->static_pages($publihsed);
 }
 
 /**
@@ -1173,10 +1185,10 @@ function get_comments_number($postId = null)
  * Get an article's comments as an associative array
  * @return array
  */
-function get_comments($postId = null)
+function get_comments($postId = null, $approvedOnly = true)
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->get_comments($postId);
+    return $KANSO_QUERY->get_comments($postId, $approvedOnly);
 }
 
 /**

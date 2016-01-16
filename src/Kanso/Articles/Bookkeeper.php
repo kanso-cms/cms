@@ -24,138 +24,165 @@ class Bookkeeper
 	*******************************************************************************/
 	
 	/**
-	 * Save/Publish/create a new or existing article
-	 *
-	 * @param   array      $articleInfo        Associative array of the article data
-	 * @param   bool       $newArticle         Is this a new article (otional) Defaults to true
-	 * @return  bool|array
-	 */
-	public function save($articleInfo, $newArticle = true) 
+   	 * Get a new article object
+   	 *
+     * @return \Kanso\Articles\Article
+     */
+	public function create()
+	{
+		return new \Kanso\Articles\Article();
+	}
+
+	/**
+   	 * Get a new article object
+   	 *
+   	 * @param  int     $id     Kanso\Articles\Article
+     * @return \Kanso\Articles\Article
+     */
+	public function existing($id)
+	{
+		# Prevalidate the article exists
+		$row = \Kanso\Kanso::getInstance()->Database->Builder()->SELECT('*')->FROM('posts')->WHERE('id', '=', (int) $id)->ROW();
+		if (!$row) return false;
+		return new \Kanso\Articles\Article($row);
+	}
+
+	/**
+   	 * Get a new article object
+   	 *
+   	 * @param  int     $id     Kanso\Articles\Article
+     * @return \Kanso\Articles\Article
+     */
+	public function byIndex($index, $value, $published = true)
 	{
 
-        # Get a new Query Builder
+		if ($index === 'id') $index = 'posts.id';
+
+		# Get a new Builder 
+        $Query =  \Kanso\Kanso::getInstance()->Database->Builder()->SELECT('posts.*')->FROM('posts')->WHERE($index, '=', $value);
+
+        $Query->LEFT_JOIN_ON('users', 'users.id = posts.author_id');
+
+        $Query->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id');
+
+        $Query->LEFT_JOIN_ON('categories', 'posts.category_id = categories.id');
+
+        $Query->LEFT_JOIN_ON('tags_to_posts', 'posts.id = tags_to_posts.post_id');
+
+        $Query->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id');
+
+        $Query->GROUP_BY('posts.id');
+
+        if ($published) $Query->AND_WHERE('status', '=', 'published');
+
+        # Find the articles
+        $articles = $Query->FIND_ALL();
+		
+		$postObjs = [];
+
+		if ($articles) {
+			foreach ($articles as $article) {
+				$postObjs[] = new Kanso\Articles\Article($article);
+			}
+		}
+		return $postObjs;
+	}
+
+
+	/**
+   	 * Save a new and or existing article
+   	 *
+     * @param  array     $rowData     Kanso\Articles\Article->tmpRow
+     * @return array|boolean
+     */
+	public function saveArticle($rowData)
+	{
+		# Save the initial slug
+		$initialSlug = $rowData['slug'];
+
+		# Get a new Query Builder
         $Query = \Kanso\Kanso::getInstance()->Database->Builder();
 
-        # If we are saving an existing article, use the article's row
-        # instead of the table
-		if (!$newArticle) {
-			if (!isset($articleInfo['id']) || ($articleInfo['id']) && (int)$articleInfo['id'] < 1) return false;
-			$row = $Query->SELECT('*')->FROM('posts')->WHERE('id', '=', (int)$articleInfo['id'])->ROW();
-			
-			# If it doesn't exist return false
-    		if (!$row) return false;
-		}
-		else {
-			$row = [];
-		}
+        # Is this a new or existing article
+        $newArticle = $rowData['id'] == null;
 
-		# Convert the category name to an array of id, name, slug. If the category doesn't exist - create it
-		$category = $articleInfo['category'];
-		if (\Kanso\Utility\Str::contains($category, ',')) $category = trim(\Kanso\Utility\Str::getBeforeFirstChar($articleInfo['category'], ','));
-		if ($category === '') $category = 'Uncategorized';
-		$category = $this->createCategory($category);
+		# If the category doesn't exist - create it
+		$rowData['category'] = $this->createCategory($rowData['category']);
 
-		# Convert the tags to an array of ids. If the tag don't exist - create them
-		$tags = $articleInfo['tags'] !== '' ? array_filter(array_map('trim', explode(',', $articleInfo['tags']))) : ['Untagged'];
-		$tags  = $this->createTags($tags);
-
-		# Validate the content
-		$content = $articleInfo['content'];
-		if ($content === '')  $content = " ";
+		# If the tags don't exist - create them
+		$rowData['tags'] = $this->createTags($rowData['tags']);
 
 		# Validate the title
-		$title = trim($articleInfo['title']) === '' ? 'Untitled' : $articleInfo['title'];
-		$title = $newArticle ? $this->uniqueBaseTitle($title) : $title;
+		$rowData['title'] = trim($rowData['title']);
 
-		if ($title === 'Untitled' && !$newArticle) {
-			$title 	     = $row['title'];
-			$titleExists = $Query->SELECT('title')->FROM('posts')->where('title', '=', $title)->AND_WHERE('id', '!=', (int)$articleInfo['id'])->FIND();
-			if ($titleExists) $title = $this->uniqueBaseTitle('Untitled');
+		# Figure out if the title needs to be changed
+		if ($newArticle) {
+			$rowData['title'] = $this->uniqueBaseTitle($rowData['title']);
 		}
-
-		# Validate the created and modified times if they were provided
-		$created  = !$newArticle ? $row['created'] : null;
-		$created  = isset($articleInfo['created']) ? $articleInfo['created'] : $created;
-		$created  = !$created ? time() : $created; 
-		$modified = !isset($articleInfo['modified']) ? time() : $articleInfo['modified'];		
-
-		# Validate the author if it was provied
-		$author = \Kanso\Kanso::getInstance()->Session->get('KANSO_ADMIN_DATA');;
-		if (isset($articleInfo['author_id'])) {
-			$authorExists = $Query->SELECT('*')->FROM('users')->WHERE('id', '=', $articleInfo['author_id'])->FIND();
-			if ($authorExists)  $author = $authorExists;
+		else if ($rowData['title'] === 'Untitled' && !$newArticle) {
+			$titleExists = $Query->SELECT('title')->FROM('posts')->where('title', '=', $rowData['title'])->AND_WHERE('id', '!=', (int)$rowData['id'])->FIND();
+			if ($titleExists) $rowData['title'] = $this->uniqueBaseTitle('Untitled');
 		}
-
-		# Validate the status if it was provided
-		$status = null;
-		if (!$newArticle) $status = $row['status'];
-		if (isset($articleInfo['status'])) $status = $articleInfo['status'];
-		if (!$status) $status = 'draft';
-
 
 		# Sanitize the thumbnail
-		if (empty($articleInfo['thumbnail'])) $articleInfo['thumbnail'] = '';
-		$articleInfo['thumbnail'] = \Kanso\Utility\Str::getAfterLastChar( rtrim($articleInfo['thumbnail'], '/'), '/');
+		$rowData['thumbnail'] = \Kanso\Utility\Str::getAfterLastChar( rtrim($rowData['thumbnail'], '/'), '/');
 
 		# Create a slug based on the category, tags, slug, author
-		$slug  = $this->titleToSlug($title, $category['slug'], $author['slug'], $created, $articleInfo['type']);
+		$rowData['slug'] = $this->titleToSlug($rowData['title'], $rowData['category']['slug'], $rowData['author']['slug'], $rowData['created'], $rowData['type']);
 
-		# Insert new post into the database and grab the ID
-		$row['status']      = $status;
-		$row['type']        = $articleInfo['type'];
-		$row['slug']        = $slug;
-		$row['title']       = $title;
-		$row['excerpt']     = $articleInfo['excerpt'];
-		$row['author_id']   = (int)$author['id'];
-		$row['category_id'] = (int)$category['id'];
-		$row['thumbnail']   = $articleInfo['thumbnail'];
-		$row['created']     = $created;
-		$row['modified']    = $modified;
-		$row['comments_enabled'] = isset($articleInfo['comments']) && $articleInfo['comments'] === 'true' ? true : false;
+		# Sanitize variables
+		$rowData['excerpt']      = $rowData['excerpt'];
+		$rowData['author_id']    = (int)$rowData['author']['id'];
+		$rowData['category_id']  = (int)$rowData['category']['id'];
+		$rowData['comments_enabled'] = (bool)$rowData['comments_enabled'];
 
-		$articleExists = isset($row['id']) ? $Query->SELECT('*')->FROM('posts')->WHERE('id', '=', (int)$row['id'])->FIND() : false;
+		# Remove joined rows so we can update/insert
+		$insertRow = \Kanso\Utility\Arr::unsetMultiple(['tags', 'category', 'content', 'comments', 'author'], $rowData);
 
-		# If the article does not exist insert a new row
-		if (!$articleExists || empty($articleExists)) {
-			$Query->INSERT_INTO('posts')->VALUES($row)->QUERY();
-			$row['id'] = intval(\Kanso\Kanso::getInstance()->Database->lastInsertId());
+		# Update an existing article
+		if (!$newArticle) {
+			$Query->UPDATE('posts')->SET($insertRow)->WHERE('id', '=', (int)$rowData['id'])->QUERY();
+			$Query->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', (int)$rowData['id'])->QUERY();
+			$Query->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', (int)$rowData['id'])->QUERY();
 		}
-		# Otherwise update the existing article and delete the tags
+		
+		# Or insert a new one
 		else {
-			$insertRow = \Kanso\Utility\Arr::unsetMultiple(['tags', 'category', 'content', 'comments', 'author'], $row);
-			$Query->UPDATE('posts')->SET($insertRow)->WHERE('id', '=', (int)$articleExists['id'])->QUERY();
-			$Query->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', $row['id'])->QUERY();
-			$Query->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $row['id'])->QUERY();
+			$Query->INSERT_INTO('posts')->VALUES($insertRow)->QUERY();
+			$rowData['id'] = intval(\Kanso\Kanso::getInstance()->Database->lastInsertId());
 		}
 
 		# Join the tags
-		foreach ($tags as $tagId) {
-			$Query->INSERT_INTO('tags_to_posts')->VALUES(['post_id' => $row['id'], 'tag_id' => $tagId])->QUERY();
+		foreach ($rowData['tags'] as $tag) {
+			$Query->INSERT_INTO('tags_to_posts')->VALUES(['post_id' => $rowData['id'], 'tag_id' => $tag['id']])->QUERY();
 		}
 
 		# Join the content
-		$Query->INSERT_INTO('content_to_posts')->VALUES(['post_id' => $row['id'], 'content' => $content])->QUERY();
+		$Query->INSERT_INTO('content_to_posts')->VALUES(['post_id' => $rowData['id'], 'content' => $rowData['content']])->QUERY();
 
 		# Fire the event
 		if ($newArticle) {
-			\Kanso\Events::fire('newArticle', [$row]);
+			\Kanso\Events::fire('newArticle', [$rowData]);
 		}
 		else {
-			\Kanso\Events::fire('articleSave', [$row]);
+			\Kanso\Events::fire('articleSave', [$rowData]);
 		}
 
-		if ($row['status'] === 'published') {
-			\Kanso\Events::fire('articlePublish', [$row]);
+		if ($rowData['status'] === 'published') {
+			\Kanso\Events::fire('articlePublish', [$rowData]);
 		}
 		
-		
-		# If the article is a page, update the static pages list
-		if ($row['type'] === 'page') $this->addToStaticPages($row['slug']);
+		# If the article is a page and the slug was changed
+		# Remove the old slug and add the new one
+		if ($rowData['type'] === 'page' && $rowData['slug'] !== $initialSlug) {
+			$this->removeFromStaticPages($initialSlug);
+			$this->addToStaticPages($rowData['slug']);
+		} 
 
-		# return the id
-		return ['id' => $row['id'], 'slug' => $row['slug']];
-
+		# return the row data
+		return $rowData;
 	}
+
 
   	/**
    	 * Change an articles status
@@ -192,7 +219,6 @@ class Bookkeeper
 
     	# Save the entry
     	return $Query->UPDATE('posts')->SET(['status' => $status])->WHERE('id', '=', $articleID)->QUERY();
-
   	}
 
     /**
@@ -270,7 +296,12 @@ class Bookkeeper
 	  		$articles[$i]['modified']    = (int)$articles[$i]['modified'];
 	  		if (isset($articles[$i]['author_id'])) $articles[$i]['author_id'] = (int)$articles[$i]['author_id'];
 
-	  		if (!$this->save($articles[$i], true))  return "invalid_json"; 
+	  		$post = $this->create();
+	  		foreach ($articles[$i] as $key => $value) {
+	  			$post->$key = $value;
+	  		}
+
+	  		if (!$post->save())  return "invalid_json"; 
 
 	  	}
 
@@ -487,7 +518,6 @@ class Bookkeeper
 	 */
 	private function createCategory($category) 
 	{
-
 		$default = [
 	  		'id'   => 1,
 	  		'name' => 'Uncategorized',
@@ -497,11 +527,15 @@ class Bookkeeper
 	    # Get a new Query Builder
         $Query = \Kanso\Kanso::getInstance()->Database->Builder();
 
+        # If the category is an array get the name
+        # This is only incase it was deleted previously
+        if (is_array($category)) $category = $category['name'];
+
         # Check if the category exists
-	  	$catRow = $Query->SELECT('*')->FROM('categories')->WHERE('name', '=', $category)->FIND();
+	  	$catRow = $Query->SELECT('*')->FROM('categories')->WHERE('name', '=', $category)->ROW();
 
 	  	# If it exists return it
-	  	if ($catRow) return $catRow;
+	  	if ($catRow) return $default;
 
 	  	# Otherwise create a new category and return it
 	  	$row = [
@@ -523,19 +557,29 @@ class Bookkeeper
 	 */
     private function createTags($tags) 
     {
-    	# Return untagged if nothing was provided
-	   	if (empty($tags) || !is_array($tags)) return ['1'];
 
-	    # Get a new Query Builder
+	  	# Get a new Query Builder
         $Query = \Kanso\Kanso::getInstance()->Database->Builder();
 
         # Set an empty list
-	   	$tagsList = [];
+	   	$tagsList = [
+	   		[
+		  		'id' => 1,
+				'name' => 'Untagged',
+				'slug' => 'untagged'
+	  		],
+	   	];
 
-	   	foreach ($tags as $tag) {
-	   		$tagExists  = $Query->SELECT('*')->FROM('tags')->WHERE('name', '=', $tag)->FIND();
-	   		if ($tagExists) {
-	   			$tagsList[] = (int)$tagExists['id'];
+	  	foreach ($tags as $tag) {
+	  		
+	  		if (is_array($tag)) $tag = $tag['name'];
+	  		
+	  		if (ucfirst($tag) === 'Untagged') continue;
+	  		
+	  		$tagRow  = $Query->SELECT('*')->FROM('tags')->WHERE('name', '=', $tag)->FIND();
+	  		
+	  		if ($tagRow) {
+	   			$tagsList[] = $tagRow;
 	   		}
 	   		else {
 	   			$row = [
@@ -544,9 +588,12 @@ class Bookkeeper
 			  	];
 			  	$Query->INSERT_INTO('tags')->VALUES($row)->QUERY();
 			  	$row['id']  = intval(\Kanso\Kanso::getInstance()->Database->lastInsertId());
-			  	$tagsList[] = $row['id'];
+			  	$tagsList[] = $row;
 	   		}
-	   	}
+	  	}
+
+	  	if (count($tagsList) > 1) array_shift($tagsList);
+
    		return $tagsList;
    	}
 
@@ -621,12 +668,12 @@ class Bookkeeper
     	$query = \Kanso\Kanso::getInstance()->Database->Builder();
 
         # Get the entry
-        $post = $query->getArticlesByIndex('id', (int)$id, 1, ['tags', 'category', 'content', 'comments', 'author']);
+        $post = $this->existing($id);
        
         # Loop through the articles and update the slug and permalink
         if ($post) {
-            $newSlug = $this->titleToSlug($post['title'], $post['category']['slug'], $post['author']['slug'], $post['created'], $post['type']);
-            $query->UPDATE('posts')->SET(['slug' => $newSlug])->WHERE('id', '=', (int)$post['id'])->QUERY();
+            $newSlug = $this->titleToSlug($post->title, $post->category['slug'], $post->author['slug'], $post->created, $post->type);
+            $query->UPDATE('posts')->SET(['slug' => $newSlug])->WHERE('id', '=', (int)$post->id)->QUERY();
         }
     }
 
