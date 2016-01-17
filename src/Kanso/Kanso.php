@@ -130,9 +130,7 @@ class Kanso
 	 * @param  array $userSettings Associative array of application settings
 	 */
 	public function __construct($UserSettings = null)
-	{
-		$this->Version = time();
-		
+	{		
 		# Check if the apllication is installed
 		$this->isInstalled = !file_exists(__DIR__.'/Install.php') && file_exists(__DIR__.'/Config.php');
 
