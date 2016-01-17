@@ -130,6 +130,18 @@ class Bookkeeper
 		# Create a slug based on the category, tags, slug, author
 		$rowData['slug'] = $this->titleToSlug($rowData['title'], $rowData['category']['slug'], $rowData['author']['slug'], $rowData['created'], $rowData['type']);
 
+		# Make sure the author is an array
+		if (is_string($rowData['author'])) {
+			$author = $Query->SELECT('*')->FROM('users')->WHERE('name', '=', $rowData['author'])->ROW();
+			if (!$author) {
+				$rowData['author'] = ['id' => 1];
+			}
+			else {
+				$rowData['author'] = $author;
+			}
+		}
+
+
 		# Sanitize variables
 		$rowData['excerpt']      = $rowData['excerpt'];
 		$rowData['author_id']    = (int)$rowData['author']['id'];
@@ -572,7 +584,7 @@ class Bookkeeper
 
 	  	foreach ($tags as $tag) {
 	  		
-	  		if (is_array($tag)) $tag = $tag['name'];
+	  		if (is_array($tag) && isset($tag['name'])) $tag = $tag['name'];
 	  		
 	  		if (ucfirst($tag) === 'Untagged') continue;
 	  		

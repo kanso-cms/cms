@@ -44,13 +44,7 @@ class Article
 		'comments_enabled' => false,
 
 		# Joins
-		'tags' => [
-			[
-				'id' => 1,
-				'name' => 'Untagged',
-				'slug' => 'untagged'
-			]
-		],
+		'tags' 	   => 'Untagged',
 		'category' => 'Uncategorized',
 		'author'   => [],
 		'content'  => ' ',
@@ -121,9 +115,6 @@ class Article
 		else if ($key === 'author') {
 			$this->setTheAuthor($value);
 		}
-		else if ($key === 'content') {
-			$this->content = $value;
-		}
 		else if (array_key_exists($key, $this->keys)) {
 			$this->tmpRow[$key] = $value;
 		}
@@ -144,9 +135,6 @@ class Article
 		}
 		else if ($key === 'author') {
 			$this->tmpRow['author'] = $this->getTheAuthor();
-		}
-		else if ($key === 'content') {
-			$this->content = ' ';
 		}
 		else if (array_key_exists($key, $this->keys)) {
 			$this->tmpRow[$key] = null;
@@ -237,12 +225,9 @@ class Article
 	{
 		$tags  = $this->getTheTags();
 		$names = array_filter(array_map('trim', explode(',', $names)));
-		foreach ($names as $name) {
-			foreach ($tags as $tag) {
-				if (strtolower($tag['name']) === strtolower($name)) return;
-			}
-			$this->tmpRow['tags'][] = $name;
-		}
+		if (!is_array($tags)) $tags = array_filter(array_map('trim', explode(',', $tags)));
+		$this->tmpRow['tags'] = array_merge($tags, $names);	
+
 		if (count($this->tmpRow['tags']) > 1) {
 			foreach ($this->tmpRow['tags'] as $i => $tag) {
 				if (is_array($tag)) {
@@ -250,8 +235,7 @@ class Article
 				}
 				else if (strtolower($tag) === 'untagged') {
 					unset($this->tmpRow['tags'][$i]); 
-				} 
-				
+				}
 			}
 		}
 	}
