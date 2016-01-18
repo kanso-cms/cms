@@ -96,15 +96,21 @@ class Bookkeeper
      * @return array|boolean
      */
 	public function saveArticle($rowData)
-	{
+	{		
+		# Is this a new or existing article
+		$rowData['id'] = (int)$rowData['id']; 
+        if (!isset($rowData['id']) || (isset($rowData['id']) && $rowData['id'] < 1)) {
+        	$newArticle = true;
+        }
+        else {
+        	$newArticle = false;
+        }
+
 		# Save the initial slug
 		$initialSlug = $rowData['slug'];
 
 		# Get a new Query Builder
         $Query = \Kanso\Kanso::getInstance()->Database->Builder();
-
-        # Is this a new or existing article
-        $newArticle = $rowData['id'] == null;
 
 		# If the category doesn't exist - create it
 		$rowData['category'] = $this->createCategory($rowData['category']);
@@ -114,6 +120,7 @@ class Bookkeeper
 
 		# Validate the title
 		$rowData['title'] = trim($rowData['title']);
+		if (empty($rowData['title'])) $rowData['title'] = 'Untitled';
 
 		# Figure out if the title needs to be changed
 		if ($newArticle) {
@@ -140,7 +147,6 @@ class Bookkeeper
 				$rowData['author'] = $author;
 			}
 		}
-
 
 		# Sanitize variables
 		$rowData['excerpt']      = $rowData['excerpt'];
@@ -581,6 +587,10 @@ class Bookkeeper
 				'slug' => 'untagged'
 	  		],
 	   	];
+
+	   	if (is_string($tags)) $tags = array_filter(array_map('trim', explode(',', $tags)));
+
+	   	if (empty($tags)) return $tagsList;
 
 	  	foreach ($tags as $tag) {
 	  		

@@ -13,7 +13,6 @@ namespace Kanso\Articles;
  */
 class Article
 {
-
 	/**
 	 * @var array    Associative array of the article data
 	 */
@@ -39,18 +38,17 @@ class Article
 		'title'       => 'Untitled',
 		'excerpt'     => '',
 		'author_id'   => 1,
-		'category_id' => 1,
+		'category_id' => null,
 		'thumbnail'   => '',
 		'comments_enabled' => false,
 
 		# Joins
 		'tags' 	   => 'Untagged',
 		'category' => 'Uncategorized',
-		'author'   => [],
+		'author'   => null,
 		'content'  => ' ',
-		'comments' => [],
+		'comments' => null,
 	];
-
 
 	/**
 	 * Constructor
@@ -106,14 +104,8 @@ class Article
 
 	public function __set($key, $value)
 	{
-		if ($key === 'category') {
-			$this->setTheCategory($value);
-		}
-		else if ($key === 'tags') {
+		if ($key === 'tags') {
 			$this->setTheTags($value);
-		}
-		else if ($key === 'author') {
-			$this->setTheAuthor($value);
 		}
 		else if (array_key_exists($key, $this->keys)) {
 			$this->tmpRow[$key] = $value;
@@ -147,60 +139,66 @@ class Article
 
 	private function getTheCategory()
 	{
+		# If this is an unsaved row, return the temporary value
 		if ($this->row['id'] == null) return $this->tmpRow['category'];
 
+		# Only load the category once
 		if (!isset($this->row['category'])) {
 			$category = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$this->row['category_id'])->ROW();
 			$this->row['category'] 	  = $category;
-			$this->tmpRow['category'] = $category;
 		}
 		return $this->row['category'];
 	}
 
 	private function getTheTags()
 	{
+		# If this is an unsaved row, return the temporary value
 		if ($this->row['id'] == null) return $this->tmpRow['tags'];
 
+		# Only load the tags once
 		if (!isset($this->row['tags'])) {
 			$tags = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('tags.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id')->WHERE('post_id', '=', (int)$this->row['id'])->FIND_ALL();
-			$this->row['tags']    = $tags;
-			$this->tmpRow['tags'] = $tags;
+			$this->row['tags'] = $tags;
 		}
 		return $this->row['tags'];
 	}
 
 	private function getTheContent()
 	{
+		# If this is an unsaved row, return the temporary value
 		if ($this->row['id'] == null) return $this->tmpRow['content'];
 
+		# Only load the content once
 		if (!isset($this->row['content'])) {
 			$content = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('content')->FROM('content_to_posts')->WHERE('post_id', '=', (int)$this->row['id'])->ROW();
-			$this->row['content']    = $content['content'];
-			$this->tmpRow['content'] = $content['content'];
+			$this->row['content'] = $content['content'];
 		}
 		return $this->row['content'];
 	}
 
+
 	private function getTheAuthor()
 	{
-
+		# If this is an unsaved row, return the initial admin
 		if ($this->row['id'] == null) {
 			$author = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('id', '=', 1)->ROW();
-			$this->row['author']    = $author;
-			$this->tmpRow['author'] = $author;
+			$this->row['author'] = $author;
 		}
 
+		# Only load the content once
 		if (empty($this->row['author'])) {
 			$author = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('id', '=', (int)$this->row['author_id'])->ROW();
-			$this->row['author']    = $author;
-			$this->tmpRow['author'] = $author;
+			$this->row['author'] = $author;
 		}
 		return $this->row['author'];
 	}
 
 	private function getTheComments()
-	{
+	{	
+		# If this is an unsaved row, return the initial admin
 		if ($this->row['id'] == null) return [];
+
+		# Only load the comments once
 		if (empty($this->row['comments'])) {
 			$comments = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$this->row['id'])->FIND_ALL();
 			$this->row['comments']    = $comments;
@@ -212,40 +210,43 @@ class Article
 	/********************************************************************************
 	* SETTERS
 	*******************************************************************************/
-	private function setTheCategory($name)
-	{
-		$category = $this->getTheCategory();
-		if (is_array($category)) $category = $category['name'];
-		if (strtolower($category) !== strtolower($name)) {
-			$this->tmpRow['category'] = $name;
-		}
-	}
 
 	private function setTheTags($names)
 	{
-		$tags  = $this->getTheTags();
-		$names = array_filter(array_map('trim', explode(',', $names)));
-		if (!is_array($tags)) $tags = array_filter(array_map('trim', explode(',', $tags)));
-		$this->tmpRow['tags'] = array_merge($tags, $names);	
+		if (trim($names) === '' || $names == null) {
+			$this->tmpRow['tags'] = '';
+			return;
+		}
 
-		if (count($this->tmpRow['tags']) > 1) {
-			foreach ($this->tmpRow['tags'] as $i => $tag) {
-				if (is_array($tag)) {
-					if (isset($tag['id']) && $tag['id'] === 1) unset($this->tmpRow['tags'][$i]);
-				}
-				else if (strtolower($tag) === 'untagged') {
-					unset($this->tmpRow['tags'][$i]); 
+		# Get the current tags
+		$tags = $this->getTheTags();
+
+		# Explode the tags into an array
+		$names = array_filter(array_map('trim', explode(',', $names)));
+
+		# If the current tags are not array, explode them too.
+		if (!is_array($tags)) {
+			$tags = array_filter(array_map('trim', explode(',', $tags)));
+		} 
+		# Otherwise only use the tag name, implode and explode them
+		else {
+			$tags = \Kanso\Utility\Arr::implodeByKey('name', $tags, ', ');
+			$tags = array_filter(array_map('trim', explode(',', $tags)));
+		}
+
+		# Merge the two arrays
+		$tags = array_merge($tags, $names);	
+
+		# If there's more than one tag, remove untagged
+		if (count($tags) > 1) {
+			foreach ($tags as $i => $tag) {
+				if (strtolower($tag) === 'untagged') {
+					unset($tags[$i]); 
 				}
 			}
 		}
-	}
 
-	private function setTheAuthor($name)
-	{
-		$author = $this->getTheAuthor();
-		if (strtolower($author['name']) !== strtolower($name)) {
-			$this->tmpRow['author'] = $name;
-		}
+		$this->tmpRow['tags'] = implode(', ', array_unique($tags));
 	}
 
 	/********************************************************************************
@@ -265,17 +266,19 @@ class Article
 
 		# Update Kanso's static pages if the status has changed 
 		# and/or the article type has changed
-		if ($this->row['status'] !== $this->tmpRow['status'] && $this->row['id'] !== null) {
+		if ($this->row['status'] !== $this->tmpRow['status'] && isset($this->row['id'])) {
 			$bookkeeper->changeStatus($this->row['id'], $this->tmpRow['status']);
 		}
 
 		# If no updates are required return;
-		if ($this->tmpRow === $this->row && $this->row['id'] !== null) return;
+		if ($this->tmpRow === $this->row && isset($this->row['id'])) return;
 
 		# Save the article
-		$save = $bookkeeper->saveArticle($this->tmpRow);
+		$save = $bookkeeper->saveArticle(array_merge($this->row, $this->tmpRow));
 
+		# Merge the results
 		if ($save) {
+			$save['tags'] = \Kanso\Utility\Arr::implodeByKey('name', $save['tags'], ', ');
 			$this->tmpRow = array_merge($this->tmpRow, $save);
 			$this->row    = array_merge($this->row, $save);
 			return true;

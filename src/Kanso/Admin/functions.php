@@ -561,14 +561,27 @@ function adminFooterScripts()
 {
 	$scripts = [];
 
-	if (adminIsWriter() || adminIsSettings()) {
-		$scripts[] = '<script type="text/javascript" src="'.adminAssetsUrl().'js/libs/dropzone.js?v='.adminKansoVersion().'"></script>';
-	} 
+	# Ajax
+	$scripts[] = '<script type="text/javascript" src="'.adminAssetsUrl().'js/vendor/simpleAjax.js?v='.adminKansoVersion().'"></script>';
 	
-	$scripts[] = '<script type="text/javascript" src="'.adminAssetsUrl().'js/scripts.js?v='.adminKansoVersion().'"></script>';
-	
+	# Input masker
+	$scripts[] = '<script type="text/javascript" src="'.adminAssetsUrl().'js/vendor/vanillaMasker.js?v='.adminKansoVersion().'"></script>';
 
+	# Dropzone
+	$scripts[] = '<script type="text/javascript" src="'.adminAssetsUrl().'js/vendor/dropzone.js?v='.adminKansoVersion().'"></script>';
+
+	# Admin scripts
+	$scripts[] = '<script type="text/javascript" src="'.adminAssetsUrl().'js/scripts.js?v='.adminKansoVersion().'"></script>';
+
+	# Write Js
 	if (adminIsWriter()) {
+		# Codemirror
+		$scripts[] = '<script type="text/javascript" src="'.adminAssetsUrl().'js/vendor/codemirror.js?v='.adminKansoVersion().'"></script>';
+		# Highlight js
+		$scripts[] = '<script type="text/javascript" src="'.adminAssetsUrl().'js/vendor/highlight.js?v='.adminKansoVersion().'"></script>';
+		# Markdownit
+		$scripts[] = '<script type="text/javascript" src="'.adminAssetsUrl().'js/vendor/markdownIt.js?v='.adminKansoVersion().'"></script>';
+	 	# Write application
 	 	$scripts[] = '<script type="text/javascript" src="'.adminAssetsUrl().'js/writer.js?v='.adminKansoVersion().'"></script>';
 	}
 

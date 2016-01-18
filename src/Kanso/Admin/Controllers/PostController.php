@@ -1074,7 +1074,7 @@ class PostController
      *
      * @return bool
      */
-    private function saveArticle($isNewArticle) 
+    private function saveArticle($isNewArticle = false) 
     {
 
         # Only logged in users can write articles
@@ -1110,11 +1110,11 @@ class PostController
 
         $validated_data['comments_enabled'] = \Kanso\Utility\Str::bool($validated_data['comments']);
 
-        $article = $isNewArticle ? \Kanso\Kanso::getInstance()->Bookkeeper->existing($validated_data['id']) : \Kanso\Kanso::getInstance()->Bookkeeper->create();
+        $article = $isNewArticle ? \Kanso\Kanso::getInstance()->Bookkeeper->create() : \Kanso\Kanso::getInstance()->Bookkeeper->existing($validated_data['id']);
 
         foreach ($validated_data as $key => $value) {
             $article->$key = $value;
-        }
+        }        
 
         $save = $article->save();
 
