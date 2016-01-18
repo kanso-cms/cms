@@ -147,6 +147,9 @@ class Bookkeeper
 				$rowData['author'] = $author;
 			}
 		}
+		else if (!isset($rowData['author'])) {
+			$rowData['author'] = ['id' => 1];
+		}
 
 		# Sanitize variables
 		$rowData['excerpt']      = $rowData['excerpt'];
@@ -157,17 +160,17 @@ class Bookkeeper
 		# Remove joined rows so we can update/insert
 		$insertRow = \Kanso\Utility\Arr::unsetMultiple(['tags', 'category', 'content', 'comments', 'author'], $rowData);
 
-		# Update an existing article
-		if (!$newArticle) {
+		# Insert a new article
+		if ($newArticle) {
+			unset($insertRow['id']);
+			$Query->INSERT_INTO('posts')->VALUES($insertRow)->QUERY();
+			$rowData['id'] = intval(\Kanso\Kanso::getInstance()->Database->lastInsertId());
+		}
+		# Or update an existing row
+		else {
 			$Query->UPDATE('posts')->SET($insertRow)->WHERE('id', '=', (int)$rowData['id'])->QUERY();
 			$Query->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', (int)$rowData['id'])->QUERY();
 			$Query->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', (int)$rowData['id'])->QUERY();
-		}
-		
-		# Or insert a new one
-		else {
-			$Query->INSERT_INTO('posts')->VALUES($insertRow)->QUERY();
-			$rowData['id'] = intval(\Kanso\Kanso::getInstance()->Database->lastInsertId());
 		}
 
 		# Join the tags
