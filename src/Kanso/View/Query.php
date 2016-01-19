@@ -282,7 +282,7 @@ class Query {
      */
     public function author_exists($author_name)
     {
-        $index       = is_numeric($author_name) ? 'id' : 'name';
+        $index       = is_numeric($author_name) ? 'id' : 'username';
         $author_name = is_numeric($author_name) ? (int)$author_name : $author_name;
         return !empty(\Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('id')->FROM('users')->WHERE($index, '=', $author_name)->FIND());
     }
