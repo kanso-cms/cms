@@ -160,7 +160,7 @@ class Query {
                 $this->postCount = count($this->posts);
             }
         } 
-        else if ($requestType === 'static_page') {
+        else if ($requestType === 'page') {
             if (strpos($uri,'?draft') !== false) {
                 $uri = str_replace('?draft', '', $uri);
                 $this->queryStr  = 'post_status = draft : post_type = page : post_slug = '.$uri.'/';
@@ -932,7 +932,7 @@ class Query {
      */
     public function is_admin()
     {
-        return \Kanso\Kanso::getInstance()->is_admin;
+        return  $this->requestType === 'admin';
     }
 
     /**
@@ -1263,7 +1263,7 @@ class Query {
     /**
      * Previous post
      */
-    public function previous()
+    public function _previous()
     {
         $this->postIndex--;
         $this->post = $this->posts[$this->postIndex];
@@ -1292,8 +1292,9 @@ class Query {
      * All the authors 
      * @return array
      */
-    public function all_the_authors()
+    public function all_the_authors($registered = true)
     {
+        if ($registered) return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('status', '=', 'active')->FIND_ALL();
         return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->FIND_ALL();
     }
 
@@ -1711,28 +1712,46 @@ class Query {
 
             'form_class' => 'comment-form',
 
+            'legend' => '
+                <legend>Leave a comment:</legend>
+            ',
+
+            'comment_field' => '
+                <label for="comment-content">Your comment</label>
+                <textarea id="comment-content" type="text" name="content" placeholder="Leave a comment..." autocomplete="off"></textarea>
+            ',
+
+            'name_field' => '
+                <label for="comment-name">Name:</label>
+                <input id="comment-name" type="text" name="name" placeholder="Name (required)" autocomplete="off" />
+            ',
+
+            'email_field' => '
+                <label for="email">Email:</label>
+                <input id="comment-email" type="email" name="email" placeholder="Email (required)" autocomplete="off" />
+            ',
+
+            'email_replies_field' => '
+                <input id="comment-email-reply" type="checkbox" name="email-reply" /> Notify me of follow-up comments by email:<br>
+            ',
+
+            'email_thread_field'  => '
+                <input id="comment-email-thread" type="checkbox" name="email-thread" /> Notify me of all comments on this post by email:<br>
+            ',
+
+            'post_id_field'  => '
+                <input id="comment-postId" type="hidden" name="postID" style="display:none" value="(:postID)" />
+            ',
+
             'reply_id' => '',
 
-            'legend' => '<legend>Leave a comment:</legend>',
+            'reply_id_field' => '
+                <input id="comment-replyId" type="hidden" name="replyID" style="display:none" value="(:replyID)" />
+            ',
 
-            'comment_field' => '<label for="content">Comment:</label>
-                                <textarea type="text" name="content (required)" placeholder="Leave a comment..." autocomplete="off"></textarea>',
-
-            'name_field' => '<label for="name">Name:</label>
-                             <input type="text" name="name" placeholder="Name (required)" autocomplete="off" />',
-
-            'email_field' => '<label for="email">Email:</label>
-                              <input type="email" name="email" placeholder="Email (required)" autocomplete="off" />',
-
-            'email_replies_field' => '<input type="checkbox" name="email-reply" /> Notify me of follow-up comments by email:<br>',
-
-            'email_thread_field'  => '<input type="checkbox" name="email-thread" /> Notify me of all comments on this post by email:<br>',
-
-            'post_id_field'  => '<input type="hidden" name="postID" style="display:none" value="(:postID)" />',
-
-            'reply_id_field' => '<input type="hidden" name="replyID" style="display:none" value="(:replyID)" />',
-
-            'submit_field'   => '<button type="submit" value="submit">Submit</button>',
+            'submit_field'   => '
+                <button id="comment-submit" type="submit" value="submit">Submit</button>
+            ',
         ];
 
         # If options were set, overwrite the dafaults
@@ -1773,7 +1792,7 @@ class Query {
      * @param  bool        $srcOnly          Should we return only the img src (rather than the actual HTML tag)
      * @return string      user's avatar or default mystery on fallback
      */
-    public function get_avatar($email_or_md5, $size = 160, $srcOnly = null) 
+    public function get_avatar($email_or_md5, $size = 160, $srcOnly = false) 
     {
 
         $isMd5   = $this->isValidMd5($email_or_md5);

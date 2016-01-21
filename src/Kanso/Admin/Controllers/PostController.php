@@ -56,6 +56,12 @@ class PostController
     public function __construct()
     {
 
+        # Set Kanso's is_admin
+        \Kanso\Kanso::getInstance()->is_admin = true;
+
+        # Set Kanso's Query object to 'admin'
+        \Kanso\Kanso::getInstance()->Query->filterPosts('admin');
+
         # Get a new GUMP instance
         $this->GUMP = new \Kanso\Utility\GUMP();
 

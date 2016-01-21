@@ -860,7 +860,7 @@ function have_posts($post_id = null)
  * @param   int  $post_id (optional)
  * @return  bool
  */
-function the_posts_count()
+function get_the_posts_count()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_posts_count();
@@ -890,28 +890,10 @@ function _next()
 /**
  * Previous post
  */
-function previous()
+function _previous()
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->previous();
-}
-
-/**
- * Next page
- */
-function next_page()
-{
-    global $KANSO_QUERY;
-    return $KANSO_QUERY->next_page();
-}
-
-/**
- * Previous page
- */
-function previus_page()
-{
-    global $KANSO_QUERY;
-    return $KANSO_QUERY->previus_page();
+    return $KANSO_QUERY->_previous();
 }
 
 /**
@@ -938,10 +920,10 @@ function all_the_categories()
  * All the authors 
  * @return array
  */
-function all_the_authors()
+function all_the_authors($registered = true)
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->all_the_authors();
+    return $KANSO_QUERY->all_the_authors($registered);
 }
 
 /**

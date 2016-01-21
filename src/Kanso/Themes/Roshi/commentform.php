@@ -12,7 +12,7 @@
 <form class="comment-form">
 
     <div class="input-wrap comment-form-name">
-       <label class="label" for="email">Your name</label>
+        <label class="label" for="email">Your name</label>
         <input class="field col-12" id="email" name="name" type="name" placeholder="Name (required)" value="">
         <p class="error-message">* Please enter your name.</p>
     </div>

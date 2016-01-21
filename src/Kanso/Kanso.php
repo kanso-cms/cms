@@ -956,7 +956,7 @@ class Kanso
 		# Static pages
 		foreach ($this->Config['KANSO_STATIC_PAGES'] as $slug) {
 			# Published static page
-			$this->get("/$slug/", '\Kanso\Kanso::loadTemplate', 'static_page');
+			$this->get("/$slug/", '\Kanso\Kanso::loadTemplate', 'page');
 		}
 
 		# Search
@@ -1068,7 +1068,7 @@ class Kanso
 		if ($PageType === 'category') return 'list';
 		if ($PageType === 'author') return 'list';
 		if ($PageType === 'single') return 'single';
-		if ($PageType === 'static_page') return 'page';
+		if ($PageType === 'page') return 'page';
 		if ($PageType === 'search') return 'search';
 	}
 
