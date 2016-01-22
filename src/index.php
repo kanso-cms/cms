@@ -2,8 +2,8 @@
 /**
  * Kanso Core Initialization File
  *
- * This is Kanso's core initializion file. Every Kanso 
- * installation must have this file or an equivlent which 
+ * This is Kanso's core initialization file. Every Kanso 
+ * installation must have this file or an equivalent which 
  * points to Kanso installation. 
  *
  * All HTTP requests must be sent to this file 
@@ -36,12 +36,10 @@
 # errors to HTTP client.
 ini_set('display_errors', 1);
 
-
 # Set the error_reporting directive at runtime
 # Remove this if you don't want php to output runtime
 # errors to HTTP client.
 error_reporting(E_ALL);
-
 
 # Set the default timezone. Adjust to your own timezone
 # if desired
@@ -56,6 +54,9 @@ require_once 'Kanso/Kanso.php';
 
 # Create a new Kanso object
 $Kanso = new Kanso\Kanso();
+
+# Any customizations should go here - i.e 
+# after Kanso's instantiation but before any dispatching. 
 
 # Initialize and run Kanso
 $Kanso->run();
