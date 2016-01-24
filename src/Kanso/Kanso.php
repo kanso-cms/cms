@@ -409,7 +409,7 @@ class Kanso
 	public function redirect($url, $status = 302)
 	{
 		# Call the pre dispatch event
-		\Kanso\Events::fire('preDispatch', [$this->Environment['REQUEST_URI'], $url, $status, time()]);
+		\Kanso\Events::fire('redirect', [$this->Environment['REQUEST_URI'], $url, $status, time()]);
 		
 		# Redirect via the HTTP Response object
 		$this->Response->redirect($url, $status);
@@ -664,7 +664,7 @@ class Kanso
 		$this->setDefaultRoutes();
 
 		# Call the pre dispatch event
-		\Kanso\Events::fire('preDispatch');
+		\Kanso\Events::fire('preDispatch', $this->Environment['REQUEST_URI']);
 
 		# Dispatch the router
 		$this->Router->dispatch();
@@ -906,7 +906,7 @@ class Kanso
 		$this->get('/admin/write/(:all)', '\Kanso\Admin\Controllers\GetController@dispatch', 'writer');
 
 		# Admin login
-		$this->get('/admin/login/', 'Kanso\Admin\Controllers\GetController@dispatch', 'logIn');
+		$this->get('/admin/login/', '\Kanso\Admin\Controllers\GetController@dispatch', 'logIn');
 
 		# Admin Logout
 		$this->get('/admin/logout/', '\Kanso\Admin\Controllers\GetController@dispatch', 'logOut');

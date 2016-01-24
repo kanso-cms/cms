@@ -39,7 +39,7 @@
 	<div class="content container row">
 		<ul class="list-inline left">
 			<li>
-				<a href="/"><h1>Roshi</h1></a>
+				<a href="<?php home_url();?>"><h1>Roshi</h1></a>
 				<span class="info-text">Default theme for Kanso CMS.</span>
 			</li>
 		</ul>

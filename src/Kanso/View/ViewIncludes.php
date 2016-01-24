@@ -1215,11 +1215,16 @@ function pagination_links($args = null)
 }
 
 /**
- * Get theme search form
+ * Get/echo theme search form
  *
  * @param  string
  */
 function get_search_form()
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->get_search_form();
+}
+function search_form()
 {
     global $KANSO_QUERY;
     echo $KANSO_QUERY->get_search_form();

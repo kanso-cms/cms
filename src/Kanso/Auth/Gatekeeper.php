@@ -569,7 +569,7 @@ class Gatekeeper
     private function logClientOut() 
     {
         # Fire the event
-        \Kanso\Events::fire('logout', [$this->user]);
+        \Kanso\Events::fire('logout', $this->user);
 
         # Clear the session
         \Kanso\Kanso::getInstance()->Session->clear();

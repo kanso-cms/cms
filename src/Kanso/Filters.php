@@ -22,10 +22,8 @@ class Filters
      */
     protected static $filters = [
         'configChange'        => [],
-        'adminArticleTabs'    => [],
-        'adminFavicons'       => [],
         'adminPageTitle'      => [],
-        'adminSettingsTabs'   => [],
+        'adminFavicons'       => [],
         'adminHeaderScripts'  => [],
         'adminBodyClass'      => [],
         'adminSvgSprites'     => [],
@@ -33,9 +31,9 @@ class Filters
         'adminHeaderDropdown' => [],
         'adminTabNav'         => [],
         'adminTabPanels'      => [],
-        'adminDropDown'       => [],
         'adminFooterScripts'  => [],
         'adminPostTypes'      => [],
+        'adminSettingsTabs'   => [],
         'adminAjaxResponse'   => [],
         'emailBody'           => [],
     ];
@@ -92,16 +90,16 @@ class Filters
      * unless you really know what you're doing.
      *
      * @param string    $filterName    The name of the filter being fired
-     * @param array     $filterData     The arguements to be sent to filter
+     * @param array     $args          The arguements to be sent to filter
      */
-    public static function apply($filterName, $filterData) 
+    public static function apply($filterName, $args) 
     {
-        
+ 
         # Is there a custom callback for the filter?   
         if (isset(self::$filters[$filterName]) && !empty(self::$filters[$filterName])) {
 
             # Return the supplied data to filtered
-            $result  = $filterData;
+            $result  = $args;
 
             # Get all the filters callbacks for the filter
             $filters = array_keys(self::$filters[$filterName]);
@@ -110,14 +108,14 @@ class Filters
             foreach ($filters as $filter) {
 
                 # Apply the callback
-                $result = \Kanso\Utility\Callback::apply(self::$callbacks[$filter], $filterData);
+                $result = \Kanso\Utility\Callback::apply(self::$callbacks[$filter], $args);
 
             }
 
             return $result;
         }
         else {
-            return $filterData;
+            return $args;
         }
     }
 

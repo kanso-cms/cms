@@ -104,8 +104,11 @@ class Events
     public static function fire($eventName, $args = []) 
     {
         if (isset(self::$events[$eventName]) && !empty(self::$events[$eventName])) {
+            
             $events = array_keys(self::$events[$eventName]);
+            
             foreach ($events as $i) {
+               
                 # Apply the callback
                 \Kanso\Utility\Callback::apply(self::$callbacks[$i], $args);
             }

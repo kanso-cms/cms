@@ -183,14 +183,14 @@ class Bookkeeper
 
 		# Fire the event
 		if ($newArticle) {
-			\Kanso\Events::fire('newArticle', [$rowData]);
+			\Kanso\Events::fire('newArticle', $rowData);
 		}
 		else {
-			\Kanso\Events::fire('articleSave', [$rowData]);
+			\Kanso\Events::fire('articleSave', $rowData);
 		}
 
 		if ($rowData['status'] === 'published') {
-			\Kanso\Events::fire('articlePublish', [$rowData]);
+			\Kanso\Events::fire('articlePublish', $rowData);
 		}
 		
 		# If the article is a page and the slug was changed
@@ -281,7 +281,7 @@ class Bookkeeper
     	if ($articleRow['type'] === 'page' && $articleRow['status'] === 'published') $this->removeFromStaticPages($articleRow['slug']);
 
     	# Fire the article delete event
-    	\Kanso\Events::fire('articleDelete', [$articleRow]);
+    	\Kanso\Events::fire('articleDelete', $articleRow);
 
     	return true;
 

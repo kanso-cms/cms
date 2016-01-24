@@ -26,12 +26,11 @@ the_header(); ?>
 							<li>
 								<span><?php echo $month_name; ?></span>
 								<ol>
-									<?php $i = count($posts); ?>
 									<?php foreach ($posts as $post) : ?>
 									<li>
-										<a href="<?php the_permalink($post['id']);?>"><?php the_title($post['id']); ?></a>
+										<a href="<?php the_permalink($post->id);?>"><?php the_title($post->id); ?></a>
 									</li>
-								<?php $i--; endforeach; ?>
+									<?php endforeach; ?>
 								</ol>
 							</li>
 						</ul>

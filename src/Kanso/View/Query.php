@@ -1538,13 +1538,24 @@ class Query {
      */
     public function comments_number($post_id = null)
     {
+        $count = 0;
         if ($post_id) {
             $post = $this->getPostByID($post_id);
-            if ($post) return count($post->comments);
-            return 0;
+            if ($post) {
+                $comments = $post->comments;
+                foreach ($comments as $comment) {
+                    if ($comment['status'] === 'approved') $count++;
+                }
+            }
+            return $count;
         }
-        if (!empty($this->post)) return count($this->post->comments);
-        return 0;
+        if (!empty($this->post)) {
+            $comments = $post->comments;
+            foreach ($comments as $comment) {
+                if ($comment['status'] === 'approved') $count++;
+            }
+        }
+        return $count;
     }
 
     /**
@@ -1727,7 +1738,7 @@ class Query {
             ',
 
             'email_field' => '
-                <label for="email">Email:</label>
+                <label for="comment-email">Email:</label>
                 <input id="comment-email" type="email" name="email" placeholder="Email (required)" autocomplete="off" />
             ',
 
@@ -2016,11 +2027,11 @@ class Query {
 
                 <fieldset>
                         
-                        <label class="col-3" for="q">Search: </label>
+                        <label for="q">Search: </label>
                         
                         <input type="search" name="q" id="q" placeholder="Search...">
 
-                        <button type"submit" class="button">Search</button>
+                        <button type"submit">Search</button>
 
                 </fieldset>
                 
