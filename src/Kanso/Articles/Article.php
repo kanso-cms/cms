@@ -97,6 +97,9 @@ class Article
 		else if ($key === 'comments') {
 			return $this->getTheComments();
 		}
+		else if ($key === 'excerpt') {
+			return urldecode($this->row['excerpt']);
+		}
 		if (array_key_exists($key, $this->row)) return $this->row[$key];
 		
 		return false;

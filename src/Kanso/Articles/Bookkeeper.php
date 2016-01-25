@@ -157,6 +157,7 @@ class Bookkeeper
 		$rowData['category_id']  	 = (int)$rowData['category']['id'];
 		$rowData['comments_enabled'] = (bool)$rowData['comments_enabled'];
 		$rowData['content'] 		 = urlencode($rowData['content']);
+		$rowData['excerpt'] 		 = urlencode($rowData['excerpt']);
 
 		# Remove joined rows so we can update/insert
 		$insertRow = \Kanso\Utility\Arr::unsetMultiple(['tags', 'category', 'content', 'comments', 'author'], $rowData);
