@@ -469,7 +469,7 @@ function adminHeroDZActive()
 function adminWriterContent()
 {
 	$entry = adminWriterEntry();
-	if ($entry) return $entry['content'];
+	if ($entry) return urldecode($entry['content']);
 	return '';
 }
 
@@ -508,7 +508,7 @@ function adminWriterTheTags()
 function adminWriterTheExcerpt()
 {
 	$entry = adminWriterEntry();
-	if ($entry) return $entry['excerpt'];
+	if ($entry) return urldecode($entry['excerpt']);
 	return '';
 }
 function adminWriterHeroImg()
