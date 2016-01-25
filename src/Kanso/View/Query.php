@@ -547,7 +547,7 @@ class Query {
         if (empty($content)) return '';
         
         $Parser  = new \Kanso\Parsedown\ParsedownExtra();
-        return $Parser->text(htmlspecialchars_decode($content));
+        return $Parser->text($content);
     
     }
     

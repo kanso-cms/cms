@@ -171,7 +171,7 @@ class Article
 		# Only load the content once
 		if (!isset($this->row['content'])) {
 			$content = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('content')->FROM('content_to_posts')->WHERE('post_id', '=', (int)$this->row['id'])->ROW();
-			$this->row['content'] = $content['content'];
+			$this->row['content'] = urldecode($content['content']);
 		}
 		return $this->row['content'];
 	}

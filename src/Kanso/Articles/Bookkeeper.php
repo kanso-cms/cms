@@ -152,10 +152,11 @@ class Bookkeeper
 		}
 
 		# Sanitize variables
-		$rowData['excerpt']      = $rowData['excerpt'];
-		$rowData['author_id']    = (int)$rowData['author']['id'];
-		$rowData['category_id']  = (int)$rowData['category']['id'];
+		$rowData['excerpt']     	 = $rowData['excerpt'];
+		$rowData['author_id']   	 = (int)$rowData['author']['id'];
+		$rowData['category_id']  	 = (int)$rowData['category']['id'];
 		$rowData['comments_enabled'] = (bool)$rowData['comments_enabled'];
+		$rowData['content'] 		 = urlencode($rowData['content']);
 
 		# Remove joined rows so we can update/insert
 		$insertRow = \Kanso\Utility\Arr::unsetMultiple(['tags', 'category', 'content', 'comments', 'author'], $rowData);
