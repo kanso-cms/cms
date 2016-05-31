@@ -1550,7 +1550,7 @@ class Query {
             return $count;
         }
         if (!empty($this->post)) {
-            $comments = $post->comments;
+            $comments = $this->post->comments;
             foreach ($comments as $comment) {
                 if ($comment['status'] === 'approved') $count++;
             }

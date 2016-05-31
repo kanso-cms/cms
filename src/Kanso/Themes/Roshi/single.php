@@ -36,7 +36,7 @@ the_header(); ?>
 		<h2>About The Author</h2>
 		<hr>
 		
-		<img width="60" height="60" src="<?php the_author_thumbnail('small');?>" />
+		<img width="60" height="60" src="<?php the_author_thumbnail(null, 'small');?>" />
 		
 		<p><?php the_author_bio();?></p>
 

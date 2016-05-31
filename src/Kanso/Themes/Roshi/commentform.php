@@ -32,7 +32,7 @@
     <div class="input-wrap">
        <div>
             <input type="checkbox" id="email-reply" class="checkbox" name="email-reply"><label for="email-reply"></label>
-            <span class="label">Notify me of all comments on this post by email.</span>
+            <span class="label">Notify me of all replies by email.</span>
         </div>
     </div>
 
