@@ -1154,8 +1154,8 @@ class Kanso
 			<OutputEncoding>UTF-8</OutputEncoding>
 			<AdultContent>false</AdultContent>
 			<Language>en-us</Language>
-			<Developer>'.$_this->Config['KANSO_AUTHOR_USERNAME'].'</Developer>
-			<Contact>'.$_this->Config['KANSO_AUTHOR_EMAIL'].'</Contact>
+			<Developer>'.$_this->Config['KANSO_OWNER_USERNAME'].'</Developer>
+			<Contact>'.$_this->Config['KANSO_OWNER_EMAIL'].'</Contact>
 			<Attribution>Search data from '.$_this->Config['KANSO_SITE_TITLE'].' '.$_this->Environment['HTTP_HOST'].'</Attribution>
 			<SyndicationRight>open</SyndicationRight>
 			<Query role="example" searchTerms="Apple"/>
