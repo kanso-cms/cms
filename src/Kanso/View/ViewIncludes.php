@@ -1240,3 +1240,15 @@ function get_archives()
     global $KANSO_QUERY;
     return $KANSO_QUERY->get_archives();
 }
+
+/**
+ * Rewind the posts index
+ *
+ * @return  array
+ */
+function rewind_posts()
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->rewind_posts();
+}
+

@@ -147,9 +147,9 @@ class Query {
         }
         else if ($requestType === 'single') {
             if (strpos($uri,'?draft') !== false) {
-                $uri = str_replace('?draft', '', $uri);
+                $uri = ltrim(str_replace('?draft', '', $uri), '/');
                 $this->queryStr  = 'post_status = draft : post_type = post : post_slug = '.$uri.'/';
-                $this->posts     = [$parser->parseQuery($this->queryStr)];
+                $this->posts     = $parser->parseQuery($this->queryStr);
                 $this->postCount = count($this->posts);
             }
             else {
@@ -162,9 +162,9 @@ class Query {
         } 
         else if ($requestType === 'page') {
             if (strpos($uri,'?draft') !== false) {
-                $uri = str_replace('?draft', '', $uri);
+                $uri = ltrim(str_replace('?draft', '', $uri), '/');
                 $this->queryStr  = 'post_status = draft : post_type = page : post_slug = '.$uri.'/';
-                $this->posts     = [$parser->parseQuery($this->queryStr)];
+                $this->posts     = $parser->parseQuery($this->queryStr);
                 $this->postCount = count($this->posts);
             }
             else {

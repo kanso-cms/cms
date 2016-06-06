@@ -371,13 +371,22 @@ class Settings
 
         # Fiter and sanitize the posts per page
         if ($config['KANSO_POSTS_PER_PAGE'] <= 0) $config['KANSO_POSTS_PER_PAGE'] = $this->defaults['KANSO_POSTS_PER_PAGE'];
-        
+
         # Fiter and sanitize the thumbnail sizes
         if (!is_array($config['KANSO_THUMBNAILS'])) {
             $config['KANSO_THUMBNAILS'] = array_map('trim', explode(',', (string)$config['KANSO_THUMBNAILS']));
         }
 
-        $config['KANSO_THUMBNAILS'] = array_map('intval', $config['KANSO_THUMBNAILS']);
+        foreach ($config['KANSO_THUMBNAILS'] as $i => $thumbs) {
+            if (is_integer($thumbs) || is_array($thumbs)) continue;
+            $thumbs = array_map('trim', explode(' ', $thumbs));
+            if (count($thumbs) === 2) {
+                $config['KANSO_THUMBNAILS'][$i] = [intval($thumbs[0]), intval($thumbs[1])];
+            }
+            else {
+                $config['KANSO_THUMBNAILS'][$i] = intval($thumbs[0]);
+            }
+        }
 
         # Fiter and sanitize the image quality 
         if ($config['KANSO_IMG_QUALITY'] <= 0 || $config['KANSO_IMG_QUALITY'] > 100)  $config['KANSO_IMG_QUALITY'] = $this->defaults['KANSO_IMG_QUALITY']; 

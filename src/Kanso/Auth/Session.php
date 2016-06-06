@@ -104,7 +104,7 @@ class session
         $Gatekeeper = \Kanso\Kanso::getInstance()->Gatekeeper;
 
         # If the session is more than 12 hours old, destroy it
-        if ($this->get('sessionLastActive') < strtotime('-12 hours')) $this->clear();
+        if ($this->get('sessionLastActive') < strtotime('-24 hours')) $this->clear();
 
         # If this is a GET request, store the last visited page
         if ($this->isGETrequest && $this->requestURL) $this->setReferrer($this->requestURL);
@@ -114,7 +114,7 @@ class session
         # otherwise generate it and save it to the SESSION
         if ($this->isGETrequest && $this->requestURL) {
             
-            if (!$this->get('kanso_public_key') || ($this->get('kanso_keys_time') && $this->get('kanso_keys_time') < strtotime('-12 hours')) ) {
+            if (!$this->get('kanso_public_key') || ($this->get('kanso_keys_time') && $this->get('kanso_keys_time') < strtotime('-24 hours')) ) {
                 $this->regenerateToken();
             }
         }

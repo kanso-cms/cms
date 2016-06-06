@@ -1099,7 +1099,6 @@ class PostController
             'tags'       => 'trim|sanitize_string',
             'type'       => 'trim|sanitize_string',
             'excerpt'    => 'trim|sanitize_string',
-            'category'   => 'trim|sanitize_string',
             'thumbnail'  => 'trim|sanitize_string',
         ]);
 

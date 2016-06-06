@@ -55,7 +55,7 @@ class Gatekeeper
     public function isLoggedIn()
     {
         $session = \Kanso\Kanso::getInstance()->Session;
-        if ($session->get('sessionLastActive') < strtotime('-12 hours')) $session->clear();
+        if ($session->get('sessionLastActive') < strtotime('-24 hours')) $session->clear();
         return $session->get('sessionIsLoggedIn') === true && $session->get('KANSO_ADMIN_DATA') !== null;
     }
 

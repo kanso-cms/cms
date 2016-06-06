@@ -742,7 +742,7 @@ function $(selector, context) {
 // ##############################################################################
 
 /* 
-	Form validator 
+    Form validator 
 */
 var formValidator = function(inputs) {
     if (!(this instanceof formValidator)) {
@@ -946,7 +946,10 @@ formValidator.prototype = {
 
     validateCommaListNumbers: function(value) {
         var re = /^((\d+),\s)+(\d+)$/;
-        return re.test(value);
+        if (re.test(value)) return true;
+        var _re = /^(((\d+)\s*(\d+),)\s*)(((\d+)\s*(\d+),)\s*)(((\d+)\s*(\d+))\s*)$/;
+        if (_re.test(value)) return true;
+        return false;
     },
 
     validateURLPath: function(value) {
@@ -2041,8 +2044,8 @@ Ajax.post(GLOBAL_AJAX_URL, {
 // ##############################################################################
 
 /* 
-	Prevennt ajax forms from being submitted 
-   	and add active class on click
+    Prevennt ajax forms from being submitted 
+    and add active class on click
 */
 var GLOBAL_PROGRESS = $('.js-global-progress .progress');
 
