@@ -43,7 +43,9 @@ class Callback
                 $controller = new $segments[0]($args);
 
                 # call method
-                return $controller->$segments[1]();
+                $method = $segments[1];
+
+                return $controller->$method();
                 
             }
         }

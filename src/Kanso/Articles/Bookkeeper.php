@@ -558,7 +558,7 @@ class Bookkeeper
 	  	$catRow = $Query->SELECT('*')->FROM('categories')->WHERE('name', '=', $category)->ROW();
 
 	  	# If it exists return it
-	  	if ($catRow) return $default;
+	  	if ($catRow) return $catRow;
 
 	  	# Otherwise create a new category and return it
 	  	$row = [

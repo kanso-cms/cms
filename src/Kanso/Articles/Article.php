@@ -147,8 +147,8 @@ class Article
 
 		# Only load the category once
 		if (!isset($this->row['category'])) {
-			$category = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$this->row['category_id'])->ROW();
-			$this->row['category'] 	  = $category;
+			$category = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('categories')->WHERE('id', '=', $this->row['category_id'])->ROW();
+			$this->row['category'] = $category;
 		}
 		return $this->row['category'];
 	}

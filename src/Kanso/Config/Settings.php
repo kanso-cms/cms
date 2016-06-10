@@ -438,19 +438,55 @@ class Settings
      */
     private function updatePostPermalinks() 
     {
-        # Get a new Query Builder
-        $Query = \Kanso\Kanso::getInstance()->Database()->Builder();
+        # Get the Kanso SQL builder
+        $SQL = \Kanso\Kanso::getInstance()->Database->Builder();
 
         # Get all the articles 
-        $allPosts = $Query->getArticlesByIndex(null, null, null, ['tags', 'category', 'content', 'comments', 'author']);
+        $allPosts = $this->getAllArticles();
        
         # Loop through the articles and update the slug and permalink
         if ($allPosts && !empty($allPosts)) {
             foreach ($allPosts as $post) {
-                $newSlug = $this->titleToSlug($post['title'], $post['category']['slug'], $post['author'][0]['slug'], $post['created'], $post['type']);
-                $Query->UPDATE('posts')->SET(['slug', $newSlug])->WHERE('id', '=', $post['id'])->QUERY();
+                $newSlug = $this->titleToSlug($post['title'], $post['category']['slug'], $post['author']['slug'], $post['created'], $post['type']);
+                $SQL->UPDATE('posts')->SET(['slug' => $newSlug])->WHERE('id', '=', $post['id'])->QUERY();
             }
         }
+    }
+
+    private function getAllArticles()
+    {
+        # Get the Kanso Query builder
+        $Query = \Kanso\Kanso::getInstance()->Query;
+
+        # Get the Kanso SQL builder
+        $SQL = \Kanso\Kanso::getInstance()->Database->Builder();
+
+        # Select the posts
+        $SQL->SELECT('posts.*')->FROM('posts');
+
+        # Apply basic joins for queries
+        $SQL->LEFT_JOIN_ON('users', 'users.id = posts.author_id');
+        $SQL->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id');
+        $SQL->LEFT_JOIN_ON('categories', 'posts.category_id = categories.id');
+        $SQL->LEFT_JOIN_ON('tags_to_posts', 'posts.id = tags_to_posts.post_id');
+        $SQL->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id');
+        $SQL->GROUP_BY('posts.id');
+
+        # Find the articles
+        $articles = $SQL->FIND_ALL();
+
+        # Pre validate there are actually some articles to process
+        if (empty($articles)) return [];
+
+        # Add full joins as keys
+        foreach ($articles as $i => $row) {
+            $articles[$i]['tags']     = $SQL->SELECT('tags.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id')->WHERE('tags_to_posts.post_id', '=', (int)$row['id'])->FIND_ALL();
+            $articles[$i]['category'] = $SQL->SELECT('*')->FROM('categories')->WHERE('id', '=', (int)$row['category_id'])->FIND();
+            $articles[$i]['author']   = $SQL->SELECT('*')->FROM('users')->WHERE('id', '=', (int)$row['author_id'])->FIND();
+            $articles[$i]['excerpt']  = urldecode($row['excerpt']);
+        }
+
+        return $articles;
     }
 
     /**
@@ -466,12 +502,8 @@ class Settings
     private function titleToSlug($title, $categorySlug, $authorSlug, $created, $type) 
     {
 
-        # Static pages don't have a permalink structure
-        if ($type === 'page') return \Kanso\Utility\Str::slugFilter($title);
-
-        # Get the permalinks structure
-        $format = self::$Kanso->Config['KANSO_PERMALINKS'];
-
+        if ($type === 'page') return \Kanso\Utility\Str::slugFilter($title).'/';
+        $format = $this->tempConfig['KANSO_PERMALINKS'];
         $dateMap = [
             'year'     => 'Y',
             'month'    => 'm',
@@ -488,12 +520,9 @@ class Settings
         $slug = '';
         $urlPieces = explode('/', $format);
         foreach ($urlPieces as $key) {
-            
-            if (isset($dateMap[$key])) $slug .= date($dateMap[$key], $created).DIRECTORY_SEPARATOR;
-            
-            else if (isset($varMap[$key])) $slug .= $varMap[$key].DIRECTORY_SEPARATOR;
+            if (isset($dateMap[$key])) $slug .= date($dateMap[$key], $created).'/';
+            else if (isset($varMap[$key])) $slug .= $varMap[$key].'/';
         }
-
         return $slug;
 
     }

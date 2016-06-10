@@ -1117,6 +1117,10 @@ class PostController
 
         $article = $isNewArticle ? \Kanso\Kanso::getInstance()->Bookkeeper->create() : \Kanso\Kanso::getInstance()->Bookkeeper->existing($validated_data['id']);
 
+        # Get the article content directly from the _POST global
+        # so it is not filtered in any way
+        if (isset($_POST['content'])) $validated_data['content'] = $_POST['content'];
+
         foreach ($validated_data as $key => $value) {
             $article->$key = $value;
         }        
@@ -1177,6 +1181,11 @@ class PostController
         $validated_data['comments_enabled'] = \Kanso\Utility\Str::bool($validated_data['comments']);
 
         $article = $newArticle ? \Kanso\Kanso::getInstance()->Bookkeeper->create() : \Kanso\Kanso::getInstance()->Bookkeeper->existing($validated_data['id']);
+
+        # Get the article content directly from the _POST global
+        # so it is not filtered in any way
+        if (isset($_POST['content'])) $validated_data['content'] = $_POST['content'];
+
 
         foreach ($validated_data as $key => $value) {
             $article->$key = $value;
