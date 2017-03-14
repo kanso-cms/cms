@@ -1,48 +1,276 @@
 <?php
+
+namespace Kanso\Admin;
+
 /**
- * Admin.php
+ * Admin class
  *
- * This file is the what gets loaded into Kanso's
- * View when a request for a page in the admin panel
- * is succefully processed.
+ * The admin class is used for public access to extend
+ * the admin panel.
  */
+class Admin
+{
 
-/********************************************************************************
-* Admin includes
-*******************************************************************************/
-$ADMIN_INCLUDES_DIR = dirname(__FILE__).'/Views/';
+    /**
+     * @var string
+     */ 
+    private $pageName;
 
-# Require admin functions
-require_once(dirname(__FILE__).'/functions.php');
+    /**
+     * @var boolean
+     */ 
+    private $isPost = false;
 
-# Include the header 
-require_once($ADMIN_INCLUDES_DIR.'header.php');
+    /**
+     * @var array
+     */ 
+    private $pageVars = [];
 
-# Include appropriate page templates
-if ($ADMIN_PAGE_TYPE === 'login') {
-	require_once($ADMIN_INCLUDES_DIR.'Account/login.php');
-}
-else if ($ADMIN_PAGE_TYPE === 'resetpassword') {
-	require_once($ADMIN_INCLUDES_DIR.'Account/resetPassword.php');
-}
-else if ($ADMIN_PAGE_TYPE === 'register') {
-	require_once($ADMIN_INCLUDES_DIR.'Account/register.php');
-}
-else if ($ADMIN_PAGE_TYPE === 'forgotpassword') {
-	require_once($ADMIN_INCLUDES_DIR.'Account/forgotPassword.php');
-}
-else if ($ADMIN_PAGE_TYPE === 'forgotusername') {
-	require_once($ADMIN_INCLUDES_DIR.'Account/forgotUsername.php');
-}
-else if ($ADMIN_PAGE_TYPE === 'articles' || $ADMIN_PAGE_TYPE === 'taxonomy' || $ADMIN_PAGE_TYPE === 'comments') {
-	require_once($ADMIN_INCLUDES_DIR.'Admin/articles.php');
-}
-else if ($ADMIN_PAGE_TYPE === 'settings') {
-	require_once($ADMIN_INCLUDES_DIR.'Admin/settings.php');
-}
-else if ($ADMIN_PAGE_TYPE === 'writer') {
-	require_once($ADMIN_INCLUDES_DIR.'Admin/writer.php');
-}
+    /**
+     * Constructor
+     *
+     */
+    public function __construct()
+    {
+        # Is this a POST request?
+        $this->isPost = \Kanso\Kanso::getInstance()->Request->isPost() && $this->validatePOST();
+    }
 
-# Include the footer
-require_once ($ADMIN_INCLUDES_DIR.'footer.php');
+    /**
+     * Create a new admin page
+     *
+     * @param string     $pageTitle     The name of the page on the sidebar
+     * @param string     $icon          The icon of the sidebar menu item
+     * @param string     $slug          The url slug for the page
+     * @param string     $model         A string representation of a class model and function e.g 
+     *                                  "\Namespace\Models\Admin@myPage"
+     * @param array      $styles        Array of stylesheets to add to the admin panel's head (optional)
+     * @param array      $styles        Array of scripts to add to the admin panel's body (optional)
+     *
+     */
+    public function page($pageTitle, $icon, $slug, $model, $styles = [], $scripts = [])
+    {
+       
+        # Filter the slug
+        $slug = \Kanso\Utility\Str::slugFilter($slug);
+
+        # Filter the slug
+        $menuName = \Kanso\Utility\Str::slugFilter($pageTitle);
+
+        # Add the sidebar menu
+        $sbItem = [
+            'link'     => "/admin/$slug/",
+            'text'     => $pageTitle,
+            'icon'     => $icon,
+            'children' => [],
+        ];
+        \Kanso\Kanso::getInstance()->Filters->on('adminSidebarLinks', function($links) use($menuName, $sbItem) {
+            $links[$menuName] = $sbItem;
+            return $links;
+        });
+        
+        # Add the scripts and styles
+        \Kanso\Kanso::getInstance()->Events->on('adminInit', function($page) use($styles, $scripts) {
+            if ($this->pageName === $page) {
+                $this->addStyles($styles);
+                $this->addScripts($scripts);
+            }
+        });
+
+        # Filter the page title
+        \Kanso\Kanso::getInstance()->Filters->on('adminPageTitle', function($title) use($pageTitle, $menuName) {
+            if ($this->pageName === $menuName) {
+                return "$pageTitle | Kanso";
+            }
+            return $title;
+        });
+
+        # Add the routes
+        \Kanso\Kanso::getInstance()->get("/admin/$slug/",  '\Kanso\Admin\Controllers\Custom@dispatch', $model); 
+        \Kanso\Kanso::getInstance()->post("/admin/$slug/", '\Kanso\Admin\Controllers\Custom@dispatch', $model); 
+
+    }
+
+    /********************************************************************************
+    * SETTERS AND GETTERS
+    *******************************************************************************/
+
+    /**
+     * Set the page name
+     *
+     * @param string      $name      The name of the page
+     *
+     */
+    public function setPageName($name)
+    {
+        $this->pageName = $name;
+    }    
+
+    /**
+     * Set the page name
+     *
+     * @return string
+     *
+     */
+    public function getPageName()
+    {
+        return $this->pageName;
+    }
+
+    /**
+     * Is this a POST request ?
+     *
+     * @return boolean
+     */
+    public function isPost()
+    {
+        return $this->isPost;
+    }
+
+    /**
+     * Is the current user logged in
+     *
+     * @return boolean
+     */
+    public function isLoggedIn()
+    {
+        return \Kanso\Kanso::getInstance()->Gatekeeper->isLoggedIn();
+    }
+
+
+    /********************************************************************************
+    * PAGE RENDERING
+    *******************************************************************************/
+
+    /**
+     * Set the page variables
+     *
+     * @param  array    $_vars    Associative array of variables to load into the template (optional)
+     * @return $this
+     */
+    public function pageVars($_vars = [])
+    {
+        $includes = new \Kanso\Admin\Models\Includes($this->pageName);
+        $token    = \Kanso\Kanso::getInstance()->Session->getToken();
+        $vars     = [
+            'ADMIN_PAGE_TYPE'    => $this->pageName,
+            'ADMIN_INCLUDES'     => $includes,
+            'ACCESS_TOKEN'       => $token,
+            'IS_POST'            => $this->isPost,
+            'POST_RESPONSE'      => false,
+        ];
+        if (is_array($_vars) && !empty($_vars)) $vars = array_merge($vars, $_vars);
+
+        $this->pageVars = $vars;
+
+        return $this;
+    }
+
+    public function getPageVars()
+    {
+        # Make sure the page variables have been loaded
+        if (empty($this->pageVars)) $this->pageVars();
+
+        return $this->pageVars;
+    }
+
+    /**
+     * Render the admin panel
+     *
+     * @param  string    $template    Path to template file (optional)
+     */
+    public function render($template = null)
+    {
+        # Make sure the page variables have been loaded
+        if (empty($this->pageVars)) $this->pageVars();
+
+        # The default template if one wasn't provided
+        if (!$template) $template = \Kanso\Kanso::getInstance()->Environment['KANSO_ADMIN_DIR'].DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'Admin.php';
+
+        \Kanso\Kanso::getInstance()->render($template, $this->pageVars);
+    }
+
+    /********************************************************************************
+    * PRIVATE VALIDATORS
+    *******************************************************************************/
+
+    /**
+     * Is this a valid POST request ?
+     *
+     * @return boolean
+     */
+    private function validatePOST() 
+    {
+        # A valid user must exist
+        if (!\Kanso\Kanso::getInstance()->Gatekeeper->getUser()) return false;
+
+        # If the request does NOT have a valid access token 404
+        if (!$this->validateAccessToken()) return false;
+
+        # Validate that the request came from the admin panel
+        if (!$this->validatereferrer()) return false;
+
+        return true;
+    }
+
+     /**
+     * Is the access token valid ?
+     *
+     * @return boolean
+     */
+    private function validateAccessToken() 
+    {
+        $postVars = \Kanso\Kanso::getInstance()->Request->fetch();
+        if (!isset($postVars['access_token'])) return false;
+        return \Kanso\Kanso::getInstance()->Gatekeeper->verifyAccessToken($postVars['access_token']);
+    }
+
+    /**
+     * Is the referrer coming from the admin panel ?
+     *
+     * @return boolean
+     */
+    private function validatereferrer() 
+    {
+        $referrer = \Kanso\Kanso::getInstance()->Session->getReferrer();
+        if (!$referrer) return false;
+        if (strpos($referrer, \Kanso\Kanso::getInstance()->Environment['KANSO_ADMIN_URI']) !== false) return true;
+        return false;
+    }
+
+    /********************************************************************************
+    * PRIVATE HELPERS
+    *******************************************************************************/
+
+    /**
+     * Add stylessheets to the admin panel on a custom page
+     *
+     * @param array      $_styles      Array of URLs to stylesheets
+     *
+     */
+    private function addStyles($_styles)
+    {
+        if (!empty($_styles)) {
+            \Kanso\Kanso::getInstance()->Filters->on('adminHeaderScripts', function($styles) {
+                return array_merge($styles, $_styles);
+            });
+        }
+    }
+
+    /**
+     * Add scripts to the admin panel on a custom page
+     *
+     * @param array      $_scripts      Array of URLs to scripts or any other HTML
+     *
+     */
+    private function addScripts($_scripts)
+    {
+        if (!empty($_scripts)) {
+            \Kanso\Kanso::getInstance()->Filters->on('adminFooterScripts', function($scripts) {
+                return array_merge($scripts, $_scripts);
+            });
+        }
+    }
+
+
+}

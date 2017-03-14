@@ -182,19 +182,16 @@ class SpamProtector
     {
 
         $file = __DIR__.DIRECTORY_SEPARATOR.'Dictionaries'.DIRECTORY_SEPARATOR.$dictionary.'.txt';
-        
+       
         if (file_exists($file) && is_file($file)) {
-            
-            $dictionary = self::loadDictionary($file);
-
-            $list       = [];
+            $dictionary   = self::loadDictionary($dictionary);
+            $result       = [];
             foreach ($dictionary as $entry) {
-                if ($entry !== $term) $list[] = $entry;
+                if ($entry !== $term) $result[] = $entry;
             }
-            
-            $list = array_unique($list);
-            sort($list);
-            file_put_contents($file, implode("\n",$list));
+            $result  = array_unique($result);
+            sort($result);
+            file_put_contents($file, implode("\n",$result));
         }
 
     }

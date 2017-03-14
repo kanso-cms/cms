@@ -34,7 +34,7 @@ class Bookkeeper
 	}
 
 	/**
-   	 * Get a new article object
+   	 * Get an existing article by id
    	 *
    	 * @param  int     $id     Kanso\Articles\Article
      * @return \Kanso\Articles\Article
@@ -48,10 +48,12 @@ class Bookkeeper
 	}
 
 	/**
-   	 * Get a new article object
+   	 * Get an existing article by key/value
    	 *
-   	 * @param  int     $id     Kanso\Articles\Article
-     * @return \Kanso\Articles\Article
+   	 * @param  string  $index        Table and column in dot notation e.g posts.id or autor.id or tags.name
+   	 * @param  mixed   $value        The value of the column
+   	 * @param  mixed   $published    Is the article published?
+     * @return array   [Kanso\Articles\Article]
      */
 	public function byIndex($index, $value, $published = true)
 	{
@@ -92,73 +94,58 @@ class Bookkeeper
 	/**
    	 * Save a new and or existing article
    	 *
-     * @param  array     $rowData     Kanso\Articles\Article->tmpRow
+     * @param  array|object     $rowData     Kanso\Articles\Article->tmpRow|Kanso\Articles\Article->tmpRow
      * @return array|boolean
      */
 	public function saveArticle($rowData)
-	{		
+	{
+		# Get a new Query Builder
+        $Query = \Kanso\Kanso::getInstance()->Database->Builder();
+
 		# Is this a new or existing article
-		$rowData['id'] = (int)$rowData['id']; 
-        if (!isset($rowData['id']) || (isset($rowData['id']) && $rowData['id'] < 1)) {
-        	$newArticle = true;
-        }
-        else {
-        	$newArticle = false;
-        }
+		$newArticle = true;
+		if (isset($rowData['id']) && !empty($rowData['id'])) {
+			$rowData['id']       = intval($rowData['id']);
+			$newArticle          = false;
+			$rowData['modified'] = time();
+		}
 
 		# Save the initial slug
 		$initialSlug = $rowData['slug'];
 
-		# Get a new Query Builder
-        $Query = \Kanso\Kanso::getInstance()->Database->Builder();
-
 		# If the category doesn't exist - create it
 		$rowData['category'] = $this->createCategory($rowData['category']);
+		$rowData['category_id'] = $rowData['category']['id'];
 
 		# If the tags don't exist - create them
 		$rowData['tags'] = $this->createTags($rowData['tags']);
 
+		# Make sure there is a valid author
+		$rowData['author'] = $this->getAuthor($rowData['author']);
+		$rowData['author_id'] = $rowData['author']['id'];
+
 		# Validate the title
 		$rowData['title'] = trim($rowData['title']);
 		if (empty($rowData['title'])) $rowData['title'] = 'Untitled';
+
+		# Sanitize the thumbnail
+		$rowData['thumbnail'] = \Kanso\Utility\Str::getAfterLastChar( rtrim($rowData['thumbnail'], '/'), '/');
 
 		# Figure out if the title needs to be changed
 		if ($newArticle) {
 			$rowData['title'] = $this->uniqueBaseTitle($rowData['title']);
 		}
 		else if ($rowData['title'] === 'Untitled' && !$newArticle) {
-			$titleExists = $Query->SELECT('title')->FROM('posts')->where('title', '=', $rowData['title'])->AND_WHERE('id', '!=', (int)$rowData['id'])->FIND();
+			$titleExists = $Query->SELECT('title')->FROM('posts')->where('title', '=', $rowData['title'])->AND_WHERE('id', '!=', $rowData['id'])->FIND();
 			if ($titleExists) $rowData['title'] = $this->uniqueBaseTitle('Untitled');
 		}
-
-		# Sanitize the thumbnail
-		$rowData['thumbnail'] = \Kanso\Utility\Str::getAfterLastChar( rtrim($rowData['thumbnail'], '/'), '/');
-
+		
 		# Create a slug based on the category, tags, slug, author
 		$rowData['slug'] = $this->titleToSlug($rowData['title'], $rowData['category']['slug'], $rowData['author']['slug'], $rowData['created'], $rowData['type']);
 
-		# Make sure the author is an array
-		if (is_string($rowData['author'])) {
-			$author = $Query->SELECT('*')->FROM('users')->WHERE('name', '=', $rowData['author'])->ROW();
-			if (!$author) {
-				$rowData['author'] = ['id' => 1];
-			}
-			else {
-				$rowData['author'] = $author;
-			}
-		}
-		else if (!isset($rowData['author'])) {
-			$rowData['author'] = ['id' => 1];
-		}
-
-		# Sanitize variables
-		$rowData['excerpt']     	 = $rowData['excerpt'];
-		$rowData['author_id']   	 = (int)$rowData['author']['id'];
-		$rowData['category_id']  	 = (int)$rowData['category']['id'];
-		$rowData['comments_enabled'] = (bool)$rowData['comments_enabled'];
-		$rowData['content'] 		 = urlencode($rowData['content']);
-		$rowData['excerpt'] 		 = urlencode($rowData['excerpt']);
-
+		# Sanitize comments_enabled
+		$rowData['comments_enabled'] = boolval($rowData['comments_enabled']);
+	
 		# Remove joined rows so we can update/insert
 		$insertRow = \Kanso\Utility\Arr::unsetMultiple(['tags', 'category', 'content', 'comments', 'author'], $rowData);
 
@@ -170,9 +157,9 @@ class Bookkeeper
 		}
 		# Or update an existing row
 		else {
-			$Query->UPDATE('posts')->SET($insertRow)->WHERE('id', '=', (int)$rowData['id'])->QUERY();
-			$Query->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', (int)$rowData['id'])->QUERY();
-			$Query->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', (int)$rowData['id'])->QUERY();
+			$Query->UPDATE('posts')->SET($insertRow)->WHERE('id', '=', $rowData['id'])->QUERY();
+			$Query->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', $rowData['id'])->QUERY();
+			$Query->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $rowData['id'])->QUERY();
 		}
 
 		# Join the tags
@@ -547,12 +534,14 @@ class Bookkeeper
 	  		'slug' => 'uncategorized',
 	  	];
 	  	
-	    # Get a new Query Builder
+        if (empty($category)) return $default;
+
+         # Get a new Query Builder
         $Query = \Kanso\Kanso::getInstance()->Database->Builder();
 
         # If the category is an array get the name
         # This is only incase it was deleted previously
-        if (is_array($category)) $category = $category['name'];
+        if (is_array($category) && isset($category['name'])) $category = $category['name'];
 
         # Check if the category exists
 	  	$catRow = $Query->SELECT('*')->FROM('categories')->WHERE('name', '=', $category)->ROW();
@@ -580,18 +569,15 @@ class Bookkeeper
 	 */
     private function createTags($tags) 
     {
-
 	  	# Get a new Query Builder
         $Query = \Kanso\Kanso::getInstance()->Database->Builder();
 
         # Set an empty list
-	   	$tagsList = [
-	   		[
+	   	$tagsList = [[
 		  		'id' => 1,
 				'name' => 'Untagged',
 				'slug' => 'untagged'
-	  		],
-	   	];
+		]];
 
 	   	if (is_string($tags)) $tags = array_filter(array_map('trim', explode(',', $tags)));
 
@@ -603,7 +589,7 @@ class Bookkeeper
 	  		
 	  		if (ucfirst($tag) === 'Untagged') continue;
 	  		
-	  		$tagRow  = $Query->SELECT('*')->FROM('tags')->WHERE('name', '=', $tag)->FIND();
+	  		$tagRow = $Query->SELECT('*')->FROM('tags')->WHERE('name', '=', $tag)->FIND();
 	  		
 	  		if ($tagRow) {
 	   			$tagsList[] = $tagRow;
@@ -619,9 +605,34 @@ class Bookkeeper
 	   		}
 	  	}
 
+	  	# If there's more than 1 tag remove untagged
 	  	if (count($tagsList) > 1) array_shift($tagsList);
 
    		return $tagsList;
+   	}
+
+   	/**
+	 * Make sure the row has an author from the DB
+	 *
+	 * @param  mixed   $_author       name or id of author or null
+	 * @return array             
+	 */
+   	private function getAuthor($_author)
+   	{
+   		# Get a new Query Builder
+        $Query = \Kanso\Kanso::getInstance()->Database->Builder();
+
+   		$author = [];
+   		if (is_numeric($_author)) {
+			$author = $Query->SELECT('*')->FROM('users')->WHERE('id', '=', $_author)->ROW();
+		}
+   		else if (is_string($_author)) {
+			$author = $Query->SELECT('*')->FROM('users')->WHERE('name', '=', $_author)->ROW();
+		}
+		if (empty($author)) {
+			$author = $Query->SELECT('*')->FROM('users')->WHERE('id', '=', 1)->ROW();
+		}
+		return $author;
    	}
 
 	/**

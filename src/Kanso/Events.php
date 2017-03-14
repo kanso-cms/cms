@@ -71,25 +71,18 @@ class Events
     }
 
     /**
-     * Hook into an event
+     * Hook into a filter
      *
-     * This function is used to hook into a Kanso event externally
+     * This function is used to hook into a Kanso filter externally
      *
-     * @param  string    $eventName    The name of the event being fired
-     * @param  array     $args         The arguements to be sent to event
-     * @return Kanso\Events|false
+     * @param  string    $eventName    The name of the filter being fired
+     * @param  array     $callback     The callback to user on the event
+     *
      */
     public function on($eventName, $callback) {
-        if (!is_array($args)) $args = [$args];
-        if (isset(self::$events[$eventName])) {
-            array_push(self::$events[$eventName], true);
-            array_push(self::$callbacks, $callback);
-            return $this;
-        }
-        else {
-            return false;
-        }
+        self::$callbacks[$eventName][] = $callback;
     }
+
 
     /**
      * Fire an event
@@ -98,19 +91,21 @@ class Events
      * the Kanso application. It should not really be used externally 
      * unless you really know what you're doing.
      *
-     * @param string    $eventName    The name of the event being fired
-     * @param array     $args         The arguements to be sent to event
+     * @param string    $eventName     The name of the filter being fired
+     * @param array     $args          The arguments to be sent to filter
      */
     public static function fire($eventName, $args = []) 
     {
-        if (isset(self::$events[$eventName]) && !empty(self::$events[$eventName])) {
-            
-            $events = array_keys(self::$events[$eventName]);
-            
-            foreach ($events as $i) {
-               
+
+        # Is there a custom callback for the filter?   
+        if (isset(self::$callbacks[$eventName]) && !empty(self::$callbacks[$eventName])) {
+
+            # Loop the filter callbacks
+            foreach (self::$callbacks[$eventName] as $filter) {
+
                 # Apply the callback
-                \Kanso\Utility\Callback::apply(self::$callbacks[$i], $args);
+                \Kanso\Utility\Callback::apply($filter, $args);
+
             }
         }
     }

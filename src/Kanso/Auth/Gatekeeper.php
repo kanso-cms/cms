@@ -17,16 +17,18 @@ class Gatekeeper
      */
 	private $user;
 
+    /**
+     * @var boolean
+     */
+    private $requested_user;
+
 	/**
      * Constructor
      */
     public function __construct()
     {
-        $session = \Kanso\Kanso::getInstance()->Session;
-    	# Get the user from the session and crete a new user object
-        # Note this user may or may not be logged in
-        $this->user = $session->get('KANSO_ADMIN_DATA');
-        if (!$this->user) $this->user = $session->get();
+        # Get the user cookie
+        $this->user = \Kanso\Kanso::getInstance()->Session->get();
     }
 
     /********************************************************************************
@@ -36,11 +38,21 @@ class Gatekeeper
     /**
      * Get the current user object
      * 
-     * @return \Kanso\Auth\Helper\User
+     * @return array
      */
     public function getUser()
-    {       
+    {
+        if ($this->isLoggedIn() && !$this->requested_user) {
+            $row = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('id', '=', $this->user['id'])->ROW();
+            $this->user = array_merge($this->user, $row);
+            $this->requested_user = true;
+        }
         return $this->user;
+    }
+
+    public function setUser($row)
+    {
+        $this->user = array_merge($this->user, $row);
     }
 
     /********************************************************************************
@@ -50,23 +62,25 @@ class Gatekeeper
     /**
      * Validate that a user is logged in to Kanso
      *
-     * @return Bool 
+     * @return Boolean
      */
     public function isLoggedIn()
     {
-        $session = \Kanso\Kanso::getInstance()->Session;
-        if ($session->get('sessionLastActive') < strtotime('-24 hours')) $session->clear();
-        return $session->get('sessionIsLoggedIn') === true && $session->get('KANSO_ADMIN_DATA') !== null;
+        return \Kanso\Kanso::getInstance()->Session->isLoggedIn();
     }
 
     /**
-	 * Is the current user a guest (i.e not logged in)
+	 * Is the current user a guest - i.e not allowed inside the admin panel
 	 *
 	 * @return boolean
 	 */
     public function isGuest()
     {
-    	return $this->isLoggedIn() === false;
+    	# Validate the user is logged in first
+        if (!$this->isLoggedIn()) return false;
+
+        # Check if they're an admin user
+        return $this->user['role'] !== 'administrator' && $this->user['role'] !== 'writer';
     }
 
     /**
@@ -77,9 +91,10 @@ class Gatekeeper
     public function isAdmin()
     {
         # Validate the user is logged in first
-        if ($this->isGuest()) return false;
+        if (!$this->isLoggedIn()) return false;
 
         # Check if they're an admin user
+        $this->getUser();
         return $this->user['role'] === 'administrator';
     }
 
@@ -88,7 +103,7 @@ class Gatekeeper
      *
      * @return boolean
      */
-    public function verifyAjaxToken($token)
+    public function verifyAccessToken($token)
     {
        return  \Kanso\Kanso::getInstance()->Session->validateToken($token);
     }
@@ -223,7 +238,7 @@ class Gatekeeper
      * 
      * @return Kanso\Auth\Helper\User|false
      */
-    public function activateUser($username, $email, $password, $token)
+    public function activateUser($username, $password, $token)
     {
     	# Get the databse instance
         $Database = \Kanso\Kanso::getInstance()->Database;
@@ -237,15 +252,12 @@ class Gatekeeper
         # Validate the user and is not already activated
         if (!$user || $user['status'] === 'confirmed') return false;
 
-        # Validate the entry email address is same as the requested
-        if ($user['email'] !== $email) return false;
-
-        # Validate another user with the same username doeesn't already exist
+        # Validate another user with the same username doesn't already exist
         $userExists = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('username', '=', $username)->ROW();
         if ($userExists) return false;
 
         # Activate the new user and update their 
-        # database enties
+        # database entries
         $row = [];
         $row['hashed_pass']  = utf8_encode(\Kanso\Security\Encrypt::hash($password));
         $row['slug']         = \Kanso\Utility\Str::slugFilter($username);
@@ -295,7 +307,7 @@ class Gatekeeper
      * @param  array   $deleter    The user's database entry doing the current operation
      * @return boolean
      */
-    public function deleteUser($id, $deleter = null) 
+    public function deleteUser($id) 
     {
         # Make sure the id is an int
         $id = (int)$id;
@@ -309,36 +321,18 @@ class Gatekeeper
         # Get a new Query Builder
         $Query = $Database->Builder();
 
-        # If the user was not provided get it from the session
-        # Validate the user is an admin
-        if ($deleter) {
-            
-            if ($deleter['role'] !== 'administrator') return false;
-
-            # A user can't delete themself
-            if ($id === $deleter['id']) return false;
-        }
-
         # Validate the user exists
         $userRow = $Query->SELECT('*')->FROM('users')->where('id', '=', $id)->ROW();
         if (!$userRow) return false;
 
-        # Set the user's status to deleted 
-        # We need to keep them in the database for authorship purposes though
-        $slug = $userRow['slug'];
-        $userRow['status']              = 'deleted';
-        $userRow['username']            = null;
-        $userRow['hashed_pass']         = null;
-        $userRow['slug']                = null;
-        $userRow['kanso_register_key']  = null;
-        $userRow['kanso_password_key']  = null;
-        $userRow['kanso_public_key']    = null;
-        $userRow['kanso_public_salt']   = null;
-        $userRow['kanso_keys_time']     = null;
+        # Change all their posts
+        $Query->UPDATE('posts')->SET(['author_id' => 1])->WHERE('author_id', '=', $id)->QUERY();
 
-        $Query->UPDATE('users')->SET($userRow)->WHERE('id', '=', $userRow['id'])->QUERY();
+        # Delete the user
+        $Query->DELETE_FROM('users')->WHERE('id', '=', $id)->QUERY();
 
-        $this->removeAuthorSlug($slug);
+        # Remove slugs
+        $this->removeAuthorSlug($userRow['slug']);
             
         return true;
     }
@@ -378,7 +372,6 @@ class Gatekeeper
         # Send email
         return \Kanso\Utility\Mailer::sendHTMLEmail($user['email'], $website, 'no-reply@'.$website, 'A reset password request has been made', $msg);
         
-        return false;
     }
 
     public function forgotUsername($email)
@@ -426,7 +419,7 @@ class Gatekeeper
         \Kanso\Kanso::getInstance()->Session->remove('session_kanso_password_key');
 
         # Reset the user's session
-        \Kanso\Kanso::getInstance()->Session->freshSession();
+        \Kanso\Kanso::getInstance()->Session->clear();
 
         # Create array of data for email template
         $website   = \Kanso\Kanso::getInstance()->Environment['KANSO_WEBSITE_NAME'];
@@ -538,25 +531,23 @@ class Gatekeeper
      */
     public function logClientIn($clientEntry) 
     {
-    	# Get the session
-    	$session = \Kanso\Kanso::getInstance()->Session;
-
+        $session = \Kanso\Kanso::getInstance()->Session;
+        
         # Create a fresh session
         $session->clear();
 
-        # Append login credentials to the session
+        # Add the user credentials
         $session->putMultiple([
-            'sessionLastActive' => time(),
-            'sessionIsLoggedIn' => true,
-            'KANSO_ADMIN_DATA'  => $clientEntry,
+            'id'    => $clientEntry['id'],
+            'email' => $clientEntry['email'],
+            'name'  => $clientEntry['name'],
         ]);
 
-        # Save a new ajax keys to the databse
-        $session->regenerateToken();
+        # Log the client in
+        $session->login();
 
         # Fire the event
         \Kanso\Events::fire('login', $clientEntry);
-
     }
 
     /**

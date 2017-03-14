@@ -13,41 +13,45 @@ namespace Kanso\Articles;
  */
 class Article
 {
+
+	/**
+	 * @var array    Pending data that needs to be saved
+	 */
+	private $pending = [];
+
 	/**
 	 * @var array    Associative array of the article data
 	 */
-	private $row;
-
-	/**
-	 * @var array    Associative array of pending article data
-	 */
-	private $tmpRow;
-
-	/**
-	 * @var array    Associative array of default article data
-	 */
-	private $keys = [
-
-		# Required keys
-		'id'          => null,
-		'created'     => null,
-		'modified'    => null,
-		'status'      => 'draft',
-		'type'        => 'post',
+	private $rowData = [
+		'id'          => '',
+		'created'     => '',
+		'modified'    => '',
+		'status'      => '',
+		'type'        => '',
 		'slug'        => '',
-		'title'       => 'Untitled',
+		'title'       => '',
 		'excerpt'     => '',
-		'author_id'   => 1,
-		'category_id' => null,
+		'author_id'   => '',
+		'category_id' => '',
 		'thumbnail'   => '',
-		'comments_enabled' => false,
-
+		'comments_enabled' => '',
+		
 		# Joins
-		'tags' 	   => 'Untagged',
-		'category' => 'Uncategorized',
-		'author'   => null,
-		'content'  => ' ',
-		'comments' => null,
+		'tags' 	      => [],
+		'category'    => [],
+		'author'      => [],
+		'content'     => ' ',
+		'comments'    => [],
+	];
+
+	/**
+	 * @var array    Defaults
+	 */
+	private $defaults = [
+		'author_id'   => 1,
+		'category_id' => 1,
+		'tags' 	      => [['id' => 1, 'name' => 'Untagged']],
+		'category'    => ['id' => 1, 'name' => 'Uncategorized'],
 	];
 
 	/**
@@ -57,22 +61,26 @@ class Article
 	 */
 	public function __construct($rowOrId = [])
 	{
-		$this->keys['created']  = time();
-		$this->keys['modified'] = time();
+		$this->rowData['created']  = time();
+		$this->rowData['modified'] = time();
 
-		if (!$rowOrId) {
-			$this->row    = $this->keys;
-			$this->tmpRow = $this->keys;
+		if (is_array($rowOrId) && !empty($rowOrId)) {
+			$this->rowData = $rowOrId;
+			$this->rowData['tags']     = [];
+			$this->rowData['category'] = [];
+			$this->rowData['author']   = [];
+			$this->rowData['comments'] = [];
+			$this->rowData['content']  = ' ';
 
-		}
-		else if (is_array($rowOrId)) {
-			$this->row    = $rowOrId;
-			$this->tmpRow = $rowOrId;
 		}
 		else if (is_numeric($rowOrId) || is_int($rowOrId)) {
-			$row = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('posts')->WHERE('id', '=', (int)$rowOrId)->ROW();
-			$this->row    = $row;
-			$this->tmpRow = $row;
+			$row = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('posts')->WHERE('id', '=', intval($rowOrId))->ROW();
+			$this->rowData = $row;
+			$this->rowData['tags']     = [];
+			$this->rowData['category'] = [];
+			$this->rowData['author']   = [];
+			$this->rowData['comments'] = [];
+			$this->rowData['content']  = ' ';
 		}
 	}
 
@@ -98,9 +106,9 @@ class Article
 			return $this->getTheComments();
 		}
 		else if ($key === 'excerpt') {
-			return urldecode($this->row['excerpt']);
+			return urldecode($this->rowData['excerpt']);
 		}
-		if (array_key_exists($key, $this->row)) return $this->row[$key];
+		if (array_key_exists($key, $this->rowData)) return $this->rowData[$key];
 		
 		return false;
 	}
@@ -110,29 +118,36 @@ class Article
 		if ($key === 'tags') {
 			$this->setTheTags($value);
 		}
-		else if (array_key_exists($key, $this->keys)) {
-			$this->tmpRow[$key] = $value;
+		else if ($key === 'category') {
+			$this->setTheCategory($value);
+		}
+		else if ($key === 'author') {
+			$this->setTheAuthor($value);
+		}
+		else if ($key === 'status') {
+			$this->setTheStatus($value);
+		}
+		else if ($key === 'excerpt') {
+			$this->rowData['excerpt'] = urlencode($value);
+		}
+		else if ($key === 'content') {
+			$this->rowData['content'] = urlencode($value);
+		}
+		
+		else if (array_key_exists($key, $this->rowData)) {
+			$this->rowData[$key] = $value;
 		}
 	}
 
 	public function __isset($key)
 	{
-		return array_key_exists($key, $this->row);
+		return array_key_exists($key, $this->rowData);
 	}
 
 	public function __unset($key)
 	{
-		if ($key === 'category') {
-			$this->tmpRow['category'] = $this->keys['category'];
-		}
-		else if ($key === 'tags') {
-			$this->tmpRow['tags'] = $this->keys['tags'];
-		}
-		else if ($key === 'author') {
-			$this->tmpRow['author'] = $this->getTheAuthor();
-		}
-		else if (array_key_exists($key, $this->keys)) {
-			$this->tmpRow[$key] = null;
+		if (array_key_exists($key, $this->rowData)) {
+			$this->rowData[$key] = '';
 		}
 	}
 
@@ -142,114 +157,95 @@ class Article
 
 	private function getTheCategory()
 	{
-		# If this is an unsaved row, return the temporary value
-		if ($this->row['id'] == null) return $this->tmpRow['category'];
-
-		# Only load the category once
-		if (!isset($this->row['category'])) {
-			$category = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('categories')->WHERE('id', '=', $this->row['category_id'])->ROW();
-			$this->row['category'] = $category;
+		
+		if (!empty($this->rowData['category_id'])) {
+			$category = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('categories')->WHERE('id', '=', $this->rowData['category_id'])->ROW();
+			if ($category) {
+				$this->rowData['category']    = $category;
+				$this->rowData['category_id'] = $category['id'];
+				return $category;
+			}
 		}
-		return $this->row['category'];
+		return $this->defaults['category'];
 	}
 
 	private function getTheTags()
 	{
-		# If this is an unsaved row, return the temporary value
-		if ($this->row['id'] == null) return $this->tmpRow['tags'];
-
-		# Only load the tags once
-		if (!isset($this->row['tags'])) {
-			$tags = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('tags.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id')->WHERE('post_id', '=', (int)$this->row['id'])->FIND_ALL();
-			$this->row['tags'] = $tags;
+		if (empty($this->rowData['tags']) || !isset($this->rowData['tags'])) {
+			if (!empty($this->rowData['id'])) {
+				$tags = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('tags.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id')->WHERE('post_id', '=', intval($this->rowData['id']))->FIND_ALL();
+				if ($tags) {
+					$this->rowData['tags'] = $tags;
+					return $tags;
+				}
+			}
 		}
-		return $this->row['tags'];
+		return $this->defaults['tags'];
 	}
 
 	private function getTheContent()
 	{
-		# If this is an unsaved row, return the temporary value
-		if ($this->row['id'] == null) return $this->tmpRow['content'];
-
-		# Only load the content once
-		if (!isset($this->row['content'])) {
-			$content = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('content')->FROM('content_to_posts')->WHERE('post_id', '=', (int)$this->row['id'])->ROW();
-			$this->row['content'] = urldecode($content['content']);
+		if (!empty($this->rowData['id'])) {
+			$content = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('content')->FROM('content_to_posts')->WHERE('post_id', '=', intval($this->rowData['id']))->ROW();
+			$this->rowData['content'] = $content['content'];
+			return urldecode($this->rowData['content']);
 		}
-		return $this->row['content'];
+		else if (!isset($this->rowData['content'])) {
+			return '';
+		}
+		else if ($this->rowData['content'] === ' ') {
+			return '';
+		}
+		return $this->rowData['content'];
 	}
-
 
 	private function getTheAuthor()
 	{
-		# If this is an unsaved row, return the initial admin
-		if ($this->row['id'] == null) {
-			$author = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('id', '=', 1)->ROW();
-			$this->row['author'] = $author;
+		if (!empty($this->rowData['author_id'])) {
+			$author = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('id', '=', $this->rowData['author_id'])->ROW();
+			if ($author) {
+				$this->rowData['author']    = $author;
+				$this->rowData['author_id'] = $author['id'];
+				return $author;
+			}
 		}
-
-		# Only load the content once
-		if (empty($this->row['author'])) {
-			$author = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('id', '=', (int)$this->row['author_id'])->ROW();
-			$this->row['author'] = $author;
+		if (empty($this->defaults['author'])) {
+			$this->defaults['author'] = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('id', '=', 1)->ROW();
 		}
-		return $this->row['author'];
+		return $this->defaults['author'];
 	}
 
 	private function getTheComments()
-	{	
-		# If this is an unsaved row, return the initial admin
-		if ($this->row['id'] == null) return [];
-
-		# Only load the comments once
-		if (empty($this->row['comments'])) {
-			$comments = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$this->row['id'])->FIND_ALL();
-			$this->row['comments']    = $comments;
-			$this->tmpRow['comments'] = $comments;
+	{
+		if (!empty($this->rowData['id'])) {
+			$comments = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('comments')->WHERE('post_id', '=', intval($this->rowData['id']))->FIND_ALL();
+			$this->rowData['comments'] = $comments;
 		}
-		return $this->row['comments'];
+		return $this->rowData['comments'];
 	}
 
 	/********************************************************************************
 	* SETTERS
 	*******************************************************************************/
 
-	private function setTheTags($names)
+	private function setTheCategory($category)
 	{
-		if (trim($names) === '' || $names == null) {
-			$this->tmpRow['tags'] = '';
-			return;
-		}
+		$this->pending['category'] = $category;
+	}
 
-		# Get the current tags
-		$tags = $this->getTheTags();
+	private function setTheTags($tags)
+	{
+		$this->pending['tags'] = $tags;
+	}
 
-		# Explode the tags into an array
-		$names = array_filter(array_map('trim', explode(',', $names)));
+	private function setTheAuthor($author)
+	{
+		$this->pending['author'] = $author;
+	}
 
-		# If the current tags are not array, explode them too.
-		if (!is_array($tags)) {
-			$tags = array_filter(array_map('trim', explode(',', $tags)));
-		} 
-		# Otherwise only use the tag name, implode and explode them
-		else {
-			$tags = \Kanso\Utility\Arr::implodeByKey('name', $tags, ', ');
-			$tags = array_filter(array_map('trim', explode(',', $tags)));
-		}
-
-		# Merge the two arrays
-		$tags = array_merge($tags, $names);	
-
-		# If there's more than one tag, remove untagged
-		if (count($tags) > 1) {
-			foreach ($tags as $i => $tag) {
-				if (strtolower($tag) === 'untagged') {
-					unset($tags[$i]); 
-				}
-			}
-		}
-
-		$this->tmpRow['tags'] = implode(', ', array_unique($tags));
+	private function setTheStatus($status)
+	{
+		$this->pending['status'] = $status;
 	}
 
 	/********************************************************************************
@@ -258,37 +254,41 @@ class Article
 
 	public function save()
 	{
-		# Initialize joins if they have not been already
-		$this->getTheCategory();
-		$this->getTheTags();
-		$this->getTheAuthor();
-		$this->getTheContent();
+		# Row to save
+		$to_save = $this->rowData;
+			
+		# Pending stuff that needs to be joined/created
+		if (isset($this->pending['category'])) {
+			$to_save['category'] = $this->pending['category'];
+		}
+		if (isset($this->pending['tags'])) {
+			$to_save['tags'] = $this->pending['tags'];
+		}
+		if (isset($this->pending['author'])) {
+			$to_save['author'] = $this->pending['author'];
+		}
+		if (isset($this->pending['status'])) {
+			$to_save['status'] = $this->pending['status'];
+		}
 
 		# Get the bookkeeper
 		$bookkeeper = \Kanso\Kanso::getInstance()->Bookkeeper;
 
 		# Update Kanso's static pages if the status has changed 
 		# and/or the article type has changed
-		if ($this->row['status'] !== $this->tmpRow['status'] && isset($this->row['id'])) {
-			$bookkeeper->changeStatus($this->row['id'], $this->tmpRow['status']);
+		if ($this->rowData['status'] !== $to_save['status'] && isset($this->rowData['id'])) {
+			$bookkeeper->changeStatus($this->rowData['id'], $to_save['status']);
 		}
 
-		# If no updates are required return;
-		if ($this->tmpRow === $this->row && isset($this->row['id'])) return;
-
 		# Save the article
-		$save = $bookkeeper->saveArticle(array_merge($this->row, $this->tmpRow));
+		$save = $bookkeeper->saveArticle($to_save);
 
 		# Merge the results
 		if ($save) {
-			$save['tags'] = \Kanso\Utility\Arr::implodeByKey('name', $save['tags'], ', ');
-			$this->tmpRow = array_merge($this->tmpRow, $save);
-			$this->row    = array_merge($this->row, $save);
+			$this->rowData = $save;
 			return true;
 		}
-		else {
-			return false;
-		}
+		return false;
 	}
 
 	public function delete()

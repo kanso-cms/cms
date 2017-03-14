@@ -11,8 +11,7 @@
 
 # Default admin security keys for new user
 $keys = [
-	'KANSO_PUBLIC_KEY' 	 => 'jce6sLiexsaWfKrDl8iV3dF4jLzNncCr08Dcm7CoipvlupmK3qrFmNarnKzC8KLe3rOJlZC-4GGUqp2iuZ2MjKKcsqekjeC6lqG1mJbcmsKpmaa-psa_sYbhorWizreEtWd6qJSQsLKnyZ3Cnp6GmpimreG_gp5_1p282r2XxreW73mEu9q_ibmBwXqkhMV76MGdvbmGi32dvNF-eIGEvayfy4_DoLSjpYq_sMzQ3JSpnHXmndfZvoG_sppl5nyyqb23rKdpnpyUudSXsaSp3Jq7jsS9t3a1zZ-SvsOlmM2zgt6kqrppm8PfgZjPoLRl37nLsL7xtdfQloR9sZHAYYmMpry8haei2p7bwcJ9yLer3re5g7t9yKDZu3RnynaRocxyncfItbexf5uYnL_YpIyRibumlYWZzsmN1696hLG5favxzb6ryKrmeni6yJak0JXUmeiZrZTnv7vi6bSBZqilvZ6vfaXhec-agqy1m6Oor92WzdXqlIK5meC8vOazhZKQqoa6eZ_UwpeZjIGKg3_E19WIiru3nLxxhdiYt9SoksSOxJqKp6610Ll8zmWn3d6Ujd6fuZ7gksSW6Mu63KyTZ4V8ks15loeswpGHuGvbnJWnwI7mtd7Aqnuf2aXAu9S6rGOdn5qp0IGwooe9hJmheX19vLuqeY6ixMCrhZmqyZ6vuYiMjMyjns_dtfG7jd9ij-q-wniYsOun4622esXapKKxtH5nmJKsmZZ5lOGYl8Cm2peTsaSFqMi71biVx-CGs67bupBpp3h2pbyns9immpKIfaF8sdDJypOuitu9n2m_2559rdGSkKDFk7GtxajOk5LjmnbJ3bl_17mpgd15t5bG5M3j76eon7WY7J6LparcjrvMe6ya0dHYuqKUqc_qv8ugZKTC1OOLaK54lZ-olXzYoJhyvmaRhcC618exiqLIg5VtxMnLfNTLkqyV2KGZ66LE7JfCvKZ7xr67m76p2GXGrcqkxr3M3cmMb2V9qPCVuGamnYrCuq3Li6_YvHbemNK-xa7K3HjdkLDjqXyyuKqP45aOusqydHiJmoOfn9rPu8mZpp2vsKuYrKm3sXd8oKeajMK1nMWdk62rjMKag6HZkueZn3K7d6PuqMramQ==',
-	"KANSO_PUBLIC_SALT"  => 'XdbAYUnLG8ReREhX0KHu2IwkNxQHw2BugM4fHr0nASBrxTpxD72GPy1D6RkDUW7aJbpqDqOdjqFQj4nXcpD1YEF5w0IqWQBF206F',
+	'access_token' => 'XGrcqMWdk62rjMKag6HZkueZn3K7d6PuqMramQ==',
 ];
 
 # Hashed default admin password
@@ -64,11 +63,9 @@ $KANSO_DEFAULTS_USERS_TABLE = [
 	'description'  => 'VARCHAR(255)',
 	'status'       => 'VARCHAR(255)',
 	'email_notifications' => 'BOOLEAN | DEFAULT TRUE',
-	'KANSO_REGISTER_KEY'  => 'VARCHAR(255)',
-	'KANSO_PASSWORD_KEY'  => 'VARCHAR(255)',
-	'KANSO_PUBLIC_KEY'    => 'VARCHAR(255)',
-	'KANSO_PUBLIC_SALT'   => 'VARCHAR(255)',
-	'KANSO_KEYS_TIME'     => 'INTEGER | UNSIGNED',
+	'access_token'        => 'VARCHAR(255)',
+	'kanso_register_key'  => 'VARCHAR(255)',
+	'kanso_password_key'  => 'VARCHAR(255)',
 ];
 
 # Default comments table
@@ -119,9 +116,7 @@ $KANSO_DEFAULT_USER = [
 	"status"      		 => 'confirmed',
 	"role"       		 => 'administrator',
 	"description" 		 => 'This is where your author bio goes. You can put a small description about yourself here, or just leave it blank if you like.',
-	"kanso_public_key"   => $keys['KANSO_PUBLIC_KEY'],
-	"kanso_public_salt"  => $keys['KANSO_PUBLIC_SALT'],
-	"kanso_keys_time"    => time(),
+	"access_token"       => $keys['access_token'],
 ];
 
 # The default tags entries

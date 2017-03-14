@@ -8,10 +8,10 @@
     <title>Welcome To Kanso</title>
 
     <!-- FAVICONS -->
-    <link rel="shortcut icon" href="/Admin/assets/images/favicon.png">
-    <link rel="apple-touch-icon" sizes="57x57" href="/Admin/assets/images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/Admin/assets/images/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/Admin/assets/images/apple-touch-icon-114x114.png">
+    <link rel="shortcut icon" href="<?php echo $adminAssetsPth; ?>images/favicon.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="<?php echo $adminAssetsPth; ?>images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="<?php echo $adminAssetsPth; ?>images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="<?php echo $adminAssetsPth; ?>images/apple-touch-icon-114x114.png">
 
 </head>
 <body style="-moz-box-sizing: border-box;box-sizing: border-box;padding: 0;margin: 0;border: 0;font: inherit;vertical-align: baseline;line-height: 1;height: 100%;background: #e5e5e5;font-family: &quot;Helvetica Neue&quot;,Helvetica,&quot;Segoe UI&quot;,Arial,freesans,sans-serif;color: #1e2629;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;">

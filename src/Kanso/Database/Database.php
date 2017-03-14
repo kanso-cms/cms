@@ -5,7 +5,7 @@ namespace Kanso\Database;
 /**
  * Database class
  *
- * The database class parses all databse queries 
+ * The database class parses all database queries 
  * for Kanso. 
  */
 class Database

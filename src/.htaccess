@@ -1,18 +1,73 @@
 # BEGIN Kanso
-<IfModule mod_rewrite.c>
-	
-	Options +FollowSymlinks
-	
-	RewriteEngine on
-	RewriteBase /
-	
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteCond %{REQUEST_URI} ^admin/.*$
-  	RewriteRule ^(.*)([^/])$        /$1$2/ [L,R=301]
 
+# ------------------------------------------------------------------------------
+# | 404 error prevention for non-existing redirected folders                   |
+# ------------------------------------------------------------------------------
+
+# Prevent Apache from returning a 404 error as the result of a rewrite
+# when the directory with the same name does not exist.
+# http://httpd.apache.org/docs/current/content-negotiation.html#multiviews
+# http://www.webmasterworld.com/apache/3808792.htm
+
+Options -MultiViews
+
+# ------------------------------------------------------------------------------
+# | File access                                                                |
+# ------------------------------------------------------------------------------
+
+# Block access to directories without a default document.
+# You should leave the following uncommented, as you shouldn't allow anyone to
+# surf through every directory on your server (which may includes rather private
+# places such as the CMS's directories).
+
+<IfModule mod_autoindex.c>
+    Options -Indexes
+</IfModule>
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Block access to hidden files and directories.
+# This includes directories used by version control systems such as Git and SVN.
+
+<IfModule mod_rewrite.c>
+    RewriteCond %{SCRIPT_FILENAME} -d [OR]
+    RewriteCond %{SCRIPT_FILENAME} -f
+    RewriteRule "(^|/)\." - [F]
+</IfModule>
+
+# ------------------------------------------------------------------------------
+# | Rewrite engine                                                             |
+# ------------------------------------------------------------------------------
+
+# Turn on the rewrite engine and enable the `FollowSymLinks` option (this is
+# necessary in order for the following directives to work).
+
+# If your web host doesn't allow the `FollowSymlinks` option, you may need to
+# comment it out and use `Options +SymLinksIfOwnerMatch`, but be aware of the
+# performance impact.
+# http://httpd.apache.org/docs/current/misc/perf-tuning.html#symlinks
+
+# Also, some cloud hosting services require `RewriteBase` to be set.
+# http://www.rackspace.com/knowledge_center/frequently-asked-question/why-is-mod-rewrite-not-working-on-my-site
+
+<IfModule mod_rewrite.c>
+    Options +FollowSymlinks
+  # Options +SymLinksIfOwnerMatch
+    RewriteEngine On
+  # RewriteBase /
+</IfModule>
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Send all requests to index.php
+# This snippet does the following:
+# If the request is not for a file
+# If the request is not for a directory
+# Open index.php
+<IfModule mod_rewrite.c>
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule ^(.*)$ index.php?/$1 [L]
-
 </IfModule>
+
 # END Kanso

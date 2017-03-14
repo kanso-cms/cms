@@ -228,6 +228,7 @@ class Response {
     {
         $this->setStatus($status);
         $this->setheaders(['Location', $url]);
+        $this->setBody('');
         $this->sendheaders();
         header('location: '.$url);
         return $this;
@@ -256,7 +257,9 @@ class Response {
             $this->headers->remove('Content-Length');
             $this->setBody('');
         }
-        return [$this->status, $this->headers, $this->body];
+        $cookies = \Kanso\Kanso::getInstance()->Session->cookies();
+
+        return [$this->status, $this->headers, $this->body, $cookies];
     }
 
     /**
@@ -268,23 +271,33 @@ class Response {
      * @return mixed    Kanso\Http\Response
      */
     public function sendheaders()
-    {   
-        if (!headers_sent())
-        {
-            if (isset($_SERVER['SERVER_PROTOCOL']))
-                $protocol = $_SERVER['SERVER_PROTOCOL'];
-            else
-                $protocol = 'HTTP/1.1';
+    {
+        # Get headers, body, status
+        list($status, $headers, $body, $cookies) = $this->finalize();
 
-            header($protocol.' '.$this->status.' '.self::getMessageForCode($this->status));
+        # Call the mid dispatch event
+        \Kanso\Events::fire('midDispatch', [$status, $headers, $body]);
 
-            foreach ($this->headers as $name => $value)
+        # Send the default headers only if no output has
+        # already been sent to the client
+        if (headers_sent() === false) {
+
+            # Send the status header
+            $protocol = \Kanso\Kanso::getInstance()->Environment['HTTP_PROTOCOL'];
+            header($protocol.'/1.1'.' '.$status.' '.self::getMessageForCode($status));
+            
+            # Send all the other headers
+            foreach ($headers as $name => $value)
             {
                 header($name.':'.$value, true);
             }
-
-            header("Content-length: $this->length");
+            foreach ($cookies as $cookie)
+            {
+                if (!isset($cookie[5])) continue;
+                setcookie($cookie[0], $cookie[1], $cookie[2], $cookie[3], $cookie[4], $cookie[5]);
+            }
         }
+
         return $this;
     }
 

@@ -101,13 +101,13 @@ class Environment
         $env['KANSO_ADMIN_DIR']    = $env['KANSO_DIR'].DIRECTORY_SEPARATOR.'Admin';
 
         # Kanso admin uri
-        $env['KANSO_ADMIN_URI']    = $env['HTTP_HOST'].DIRECTORY_SEPARATOR.'admin';
+        $env['KANSO_ADMIN_URI']    = strtolower($env['HTTP_HOST'].DIRECTORY_SEPARATOR.'admin');
 
         # Kanso website name
         $env['KANSO_WEBSITE_NAME'] = str_replace('www.', '', str_replace($env['HTTP_PROTOCOL'].'://', '', $env['HTTP_HOST']));
 
         # Kanso's image uploads url
-        $env['KANSO_IMGS_URL']     = str_replace($env['DOCUMENT_ROOT'], $env['HTTP_HOST'], $env['KANSO_UPLOADS_DIR']).DIRECTORY_SEPARATOR.'Images/';
+        $env['KANSO_IMGS_URL']     = str_replace($env['DOCUMENT_ROOT'], $env['HTTP_HOST'], $env['KANSO_UPLOADS_DIR']).DIRECTORY_SEPARATOR.'Images'.DIRECTORY_SEPARATOR;
 
         # Save the clients IP address
         $ipaddress = '';

@@ -1,0 +1,648 @@
+DATE    : Monday 13th of March 2017 11:49:13 AM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/tags/
+CLASS   : Kanso/Admin/Views/Templates/Tags/list-pagination
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Views/Templates/Tags/list-pagination.php
+LINE    : 21
+MESSAGE : Undefined index: tag
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(77): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(687): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'tags'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Dashboard->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(95): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Dashboard->tags(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(141): Kanso\Admin\Controllers\Dashboard->renderPage(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(351): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(649): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(42): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/dash-tags.php(21): require('/Users/joe/Site...')
+
+
+DATE    : Tuesday 14th of March 2017 10:49:03 AM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/login/
+CLASS   : Kanso/Admin/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php
+LINE    : 74
+MESSAGE : Undefined property: Kanso\Admin\Admin::$requestName
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(77): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'login'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Account->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Account.php(110): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Account->login(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Account.php(144): Kanso\Admin\Controllers\Account->renderPage(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Account.php(324): Kanso\Admin\Admin->pageVars(Array)
+
+
+DATE    : Tuesday 14th of March 2017 10:49:31 AM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/login/
+CLASS   : Kanso/Admin/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php
+LINE    : 80
+MESSAGE : Undefined property: Kanso\Admin\Admin::$is_post
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(77): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'login'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Account->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Account.php(110): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Account->login(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Account.php(144): Kanso\Admin\Controllers\Account->renderPage(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Account.php(324): Kanso\Admin\Admin->pageVars(Array)
+
+
+DATE    : Tuesday 14th of March 2017 10:54:05 AM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/login/
+CLASS   : Kanso/Admin/Controllers/Account
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Account.php
+LINE    : 284
+MESSAGE : Undefined variable: modelVars
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(77): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'login'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Account->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Account.php(110): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Account->login(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Account.php(144): Kanso\Admin\Controllers\Account->renderPage()
+
+
+DATE    : Tuesday 14th of March 2017 11:13:04 AM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/login/
+CLASS   : Kanso/Admin/Controllers/Account
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Account.php
+LINE    : 270
+MESSAGE : Undefined variable: vars
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(77): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'login'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Account->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Account.php(110): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Account->login(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Account.php(144): Kanso\Admin\Controllers\Account->renderPage()
+
+
+DATE    : Tuesday 14th of March 2017 01:59:54 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/settings/users/
+CLASS   : Kanso/Auth/Gatekeeper
+FILE    : /Users/joe/Sites/Kanso/Kanso/Auth/Gatekeeper.php
+LINE    : 97
+MESSAGE : Undefined index: role
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(77): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'settingsUsers'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Dashboard->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(93): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Dashboard->settingsUsers(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(301): Kanso\Auth\Gatekeeper->isAdmin()
+
+
+DATE    : Tuesday 14th of March 2017 02:08:42 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/writer/?id=1
+CLASS   : Kanso/Admin/Models/Writer
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Models/Writer.php
+LINE    : 74
+MESSAGE : Undefined variable: title
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(77): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(173): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'writer'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Dashboard->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(93): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Dashboard->writer(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(222): Kanso\Admin\Controllers\Dashboard->renderPage(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(352): Kanso\Admin\Admin->render(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php(181): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(652): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(17): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Templates/header.php(9): Kanso\Admin\Models\Includes->theTitle(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Models/Includes.php(113): Kanso\Filters::apply('adminPageTitle', 'Write | New Art...'),
+		  /Users/joe/Sites/Kanso/Kanso/Filters.php(95): Kanso\Utility\Callback::apply(Object(Closure), 'Write | New Art...'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), 'Write | New Art...'),
+		  [internal function]: Kanso\Admin\Models\Writer->Kanso\Admin\Models\{closure}('Write | New Art...')
+
+
+DATE    : Tuesday 14th of March 2017 02:09:38 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/writer/?id=1
+CLASS   : Kanso/Admin/Models/Writer
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Models/Writer.php
+LINE    : 74
+MESSAGE : Undefined variable: title
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(77): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(173): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'writer'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Dashboard->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(93): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Dashboard->writer(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(222): Kanso\Admin\Controllers\Dashboard->renderPage(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(352): Kanso\Admin\Admin->render(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php(181): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(652): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(17): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Templates/header.php(9): Kanso\Admin\Models\Includes->theTitle(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Models/Includes.php(113): Kanso\Filters::apply('adminPageTitle', 'Write | New Art...'),
+		  /Users/joe/Sites/Kanso/Kanso/Filters.php(95): Kanso\Utility\Callback::apply(Object(Closure), 'Write | New Art...'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), 'Write | New Art...'),
+		  [internal function]: Kanso\Admin\Models\Writer->Kanso\Admin\Models\{closure}('Write | New Art...')
+
+
+DATE    : Tuesday 14th of March 2017 02:09:56 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/writer/?id=1
+CLASS   : Kanso/Admin/Models/Writer
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Models/Writer.php
+LINE    : 74
+MESSAGE : Undefined variable: title
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(77): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(173): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'writer'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Dashboard->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(93): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Dashboard->writer(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(222): Kanso\Admin\Controllers\Dashboard->renderPage(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(352): Kanso\Admin\Admin->render(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php(181): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(652): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(17): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Templates/header.php(9): Kanso\Admin\Models\Includes->theTitle(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Models/Includes.php(113): Kanso\Filters::apply('adminPageTitle', 'Write | New Art...'),
+		  /Users/joe/Sites/Kanso/Kanso/Filters.php(95): Kanso\Utility\Callback::apply(Object(Closure), 'Write | New Art...'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), 'Write | New Art...'),
+		  [internal function]: Kanso\Admin\Models\Writer->Kanso\Admin\Models\{closure}('Write | New Art...')
+
+
+DATE    : Tuesday 14th of March 2017 02:13:43 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/writer/?id=1
+CLASS   : Kanso/Admin/Models/Writer
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Models/Writer.php
+LINE    : 79
+MESSAGE : Undefined variable: filter
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(77): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(173): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'writer'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Dashboard->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(93): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Dashboard->writer(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(222): Kanso\Admin\Controllers\Dashboard->renderPage(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(352): Kanso\Admin\Admin->render(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php(181): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(652): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(17): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Templates/header.php(9): Kanso\Admin\Models\Includes->theTitle(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Models/Includes.php(113): Kanso\Filters::apply('adminPageTitle', 'Write | New Art...'),
+		  /Users/joe/Sites/Kanso/Kanso/Filters.php(95): Kanso\Utility\Callback::apply(Object(Closure), 'Write | New Art...'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), 'Write | New Art...'),
+		  [internal function]: Kanso\Admin\Models\Writer->Kanso\Admin\Models\{closure}('Write | New Art...')
+
+
+DATE    : Tuesday 14th of March 2017 03:06:01 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/tags/
+CLASS   : Kanso/Admin/Views/Templates/Tags/list-item
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Views/Templates/Tags/list-item.php
+LINE    : 26
+MESSAGE : Undefined variable: cat
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(77): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'tags'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Dashboard->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(93): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Dashboard->tags(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(150): Kanso\Admin\Controllers\Dashboard->renderPage(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(352): Kanso\Admin\Admin->render(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php(181): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(652): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(42): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/dash-tags.php(18): require('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Templates/Tags/list-body.php(6): require('/Users/joe/Site...')
+
+
+DATE    : Tuesday 14th of March 2017 03:40:17 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/articles/
+CLASS   : Kanso/Admin/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php
+LINE    : 81
+MESSAGE : Undefined variable: styles
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(43): Kanso\Admin\Controllers\Dashboard->__construct('articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(74): Kanso\Events::fire('adminInit', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Events.php(107): Kanso\Utility\Callback::apply(Object(Closure), 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), 'articles'),
+		  [internal function]: Kanso\Admin\Admin->Kanso\Admin\{closure}('articles')
+
+
+DATE    : Tuesday 14th of March 2017 03:43:38 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/articles/
+CLASS   : Kanso/Admin/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php
+LINE    : 91
+MESSAGE : Undefined variable: styles
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(43): Kanso\Admin\Controllers\Dashboard->__construct('articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(74): Kanso\Events::fire('adminInit', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Events.php(107): Kanso\Utility\Callback::apply(Object(Closure), 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), 'articles'),
+		  [internal function]: Kanso\Admin\Admin->Kanso\Admin\{closure}('articles')
+
+
+DATE    : Tuesday 14th of March 2017 03:46:36 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/articles/
+CLASS   : Kanso/Admin/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php
+LINE    : 64
+MESSAGE : Undefined variable: slug
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Dashboard->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(93): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Dashboard->articles(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(114): Kanso\Admin\Controllers\Dashboard->renderPage(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(352): Kanso\Admin\Admin->render(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php(184): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(652): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(66): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Templates/sidebar.php(10): Kanso\Admin\Models\Includes->sidebarLinks(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Models/Includes.php(267): Kanso\Filters::apply('adminSidebarLin...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Filters.php(95): Kanso\Utility\Callback::apply(Object(Closure), Array),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), Array),
+		  [internal function]: Kanso\Admin\Admin->Kanso\Admin\{closure}(Array)
+
+
+DATE    : Tuesday 14th of March 2017 03:46:50 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/articles/
+CLASS   : Kanso/Admin/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php
+LINE    : 64
+MESSAGE : Undefined variable: slug
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Dashboard->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(93): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Dashboard->articles(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(114): Kanso\Admin\Controllers\Dashboard->renderPage(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(352): Kanso\Admin\Admin->render(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php(184): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(652): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(66): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Templates/sidebar.php(10): Kanso\Admin\Models\Includes->sidebarLinks(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Models/Includes.php(267): Kanso\Filters::apply('adminSidebarLin...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Filters.php(95): Kanso\Utility\Callback::apply(Object(Closure), Array),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), Array),
+		  [internal function]: Kanso\Admin\Admin->Kanso\Admin\{closure}(Array)
+
+
+DATE    : Tuesday 14th of March 2017 03:47:16 PM
+TYPE    : E_WARNING [2]
+URL     : http://localhost:8888/admin/articles/
+CLASS   : Kanso/Utility/Callback
+FILE    : /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php
+LINE    : 53
+MESSAGE : call_user_func() expects parameter 1 to be a valid callback, no array or string given
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Dashboard->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(93): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Dashboard->articles(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(114): Kanso\Admin\Controllers\Dashboard->renderPage(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(352): Kanso\Admin\Admin->render(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php(190): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(652): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(17): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Templates/header.php(9): Kanso\Admin\Models\Includes->theTitle(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Models/Includes.php(119): Kanso\Filters::apply('adminPageTitle', 'Articles | Kans...'),
+		  /Users/joe/Sites/Kanso/Kanso/Filters.php(95): Kanso\Utility\Callback::apply(NULL, 'Articles | Kans...'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(NULL, 'Articles | Kans...')
+
+
+DATE    : Tuesday 14th of March 2017 03:47:25 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/articles/
+CLASS   : Kanso/Admin/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php
+LINE    : 64
+MESSAGE : Undefined variable: slug
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Dashboard->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(93): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Dashboard->articles(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(114): Kanso\Admin\Controllers\Dashboard->renderPage(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(352): Kanso\Admin\Admin->render(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php(184): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(652): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(66): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Templates/sidebar.php(10): Kanso\Admin\Models\Includes->sidebarLinks(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Models/Includes.php(267): Kanso\Filters::apply('adminSidebarLin...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Filters.php(95): Kanso\Utility\Callback::apply(Object(Closure), Array),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), Array),
+		  [internal function]: Kanso\Admin\Admin->Kanso\Admin\{closure}(Array)
+
+
+DATE    : Tuesday 14th of March 2017 03:48:33 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/articles/
+CLASS   : Kanso/Admin/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php
+LINE    : 75
+MESSAGE : Undefined variable: styles
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(43): Kanso\Admin\Controllers\Dashboard->__construct('articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(74): Kanso\Events::fire('adminInit', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Events.php(107): Kanso\Utility\Callback::apply(Object(Closure), 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), 'articles'),
+		  [internal function]: Kanso\Admin\Admin->Kanso\Admin\{closure}('articles')
+
+
+DATE    : Tuesday 14th of March 2017 03:51:55 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/articles/
+CLASS   : Kanso/Admin/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php
+LINE    : 75
+MESSAGE : Undefined variable: styles
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(43): Kanso\Admin\Controllers\Dashboard->__construct('articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(74): Kanso\Events::fire('adminInit', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Events.php(107): Kanso\Utility\Callback::apply(Object(Closure), 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), 'articles'),
+		  [internal function]: Kanso\Admin\Admin->Kanso\Admin\{closure}('articles')
+
+
+DATE    : Tuesday 14th of March 2017 03:51:57 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/articles/
+CLASS   : Kanso/Admin/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php
+LINE    : 75
+MESSAGE : Undefined variable: styles
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(43): Kanso\Admin\Controllers\Dashboard->__construct('articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(74): Kanso\Events::fire('adminInit', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Events.php(107): Kanso\Utility\Callback::apply(Object(Closure), 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), 'articles'),
+		  [internal function]: Kanso\Admin\Admin->Kanso\Admin\{closure}('articles')
+
+
+DATE    : Tuesday 14th of March 2017 03:51:57 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/articles/
+CLASS   : Kanso/Admin/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php
+LINE    : 75
+MESSAGE : Undefined variable: styles
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(43): Kanso\Admin\Controllers\Dashboard->__construct('articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(74): Kanso\Events::fire('adminInit', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Events.php(107): Kanso\Utility\Callback::apply(Object(Closure), 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), 'articles'),
+		  [internal function]: Kanso\Admin\Admin->Kanso\Admin\{closure}('articles')
+
+
+DATE    : Tuesday 14th of March 2017 03:52:33 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/articles/
+CLASS   : Kanso/Admin/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php
+LINE    : 64
+MESSAGE : Undefined variable: slug
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Dashboard->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(93): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Dashboard->articles(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(114): Kanso\Admin\Controllers\Dashboard->renderPage(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(352): Kanso\Admin\Admin->render(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php(179): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(652): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(66): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Templates/sidebar.php(10): Kanso\Admin\Models\Includes->sidebarLinks(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Models/Includes.php(267): Kanso\Filters::apply('adminSidebarLin...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Filters.php(95): Kanso\Utility\Callback::apply(Object(Closure), Array),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), Array),
+		  [internal function]: Kanso\Admin\Admin->Kanso\Admin\{closure}(Array)
+
+
+DATE    : Tuesday 14th of March 2017 03:53:32 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/articles/
+CLASS   : Kanso/Admin/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php
+LINE    : 82
+MESSAGE : Undefined variable: menuName
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Dashboard->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(93): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Dashboard->articles(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(114): Kanso\Admin\Controllers\Dashboard->renderPage(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(352): Kanso\Admin\Admin->render(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php(183): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(652): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(17): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Templates/header.php(9): Kanso\Admin\Models\Includes->theTitle(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Models/Includes.php(119): Kanso\Filters::apply('adminPageTitle', 'Articles | Kans...'),
+		  /Users/joe/Sites/Kanso/Kanso/Filters.php(95): Kanso\Utility\Callback::apply(Object(Closure), 'Articles | Kans...'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), 'Articles | Kans...'),
+		  [internal function]: Kanso\Admin\Admin->Kanso\Admin\{closure}('Articles | Kans...')
+
+
+DATE    : Tuesday 14th of March 2017 03:53:47 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/articles/
+CLASS   : Kanso/Admin/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php
+LINE    : 64
+MESSAGE : Undefined variable: slug
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Dashboard->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(93): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Dashboard->articles(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(114): Kanso\Admin\Controllers\Dashboard->renderPage(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(352): Kanso\Admin\Admin->render(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php(183): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(652): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(66): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Templates/sidebar.php(10): Kanso\Admin\Models\Includes->sidebarLinks(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Models/Includes.php(267): Kanso\Filters::apply('adminSidebarLin...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Filters.php(95): Kanso\Utility\Callback::apply(Object(Closure), Array),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), Array),
+		  [internal function]: Kanso\Admin\Admin->Kanso\Admin\{closure}(Array)
+
+
+DATE    : Tuesday 14th of March 2017 03:53:54 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/articles/
+CLASS   : Kanso/Admin/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php
+LINE    : 64
+MESSAGE : Undefined variable: slug
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Dashboard->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(93): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Dashboard->articles(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(114): Kanso\Admin\Controllers\Dashboard->renderPage(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(352): Kanso\Admin\Admin->render(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php(183): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(652): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(66): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Templates/sidebar.php(10): Kanso\Admin\Models\Includes->sidebarLinks(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Models/Includes.php(267): Kanso\Filters::apply('adminSidebarLin...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Filters.php(95): Kanso\Utility\Callback::apply(Object(Closure), Array),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), Array),
+		  [internal function]: Kanso\Admin\Admin->Kanso\Admin\{closure}(Array)
+
+
+DATE    : Tuesday 14th of March 2017 03:54:03 PM
+TYPE    : E_NOTICE [8]
+URL     : http://localhost:8888/admin/articles/
+CLASS   : Kanso/Admin/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php
+LINE    : 64
+MESSAGE : Undefined variable: slug
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', 'articles'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Dashboard->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(93): call_user_func(Array),
+		  [internal function]: Kanso\Admin\Controllers\Dashboard->articles(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(114): Kanso\Admin\Controllers\Dashboard->renderPage(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Dashboard.php(352): Kanso\Admin\Admin->render(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php(184): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(652): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(66): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Templates/sidebar.php(10): Kanso\Admin\Models\Includes->sidebarLinks(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Models/Includes.php(267): Kanso\Filters::apply('adminSidebarLin...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Filters.php(95): Kanso\Utility\Callback::apply(Object(Closure), Array),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(53): call_user_func(Object(Closure), Array),
+		  [internal function]: Kanso\Admin\Admin->Kanso\Admin\{closure}(Array)
+
+
+DATE    : Tuesday 14th of March 2017 03:58:46 PM
+TYPE    : E_WARNING [2]
+URL     : http://localhost:8888/admin/test/
+CLASS   : Kanso/Admin/Views/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php
+LINE    : 62
+MESSAGE : require_once(/Users/joe/Sites/Kanso/App/Test.php): failed to open stream: No such file or directory
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', '\\App\\Example'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Custom->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Custom.php(124): Kanso\Admin\Admin->render(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php(183): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(652): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(62): require_once()
+
+
+DATE    : Tuesday 14th of March 2017 03:59:43 PM
+TYPE    : E_WARNING [2]
+URL     : http://localhost:8888/admin/test/
+CLASS   : Kanso/Admin/Views/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php
+LINE    : 62
+MESSAGE : require_once(/Users/joe/Sites/Kanso/App/Test.php): failed to open stream: No such file or directory
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', '\\App\\Example'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Custom->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Custom.php(124): Kanso\Admin\Admin->render(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php(191): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(652): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(62): require_once()
+
+
+DATE    : Tuesday 14th of March 2017 03:59:58 PM
+TYPE    : E_WARNING [2]
+URL     : http://localhost:8888/admin/test/
+CLASS   : Kanso/Admin/Views/Admin
+FILE    : /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php
+LINE    : 62
+MESSAGE : require_once(/Users/joe/Sites/Kanso/App/Test.php): failed to open stream: No such file or directory
+IP      : ::1
+TRACE   : /Users/joe/Sites/Kanso/index.php(79): Kanso\Kanso->run(),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(690): Kanso\Router\Router::dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Router/Router.php(146): Kanso\Utility\Callback::apply('\\Kanso\\Admin\\Co...', '\\App\\Example'),
+		  /Users/joe/Sites/Kanso/Kanso/Utility/Callback.php(48): Kanso\Admin\Controllers\Custom->dispatch(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Controllers/Custom.php(124): Kanso\Admin\Admin->render(),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Admin.php(190): Kanso\Kanso->render('/Users/joe/Site...', Array),
+		  /Users/joe/Sites/Kanso/Kanso/Kanso.php(652): Kanso\View\View->display('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/View/View.php(79): require_once('/Users/joe/Site...'),
+		  /Users/joe/Sites/Kanso/Kanso/Admin/Views/Admin.php(62): require_once()
+
+

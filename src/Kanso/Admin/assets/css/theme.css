@@ -1,0 +1,124 @@
+.dash-wrap {
+  width: 100%;
+  max-width: 1200px;
+  padding-left: 90px;
+  padding-right: 20px;
+  margin: 0 auto;
+  min-width: 1000px;
+}
+
+.sb-trigger {
+  position: fixed;
+  z-index: 499;
+  left: 0;
+  top: 0;
+}
+
+.sidebar {
+  background-color: #1c2025;
+  color: #fff;
+  width: 66px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 499;
+  height: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  font-family: "Source Sans Pro", -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
+}
+.sidebar .logo {
+  display: block;
+  background-color: #62c4b6;
+  text-align: center;
+  padding: 20px;
+}
+.sidebar .logo svg {
+  width: 30px;
+  height: 30px;
+}
+.sidebar ul {
+  list-style: none;
+}
+.sidebar ul li a {
+  display: block;
+  text-transform: uppercase;
+  color: #b0b8c3;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+.sidebar ul li a:hover {
+  text-decoration: none;
+}
+.sidebar ul li a .glyph-icon {
+  display: inline-block;
+  margin-right: 30px;
+  color: #5e6b7c;
+}
+.sidebar ul li.active > a, .sidebar ul li:hover > a {
+  color: #fff;
+  background-color: #060708;
+}
+.sidebar nav > ul > li > a {
+  padding: 28px 23px;
+  border-left: 3px solid transparent;
+}
+.sidebar nav > ul > li > a + ul a {
+  padding: 16px 20px 16px 80px;
+  font-size: 1.1rem;
+}
+.sidebar nav > ul > li.active > a {
+  border-left: 3px solid #62c4b6;
+}
+.sidebar nav > ul > li > ul {
+  display: none;
+}
+.sidebar.active {
+  overflow-y: auto;
+}
+.sidebar.active nav > ul > li.active > ul {
+  display: block;
+}
+
+.page-heading {
+  padding-top: 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #f4f4f4;
+  margin-bottom: 30px;
+}
+.page-heading h1 {
+  margin-bottom: 0;
+}
+
+.list-powers {
+  border-bottom: 1px solid #f4f4f4;
+  padding-bottom: 30px;
+}
+
+.list-body {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+.list-body .list-row {
+  border-bottom: 1px solid #f4f4f4;
+  padding: 20px 0;
+}
+.list-body .list-row:first-child {
+  padding-top: 0;
+}
+
+.avatar img {
+  display: block;
+  border-radius: 3px;
+}
+
+.accnt-form-card {
+  max-width: 650px;
+  margin: 0 auto;
+  margin-top: 100px;
+}
+.accnt-form-card .logo {
+  width: 80px;
+  margin: 0 auto;
+  display: block;
+}

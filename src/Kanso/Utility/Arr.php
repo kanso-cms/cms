@@ -19,7 +19,6 @@ class Arr
 	 */
 	public static function paginate($list, $page, $limit) 
 	{
-		
 		$total            = count($list); // Find out how many items are in the table
 		$limit            = ($limit ? $limit : 10); // How many items to list per page
 		$pages            = ceil($total / $limit); // How many pages will there be
@@ -34,7 +33,6 @@ class Arr
 		    $paged[] = array_slice($list, $offset, $limit);
 		}
 		return $paged;
-
 	}
 
 	/**
@@ -43,7 +41,7 @@ class Arr
 	 * @param  array    $arr 
 	 * @return boolean
 	 */
-	function isAssoc($arr)
+	public static function isAssoc($arr)
 	{
 	    return array_keys($arr) !== range(0, count($arr) - 1);
 	}
@@ -175,7 +173,7 @@ class Arr
     {
         $str = '';
         foreach ($array as $arr) {
-            if (isset($arr[$key])) $str = $arr[$key].$glue;
+            if (isset($arr[$key])) $str .= $arr[$key].$glue;
         }
         return rtrim($str, $glue);
     }

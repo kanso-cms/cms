@@ -1294,7 +1294,7 @@ class Query {
      */
     public function all_the_authors($registered = true)
     {
-        if ($registered) return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('status', '=', 'active')->FIND_ALL();
+        if ($registered) return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('status', '=', 'confirmed')->FIND_ALL();
         return \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->FIND_ALL();
     }
 

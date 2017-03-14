@@ -45,7 +45,7 @@ class Installer
      *
      * This method will restore/install Kanso to it's default settings
      * If $asDefault is set to true, the current Kanso application
-     * will be reistalled, otherwise it is installed from settings
+     * will be reinstalled, otherwise it is installed from settings
      * found in Install.ini.php
      *
      * @param  boolean    $asDefault  Install default factory settings
@@ -55,7 +55,7 @@ class Installer
     {
         
 
-    	# Validate Kanso is NOT alread installed if this
+    	# Validate Kanso is NOT already installed if this
         # is a fresh install
     	if (!$asDefault) {
 
@@ -103,7 +103,7 @@ class Installer
     }
 
     /**
-     * Install The Default Kanso databse
+     * Install The Default Kanso database
      *
      */
     private function installDB()

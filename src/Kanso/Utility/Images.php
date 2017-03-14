@@ -154,7 +154,7 @@ class Images
     {
 
         $user_limit     = 512000000;
-        $real_limit     = $this->return_bytes(ini_get('memory_limit'));
+        $real_limit     = $this->memoryLimitBytes();
         $needed         = 0;
         $width          = 0;
         $height         = 0;
@@ -187,20 +187,22 @@ class Images
      *
      * @param  array $val value in GB/MB/KB
      */
-    public function return_bytes($val) {
-        $val = trim($val);
-        $last = strtolower($val[strlen($val)-1]);
+    public function memoryLimitBytes() {
+
+        $memory_limit = ini_get('memory_limit');
+        $val          = trim($memory_limit);
+        $last         = strtolower($val[strlen($val)-1]);
+        $digits       = preg_replace('/[^0-9]/', '', $val);
         switch($last) {
             // The 'G' modifier is available since PHP 5.1.0
             case 'g':
-                $val *= 1024;
+                return $digits*pow(1024,3);
             case 'm':
-                $val *= 1024;
+                return $digits*pow(1024,2);
             case 'k':
-                $val *= 1024;
+                return $digits*1024;
         }
-
-        return $val;
+        return $digits;
     }
 
     /**

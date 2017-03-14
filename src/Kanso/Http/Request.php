@@ -227,10 +227,14 @@ class Request
      */
     public function isAjax()
     {
+        if (!$this->isPost()) return false;
         $headers = \Kanso\Kanso::getInstance()->Headers();
+        if (isset($headers['REQUESTED_WITH']) && $headers['REQUESTED_WITH'] === 'XMLHttpRequest' ) return true;
+        if (isset($headers['HTTP_REQUESTED_WITH']) && $headers['HTTP_REQUESTED_WITH'] === 'XMLHttpRequest' ) return true;
         if (isset($headers['HTTP_X_REQUESTED_WITH']) && $headers['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest' ) return true;
         if (isset($headers['X_REQUESTED_WITH']) && $headers['X_REQUESTED_WITH'] === 'XMLHttpRequest' ) return true;
         return false;
+        
     }
 
     /**
@@ -277,6 +281,39 @@ class Request
         }
 
         return false;
+    }
+
+    /**
+     * Fetch and parse url queries
+     *
+     * This method fetches and parses url queries
+     * eg example.com?foo=bar -> ['foo' => 'bar'];
+     *
+     * @return array
+     */
+    public function queries($_key = false)
+    {
+        $result   = [];
+        $queryStr = $this->fetch('query');
+        if (!empty($queryStr)) {
+            $querySets = explode('&', $queryStr);
+            if (!empty($querySets)) {
+                foreach ($querySets as $querySet) {
+                    if (\Kanso\Utility\Str::contains($querySet, '=')) {
+                        $querySet = explode('=', $querySet);
+                        $key      = urldecode($querySet[0]);
+                        $value    = urldecode($querySet[1]);
+                        if (empty($value)) $value = false;
+                        $result[$key] = $value;   
+                    }
+                }
+            }
+        }
+        if ($_key) {
+            if (isset($result[$_key])) return $result[$_key];
+            return null;
+        }
+        return $result;
     }
 
     /**

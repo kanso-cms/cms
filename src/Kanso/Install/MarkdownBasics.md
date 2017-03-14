@@ -189,7 +189,6 @@ Blocks of code are either fenced by lines with three back-ticks ```, or are inde
 var s = "JavaScript syntax highlighting";
 alert(s);
 ```
-```
 
 ```python
 s = "Python syntax highlighting"

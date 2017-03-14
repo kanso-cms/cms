@@ -22,6 +22,8 @@ namespace Kanso;
  * @property Cache          \Kanso\Cache\Cache
  * @property Events         \Kanso\Events
  * @property Filters        \Kanso\Filters
+ * @property Cookie         \Kanso\Auth\Cookie
+ * @property Admin          \Kanso\Admin\Admin
  */
 class Kanso 
 {
@@ -34,7 +36,7 @@ class Kanso
 	/**
 	 * @var string    The Kanso application version
 	 */
-	public $Version = '0.0.01';
+	public $Version = '0.0.002';
 
 	/**
 	 * @var string    The Kanso application name
@@ -225,22 +227,32 @@ class Kanso
 
 		# Default Comment manager
 		$this->Container->singleton('Comments', function () {
-			return new Kanso\Comments\CommentManager();
+			return new \Kanso\Comments\CommentManager();
 		});
 
 		# Default FileSystem
 		$this->Container->singleton('FileSystem', function () {
-			return new Kanso\Utility\FileSystem();
+			return new \Kanso\Utility\FileSystem();
 		});
 
 		# Default Humanizer
 		$this->Container->singleton('Humanizer', function () {
-			return new Kanso\Utility\Humanizer();
+			return new \Kanso\Utility\Humanizer();
 		});
 
 		# Default Mailer
 		$this->Container->singleton('Mailer', function () {
-			return new Kanso\Utility\Mailer();
+			return new \Kanso\Utility\Mailer();
+		});
+
+		# Default cookie
+		$this->Container->singleton('Cookie', function () {
+			return new \Kanso\Auth\Cookie\Cookie();
+		});
+
+		# Default Admin
+		$this->Container->singleton('Admin', function () {
+			return new \Kanso\Admin\Admin();
 		});
 
 		# Make default if first instance
@@ -602,7 +614,15 @@ class Kanso
 		return $this->Comments;
 	}
 
-	
+	/**
+	 * Get the Cookie manager
+	 *
+	 * @return \Kanso\Auth\Cookie
+	 */
+	public function Cookie()
+	{
+		return $this->Cookie;
+	}
 
 	/******************************************************************************
 	* RENDERING
@@ -670,7 +690,7 @@ class Kanso
 		$this->Router->dispatch();
 
 		# Get headers, body, status
-		list($status, $headers, $body) = $this->Response->finalize();
+		list($status, $headers, $body, $cookies) = $this->Response->finalize();
 
 		# Call the mid dispatch event
 		\Kanso\Events::fire('midDispatch', [$status, $headers, $body]);
@@ -687,6 +707,11 @@ class Kanso
 			{
 				header($name.':'.$value, true);
 			}
+			foreach ($cookies as $cookie)
+            {
+                if (!isset($cookie[5])) continue;
+                setcookie($cookie[0], $cookie[1], $cookie[2], $cookie[3], $cookie[4], $cookie[5]);
+            }
 		}
 
 		# Send body, but only if it isn't a HEAD request
@@ -713,9 +738,9 @@ class Kanso
 	/**
 	 * Run the install script
 	 *
-	 * This method intializes the install script
+	 * This method initializes the install script
 	 * and is called from $Kanso->run() when the application
-	 * is not installed
+	 * is not installed.
 	 */
 	private function runInstall()
 	{
@@ -737,13 +762,15 @@ class Kanso
 
         	# Validate the install file exists
         	if (!file_exists(__DIR__.'/Install.php')) {
-        		throw new \Exception("Could not install Kanso. Install.php was not found on the server. Ensure you have renamed \"Install.sample.php\" to \"Install.php\".");
-        		
+        		throw new \Exception("Could not install Kanso. Install.php was not found on the server. Ensure you have renamed \"Install.sample.php\" to \"Install.php\".");        		
         	}
 
         	# Install the application if needed
 			$installer = new \Kanso\Install\Installer();
 			$installed = $installer->installKanso();
+
+			# Admin path for scripts and favicons
+    		$adminAssetsPth = str_replace($_SERVER['DOCUMENT_ROOT'], '', dirname(__FILE__).DIRECTORY_SEPARATOR.'Admin').'/assets/';
 
 			# Show the welcome page
 			include "Install/InstallSplash.php";
@@ -752,8 +779,6 @@ class Kanso
 		
 		# Return the aplication was not installed
 	}
-
-
 
 	/**
 	 * Dispatch Session
@@ -771,8 +796,7 @@ class Kanso
 
 		# Instantiate the Kanso session
 		# Note this will also instantiate the gatekeeper
-		$session = $this->Session;
-		$session->init();
+		$this->Session->init();
 
 	}
 
@@ -820,10 +844,13 @@ class Kanso
 	 */
 	public static function handleErrors($errno, $errstr = '', $errfile = '', $errline = '')
 	{
+		# Are we reporting errors ?
 		if (!($errno & error_reporting()))  return;
 		
+		# Fire the error event
 		\Kanso\Events::fire('error', [$errstr, $errno, $errfile, $errline, time()]);
 
+		# Throw a kanso exception
 		throw new \Kanso\Exception\Error($errstr, $errno, $errfile, $errline);
 	}
 
@@ -883,102 +910,7 @@ class Kanso
 	 */
 	private function setDefaultRoutes() 
 	{
-
-		# 404 All Kanso/ .php requests
-		$this->get('/Kanso/(:all).php', [$this, 'notFound']);
-		
-		# Admin settings
-		$this->get('/admin/settings/(:all)/', '\Kanso\Admin\Controllers\GetController@dispatch', 'settings');
-		
-		# Admin artciles
-		$this->get('/admin/articles/',  '\Kanso\Admin\Controllers\GetController@dispatch', 'articles');
-
-		# Admin comments
-		$this->get('/admin/comments/',  '\Kanso\Admin\Controllers\GetController@dispatch', 'comments');
-
-		# Admin tags
-		$this->get('/admin/taxonomy/',  '\Kanso\Admin\Controllers\GetController@dispatch', 'taxonomy');
-		
-		# Admin write
-		$this->get('/admin/write/', '\Kanso\Admin\Controllers\GetController@dispatch', 'writer');
-
-		# Admin Edits
-		$this->get('/admin/write/(:all)', '\Kanso\Admin\Controllers\GetController@dispatch', 'writer');
-
-		# Admin login
-		$this->get('/admin/login/', '\Kanso\Admin\Controllers\GetController@dispatch', 'logIn');
-
-		# Admin Logout
-		$this->get('/admin/logout/', '\Kanso\Admin\Controllers\GetController@dispatch', 'logOut');
-
-		# Admin register
-		$this->get('/admin/register?(:all)', '\Kanso\Admin\Controllers\GetController@dispatch', 'register');
-
-		# Admin forgot password
-		$this->get('/admin/forgot-password/', '\Kanso\Admin\Controllers\GetController@dispatch', 'forgotPassword');
-
-		# Admin forgot username
-		$this->get('/admin/forgot-username/', '\Kanso\Admin\Controllers\GetController@dispatch', 'forgotUserName');
-
-		# Admin Reset password
-		$this->get('/admin/reset-password?(:all)', '\Kanso\Admin\Controllers\GetController@dispatch', 'resetPassword');
-
-		# Admin POST
-		$this->post('/admin/', '\Kanso\Admin\Controllers\PostController@validate');
-
-		# Homepage
-		$this->get('/', '\Kanso\Kanso::loadTemplate', 'home');
-		$this->get('/page/(:num)/', '\Kanso\Kanso::loadTemplate', 'home');
-
-		# Articles
-		$this->get($this->Config['KANSO_PERMALINKS_ROUTE'], '\Kanso\Kanso::loadTemplate', 'single');
-
-		# Category
-		if ($this->Config['KANSO_ROUTE_CATEGORIES'] === true) {
-			$this->get('/category/(:any)/', '\Kanso\Kanso::loadTemplate', 'category');
-			$this->get('/category/(:any)/page/(:num)/', '\Kanso\Kanso::loadTemplate', 'category');
-		}
-		
-		# Tag
-		if ($this->Config['KANSO_ROUTE_TAGS'] === true) {
-			$this->get('/tag/(:any)/', '\Kanso\Kanso::loadTemplate', 'tag');
-			$this->get('/tag/(:any)/page/(:num)/', '\Kanso\Kanso::loadTemplate', 'tag');
-		}
-
-		# Author
-		if ($this->Config['KANSO_ROUTE_AUTHORS'] === true) {
-			foreach ($this->Config['KANSO_AUTHOR_SLUGS'] as $slug) {
-				$this->get("/authors/$slug/", '\Kanso\Kanso::loadTemplate', 'author');
-				$this->get("/authors/$slug/page/(:num)/", '\Kanso\Kanso::loadTemplate', 'author');
-			}
-		}
-
-		# Static pages
-		foreach ($this->Config['KANSO_STATIC_PAGES'] as $slug) {
-			# Published static page
-			$this->get("/$slug/", '\Kanso\Kanso::loadTemplate', 'page');
-		}
-
-		# Search
-		$this->get('/search-results/(:all)/', '\Kanso\Kanso::loadTemplate', 'search');
-		$this->get('/opensearch.xml', '\Kanso\Kanso::loadOpenSearch');
-
-
-		# Archive
-		$this->get('/archive/',  '\Kanso\Kanso::loadTemplate', 'archive');
-
-		# Ajax Post Comments
-		if ($this->Config['KANSO_COMMENTS_OPEN'] === true) {
-			$this->post("/comments", '\Kanso\Comments\CommentManager@dispatch');
-		}
-
-		# Sitemap
-		$this->get("/".$this->Config['KANSO_SITEMAP'], '\Kanso\Kanso::loadSiteMap');
-
-		# RSS
-		$this->get('/feed/', '\Kanso\Kanso::loadRssFeed', 'home');
-		$this->get($this->Config['KANSO_PERMALINKS_ROUTE'].'feed/', '\Kanso\Kanso::loadRssFeed', 'single');
-
+		require 'Router'.DIRECTORY_SEPARATOR.'Routes.php';
 	}
 
 	/********************************************************************************

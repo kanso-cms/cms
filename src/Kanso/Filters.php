@@ -8,19 +8,14 @@ namespace Kanso;
 class Filters 
 {   
     /**
-     * @var Kanso\Events
+     * @var Kanso\Filters
      */
     private static $instance;
 
     /**
-     * @var mixed Array of callbacks
-     */
-    protected static $callbacks = [];
-
-    /**
      * @var array    Default Kanso filter types
      */
-    protected static $filters = [
+    protected static $callbacks = [
         'configChange'        => [],
         'adminPageTitle'      => [],
         'adminFavicons'       => [],
@@ -71,15 +66,7 @@ class Filters
      * @return Kanso\Events|false
      */
     public function on($filterName, $callback) {
-        if (!is_array($args)) $args = [$args];
-        if (isset(self::$filters[$filterName])) {
-            array_push(self::$filters[$filterName], true);
-            array_push(self::$callbacks, $callback);
-            return $this;
-        }
-        else {
-            return false;
-        }
+        self::$callbacks[$filterName][] = $callback;
     }
 
     /**
@@ -96,19 +83,16 @@ class Filters
     {
  
         # Is there a custom callback for the filter?   
-        if (isset(self::$filters[$filterName]) && !empty(self::$filters[$filterName])) {
+        if (isset(self::$callbacks[$filterName]) && !empty(self::$callbacks[$filterName])) {
 
             # Return the supplied data to filtered
             $result  = $args;
 
-            # Get all the filters callbacks for the filter
-            $filters = array_keys(self::$filters[$filterName]);
-
             # Loop the filter callbacks
-            foreach ($filters as $filter) {
+            foreach (self::$callbacks[$filterName] as $filter) {
 
                 # Apply the callback
-                $result = \Kanso\Utility\Callback::apply(self::$callbacks[$filter], $args);
+                $result = \Kanso\Utility\Callback::apply($filter, $args);
 
             }
 
