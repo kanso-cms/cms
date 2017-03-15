@@ -224,7 +224,7 @@ class Response {
      * @param  int       $status    The redirect HTTP status code
      * @return mixed                Kanso\Http\Response
      */
-    public function redirect ($url, $status = 302)
+    public function redirect($url, $status = 302)
     {
         $this->setStatus($status);
         $this->setheaders(['Location', $url]);
@@ -445,7 +445,6 @@ class Response {
         unset($this->headers[$offset]);
     }
 
-
     /**
      * Helper function for zip downloads
      *
@@ -454,7 +453,7 @@ class Response {
      *
      * @param string    $file    Absolute path to file for download
      */
-    public function headers_download_zip($file) 
+    public function downloadZip($file) 
     {
         if (is_file($file) && !headers_sent()) {
             $fileName = substr($file, strrpos($file, '/') + 1);
@@ -471,8 +470,9 @@ class Response {
                     'Content-Length'            => filesize($file),
                 ]
             );
-            ob_end_flush();
-            @readfile($file);
+            $this->sendheaders();
+            readfile($file);
+            \Kanso\Kanso::getInstance()->stop();
         }
     }
 
@@ -484,7 +484,7 @@ class Response {
      *
      * @param string    $file    Absolute path to file for download
      */
-    public function headers_download_file($file) 
+    public function downloadFile($file) 
     {
         if (is_file($file) && !headers_sent()) {
             $this->setheaders(
@@ -499,6 +499,9 @@ class Response {
                     'Content-Length'             => filesize($file),
                 ]
             );
+            $this->sendheaders();
+            readfile($file);
+            \Kanso\Kanso::getInstance()->stop();
         }
     }
 
