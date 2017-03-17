@@ -203,6 +203,11 @@ class Str
 	 */
 	public static function slugFilter($str) 
 	{
+		return strtolower(preg_replace("/[^a-zA-Z0-9-]/", '', str_replace(' ', '-', $str)));
+	}
+
+	public static function alphaNumeric($str)
+	{
 		return strtolower(preg_replace("/[^a-zA-Z0-9 -]/", '', str_replace(' ', '-', $str)));
 	}
 

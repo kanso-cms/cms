@@ -62,6 +62,7 @@ $KANSO_DEFAULTS_USERS_TABLE = [
 	'role'         => 'VARCHAR(255)',
 	'description'  => 'VARCHAR(255)',
 	'status'       => 'VARCHAR(255)',
+	'last_online'  => 'VARCHAR(255)',
 	'email_notifications' => 'BOOLEAN | DEFAULT TRUE',
 	'access_token'        => 'VARCHAR(255)',
 	'kanso_register_key'  => 'VARCHAR(255)',

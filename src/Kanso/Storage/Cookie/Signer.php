@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanso\Auth\Cookie;
+namespace Kanso\Storage\Cookie;
 
 class Signer
 {

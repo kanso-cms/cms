@@ -12,6 +12,7 @@
 *******************************************************************************/
 
 $_TEMPLATES_DIR = dirname(__FILE__).DIRECTORY_SEPARATOR.'Templates';
+$USER = $ADMIN_INCLUDES->user();
 
 # Include the header 
 require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'header.php');

@@ -1,9 +1,9 @@
 <?php
 
-namespace Kanso\Auth\Cookie;
+namespace Kanso\Storage\Cookie;
 
-use Kanso\Auth\Cookie\OpenSSL;
-use Kanso\Auth\Cookie\Signer;
+use Kanso\Storage\Cookie\OpenSSL;
+use Kanso\Storage\Cookie\Signer;
 
 class Cookie {
 

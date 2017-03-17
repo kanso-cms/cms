@@ -21,12 +21,13 @@ class Templater
      * @param  $template    string   Name of the template file to load
      * @return string
      */
-	public static function getTemplate($data, $template) 
+	public static function getTemplate($template, $data = []) 
 	{
 		$templateFile = __DIR__.DIRECTORY_SEPARATOR.$template.'.php';
 		if (file_exists($templateFile) && is_file($templateFile)) {
         	ob_start();
-        	include $templateFile;
+            extract($data);
+        	require_once $templateFile;
         	return ob_get_clean();
 		}
 		return '';

@@ -134,7 +134,7 @@ class Admin
      */
     public function isLoggedIn()
     {
-        return \Kanso\Kanso::getInstance()->Gatekeeper->isLoggedIn();
+        return \Kanso\Kanso::getInstance()->Gatekeeper->isAdmin();
     }
 
 
@@ -151,7 +151,7 @@ class Admin
     public function pageVars($_vars = [])
     {
         $includes = new \Kanso\Admin\Models\Includes($this->pageName);
-        $token    = \Kanso\Kanso::getInstance()->Session->getToken();
+        $token    = \Kanso\Kanso::getInstance()->Cookie->getToken();
         $vars     = [
             'ADMIN_PAGE_TYPE'    => $this->pageName,
             'ADMIN_INCLUDES'     => $includes,
@@ -201,9 +201,6 @@ class Admin
      */
     private function validatePOST() 
     {
-        # A valid user must exist
-        if (!\Kanso\Kanso::getInstance()->Gatekeeper->getUser()) return false;
-
         # If the request does NOT have a valid access token 404
         if (!$this->validateAccessToken()) return false;
 
@@ -222,7 +219,7 @@ class Admin
     {
         $postVars = \Kanso\Kanso::getInstance()->Request->fetch();
         if (!isset($postVars['access_token'])) return false;
-        return \Kanso\Kanso::getInstance()->Gatekeeper->verifyAccessToken($postVars['access_token']);
+        return \Kanso\Kanso::getInstance()->Gatekeeper->verifyToken($postVars['access_token']);
     }
 
     /**
@@ -232,7 +229,7 @@ class Admin
      */
     private function validatereferrer() 
     {
-        $referrer = \Kanso\Kanso::getInstance()->Session->getReferrer();
+        $referrer = \Kanso\Kanso::getInstance()->Cookie->getReferrer();
         if (!$referrer) return false;
         if (strpos($referrer, \Kanso\Kanso::getInstance()->Environment['KANSO_ADMIN_URI']) !== false) return true;
         return false;

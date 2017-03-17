@@ -51,7 +51,7 @@
 				<th align="right"></th>
 			</tr></thead>
 			<?php foreach ($all_authors as $author) : ?>
-				<?php if ($author['id'] !== $ADMIN_INCLUDES->user()['id'] && (int)$author['id'] !== 1) : ?>
+				<?php if ($author['id'] !== $ADMIN_INCLUDES->user('id') && (int)$author['id'] !== 1) : ?>
 					<tr>
 						<td><?php echo $author['name'] === null ? '?': $author['name'];?></a></td>
 						<td><?php echo $author['email'];?></td>

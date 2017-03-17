@@ -38,33 +38,23 @@ class CommentManager
         # Set the Kanso Object instance
         self::$Kanso = \Kanso\Kanso::getInstance();
 
-        # 404 on if this is not an ajax  request
-        if (!self::$Kanso->Request->isAjax()) {
-        	
-        	self::$Kanso->Response->setStatus(404);
-        	
-        	return false;
-        }
-
         # Add the comment
         $response = self::add(self::$Kanso->Request->fetch());
 
-        # If the comment was succesful return a JSON response
-        if ($response) {
+        # Ajax response
+        if (self::$Kanso->Request->isAjax()) {
+        	
+            # If the comment was successful return a JSON response
+            if ($response) {
 
-            self::$Kanso->Response->setBody(json_encode( ['response' => 'processed', 'details' => $response]));
-            
-            self::$Kanso->Response->setheaders( ['Content-Type' => 'application/json']);
+                self::$Kanso->Response->setBody(json_encode( ['response' => 'processed', 'details' => $response]));
+                
+                self::$Kanso->Response->setheaders( ['Content-Type' => 'application/json']);
+            }
 
-            return true;
-
+            # 404 on error/invalid request
+            self::$Kanso->Response->setStatus(404);
         }
-
-        # 404 on error/invalid request
-        self::$Kanso->Response->setStatus(404);
-
-        return false;
-
     }
 
     /**

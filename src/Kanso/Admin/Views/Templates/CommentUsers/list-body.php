@@ -1,8 +1,8 @@
 <div class="list-body">
-	<?php if (empty($users)) : ?>
+	<?php if (empty($commenters)) : ?>
 		<?php require($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'CommentUsers'.DIRECTORY_SEPARATOR.'list-empty.php'); ?>
 	<?php else : ?>
-		<?php foreach ($users as $user) : ?>
+		<?php foreach ($commenters as $commenter) : ?>
 			<?php require($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'CommentUsers'.DIRECTORY_SEPARATOR.'list-item.php'); ?>
 		<?php endforeach; ?>
 	<?php endif; ?>

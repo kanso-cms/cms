@@ -284,10 +284,9 @@ class Includes
 	 */
 	function user($key = null)
 	{
-		$id   = \Kanso\Kanso::getInstance()->Session->get('id');
-		$user = \Kanso\Kanso::getInstance()->Database->Builder()->SELECT('*')->FROM('users')->WHERE('id', '=', $id)->ROW();
-		if ($key) {
-			if (isset($user[$key])) return $user[$key];
+		$user = \Kanso\Kanso::getInstance()->Gatekeeper->getUser();
+		if ($key && $user) {
+			if (isset($user->$key)) return $user->$key;
 			return null;
 		}
 		return $user;

@@ -23,6 +23,11 @@ class Settings
      */
     private $validation;
 
+    /**
+     * @var \Kanso\Kanso::getInstance()->Database()->Builder()
+     */
+    private $SQL;
+
     /********************************************************************************
     * PUBLIC INITIALIZATION
     *******************************************************************************/
@@ -36,6 +41,7 @@ class Settings
     {
         $this->tab        = $tab;
         $this->validation = \Kanso\Kanso::getInstance()->Validation;
+        $this->SQL        = \Kanso\Kanso::getInstance()->Database()->Builder();
     }
 
     /**
@@ -67,11 +73,17 @@ class Settings
         }
         $thumnails = rtrim($thumnails, ', ');
 
+        # Get all the authors
+        $allAuthors = $this->SQL->SELECT('*')->FROM('users')
+        ->WHERE('role', '=', 'administrator')
+        ->OR_WHERE('role', '=', 'writer')
+        ->FIND_ALL();
+
         return [
             'active_tab'  => $this->tab,
             'themes'      => $themes,
             'thumbnails'  => $thumnails,
-            'all_authors' => \Kanso\Kanso::getInstance()->Query->all_the_authors(false),
+            'all_authors' => $allAuthors,
         ];
     }
 
@@ -175,46 +187,33 @@ class Settings
         $password = $validated_data['password'];
         $emailNotifications = isset($validated_data['email_notifications']) ? true : false;
 
-        # Get a new Query Builder
-        $Query = \Kanso\Kanso::getInstance()->Database()->Builder();
-
-        # Grab the user's row
-        $userRow = \Kanso\Kanso::getInstance()->Gatekeeper->getUser();
+        # Grab the user's object
+        $user = \Kanso\Kanso::getInstance()->Gatekeeper->getUser();
 
         # Validate that the username/ email doesn't exist already
         # only if the user has changed either value
-        if ($email !== $userRow['email']) {
-            $emailExists = $Query->SELECT('*')->FROM('users')->WHERE('email', '=', $email)->FIND();
+        if ($email !== $user->email) {
+            $emailExists = $this->SQL->SELECT('*')->FROM('users')->WHERE('email', '=', $email)->FIND();
             if ($emailExists) return $this->response('Another user already exists with that email. Please try another email address.', 'warning');
         }
-        if ($username !== $userRow['username']) {
-            $usernameExists = $Query->SELECT('*')->FROM('users')->WHERE('username', '=', $username)->FIND();
+        if ($username !== $user->username) {
+            $usernameExists = $this->SQL->SELECT('*')->FROM('users')->WHERE('username', '=', $username)->FIND();
             if ($usernameExists) return $this->response('Another user already exists with that username. Please try another username.', 'warning');
         }
 
-        # Update the username and email
-        $row = [
-            'username' => $username,
-            'email'    => $email,
-            'email_notifications' => $emailNotifications,
-        ];
+        # Update the user
+        $user->username = $username;
+        $user->email    = $email;
+        $user->email_notifications = $emailNotifications;
 
         # If they changed their password lets update it
-        if ($password !== '' && !empty($password)) $row['hashed_pass'] = utf8_encode(\Kanso\Security\Encrypt::hash($password));
+        if ($password !== '' && !empty($password)) $user->password = utf8_encode(\Kanso\Security\Encrypt::hash($password));
 
-        # Save to the databse and refresh the client's session
-        $update = $Query->UPDATE('users')->SET($row)->WHERE('id', '=', $userRow['id'])->QUERY();
+        $user->save();
 
-        # If updated
-        if ($update) {
+      
+        return $this->response('Your account settings were successfully updated!', 'success');
 
-            # Refresh the session
-            \Kanso\Kanso::getInstance()->Session->refresh();
-
-            return $this->response('Your account settings were successfully updated!', 'success');
-        }
-
-        return $this->response('Oops! Something went wrong. Please try again later or log an issue on GitHub', 'danger');
     }
 
     /**
@@ -247,43 +246,21 @@ class Settings
             'gplus'       => 'trim|sanitize_string',
         ]);
 
+        # Validate POST
         $validated_data = $this->validation->run($postVars);
-
-
         if (!$validated_data) return false;
 
-        # Get a new Query Builder
-        $SQL = \Kanso\Kanso::getInstance()->Database()->Builder();
-
         # Grab the Row and update settings
-        $userRow = $SQL->SELECT('*')->FROM('users')->WHERE('id', '=', \Kanso\Kanso::getInstance()->Session->get('id'))->ROW();
-        if (!$userRow) $this->response('Oops! Something went wrong. Please try again later or log an issue on GitHub', 'danger');
+        $user = \Kanso\Kanso::getInstance()->Gatekeeper->getUser();
 
         # Change authors details
-        $oldSlug                = $userRow['slug'];
-        $userRow['name']        = $validated_data['name'];
-        $userRow['slug']        = $validated_data['slug'];
-        $userRow['facebook']    = $validated_data['facebook'];
-        $userRow['twitter']     = $validated_data['twitter'];
-        $userRow['gplus']       = $validated_data['gplus'];
-        $userRow['description'] = $validated_data['description'];
-
-        # Save to the databse and refresh the client's session
-        $update = $SQL->UPDATE('users')->SET($userRow)->WHERE('id', '=', $userRow['id'])->QUERY();
-        
-        # Id updated
-        if ($update) {
-
-            # Relog the client in
-            \Kanso\Kanso::getInstance()->Session->refresh();
-
-            # Remove the old slug
-            $this->removeAuthorSlug($oldSlug);
-
-            # Add the new one
-            $this->addAuthorSlug($validated_data['slug']);
-
-        }
+        $user->name        = $validated_data['name'];
+        $user->slug        = $validated_data['slug'];
+        $user->facebook    = $validated_data['facebook'];
+        $user->twitter     = $validated_data['twitter'];
+        $user->gplus       = $validated_data['gplus'];
+        $user->description = $validated_data['description'];
+        $user->save();
 
         return $this->response('Your author information was successfully updated!', 'success');
     }
@@ -298,7 +275,7 @@ class Settings
     {
         # Validate the user is an admin
         $user = \Kanso\Kanso::getInstance()->Gatekeeper->getUser();
-        if ($user['role'] !== 'administrator') return false;
+        if ($user->role !== 'administrator') return false;
 
         # Validate post variables
         $postVars = $this->validation->sanitize($postVars);
@@ -402,7 +379,7 @@ class Settings
     {
         # Validate the user is an admin
         $user = \Kanso\Kanso::getInstance()->Gatekeeper->getUser();
-        if ($user['role'] !== 'administrator') return false;
+        if ($user->role !== 'administrator') return false;
 
         # Validate a file was sent
         if (empty($_FILES) || !isset($_FILES['import_articles'])) return $this->response('No files were uploaded. Please select a ".json" file to upload.', 'warning');
@@ -443,7 +420,7 @@ class Settings
     {
         # Validate the user is an admin
         $user = \Kanso\Kanso::getInstance()->Gatekeeper->getUser();
-        if ($user['role'] !== 'administrator') return false;
+        if ($user->role !== 'administrator') return false;
 
         # Validate a file was sent
         if (empty($_FILES) || !isset($_FILES['import_images']) || !is_array($_FILES['import_images'])) return $this->response('No files were uploaded. Please select a ".json" file to upload.', 'warning');
@@ -538,7 +515,7 @@ class Settings
     {
         # Validate the user is an admin
         $user = \Kanso\Kanso::getInstance()->Gatekeeper->getUser();
-        if ($user['role'] !== 'administrator') return false;
+        if ($user->role !== 'administrator') return false;
 
         # Login page
         $loginPage = \Kanso\Kanso::getInstance()->Environment['KANSO_ADMIN_URI'].'/login/';
@@ -548,7 +525,7 @@ class Settings
         
         if ($installer->installKanso(true)) {
 
-            \Kanso\Kanso::getInstance()->Session->clear();
+            \Kanso\Kanso::getInstance()->Cookie->clear();
 
             \Kanso\Kanso::getInstance()->redirect($loginPage);
         }
@@ -563,7 +540,7 @@ class Settings
     {
         # Validate the user is an admin
         $user = \Kanso\Kanso::getInstance()->Gatekeeper->getUser();
-        if ($user['role'] !== 'administrator') return false;
+        if ($user->role !== 'administrator') return false;
 
         $postVars = $this->validation->sanitize($postVars);
 
@@ -582,10 +559,10 @@ class Settings
         if (!$validated_data) return false;
 
         # User's cant invite themselves
-        if ($validated_data['email'] === $user['email']) return $this->response('Another user is already registered with that email address.', 'warning');
+        if ($validated_data['email'] === $user->email) return $this->response('Another user is already registered with that email address.', 'warning');
 
         # Get the user's row if it exists
-        $userRow = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('email', '=', $validated_data['email'])->ROW();
+        $userRow = $this->SQL->SELECT('*')->FROM('users')->WHERE('email', '=', $validated_data['email'])->ROW();
 
         # Validate they are not already confirmed
         if ($userRow && $userRow['status'] === 'confirmed') return $this->response('Another user is already registered with that email address.', 'warning');
@@ -593,7 +570,7 @@ class Settings
         # If theyre deleted or pending re-invite them
         if (!$userRow || ($userRow && $userRow['status'] !== 'confirmed')) {
             
-            \Kanso\Kanso::getInstance()->Gatekeeper->registerUser($validated_data['email'], $validated_data['role'], $user);
+            \Kanso\Kanso::getInstance()->Gatekeeper->registerAdmin($validated_data['email'], $validated_data['role']);
 
             return $this->response('The user was successfully sent a registration invite.', 'success');
         }
@@ -608,7 +585,7 @@ class Settings
     {
         # Validate the user is an admin
         $user = \Kanso\Kanso::getInstance()->Gatekeeper->getUser();
-        if ($user['role'] !== 'administrator') return false;
+        if ($user->role !== 'administrator') return false;
 
         $postVars = $this->validation->sanitize($postVars);
 
@@ -627,17 +604,17 @@ class Settings
         if (!$validated_data) return false;
 
         # The user cannot change their own role
-        if ((int)$validated_data['user_id'] === (int)$user['id']) return false;
+        if (intval($validated_data['user_id']) === intval($user->id)) return false;
 
-        # Nooe can change user id 1's role
-        if ((int)$validated_data['user_id'] === 1) return false;
+        # You cannot change user id 1's role
+        if (intval($validated_data['user_id']) === 1) return false;
 
         # Validate the user actually exists
-        $userExists = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('id', '=', (int)$validated_data['user_id'])->FIND();
+        $userExists = $this->SQL->SELECT('*')->FROM('users')->WHERE('id', '=', intval($validated_data['user_id']))->FIND();
         if (empty($userExists)) return false;
         
         # Change their role
-        \Kanso\Kanso::getInstance()->Gatekeeper->changeUserRole((int)$validated_data['user_id'], $validated_data['role']);
+        \Kanso\Kanso::getInstance()->Gatekeeper->changeUserRole(intval($validated_data['user_id']), $validated_data['role']);
 
         return $this->response('The user\'s role was successfully updated.', 'success');
 
@@ -652,7 +629,7 @@ class Settings
     {
         # Validate the user is an admin
         $user = \Kanso\Kanso::getInstance()->Gatekeeper->getUser();
-        if ($user['role'] !== 'administrator') return false;
+        if ($user->role !== 'administrator') return false;
 
         $postVars = $this->validation->sanitize($postVars);
 
@@ -669,13 +646,13 @@ class Settings
         if (!$validated_data) return false;
 
         # The user cannot change their own role
-        if ((int)$validated_data['user_id'] === (int)$user['id']) return false;
+        if ((int)$validated_data['user_id'] === (int)$user->id) return false;
 
         # Nooe can change user id 1's role
         if ((int)$validated_data['user_id'] === 1) return false;
 
         # Validate the user actually exists
-        $userExists = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('id', '=', (int)$validated_data['user_id'])->FIND();
+        $userExists = $this->SQL->SELECT('*')->FROM('users')->WHERE('id', '=', (int)$validated_data['user_id'])->FIND();
         if (empty($userExists)) return false;
         
         # Change their role
@@ -700,39 +677,5 @@ class Settings
 
         return (json_last_error() == JSON_ERROR_NONE);
 
-    }
-
-    /**
-     * Add a slug to Kanso's author pages configuration (used internally)
-     *
-     * @param  string    $slug    The slug to be added
-     */
-    private function addAuthorSlug($slug)
-    {
-        # Get the slugs
-        $slugs = \Kanso\Kanso::getInstance()->Config['KANSO_AUTHOR_SLUGS'];
-
-        # Add the slug
-        $slugs[] = $slug;
-
-        \Kanso\Kanso::getInstance()->Settings->put('KANSO_AUTHOR_SLUGS', array_unique(array_values($slugs)));
-    }
-
-    /**
-     * Remove a slug from Kanso's author pages configuration (used internally)
-     *
-     * @param  string    $slug    The slug to be removed
-     */
-    private function removeAuthorSlug($slug)
-    {
-        # Get the config
-        $slugs = \Kanso\Kanso::getInstance()->Config['KANSO_AUTHOR_SLUGS'];
-
-        # Remove the slug
-        foreach ($slugs as $i => $configSlug) {
-            if ($configSlug === $slug) unset($slugs[$i]);
-        }
-
-        \Kanso\Kanso::getInstance()->Settings->put('KANSO_AUTHOR_SLUGS', array_values($slugs));
     }
 }

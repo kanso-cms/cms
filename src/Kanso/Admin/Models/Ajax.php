@@ -126,7 +126,7 @@ class Ajax
         $article->excerpt    = $validated_data['excerpt'];
         $article->thumbnail  = $validated_data['thumbnail'];
         $article->type       = $validated_data['type'];
-        $article->author     = \Kanso\Kanso::getInstance()->Session->get('id');
+        $article->author     = \Kanso\Kanso::getInstance()->Cookie->get('id');
         $article->comments_enabled = \Kanso\Utility\Str::bool($validated_data['comments']);
         if (isset($_POST['content'])) $article->content = $_POST['content'];
         if (isset($validated_data['status'])) $article->status = $validated_data['status'];
@@ -189,7 +189,7 @@ class Ajax
         $article->thumbnail  = $validated_data['thumbnail'];
         $article->status     = 'draft';
         $article->type       = $validated_data['type'];
-        $article->author     = \Kanso\Kanso::getInstance()->Session->get('id');
+        $article->author     = \Kanso\Kanso::getInstance()->Cookie->get('id');
         $article->comments_enabled = \Kanso\Utility\Str::bool($validated_data['comments']);
         if (isset($validated_data['status'])) $article->status = $validated_data['status'];
 

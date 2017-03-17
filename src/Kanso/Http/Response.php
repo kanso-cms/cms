@@ -257,7 +257,7 @@ class Response {
             $this->headers->remove('Content-Length');
             $this->setBody('');
         }
-        $cookies = \Kanso\Kanso::getInstance()->Session->cookies();
+        $cookies = \Kanso\Kanso::getInstance()->Cookie->cookies();
 
         return [$this->status, $this->headers, $this->body, $cookies];
     }

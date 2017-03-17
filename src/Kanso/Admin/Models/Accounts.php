@@ -54,9 +54,24 @@ class Accounts
 
         $validated_data = $this->validation->run($postVars);
 
-        if ($validated_data) return \Kanso\Kanso::getInstance()->Gatekeeper->login($validated_data['username'], $validated_data['password']);
+        $gatekeeper = \Kanso\Kanso::getInstance()->Gatekeeper;
 
-        return false;
+        if ($validated_data) {
+            $login = $gatekeeper->login($validated_data['username'], $validated_data['password']);
+            if ($login === $gatekeeper::LOGIN_ACTIVATING) {
+                return ['class' => 'warning', 'icon' => 'exclamation-triangle', 'msg' => 'Your account has not yet been activated.'];
+            }
+            else if ($login === $gatekeeper::LOGIN_LOCKED) {
+                return ['class' => 'warning', 'icon' => 'exclamation-triangle', 'msg' => 'That account has been temporarily locked due to too many failed login attempts.'];
+            }
+            else if ($login === $gatekeeper::LOGIN_BANNED) {
+                return ['class' => 'warning', 'icon' => 'exclamation-triangle', 'msg' => 'That account has been permanently suspended.'];
+            }
+            else if ($login === true) {
+                return true;
+            }
+        }
+        return ['class' => 'danger', 'icon' => 'times', 'msg' => 'Either the username or password you entered was incorrect.'];
     }
 
     /**
@@ -115,7 +130,7 @@ class Accounts
     public function register($token)
     {
         # Get the key from the user's session
-        $sessionKey = \Kanso\Kanso::getInstance()->Session->get('session_kanso_register_key');
+        $sessionKey = \Kanso\Kanso::getInstance()->Cookie->get('session_kanso_register_key');
 
         # Validate the token and session key are the same
         if ($sessionKey !== $token) return false;

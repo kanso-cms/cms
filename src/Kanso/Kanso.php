@@ -13,7 +13,6 @@ namespace Kanso;
  * @property Response       \Kanso\Http\Response
  * @property Database       \Kanso\Database\Database
  * @property Gatekeeper     \Kanso\Auth\Gatekeeper
- * @property Session        \Kanso\Auth\Session
  * @property Bookkeeper     \Kanso\Articles\Bookkeeper
  * @property Router         \Kanso\Router\Router
  * @property Mailer         \Kanso\Utility\Mailer
@@ -22,7 +21,7 @@ namespace Kanso;
  * @property Cache          \Kanso\Cache\Cache
  * @property Events         \Kanso\Events
  * @property Filters        \Kanso\Filters
- * @property Cookie         \Kanso\Auth\Cookie
+ * @property Cookie         \Kanso\Storage\Cookie
  * @property Admin          \Kanso\Admin\Admin
  */
 class Kanso 
@@ -180,11 +179,6 @@ class Kanso
 			return new \Kanso\Auth\Gatekeeper();
 		});
 
-		# Default Session
-		$this->Container->singleton('Session', function () {
-			return new \Kanso\Auth\Session();
-		});
-
 		# Default GUMP
 		$this->Container->set('Validation', function() {
 			return new \Kanso\Utility\GUMP();
@@ -247,7 +241,7 @@ class Kanso
 
 		# Default cookie
 		$this->Container->singleton('Cookie', function () {
-			return new \Kanso\Auth\Cookie\Cookie();
+			return new \Kanso\Storage\Cookie();
 		});
 
 		# Default Admin
@@ -585,16 +579,6 @@ class Kanso
 	}
 
 	/**
-	 * Get the Session object
-	 *
-	 * @return \Kanso\Auth\Session
-	 */
-	public function Session()
-	{
-		return $this->Session;
-	}
-
-	/**
 	 * Get the Bookkeeper object
 	 *
 	 * @return \Kanso\Auth\Session
@@ -793,11 +777,6 @@ class Kanso
 				session_start();
 			}
 		}
-
-		# Instantiate the Kanso session
-		# Note this will also instantiate the gatekeeper
-		$this->Session->init();
-
 	}
 
 

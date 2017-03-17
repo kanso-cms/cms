@@ -154,7 +154,7 @@ class Ajax
      */
     private function validatereferrer() 
     {
-        $referrer = \Kanso\Kanso::getInstance()->Session->getReferrer();
+        $referrer = \Kanso\Kanso::getInstance()->Cookie->getReferrer();
         if (!$referrer) return false;
         if (strpos($referrer, \Kanso\Kanso::getInstance()->Environment['KANSO_ADMIN_URI']) !== false) return true;
         return false;

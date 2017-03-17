@@ -15,7 +15,6 @@
 # This determines whether errors should be printed to the 
 # screen (HTTP RESPONSE OR BROWSER) as part of the output 
 # or if they should be hidden from the user. 
-
 /**
 * @see http://php.net/manual/en/errorfunc.configuration.php#ini.display-errors
 */
@@ -25,7 +24,6 @@
 
 # Display errors
 ini_set('display_errors', 1);
-
 
 # The error_reporting() function sets the error_reporting directive at runtime. 
 # PHP has many levels of errors (FATAL ERROR, WARNING, NOTICE et...), 

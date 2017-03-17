@@ -37,13 +37,13 @@ class CommentUsers
 	{
         # Prep the response
         $response = [
-            'users'         => $this->loadUsers(),
+            'commenters'    => $this->loadUsers(),
             'max_page'      => 0,
             'queries'       => $this->getQueries(),
             'empty_queries' => $this->emptyQueries(),
         ];
 
-        # If the articles are empty,
+        # If the commenters are empty,
         # There's no need to check for max pages
         if (!empty($response['users'])) {
             $response['max_page'] = $this->loadUsers(true);
