@@ -407,7 +407,7 @@ class Gatekeeper
 
         }
        
-        return $user;
+        return true;
     }
 
     /**
@@ -471,7 +471,7 @@ class Gatekeeper
 
         }
 
-        return $user;
+        return true;
     }
 
     /**
