@@ -609,11 +609,21 @@ class Kanso
 	/**
 	 * Get the Cookie manager
 	 *
-	 * @return \Kanso\Auth\Cookie
+	 * @return \Kanso\Storage\Cookie
 	 */
 	public function Cookie()
 	{
 		return $this->Cookie;
+	}
+
+	/**
+	 * Get the session manager
+	 *
+	 * @return \Kanso\Storage\Session
+	 */
+	public function Session()
+	{
+		return $this->Session;
 	}
 
 	/******************************************************************************
