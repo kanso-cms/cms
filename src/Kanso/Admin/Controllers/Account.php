@@ -219,7 +219,7 @@ class Account
 		# If this is a POST request get the token from the referrer
 		if ($this->is_post) {
 			# Get the token from the referrer
-			$_token = \Kanso\Kanso::getInstance()->Cookie->getReferrer();
+			$_token = \Kanso\Kanso::getInstance()->Session->getReferrer();
 			if (!$_token) return \Kanso\Kanso::getInstance()->notFound();
 			$_token = explode('token=', $_token);
 			if (!isset($_token[1])) return \Kanso\Kanso::getInstance()->notFound();
@@ -242,7 +242,7 @@ class Account
 		if (!$user) return \Kanso\Kanso::getInstance()->notFound();
 
 		# Add the token to client's Cookie
-		\Kanso\Kanso::getInstance()->Cookie->put('session_kanso_register_key', $token);
+		\Kanso\Kanso::getInstance()->Session->put('session_kanso_register_key', $token);
 
 		# If this is a post request, validate it
 		# and redirect and login if the registration was successful

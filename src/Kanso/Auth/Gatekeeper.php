@@ -147,7 +147,7 @@ class Gatekeeper
     public function getUser()
     {
         if (is_null($this->user)) {
-            $id = \Kanso\Kanso::getInstance()->Cookie->get('id');
+            $id = \Kanso\Kanso::getInstance()->Cookie->get('user_id');
             if ($id) $this->user = new \Kanso\Auth\Adapters\User($id);
         }
 
@@ -174,7 +174,7 @@ class Gatekeeper
     {
         if ($this->isLoggedIn()) {
 
-            $freshUser = new \Kanso\Auth\Adapters\User($this->user->id);
+            $freshUser = $this->SQL->SELECT('id')->FROM('users')->WHERE('id', '=', $this->user->id)->ROW();
 
             $this->logClientIn($freshUser);
         }
@@ -201,21 +201,22 @@ class Gatekeeper
         if (!\Kanso\Kanso::getInstance()->Cookie->isLoggedIn()) return false;
 
         # If there is no user id in the cookie
-        if (!\Kanso\Kanso::getInstance()->Cookie->get('id')) return false;
+        if (!\Kanso\Kanso::getInstance()->Cookie->get('user_id')) return false;
 
         # Get the current user
         if (!$this->getUser()) return false;
 
         # Compare the two access tokens
-        $cookie_token = \Kanso\Kanso::getInstance()->Cookie->getToken();
+        $session_token = \Kanso\Kanso::getInstance()->Session->getToken();
         $db_token     = $this->user->access_token;
 
         # If the tokens don't match their cookie should be destroyed
         # and they should be logged out immediately.
         # as they have logged into a different machine
-        if ($cookie_token !== $db_token) {
+        if ($session_token !== $db_token) {
             $this->user = NULL;
             \Kanso\Kanso::getInstance()->Cookie->clear();
+            \Kanso\Kanso::getInstance()->Session->clear();
             return false;
         }
         return true;
@@ -262,15 +263,15 @@ class Gatekeeper
     public function verifyToken($token)
     {
         # Get the cookie token
-        $cookie_token = \Kanso\Kanso::getInstance()->Cookie->getToken();
+        $session_token = \Kanso\Kanso::getInstance()->Session->getToken();
 
         # Logged in users must compare 3 tokens - DB, Cookie, Argument
         if ($this->isLoggedIn()) {
-            return $token === $cookie_token && $cookie_token === $this->user->access_token;
+            return $token === $session_token && $session_token === $this->user->access_token;
         }
 
         # Other users just compare 2 - cookie, argument
-        return $token === $cookie_token;
+        return $token === $session_token;
     }
 
     /********************************************************************************
@@ -313,6 +314,7 @@ class Gatekeeper
             return self::LOGIN_BANNED;
         }
 
+
         # Save the hashed password
         $hashedPass = utf8_decode($user['hashed_pass']);
         
@@ -320,7 +322,6 @@ class Gatekeeper
         if (\Kanso\Security\Encrypt::verify($password, $hashedPass)) {
 
             # Log the client in
-            $user = new \Kanso\Auth\Adapters\User($user['id']);
         	$this->logClientIn($user);
 
             # Fire the event
@@ -343,8 +344,8 @@ class Gatekeeper
         # Fire the event
         \Kanso\Events::fire('logout', $this->user);
 
-        # Clear the Cookie
-        \Kanso\Kanso::getInstance()->Cookie->clear();
+        # Keep the cookie but set as not logged in
+        \Kanso\Kanso::getInstance()->Cookie->logout();
 
     	# Remove the user object
     	$this->user = NULL;
@@ -675,34 +676,38 @@ class Gatekeeper
      * This is responsible for logging a client into the 
      * admin panel.
      *
-     * @param  Kanso\Auth\Adapters\User
+     * @param  array    $_user    row from database  
      */
     public function logClientIn($_user) 
     {
-        $Cookie = \Kanso\Kanso::getInstance()->Cookie;
+        $cookie  = \Kanso\Kanso::getInstance()->Cookie;
+        $session = \Kanso\Kanso::getInstance()->Session;
         
         # Create a fresh cookie
-        $Cookie->clear();
+        $cookie->clear();
+        $session->clear();
 
         # Add the user credentials
-        $Cookie->putMultiple([
-            'id'    => $_user->id,
-            'email' => $_user->email,
-            'name'  => $_user->name,
+        $cookie->putMultiple([
+            'user_id' => $_user['id'],
+            'email'   => $_user['email'],
         ]);
 
-        #Update the user's access token in the DB
+        # Save everything to session
+        $session->putMultiple($_user);
+
+        # Update the user's access token in the DB
         # to match the newly created one
         $this->SQL
-            ->UPDATE('users')->SET(['access_token' => $Cookie->getToken()])
-            ->WHERE('id', '=', $_user->id)
+            ->UPDATE('users')->SET(['access_token' => $session->getToken()])
+            ->WHERE('id', '=', $_user['id'])
             ->QUERY();
 
         # Log the client in
-        $Cookie->login();
+        $cookie->login();
 
         # Save the user
-        $this->user = $_user;
+        $this->user =  new \Kanso\Auth\Adapters\User($_user);
     }
 
 }

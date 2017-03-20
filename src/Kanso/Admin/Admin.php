@@ -151,7 +151,7 @@ class Admin
     public function pageVars($_vars = [])
     {
         $includes = new \Kanso\Admin\Models\Includes($this->pageName);
-        $token    = \Kanso\Kanso::getInstance()->Cookie->getToken();
+        $token    = \Kanso\Kanso::getInstance()->Session->getToken();
         $vars     = [
             'ADMIN_PAGE_TYPE'    => $this->pageName,
             'ADMIN_INCLUDES'     => $includes,
@@ -229,7 +229,7 @@ class Admin
      */
     private function validatereferrer() 
     {
-        $referrer = \Kanso\Kanso::getInstance()->Cookie->getReferrer();
+        $referrer = \Kanso\Kanso::getInstance()->Session->getReferrer();
         if (!$referrer) return false;
         if (strpos($referrer, \Kanso\Kanso::getInstance()->Environment['KANSO_ADMIN_URI']) !== false) return true;
         return false;

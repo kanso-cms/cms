@@ -15,17 +15,7 @@ class Cookie
     protected $cookieData = [];
 
     /**
-     * @var array 'ks_flash'
-     */
-    protected $flashData = [];
-
-    /**
-     * @var string 'ks_access'
-     */
-    protected $token;
-
-    /**
-     * @var string 'ks_login'
+     * @var string 'kanso_login'
      */
     protected $login = 'no';
 
@@ -35,31 +25,44 @@ class Cookie
     private  $singer;
 
     /**
+     * @var string 'ks_access'
+     */
+    private $cookieName = 'kanso_cookie';
+
+    /**
+     * @var string 'ks_access'
+     */
+    private $lifeTime = '1 month';
+
+    /**
      * Constructor
      *
      */
     public function __construct()
     {
+        # Cookie signer
         $this->singer = new \Kanso\Storage\Cookie\Cookie;
-        $user  = $this->singer->fetch('ks_session');
-        $flash = $this->singer->fetch('ks_flash');
-        $token = $this->singer->fetch('ks_access');
-        $login = isset($_COOKIE['ks_login']) ? $_COOKIE['ks_login'] : 'no';
+        
+        # Fetch cookies
+        $data  = $this->singer->fetch($this->cookieName);
+        $login = isset($_COOKIE['kanso_login']) ? $_COOKIE['kanso_login'] : 'no';
 
         # Get the session data if it exists
-        if ($user) $this->cookieData = unserialize($user);
-
-        # Get the session flash data if it exists
-        if ($flash) $this->flashData = unserialize($flash);
-
-        # Get the session flash data if it exists
-        if ($token) $this->token = $token;
+        if ($data) $this->cookieData = unserialize($data);
 
         # Does the user have a login cookie?
         $this->login = $login === 'yes' ? 'yes' : 'no';
 
-        # If this is a GET request start the Kanso cookie
-        $this->initCookies();
+        # Make sure last active is set
+        if (!$this->get('last_active')) $this->put('last_active', time());
+
+        # Validate the cookie
+        $this->validateCookie();
+
+        # Set the referrer
+        if (\Kanso\Kanso::getInstance()->Request->isGet()) {
+            $this->put('referrer', \Kanso\Kanso::getInstance()->Environment['REQUEST_URL']);
+        }
     }
 
     /********************************************************************************
@@ -73,27 +76,13 @@ class Cookie
      * variables in the client's cookie for a number of security measures.
      *
      */
-    private function initCookies() 
+    private function validateCookie() 
     {   
-        # If no Kanso cookie data is present we need a fresh cookie
-        if (empty($this->cookieData) || !$this->cookieData) $this->clear();
-
-        # Iterate the flash data
-        $this->iterateFlash();
+        # Double check cookie data is not corrupted
+        if (!is_array($this->cookieData)) $this->clear();
 
         # If the cookie is more than 1 month, destroy it
-        if ($this->get('last_active') < strtotime('-1 week')) $this->clear();
-
-        # Last active is now
-        $this->put('last_active', time());
-
-        # If there is no validation token - create one
-        if (empty($this->token) || !$this->token) $this->regenerateToken();
-
-        # Let's set the referrer for get requests
-        if (\Kanso\Kanso::getInstance()->Request->isGet()) {
-            $this->put('referrer', \Kanso\Kanso::getInstance()->Environment['REQUEST_URL']);
-        }
+        if ($this->get('last_active') < strtotime('-'.$this->lifeTime)) $this->clear();
     }
 
     /**
@@ -116,16 +105,16 @@ class Cookie
         $this->login = 'yes';
     }
 
-    /**
-     * Verify a user's access token
+     /**
+     * Log the client in
      *
-     * @param   string   $token
-     * @return  boolean
      */
-    public function verifyToken($token)
-    {   
-        return $token !== $this->token;
+    public function logout()
+    {
+        # Set as logged in
+        $this->login = 'no';
     }
+
 
     /**
      * Get cookies
@@ -138,22 +127,20 @@ class Cookie
     public function cookies() 
     {
         # Login cookies don't get encrypted
-        $login    = $this->singer->store('ks_login', $this->login);
+        $login    = $this->singer->store('kanso_login', $this->login);
         $login[1] = $this->login;
 
         # Cookies to send to the client
         return [
-            $this->singer->store('ks_session', serialize($this->cookieData)),
-            $this->singer->store('ks_flash',   serialize($this->flashData)),
-            $this->singer->store('ks_access',  $this->token),
+            $this->singer->store($this->cookieName, serialize($this->cookieData)),
             $login,
         ];
     }
 
     /**
-     * Clear the user's session
+     * Clear the user's cookie
      *
-     * This completely clears the users session
+     * This completely clears the users cookies
      * as if they have never visited the site before.
      *
      */
@@ -162,36 +149,16 @@ class Cookie
         # Clear the data
         $this->cookieData = [];
 
-        # Clear the flash data
-        $this->flashData = [];
-
         # The user is not logged in
         $this->login = 'no';
-
-        # Generate a new access token
-        $this->regenerateToken();
 
         # Append Kanso session data
         $this->put('last_active', time());
     }
 
-    /**
-     * Get the session referrer
-     *
-     * This returns the referrer if it is
-     * set either via the HTTP request or
-     * the cookie data.
-     *
-     * @return  string|false
-     */
-    public function getReferrer()
-    {
-        if ($this->has('referrer')) return $this->get('referrer');
-        return false;
-    }
     
     /********************************************************************************
-    * SESSION DATA MANAGEMENT
+    * COOKIE DATA MANAGEMENT
     *******************************************************************************/
 
     /**
@@ -251,104 +218,6 @@ class Cookie
         if (isset($this->cookieData[$key])) unset($this->cookieData[$key]);
     }
 
-    /********************************************************************************
-    * FLASH DATA MANAGEMENT
-    *******************************************************************************/
-
-    /**
-     * Get a key from the flash data or the entire flash data
-     *
-     * @param  string   $key   (optional)
-     * @return null|array 
-     */
-    public function getFlash($key = null) 
-    {
-        if (!$key) return $this->flashData;
-        if ($key && isset($this->flashData[$key][$key])) return $this->flashData[$key][$key];
-        return null;
-    }
-
-    /**
-     * Check if a key-value exists in the flash data
-     *
-     * @param  string   $key
-     */
-    public function hasFlash($key)
-    {
-        return isset($this->flashData[$key][$key]);
-    }
-
-    /**
-     * Save a key/value pair to the flash data
-     *
-     * @param  string   $key
-     * @param  mixed    $value
-     */
-    public function putflash($key, $value) 
-    {
-        $this->flashData[$key][$key]    = $value;
-        $this->flashData[$key]['count'] = 0;
-    }
-
-    /**
-     * Remove a key-value from the flash data
-     *
-     * @param  string   $key
-     */
-    public function removeFlash($key)
-    {
-        if (isset($this->flashData[$key])) unset($this->flashData[$key]);
-    }
-
-    /**
-     * Clear the sessions flash data
-     *
-     */
-    public function clearFlash()
-    {
-        $this->flashData = [];
-    }
-
-    /**
-     * Loop over the flash data and remove old data
-     *
-     */
-    private function iterateFlash()
-    {
-        if (empty($this->flashData)) return;
-        foreach ($this->flashData as $key => $data) {
-            $count = $data['count'];
-            if ($data['count'] + 1 > 1 ) {
-                unset($this->flashData[$key]);
-            }
-            else {
-                $this->flashData[$key]['count'] = $count + 1;
-            }
-        }
-    }
-
-    /********************************************************************************
-    * AJAX TOKEN MANAGEMENT
-    *******************************************************************************/
-
-    /**
-     * Get the ajax token
-     *
-     * @return  array
-     */
-    public function getToken()
-    {
-        return $this->token;
-    }
-
-    /**
-     * Regenerate the ajax token
-     *
-     * @return boolean
-     */
-    public function regenerateToken()
-    {
-        $this->token = \Kanso\Utility\Str::generateRandom(16, true);
-    }
+   
 
 }

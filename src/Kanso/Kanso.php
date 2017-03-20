@@ -174,6 +174,16 @@ class Kanso
 			return new \Kanso\Database\Database;
 		});
 
+		# Default cookie
+		$this->Container->singleton('Cookie', function () {
+			return new \Kanso\Storage\Cookie();
+		});
+
+		# Default session
+		$this->Container->singleton('Session', function () {
+			return new \Kanso\Storage\Session();
+		});
+
 		# Default Gatekeeper
 		$this->Container->singleton('Gatekeeper', function () {
 			return new \Kanso\Auth\Gatekeeper();
@@ -239,11 +249,6 @@ class Kanso
 			return new \Kanso\Utility\Mailer();
 		});
 
-		# Default cookie
-		$this->Container->singleton('Cookie', function () {
-			return new \Kanso\Storage\Cookie();
-		});
-
 		# Default Admin
 		$this->Container->singleton('Admin', function () {
 			return new \Kanso\Admin\Admin();
@@ -254,11 +259,11 @@ class Kanso
 			$this->setName('default');
 		}
 
-		# Start the session immediately
-		$this->dispatchSession();
-
 		# Default this is not an admin request
 		$this->is_admin = false;
+
+		# Start the session
+		$this->Session->init();
 
 		# Include the active theme's plugins.php file if it exists
 		$plugins = $this->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.$this->Config['KANSO_THEME_NAME'].DIRECTORY_SEPARATOR.'plugins.php';
@@ -419,6 +424,9 @@ class Kanso
 		
 		# Redirect via the HTTP Response object
 		$this->Response->redirect($url, $status);
+
+		# Write to the session
+		$this->Session->save();
 
 		# Stop Kanso
 		$this->halt($status);
@@ -676,6 +684,9 @@ class Kanso
 		# Get headers, body, status
 		list($status, $headers, $body, $cookies) = $this->Response->finalize();
 
+		# Write to the session
+		$this->Session->save();
+
 		# Call the mid dispatch event
 		\Kanso\Events::fire('midDispatch', [$status, $headers, $body]);
 
@@ -762,21 +773,6 @@ class Kanso
         }
 		
 		# Return the aplication was not installed
-	}
-
-	/**
-	 * Dispatch Session
-	 *
-	 * If a session hasn't been started already, start a new one.
-	 */
-	private function dispatchSession() 
-	{
-		# Start a PHP session
-		if ( session_id() == '' || !isset($_SESSION)) {
-			if (!headers_sent()) { 
-				session_start();
-			}
-		}
 	}
 
 

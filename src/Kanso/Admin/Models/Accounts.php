@@ -130,7 +130,7 @@ class Accounts
     public function register($token)
     {
         # Get the key from the user's session
-        $sessionKey = \Kanso\Kanso::getInstance()->Cookie->get('session_kanso_register_key');
+        $sessionKey = \Kanso\Kanso::getInstance()->Session->get('session_kanso_register_key');
 
         # Validate the token and session key are the same
         if ($sessionKey !== $token) return false;

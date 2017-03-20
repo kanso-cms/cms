@@ -26,6 +26,35 @@ class Includes
     public function __construct($pageName)
     {
         $this->pageName = $pageName;
+
+        # Add the CSS/JS scripts for the writer
+        if ($pageName === 'writer') {
+
+        	$assetsV   = $this->assetsVersion();
+        	$assetsURL = $this->assetsURL();
+
+        	\Kanso\Kanso::getInstance()->Filters->on('adminHeaderScripts', function($stylesheets) use($assetsV, $assetsURL) {
+
+	            $stylesheets[] = '<link rel="stylesheet" href="'.$assetsURL.'/css/vendor/codemirror.css?v='.$assetsV.'">';
+	            $stylesheets[] = '<link rel="stylesheet" href="'.$assetsURL.'/css/vendor/dropzone.css?v='.$assetsV.'">';
+	            $stylesheets[] = '<link rel="stylesheet" href="'.$assetsURL.'/css/vendor/highlight.css?v='.$assetsV.'">';
+	            $stylesheets[] = '<link rel="stylesheet" href="'.$assetsURL.'/css/markdown.css?v='.$assetsV.'">';
+	            $stylesheets[] = '<link rel="stylesheet" href="'.$assetsURL.'/css/writer.css?v='.$assetsV.'">';
+
+	            return $stylesheets;
+	        });
+
+	        # Add the JS scripts to the footer
+	        \Kanso\Kanso::getInstance()->Filters->on('adminFooterScripts', function($scripts) use($assetsV, $assetsURL) {
+	            $scripts[] = '<script type="text/javascript" src="'.$assetsURL.'/js/vendor/codemirror.js?v='.$assetsV.'"></script>';
+	            $scripts[] = '<script type="text/javascript" src="'.$assetsURL.'/js/vendor/dropzone.js?v='.$assetsV.'"></script>';
+	            $scripts[] = '<script type="text/javascript" src="'.$assetsURL.'/js/vendor/highlight.js?v='.$assetsV.'"></script>';
+	            $scripts[] = '<script type="text/javascript" src="'.$assetsURL.'/js/vendor/markdownIt.js?v='.$assetsV.'"></script>';
+	            $scripts[] = '<script type="text/javascript" src="'.$assetsURL.'/js/writer.js?v='.$assetsV.'"></script>';
+
+	            return $scripts;
+	        });
+        }
     }
 
     /**

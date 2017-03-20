@@ -526,7 +526,7 @@ class Settings
         if ($installer->installKanso(true)) {
 
             \Kanso\Kanso::getInstance()->Cookie->clear();
-
+            \Kanso\Kanso::getInstance()->Session->clear();
             \Kanso\Kanso::getInstance()->redirect($loginPage);
         }
     }
