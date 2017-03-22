@@ -127,6 +127,7 @@ class Session
     public function regenerateToken()
     {
         $this->token = hash('sha256', random_bytes(16));
+        return $this->token;
     }
 
     /**

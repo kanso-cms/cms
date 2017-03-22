@@ -206,9 +206,14 @@ class Str
 		return strtolower(preg_replace("/[^a-zA-Z0-9-]/", '', str_replace(' ', '-', $str)));
 	}
 
-	public static function alphaNumeric($str)
+	public static function alphaNumericFilter($str)
 	{
-		return strtolower(preg_replace("/[^a-zA-Z0-9 -]/", '', str_replace(' ', '-', $str)));
+		return preg_replace("/[^a-zA-Z0-9 -]/", '', str_replace(' ', '-', $str));
+	}
+
+	public static function alphaFilter($str)
+	{
+		return preg_replace("/[^a-z]/", '', $str);
 	}
 
 	/**

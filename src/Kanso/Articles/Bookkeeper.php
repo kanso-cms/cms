@@ -495,8 +495,23 @@ class Bookkeeper
 	 */
 	private function titleToSlug($title, $categorySlug, $authorSlug, $created, $type) 
 	{
-	  	if ($type === 'page') return \Kanso\Utility\Str::slugFilter($title).'/';
-	  	$format = \Kanso\Kanso::getInstance()->Config['KANSO_PERMALINKS'];
+	  	$config = \Kanso\Kanso::getInstance()->Config;
+		# Custom posts have their own route, thus their own slug structure
+	  	if ($type === 'page') {
+	  		return \Kanso\Utility\Str::slugFilter($title).'/';
+	  	}
+	  	else if ($type === 'post') {
+	  		$format = $config['KANSO_PERMALINKS']; 
+	  	}
+	  	else {
+	  		if (isset($config['KANSO_CUSTOM_POSTS'][$type])) {
+	  			$format = $config['KANSO_CUSTOM_POSTS'][$type];
+	  		}
+	  		else {
+	  			return \Kanso\Utility\Str::slugFilter($title).'/';
+	  		}
+	  	}
+
 	  	$dateMap = [
 	  		'year'     => 'Y',
 	  		'month'    => 'm',
@@ -513,8 +528,15 @@ class Bookkeeper
 	  	$slug = '';
 	  	$urlPieces = explode('/', $format);
 	  	foreach ($urlPieces as $key) {
-	  		if (isset($dateMap[$key])) $slug .= date($dateMap[$key], $created).'/';
-	  		else if (isset($varMap[$key])) $slug .= $varMap[$key].'/';
+	  		if (isset($dateMap[$key])) {
+	  			$slug .= date($dateMap[$key], $created).'/';
+	  		}
+	  		else if (isset($varMap[$key])) {
+	  			$slug .= $varMap[$key].'/';
+	  		}
+	  		else {
+	  			$slug .= $key.'/';
+	  		}
 	  	}
 	  	return $slug;
 

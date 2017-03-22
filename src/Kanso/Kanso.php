@@ -266,7 +266,7 @@ class Kanso
 		$this->Session->init();
 
 		# Include the active theme's plugins.php file if it exists
-		$plugins = $this->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.$this->Config['KANSO_THEME_NAME'].DIRECTORY_SEPARATOR.'plugins.php';
+		$plugins = $this->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.'plugins.php';
 		if (file_exists($plugins)) require_once($plugins);
 		
 	}
@@ -321,6 +321,18 @@ class Kanso
 	public function getName()
 	{
 		return $this->name;
+	}
+
+	/**
+	 * Set a config key/par but dont save
+	 *
+	 * @return string|null
+	 */
+	public function tmpConfig($key, $value)
+	{
+		$config = $this->Config;
+		$config[$key] = $value;
+		$this->Container->set('Config', $config);
 	}
 
 	/********************************************************************************
@@ -648,7 +660,7 @@ class Kanso
 		if ($status) $this->Response->setStatus($status);
 
 		# Set the data
-		if ($data)   $this->View->appendData($data);
+		if ($data) $this->View->appendData($data);
 
 		# Append and parse template file
 		$this->Response->appendBody($this->View->display($template));
@@ -700,29 +712,13 @@ class Kanso
 		# Call the mid dispatch event
 		\Kanso\Events::fire('midDispatch', [$status, $headers, $body]);
 
-		# Send the default headers only if no output has
-		# already been sent to the client
-		if (headers_sent() === false) {
-
-			# Send the status header
-			header($this->Environment['HTTP_PROTOCOL'].'/1.1'.' '.$status.' '.\Kanso\Http\Response::getMessageForCode($status));
-			
-			# Send all the other headers
-			foreach ($headers as $name => $value)
-			{
-				header($name.':'.$value, true);
-			}
-			foreach ($cookies as $cookie)
-            {
-                if (!isset($cookie[5])) continue;
-                setcookie($cookie[0], $cookie[1], $cookie[2], $cookie[3], $cookie[4], $cookie[5]);
-            }
-		}
+		# Send headers and cookies
+		$this->Response->sendheaders();
 
 		# Send body, but only if it isn't a HEAD request
 		if (!$this->Request->isHead()) {
 			
-				echo $body;
+			echo $body;
 			
 			# Save the output to the cache if the request
 			# is cachable
@@ -855,7 +851,7 @@ class Kanso
 		
 		# Check that the current theme has a 404 page
 		# Set the body to the 404 template
-		$errorDoc = $this->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.$this->Config['KANSO_THEME_NAME'].DIRECTORY_SEPARATOR.'404.php';
+		$errorDoc = $this->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.'404.php';
 		if (file_exists($errorDoc)) $body = $this->View->display($errorDoc);
 
 		# Ajax and requests don't need a body
@@ -919,17 +915,17 @@ class Kanso
 	 *
 	 * @param string Page type declaration
 	 */
-	public static function loadTemplate($PageType) 
+	public static function loadTemplate($pageType) 
 	{
 		# Get the Kanso Object instance
 		$_this = self::getInstance();
 
 		# Set the page type in the cache
-		$_this->Cache->pageType = $PageType;
+		$_this->Cache->setPageType($pageType);
 
 		# Check if we can load from cache
 		$cachedBody    = false;
-		$LoadFromCache = $PageType === 'single' && $_this->Cache->isCahced() === true;
+		$LoadFromCache = $pageType === 'single' && $_this->Cache->isCahced() === true;
 		if ($LoadFromCache) $cachedBody = $_this->Cache->LoadFromCache();
 		
 		# If there is a cached version load it into the view
@@ -942,30 +938,25 @@ class Kanso
 		else {
 
 			# Filter the posts based on the pageType
-			$_this->Query->filterPosts($PageType);
+			$_this->Query->filterPosts($pageType);
 
-			# If there are no posts and this is not a request for the
-			# homepage or search pages - retrun a 404 
-			if ($PageType === 'home' && !$_this->Query->have_posts()) {
-				
-				$_this->notFound();
-				
+			# Load the appropriate template into the view/body
+			$template = $_this->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.$_this->getTemplate($pageType).'.php';
+
+			# If the status was set to 404 here by the query, stop rendering
+			# Note this does not send a 404 straight away. If you have a custom route
+			# and wanted to display a template, you could still change the the status/response
+			# between now and when kanso sends a response.
+			if ($_this->Response->getstatus() !== 404 && file_exists($template)) {
+
+				# Render the template
+				$_this->render($template);
+
+				# Reset the file is not cached so the output can
+				# be save if needed
+				$_this->Cache->setIsCahced(false);
+			
 			}
-
-			# Otherwise load the appropriate template into the view/body
-			else {
-				
-				$template  = $_this->getTemplate($PageType);
-
-				$themeBase = $_this->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.$_this->Config['KANSO_THEME_NAME'];
-
-				$_this->render($themeBase.DIRECTORY_SEPARATOR.$template.'.php');
-
-			}
-
-			# Reset the file is not cached so the output can
-			# be save if needed
-			$_this->Cache->isCahced = false;
 
 		}
 
@@ -977,16 +968,18 @@ class Kanso
 	 * @param  string Page type declaration
 	 * @return string
 	 */
-	private function getTemplate($PageType) 
+	private function getTemplate($pageType) 
 	{
-		if ($PageType === 'home') return 'index';
-		if ($PageType === 'archive') return 'archive';
-		if ($PageType === 'tag') return 'list';
-		if ($PageType === 'category') return 'list';
-		if ($PageType === 'author') return 'list';
-		if ($PageType === 'single') return 'single';
-		if ($PageType === 'page') return 'page';
-		if ($PageType === 'search') return 'search';
+		$slug = $this->Environment['REQUEST_URI'];
+		if ($pageType === 'home') return 'index';
+		if ($pageType === 'archive') return 'archive';
+		if ($pageType === 'tag') return 'list';
+		if ($pageType === 'category') return 'list';
+		if ($pageType === 'author') return 'list';
+		if ($pageType === 'single') return 'single';
+		if ($pageType === 'page') return 'page';
+		if ($pageType === 'search') return 'search';
+		return $pageType;
 	}
 
 	/********************************************************************************
@@ -1000,13 +993,13 @@ class Kanso
 	 * when an RSS request for the homepage/single is made.
 	 *
 	 */
-	public static function loadRssFeed($PageType) 
+	public static function loadRssFeed($pageType) 
 	{
 		# Get the Kanso Object instance
 		$_this = self::getInstance();
 
 		# Filter the posts based on the pageType
-		$_this->Query->filterPosts($PageType);
+		$_this->Query->filterPosts($pageType);
 
 		# If there are no posts and this is not a request for the
 		# homepage or search pages - retrun a 404 
@@ -1022,7 +1015,7 @@ class Kanso
 			# Set the content type to XML
 			$_this->Response->setheaders(['Content-Type' => 'application/rss+xml']);
 
-			$_this->Response->setBody(\Kanso\RSS\rssBuilder::buildFeed($PageType));
+			$_this->Response->setBody(\Kanso\RSS\rssBuilder::buildFeed($pageType));
 
 		}
 	}

@@ -26,6 +26,7 @@ $KANSO_DEFAULTS_POSTS_TABLE = [
 	'type'        => 'VARCHAR(255)',
 	'slug'        => 'VARCHAR(255)',
 	'title'       => 'VARCHAR(255)',
+	'meta'        => 'VARCHAR(255)',
 	'excerpt'     => 'TEXT',
 	'author_id'   => 'INTEGER | UNSIGNED',
 	'category_id' => 'INTEGER | UNSIGNED',

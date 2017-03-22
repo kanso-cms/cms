@@ -86,9 +86,69 @@ class Admin
         });
 
         # Add the routes
-        \Kanso\Kanso::getInstance()->get("/admin/$slug/",  '\Kanso\Admin\Controllers\Custom@dispatch', $model); 
+        \Kanso\Kanso::getInstance()->get("/admin/$slug/",  '\Kanso\Admin\Controllers\Custom@dispatch', $model);
+        \Kanso\Kanso::getInstance()->get("/admin/$slug/(:all)",  '\Kanso\Admin\Controllers\Custom@dispatch', $model); 
         \Kanso\Kanso::getInstance()->post("/admin/$slug/", '\Kanso\Admin\Controllers\Custom@dispatch', $model); 
+        \Kanso\Kanso::getInstance()->post("/admin/$slug/(:all)", '\Kanso\Admin\Controllers\Custom@dispatch', $model); 
+    }
 
+
+    /********************************************************************************
+    * ADD A NEW POST TYPE
+    *******************************************************************************/
+
+    /**
+     * Create a new post type
+     *
+     * @param string     $name     The display name for the post type
+     * @param string     $name     The value that will go into the database for the type column
+     * @param string     $route    A valid Kanso route string eg:  '(:year)/(:month)/(:postname)/', 
+     *
+     */
+    public function newPostType($name, $value, $icon, $route)
+    {
+
+        # Sanitize the value
+        $value = \Kanso\Utility\Str::slugFilter($value);
+
+        # Add the route
+        \Kanso\Kanso::getInstance()->Events->on('preDispatch', function($slug) use($value, $route) {
+
+            \Kanso\Kanso::getInstance()->get($route, '\Kanso\Kanso::loadTemplate', 'single-'.$value);
+
+        });
+
+        # Filter add the post type
+        \Kanso\Kanso::getInstance()->Filters->on('adminPostTypes', function($types) use($name, $value) {
+
+            $types[$name] = $value;
+
+            return $types;
+
+        });
+
+        # Add the sidebar link
+        $this->page($name, $icon, $value, '\Kanso\Admin\Models\CustomPosts');       
+
+        # Add the post types to Kanso's settings
+        $permalink = str_replace([':', '(', ')'], '', $route);
+        $permalink = trim($permalink, '/');
+
+        if (!isset(\Kanso\Kanso::getInstance()->Config['KANSO_CUSTOM_POSTS'])) {
+            $customPosts = [$value => $permalink];
+            \Kanso\Kanso::getInstance()->tmpConfig('KANSO_CUSTOM_POSTS', $customPosts);
+        }
+        else {
+            $customPosts = \Kanso\Kanso::getInstance()->Config['KANSO_CUSTOM_POSTS'];
+            $customPosts[$value] = $permalink;
+            \Kanso\Kanso::getInstance()->tmpConfig('KANSO_CUSTOM_POSTS', $customPosts);
+        }
+
+        # We need to also route the admin panel
+
+      
+       
+        
     }
 
     /********************************************************************************
@@ -166,6 +226,11 @@ class Admin
         return $this;
     }
 
+    /**
+     * Get the page variables
+     *
+     * @return $mixed
+     */
     public function getPageVars()
     {
         # Make sure the page variables have been loaded

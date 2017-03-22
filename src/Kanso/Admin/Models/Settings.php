@@ -56,7 +56,7 @@ class Settings
 	{
         $env     = \Kanso\Kanso::getInstance()->Environment;
         $config  = \Kanso\Kanso::getInstance()->Config;
-        $_themes = array_filter(glob($env['KANSO_THEME_DIR'].'/*'), 'is_dir');
+        $_themes = array_filter(glob($env['KANSO_THEMES_DIR'].'/*'), 'is_dir');
         $themes  = [];
         foreach ($_themes as $i => $_theme) {
             $themes[] = substr($_theme, strrpos($_theme, '/') + 1);

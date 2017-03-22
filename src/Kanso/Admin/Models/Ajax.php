@@ -97,7 +97,7 @@ class Ajax
         $postVars = $this->validation->sanitize($this->postVars);
 
         $this->validation->validation_rules([
-            'type' => 'required|contains,post page',
+            'type' => 'required',
             'id'   => 'required|integer',
         ]);
 
@@ -154,7 +154,7 @@ class Ajax
         $postVars = $this->validation->sanitize($this->postVars);
 
         $this->validation->validation_rules([
-            'type' => 'required|contains,post page',
+            'type' => 'required',
         ]);
 
         $this->validation->filter_rules([

@@ -108,6 +108,9 @@ class Article
 		else if ($key === 'excerpt') {
 			return urldecode($this->rowData['excerpt']);
 		}
+		else if ($key === 'meta') {
+			return unserialize($this->rowData['meta']);
+		}
 		if (array_key_exists($key, $this->rowData)) return $this->rowData[$key];
 		
 		return false;
@@ -133,7 +136,9 @@ class Article
 		else if ($key === 'content') {
 			$this->rowData['content'] = urlencode($value);
 		}
-		
+		else if ($key === 'meta') {
+			$this->rowData['meta'] = serialize($value);
+		}		
 		else if (array_key_exists($key, $this->rowData)) {
 			$this->rowData[$key] = $value;
 		}

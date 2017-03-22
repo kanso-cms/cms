@@ -92,7 +92,13 @@ class Environment
         $env['KANSO_DIR']          = __DIR__;
 
         # Kanso theme directory
-        $env["KANSO_THEME_DIR"]    = $env['KANSO_DIR'].DIRECTORY_SEPARATOR.'Themes';
+        $env["KANSO_THEMES_DIR"]    = $env['KANSO_DIR'].DIRECTORY_SEPARATOR.'Themes';
+
+        # Active theme directory
+        $env["KANSO_THEME_DIR"]     = $env["KANSO_THEMES_DIR"].DIRECTORY_SEPARATOR.\Kanso\Kanso::getInstance()->Config()['KANSO_THEME_NAME'];
+
+        # Active theme directory URI
+        $env["KANSO_THEME_DIR_URI"]  = str_replace($env['DOCUMENT_ROOT'], $env['HTTP_HOST'], $env["KANSO_THEME_DIR"]);
 
         # Kanso uploads directory
         $env['KANSO_UPLOADS_DIR']  = $env['KANSO_DIR'].DIRECTORY_SEPARATOR.'Uploads';

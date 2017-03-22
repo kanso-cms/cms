@@ -106,7 +106,7 @@ class Gatekeeper
         $password = utf8_encode(\Kanso\Security\Encrypt::hash($password));
         $status   = !$activate ? 'pending' : 'confirmed';
         $email    = filter_var($email, FILTER_SANITIZE_EMAIL);
-        $username = \Kanso\Utility\Str::alphaNumeric($username);
+        $username = \Kanso\Utility\Str::alphaNumericFilter($username);
         $slug     = \Kanso\Utility\Str::slugFilter($username);
         $token    = \Kanso\Utility\Str::generateRandom(16, true);
         $key      = !$activate ? \Kanso\Utility\Str::generateRandom(40, true) : NULL;

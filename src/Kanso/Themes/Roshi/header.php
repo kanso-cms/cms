@@ -20,7 +20,6 @@
 	<link rel="prev" title="<?php the_previous_page_title();?> " href="<?php the_previous_page_url();?>">
 	<link rel="next" title="<?php the_next_page_title();?> "     href="<?php the_next_page_url();?>">
 
-
 	<!-- FAVICONS -->
 	<link rel="shortcut icon"                    href="<?php theme_url(); ?>/assets/images/favicon.png">
 	<link rel="apple-touch-icon" sizes="57x57"   href="<?php theme_url(); ?>/assets/images/apple-touch-icon.png">

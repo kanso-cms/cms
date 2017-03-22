@@ -71,7 +71,7 @@ Class View {
     public function display($template) 
     {
         $Kanso     = \Kanso\Kanso::getInstance();
-        $functions = $Kanso->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.$Kanso->Config['KANSO_THEME_NAME'].DIRECTORY_SEPARATOR.'functions.php';
+        $functions = $Kanso->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.'functions.php';
         if (file_exists($functions)) require_once $functions;
         require_once 'ViewIncludes.php';
         extract($this->data);

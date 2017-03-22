@@ -31,6 +31,7 @@ class Filters
         'adminSettingsTabs'   => [],
         'adminAjaxResponse'   => [],
         'emailBody'           => [],
+        'adminPostTypes'      => [],
     ];
 
     /**

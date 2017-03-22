@@ -44,7 +44,7 @@ xmlns:sy="http://purl.org/rss/1.0/modules/syndication/">
 		<lastBuildDate></lastBuildDate>
 		<sy:updatePeriod>hourly</sy:updatePeriod>
 		<sy:updateFrequency>1</sy:updateFrequency>
-		<generator>http://kanso.pencilscoop.com</generator>
+		<generator>http://kanso-cms.github.io/</generator>
 	</channel>
 </rss>';
 	}
@@ -72,7 +72,7 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
 		<language>en-US</language>
 		<sy:updatePeriod>hourly</sy:updatePeriod>
 		<sy:updateFrequency>1</sy:updateFrequency>
-		<generator>http://kanso.pencilscoop.com</generator>';
+		<generator>http://kanso-cms.github.io/</generator>';
 			# Loop 2 posts
         	$i = 0;
 			while ( $Kanso->Query->have_posts() && $i < 2) {

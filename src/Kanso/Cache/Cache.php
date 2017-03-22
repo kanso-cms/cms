@@ -19,32 +19,32 @@ Class Cache
     /**
      * @var bool      Is caching enabled?
      */
-    protected $useCache;
+    private $useCache;
 
     /**
      * @var string    The name of the file being loaded/saved
      */
-    protected $cacheFile;
+    private $cacheFile;
 
     /**
      * @var int       Unix timestamp of cache lifetime
      */
-    protected $cacheLife;
+    private $cacheLife;
 
     /**
      * @var bool      If this is an exception?
      */
-    public $isException;
+    private $isException;
 
     /**
      * @var bool      If this is an exception or not
      */
-    public $isCahced;
+    private $isCahced;
 
     /**
      * @var string    The current page type
      */
-    public $pageType;
+    private $pageType;
 
     /**
      * Constructor
@@ -93,6 +93,27 @@ Class Cache
         $this->isException = true;
         return true;
     }
+
+    /**
+     * Get the pageType
+     *
+     * @return  string
+     */
+    public function pageType()
+    {
+       return $this->pageType;
+    }
+
+    /**
+     * Set the pageType
+     *
+     * @param string    $type
+     *
+     */
+    public function setPageType($type)
+    {
+       return $this->pageType = $type;
+    }
     
     /**
      * Is there a cached version of the current request?
@@ -105,17 +126,35 @@ Class Cache
      */
     public function isCahced() 
     {
-        if ($this->isException()) return false;
-        if (!$this->useCache) return false;
-        if (file_exists($this->cacheFile) && is_file($this->cacheFile)) {
+        if (is_bool($this->useCache)) return $this->useCache;
+        if ($this->isException() || !$this->useCache) {
+            $this->isCahced = false;
+        }
+        else if (file_exists($this->cacheFile) && is_file($this->cacheFile)) {
             $last_cached = filemtime($this->cacheFile);
             if ($last_cached < $this->cacheLife) {
                 unlink($cached);
-                return false;
+                $this->isCahced = false;
             }
-            return true;
+            else {
+                $this->isCahced = true;
+            }
         }
-        return false;
+        else {
+            $this->isCahced = false;
+        }
+        return $this->isCahced;
+    }
+
+    /**
+     * Set if the cage is cached
+     *
+     * @param boolean    $bool
+     *
+     */
+    public function setIsCahced($bool) 
+    {
+        $this->isCahced = $bool;
     }
     
     /**

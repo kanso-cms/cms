@@ -42,7 +42,6 @@ class Events
         'notFound'       => [],
         'error'          => [],
         'redirect'       => [],
-        'adminAjaxInit'  => [],
         'adminInit'      => [],
         'htmlEmailSend'  => [],
     ];

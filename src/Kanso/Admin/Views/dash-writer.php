@@ -110,8 +110,11 @@
 						<label for="type">Type</label>
 						<p class="color-gray">Set the post type.</p>
 						<select name="type">
-							<option value="post" <?php echo $the_post->type === 'post' ? 'selected' : '' ;?>>Article</option>
-							<option value="page" <?php echo $the_post->type === 'page' ? 'selected' : '' ;?>>Page</option>
+							<?php $postTypes = $ADMIN_INCLUDES->postTypes(); ?>
+							<?php foreach ($postTypes as $typeName => $nameVal) : ?>
+								<option value="<?php echo $nameVal; ?>" <?php echo $the_post->type === $nameVal ? 'selected' : '' ;?>><?php echo $typeName; ?></option>
+							<?php endforeach; ?>
+							
 						</select>
 					</div>
 

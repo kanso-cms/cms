@@ -309,7 +309,7 @@ class Settings
         ];
 
         # Validate things that are required
-        if ($Kanso_Config['KANSO_THEME_NAME'] === '' || !is_dir($env['KANSO_THEME_DIR'].'/'.$Kanso_Config['KANSO_THEME_NAME'])) return $this->responseCodes['invalid_theme'];
+        if ($Kanso_Config['KANSO_THEME_NAME'] === '' || !is_dir($env['KANSO_THEMES_DIR'].'/'.$Kanso_Config['KANSO_THEME_NAME'])) return $this->responseCodes['invalid_theme'];
         if ($KansoPermalinks['KANSO_PERMALINKS'] === '' || $KansoPermalinks['KANSO_PERMALINKS_ROUTE'] === '' || strpos($KansoPermalinks['KANSO_PERMALINKS'], 'postname') === false) return $this->responseCodes['invalid_permalinks'];
         if ($Kanso_Config['KANSO_IMG_QUALITY'] < 1 || $Kanso_Config['KANSO_IMG_QUALITY'] > 100)return $this->responseCodes['invalid_img_quality'];
         if ($Kanso_Config['KANSO_USE_CDN'] === true && $Kanso_Config['KASNO_CDN_URL'] === '') return $this->responseCodes['invalid_cdn_url'];

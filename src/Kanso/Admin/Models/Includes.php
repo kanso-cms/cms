@@ -74,7 +74,6 @@ class Includes
 	 */
     public function theTitle()
     {
-
 		# Figure out the title based on the 
 		# request type
 
@@ -304,6 +303,21 @@ class Includes
 		];
 
 		return $links;
+	}
+
+	/**
+	 * Get the available post types
+	 * 
+	 * @return string
+	 */
+	public function postTypes()
+	{
+		$types = [
+			'Article' => 'post',
+			'Page'    => 'page',
+		];
+
+		return \Kanso\Filters::apply('adminPostTypes', $types);
 	}
 
 	/**
