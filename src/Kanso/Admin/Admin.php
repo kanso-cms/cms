@@ -79,8 +79,16 @@ class Admin
 
         # Filter the page title
         \Kanso\Kanso::getInstance()->Filters->on('adminPageTitle', function($title) use($pageTitle, $menuName) {
+            
             if ($this->pageName === $menuName) {
                 return "$pageTitle | Kanso";
+            }
+            else if ($this->pageName === 'custom') {
+                $slug = trim(\Kanso\Kanso::getInstance()->Environment['REQUEST_URI'], '/');
+                $slug = \Kanso\Utility\Str::getAfterLastChar($slug, '/');
+                if ($slug === $menuName) {
+                     return ucfirst($menuName)." | Kanso";
+                }
             }
             return $title;
         });

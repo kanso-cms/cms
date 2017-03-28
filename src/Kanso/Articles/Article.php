@@ -33,7 +33,7 @@ class Article
 		'excerpt'     => '',
 		'author_id'   => '',
 		'category_id' => '',
-		'thumbnail'   => '',
+		'thumbnail_id'     => '',
 		'comments_enabled' => '',
 		
 		# Joins
@@ -50,8 +50,8 @@ class Article
 	private $defaults = [
 		'author_id'   => 1,
 		'category_id' => 1,
-		'tags' 	      => [['id' => 1, 'name' => 'Untagged']],
-		'category'    => ['id' => 1, 'name' => 'Uncategorized'],
+		'tags' 	      => [['id' => 1, 'name' => 'Untagged', 'slug' => 'untagged']],
+		'category'    => ['id' => 1, 'name' => 'Uncategorized', 'slug' => 'uncategorized'],
 	];
 
 	/**
@@ -138,7 +138,10 @@ class Article
 		}
 		else if ($key === 'meta') {
 			$this->rowData['meta'] = serialize($value);
-		}		
+		}
+		else if ($key === 'thumbnail') {
+			$this->getTheThumbnail();
+		}
 		else if (array_key_exists($key, $this->rowData)) {
 			$this->rowData[$key] = $value;
 		}
@@ -206,18 +209,25 @@ class Article
 
 	private function getTheAuthor()
 	{
-		if (!empty($this->rowData['author_id'])) {
-			$author = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('id', '=', $this->rowData['author_id'])->ROW();
-			if ($author) {
-				$this->rowData['author']    = $author;
-				$this->rowData['author_id'] = $author['id'];
-				return $author;
-			}
+		if (!empty($this->rowData['author_id'])) {			
+			$this->rowData['author'] = \Kanso\Kanso::getInstance()->Gatekeeper->getUserProvider()->byId($this->rowData['author_id']);
+			return $this->rowData['author'];
 		}
 		if (empty($this->defaults['author'])) {
-			$this->defaults['author'] = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('users')->WHERE('id', '=', 1)->ROW();
+			$this->defaults['author'] = \Kanso\Kanso::getInstance()->Gatekeeper->getUserProvider()->byId(1);
 		}
 		return $this->defaults['author'];
+	}
+
+	private function getTheThumbnail()
+	{
+		if (isset($this->rowData['thumbnail'])) return $this->rowData['thumbnail'];
+
+		if (!empty($this->rowData['thumbnail_id']) && $this->rowData['thumbnail_id'] > 0) {
+			$this->rowData['thumbnail'] = \Kanso\Kanso::getInstance()->MediaLibrary->byId($this->rowData['thumbnail_id']);
+			return $this->rowData['thumbnail'];
+		}
+		return false;
 	}
 
 	private function getTheComments()

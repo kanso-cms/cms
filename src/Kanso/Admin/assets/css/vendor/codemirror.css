@@ -285,8 +285,8 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   height: 100%;
   display: inline-block;
   margin-bottom: -30px;
-  *zoom: 1;
-  *display: inline;
+  zoom: 1;
+  display: inline;
 }
 
 .CodeMirror-gutter-wrapper {
@@ -417,7 +417,7 @@ div.CodeMirror-cursors {
 }
 
 .CodeMirror span {
-  *vertical-align: text-bottom;
+  vertical-align: text-bottom;
 }
 
 .cm-force-border {

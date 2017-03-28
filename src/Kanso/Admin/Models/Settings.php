@@ -391,7 +391,7 @@ class Settings
         if ($postVars['import_articles']['type'] !== 'application/json') return $this->response('No files were uploaded. Please select a ".json" file to upload.', 'warning');
 
         # Convert the mime to an extension
-        $mime = \Kanso\Kanso::getInstance()->Request->mimeToExt($postVars['import_articles']['type']);
+        $mime = \Kanso\Utility\Mime::toExt($postVars['import_articles']['type']);
         if ($mime !== 'json') return 'invalid_json';
 
         # Validate the file is a valid json

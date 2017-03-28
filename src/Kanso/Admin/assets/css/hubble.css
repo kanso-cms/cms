@@ -5000,11 +5000,13 @@ form.success .msg-success {
 }
 
 .modal-icon {
-  font-size: 41px;
+  font-size: 4.1rem;
   border-width: 1px;
   border-style: solid;
   border-radius: 50%;
-  padding: 14px;
+  width: 7rem;
+  height: 7rem;
+  line-height: 7rem;
 }
 
 .modal-dialog {
@@ -5025,6 +5027,9 @@ form.success .msg-success {
   z-index: 400;
   top: -2px;
   width: 100%;
+}
+.notification-wrap .msg-buttons {
+  text-align: center;
 }
 
 .notification-wrap.active {

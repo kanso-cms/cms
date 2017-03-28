@@ -129,7 +129,8 @@ class Bookkeeper
 		if (empty($rowData['title'])) $rowData['title'] = 'Untitled';
 
 		# Sanitize the thumbnail
-		$rowData['thumbnail'] = \Kanso\Utility\Str::getAfterLastChar( rtrim($rowData['thumbnail'], '/'), '/');
+		$rowData['thumbnail_id'] = intval($rowData['thumbnail_id']);
+		if ($rowData['thumbnail_id'] === 0) $rowData['thumbnail_id'] = NULL;
 
 		# Figure out if the title needs to be changed
 		if ($newArticle) {
@@ -289,7 +290,7 @@ class Bookkeeper
 	  	foreach ($articles as $i => $article) {
 
 	      	# Validate the article's array keys
-	  		if (!\Kanso\Utility\Arr::issets(['created', 'modified', 'status', 'type', 'title', 'excerpt', 'category', 'tags', 'content', 'thumbnail', 'comments_enabled'], $article )) return "invalid_json";
+	  		if (!\Kanso\Utility\Arr::issets(['created', 'modified', 'status', 'type', 'title', 'excerpt', 'category', 'tags', 'content', 'thumbnail_id', 'comments_enabled'], $article )) return "invalid_json";
 	  		if (!is_numeric($article['created'])) return "invalid_json";
 	  		if (!is_numeric($article['modified'])) return "invalid_json";
 	  		if ($article['type'] !== 'page' && $article['type'] !== 'post') return "invalid_json";
@@ -299,7 +300,7 @@ class Bookkeeper
 	  		$articles[$i]['title']       = filter_var($articles[$i]['title'], FILTER_SANITIZE_STRING);
 	  		$articles[$i]['excerpt']     = filter_var($articles[$i]['excerpt'], FILTER_SANITIZE_STRING);
 	  		$articles[$i]['category']    = filter_var($articles[$i]['category'], FILTER_SANITIZE_STRING);
-	  		$articles[$i]['thumbnail']   = filter_var($articles[$i]['thumbnail'], FILTER_SANITIZE_STRING);
+	  		$articles[$i]['thumbnail_id']= intval($articles[$i]['thumbnail_id']);
 	  		$articles[$i]['tags']  		 = filter_var($articles[$i]['tags'], FILTER_SANITIZE_STRING);
 	  		$article['comments_enabled'] = (bool) $article['comments_enabled'];
 	  		$articles[$i]['created']     = (int)$articles[$i]['created'];

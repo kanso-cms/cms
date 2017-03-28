@@ -97,9 +97,16 @@ class Ajax
 	
 	private function writerAjax()
 	{
-		$model = new \Kanso\Admin\Models\Ajax;
+		$model = new \Kanso\Admin\Models\WriterAjax;
 		return $model->dispatch();
 	}
+
+	private function mediaLibrary()
+	{
+		$model = new \Kanso\Admin\Models\MediaLibrary;
+		return $model->dispatch();
+	}
+
 
 	/********************************************************************************
 	* Response

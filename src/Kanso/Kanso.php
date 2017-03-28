@@ -23,6 +23,8 @@ namespace Kanso;
  * @property Filters        \Kanso\Filters
  * @property Cookie         \Kanso\Storage\Cookie
  * @property Admin          \Kanso\Admin\Admin
+ * @property MediaLibray    \Kanso\Media\MediaLibray
+
  */
 class Kanso 
 {
@@ -247,6 +249,11 @@ class Kanso
 		# Default Mailer
 		$this->Container->singleton('Mailer', function () {
 			return new \Kanso\Utility\Mailer();
+		});
+
+		# Default MediaLibrary
+		$this->Container->singleton('MediaLibrary', function () {
+			return new \Kanso\Media\MediaLibrary();
 		});
 
 		# Default Admin
@@ -638,6 +645,16 @@ class Kanso
 		return $this->Session;
 	}
 
+	/**
+	 * Get the MediaLibrary manager
+	 *
+	 * @return \Kanso\Media\MediaLibrary
+	 */
+	public function MediaLibrary()
+	{
+		return $this->MediaLibrary;
+	}
+
 	/******************************************************************************
 	* RENDERING
 	*****************************************************************************/
@@ -941,13 +958,13 @@ class Kanso
 			$_this->Query->filterPosts($pageType);
 
 			# Load the appropriate template into the view/body
-			$template = $_this->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.$_this->getTemplate($pageType).'.php';
+			$template = $_this->getTemplate($pageType);
 
 			# If the status was set to 404 here by the query, stop rendering
 			# Note this does not send a 404 straight away. If you have a custom route
 			# and wanted to display a template, you could still change the the status/response
 			# between now and when kanso sends a response.
-			if ($_this->Response->getstatus() !== 404 && file_exists($template)) {
+			if ($_this->Response->getstatus() !== 404 && $template) {
 
 				# Render the template
 				$_this->render($template);
@@ -970,16 +987,71 @@ class Kanso
 	 */
 	private function getTemplate($pageType) 
 	{
-		$slug = $this->Environment['REQUEST_URI'];
-		if ($pageType === 'home') return 'index';
-		if ($pageType === 'archive') return 'archive';
-		if ($pageType === 'tag') return 'list';
-		if ($pageType === 'category') return 'list';
-		if ($pageType === 'author') return 'list';
-		if ($pageType === 'single') return 'single';
-		if ($pageType === 'page') return 'page';
-		if ($pageType === 'search') return 'search';
-		return $pageType;
+		# Waterfall of pages
+		$waterfall    =  [];
+		
+		# Current theme dir
+		$templateBase = $this->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR;
+
+		# Explode request url
+		$urlParts     = array_filter(explode('/', trim($this->Environment['REQUEST_URI'], '/')));
+		
+		if ($pageType === 'home') {
+			$waterfall[] = 'homepage';
+			$waterfall[] = 'index';
+		}
+		else if ($pageType === 'page') {
+			$waterfall[] = 'page-'.array_pop($urlParts);
+			$waterfall[] = 'page';
+		}
+		else if ($pageType === 'single') {			
+			$waterfall[] = 'single-'.array_pop($urlParts);
+			$waterfall[] = 'single';
+		}
+		else if (\Kanso\Utility\Str::getBeforeFirstChar($pageType, '-') === 'single') {
+			if ($this->Query->have_posts()) {
+				$this->Query->the_post();
+				$waterfall[] = 'single-'.$this->Query->the_post_type();
+				$this->Query->rewind_posts();
+			}
+			$waterfall[] = 'single-'.array_pop($urlParts);
+			$waterfall[] = 'single';
+		}
+		else if ($pageType === 'archive') {
+			$waterfall[] = 'archive';
+			$waterfall[] = 'index';
+		}
+		else if ($pageType === 'tag') {
+			$waterfall[] = 'taxonomy-tag';
+			$waterfall[] = 'tag';
+			$waterfall[] = 'taxonomy';
+		}
+		else if ($pageType === 'category') {
+			$waterfall[] = 'taxonomy-category';
+			$waterfall[] = 'category';
+			$waterfall[] = 'taxonomy';
+		}
+		else if ($pageType === 'author') {
+
+			$waterfall[] = 'taxonomy-author';
+			$waterfall[] = 'author';
+			$waterfall[] = 'taxonomy';
+		}
+		else if ($pageType === 'search') {
+			$waterfall[] = 'search';
+			$waterfall[] = 'index';
+		}
+
+		foreach ($waterfall as $name) {
+			$template = "$templateBase$name.php";
+			if (file_exists($template)) return $template;
+		}
+
+		if (file_exists("$templateBase$pageType.php")) {
+			return "$templateBase$pageType.php";
+		}
+
+		return false;
 	}
 
 	/********************************************************************************

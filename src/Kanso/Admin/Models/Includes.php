@@ -36,22 +36,18 @@ class Includes
         	\Kanso\Kanso::getInstance()->Filters->on('adminHeaderScripts', function($stylesheets) use($assetsV, $assetsURL) {
 
 	            $stylesheets[] = '<link rel="stylesheet" href="'.$assetsURL.'/css/vendor/codemirror.css?v='.$assetsV.'">';
-	            $stylesheets[] = '<link rel="stylesheet" href="'.$assetsURL.'/css/vendor/dropzone.css?v='.$assetsV.'">';
 	            $stylesheets[] = '<link rel="stylesheet" href="'.$assetsURL.'/css/vendor/highlight.css?v='.$assetsV.'">';
 	            $stylesheets[] = '<link rel="stylesheet" href="'.$assetsURL.'/css/markdown.css?v='.$assetsV.'">';
 	            $stylesheets[] = '<link rel="stylesheet" href="'.$assetsURL.'/css/writer.css?v='.$assetsV.'">';
-
 	            return $stylesheets;
 	        });
 
 	        # Add the JS scripts to the footer
 	        \Kanso\Kanso::getInstance()->Filters->on('adminFooterScripts', function($scripts) use($assetsV, $assetsURL) {
 	            $scripts[] = '<script type="text/javascript" src="'.$assetsURL.'/js/vendor/codemirror.js?v='.$assetsV.'"></script>';
-	            $scripts[] = '<script type="text/javascript" src="'.$assetsURL.'/js/vendor/dropzone.js?v='.$assetsV.'"></script>';
 	            $scripts[] = '<script type="text/javascript" src="'.$assetsURL.'/js/vendor/highlight.js?v='.$assetsV.'"></script>';
 	            $scripts[] = '<script type="text/javascript" src="'.$assetsURL.'/js/vendor/markdownIt.js?v='.$assetsV.'"></script>';
 	            $scripts[] = '<script type="text/javascript" src="'.$assetsURL.'/js/writer.js?v='.$assetsV.'"></script>';
-
 	            return $scripts;
 	        });
         }
@@ -104,6 +100,9 @@ class Includes
 		} 
 		else if ($this->pageName === 'articles') {
 			$title = 'Articles | Kanso';
+		}
+		else if ($this->pageName === 'media') {
+			$title = 'Media Library | Kanso';
 		}
 		else if ($this->pageName === 'settings' || $this->pageName === 'settingsAccount') {
 			$title = 'Account Settings | Kanso';
@@ -177,7 +176,8 @@ class Includes
 			'<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700" rel="stylesheet">',
 			'<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">',
 			'<link rel="stylesheet" href="'.$this->assetsURL().'/css/hubble.css?v='.$this->assetsVersion().'">',
-			'<link rel="stylesheet" href="'.$this->assetsURL().'/css/theme.css?v='.$this->assetsVersion().'">'
+			'<link rel="stylesheet" href="'.$this->assetsURL().'/css/theme.css?v='.$this->assetsVersion().'">',
+			'<link rel="stylesheet" href="'.$this->assetsURL().'/css/vendor/dropzone.css?v='.$this->assetsVersion().'">',
 		];
 		$styles = \Kanso\Filters::apply('adminHeaderScripts', $styles);
 
@@ -204,6 +204,12 @@ class Includes
 
 		# forms
 		$scripts[] = '<script type="text/javascript" src="'.$this->assetsURL().'/js/forms.js?v='.$this->assetsVersion().'"></script>';
+
+		# Dropzone
+		$scripts[] = '<script type="text/javascript" src="'.$this->assetsURL().'/js/vendor/dropzone.js?v='.$this->assetsVersion().'"></script>';
+
+		# Media library
+		$scripts[] = '<script type="text/javascript" src="'.$this->assetsURL().'/js/media-library.js?v='.$this->assetsVersion().'"></script>';
 
 		$scripts = \Kanso\Filters::apply('adminFooterScripts', $scripts);
 
@@ -258,6 +264,12 @@ class Includes
 						'text'     => 'Users',
 					],
 				],
+			],
+			'media' => [
+				'link'     => '/admin/media/',
+				'text'     => 'Media',
+				'icon'     => 'camera-retro',
+				'children' => [],
 			],
 			'settings' => [
 				'link'     => '/admin/settings/',
@@ -363,6 +375,7 @@ class Includes
 	 */
 	public function assetsVersion()
 	{
+		return time();
 		return \Kanso\Kanso::getInstance()->Version;
 	}
 

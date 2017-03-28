@@ -95,7 +95,13 @@ class Environment
         $env["KANSO_THEMES_DIR"]    = $env['KANSO_DIR'].DIRECTORY_SEPARATOR.'Themes';
 
         # Active theme directory
-        $env["KANSO_THEME_DIR"]     = $env["KANSO_THEMES_DIR"].DIRECTORY_SEPARATOR.\Kanso\Kanso::getInstance()->Config()['KANSO_THEME_NAME'];
+        $env["KANSO_THEME_DIR"]     = '';
+        if (\Kanso\Kanso::getInstance()) {
+            $env["KANSO_THEME_DIR"] = $env["KANSO_THEMES_DIR"].DIRECTORY_SEPARATOR.\Kanso\Kanso::getInstance()->Config()['KANSO_THEME_NAME'];
+        }
+        else {
+            $env["KANSO_THEME_DIR"] =  $env["KANSO_THEMES_DIR"].DIRECTORY_SEPARATOR.'Roshi';
+        }
 
         # Active theme directory URI
         $env["KANSO_THEME_DIR_URI"]  = str_replace($env['DOCUMENT_ROOT'], $env['HTTP_HOST'], $env["KANSO_THEME_DIR"]);

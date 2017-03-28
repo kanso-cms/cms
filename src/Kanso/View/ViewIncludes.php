@@ -77,7 +77,7 @@ function the_posts()
 }
 
 /**
- * Get/Echo the title
+ * Get the title
  *
  * @param   int    $post_id (optional) 
  * @return  string|false
@@ -85,16 +85,11 @@ function the_posts()
 function the_title($post_id = null)
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_title($post_id);
-}
-function get_the_title($post_id = null)
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_title($post_id);
 }
 
 /**
- * Get/Echo the permalink
+ * Get the permalink
  *
  * @param   int    $post_id (optional) 
  * @return  string|false
@@ -102,16 +97,11 @@ function get_the_title($post_id = null)
 function the_permalink($post_id = null)
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_permalink($post_id);
-}
-function get_the_permalink($post_id = null)
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_permalink($post_id);
 }
 
 /**
- * Get/Echo the slug
+ * Get the slug
  *
  * @param   int    $post_id (optional) 
  * @return  string|false
@@ -119,16 +109,11 @@ function get_the_permalink($post_id = null)
 function the_slug($post_id = null)
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_slug($post_id);
-}
-function get_the_slug($post_id = null)
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_slug($post_id);
 }
 
 /**
- * Get/Echo the excerpt
+ * Get the excerpt
  *
  * @param   int    $post_id (optional) 
  * @return  string|false
@@ -136,16 +121,11 @@ function get_the_slug($post_id = null)
 function the_excerpt($post_id = null)
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_excerpt($post_id);
-}
-function get_the_excerpt($post_id = null)
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_excerpt($post_id);
 }
 
 /**
- * Get/Echo the category
+ * Get the category
  *
  * @param   int    $post_id (optional) 
  * @return  string|false
@@ -153,16 +133,11 @@ function get_the_excerpt($post_id = null)
 function the_category($post_id = null)
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_category($post_id);
-}
-function get_the_category($post_id = null)
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_category($post_id);
 }
 
 /**
- * Get/Echo category url
+ * Get category url
  *
  * @param   int    $category_id (optional) 
  * @return  string|false
@@ -170,33 +145,24 @@ function get_the_category($post_id = null)
 function the_category_url($category_id = null)
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_category_url($category_id);
-}
-function get_the_category_url($category_id = null)
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_category_url($category_id);
 }
 
 /**
- * Get/Echo the category slug
+ * Get the category slug
  *
  * @param   int    $category_id (optional) 
  * @return  string|false
  */
+
 function the_category_slug($category_id = null)
-{
-    global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_category_slug($category_id);
-}
-function get_the_category_slug($category_id = null)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_category_slug($category_id);
 }
 
 /**
- * Get/Echo the category id
+ * Get the category id
  *
  * @param   string   $category_name (optional) 
  * @return  int|false
@@ -204,28 +170,23 @@ function get_the_category_slug($category_id = null)
 function the_category_id($category_name = null)
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_category_id($category_name);
-}
-function get_the_category_id($category_name = null)
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_category_id($category_name);
 }
 
 /**
- * Get/Echo the tags
+ * Get the tags
  *
  * @param   int   $post_id (optional) 
  * @return  array
  */
-function get_the_tags($post_id = null) 
+function the_tags($post_id = null) 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_tags($post_id);
 }
 
 /**
- * Get/Echo the tags as a string
+ * Get the tags as a string
  *
  * @param   int   $post_id (optional) 
  * @return  string
@@ -233,17 +194,11 @@ function get_the_tags($post_id = null)
 function the_tags_list($post_id = null) 
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_tags_list($post_id);
-}
-
-function get_the_tags_list($post_id = null) 
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_tags_list($post_id);
 }
 
 /**
- * Get/Echo the Tags Slug
+ * Get the Tags Slug
  *
  * @param   int   $tag_id 
  * @return  string|false
@@ -251,16 +206,11 @@ function get_the_tags_list($post_id = null)
 function the_tag_slug($tag_id) 
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_tag_slug($tag_id);
-}
-function get_the_tag_slug($tag_id) 
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_tag_slug($tag_id);
 }
 
 /**
- * Get/Echo the tags URL
+ * Get the tags URL
  *
  * @param   int   $tag_id 
  * @return  string|false
@@ -268,16 +218,11 @@ function get_the_tag_slug($tag_id)
 function the_tag_url($tag_id) 
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_tag_url($tag_id) ;
-}
-function get_the_tag_url($tag_id) 
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_tag_url($tag_id) ;
 }
 
 /**
- * Get/Echo the content
+ * Get the content
  *
  * @param   int   $post_id (optional) 
  * @return  string|false
@@ -285,16 +230,11 @@ function get_the_tag_url($tag_id)
 function the_content($post_id = null) 
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_content($post_id);
-}
-function get_the_content($post_id = null) 
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_content($post_id);
 }
 
 /**
- * Get/Echo the post thumbnail
+ * Get the post thumbnail
  *
  * @param   string   $size    (optional) "small/medium/large"
  * @param   int      $post_id (optional)
@@ -303,16 +243,37 @@ function get_the_content($post_id = null)
 function the_post_thumbnail($post_id = null, $size = 'large') 
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_post_thumbnail($post_id, $size) ;
-}
-function get_the_post_thumbnail($post_id = null, $size = 'large') 
-{
-    global $KANSO_QUERY;
-    return $KANSO_QUERY->the_post_thumbnail($post_id, $size) ;
+    return $KANSO_QUERY->the_post_thumbnail($post_id, $size);
 }
 
 /**
- * Get/Echo the author name
+ * Get the post thumbnail src
+ *
+ * @param   string   $size    (optional) "small/medium/large"
+ * @param   int      $post_id (optional)
+ * @return  string|false
+ */
+function the_post_thumbnail_src($post_id = null, $size = null)
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_post_thumbnail_src($post_id, $size);
+}
+
+/**
+ * Get the post thumbnail src
+ *
+ * @param   string   $size    (optional) "small/medium/large"
+ * @param   int      $post_id (optional)
+ * @return  string|false
+ */
+function display_thumbnail($thumbnail, $size, $width = '', $height = '', $classes = '', $id = '')
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->display_thumbnail($thumbnail, $size, $width, $height, $classes, $id);
+}
+
+/**
+ * Get the author name
  *
  * @param   int      $post_id (optional)
  * @return  string|false
@@ -320,16 +281,23 @@ function get_the_post_thumbnail($post_id = null, $size = 'large')
 function the_author($post_id = null) 
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_author($post_id);
-}
-function get_the_author($post_id = null) 
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_author($post_id);
 }
 
 /**
- * Get/Echo the author url 
+ * Get the author name
+ *
+ * @param   int      $post_id (optional)
+ * @return  string|false
+ */
+function the_author_name($post_id = null) 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_author_name($post_id);
+}
+
+/**
+ * Get the author url 
  *
  * @param   int      $author_id (optional)
  * @return  string|false
@@ -337,34 +305,37 @@ function get_the_author($post_id = null)
 function the_author_url($author_id = null)
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_author_url($author_id);
-}
-function get_the_author_url($author_id = null)
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_author_url($author_id);
 }
 
 /**
- * Get/Echo the author thumbnail 
+ * Get the author thumbnail 
  *
  * @param   string   $size      (optional) "small/medium/large"
  * @param   int      $author_id (optional)
  * @return  string|false
  */
-function the_author_thumbnail($author_id = null, $size = 'small')
+function the_author_thumbnail($author_id = null)
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_author_thumbnail($author_id, $size);
+    return $KANSO_QUERY->the_author_thumbnail($author_id);
 }
-function get_the_author_thumbnail($author_id = null, $size = 'small')
+
+/**
+ * Get the author thumbnail 
+ *
+ * @param   string   $size      (optional) "small/medium/large"
+ * @param   int      $author_id (optional)
+ * @return  string|false
+ */
+function the_author_thumbnail_src($author_id = null, $size = 'small')
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_author_thumbnail($author_id, $size);
 }
 
 /**
- * Get/Echo the author bio 
+ * Get the author bio 
  *
  * @param   int      $author_id (optional)
  * @return  string|false
@@ -372,16 +343,11 @@ function get_the_author_thumbnail($author_id = null, $size = 'small')
 function the_author_bio($author_id = null)
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_author_bio($author_id);
-}
-function get_the_author_bio($author_id = null)
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_author_bio($author_id);
 }
 
 /**
- * Get/Echo the author twitter 
+ * Get the author twitter 
  *
  * @param   int      $author_id (optional)
  * @return  string|false
@@ -389,16 +355,11 @@ function get_the_author_bio($author_id = null)
 function the_author_twitter($author_id = null)
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_author_twitter($author_id);
-}
-function get_the_author_twitter($author_id = null)
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_author_twitter($author_id);
 }
 
 /**
- * Get/Echo the author google 
+ * Get the author google 
  *
  * @param   int      $author_id (optional)
  * @return  string|false
@@ -406,16 +367,11 @@ function get_the_author_twitter($author_id = null)
 function the_author_google($author_id = null)
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_author_google($author_id);
-}
-function get_the_author_google($author_id = null)
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_author_google($author_id);
 }
 
 /**
- * Get/Echo the author facebook 
+ * Get the author facebook 
  *
  * @param   int      $author_id (optional)
  * @return  string|false
@@ -423,32 +379,22 @@ function get_the_author_google($author_id = null)
 function the_author_facebook($author_id = null)
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_author_facebook($author_id);
-}
-function get_the_author_facebook($author_id = null)
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_author_facebook($author_id);
 }
 
 /**
- * Get/Echo the post ID 
+ * Get the post ID 
  *
  * @return  int|false
  */
 function the_post_id() 
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_post_id();
-}
-function get_the_post_id() 
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_post_id();
 }
 
 /**
- * Get/Echo the post status 
+ * Get the post status 
  *
  * @param   int      $post_id (optional)
  * @return  string|false
@@ -456,16 +402,11 @@ function get_the_post_id()
 function the_post_status($post_id = null) 
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_post_status($post_id) ;
-}
-function get_the_post_status($post_id = null) 
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_post_status($post_id) ;
 }
 
 /**
- * Get/Echo the post type 
+ * Get the post type 
  *
  * @param   int      $post_id (optional)
  * @return  string|false
@@ -473,16 +414,11 @@ function get_the_post_status($post_id = null)
 function the_post_type($post_id = null)
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_post_type($post_id);
-}
-function get_the_post_type($post_id = null)
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_post_type($post_id);
 }
 
 /**
- * Get/Echo the post created time 
+ * Get the post created time 
  *
  * @param   string   $format  (optional)
  * @param   int      $post_id (optional)
@@ -491,27 +427,17 @@ function get_the_post_type($post_id = null)
 function the_time($format = 'U', $post_id = null)
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_time($format, $post_id);
-}
-function get_the_time($format = 'U', $post_id = null)
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_time($format, $post_id);
 }
 
 /**
- * Get/Echo the post modified time 
+ * Get the post modified time 
  *
  * @param   string   $format  (optional)
  * @param   int      $post_id (optional)
  * @return  string|int|false
  */
 function the_modified_time($format = 'U', $post_id = null)
-{
-    global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_modified_time($format, $post_id);
-}
-function get_the_modified_time($format = 'U', $post_id = null)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_modified_time($format, $post_id);
@@ -523,7 +449,7 @@ function get_the_modified_time($format = 'U', $post_id = null)
  * @param   int      $author_id
  * @return  array
  */
-function get_the_author_posts($author_id, $publihsed = true)
+function the_author_posts($author_id, $publihsed = true)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_author_posts($author_id, $publihsed);
@@ -535,7 +461,7 @@ function get_the_author_posts($author_id, $publihsed = true)
  * @param   int      $category_id
  * @return  array
  */
-function get_the_category_posts($category_id, $publihsed = true)
+function the_category_posts($category_id, $publihsed = true)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_category_posts($category_id, $publihsed);
@@ -547,23 +473,18 @@ function get_the_category_posts($category_id, $publihsed = true)
  * @param   int      $tag_id
  * @return  array
  */
-function get_the_tag_posts($tag_id, $publihsed = true)
+function the_tag_posts($tag_id, $publihsed = true)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_tag_posts($tag_id, $publihsed);
 }
 
 /**
- * Get/Echo the page type 
+ * Get the page type 
  *
  * @return  string
  */
 function the_page_type()
-{
-    global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_page_type();
-}
-function get_the_page_type()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_page_type();
@@ -744,7 +665,7 @@ function has_category($post_id = null)
  *
  * @return  array|false   (array of slug/title)
  */
-function get_the_next_page()
+function the_next_page()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_next_page();
@@ -755,23 +676,18 @@ function get_the_next_page()
  *
  * @return  array|false (array of slug/title)
  */
-function get_the_previous_page()
+function the_previous_page()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_previous_page();
 }
 
 /**
- * Get/Echo the next page title
+ * Get the next page title
  *
  * @return  string|false
  */
 function the_next_page_title()
-{
-    global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_next_page_title();
-}
-function get_the_next_page_title()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_next_page_title();
@@ -785,58 +701,38 @@ function get_the_next_page_title()
 function the_previous_page_title()
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_previous_page_title();
-}
-function get_the_previous_page_title()
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_previous_page_title();
 }
 
 /**
- * Get/Echo the next page url
+ * Get the next page url
  *
  * @return  string|false
  */
 function the_next_page_url()
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_next_page_url();
-}
-function get_the_next_page_url()
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_next_page_url();
 }
 
 /**
- * Get/Echo the previous page url
+ * Get the previous page url
  *
  * @return  string|false
  */
 function the_previous_page_url()
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_previous_page_url();
-}
-function get_the_previous_page_url()
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->the_previous_page_url();
 }
 
 /**
- * Get/Echo the search query
+ * Get the search query
  *
  * @return  string|false
  */
 
 function search_query()
-{
-    global $KANSO_QUERY;
-    echo $KANSO_QUERY->search_query();
-}
-function get_search_query()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->search_query();
@@ -860,7 +756,7 @@ function have_posts($post_id = null)
  * @param   int  $post_id (optional)
  * @return  bool
  */
-function get_the_posts_count()
+function the_posts_count()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_posts_count();
@@ -977,121 +873,81 @@ function include_template($template_name)
 }
 
 /**
- * Get/echo the theme directory
+ * Get the theme directory
  * @return string
  */
 function theme_directory() 
-{
-    global $KANSO_QUERY;
-    echo $KANSO_QUERY->theme_directory();
-}
-function get_theme_directory() 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->theme_directory();
 }
 
 /**
- * Get/echo the theme url
+ * Get the theme url
  * @return string
  */
 function theme_url() 
-{
-    global $KANSO_QUERY;
-    echo $KANSO_QUERY->theme_url();
-}
-function get_theme_url() 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->theme_url();
 }
 
 /**
- * Get/echo the homepage
+ * Get the homepage
  * @return string
  */
 function home_url() 
-{
-    global $KANSO_QUERY;
-    echo $KANSO_QUERY->home_url();
-}
-function get_home_url() 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->home_url();
 }
 
 /**
- * Get/echo the website name 
+ * Get the website name 
  * eg http://www.example.com returns example.com
  * @return string
  */
 function website_name() 
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->website_name();
-}
-function get_website_name() 
-{
-    global $KANSO_QUERY;
     return $KANSO_QUERY->website_name();
 }
 
 /**
- * Get/echo the website title 
+ * Get the website title 
  * @return string
  */
 function website_title() 
-{
-    global $KANSO_QUERY;
-    echo $KANSO_QUERY->website_title();
-}
-function get_website_title() 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->website_title();
 }
 
 /**
- * Get/echo the website description 
+ * Get the website description 
  * @return string
  */
 function website_description() 
-{
-    global $KANSO_QUERY;
-    echo $KANSO_QUERY->website_description();
-}
-function get_website_description() 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->website_description();
 }
 
 /**
- * Get/Echo the page title
+ * Get the page title
  * @return  string
  */
 function the_meta_title()
-{
-    global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_meta_title();
-}
-function get_the_meta_title()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_meta_title();
 }
 
 /**
- * Get/echo the meta description
+ * Get the meta description
  * @return string
  */
 function the_meta_description()
-{
-    global $KANSO_QUERY;
-    echo $KANSO_QUERY->the_meta_description();
-}
-function get_the_meta_description()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_meta_description();
@@ -1102,7 +958,7 @@ function get_the_meta_description()
  * Get current Kanso logged in user info
  * @return array
  */
-function get_current_userinfo() 
+function current_userinfo() 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->get_current_userinfo();
@@ -1122,7 +978,7 @@ function is_loggedin()
  * Get a user's avatar 'img tag'
  * @return bool
  */
-function get_avatar($email_or_md5 = null, $size = 160, $srcOnly = null) 
+function avatar($email_or_md5 = null, $size = 160, $srcOnly = null) 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->get_avatar($email_or_md5, $size, $srcOnly);
@@ -1149,15 +1005,10 @@ function has_comments($postId = null)
 }
 
 /**
- * Get/echo the total comments number
+ * Get the total comments number
  * @return bool
  */
 function comments_number($postId = null)
-{
-    global $KANSO_QUERY;
-    echo $KANSO_QUERY->comments_number($postId);
-}
-function get_comments_number($postId = null)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->comments_number($postId);
@@ -1167,37 +1018,27 @@ function get_comments_number($postId = null)
  * Get an article's comments as an associative array
  * @return array
  */
-function get_comments($postId = null, $approvedOnly = true)
+function comments($postId = null, $approvedOnly = true)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->get_comments($postId, $approvedOnly);
 }
 
 /**
- * Get/echo an article's comments as HTML
+ * Get an article's comments as HTML
  * @return string
  */
 function display_comments($args = null, $postId = null)
-{
-    global $KANSO_QUERY;
-    echo $KANSO_QUERY->display_comments($args, $postId);
-}
-function get_display_comments($args = null, $postId = null)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->display_comments($args, $postId);
 }
 
 /**
- * Get/echo a comment form
+ * Get a comment form
  * @return string
  */
 function comment_form($args = null, $postId = null)
-{
-    global $KANSO_QUERY;
-    echo $KANSO_QUERY->comment_form($args, $postId);
-}
-function get_comment_form($args = null, $postId = null)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->comment_form($args, $postId);
@@ -1211,23 +1052,18 @@ function get_comment_form($args = null, $postId = null)
 function pagination_links($args = null) 
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->pagination_links($args);
+    return $KANSO_QUERY->pagination_links($args);
 }
 
 /**
- * Get/echo theme search form
+ * Get theme search form
  *
  * @param  string
  */
-function get_search_form()
-{
-    global $KANSO_QUERY;
-    return $KANSO_QUERY->get_search_form();
-}
 function search_form()
 {
     global $KANSO_QUERY;
-    echo $KANSO_QUERY->get_search_form();
+    return $KANSO_QUERY->get_search_form();
 }
 
 /**
@@ -1235,7 +1071,7 @@ function search_form()
  *
  * @return  array
  */
-function get_archives()
+function archives()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->get_archives();

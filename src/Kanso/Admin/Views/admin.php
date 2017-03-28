@@ -51,6 +51,9 @@ else if ($ADMIN_PAGE_TYPE === 'comments') {
 else if ($ADMIN_PAGE_TYPE === 'commentUsers') {
 	require_once('dash-comment-users.php');
 }
+else if ($ADMIN_PAGE_TYPE === 'media') {
+	require_once('dash-media.php');
+}
 else if ($ADMIN_PAGE_TYPE === 'settings' || 
 		 $ADMIN_PAGE_TYPE === 'settingsAccount' || 
 		 $ADMIN_PAGE_TYPE === 'settingsAuthor' || 

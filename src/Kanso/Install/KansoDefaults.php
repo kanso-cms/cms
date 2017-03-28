@@ -30,7 +30,7 @@ $KANSO_DEFAULTS_POSTS_TABLE = [
 	'excerpt'     => 'TEXT',
 	'author_id'   => 'INTEGER | UNSIGNED',
 	'category_id' => 'INTEGER | UNSIGNED',
-	'thumbnail'   => 'VARCHAR(255)',
+	'thumbnail_id'     => 'INTEGER | UNSIGNED',
 	'comments_enabled' => 'BOOLEAN DEFAULT FALSE',
 ];
 
@@ -59,7 +59,7 @@ $KANSO_DEFAULTS_USERS_TABLE = [
 	'facebook'     => 'VARCHAR(255)',
 	'twitter'      => 'VARCHAR(255)',
 	'gplus'        => 'VARCHAR(255)',
-	'thumbnail'    => 'VARCHAR(255)',
+	'thumbnail_id' => 'INTEGER | UNSIGNED',
 	'role'         => 'VARCHAR(255)',
 	'description'  => 'VARCHAR(255)',
 	'status'       => 'VARCHAR(255)',
@@ -104,6 +104,20 @@ $KANSO_DEFAULTS_CONTENT_TO_POSTS_TABLE = [
 	'post_id'  => 'INTEGER | UNSIGNED',
 ];
 
+# Default media table
+$KANSO_DEFAULTS_MEDIA_TABLE = [
+	'id'           => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'url'  	       => 'VARCHAR(255)',
+	'path'  	   => 'VARCHAR(255)',
+	'title'	       => 'VARCHAR(255)',
+	'alt'	       => 'VARCHAR(255)',
+	'rel'          => 'VARCHAR(255)',
+	'size'         => 'INTEGER | UNSIGNED',
+	'dimensions'   => 'VARCHAR(255)',
+	'date'         => 'INTEGER | UNSIGNED',
+	'uploader_id'  => 'INTEGER | UNSIGNED',
+];
+
 # The default user entry
 $KANSO_DEFAULT_USER = [
 	"username"    		 => $this->config['KANSO_OWNER_USERNAME'],
@@ -114,7 +128,7 @@ $KANSO_DEFAULT_USER = [
 	"facebook"    		 => 'https://www.facebook.com/example',
 	"twitter"     		 => 'https://www.twitter.com/example',
 	"gplus"       		 => 'https://www.plus.google.com/example',
-	"thumbnail"  		 => 'author_img_large.png',
+	"thumbnail_id"       => 1,
 	"status"      		 => 'confirmed',
 	"role"       		 => 'administrator',
 	"description" 		 => 'This is where your author bio goes. You can put a small description about yourself here, or just leave it blank if you like.',
@@ -173,7 +187,7 @@ $KANSO_DEFAULT_ARTICLES = [
 		'excerpt'     => 'Welcome to Kanso. This is your first post. Edit or delete it, then start blogging!',
 		'author_id'   => 1,
 		'category_id' => 2,
-		'thumbnail'   => 'hero1_large.jpg',
+		'thumbnail_id'   => 2,
 		'comments_enabled' => true,
 	],
 	[
@@ -186,7 +200,7 @@ $KANSO_DEFAULT_ARTICLES = [
 		'excerpt'     => 'This is intended as a quick reference and showcase.Kanso uses Markdown Extra to parse article content. Content written within the Kanso Writer application is stored in the database as raw text. When the article content is loaded, it is parsed using ParseDown Extra.',
 		'author_id'   => 1,
 		'category_id' => 2,
-		'thumbnail'   => 'hero2_large.jpg',
+		'thumbnail_id'     => 3,
 		'comments_enabled' => true,
 	],
 	[
@@ -199,7 +213,7 @@ $KANSO_DEFAULT_ARTICLES = [
 		'excerpt'     => 'The purpose of this HTML is to help determine what default settings are with CSS and to make sure that all possible HTML Elements are included in this HTML so as to not miss any possible Elements when designing a site.',
 		'author_id'   => 1,
 		'category_id' => 3,
-		'thumbnail'   => 'hero3_large.jpg',
+		'thumbnail_id'     => 4,
 		'comments_enabled' => true,
 	],
 ];
@@ -257,5 +271,62 @@ $KANSO_DEFAULT_COMMENTS = [
 		'email_reply'  => false,
 		'email_thread' => false,
 		'rating'       => 2,
+	],
+];
+
+# The default media library entries
+$_installDir = rtrim(dirname(dirname(__FILE__)), '/');
+$_imgesDir   = $_installDir.DIRECTORY_SEPARATOR.'Uploads'.DIRECTORY_SEPARATOR.'Images';
+$_imagesUrl  = str_replace($_SERVER['DOCUMENT_ROOT'], $_SERVER['HTTP_HOST'], $_imgesDir);
+
+# localhost bugfix
+if (!strpos($_imagesUrl, 'http://') !== false) {
+    $_imagesUrl = 'http://'.$_imagesUrl;
+}
+
+$KANSO_DEFAULT_IMAGES = [
+	[
+		'url'  	       => $_imagesUrl.DIRECTORY_SEPARATOR.'author_img.png',
+		'path'  	   => $_imgesDir.DIRECTORY_SEPARATOR.'author_img.png',
+		'title'	       => 'Default Author Image',
+		'alt'	       => 'Author\'s profile photo',
+		'rel'          => 'attachment',
+		'size'         => 443576,
+		'dimensions'   => '1200 x 1200',
+		'date'         => time(),
+		'uploader_id'  => 1,
+	],
+	[
+		'url'  	       => $_imagesUrl.DIRECTORY_SEPARATOR.'hero1.jpg',
+		'path'  	   => $_imgesDir.DIRECTORY_SEPARATOR.'hero1.jpg',
+		'title'	       => 'New York City',
+		'alt'	       => 'Photo of New York City',
+		'rel'          => 'attachment',
+		'size'         => 222994,
+		'dimensions'   => '1200 x 800',
+		'date'         => time(),
+		'uploader_id'  => 1,
+	],
+	[
+		'url'  	       => $_imagesUrl.DIRECTORY_SEPARATOR.'hero2.jpg',
+		'path'  	   => $_imgesDir.DIRECTORY_SEPARATOR.'hero2.jpg',
+		'title'	       => 'Beautiful Landscape with Lake',
+		'alt'	       => 'Landscape photo of lake and mountains',
+		'rel'          => 'attachment',
+		'size'         =>  140531,
+		'dimensions'   => '1200 x 595',
+		'date'         => time(),
+		'uploader_id'  => 1,
+	],
+	[
+		'url'  	       => $_imagesUrl.DIRECTORY_SEPARATOR.'hero3.jpg',
+		'path'  	   => $_imgesDir.DIRECTORY_SEPARATOR.'hero3.jpg',
+		'title'	       => 'Beautiful Autumn Leaves',
+		'alt'	       => 'Photo of track with autumn leaves',
+		'rel'          => 'attachment',
+		'size'         => 222897,
+		'dimensions'   => '1200 x 701',
+		'date'         => time(),
+		'uploader_id'  => 1,
 	],
 ];

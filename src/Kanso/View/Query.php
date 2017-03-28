@@ -36,7 +36,7 @@ class Query {
     /**
      * @var    int    Current post index of paginated array of posts
      */
-    public $postIndex = -1;
+    public $postIndex = 0;
 
     /**
      * @var    int    Current post count
@@ -222,6 +222,9 @@ class Query {
                 $this->posts     = $parser->parseQuery($this->queryStr);
                 $this->postCount = count($this->posts);
             }
+            if (empty($this->posts)) {
+                return \Kanso\Kanso::getInstance()->notFound();
+            }
         }
         else if ($requestType === 'search') {
             
@@ -247,6 +250,8 @@ class Query {
             $this->postCount = count($this->posts);
             $this->searchQuery = $query;
         }
+
+        if (isset($this->posts[0])) $this->post = $this->posts[0];
 
     }
 
@@ -309,7 +314,6 @@ class Query {
         return md5($key);
     }
 
-
     /**
      * Tag exists
      *
@@ -326,14 +330,16 @@ class Query {
     /**
      * Author exists
      *
-     * @param   string    $author_name 
+     * @param   string|int    $author_name 
      * @return  bool  
      */
     public function author_exists($author_name)
     {
         $index       = is_numeric($author_name) ? 'id' : 'username';
-        $author_name = is_numeric($author_name) ? (int)$author_name : $author_name;
-        return !empty($this->SQL->SELECT('id')->FROM('users')->WHERE($index, '=', $author_name)->FIND());
+        $author_name = is_numeric($author_name) ? intval($author_name) : $author_name;
+        $row         = $this->SQL->SELECT('id')->FROM('users')->WHERE($index, '=', $author_name)->ROW();
+        if ($row) return $row['role'] === 'administrator' || $row['role'] === 'writer';
+        return false;
     }
 
     /**
@@ -607,32 +613,96 @@ class Query {
      * @param   int      $post_id (optional)
      * @return  string|false
      */
-    public function the_post_thumbnail($post_id = null, $size = 'large') 
+    public function the_post_thumbnail($post_id = null) 
     {
         if ($post_id) {
             $post = $this->getPostByID($post_id);
-            if ($post) return \Kanso\Kanso::getInstance()->Environment()['KANSO_IMGS_URL'].str_replace('_large', '_'.$size, $post->thumbnail);
+            if ($post) return $this->getMediaById($post->thumbnail_id);
             return false;
         }
-        if (!empty($this->post)) return \Kanso\Kanso::getInstance()->Environment()['KANSO_IMGS_URL'].str_replace('_large', '_'.$size, $this->post->thumbnail);
+        if (!empty($this->post)) return $this->getMediaById($this->post->thumbnail_id);
         
         return false;
+    }
+
+    /**
+     * The post thumbnail
+     *
+     * @param   string   $size    (optional) "small/medium/large" false for original image
+     * @param   int      $post_id (optional)
+     * @return  string|false
+     */
+    public function the_post_thumbnail_src($post_id = null, $size = false) 
+    {
+        $thumbnail = $this->the_post_thumbnail($post_id);
+        if ($thumbnail) {
+            return $this->media_size($thumbnail->url, $size);
+        }
+        return false;
+    }
+
+    /**
+     * The post thumbnail
+     *
+     * @param   \Kanso\Media\Attachment $thumbnail
+     * @return  string
+     */
+    public function display_thumbnail($thumbnail, $size = 'original', $width = '', $height = '', $classes = '', $id = '') 
+    {
+        $width    = !$width ? '' : 'width="'.$width.'"';
+        $height   = !$height ? '' : 'height="'.$height.'"';
+        $classes  = !$classes ? '' : 'class="'.$classes.'"';
+        $id       = !$id ? '' : 'id="'.$id.'"';
+        $src      = $this->media_size($thumbnail->url, $size);
+
+        return '<img src="'.$src.'" '.$width.' '.$height.' '.$classes.' '.$id.' rel="'.$thumbnail->rel.'" alt="'.$thumbnail->alt.'" title="'.$thumbnail->title.'" />';
+    }
+
+    private function media_size($url, $size = false)
+    {
+        if (!$size || $size === 'original') return $url;
+        $name = \Kanso\Utility\Str::getBeforeLastChar($url, '.');
+        $ext  = \Kanso\Utility\Str::getAfterLastChar($url, '.');
+        return $name.'_'.$size.'.'.$ext;
     }
 
     /**
      * The author
      *
      * @param   int      $post_id (optional)
-     * @return  string|false
+     * @return  \Kanso\Auth\Adapters\User|false
      */
     public function the_author($post_id = null) 
     {
         if ($post_id) {
             $post = $this->getPostByID($post_id);
-            if ($post) return $post->author['name'];
+            if ($post) return $this->getAuthorById($post->author_id);
             return false;
         }
-        if (!empty($this->post)) return $this->post->author['name'];
+        if (!empty($this->post)) return $this->getAuthorById($this->post->author_id);
+        return false;
+    }
+
+    /**
+     * The author name
+     *
+     * @param   int      $post_id (optional)
+     * @return  string|false
+     */
+    public function the_author_name($post_id = null) 
+    {
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) {
+                $author = $this->getAuthorById($post->author_id);
+                if ($author) return $author->name;
+            }
+            return false;
+        }
+        if (!empty($this->post)) {
+            $author = $this->getAuthorById($this->post->author_id);
+            if ($author) return $author->name;
+        }
         return false;
     }
 
@@ -646,11 +716,12 @@ class Query {
     {
         if ($author_id) {
             $author = $this->getAuthorById($author_id);
-            if ($author) return \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'].'/authors/'.$author['slug'];
+            if ($author) return \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'].'/authors/'.$author->slug;
             return false;
         }
         if (!empty($this->post)) {
-            return \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'].'/authors/'.$this->post->author['slug'];
+            $author = $this->getAuthorById($this->post->author_id);
+            return \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'].'/authors/'.$author->slug;
         }
         return false;
     }
@@ -662,20 +733,21 @@ class Query {
      * @param   int      $author_id (optional)
      * @return  string|false
      */
-    public function the_author_thumbnail($author_id = null, $size = 'small')
+    public function the_author_thumbnail($author_id = null)
     {
         if ($author_id) {
             $author = $this->getAuthorById($author_id);
-            if ($author && !empty($author['thumbnail'])) return \Kanso\Kanso::getInstance()->Environment()['KANSO_IMGS_URL'].str_replace('_large', '_'.$size, $author['thumbnail']);
+            if ($author) return $this->getMediaById($author->thumbnail_id);
             return false;
         }
         if (!empty($this->post)) {
-            if (!empty($this->post->author['thumbnail'])) {
-                return \Kanso\Kanso::getInstance()->Environment()['KANSO_IMGS_URL'].str_replace('_large', '_'.$size, $this->post->author['thumbnail']);
-            }
+            $author = $this->getAuthorById($this->post->author_id);
+            if ($author) return $this->getMediaById($author->thumbnail_id);
+            return false;
         }
         return false;
     }
+
 
     /**
      * The author bio 
@@ -687,11 +759,11 @@ class Query {
     {
         if ($author_id) {
             $author = $this->getAuthorById($author_id);
-            if ($author) return $author['description'];
+            if ($author) return $author->description;
             return false;
         }
         if (!empty($this->post)) {
-            return $this->post->author['description'];
+            return $this->post->author->description;
         }
         return false;
     }
@@ -706,11 +778,11 @@ class Query {
     {
         if ($author_id) {
             $author = $this->getAuthorById($author_id);
-            if ($author) return $author['twitter'];
+            if ($author) return $author->twitter;
             return false;
         }
         if (!empty($this->post)) {
-            return $this->post->author['twitter'];
+            return $this->post->author->twitter;
         }
         return false;
     }
@@ -725,11 +797,11 @@ class Query {
     {
         if ($author_id) {
             $author = $this->getAuthorById($author_id);
-            if ($author) return $author['gplus'];
+            if ($author) return $author->gplus;
             return false;
         }
         if (!empty($this->post)) {
-            return $this->post->author['gplus'];
+            return $this->post->author->gplus;
         }
         return false;
     }
@@ -744,10 +816,10 @@ class Query {
     {
         if ($author_id) {
             $author = $this->getAuthorById($author_id);
-            if ($author) return $author['facebook'];
+            if ($author) return $author->facebook;
         }
         if (!empty($this->post)) {
-            return $this->post->author['facebook'];
+            return $this->post->author->facebook;
         }
         return false;
     }
@@ -859,7 +931,7 @@ class Query {
     public function the_author_posts($author_id, $published = true)
     {
         if ($this->author_exists($author_id)) {
-            return \Kanso\Kanso::getInstance()->Bookkeeper->byIndex('author_id', (int)$author_id, $published);
+            return \Kanso\Kanso::getInstance()->Bookkeeper->byIndex('author_id', intval($author_id), $published);
         }
         return false;
     }
@@ -873,7 +945,7 @@ class Query {
     public function the_category_posts($category_id, $published = true)
     {
         if ($this->category_exists($category_id)) {
-            return \Kanso\Kanso::getInstance()->Bookkeeper->byIndex('category_id', (int)$category_id, $published);
+            return \Kanso\Kanso::getInstance()->Bookkeeper->byIndex('category_id', intval($category_id), $published);
         }
         return false;
     }
@@ -887,7 +959,7 @@ class Query {
     public function the_tag_posts($tag_id, $published = true)
     {
         if ($this->tag_exists($tag_id)) {
-            return \Kanso\Kanso::getInstance()->Bookkeeper->byIndex('tags.id', (int)$tag_id, $published);
+            return \Kanso\Kanso::getInstance()->Bookkeeper->byIndex('tags.id', intval($tag_id), $published);
         }
     }
 
@@ -1021,27 +1093,30 @@ class Query {
     {
         if ($post_id) {
             $post = $this->getPostByID($post_id);
-            if ($post) return trim($post->thumbnail) !== "";
+            if ($post) return !empty($this->getMediaById($post->thumbnail_id));
             return false;
         }
-        if (!empty($this->post)) return trim($this->post->thumbnail) !== "";
+        if (!empty($this->post)) return !empty($this->getMediaById($this->post->thumbnail_id));
         return false;
     }
 
     /**
      * Has author Thumbnail
      *
-     * @param   int   $post_id   (optional)
+     * @param   int   $author_id   (optional)
      * @return  bool
      */
     public function has_author_thumbnail($author_id = null)
     {
-        if (!$author_id) {
-            if (!empty($this->post)) return $this->post->author['thumbnail'] !== '';
+        if ($author_id) {
+            $author = $this->getAuthorById($author_id);
+            if ($author) return !empty($author_id->thumbnail_id);
             return false;
         }
-        $author = $this->getAuthorById($author_id);
-        if ($author) return $author['thumbnail'] !== '';
+        if (!empty($this->post)) {
+            $author = $this->getAuthorById($this->post->author_id);
+            if ($author) return !empty($author_id->thumbnail_id);
+        }
         return false;
     }
 
@@ -1118,7 +1193,7 @@ class Query {
         $key = $this->cacheKey(__FUNCTION__, func_get_args(), func_num_args());
         if ($this->cacheHas($key)) return $this->cacheGet($key);
        
-        if ($this->requestType === 'page') return $this->cachePut($key, false);
+        if ($this->requestType === 'page' || $this->requestType === 'archive') return $this->cachePut($key, false);
         if ($this->is_single() || $this->is_custom_post()) {
             return $this->cachePut($key, $this->findNextPost($this->post));
         }
@@ -1170,7 +1245,7 @@ class Query {
         $key = $this->cacheKey(__FUNCTION__, func_get_args(), func_num_args());
         if ($this->cacheHas($key)) return $this->cacheGet($key);
 
-        if ($this->requestType === 'page') return $this->cachePut($key,  false);
+        if ($this->requestType === 'page' || $this->requestType === 'archive') return $this->cachePut($key,  false);
         if ($this->is_single() || $this->is_custom_post()) {
             
             return $this->cachePut($key, $this->findPrevPost($this->post));
@@ -1303,13 +1378,11 @@ class Query {
     {
         if ($post_id) return !empty($this->getPostByID($post_id));
 
-        if ( $this->postIndex + 1 < $this->postCount ) {
+        if ($this->postIndex < $this->postCount) {
+            $this->inLoop = true;
             return true;
-        } 
-        else if ( $this->postIndex + 1 == $this->postCount && $this->postCount > 0 ) {
-            $this->rewind_posts();
         }
-
+       
         $this->inLoop = false;
 
         return false;
@@ -1320,10 +1393,8 @@ class Query {
      *
      */
     public function rewind_posts() {
-        $this->postIndex = -1;
-        if ( $this->postCount > 0 ) {
-            $this->post = $this->posts[0];
-        }
+        $this->postIndex = 0;
+        if ($this->postCount > 0 ) $this->post = $this->posts[0];
     }
 
     /**
@@ -1332,7 +1403,12 @@ class Query {
     public function _next()
     {
         $this->postIndex++;
-        $this->post = $this->posts[$this->postIndex];
+        if (isset($this->posts[$this->postIndex])) {
+            $this->post = $this->posts[$this->postIndex];
+        }
+        else {
+            $this->post = NULL;
+        }
         return $this->post;
     }
 
@@ -1342,7 +1418,12 @@ class Query {
     public function _previous()
     {
         $this->postIndex--;
-        $this->post = $this->posts[$this->postIndex];
+        if (isset($this->posts[$this->postIndex])) {
+            $this->post = $this->posts[$this->postIndex];
+        }
+        else {
+            $this->post = NULL;
+        }
         return $this->post;
     }
 
@@ -1504,16 +1585,13 @@ class Query {
     public function the_meta_title()
     {
         $uri        = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['PATH_INFO'], '/'));
-        $PageType   = $this->requestType;
         $titleBase  = $this->website_title();
         $titlePage  = $this->pageIndex > 0 ? 'Page '.($this->pageIndex+1).' | ' : '';
         $titleTitle = '';
 
         if ($this->is_single() || $this->is_page() || $this->is_custom_post()) {
             if ($this->have_posts()) {
-                $this->the_post();
                 $titleTitle = $this->post->title.' | ';
-                $this->rewind_posts();
             }
         }
         else if ($this->is_tag() || $this->is_category() || $this->is_author()) {
@@ -1865,7 +1943,8 @@ class Query {
     }
 
     /**
-     * Retrieve the avatar 'img' tag from an email address or md5 hash. 
+     * Retrieve the avatar 'img' tag from an email address or md5 hash.
+     *
      * @param  string      $email_address    The email address or md5 of the current user (optional)
      * @param  int         $size             Image size in px
      * @param  bool        $srcOnly          Should we return only the img src (rather than the actual HTML tag)
@@ -2276,7 +2355,7 @@ class Query {
     {
         $key = $this->cacheKey(__FUNCTION__, func_get_args(), func_num_args());
         if ($this->cacheHas($key)) return $this->cacheGet($key);
-        return $this->cachePut($key, $this->SQL->SELECT('*')->FROM('users')->WHERE('id', '=', $author_id)->ROW());
+        return $this->cachePut($key, \Kanso\Kanso::getInstance()->Gatekeeper->getUserProvider()->byId($author_id));
     }
 
     private function getTagById($tag_id)
@@ -2299,5 +2378,13 @@ class Query {
         if ($this->cacheHas($key)) return $this->cacheGet($key);
         return $this->cachePut($key,  $this->SQL->SELECT('*')->FROM('categories')->WHERE('name', '=', $category_name)->ROW());
     }
+
+    private function getMediaById($thumb_id)
+    {
+        $key = $this->cacheKey(__FUNCTION__, func_get_args(), func_num_args());
+        if ($this->cacheHas($key)) return $this->cacheGet($key);
+        return $this->cachePut($key,  \Kanso\Kanso::getInstance()->MediaLibrary->byId($thumb_id));
+    }
+
 
 }

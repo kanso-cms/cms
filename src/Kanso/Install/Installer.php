@@ -53,8 +53,6 @@ class Installer
      */
     public function installKanso($asDefault = false)
     {
-        
-
     	# Validate Kanso is NOT already installed if this
         # is a fresh install
     	if (!$asDefault) {
@@ -150,6 +148,8 @@ class Installer
 
         $Query->CREATE_TABLE('content_to_posts', $KANSO_DEFAULTS_CONTENT_TO_POSTS_TABLE);
 
+        $Query->CREATE_TABLE('media_uploads', $KANSO_DEFAULTS_MEDIA_TABLE);
+
         $Query->ALTER_TABLE('tags_to_posts')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
         $Query->ALTER_TABLE('tags_to_posts')->MODIFY_COLUMN('tag_id')->ADD_FOREIGN_KEY('tags', 'id');
 
@@ -157,14 +157,16 @@ class Installer
         
         $Query->ALTER_TABLE('posts')->MODIFY_COLUMN('author_id')->ADD_FOREIGN_KEY('users', 'id');
 
+        # No foreign keys here so that you can delete
+        # an attachment without having a constraint
+        // $Query->ALTER_TABLE('posts')->MODIFY_COLUMN('thumbnail_id')->ADD_FOREIGN_KEY('media_uploads', 'id');
+        // $Query->ALTER_TABLE('users')->MODIFY_COLUMN('thumbnail_id')->ADD_FOREIGN_KEY('media_uploads', 'id');
+
         $Query->ALTER_TABLE('comments')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
 
         $Query->ALTER_TABLE('content_to_posts')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
         
         # Populate tables
-
-        # Default user
-        $Query->INSERT_INTO('users')->VALUES($KANSO_DEFAULT_USER)->QUERY();
 
         # Default Tags
         foreach ($KANSO_DEFAULT_TAGS as $i => $tag) {
@@ -174,7 +176,15 @@ class Installer
         # Default categories
         foreach ($KANSO_DEFAULT_CATEGORIES as $i => $category) {
             $Query->INSERT_INTO('categories')->VALUES($category)->QUERY();
-        }        
+        }
+
+        # Default media
+        foreach ($KANSO_DEFAULT_IMAGES as $image) {
+            $Query->INSERT_INTO('media_uploads')->VALUES($image)->QUERY();
+        }
+
+        # Default user
+        $Query->INSERT_INTO('users')->VALUES($KANSO_DEFAULT_USER)->QUERY();
 
         # Default Articles
         foreach ($KANSO_DEFAULT_ARTICLES as $i => $article) {
@@ -191,6 +201,8 @@ class Installer
         foreach ($KANSO_DEFAULT_COMMENTS as $comment) {
             $Query->INSERT_INTO('comments')->VALUES($comment)->QUERY();
         }
+
+        
 
     }
 

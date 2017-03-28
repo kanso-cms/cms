@@ -12,7 +12,7 @@
 
 function customExcerpt($length, $suffix = '', $toChar = true) {
     
-    $excerpt = get_the_excerpt();
+    $excerpt = the_excerpt();
 
     if ($toChar) return (strlen($excerpt) > $length ) ? substr($excerpt, 0, $length).$suffix : $excerpt;
 

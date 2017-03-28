@@ -13,7 +13,7 @@ the_header(); ?>
 
 	<h1>Archives</h1>
 
-	<?php $archive = get_archives(); ?>
+	<?php $archive = archives(); ?>
 
 	<?php if ( have_posts() ) : ?>
 
@@ -28,7 +28,7 @@ the_header(); ?>
 								<ol>
 									<?php foreach ($posts as $post) : ?>
 									<li>
-										<a href="<?php the_permalink($post->id);?>"><?php the_title($post->id); ?></a>
+										<a href="<?php echo the_permalink($post->id);?>"><?php echo the_title($post->id); ?></a>
 									</li>
 									<?php endforeach; ?>
 								</ol>

@@ -14,7 +14,7 @@
 
 		<h4>Site Search</h4>
 
-		<?php get_search_form(); ?>
+		<?php echo search_form(); ?>
 
 		<hr>
 
@@ -32,7 +32,7 @@
 			<ul class="list-bullet">
 				<?php foreach ($categories as $category) : ?>
 					<?php if ((int)$category['id'] !== 1 ) :?>
-						<li><a href="<?php the_category_url($category['id']);?>"><?php echo $category['name'];?></a></li>
+						<li><a href="<?php echo the_category_url($category['id']);?>"><?php echo $category['name'];?></a></li>
 					<?php endif; ?>
 				<?php endforeach;?>
 			</ul>
@@ -55,7 +55,7 @@
 			<ul class="list-bullet">
 				<?php foreach ($tags as $tag) : ?>
 					<?php if ((int)$tag['id'] !== 1 ) :?>
-						<li><a href="<?php the_tag_url($tag['id']);?>"><?php echo $tag['name'];?></a></li>
+						<li><a href="<?php echo the_tag_url($tag['id']);?>"><?php echo $tag['name'];?></a></li>
 					<?php endif; ?>
 				<?php endforeach;?>
 			</ul>

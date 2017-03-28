@@ -13,31 +13,31 @@ the_header(); ?>
 	<div class="col col-12 no-gutter tablet-col tablet-huge-gutter tablet-col-9 tablet-right-gutter">
 		
 		<!-- BEGIN LOOP -->
-		<?php if ( have_posts() ) : while ( have_posts() ) : the_post();  ?>
+		<?php if ( have_posts() ) : while ( have_posts() ) :  ?>
 
 			<div class="col-12 no-gutter clearfix">
 
 				<?php if (has_post_thumbnail()) :?>
 
-				<a href="<?php the_permalink();?>" class="block hide-overflow" style="max-height:250px;">
-					<img src="<?php the_post_thumbnail(); ?>" class="col-12" />
+				<a href="<?php echo the_permalink();?>" class="block hide-overflow" style="max-height:250px;">
+					<img src="<?php echo the_post_thumbnail_src(); ?>" class="col-12" />
 				</a>
 				
 				<?php endif;?>
 
-				<a class="block" href="<?php the_permalink();?>"><h3 class="font-600"><?php the_title();?></h3></a>
+				<a class="block" href="<?php echo the_permalink();?>"><h3 class="font-600"><?php echo the_title();?></h3></a>
 
-				<p class="info-text"><?php the_time('M d, Y'); ?></p>
+				<p class="info-text"><?php echo the_time('M d, Y'); ?></p>
 
 				<p><?php echo customExcerpt(150, '...') ?> </p>
 
-				<a href="<?php the_permalink();?>" class="button primary">Read More&nbsp;&nbsp;»</a>
+				<a href="<?php echo the_permalink();?>" class="button primary">Read More&nbsp;&nbsp;»</a>
 				
 				<br><br><br>
 
 			</div>
 
-		<?php endwhile;
+		<?php the_post(); endwhile;
 
 		else : ?>
 
@@ -63,7 +63,7 @@ the_header(); ?>
 	<div class="col col-12 no-gutter">
 		<div class="row pagination">
 			<ul>
-				<?php pagination_links(); ?>
+				<?php echo pagination_links(); ?>
 			</ul>
 		</div>
 	</div>

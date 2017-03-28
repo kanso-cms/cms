@@ -19,26 +19,22 @@
 </footer>
 
 <!-- VENDOR AJAX -->
-<script type="text/javascript" src="<?php theme_url(); ?>/assets/js/vendor/simpleAjax.js"></script>
+<script type="text/javascript" src="<?php echo theme_url(); ?>/assets/js/vendor/simpleAjax.js"></script>
 
 <!-- VENDOR SMOOTH SCROLL -->
-<script type="text/javascript" src="<?php theme_url(); ?>/assets/js/vendor/smoothScroll.js"></script>
+<script type="text/javascript" src="<?php echo theme_url(); ?>/assets/js/vendor/smoothScroll.js"></script>
 
 <!-- VENDOR SYNTAX HIGHLGHTING -->
-<script type="text/javascript" src="<?php theme_url(); ?>/assets/js/vendor/highlight.js"></script>
+<script type="text/javascript" src="<?php echo theme_url(); ?>/assets/js/vendor/highlight.js"></script>
 
 <!-- VENDOR MARKDOWN FOR COMMENTS -->
-<script type="text/javascript" src="<?php theme_url(); ?>/assets/js/vendor/markdown-it.js"></script>
+<script type="text/javascript" src="<?php echo theme_url(); ?>/assets/js/vendor/markdown-it.js"></script>
 
 <!-- HELPER FUNCTIONS -->
-<script type="text/javascript" src="<?php theme_url(); ?>/assets/js/helper.js"></script>
+<script type="text/javascript" src="<?php echo theme_url(); ?>/assets/js/helper.js"></script>
 
 <!-- CUSTOM SCRIPTS -->
-<script type="text/javascript" src="<?php theme_url(); ?>/assets/js/scripts.js"></script>
-
-
-
-
+<script type="text/javascript" src="<?php echo theme_url(); ?>/assets/js/scripts.js"></script>
 
 </body>
 </html>

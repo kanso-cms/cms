@@ -16,63 +16,62 @@
     /*-------------------------------------------------------------
     ** Global variables for application
     --------------------------------------------------------------*/
-        document.getElementsByTagName('html')[0].className = 'writer-html';
-        document.body.className = 'writing markdown';
+    document.getElementsByTagName('html')[0].className = 'writer-html';
+    document.body.className = 'writing markdown';
 
-        var doc     = document.documentElement;
-        var ajaxURL = window.location.href.replace(/admin(.+)/, 'admin/writer/');
-        var Ajax    = Modules.require('Ajax');
+    var doc     = document.documentElement;
+    var ajaxURL = window.location.href.replace(/admin(.+)/, 'admin/writer/');
+    var Ajax    = Modules.require('Ajax');
 
-        // Writer
-        var writerTextArea = $('.js-writer-textarea');
-        var CodeMirrorDiv;
+    // Writer
+    var writerTextArea = $('.js-writer-textarea');
+    var CodeMirrorDiv;
 
-        // Inputs and buttons
-        var saveBtn       = $('.js-writer-footer .js-save-post');
-        var publishBtn    = $('.js-review-wrap .js-writer-form button[type=submit]');
-        var articleForm   = $('.js-review-wrap .js-writer-form');
+    // Inputs and buttons
+    var saveBtn       = $('.js-writer-footer .js-save-post');
+    var publishBtn    = $('.js-review-wrap .js-writer-form button[type=submit]');
+    var articleForm   = $('.js-review-wrap .js-writer-form');
 
-        // Global writer dopzone variables
-        var writerDZ;
-        var writerDZ_sendTimer;
-        var writerDZ_errorTimer;
-        var writerDZ_sendFiles = true;
-        var writerDZ_droppedFiles = 0;
-        var writerDZ_imgInserted = [];
-        var thumbnailInput = $('.js-thumbnail');
+    // Global writer dopzone variables
+    var writerDZ;
+    var writerDZ_sendTimer;
+    var writerDZ_errorTimer;
+    var writerDZ_sendFiles = true;
+    var writerDZ_droppedFiles = 0;
+    var writerDZ_imgInserted = [];
 
-        // Global hero image dropzone variables
-        var heroDZ;
-        var heroDZ_dropwrap    = $('.js-hero-drop form');
-        var heroDZ_progressBar = $('.js-hero-drop .progress');
-        var heroDZ_sendTimer;
-        var heroDZ_errorTimer;
-        var heroDZ_sendFiles = true;
-        var heroDZ_droppedFiles = 0;
+    // Global hero image dropzone variables
+    var heroDZ;
+    var heroDZ_dropwrap    = $('.js-hero-drop form');
+    var heroDZ_progressBar = $('.js-hero-drop .progress');
+    var heroDZ_sendTimer;
+    var heroDZ_errorTimer;
+    var heroDZ_sendFiles = true;
+    var heroDZ_droppedFiles = 0;
 
-        // Panels
-        var writerWrap = $('.js-writer-wrap');
-        var readWrap = $('.js-reader-wrap');
-        var reviewWrap = $('.js-review-wrap');
-        var viewWraps;
+    // Panels
+    var writerWrap = $('.js-writer-wrap');
+    var readWrap = $('.js-reader-wrap');
+    var reviewWrap = $('.js-review-wrap');
+    var viewWraps;
 
-        // Panel scrolls
-        var readScroll = 0;
-        var writeScroll = 0;
-        var reviewScroll = 0;
+    // Panel scrolls
+    var readScroll = 0;
+    var writeScroll = 0;
+    var reviewScroll = 0;
 
-        // footer
-        var writerFooter = $('.js-writer-footer');
-        var footerTimer;
+    // footer
+    var writerFooter = $('.js-writer-footer');
+    var footerTimer;
 
-        // footer view togglers
-        var writeTrigger = $('.js-writer-footer .js-raw');
-        var readTrigger = $('.js-writer-footer .js-html');
-        var reviewTrigger = $('.js-writer-footer .js-pre-publish');
-        var toggleTriggers;
-        var sbTimer;
-        var GLOBAL_PROGRESS_WRAP = $('.js-writer-progress');
-        var GLOBAL_PROGRESS      = $('.js-writer-progress span');
+    // footer view togglers
+    var writeTrigger = $('.js-writer-footer .js-raw');
+    var readTrigger = $('.js-writer-footer .js-html');
+    var reviewTrigger = $('.js-writer-footer .js-pre-publish');
+    var toggleTriggers;
+    var sbTimer;
+    var GLOBAL_PROGRESS_WRAP = $('.js-writer-progress');
+    var GLOBAL_PROGRESS      = $('.js-writer-progress span');
 
 
 // ##############################################################################
@@ -84,12 +83,12 @@
 --------------------------------------------------------------*/
 var KansoWriter = function() {
 
-    this.version = "1.0.0";
-    this.author = "Joe Howard";
+    this.version   = "1.0.0";
+    this.author    = "Joe Howard";
     this.copyright = "Kanso 2015";
-    this.writer = null;
+    this.writer    = null;
     this.saveTimer = null;
-    this.hasSaved = false;
+    this.hasSaved  = false;
 
     // Markdown 2 HTML
     this.markdown = window.markdownit({
@@ -107,8 +106,8 @@ var KansoWriter = function() {
     // Initialize the application
     this.initialize();
     this.initCodeMirror();
+    this.initThumbnailImage();
     this.initWindowResize();
-    this.initHeroDZ();
     this.initInputChanges();
     this.initFooter();
 }
@@ -252,9 +251,10 @@ KansoWriter.prototype.initFooter = function() {
     $('.js-writer-footer .js-insert-link').addEventListener('click', function() {
         self.insertWrapText('[', '](href)', '[text](href)', self);
     });
-    $('.js-writer-footer .js-insert-image').addEventListener('click', function() {
+    
+    /*$('.js-writer-footer .js-insert-image').addEventListener('click', function() {
         self.insertWrapText('![', '](src)', '![altText](src)', self);
-    });
+    });*/
 
     window.addEventListener("resize", function() {
         clearTimeout(footerTimer);
@@ -559,19 +559,6 @@ KansoWriter.prototype.initCodeMirror = function() {
         }
     );
 
-
- /*   this.writer = CodeMirror.fromTextArea(writerTextArea, {
-        mode: 'markdown',
-        lineWrapping: true,
-        lineNumbers: false,
-        dragDrop: false,
-        theme: "base16-light",
-        scrollbarStyle: 'overlay',
-        extraKeys: {
-            "Enter": "newlineAndIndentContinueMarkdownList"
-        }
-    });*/
-
     CodeMirrorDiv = $('.CodeMirror');
 
     this.writer.on("change", function() {
@@ -616,6 +603,42 @@ KansoWriter.prototype.updateCodeMirrorLayout = function(self) {
 
     clearTimeout(footerTimer);
     removeClass(writerFooter, 'active');
+
+}
+
+// ##############################################################################
+// FILE: Libs/Writer/dropZone.js
+// ##############################################################################
+KansoWriter.prototype.initThumbnailImage = function() {
+    var showMediaLibTrigger = $('.js-select-img-trigger');
+    var removeImgTrigger    = $('.js-remove-img-trigger');
+    var setFeatureTrigger   = $('.js-set-feature-image');
+    var imgWrap             = $('.js-feature-img');
+    var img                 = $('.js-feature-img img');
+    var featureInput        = $('.js-feature-id');
+    
+    showMediaLibTrigger.addEventListener('click', function(e) {
+        e = e || window.event;
+        e.preventDefault();
+        addClass($('.js-media-library'), 'feature-image');
+    });
+
+    setFeatureTrigger.addEventListener('click', function(e) {
+        e = e || window.event;
+        e.preventDefault();
+        Modules.get('MediaLibrary')._hideLibrary();
+        featureInput.value = $('#media_id').value;
+        img.src = $('#media_url').value;
+        addClass(imgWrap, 'active');
+    });
+
+    removeImgTrigger.addEventListener('click', function(e) {
+        e = e || window.event;
+        e.preventDefault();
+        featureInput.value = '';
+        removeClass(imgWrap, 'active');
+        img.src = '';
+    });
 
 }
 
@@ -752,157 +775,6 @@ KansoWriter.prototype.writerDZ_callback_processQueu = function() {
     writerDZ_sendFiles = true;
     writerDZ_droppedFiles = 0;
     writerDZ_imgInserted = [];
-}
-
-// ##############################################################################
-// FILE: Libs/Writer/dropZoneHero.js
-// ##############################################################################
-
-/*-------------------------------------------------------------
-**  Initialize DropZone for Hero Image
---------------------------------------------------------------*/
-KansoWriter.prototype.initHeroDZ = function() {
-
-    var options = {
-        url: ajaxURL,
-        maxFilesize: 5,
-        parallelUploads: 1,
-        uploadMultiple: false,
-        clickable: true,
-        createImageThumbnails: true,
-        maxFiles: null,
-        acceptedFiles: ".jpg,.png",
-        autoProcessQueue: false,
-        maxThumbnailFilesize: 5,
-        thumbnailWidth: 800,
-        thumbnailHeight: 400,
-        resize: this.resizeHeroDropImage,
-        dictInvalidFileType: "Error! Unsupported file or files. You can't upload files of that type.",
-        dictFileTooBig: "Error! File or files are too lare. Max upload size is 5mb per file.",
-        dictResponseError: "There was an error processing the request. Try again in a few moments.",
-        dictMaxFilesExceeded: "Error! Too many uploads at once. Upload limit is 1 file per drop."
-    };
-
-    heroDZ = new Dropzone(heroDZ_dropwrap, options);
-
-    this.initHeroDZEvents();
-}
-
-/*-------------------------------------------------------------
-**  Resize CTX hero image properly
---------------------------------------------------------------*/
-KansoWriter.prototype.resizeHeroDropImage = function(file) {
-    var w = file['width'];
-    var h = file['height'];
-    var imageResize = ImageResizer(w, h, true);
-    var resized = imageResize.crop(800, 400);
-    return {
-        srcX: resized.source_x,
-        srcY: resized.source_y,
-        srcWidth: resized.source_w,
-        srcHeight: resized.source_h,
-
-        trgX: resized.dest_x,
-        trgY: resized.dest_y,
-        trgWidth: 800,
-        trgHeight: 400,
-    };
-};
-
-/*-------------------------------------------------------------
-**  Initialize events on the hero image DropZone
---------------------------------------------------------------*/
-KansoWriter.prototype.initHeroDZEvents = function() {
-
-    var DZ = heroDZ;
-    var self = this;
-
-    DZ.on("uploadprogress", function(file, progress) {
-        GLOBAL_PROGRESS.style.width = progress + "%";
-        addClass(GLOBAL_PROGRESS_WRAP, 'active');
-    });
-
-    DZ.on("sending", function(file, xhr, formdata) {
-        formdata.append("ajax_request", 'writer_image_upload');
-    });
-
-    DZ.on("drop", function(file) {
-        self.HeroDZ_cleanUp();
-    });
-
-    DZ.on("error", function(file, response, xhr) {
-        self.HeroDZ_cleanUp();
-        Modules.require('Notifications', { type : 'warning', msg : response});
-    });
-
-    DZ.on("addedfile", function(file) {
-        heroDZ_droppedFiles++;
-        if (heroDZ_droppedFiles > 1) {
-            self.HeroDZ_cleanUp();
-            heroDZ_sendFiles = false;
-            clearTimeout(heroDZ_sendTimer);
-            heroDZ_errorTimer = setTimeout(self.HeroDZ_showError, 300);
-        } else if (heroDZ_droppedFiles === 1) {
-            heroDZ_sendTimer = setTimeout(self.HeroDZ_processQueu, 300);
-        }
-
-    });
-
-    DZ.on("success", function(files, response) {
-        if (typeof response !== 'object') response === isJSON(response);
-        if (typeof response === 'object') {
-            if (response && response['response'] && response['response'] === 'processed') {
-                Modules.require('Notifications', { type : 'success', msg : 'Your file was successfully uploaded!'});
-                self.HeroDZ_updateForm(response['details']);
-                clearTimeout(self.savePostTimer);
-                addClass($('.js-save-post'), 'active');
-                return;
-            }
-        }
-        Modules.require('Notifications', { type : 'danger', msg : 'There was an error processing the request. Try again in a few moments.'});
-    });
-
-    DZ.on("complete", function(file) {
-        heroDZ_sendFiles = true;
-        heroDZ_droppedFiles = 0;
-        GLOBAL_PROGRESS.style.width = "0%";
-        removeClass(GLOBAL_PROGRESS_WRAP, 'active');
-    });
-
-}
-
-/*-------------------------------------------------------------
-**  Hero Image DropZone Callbacks
---------------------------------------------------------------*/
-KansoWriter.prototype.HeroDZ_showError = function() {
-    clearTimeout(heroDZ_errorTimer);
-    Modules.require('Notifications', { type : 'warning', msg : 'Error! Too many uploads at once. Upload limit is 1 file per drop.'});
-    heroDZ_sendFiles = true;
-    heroDZ_droppedFiles = 0;
-}
-
-KansoWriter.prototype.HeroDZ_processQueu = function() {
-    clearTimeout(heroDZ_sendTimer);
-    if (heroDZ_sendFiles === true) heroDZ.processQueue();
-    heroDZ_sendFiles = true;
-    heroDZ_droppedFiles = 0;
-}
-
-KansoWriter.prototype.HeroDZ_cleanUp = function() {
-    removeClass(heroDZ_dropwrap, 'dz-started');
-    var existingDrop = $('.js-hero-drop .dz-preview');
-    var allDrops = $All('.js-hero-drop .dz-preview');
-    if (nodeExists(existingDrop)) {
-        for (var i = 0; i < allDrops.length; i++) {
-            removeFromDOM(allDrops[i]);
-        }
-    }
-}
-KansoWriter.prototype.HeroDZ_updateForm = function(imgURL) {
-    clearTimeout(self.savePostTimer);
-    imgURL = imgURL.substring(imgURL.lastIndexOf('/') + 1);
-    thumbnailInput.value = imgURL;
-    addClass($('.js-save-post'), 'active');
 }
 
 // ##############################################################################
@@ -1062,6 +934,7 @@ KansoWriter.prototype.checkForLists = function(self) {
 /*-------------------------------------------------------------
 **  Initialize the editor
 --------------------------------------------------------------*/
-var bootWriter = new KansoWriter();
+
+Modules.singleton('KansoWriter', KansoWriter).get('KansoWriter')
 
 })();

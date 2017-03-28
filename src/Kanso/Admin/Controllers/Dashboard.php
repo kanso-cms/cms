@@ -228,23 +228,6 @@ class Dashboard
 	}
 
 	/**
-	 * Parse Ajax requests made to the writer
-	 *
-	 */
-	private function writerAjax()
-	{
-		# If the user is logged in, load the model
-		# and parse the response
-		if ($this->isLoggedIn) {
-			$this->model = new \Kanso\Admin\Models\Writer;
-			$response    = $this->model->ajax();
-		}
-		else {
-			\Kanso\Kanso::getInstance()->notFound();
-		}
-	}
-
-	/**
 	 * Load the settings pages
 	 *
 	 * @param string    $tab    The current tab (optional)
@@ -315,6 +298,25 @@ class Dashboard
 		}
 		$this->settings('tools');
 	}
+
+
+	/**
+	 * Load the media library
+	 *
+	 */
+	private function media()
+	{
+		# If the user is logged in, load the model
+		# and render the page
+		if ($this->isLoggedIn) {
+			$this->renderPage();
+		}
+		# 404
+		else {
+			\Kanso\Kanso::getInstance()->notFound();
+		}
+	}
+
 
 	/********************************************************************************
 	* PAGE RENDERING

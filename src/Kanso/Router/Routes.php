@@ -92,6 +92,10 @@ $this->get('/admin/writer/(:all)',  '\Kanso\Admin\Controllers\Dashboard@dispatch
 $this->post('/admin/writer/',       '\Kanso\Admin\Controllers\Ajax@dispatch', 'writerAjax');
 $this->post('/admin/writer/(:any)', '\Kanso\Admin\Controllers\Ajax@dispatch', 'writerAjax');
 
+# Admin media
+$this->get('/admin/media/',          '\Kanso\Admin\Controllers\Dashboard@dispatch', 'media');
+$this->post('/admin/media-library/', '\Kanso\Admin\Controllers\Ajax@dispatch', 'mediaLibrary');
+
 # Homepage
 $this->get('/', '\Kanso\Kanso::loadTemplate', 'home');
 $this->get('/page/(:num)/', '\Kanso\Kanso::loadTemplate', 'home');

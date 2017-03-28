@@ -171,6 +171,25 @@ body.writing.review .writer-footer .writer-powers {
   display: none;
 }
 
+.feature-img  .remove-img-trigger,
+.feature-img.active  .select-img-trigger {
+  display: none;
+}
+.feature-img.active  .remove-img-trigger {
+  display: inline-block;
+}
+.feature-img img {
+  height: auto;
+  max-height: 300px;
+  width: auto;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 13px;
+  display: none;
+}
+.feature-img.active img {
+  display: block;
+}
 
 @media only screen and (max-width: 1279px) {
   .CodeMirror {
