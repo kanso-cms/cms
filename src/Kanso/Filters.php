@@ -20,18 +20,11 @@ class Filters
         'adminPageTitle'      => [],
         'adminFavicons'       => [],
         'adminHeaderScripts'  => [],
-        'adminBodyClass'      => [],
         'adminSvgSprites'     => [],
-        'adminHeaderLinks'    => [],
-        'adminHeaderDropdown' => [],
-        'adminTabNav'         => [],
-        'adminTabPanels'      => [],
         'adminFooterScripts'  => [],
         'adminPostTypes'      => [],
         'adminSettingsTabs'   => [],
-        'adminAjaxResponse'   => [],
         'emailBody'           => [],
-        'adminPostTypes'      => [],
     ];
 
     /**

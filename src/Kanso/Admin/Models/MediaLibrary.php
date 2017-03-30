@@ -110,7 +110,7 @@ class MediaLibrary
 
             # If this is not an image put no preview on it
             if (!in_array($image['type'], $imageTypes)) {
-                $image['preview'] = \Kanso\Kanso::getInstance()->Environment['KANSO_IMGS_URL'].'no-preview-available.jpg';
+                $image['preview'] = \Kanso\Kanso::getInstance()->Environment['KANSO_IMGS_URL'].'/no-preview-available.jpg';
             }
 
             $response[] = $image;

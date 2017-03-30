@@ -140,7 +140,6 @@ class Str
 	 */
 	public static function generateRandom($length = 55, $withNumbers = true) 
 	{
-
 		$characters = $withNumbers ? '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' : 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' ;
 		$charactersLength = strlen($characters);
 		$randomString = '';
@@ -148,7 +147,6 @@ class Str
 		  $randomString .= $characters[rand(0, $charactersLength - 1)];
 		}
 		return $randomString;
-
 	}
 
 	/**
@@ -159,7 +157,6 @@ class Str
 	 */
 	public static function strcmpMulti()
 	{
-
 		$strs = func_get_args();
 		if (empty($strs)) return false;
 		$str  = $strs[0];
@@ -168,7 +165,6 @@ class Str
 			$str = $string;
 		}
 		return true;
-
 	}
 
 	/**

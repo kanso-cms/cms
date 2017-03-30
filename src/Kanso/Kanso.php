@@ -24,7 +24,7 @@ namespace Kanso;
  * @property Cookie         \Kanso\Storage\Cookie
  * @property Admin          \Kanso\Admin\Admin
  * @property MediaLibray    \Kanso\Media\MediaLibray
-
+ *
  */
 class Kanso 
 {
@@ -130,9 +130,8 @@ class Kanso
 	/**
 	 * Constructor
 	 *
-	 * @param  array $userSettings Associative array of application settings
 	 */
-	public function __construct($UserSettings = null)
+	public function __construct()
 	{		
 		# Check if the apllication is installed
 		$this->isInstalled = !file_exists(__DIR__.'/Install.php') && file_exists(__DIR__.'/Config.php');
@@ -171,9 +170,9 @@ class Kanso
 			return new \Kanso\Http\Response();
 		});
 
-		# Default databse
-		$this->Container->singleton('Database', function () {
-			return new \Kanso\Database\Database;
+		# Default view
+		$this->Container->singleton('View', function () {
+			return new \Kanso\View\View();
 		});
 
 		# Default cookie
@@ -186,14 +185,9 @@ class Kanso
 			return new \Kanso\Storage\Session();
 		});
 
-		# Default Gatekeeper
-		$this->Container->singleton('Gatekeeper', function () {
-			return new \Kanso\Auth\Gatekeeper();
-		});
-
-		# Default GUMP
-		$this->Container->set('Validation', function() {
-			return new \Kanso\Utility\GUMP();
+		# Default databse
+		$this->Container->singleton('Database', function () {
+			return new \Kanso\Database\Database;
 		});
 
 		# Default router
@@ -206,16 +200,6 @@ class Kanso
 			return new View\Query();
 		});
 
-		# Default view
-		$this->Container->singleton('View', function () {
-			return \Kanso\View\View::getInstance();
-		});
-
-		# Default view
-		$this->Container->singleton('Cache', function () {
-			return new \Kanso\Cache\Cache();
-		});
-
 		# Default Events
 		$this->Container->singleton('Events', function () {
 			return \Kanso\Events::getInstance();
@@ -226,9 +210,29 @@ class Kanso
 			return \Kanso\Filters::getInstance();
 		});
 
+		# Default Cache
+		$this->Container->singleton('Cache', function () {
+			return new \Kanso\Cache\Cache();
+		});
+
+		# Default GUMP
+		$this->Container->set('Validation', function() {
+			return new \Kanso\Utility\GUMP();
+		});
+
+		# Default Gatekeeper
+		$this->Container->singleton('Gatekeeper', function () {
+			return new \Kanso\Auth\Gatekeeper();
+		});
+
 		# Default Articlekeeper
 		$this->Container->singleton('Bookkeeper', function () {
 			return new \Kanso\Articles\Bookkeeper();
+		});
+
+		# Default MediaLibrary
+		$this->Container->singleton('MediaLibrary', function () {
+			return new \Kanso\Media\MediaLibrary();
 		});
 
 		# Default Comment manager
@@ -251,11 +255,6 @@ class Kanso
 			return new \Kanso\Utility\Mailer();
 		});
 
-		# Default MediaLibrary
-		$this->Container->singleton('MediaLibrary', function () {
-			return new \Kanso\Media\MediaLibrary();
-		});
-
 		# Default Admin
 		$this->Container->singleton('Admin', function () {
 			return new \Kanso\Admin\Admin();
@@ -275,7 +274,6 @@ class Kanso
 		# Include the active theme's plugins.php file if it exists
 		$plugins = $this->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.'plugins.php';
 		if (file_exists($plugins)) require_once($plugins);
-		
 	}
 
 	public function __get($name)
@@ -582,7 +580,7 @@ class Kanso
 	 */
 	public function Cache()
 	{
-		return $this->View;
+		return $this->Cache;
 	}
 
 	/**
@@ -677,7 +675,7 @@ class Kanso
 		if ($status) $this->Response->setStatus($status);
 
 		# Set the data
-		if ($data) $this->View->appendData($data);
+		if ($data) $this->View->setMultiple($data);
 
 		# Append and parse template file
 		$this->Response->appendBody($this->View->display($template));
@@ -737,13 +735,10 @@ class Kanso
 			
 			echo $body;
 			
-			# Save the output to the cache if the request
-			# is cachable
-			if ($this->Config['KANSO_USE_CACHE'] === true 
-				&& $this->Cache->isException()  === false 
-				&& $this->Cache->isCahced()     === false) {
-				$this->Cache->saveToCache($body);
-			}
+			# Save the output to the cache if the request is cachable
+			if ($this->Config['KANSO_USE_CACHE'] === true && $this->Query->is_single() && !$this->Cache->has()) {
+				$this->Cache->put($body);
+			}	
 		}
 
 		# Call the post dispatch event
@@ -926,7 +921,7 @@ class Kanso
 	 * at the same time and deletes the cache file between the time this request was made
 	 * and the time the cached file is loaded, the cached file won't exist anymore. 
 	 * The chances of this actually happening are incredibly low (almost impossible). 
-	 * However, we need to take it into consideration. The fix is storing the LoadFromCache() 
+	 * However, we need to take it into consideration. The fix is storing the loadFromCache() 
 	 * body as a variable. If it returns false, it means the file was deleted. We can then load 
 	 * the page directly from the template instead.
 	 *
@@ -937,19 +932,23 @@ class Kanso
 		# Get the Kanso Object instance
 		$_this = self::getInstance();
 
-		# Set the page type in the cache
+		# Check if we can load from cache
 		$_this->Cache->setPageType($pageType);
 
-		# Check if we can load from cache
-		$cachedBody    = false;
-		$LoadFromCache = $pageType === 'single' && $_this->Cache->isCahced() === true;
-		if ($LoadFromCache) $cachedBody = $_this->Cache->LoadFromCache();
-		
-		# If there is a cached version load it into the view
-		if ($LoadFromCache && $cachedBody) {
+		# Can we load from the cache
+		$fromCache = false;
 
-			$_this->Response->setBody($cachedBody);
-
+		if ($pageType === 'single' && $_this->Config['KANSO_USE_CACHE'] === true && $_this->Cache->has()) {
+			if ($_this->Cache->expired($_this->Config['KANSO_CACHE_LIFE'])) {
+				$_this->Cache->remove();
+				$fromCache = false;
+			}
+			else {
+				$fromCache = true;
+			}
+		}
+		if ($fromCache) {
+			$_this->Response->setBody($_this->Cache->get());
 		}
 		# Otherwise load the template file
 		else {
@@ -968,10 +967,6 @@ class Kanso
 
 				# Render the template
 				$_this->render($template);
-
-				# Reset the file is not cached so the output can
-				# be save if needed
-				$_this->Cache->setIsCahced(false);
 			
 			}
 
@@ -1010,9 +1005,7 @@ class Kanso
 		}
 		else if (\Kanso\Utility\Str::getBeforeFirstChar($pageType, '-') === 'single') {
 			if ($this->Query->have_posts()) {
-				$this->Query->the_post();
 				$waterfall[] = 'single-'.$this->Query->the_post_type();
-				$this->Query->rewind_posts();
 			}
 			$waterfall[] = 'single-'.array_pop($urlParts);
 			$waterfall[] = 'single';
@@ -1022,17 +1015,25 @@ class Kanso
 			$waterfall[] = 'index';
 		}
 		else if ($pageType === 'tag') {
+			if ($this->Response->getstatus() !== 404) {
+				$waterfall[] = 'tag-'.$this->Query->the_taxonomy()['slug'];
+			}
 			$waterfall[] = 'taxonomy-tag';
 			$waterfall[] = 'tag';
 			$waterfall[] = 'taxonomy';
 		}
 		else if ($pageType === 'category') {
+			if ($this->Response->getstatus() !== 404) {
+				$waterfall[] = 'category-'.$this->Query->the_taxonomy()['slug'];
+			}
 			$waterfall[] = 'taxonomy-category';
 			$waterfall[] = 'category';
 			$waterfall[] = 'taxonomy';
 		}
 		else if ($pageType === 'author') {
-
+			if ($this->Response->getstatus() !== 404) {
+				$waterfall[] = 'author-'.$this->Query->the_taxonomy()['slug'];
+			}
 			$waterfall[] = 'taxonomy-author';
 			$waterfall[] = 'author';
 			$waterfall[] = 'taxonomy';

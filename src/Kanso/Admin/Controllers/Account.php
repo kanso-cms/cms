@@ -76,7 +76,7 @@ class Account
 		$this->isLoggedIn = \Kanso\Kanso::getInstance()->Admin->isLoggedIn();
 
 		# Save the default homepage URL for redirecting
-		$this->adminHomepage = \Kanso\Kanso::getInstance()->Environment['KANSO_ADMIN_URI'].DIRECTORY_SEPARATOR.'articles'.DIRECTORY_SEPARATOR;
+		$this->adminHomepage = \Kanso\Kanso::getInstance()->Environment['KANSO_ADMIN_URL'].DIRECTORY_SEPARATOR.'articles'.DIRECTORY_SEPARATOR;
 		
 		# Load the model
 		$this->model = new \Kanso\Admin\Models\Accounts($requestName);

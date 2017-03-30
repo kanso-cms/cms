@@ -393,7 +393,7 @@ class Gatekeeper
                 'username'    => $user->username, 
                 'password'    => $password,
                 'websiteName' => $env['KANSO_WEBSITE_NAME'],
-                'loginURL'    => $env['KANSO_ADMIN_URI'].'/login/'
+                'loginURL'    => $env['KANSO_ADMIN_URL'].'/login/'
             ];
            
             # Email credentials
@@ -523,7 +523,7 @@ class Gatekeeper
             $config    = \Kanso\Kanso::getInstance()->Config;
             $resetUrl  = $env['HTTP_HOST'].'/reset-password/?token='.$user->kanso_password_key;
             if ($user->role === 'administrator' || $user->role === 'writer') {
-                $resetUrl  = $env['KANSO_ADMIN_URI'].'/reset-password/?token='.$user->kanso_password_key;
+                $resetUrl  = $env['KANSO_ADMIN_URL'].'/reset-password/?token='.$user->kanso_password_key;
             }
 
             $emailData = [

@@ -19,43 +19,59 @@ Class View {
     /**
      * @var array Associative array of data
      */
-    private $data;
+    private $data = [];
 
     /**
-     * @var Kanso\MVC\View
+     * @var array Associative array of templates to load
      */
-    private static $instance;
+    private $templates = [];
 
     /**
-     * Get View instance (singleton)
-     *
-     * This creates and/or returns an View instance (singleton)
-     *          
-     * @return Kanso\MVC\View
+     * Constructor
      */
-    public static function getInstance() 
+    public function __construct()
     {
-        if (!isset(self::$instance)) {
-            self::$instance = new View();
-        }
-        return self::$instance;
     }
 
     /**
-     * Private Constructor
+     * Magic method overrides
      */
-    private function __construct()
-    {
-        $this->data  = [];
+    public function __get($key)
+    {  
+        if (isset($this->data[$key])) return $this->data[$key];
+        return NULL;
     }
-    
+    public function __set($key, $value)
+    {  
+        $this->data[$key] = $value;
+    }
+    public function __isset($key)
+    {
+        return isset($this->data[$key]);
+    }
+    public function __unset($key)
+    {
+        if (isset($this->data[$key])) unset($this->data[$key]);
+    }
+
     /**
      * Append data to be used on template
+     *
      * @param array $data
      */
-    public function appendData($data) 
+    public function setMultiple($data) 
     {   
-        if (!is_null($data)) $this->data = array_merge($this->data, $data);
+        $this->data = array_merge($this->data, $data);
+    }
+
+    /**
+     * Append data to be used on template
+     *
+     * @param array $data
+     */
+    public function template($template) 
+    {   
+        $this->templates[] = $template;
     }
 
     /**
@@ -64,11 +80,25 @@ Class View {
      * This function will include the functions from the Query
      * for use in templates
      *
-     * @see \Kanso\Helper\ToolBox
      * @see \Kanso\MVC\ViewIncludes.php
      * @param string $template  Absolute path to template file
+     * @param array  $vars      Assoc array of variables
      */
-    public function display($template) 
+    public function display($template = null, $vars = null) 
+    {
+        if ($template) $this->template($template);
+        if ($vars) $this->setMultiple($vars);
+        $output = '';
+        foreach ($this->templates as $file) {
+            $output .= $this->sandbox($file);
+        }
+        return $output;
+    }
+
+    /**
+     * Sandbox and output the content from the template
+     */
+    private function sandbox($file)
     {
         $Kanso     = \Kanso\Kanso::getInstance();
         $functions = $Kanso->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.'functions.php';
@@ -76,7 +106,7 @@ Class View {
         require_once 'ViewIncludes.php';
         extract($this->data);
         ob_start();
-        require_once $template;
+        require_once $file;
         return ob_get_clean();
     }
 

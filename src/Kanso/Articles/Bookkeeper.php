@@ -262,7 +262,7 @@ class Bookkeeper
     	$Query->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $articleID)->QUERY();
 
     	# Clear the cache
-    	\Kanso\Kanso::getInstance()->Cache->clearCache($articleRow['slug']);
+    	\Kanso\Kanso::getInstance()->Cache->clear($articleRow['slug']);
 
     	# Delete the article entry
     	$Query->DELETE_FROM('posts')->WHERE('id', '=', $articleID)->QUERY();

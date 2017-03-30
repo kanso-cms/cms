@@ -27,6 +27,18 @@ class MediaLibrary
 	}
 
 	/**
+	 * Create a new empty attachment
+	 *
+	 * @return \Kanso\Media\Attachment
+	 *
+	 */
+	public function create()
+	{
+		return new \Kanso\Media\Attachment();
+	}
+
+
+	/**
 	 * Get an attachment by id
 	 *
 	 * @param integer    $id    id of file in the database

@@ -365,7 +365,7 @@ class Includes
 	 */
     public function assetsURL()
 	{
-		return str_replace('/admin', '/kanso/admin', \Kanso\Kanso::getInstance()->Environment['KANSO_ADMIN_URI']).'/assets';
+		return str_replace('/admin', '/kanso/admin', \Kanso\Kanso::getInstance()->Environment['KANSO_ADMIN_URL']).'/assets';
 	}
 
 	/**

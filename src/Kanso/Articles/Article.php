@@ -111,6 +111,9 @@ class Article
 		else if ($key === 'meta') {
 			return unserialize($this->rowData['meta']);
 		}
+		else if ($key === 'thumbnail') {
+			$this->getTheThumbnail();
+		}
 		if (array_key_exists($key, $this->rowData)) return $this->rowData[$key];
 		
 		return false;
@@ -138,9 +141,6 @@ class Article
 		}
 		else if ($key === 'meta') {
 			$this->rowData['meta'] = serialize($value);
-		}
-		else if ($key === 'thumbnail') {
-			$this->getTheThumbnail();
 		}
 		else if (array_key_exists($key, $this->rowData)) {
 			$this->rowData[$key] = $value;

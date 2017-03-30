@@ -313,7 +313,7 @@ class Settings
         ]);
 
         if (isset($postVars['clear_cache'])) {
-            $cleared = \Kanso\Kanso::getInstance()->Cache->clearCache();
+            $cleared = \Kanso\Kanso::getInstance()->Cache->clear();
             if ($cleared)  return $this->response('Kanso\'s cache was successfully cleared !', 'success');
             return $this->response('There was an error clearing the cache.', 'danger');
         }
@@ -343,7 +343,7 @@ class Settings
                 "KANSO_IMG_QUALITY"      => (int)$validated_data['thumbnail_quality'],
                 "KANSO_USE_CDN"          => \Kanso\Utility\Str::bool($validated_data['enable_cdn']),
                 "KASNO_CDN_URL"          => $validated_data['cdn_url'],
-                "KANSO_enable_cache"     => \Kanso\Utility\Str::bool($validated_data['enable_cache']),
+                "KANSO_USE_CACHE"        => \Kanso\Utility\Str::bool($validated_data['enable_cache']),
                 "KANSO_CACHE_LIFE"       => $validated_data['cache_life'],
                 "KANSO_COMMENTS_OPEN"    => \Kanso\Utility\Str::bool($validated_data['enable_comments']),
             ];
@@ -518,7 +518,7 @@ class Settings
         if ($user->role !== 'administrator') return false;
 
         # Login page
-        $loginPage = \Kanso\Kanso::getInstance()->Environment['KANSO_ADMIN_URI'].'/login/';
+        $loginPage = \Kanso\Kanso::getInstance()->Environment['KANSO_ADMIN_URL'].'/login/';
 
         # Reinstall from defaults
         $installer = new \Kanso\Install\Installer();

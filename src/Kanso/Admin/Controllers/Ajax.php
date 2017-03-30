@@ -163,7 +163,7 @@ class Ajax
     {
         $referrer = \Kanso\Kanso::getInstance()->Session->getReferrer();
         if (!$referrer) return false;
-        if (strpos($referrer, \Kanso\Kanso::getInstance()->Environment['KANSO_ADMIN_URI']) !== false) return true;
+        if (strpos($referrer, \Kanso\Kanso::getInstance()->Environment['KANSO_ADMIN_URL']) !== false) return true;
         return false;
     }
 

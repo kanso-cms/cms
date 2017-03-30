@@ -79,6 +79,78 @@ Class Cache
         $this->cacheFile =  $Environment['KANSO_DIR'].DIRECTORY_SEPARATOR.'Cache'.DIRECTORY_SEPARATOR.'Library'.DIRECTORY_SEPARATOR.\Kanso\Utility\Str::slugFilter($name).'.html';
     }
 
+
+    /********************************************************************************
+    * PUBLIC ACCESS
+    *******************************************************************************/
+    public function put($html, $slug = NULL)
+    {
+        file_put_contents($this->cacheKey($slug), $html);
+    }
+
+    public function get($slug = NULL)
+    {
+        if ($this->has($slug)) {
+            return file_get_contents($this->cacheKey($slug));
+        }
+        return NULL;
+    }
+
+    public function has($slug = NULL)
+    {
+        return file_exists($this->cacheKey($slug));
+    }
+
+    public function remove($slug = NULL)
+    {
+        return unlink($this->cacheKey($slug));
+    }
+
+    public function time($slug = NULL)
+    {
+        if ($this->has($slug)) {
+            return filemtime($this->cacheKey($slug));
+        }
+        return NULL;
+    }
+
+    public function expired($life, $slug = NULL)
+    {
+        if (!$this->has($slug)) return false;  
+        return $this->time($slug) < strtotime('-'.$life);
+    }
+
+    public function clear()
+    {
+        $files = glob($this->cacheDir().DIRECTORY_SEPARATOR.'*');
+        foreach ($files as $file) { 
+            if(is_file($file)) if (!unlink($file)) return false;
+        }
+        return true;
+    }
+
+    private function cacheKey($slug = NULL)
+    {
+        if (!$slug) {
+            $key = \Kanso\Kanso::getInstance()->Environment['REQUEST_URI'];
+        }
+        else {
+            $key = \Kanso\Kanso::getInstance()->Environment['HTTP_HOST'].'/'.$slug;
+        }
+        $key = \Kanso\Utility\Str::slugFilter($key);
+        return $this->cacheDir().DIRECTORY_SEPARATOR.$key.'.html';
+    }
+
+    private function cacheDir()
+    {
+        return \Kanso\Kanso::getInstance()->Environment['KANSO_DIR'].DIRECTORY_SEPARATOR.'Cache'.DIRECTORY_SEPARATOR.'Library';
+    }
+
+
+    /********************************************************************************
+    * PRIVATE ACCESS - KANSO APPLICATION ONLY
+    *******************************************************************************/
+
     /**
      * Is the current request a cache exception?
      *

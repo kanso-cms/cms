@@ -43,83 +43,69 @@ class Environment
         # The HTTP request method
         $env['REQUEST_METHOD'] = $_SERVER['REQUEST_METHOD'];
 
-        # Server params
-        $scriptName = $_SERVER['SCRIPT_NAME']; // <-- "/foo/index.php"
-        $requestUri = $_SERVER['REQUEST_URI']; // <-- "/foo/bar?test=abc" or "/foo/index.php/bar?test=abc"
-        $queryString = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : ''; // <-- "test=abc" or ""
-
-        # Physical path
-        if (strpos($requestUri, $scriptName) !== false) {
-            $physicalPath = $scriptName; // <-- Without rewriting
-        } else {
-            $physicalPath = str_replace('\\', '', dirname($scriptName)); // <-- With rewriting
-        }
-        $env['SCRIPT_NAME'] = rtrim($physicalPath, '/'); // <-- Remove trailing slashes
-
-        # Virtual path
-        $env['PATH_INFO'] = $requestUri;
-        if (substr($requestUri, 0, strlen($physicalPath)) == $physicalPath) {
-            $env['PATH_INFO'] = substr($requestUri, strlen($physicalPath)); // <-- Remove physical path
-        }
-        $env['PATH_INFO']         = str_replace('?' . $queryString, '', $env['PATH_INFO']); // <-- Remove query string
-        $env['PATH_INFO']         = '/' . ltrim($env['PATH_INFO'], '/'); // <-- Ensure leading slash
-
-        # Query string (without leading "?")
-        $env['QUERY_STRING']       = $queryString;
+        # Script Name
+        $scriptName         = isset($_SERVER['SCRIPT_NAME']) && !empty($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : substr($_SERVER['PHP_SELF'], strrpos($_SERVER['PHP_SELF'], '/') + 1);
+        $env['SCRIPT_NAME'] = trim($scriptName, '/'); 
 
         # Name of server host that is running the script
-        $env['SERVER_NAME']        = $_SERVER['SERVER_NAME'];
+        $env['SERVER_NAME'] = $_SERVER['SERVER_NAME'];
 
         # Number of server port that is running the script
-        $env['SERVER_PORT']        = isset($_SERVER['SERVER_PORT']) ? $_SERVER['SERVER_PORT'] : 80;
+        $env['SERVER_PORT'] = isset($_SERVER['SERVER_PORT']) ? $_SERVER['SERVER_PORT'] : 80;
 
         # Is the application running under HTTPS or HTTP protocol?
-        $env['HTTP_PROTOCOL']      = empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off' ? 'http' : 'https';
+        if ( (isset($_SERVER['HTTPS']) && $env['SERVER_PORT'] === 443) && ($_SERVER['HTTPS'] === 1 || $_SERVER['HTTPS'] === 'on')) {
+            $env['HTTP_PROTOCOL'] = 'https';
+        }
+        else {
+            $env['HTTP_PROTOCOL'] = 'http';
+        }
 
-        # Server root
-        $env['DOCUMENT_ROOT']      = $_SERVER['DOCUMENT_ROOT'];
+        # Document root
+        $env['DOCUMENT_ROOT'] = $_SERVER['DOCUMENT_ROOT'];
 
         # Http host
-        $env['HTTP_HOST']          = $env['HTTP_PROTOCOL'].'://'.$_SERVER['HTTP_HOST'];
+        $env['HTTP_HOST'] = $env['HTTP_PROTOCOL'].'://'.$_SERVER['HTTP_HOST'];
 
         # Request uri
-        $env['REQUEST_URI']        = $_SERVER['REQUEST_URI'];
+        $env['REQUEST_URI'] = $_SERVER['REQUEST_URI'];
 
-        # Request URL
-        $env['REQUEST_URL']        = $env['HTTP_HOST'].$env['REQUEST_URI'];
+        # Request full URL
+        $env['REQUEST_URL'] = $env['HTTP_HOST'].$env['REQUEST_URI'];
+
+        # Query string (without leading "?")
+        $queryString         = isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+        $env['QUERY_STRING'] = (strpos($queryString, '?') !== false) ? substr($queryString, strrpos($queryString, '?') + 1) : '';
 
         # Kanso directory
-        $env['KANSO_DIR']          = __DIR__;
+        $env['KANSO_DIR'] = __DIR__;
 
         # Kanso theme directory
         $env["KANSO_THEMES_DIR"]    = $env['KANSO_DIR'].DIRECTORY_SEPARATOR.'Themes';
 
         # Active theme directory
-        $env["KANSO_THEME_DIR"]     = '';
+        $env["KANSO_THEME_DIR"] = $env["KANSO_THEMES_DIR"].DIRECTORY_SEPARATOR.'Roshi';
         if (\Kanso\Kanso::getInstance()) {
             $env["KANSO_THEME_DIR"] = $env["KANSO_THEMES_DIR"].DIRECTORY_SEPARATOR.\Kanso\Kanso::getInstance()->Config()['KANSO_THEME_NAME'];
         }
-        else {
-            $env["KANSO_THEME_DIR"] =  $env["KANSO_THEMES_DIR"].DIRECTORY_SEPARATOR.'Roshi';
-        }
-
-        # Active theme directory URI
-        $env["KANSO_THEME_DIR_URI"]  = str_replace($env['DOCUMENT_ROOT'], $env['HTTP_HOST'], $env["KANSO_THEME_DIR"]);
+       
+        # Active theme directory URL
+        $env["KANSO_THEME_DIR_URL"]  = str_replace($env['DOCUMENT_ROOT'], $env['HTTP_HOST'], $env["KANSO_THEME_DIR"]);
 
         # Kanso uploads directory
-        $env['KANSO_UPLOADS_DIR']  = $env['KANSO_DIR'].DIRECTORY_SEPARATOR.'Uploads';
+        $env['KANSO_UPLOADS_DIR'] = $env['KANSO_DIR'].DIRECTORY_SEPARATOR.'Uploads';
 
         # Kanso admin directory
         $env['KANSO_ADMIN_DIR']    = $env['KANSO_DIR'].DIRECTORY_SEPARATOR.'Admin';
 
         # Kanso admin uri
-        $env['KANSO_ADMIN_URI']    = strtolower($env['HTTP_HOST'].DIRECTORY_SEPARATOR.'admin');
+        $env['KANSO_ADMIN_URL']    = strtolower($env['HTTP_HOST'].DIRECTORY_SEPARATOR.'admin');
 
         # Kanso website name
         $env['KANSO_WEBSITE_NAME'] = str_replace('www.', '', str_replace($env['HTTP_PROTOCOL'].'://', '', $env['HTTP_HOST']));
 
         # Kanso's image uploads url
-        $env['KANSO_IMGS_URL']     = str_replace($env['DOCUMENT_ROOT'], $env['HTTP_HOST'], $env['KANSO_UPLOADS_DIR']).DIRECTORY_SEPARATOR.'Images'.DIRECTORY_SEPARATOR;
+        $env['KANSO_IMGS_URL']     = str_replace($env['DOCUMENT_ROOT'], $env['HTTP_HOST'], $env['KANSO_UPLOADS_DIR']).DIRECTORY_SEPARATOR.'Images';
 
         # Save the clients IP address
         $ipaddress = '';

@@ -253,7 +253,7 @@ class Settings
         if ($changedPermalinks) $this->updatePostPermalinks();
 
         # Clear the cache as well
-        if ($changedCache) \Kanso\Kanso::getInstance()->Cache->clearCache();
+        if ($changedCache) \Kanso\Kanso::getInstance()->Cache->clear();
 
         # Update Kanso
         \Kanso\Kanso::getInstance()->Config = $config;
@@ -400,7 +400,7 @@ class Settings
         # Filter and sanitize the cahce options
         if ($config['KANSO_USE_CACHE'] === true) {
             $validCacheLife = $this->validateCacheLife($config['KANSO_CACHE_LIFE']);
-            if (!$validateCacheLife) {
+            if (!$validCacheLife) {
                 $config['KANSO_USE_CACHE']  = false;
                 $config['KANSO_CACHE_LIFE'] = '';
             }

@@ -74,14 +74,15 @@ class Humanizer
 	}
 
 	/**
-	 * Validate that a variable is a valid UNIX timestamp
+	 * Pluralize a word
 	 *
-	 * @param   mixed      $timestamp
-	 * @param   boolean
+	 * @param   string      $word
+	 * @param   int         $count
+	 * @param   string
 	 */
-	private static function isValidTimeStamp($timestamp)
+	private static function pluralize($word, $count = 2)
 	{
-	    return ( is_numeric($timestamp) && (int)$timestamp == $timestamp );
+	    return \Kanso\Utility\Pluralize::convert($word, $count);
 	}
 
 	/**
@@ -95,5 +96,18 @@ class Humanizer
 		$env = \Kanso\Kanso::getInstance()->Environment();
 		return str_replace($env['DOCUMENT_ROOT'], $env['HTTP_HOST'], $dirname);
 	}
+
+	/**
+	 * Validate that a variable is a valid UNIX timestamp
+	 *
+	 * @param   mixed      $timestamp
+	 * @param   boolean
+	 */
+	private static function isValidTimeStamp($timestamp)
+	{
+	    return ( is_numeric($timestamp) && (int)$timestamp == $timestamp );
+	}
+
+	
 
 }

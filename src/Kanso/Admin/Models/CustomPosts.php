@@ -332,14 +332,3 @@ class CustomPosts
     }
 
 }
-
-
-class MyPage
-{
-    public function __construct()
-    {
-    }
-    
-    
-       
-}

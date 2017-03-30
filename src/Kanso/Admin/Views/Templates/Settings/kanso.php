@@ -146,28 +146,30 @@
             </span>
         </div>
 
-        <div class="<?php echo ($kansoConfig['KANSO_USE_CACHE'] === true ? '' : 'collapsed');?> " id="cache-details">
-            <div class="form-field row floor-sm">
-                <label for="cache_life">Cache lifetime</label>
-                <p class="color-gray">
-                    How long should Kanso keep cached page versions before creating a new one. 
-                    e.g 1 minute, 2 hours, 1 week, 3 months.
-                </p>
-                <input type="text" name="cache_life" id="cache_life" value="<?php echo $kansoConfig['KANSO_CACHE_LIFE'];?>">
-            </div>
-            <div class="form-field row floor-sm">
-                <p class="color-gray">
-                    Clear Kanso's entire cache library. This is useful when you've made changes to your templates
-                    or a large number of posts.
-                </p>
-                <script type="text/javascript">
-                    function cleaKansoCache() {
-                        var form = document.getElementById('kanso_form');
-                        form.innerHTML += '<input type="hidden" name="clear_cache" value="true">';
-                        form.submit();
-                    };
-                </script>
-                <button type="button" class="btn btn-danger" onclick="cleaKansoCache()">Clear cache</button>
+        <div class="<?php echo ($kansoConfig['KANSO_USE_CACHE'] === true ? 'hide-overflow' : 'hide-overflow collapsed');?> " id="cache-details" >
+            <div class="gutter-lg gutter-l">
+                <div class="form-field row floor-sm">
+                    <label for="cache_life">Cache lifetime</label>
+                    <p class="color-gray">
+                        How long should Kanso keep cached page versions before creating a new one. 
+                        e.g 1 minute, 2 hours, 1 week, 3 months.
+                    </p>
+                    <input type="text" name="cache_life" id="cache_life" value="<?php echo $kansoConfig['KANSO_CACHE_LIFE'];?>">
+                </div>
+                <div class="form-field row floor-sm">
+                    <p class="color-gray">
+                        Clear Kanso's entire cache library. This is useful when you've made changes to your templates
+                        or a large number of posts.
+                    </p>
+                    <script type="text/javascript">
+                        function cleaKansoCache() {
+                            var form = document.getElementById('kanso_form');
+                            form.innerHTML += '<input type="hidden" name="clear_cache" value="true">';
+                            form.submit();
+                        };
+                    </script>
+                    <button type="button" class="btn btn-danger" onclick="cleaKansoCache()">Clear cache</button>
+                </div>
             </div>
         </div>
 
@@ -183,10 +185,12 @@
             </span>
         </div>
 
-        <div class="<?php echo ($kansoConfig['KANSO_USE_CDN'] === true ? '' : 'collapsed');?> " id="cdn-url">
-            <div class="form-field row floor-sm">
-                <label for="cdn_url">CDN URL</label>
-                <input type="text" name="cdn_url" id="cdn_url" value="<?php echo $kansoConfig['KASNO_CDN_URL'];?>">
+        <div class="<?php echo ($kansoConfig['KANSO_USE_CDN'] === true ? 'hide-overflow' : 'hide-overflow collapsed');?> " id="cdn-url">
+            <div class="gutter-lg gutter-l">
+                <div class="form-field row floor-sm">
+                    <label for="cdn_url">CDN URL</label>
+                    <input type="text" name="cdn_url" id="cdn_url" value="<?php echo $kansoConfig['KASNO_CDN_URL'];?>">
+                </div>
             </div>
         </div>
         

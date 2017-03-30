@@ -59,7 +59,12 @@ class Query {
     public $post = null;
 
     /**
-     * @var    string    search term if applicable
+     * @var    string    Current taxonomy slug if applicable (e.g tag, category, author)
+     */
+    protected $taxonomySlug;
+
+    /**
+     * @var    string    Search term if applicable
      */
     protected $searchQuery;
 
@@ -68,11 +73,10 @@ class Query {
      */
     protected $methodCache = [];
 
-      /**
+    /**
      * @var    \Kanso\Kanso::getInstance()->Database->Builder()
      */
     protected $SQL;
-
 
     /**
      * Constructor
@@ -89,6 +93,9 @@ class Query {
         $this->pageIndex    = $this->pageIndex === 1 || $this->pageIndex === 0 ? 0 : $this->pageIndex-1;
         $this->queryStr     = trim($queryStr);
 
+         # Get an SQL query builder
+        $this->SQL = \Kanso\Kanso::getInstance()->Database->Builder();
+
         # Filter the posts directly from the constructor if
         # this is a custom Query request
         if (!empty($queryStr)) {
@@ -96,9 +103,6 @@ class Query {
             $this->posts     = $parser->parseQuery($queryStr);
             $this->postCount = count($this->posts);
         }
-
-        # Get an SQL query builder
-        $this->SQL = \Kanso\Kanso::getInstance()->Database->Builder();
 
     }
 
@@ -153,6 +157,7 @@ class Query {
                     return \Kanso\Kanso::getInstance()->notFound();
                 }
             }
+            $this->taxonomySlug = explode("/", $uri)[2];
         }
         else if ($requestType === 'category') {
             $perPage = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
@@ -168,6 +173,7 @@ class Query {
                     return \Kanso\Kanso::getInstance()->notFound();
                 }
             }
+            $this->taxonomySlug = explode("/", $uri)[2];
         } 
         else if ($requestType === 'author') {
             $perPage = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
@@ -187,6 +193,7 @@ class Query {
             else {
                 return \Kanso\Kanso::getInstance()->notFound();
             }
+            $this->taxonomySlug = explode("/", $uri)[2];
 
         }
         else if ($requestType === 'single' || \Kanso\Utility\Str::getBeforeFirstChar($requestType, '-') === 'single') {
@@ -579,6 +586,30 @@ class Query {
     {
         $tag = $this->getTagById($tag_id);
         if ($tag) return \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'].'/tag/'.$tag['slug'];
+        return false;
+    }
+
+    /**
+     * Get the current taxonomy
+     *
+     * @param   int   $tag_id 
+     * @return  array|false
+     */
+    public function the_taxonomy() 
+    {
+        $table = false;
+        if ($this->requestType === 'category') {
+            $table = 'categories';
+        }
+        else if ($this->requestType === 'tag') {
+            $table = 'tags';
+        }
+        else if ($this->requestType === 'author') {
+            $table = 'users';
+        }
+        if ($table) {
+            return $this->SQL->SELECT('*')->FROM($table)->WHERE('slug', '=', $this->taxonomySlug)->ROW();
+        }
         return false;
     }
 
@@ -1211,7 +1242,7 @@ class Query {
 
         if (!empty($posts)) {
             $nextPage   = $this->pageIndex + 2;
-            $uri        = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['PATH_INFO'], '/'));
+            $uri        = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['REQUEST_URI'], '/'));
             $PageType   = $this->requestType;
             $titleBase  = \Kanso\Kanso::getInstance()->Config()['KANSO_SITE_TITLE'];
             $titlePage  = $nextPage > 1 ? 'Page '.$nextPage.' | ' : '';
@@ -1265,7 +1296,7 @@ class Query {
 
         if (!empty($posts)) {
             $prevPage   = $this->pageIndex;
-            $uri        = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['PATH_INFO'], '/'));
+            $uri        = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['REQUEST_URI'], '/'));
             $PageType   = $this->requestType;
             $titleBase  = \Kanso\Kanso::getInstance()->Config()['KANSO_SITE_TITLE'];
             $titlePage  = $prevPage > 1 ? 'Page '.$prevPage.' | ' : '';
@@ -1515,7 +1546,7 @@ class Query {
      */
     public function theme_url() 
     {
-        return \Kanso\Kanso::getInstance()->Environment()['KANSO_THEME_DIR_URI'];
+        return \Kanso\Kanso::getInstance()->Environment()['KANSO_THEME_DIR_URL'];
     }
 
     /**
@@ -1584,7 +1615,7 @@ class Query {
      */
     public function the_meta_title()
     {
-        $uri        = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['PATH_INFO'], '/'));
+        $uri        = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['REQUEST_URI'], '/'));
         $titleBase  = $this->website_title();
         $titlePage  = $this->pageIndex > 0 ? 'Page '.($this->pageIndex+1).' | ' : '';
         $titleTitle = '';
@@ -1997,7 +2028,7 @@ class Query {
         ];
 
         # Segment the reuest URI
-        $uri = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['PATH_INFO'], '/'));
+        $uri = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['REQUEST_URI'], '/'));
 
         # Declare the pagination string
         $pagination = '';
