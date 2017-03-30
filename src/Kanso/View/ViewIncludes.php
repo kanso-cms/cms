@@ -944,6 +944,17 @@ function the_meta_title()
 }
 
 /**
+ * Get the canonical url
+ * @return  string
+ */
+function the_canonical_url()
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_canonical_url();
+}
+
+
+/**
  * Get the meta description
  * @return string
  */

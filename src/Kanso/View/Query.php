@@ -1221,38 +1221,43 @@ class Query {
      */
     public function the_next_page()
     {
+        # Get from the cache
         $key = $this->cacheKey(__FUNCTION__, func_get_args(), func_num_args());
         if ($this->cacheHas($key)) return $this->cacheGet($key);
-       
-        if ($this->requestType === 'page' || $this->requestType === 'archive') return $this->cachePut($key, false);
+
+        # There are only next/prev pages for single, tags, category, author, and homepage 
+        $validRequests = ['single', 'home', 'tag', 'category', 'author'];
+        if (!in_array($this->requestType, $validRequests) && !$this->is_custom_post()) {
+            return $this->cachePut($key, false);
+        }
+        
+        # If this is a single or custom post just find the next post
         if ($this->is_single() || $this->is_custom_post()) {
             return $this->cachePut($key, $this->findNextPost($this->post));
         }
 
+        # This must now be a paginated page - tag, category, author or homepage listing
+        # Get the current page + posts per page and check if there is a page after that
         $perPage  = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
-        $index    = $this->pageIndex + 1;
-        $offset   = $index * $perPage;
-        $limit    = $perPage;
+        $page     = $this->pageIndex + 1;
+        $offset   = $page * $perPage;
+        $limit    = 1;
         $queryStr = preg_replace('/limit.+/', "limit = $offset, $limit", $this->queryStr);
-        
-        # Load the query parser
-        $parser = new QueryParser();
-
-        $posts = $parser->parseQuery($queryStr);
+        $parser   = new QueryParser();
+        $posts     = $parser->parseQuery($queryStr);
 
         if (!empty($posts)) {
             $nextPage   = $this->pageIndex + 2;
             $uri        = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['REQUEST_URI'], '/'));
-            $PageType   = $this->requestType;
-            $titleBase  = \Kanso\Kanso::getInstance()->Config()['KANSO_SITE_TITLE'];
+            $titleBase  = $this->website_title();
             $titlePage  = $nextPage > 1 ? 'Page '.$nextPage.' | ' : '';
             $titleTitle = '';
             if ($this->is_home() ) {
                 $slug = 'page/'.$nextPage.'/';
             }
             else if ($this->is_tag() || $this->is_category() || $this->is_author() ) {
-                $titleTitle = $uri[1].' | ';
-                $slug = $uri[0].'/'.$uri[1].'/page/'.$nextPage.'/';
+                $titleTitle = $this->the_taxonomy()['name']. ' | ';
+                $slug       = $uri[0].'/'.$uri[1].'/page/'.$nextPage.'/';
             }
             else if ($this->is_search()) {
                 $titleTitle = 'Search Results | ';
@@ -1263,6 +1268,7 @@ class Query {
                 'slug'  => $slug,
             ]);
         }
+
         return $this->cachePut($key, false);
     }
 
@@ -1273,50 +1279,59 @@ class Query {
      */
     public function the_previous_page()
     {
+        # Get from the cache
         $key = $this->cacheKey(__FUNCTION__, func_get_args(), func_num_args());
         if ($this->cacheHas($key)) return $this->cacheGet($key);
 
-        if ($this->requestType === 'page' || $this->requestType === 'archive') return $this->cachePut($key,  false);
+        # There are only next/prev pages for single, tags, category, author, and homepage 
+        $validRequests = ['single', 'home', 'tag', 'category', 'author'];
+        if (!in_array($this->requestType, $validRequests) && !$this->is_custom_post()) {
+            return $this->cachePut($key, false);
+        }
+        
+        # If this is a single or custom post just find the next post
         if ($this->is_single() || $this->is_custom_post()) {
-            
             return $this->cachePut($key, $this->findPrevPost($this->post));
         }
-        if ($this->pageIndex === 0 ) return false;
 
-        $perPage  = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
-        $index    = $this->pageIndex - 1;
-        $offset   = $index * $perPage;
-        $limit    = $perPage;
-        $queryStr = preg_replace('/limit.+/', "limit = $offset, $limit", $this->queryStr);
+        # This must now be a paginated page - tag, category, author or homepage listing
+        # Get the current page + posts per page and check if there is a page before that
+        if ($this->pageIndex > 0 ) {
+            $perPage  = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
+            $page     = $this->pageIndex - 1;
+            $offset   = $page * $perPage;
+            $limit    = 1;
+            $queryStr = preg_replace('/limit.+/', "limit = $offset, $limit", $this->queryStr);
+            $parser   = new QueryParser();
+            $posts    = $parser->parseQuery($queryStr);
+        }
+        else {
+            $posts = [];
+        }
         
-        # Load the query parser
-        $parser = new QueryParser();
-
-        $posts = $parser->parseQuery($queryStr);
-
         if (!empty($posts)) {
-            $prevPage   = $this->pageIndex;
+            $prevpage   = $this->pageIndex;
             $uri        = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['REQUEST_URI'], '/'));
-            $PageType   = $this->requestType;
-            $titleBase  = \Kanso\Kanso::getInstance()->Config()['KANSO_SITE_TITLE'];
-            $titlePage  = $prevPage > 1 ? 'Page '.$prevPage.' | ' : '';
+            $titleBase  = $this->website_title();
+            $titlePage  = $prevpage > 1 ? 'Page '.$prevpage.' | ' : '';
             $titleTitle = '';
             if ($this->is_home() ) {
-                $slug =  $prevPage > 1 ? 'page/'.$prevPage.'/' : '';
+                $slug = $prevpage > 1 ? 'page/'.$prevpage.'/' : '';
             }
-            else if ($this->is_tag() || $this->is_category() || $this->is_author()) {
-                $titleTitle = $uri[1].' | ';
-                $slug       =  $prevPage > 1 ? $uri[0].'/'.$uri[1].'/page/'.$prevPage.'/' : $uri[0].'/'.$uri[1].'/';
+            else if ($this->is_tag() || $this->is_category() || $this->is_author() ) {
+                $titleTitle = $this->the_taxonomy()['name'].' | ';
+                $slug       = $prevpage > 1 ? $uri[0].'/'.$uri[1].'/page/'.$prevpage.'/' : $uri[0].'/'.$uri[1].'/';
             }
             else if ($this->is_search()) {
                 $titleTitle = 'Search Results | ';
-                $slug       = $prevPage > 1 ? $uri[0].'/'.$uri[1].'/page/'.$prevPage.'/' : $uri[0].'/'.$uri[1].'/';
+                $slug       =  $prevpage > 1 ? $uri[0].'/'.$uri[1].'/page/'.$prevpage.'/' : $uri[0].'/'.$uri[1].'/';
             }
             return $this->cachePut($key, [
                 'title' => $titleTitle.$titlePage.$titleBase,
                 'slug'  => $slug,
             ]);
         }
+
         return $this->cachePut($key, false);
     }
 
@@ -1598,7 +1613,7 @@ class Query {
     {
         $description = $this->website_description();
 
-        if ($this->is_single() || $this->is_page()) {
+        if ($this->is_single() || $this->is_page() || $this->is_custom_post()) {
             $description = $this->post->excerpt;
         }
         else if ($this->is_search()) {
@@ -1626,16 +1641,44 @@ class Query {
             }
         }
         else if ($this->is_tag() || $this->is_category() || $this->is_author()) {
-            $titleTitle = ucwords(str_replace(['-', '_'], " ", $uri[1])).' | ';
+            $titleTitle = $this->the_taxonomy()['name'].' | ';
         }
         else if ($this->is_search()) {
             $titleTitle = 'Search Results | ';
         }
         else if ($this->is_archive()) {
-            $titleTitle = 'Archive | ';
+            $titleTitle = 'Archives | ';
         }
 
         return  $titleTitle.$titlePage.$titleBase;
+    }
+
+    /**
+     * Get the canonical link
+     *
+     * @return  string|false
+     */
+    public function the_canonical_url()
+    {
+        if (!$this->have_posts()) return false;
+        $page = $this->pageIndex;
+        $base = \Kanso\Kanso::getInstance()->Environment['HTTP_HOST'];
+        $uri  = explode("/", trim(\Kanso\Kanso::getInstance()->Environment['REQUEST_URI'], '/'));
+        $slug = '';
+        if ($this->is_single() || $this->is_page() || $this->is_custom_post()) {
+            $slug = $this->post->slug;
+        }
+        if ($this->is_home() ) {
+            $slug = $page > 1 ? 'page/'.$page.'/' : '';
+        }
+        else if ($this->is_tag() || $this->is_category() || $this->is_author() ) {
+            $slug = $page > 1 ? $uri[0].'/'.$uri[1].'/page/'.$page.'/' : $uri[0].'/'.$uri[1].'/';
+        }
+        else if ($this->is_search()) {
+            $slug = $page > 1 ? $uri[0].'/'.$uri[1].'/page/'.$page.'/' : $uri[0].'/'.$uri[1].'/';
+        }
+        return "$base/$slug";
+
     }
 
     /**
@@ -1653,7 +1696,7 @@ class Query {
      *
      * @return array
      */
-    public function get_current_userinfo() 
+    public function user() 
     {
         return \Kanso\Kanso::getInstance()->Gatekeeper->getUser();
     }
@@ -1981,7 +2024,7 @@ class Query {
      * @param  bool        $srcOnly          Should we return only the img src (rather than the actual HTML tag)
      * @return string      user's avatar or default mystery on fallback
      */
-    public function get_avatar($email_or_md5, $size = 160, $srcOnly = false) 
+    public function get_gravatar($email_or_md5, $size = 160, $srcOnly = false) 
     {
 
         $isMd5   = $this->isValidMd5($email_or_md5);
@@ -2249,7 +2292,7 @@ class Query {
 
             # Replace avatar src
             $patterns[]     = '/\(:avatar_src\)/';
-            $replacements[] = $this->get_avatar($comment['email'], $options['avatar_size'], true);
+            $replacements[] = $this->get_gravatar($comment['email'], $options['avatar_size'], true);
 
             # Replace avatar size
             $patterns[]     = '/\(:avatar_size\)/';
@@ -2333,7 +2376,7 @@ class Query {
             foreach ($next as $i => $prevPost) {
                 if ((int)$prevPost['id'] === (int)$post->id) {
                     if (isset($next[$i+1])) {
-                        return $this->SQL->SELECT('*')->FROM('posts')->WHERE('id', '=', $next[$i+1]['id'])->ROW();
+                        return $this->SQL->SELECT('*')->FROM('posts')->AND_WHERE('type', '=', $post->type)->WHERE('id', '=', $next[$i+1]['id'])->ROW();
                     }
                 }
             }
@@ -2357,7 +2400,7 @@ class Query {
             foreach ($next as $i => $prevPost) {
                 if ((int)$prevPost['id'] === (int)$post->id) {
                     if (isset($next[$i+1])) {
-                        return $this->SQL->SELECT('*')->FROM('posts')->WHERE('id', '=', $next[$i+1]['id'])->ROW();
+                        return $this->SQL->SELECT('*')->FROM('posts')->AND_WHERE('type', '=', $post->type)->WHERE('id', '=', $next[$i+1]['id'])->ROW();
                     }
                 }
             }

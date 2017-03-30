@@ -17,8 +17,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title><?php echo the_meta_title();?></title>
 	<meta name="description" content="<?php echo the_meta_description();?>">
-	<link rel="prev" title="<?php echo the_previous_page_title();?> " href="<?php echo the_previous_page_url();?>">
-	<link rel="next" title="<?php echo the_next_page_title();?> "     href="<?php echo the_next_page_url();?>">
+
+	<link rel="canonical" title="<?php echo the_meta_title();?>"          href="<?php echo the_canonical_url();?>">
+	<link rel="prev"      title="<?php echo the_previous_page_title();?>" href="<?php echo the_previous_page_url();?>">
+	<link rel="next"      title="<?php echo the_next_page_title();?>"     href="<?php echo the_next_page_url();?>">
 
 	<!-- FAVICONS -->
 	<link rel="shortcut icon"                    href="<?php echo theme_url(); ?>/assets/images/favicon.png">
