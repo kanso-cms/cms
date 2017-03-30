@@ -38,19 +38,19 @@ body.writing #content {
 
 /* Writer */
 html.writer-html {
-  background: #F4F3F1;
+  background: #fff;
 }
 html.writer-html .sidebar {
 	transition: opacity .3s ease;
 }
 
 body.writing.markdown {
-  background: #f4f3f1;
+  background: #f5f5f5;
   overflow: hidden;
 }
 
 .writer {
-  padding: 27px 100px 27px 100px;
+  padding: 50px 100px 31px 100px;
   width: 100%;
 }
 
@@ -58,12 +58,10 @@ body.writing.markdown {
 html.reading,
 html.reading body {
   background: #fff;
-}
-
-body.writing.HTML {
-  background: #fff;
   height: 100% !important;
 }
+
+
 
 body.writing .header {
   transform: translateY(0);
@@ -97,7 +95,7 @@ body.writing .header.active {
   width: 100%;
   text-align: center;
   border-top: 1px solid #aba8a6;
-  background: #F4F3F1;
+  background: #f5f5f5;
   z-index: 501;
   line-height: 8px;
 }

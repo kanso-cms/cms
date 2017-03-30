@@ -539,6 +539,7 @@ class Bookkeeper
 	  			$slug .= $key.'/';
 	  		}
 	  	}
+	  	$slug = trim($slug, '/').'/';
 	  	return $slug;
 
 	}

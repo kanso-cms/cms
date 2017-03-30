@@ -8,9 +8,14 @@
   line-height: 1.6;
   word-wrap: break-word;
   width: 100%;
-    margin: 0;
-    margin-left: auto;
-    margin-right: auto;
+  margin: 0;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 20px;
+  max-width: 1080px;
+}
+.markdown-body p {
+  font-size: 20px;
 }
 
 .markdown-body a {
@@ -344,6 +349,7 @@
   word-break: normal;
   word-break: keep-all;
   border: none;
+  font-size: 15px;
 }
 
 .markdown-body table th {
@@ -375,8 +381,9 @@
   padding-bottom: 0.2em;
   margin: 0;
   font-size: 85%;
-  background-color: rgba(0, 0, 0, 0.04);
   border-radius: 3px;
+  background-color: #fff;
+  border: none;
 }
 
 .markdown-body code:before, .markdown-body code:after {
@@ -398,12 +405,14 @@
   margin-bottom: 16px;
 }
 
-.markdown-body .highlight pre, .markdown-body pre {
+.markdown-body .highlight pre, 
+.markdown-body pre {
   padding: 16px;
   overflow: auto;
   font-size: 85%;
   line-height: 1.45;
-  background-color: #f7f7f7;
+  background-color: #fff;
+  border: none;
   border-radius: 3px;
 }
 
