@@ -989,10 +989,10 @@ function is_loggedin()
  * Get a user's avatar 'img tag'
  * @return bool
  */
-function avatar($email_or_md5 = null, $size = 160, $srcOnly = null) 
+function get_gravatar($email_or_md5 = null, $size = 160, $srcOnly = null) 
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->get_avatar($email_or_md5, $size, $srcOnly);
+    return $KANSO_QUERY->get_gravatar($email_or_md5, $size, $srcOnly);
 }
 
 /**

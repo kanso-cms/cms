@@ -345,7 +345,7 @@ class CommentManager
             'date'             => $newComment['date'],
             'articlePermalink' => self::$Kanso->Query->the_permalink($articleRow['id']),
             'articleTitle'     => $articleRow['title'],
-            'avatar'           => self::$Kanso->Query->get_avatar($newComment['email'], 20, true),
+            'avatar'           => self::$Kanso->Query->get_gravatar($newComment['email'], 20, true),
             'content'          => self::cleanHTMLTags($newComment['html_content']),
             'websiteLink'      => self::$Kanso->Environment['HTTP_HOST'],
             'website'          => $website,
@@ -359,7 +359,7 @@ class CommentManager
                 'name'       => $parentComment['name'],
                 'id'         => $parentComment['id'],
                 'date'       => $parentComment['date'],
-                'avatar'     => self::$Kanso->Query->get_avatar($parentComment['email'], 20, true),
+                'avatar'     => self::$Kanso->Query->get_gravatar($parentComment['email'], 20, true),
                 'content'    => self::cleanHTMLTags($parentComment['html_content']),
             ];
         }

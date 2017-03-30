@@ -209,7 +209,7 @@ class Comments
         foreach ($comments as $key => $comment) {
             $comments[$key]['permalink'] = $Query->the_permalink($comment['post_id']);
             $comments[$key]['title']     = $Query->the_title($comment['post_id']);
-            $comments[$key]['avatar']    = $Query->get_avatar($comment['email'], 100, true);
+            $comments[$key]['avatar']    = $Query->get_gravatar($comment['email'], 100, true);
         }
 
         return $comments;

@@ -207,7 +207,7 @@ class CommentUsers
                     'ip_address'   => $comment['ip_address'],
                     'name'         => $comment['name'],
                     'email'        => $comment['email'],
-                    'avatar'       => \Kanso\Kanso::getInstance()->Query->get_avatar($comment['email'], 150, true),
+                    'avatar'       => \Kanso\Kanso::getInstance()->Query->get_gravatar($comment['email'], 150, true),
                 ];
             }
             else {
