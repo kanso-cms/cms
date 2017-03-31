@@ -151,12 +151,6 @@ class Admin
             $customPosts[$value] = $permalink;
             \Kanso\Kanso::getInstance()->tmpConfig('KANSO_CUSTOM_POSTS', $customPosts);
         }
-
-        # We need to also route the admin panel
-
-      
-       
-        
     }
 
     /********************************************************************************
@@ -258,7 +252,7 @@ class Admin
         if (empty($this->pageVars)) $this->pageVars();
 
         # The default template if one wasn't provided
-        if (!$template) $template = \Kanso\Kanso::getInstance()->Environment['KANSO_ADMIN_DIR'].DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'Admin.php';
+        if (!$template) $template = \Kanso\Kanso::getInstance()->Environment['KANSO_ADMIN_DIR'].DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'admin.php';
 
         \Kanso\Kanso::getInstance()->render($template, $this->pageVars);
     }

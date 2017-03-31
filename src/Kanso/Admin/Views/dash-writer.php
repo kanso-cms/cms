@@ -26,5 +26,5 @@
 
 <!-- MEDIA LIBRARY -->
 <div class="writer-media-wrapper js-triggerable-media">
-	<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'media'.DIRECTORY_SEPARATOR.'media-library.php'); ?>
+	<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Media'.DIRECTORY_SEPARATOR.'media-library.php'); ?>
 </div>

@@ -735,8 +735,8 @@
             if (size !== 'origional') {
                 var split   = URL.split('.');
                 var ext     = split.pop();
-                var name    = split[0];
-                URL = name+'_'+size+'.'+ext;
+                var name    = split.join('.');
+                URL         = name+'_'+size+'.'+ext;
             }
             var img = '<img src="'+URL+'" alt="'+alt+'" rel="'+rel+'" title="'+title+'" />';
             writer.insertWrapText(img, '', img, writer);

@@ -28,7 +28,13 @@ class Cookie {
 
     public function __construct($options = [])
     {
+        # Merge options
+        $env = \Kanso\Kanso::getInstance()->Environment;
+        $this->defaults['secure'] = $env['HTTP_PROTOCOL'] === 'https' ? true : false;
+        $this->defaults['domain'] = $env['KANSO_WEBSITE_NAME'];
         $this->options = array_merge($this->defaults, $options);
+
+        # Utility
         $this->openSSL = new OpenSSL($this->options['secret'], $this->options['cipher']);
         $this->signer  = new Signer($this->options['secret']);
         $this->default_memory = ini_get('memory_limit');
