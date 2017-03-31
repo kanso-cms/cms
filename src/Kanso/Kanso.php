@@ -197,7 +197,7 @@ class Kanso
 
 		# Default Query
 		$this->Container->singleton('Query', function () {
-			return new View\Query();
+			return new Query\Query();
 		});
 
 		# Default Events

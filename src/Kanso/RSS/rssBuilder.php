@@ -86,7 +86,7 @@ $xml .='
 			<link>'.$Kanso->Query->the_permalink().'</link>
 			
 			<pubDate>'.$Kanso->Query->the_time('D, d M Y H:i:s').'</pubDate>
-			<dc:creator>'.$Kanso->Query->the_author().'</dc:creator>
+			<dc:creator>'.$Kanso->Query->the_author_name().'</dc:creator>
 			<category>'.$Kanso->Query->the_category().'</category>
 			<description>'.$Kanso->Query->the_excerpt().'</description>
 			<wfw:commentRss>'.$Kanso->Environment['REQUEST_URL'].'</wfw:commentRss>

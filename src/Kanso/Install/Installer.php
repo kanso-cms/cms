@@ -201,9 +201,6 @@ class Installer
         foreach ($KANSO_DEFAULT_COMMENTS as $comment) {
             $Query->INSERT_INTO('comments')->VALUES($comment)->QUERY();
         }
-
-        
-
     }
 
     /**

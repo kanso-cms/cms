@@ -1,11 +1,11 @@
 <?php
 
-namespace Kanso\View;
+namespace Kanso\Query;
 
 /**
  * Query Parser
  *
- * This class is used by \Kanso\View\Query to parse a string
+ * This class is used by \Kanso\Query\Query to parse a string
  * query on the the database and return the results
  *
  */

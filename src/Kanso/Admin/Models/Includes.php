@@ -224,6 +224,12 @@ class Includes
 	function sidebarLinks()
 	{
 		$links = [
+			'visit' => [
+				'link'     => '/" target="blank',
+				'text'     => 'Visit Site',
+				'icon'     => 'globe',
+				'children' => [],
+			],
 			'writer' => [
 				'link'     => '/admin/writer/',
 				'text'     => 'Writer',
@@ -268,7 +274,7 @@ class Includes
 			'media' => [
 				'link'     => '/admin/media/',
 				'text'     => 'Media',
-				'icon'     => 'camera-retro',
+				'icon'     => 'camera',
 				'children' => [],
 			],
 			'settings' => [

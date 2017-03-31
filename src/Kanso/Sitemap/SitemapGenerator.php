@@ -106,6 +106,8 @@ class SitemapGenerator
 		$XML .='</url>'."\n\t";
 		$XML .= '</urlset>';
 
+		return \Kanso\Kanso::getInstance()->Filters->apply('sitemap', $XML);
+
 		return $XML;
 
 	}

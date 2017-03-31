@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanso\View;
+namespace Kanso\Query;
 
 /**
  * Query

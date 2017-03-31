@@ -25,6 +25,7 @@ class Filters
         'adminPostTypes'      => [],
         'adminSettingsTabs'   => [],
         'emailBody'           => [],
+        'sitemap'             => [],
     ];
 
     /**
