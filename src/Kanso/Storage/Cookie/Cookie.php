@@ -28,10 +28,13 @@ class Cookie {
 
     public function __construct($options = [])
     {
-        # Merge options
+        # Only change the domain if this is not localhost
         $env = \Kanso\Kanso::getInstance()->Environment;
-        $this->defaults['secure'] = $env['HTTP_PROTOCOL'] === 'https' ? true : false;
-        $this->defaults['domain'] = $env['KANSO_WEBSITE_NAME'];
+        if (!\Kanso\Utility\Str::contains($env['KANSO_WEBSITE_NAME'], 'localhost')) {
+            $this->defaults['domain'] = $env['KANSO_WEBSITE_NAME'];
+            $this->defaults['secure'] = $env['HTTP_PROTOCOL'] === 'https' ? true : false;
+        }
+        # Merge options
         $this->options = array_merge($this->defaults, $options);
 
         # Utility
