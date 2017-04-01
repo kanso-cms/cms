@@ -128,12 +128,24 @@ function the_excerpt($post_id = null)
  * Get the category
  *
  * @param   int    $post_id (optional) 
- * @return  string|false
+ * @return  array|false
  */
 function the_category($post_id = null)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_category($post_id);
+}
+
+/**
+ * Get the category name
+ *
+ * @param   int    $post_id (optional) 
+ * @return  string|false
+ */
+function the_category_name($post_id = null)
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_category_name($post_id);
 }
 
 /**

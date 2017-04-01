@@ -22,7 +22,7 @@ the_header(); ?>
 
 	<p class="small text-center">
 		<?php the_time('M d, Y'); ?> • 
-		<a href="<?php echo the_category_url();?>"><?php echo the_category();?></a> • 
+		<a href="<?php echo the_category_url();?>"><?php echo the_category_name();?></a> • 
 		By <a href="<?php echo the_author_url();?>"><?php echo the_author_name();?></a> 
 	</p>
 

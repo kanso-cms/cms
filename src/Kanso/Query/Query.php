@@ -459,9 +459,26 @@ class Query {
      * The category
      *
      * @param   int    $post_id (optional) 
-     * @return  string|false
+     * @return  array|false
      */
     public function the_category($post_id = null)
+    {
+        if ($post_id) {
+            $post = $this->getPostByID($post_id);
+            if ($post) return $post->category;
+            return false;
+        }
+        if (!empty($this->post)) return $this->post->category;
+        return false;
+    }
+
+    /**
+     * The category
+     *
+     * @param   int    $post_id (optional) 
+     * @return  string|false
+     */
+    public function the_category_name($post_id = null)
     {
         if ($post_id) {
             $post = $this->getPostByID($post_id);
