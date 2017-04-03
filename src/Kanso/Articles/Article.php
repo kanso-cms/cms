@@ -37,11 +37,13 @@ class Article
 		'comments_enabled' => '',
 		
 		# Joins
-		'tags' 	      => [],
-		'category'    => [],
-		'author'      => [],
+		'tags' 	      => NULL,
+		'category'    => NULL,
+		'author'      => NULL,
+		'comments'    => NULL,
+		'thumbnail'   => NULL,
 		'content'     => ' ',
-		'comments'    => [],
+		
 	];
 
 	/**
@@ -66,21 +68,22 @@ class Article
 
 		if (is_array($rowOrId) && !empty($rowOrId)) {
 			$this->rowData = $rowOrId;
-			$this->rowData['tags']     = [];
-			$this->rowData['category'] = [];
-			$this->rowData['author']   = [];
-			$this->rowData['comments'] = [];
-			$this->rowData['content']  = ' ';
-
+			$this->rowData['tags']     = NULL;
+			$this->rowData['category'] = NULL;
+			$this->rowData['author']   = NULL;
+			$this->rowData['comments'] = NULL;
+			$this->rowData['content']  = NULL;
+			$this->rowData['thumbnail']  = NULL;
 		}
 		else if (is_numeric($rowOrId) || is_int($rowOrId)) {
 			$row = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('posts')->WHERE('id', '=', intval($rowOrId))->ROW();
 			$this->rowData = $row;
-			$this->rowData['tags']     = [];
-			$this->rowData['category'] = [];
-			$this->rowData['author']   = [];
-			$this->rowData['comments'] = [];
-			$this->rowData['content']  = ' ';
+			$this->rowData['tags']     = NULL;
+			$this->rowData['category'] = NULL;
+			$this->rowData['author']   = NULL;
+			$this->rowData['comments'] = NULL;
+			$this->rowData['content']  = NULL;
+			$this->rowData['thumbnail']  = NULL;
 		}
 	}
 
@@ -165,76 +168,82 @@ class Article
 
 	private function getTheCategory()
 	{
-		
 		if (!empty($this->rowData['category_id'])) {
-			$category = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('categories')->WHERE('id', '=', $this->rowData['category_id'])->ROW();
-			if ($category) {
-				$this->rowData['category']    = $category;
-				$this->rowData['category_id'] = $category['id'];
-				return $category;
+			if (is_null($this->rowData['category'])) {
+				$this->rowData['category'] = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('categories')->WHERE('id', '=', $this->rowData['category_id'])->ROW();
 			}
 		}
-		return $this->defaults['category'];
+		else {
+			$this->rowData['category'] = $this->defaults['category'];
+		}
+		return $this->rowData['category'];
 	}
 
 	private function getTheTags()
 	{
-		if (empty($this->rowData['tags']) || !isset($this->rowData['tags'])) {
-			if (!empty($this->rowData['id'])) {
-				$tags = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('tags.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id')->WHERE('post_id', '=', intval($this->rowData['id']))->FIND_ALL();
-				if ($tags) {
-					$this->rowData['tags'] = $tags;
-					return $tags;
-				}
+		if (!empty($this->rowData['id'])) {
+			if (is_null($this->rowData['tags'])) {
+				$this->rowData['tags'] = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('tags.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id')->WHERE('post_id', '=', intval($this->rowData['id']))->FIND_ALL();
 			}
 		}
-		return $this->defaults['tags'];
+		else {
+			$this->rowData['tags'] = $this->defaults['tags'];
+		}
+		return $this->rowData['tags'];
+		
 	}
 
 	private function getTheContent()
 	{
 		if (!empty($this->rowData['id'])) {
-			$content = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('content')->FROM('content_to_posts')->WHERE('post_id', '=', intval($this->rowData['id']))->ROW();
-			$this->rowData['content'] = $content['content'];
-			return urldecode($this->rowData['content']);
+			if (is_null($this->rowData['content'])) {
+				$content = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('content')->FROM('content_to_posts')->WHERE('post_id', '=', intval($this->rowData['id']))->ROW();
+				if (isset($content['content'])) {
+					$this->rowData['content'] = $content['content'];
+				}
+				else {
+					$this->rowData['content'] = ' ';
+				}
+			}
 		}
-		else if (!isset($this->rowData['content'])) {
-			return '';
+		else {
+			$this->rowData['content'] = ' ';
 		}
-		else if ($this->rowData['content'] === ' ') {
-			return '';
-		}
-		return $this->rowData['content'];
+		return urldecode($this->rowData['content']);
 	}
 
 	private function getTheAuthor()
 	{
-		if (!empty($this->rowData['author_id'])) {			
-			$this->rowData['author'] = \Kanso\Kanso::getInstance()->Gatekeeper->getUserProvider()->byId($this->rowData['author_id']);
-			return $this->rowData['author'];
+		if (!empty($this->rowData['author_id'])) {
+			if (is_null($this->rowData['author'])) {
+				$this->rowData['author'] = \Kanso\Kanso::getInstance()->Gatekeeper->getUserProvider()->byId($this->rowData['author_id']);
+			}
 		}
-		if (empty($this->defaults['author'])) {
-			$this->defaults['author'] = \Kanso\Kanso::getInstance()->Gatekeeper->getUserProvider()->byId(1);
+		else {
+			$this->rowData['author'] = \Kanso\Kanso::getInstance()->Gatekeeper->getUserProvider()->byId(1);
 		}
-		return $this->defaults['author'];
+		return $this->rowData['author'];
 	}
 
 	private function getTheThumbnail()
 	{
-		if (isset($this->rowData['thumbnail'])) return $this->rowData['thumbnail'];
-
-		if (!empty($this->rowData['thumbnail_id']) && $this->rowData['thumbnail_id'] > 0) {
-			$this->rowData['thumbnail'] = \Kanso\Kanso::getInstance()->MediaLibrary->byId($this->rowData['thumbnail_id']);
-			return $this->rowData['thumbnail'];
+		if (!empty($this->rowData['thumbnail_id'])) {
+			if (is_null($this->rowData['thumbnail'])) {
+				$this->rowData['thumbnail'] = \Kanso\Kanso::getInstance()->MediaLibrary->byId($this->rowData['thumbnail_id']);
+			}
 		}
-		return false;
+		return $this->rowData['thumbnail'];
 	}
 
 	private function getTheComments()
 	{
 		if (!empty($this->rowData['id'])) {
-			$comments = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('comments')->WHERE('post_id', '=', intval($this->rowData['id']))->FIND_ALL();
-			$this->rowData['comments'] = $comments;
+			if (is_null($this->rowData['comments'])) {
+				$this->rowData['comments'] = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('*')->FROM('comments')->WHERE('post_id', '=', intval($this->rowData['id']))->FIND_ALL();
+			}
+		}
+		else {
+			$this->rowData['comments'] = [];
 		}
 		return $this->rowData['comments'];
 	}

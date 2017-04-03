@@ -36,17 +36,12 @@ class Query {
     /**
      * @var    int    Current post index of paginated array of posts
      */
-    public $postIndex = 0;
+    public $postIndex = -1;
 
     /**
      * @var    int    Current post count
      */
     public $postCount = 0;
-
-    /**
-     * @var    boolean    Whether the loop has started and the caller is in the loop.
-     */
-    public $inLoop = false;
 
     /**
      * @var    array    Array of posts from query result
@@ -137,6 +132,14 @@ class Query {
             $this->queryStr  = "post_status = published : post_type = post : orderBy = post_created, DESC : limit = $offset, $perPage";
             $this->posts     = $parser->parseQuery($this->queryStr);
             $this->postCount = count($this->posts);
+
+            # /page/4/ but that page does not exist
+            # Double check if the tag exists
+            # and 404 if it does NOT 
+            if (empty($this->posts)) {
+                return \Kanso\Kanso::getInstance()->notFound();
+            }
+
         }
         else if ($requestType === 'archive') {
             $this->queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC';
@@ -373,7 +376,6 @@ class Query {
     public function the_post($post_id = null)
     {
         if ($post_id) return $this->getPostByID($post_id);
-        $this->inLoop = true;
         return $this->_next();
     }
 
@@ -701,9 +703,10 @@ class Query {
         $height   = !$height ? '' : 'height="'.$height.'"';
         $classes  = !$classes ? '' : 'class="'.$classes.'"';
         $id       = !$id ? '' : 'id="'.$id.'"';
-        $src      = $this->media_size($thumbnail->url, $size);
-
-        return '<img src="'.$src.'" '.$width.' '.$height.' '.$classes.' '.$id.' rel="'.$thumbnail->rel.'" alt="'.$thumbnail->alt.'" title="'.$thumbnail->title.'" />';
+        if (!$thumbnail) return '<img src="_" '.$width.' '.$height.' '.$classes.' '.$id.' rel="" alt="" title="">';
+        
+        $src = $this->media_size($thumbnail->url, $size);
+        return '<img src="'.$src.'" '.$width.' '.$height.' '.$classes.' '.$id.' rel="'.$thumbnail->rel.'" alt="'.$thumbnail->alt.'" title="'.$thumbnail->title.'" >';
     }
 
     private function media_size($url, $size = false)
@@ -779,7 +782,7 @@ class Query {
      *
      * @param   string   $size      (optional) "small/medium/large"
      * @param   int      $author_id (optional)
-     * @return  string|false
+     * @return  object|false
      */
     public function the_author_thumbnail($author_id = null)
     {
@@ -1132,6 +1135,16 @@ class Query {
     }
 
     /**
+     * Is 404
+     *
+     * @return  bool
+     */
+    public function is_not_found()
+    {
+        return \Kanso\Kanso::getInstance()->Response->getStatus() === 404;
+    }
+
+    /**
      * Has post Thumbnail
      *
      * @param   int   $post_id   (optional)
@@ -1441,12 +1454,7 @@ class Query {
     {
         if ($post_id) return !empty($this->getPostByID($post_id));
 
-        if ($this->postIndex < $this->postCount) {
-            $this->inLoop = true;
-            return true;
-        }
-       
-        $this->inLoop = false;
+        return $this->postIndex < $this->postCount -1;
 
         return false;
     }
@@ -1636,6 +1644,9 @@ class Query {
         else if ($this->is_search()) {
             $meta_description = 'Search Results for: '.$this->search_query().' - '.$this->website_title();
         }
+        if ($this->is_not_found()) {
+            $description = 'The page you are looking for could not be found.';
+        }
 
         return \Kanso\Utility\Str::reduce($description, 180);
     }
@@ -1667,6 +1678,8 @@ class Query {
             $titleTitle = 'Archives | ';
         }
 
+        if ($this->is_not_found()) return 'Page Not Found';
+
         return  $titleTitle.$titlePage.$titleBase;
     }
 
@@ -1677,11 +1690,16 @@ class Query {
      */
     public function the_canonical_url()
     {
-        if (!$this->have_posts()) return false;
+       
         $page = $this->pageIndex;
-        $base = \Kanso\Kanso::getInstance()->Environment['HTTP_HOST'];
-        $uri  = explode("/", trim(\Kanso\Kanso::getInstance()->Environment['REQUEST_URI'], '/'));
+        $env  = \Kanso\Kanso::getInstance()->Environment;
+        $base = $env['HTTP_HOST'];
+        $uri  = explode("/", trim($env['REQUEST_URI'], '/'));
         $slug = '';
+        if (!$this->have_posts() || $this->is_not_found()) {
+            return $env['HTTP_HOST'].$env['REQUEST_URI'];
+        }
+
         if ($this->is_single() || $this->is_page() || $this->is_custom_post()) {
             $slug = $this->post->slug;
         }
@@ -1694,8 +1712,10 @@ class Query {
         else if ($this->is_search()) {
             $slug = $page > 1 ? $uri[0].'/'.$uri[1].'/page/'.$page.'/' : $uri[0].'/'.$uri[1].'/';
         }
+        else {
+            return $env['HTTP_HOST'].$env['REQUEST_URI'];
+        }
         return "$base/$slug";
-
     }
 
     /**
@@ -2077,6 +2097,8 @@ class Query {
         $options = [
           'base'               => \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'],
           'format'             => '<li class="(:class)"><a href="(:link)">(:num)</a></li>',
+          'format_disabled'    => '<li class="(:class)"><span>(:num)</span></li>',
+          'white_space'        => " ",
           'current'            => 1,
           'total'              => 1,
           'context'            => 2,
@@ -2098,12 +2120,19 @@ class Query {
         $queryStr  = trim(preg_replace('/limit =[^:]+/', '', $queryStr));
         $queryStr  = trim($queryStr, ":");
 
-        # Load the query parser
-        $parser = new QueryParser();
+        # Empty search has no pages and posts
+        if (!empty($queryStr)) {
+            # Load the query parser
+            $parser = new QueryParser();
 
-        # Count the posts
-        $posts = $parser->countQuery($queryStr);
-        $pages = \Kanso\Utility\Arr::paginate($posts, $this->pageIndex, \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE']);
+            # Count the posts
+            $posts = $parser->countQuery($queryStr);
+            $pages = \Kanso\Utility\Arr::paginate($posts, $this->pageIndex, \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE']);
+        }
+        else {
+            $posts = 0;
+            $pages = [];
+        }
 
         # If no args were defined, Kanso will figure it out for us
         if (!$args || !isset($args['current']) || !isset($args['total'])) {
@@ -2168,11 +2197,12 @@ class Query {
         
         # If show previous
         if ($options['prev_next'] === true) {
-            $class = $options['current'] === 1  ? 'disabled' : '';
-            $link  = $options['current'] === 1  ? '#' : $options['base'].DIRECTORY_SEPARATOR.'page'.DIRECTORY_SEPARATOR.($options['current']-1).DIRECTORY_SEPARATOR;
-            $link  = $options['current'] === 2  ? $options['base'] : $link;
+            $class  = $options['current'] === 1  ? 'disabled' : '';
+            $link   = $options['current'] === 1  ? '#' : $options['base'].DIRECTORY_SEPARATOR.'page'.DIRECTORY_SEPARATOR.($options['current']-1).DIRECTORY_SEPARATOR;
+            $link   = $options['current'] === 2  ? $options['base'] : $link;
+            $format = $options['current'] === 1  ? $options['format_disabled'] : $options['format'];
             $replacements = [$class, $link, $options['prev_text']];
-            $pagination  .= preg_replace($patterns, $replacements, $options['format']);
+            $pagination  .= preg_replace($patterns, $replacements, $format).$options['white_space'];
             $replacements = [];
         }
 
@@ -2180,7 +2210,7 @@ class Query {
         $class = $options['current'] === 1  ? 'active' : '';
         $link  = $options['current'] === 1  ? '#' : $options['base'];
         $replacements = [$class, $link, 1];
-        $pagination  .= preg_replace($patterns, $replacements, $options['format']);
+        $pagination  .= preg_replace($patterns, $replacements, $options['format']).$options['white_space'];
         $replacements = [];
 
         # Show the front ellipsis
@@ -2192,27 +2222,27 @@ class Query {
             $class = $i === $options['current'] ? 'active' : '';
             $link  = $i === $options['current'] ? '#' : $options['base'].DIRECTORY_SEPARATOR.'page'.DIRECTORY_SEPARATOR.($i).DIRECTORY_SEPARATOR;
             $replacements = [$class, $link, $i];
-            $pagination  .= preg_replace($patterns, $replacements, $options['format']);
+            $pagination  .= preg_replace($patterns, $replacements, $options['format']).$options['white_space'];
             $replacements = [];
         }
 
         # Show the back ellipsis
-        $pagination .= $backEllipsis;
+        $pagination .= $backEllipsis.$options['white_space'];
 
         # Show the last page
         $class = $options['current'] === $options['total'] ? 'active' : '';
         $link  = $options['current'] === $options['total'] ? '#' : $options['base'].DIRECTORY_SEPARATOR.'page'.DIRECTORY_SEPARATOR.$options['total'].DIRECTORY_SEPARATOR;
         $replacements = [$class, $link, $options['total']];
-        $pagination  .= preg_replace($patterns, $replacements, $options['format']);
+        $pagination  .= preg_replace($patterns, $replacements, $options['format']).$options['white_space'];
         $replacements = [];
 
         # If show next
         if ($options['prev_next'] === true) {
-            $class = $options['current'] <  $options['total'] ? '' : 'disabled' ;
-
-            $link  = $options['current'] <  $options['total'] ? $options['base'].DIRECTORY_SEPARATOR.'page'.DIRECTORY_SEPARATOR.($options['current']+1).DIRECTORY_SEPARATOR : '#';
+            $class  = $options['current'] <  $options['total'] ? '' : 'disabled' ;
+            $format = $options['current'] <  $options['total'] ? $options['format'] : $options['format_disabled'] ;
+            $link   = $options['current'] <  $options['total'] ? $options['base'].DIRECTORY_SEPARATOR.'page'.DIRECTORY_SEPARATOR.($options['current']+1).DIRECTORY_SEPARATOR : '#';
             $replacements = [$class, $link, $options['next_text']];
-            $pagination  .= preg_replace($patterns, $replacements, $options['format']);
+            $pagination  .= preg_replace($patterns, $replacements, $format).$options['white_space'];
         }
 
         return $pagination;

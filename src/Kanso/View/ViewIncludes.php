@@ -230,8 +230,20 @@ function the_tag_slug($tag_id)
 function the_tag_url($tag_id) 
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->the_tag_url($tag_id) ;
+    return $KANSO_QUERY->the_tag_url($tag_id);
 }
+
+/**
+ * Get the taxonomy row
+ *
+ * @return  array|false
+ */
+function the_taxonomy() 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_taxonomy();
+}
+
 
 /**
  * Get the content
@@ -610,6 +622,17 @@ function is_admin()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->is_admin();
+}
+
+/**
+ * Is not found
+ *
+ * @return  bool
+ */
+function is_not_found()
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->is_not_found();
 }
 
 /**

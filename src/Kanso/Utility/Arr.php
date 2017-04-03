@@ -175,7 +175,10 @@ class Arr
         foreach ($array as $arr) {
             if (isset($arr[$key])) $str .= $arr[$key].$glue;
         }
-        return rtrim($str, $glue);
+        if ($glue === '') return $str;
+
+        $split = array_filter(explode($glue, $str));
+        return implode($glue, $split);
     }
 
 	/**

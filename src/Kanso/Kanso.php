@@ -37,7 +37,7 @@ class Kanso
 	/**
 	 * @var string    The Kanso application version
 	 */
-	public $Version = '0.0.045';
+	public $Version = '0.0.5';
 
 	/**
 	 * @var string    The Kanso application name
@@ -855,6 +855,8 @@ class Kanso
 	 */
 	public function notFound() 
 	{
+		$this->Response->setStatus(404);
+
 		# Call the pre dispatch event
 		\Kanso\Events::fire('notFound', [$this->Environment['REQUEST_URI'], time()]);
 
@@ -870,8 +872,7 @@ class Kanso
 		# just a 404
 		if ($this->Request->isAjax()) $body = '';
 
-		# Set the resoponse and body
-		$this->Response->setStatus(404);
+		# Set the body
 		$this->Response->setBody($body);
 	}
 

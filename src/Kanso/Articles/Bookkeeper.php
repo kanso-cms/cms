@@ -148,7 +148,7 @@ class Bookkeeper
 		$rowData['comments_enabled'] = boolval($rowData['comments_enabled']);
 	
 		# Remove joined rows so we can update/insert
-		$insertRow = \Kanso\Utility\Arr::unsetMultiple(['tags', 'category', 'content', 'comments', 'author'], $rowData);
+		$insertRow = \Kanso\Utility\Arr::unsetMultiple(['thumbnail', 'tags', 'category', 'content', 'comments', 'author'], $rowData);
 
 		# Insert a new article
 		if ($newArticle) {
