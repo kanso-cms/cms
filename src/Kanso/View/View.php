@@ -91,7 +91,10 @@ Class View {
         	$this->templates = [];
         	$this->template($template);
         }
-        if ($vars) $this->setMultiple($vars);
+        if ($vars) {
+            $this->vars = [];
+            $this->setMultiple($vars);
+        }
         $output = '';
         foreach ($this->templates as $file) {
             $output .= $this->sandbox($file);
@@ -110,7 +113,7 @@ Class View {
         require_once 'ViewIncludes.php';
         extract($this->data);
         ob_start();
-        require_once $file;
+        require $file;
         return ob_get_clean();
     }
 

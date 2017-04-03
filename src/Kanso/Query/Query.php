@@ -54,6 +54,11 @@ class Query {
     public $post = null;
 
     /**
+     * @var    Was the route matched ?
+     */
+    public $matchedRoute;
+
+    /**
      * @var    string    Current taxonomy slug if applicable (e.g tag, category, author)
      */
     protected $taxonomySlug;
@@ -72,11 +77,6 @@ class Query {
      * @var    \Kanso\Kanso::getInstance()->Database->Builder()
      */
     protected $SQL;
-
-    /**
-     * @var    Was the route matched ?
-     */
-    protected $notFound;
 
     /**
      * Constructor
@@ -134,51 +134,46 @@ class Query {
         # the previous filter
         \Kanso\Kanso::getInstance()->Response->setStatus(200);
 
-        # N.B
-        # If the request is tag, categry, or author and the posts are empty
-        # We need to run another check to validate the taxonomy actually exists.
-        # e.g if someone goes to example.com/tag/foobar/ and the tag doesn't exists
-        # vs. going to example.com/tag/foo/ where foo exists but has no posts
-
         # Load the query parser
         $parser = new QueryParser();
 
-        # Save the requested URL
-        $uri = rtrim(\Kanso\Kanso::getInstance()->Environment()['REQUEST_URI'], '/');
+        # Shared values
+        $posts        = [];
+        $queryStr     = '';
+        $postCount    = 0;
+        $perPage      = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
+        $offset       = $this->pageIndex * $perPage;
+        $limit        = $perPage;
+        $taxonomySlug = NULL;
+        $uri          = rtrim(\Kanso\Kanso::getInstance()->Environment()['REQUEST_URI'], '/');
 
         # Filter and paginate the posts based on the request type
         if ($requestType === 'home') {
-            $perPage = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
-            $offset  = $this->pageIndex * $perPage;
-            $limit   = $perPage;
-            $this->queryStr  = "post_status = published : post_type = post : orderBy = post_created, DESC : limit = $offset, $perPage";
-            $this->posts     = $parser->parseQuery($this->queryStr);
-            $this->postCount = count($this->posts);
 
-            # /page/4/ but that page does not exist
-            # Double check if the tag exists
-            # and 404 if it does NOT 
-            if (empty($this->posts)) {
+            $queryStr  = "post_status = published : post_type = post : orderBy = post_created, DESC : limit = $offset, $perPage";
+            $posts     = $parser->parseQuery($queryStr);
+            $postCount = count($posts);
+
+            # Double check if the tag exists and 404 if it does NOT 
+            if (empty($posts)) {
                 return \Kanso\Kanso::getInstance()->notFound();
             }
 
         }
         else if ($requestType === 'archive') {
-            $this->queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC';
-            $this->posts     = $parser->parseQuery($this->queryStr);
-            $this->postCount = count($this->posts);
+            $queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC';
+            $posts     = $parser->parseQuery($queryStr);
+            $postCount = count($posts);
         }
         else if ($requestType === 'tag') {
-            $perPage = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
-            $offset  = $this->pageIndex * $perPage;
-            $this->queryStr = 'post_status = published : post_type = post : orderBy = post_created, DESC : tag_slug = '.explode("/", $uri)[2]." : limit = $offset, $perPage";
-            $this->posts    = $parser->parseQuery($this->queryStr);
-            $this->postCount = count($this->posts);
-            $this->taxonomySlug = explode("/", $uri)[2];
+            $queryStr = 'post_status = published : post_type = post : orderBy = post_created, DESC : tag_slug = '.explode("/", $uri)[2]." : limit = $offset, $perPage";
+            $posts    = $parser->parseQuery($queryStr);
+            $postCount = count($posts);
+            $taxonomySlug = explode("/", $uri)[2];
 
             # Double check if the tag exists
             # and 404 if it does NOT 
-            if (empty($this->posts)) {
+            if (empty($posts)) {
                 if (!$this->SQL->SELECT('id')->FROM('tags')->WHERE('slug', '=', explode("/", $uri)[2])->ROW()) {
                     return \Kanso\Kanso::getInstance()->notFound();
                 }
@@ -186,16 +181,14 @@ class Query {
             
         }
         else if ($requestType === 'category') {
-            $perPage = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
-            $offset  = $this->pageIndex * $perPage;
-            $this->queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = '.explode("/", $uri)[2]." : limit = $offset, $perPage";
-            $this->posts     = $parser->parseQuery($this->queryStr);
-            $this->postCount = count($this->posts);
-            $this->taxonomySlug = explode("/", $uri)[2];
+            $queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = '.explode("/", $uri)[2]." : limit = $offset, $perPage";
+            $posts     = $parser->parseQuery($queryStr);
+            $postCount = count($posts);
+            $taxonomySlug = explode("/", $uri)[2];
 
             # Double check if the tag exists
             # and 404 if it does NOT 
-            if (empty($this->posts)) {
+            if (empty($posts)) {
                 if (!$this->SQL->SELECT('id')->FROM('categories')->WHERE('slug', '=', explode("/", $uri)[2])->ROW()) {
                     return \Kanso\Kanso::getInstance()->notFound();
                 }
@@ -203,12 +196,11 @@ class Query {
             
         } 
         else if ($requestType === 'author') {
-            $perPage = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
-            $offset  = $this->pageIndex * $perPage;
-            $this->queryStr  = ' post_status = published : post_type = post : orderBy = post_created, DESC: author_slug = '.explode("/", $uri)[2].": limit = $offset, $perPage";
-            $this->posts     = $parser->parseQuery($this->queryStr);
-            $this->postCount = count($this->posts);
-            $this->taxonomySlug = explode("/", $uri)[2];
+            $queryStr  = ' post_status = published : post_type = post : orderBy = post_created, DESC: author_slug = '.explode("/", $uri)[2].": limit = $offset, $perPage";
+            $posts     = $parser->parseQuery($queryStr);
+            $postCount = count($posts);
+            $taxonomySlug = explode("/", $uri)[2];
+
             # Double check if the author exists
             # and that they are an admin or writer
             $role = $this->SQL->SELECT('role')->FROM('users')->WHERE('slug', '=', explode("/", $uri)[2])->ROW();
@@ -220,53 +212,53 @@ class Query {
             else {
                 return \Kanso\Kanso::getInstance()->notFound();
             }
+            
         }
         else if ($requestType === 'single' || \Kanso\Utility\Str::getBeforeFirstChar($requestType, '-') === 'single') {
             $postType = $requestType === 'single' ? 'post' : \Kanso\Utility\Str::getAfterFirstChar($requestType, '-'); 
             if (strpos($uri,'?draft') !== false) {
                 $uri = ltrim(str_replace('?draft', '', $uri), '/');
-                $this->queryStr  = 'post_status = draft : post_type = '.$postType.' : post_slug = '.$uri.'/';
-                $this->posts     = $parser->parseQuery($this->queryStr);
-                $this->postCount = count($this->posts);
+                $queryStr  = 'post_status = draft : post_type = '.$postType.' : post_slug = '.$uri.'/';
+                $posts     = $parser->parseQuery($queryStr);
+                $postCount = count($posts);
             }
             else {
-                $uri = \Kanso\Utility\Str::GetBeforeLastWord($uri, '/feed');
-                $uri = ltrim($uri, '/');
-                $this->queryStr  = 'post_status = published : post_type = '.$postType.' : post_slug = '.$uri.'/';
-                $this->posts     = $parser->parseQuery($this->queryStr);
-                $this->postCount = count($this->posts);
+                $uri       = \Kanso\Utility\Str::GetBeforeLastWord($uri, '/feed');
+                $uri       = ltrim($uri, '/');
+                $queryStr  = 'post_status = published : post_type = '.$postType.' : post_slug = '.$uri.'/';
+                $posts     = $parser->parseQuery($queryStr);
+                $postCount = count($posts);
             }
-            if (empty($this->posts)) {
+
+            if (empty($posts)) {
                 return \Kanso\Kanso::getInstance()->notFound();
             }
         }
         else if ($requestType === 'page') {
             if (strpos($uri,'?draft') !== false) {
                 $uri = ltrim(str_replace('?draft', '', $uri), '/');
-                $this->queryStr  = 'post_status = draft : post_type = page : post_slug = '.$uri.'/';
-                $this->posts     = $parser->parseQuery($this->queryStr);
-                $this->postCount = count($this->posts);
+                $queryStr  = 'post_status = draft : post_type = page : post_slug = '.$uri.'/';
+                $posts     = $parser->parseQuery($queryStr);
+                $postCount = count($posts);
             }
             else {
                 $uri = \Kanso\Utility\Str::GetBeforeLastWord($uri, '/feed');
                 $uri = ltrim($uri, '/');
-                $this->queryStr  = 'post_status = published : post_type = page : post_slug = '.$uri.'/';
-                $this->posts     = $parser->parseQuery($this->queryStr);
-                $this->postCount = count($this->posts);
+                $queryStr  = 'post_status = published : post_type = page : post_slug = '.$uri.'/';
+                $posts     = $parser->parseQuery($queryStr);
+                $postCount = count($posts);
             }
-            if (empty($this->posts)) {
+
+            if (empty($posts)) {
                 return \Kanso\Kanso::getInstance()->notFound();
             }
         }
         else if ($requestType === 'search') {
-            
-            $perPage = \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
-            $offset  = $this->pageIndex * $perPage;
 
             # Get the query
             $query = \Kanso\Kanso::getInstance()->Request()->fetch('query');
             
-            # Validate the query exts
+            # Validate the query exists
             if (!$query || empty(trim($query))) return;
 
             # Get the actual search query | sanitize
@@ -277,14 +269,22 @@ class Query {
             if (empty($query)) return;
 
             # Filter the posts
-            $this->queryStr  = "post_status = published : post_type = post : orderBy = post_created, DESC : post_title LIKE $query || post_excerpt LIKE $query : limit = $offset, $perPage";
-            $this->posts     = $parser->parseQuery($this->queryStr);
-            $this->postCount = count($this->posts);
+            $queryStr  = "post_status = published : post_type = post : orderBy = post_created, DESC : post_title LIKE $query || post_excerpt LIKE $query : limit = $offset, $perPage";
+            $posts     = $parser->parseQuery($queryStr);
+            $postCount = count($posts);
             $this->searchQuery = $query;
         }
 
-        # the_post 
-        if (isset($this->posts[0])) $this->post = $this->posts[0];
+        # Set the_post so we're looking at the first item
+        if (isset($posts[0])) $this->post = $posts[0];
+
+        # Set values
+        $this->posts        = $posts;
+        $this->queryStr     = $queryStr;
+        $this->postCount    = $postCount;
+        $this->requestType  = $requestType;
+        $this->taxonomySlug = !$taxonomySlug ? NULL : $taxonomySlug;
+        $this->matchedRoute = true;
 
     }
 

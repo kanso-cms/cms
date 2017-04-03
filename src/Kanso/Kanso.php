@@ -708,9 +708,6 @@ class Kanso
 
 			return;
 		}
-
-		# Set the default error callback
-		$this->Router->error([$this, 'notFound']);
 		
 		# Apply default application routes
 		$this->setDefaultRoutes();
@@ -862,7 +859,7 @@ class Kanso
 	 * route was found and a 404 response needs to be sent.
 	 */
 	public function notFound() 
-	{
+	{		
 		# Status
 		$this->Response->setStatus(404);
 
@@ -883,6 +880,7 @@ class Kanso
 
 		# Set the body
 		$this->Response->setBody($body);
+
 	}
 
 	/**
@@ -961,7 +959,7 @@ class Kanso
 			$_this->Response->setBody($_this->Cache->get());
 		}
 		# Otherwise load the template file
-		else {
+		else if (!$_this->Query->matchedRoute) {
 
 			# Filter the posts based on the pageType
 			$_this->Query->filterPosts($pageType);
