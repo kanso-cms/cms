@@ -858,7 +858,11 @@ class Kanso
 	 */
 	public function notFound() 
 	{
+		# Status
 		$this->Response->setStatus(404);
+
+		# Remove the query request type
+		$this->Query->setNotFound();
 
 		# Call the pre dispatch event
 		\Kanso\Events::fire('notFound', [$this->Environment['REQUEST_URI'], time()]);
@@ -967,14 +971,11 @@ class Kanso
 			# Note this does not send a 404 straight away. If you have a custom route
 			# and wanted to display a template, you could still change the the status/response
 			# between now and when kanso sends a response.
-			if ($_this->Response->getstatus() === 404) {
-				return $_this->notFound();
-			}
 			if ($_this->Response->getstatus() !== 404 && $template) {
-
-				# Render the template
 				$_this->render($template);
-			
+			}
+			else {
+				$_this->notFound();
 			}
 		}
 
@@ -989,14 +990,17 @@ class Kanso
 	private function getTemplate($pageType) 
 	{
 		# Waterfall of pages
-		$waterfall    =  [];
+		$waterfall =  [];
 		
 		# Current theme dir
 		$templateBase = $this->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR;
 
 		# Explode request url
-		$urlParts     = array_filter(explode('/', trim($this->Environment['REQUEST_URI'], '/')));
+		$urlParts = array_filter(explode('/', trim($this->Environment['REQUEST_URI'], '/')));
 		
+		# 404s never get a template
+		if ($this->Response->getstatus() === 404) return false;
+
 		if ($pageType === 'home') {
 			$waterfall[] = 'homepage';
 			$waterfall[] = 'index';
@@ -1021,25 +1025,19 @@ class Kanso
 			$waterfall[] = 'index';
 		}
 		else if ($pageType === 'tag') {
-			if ($this->Response->getstatus() !== 404) {
-				$waterfall[] = 'tag-'.$this->Query->the_taxonomy()['slug'];
-			}
+			$waterfall[] = 'tag-'.$this->Query->the_taxonomy()['slug'];
 			$waterfall[] = 'taxonomy-tag';
 			$waterfall[] = 'tag';
 			$waterfall[] = 'taxonomy';
 		}
 		else if ($pageType === 'category') {
-			if ($this->Response->getstatus() !== 404) {
-				$waterfall[] = 'category-'.$this->Query->the_taxonomy()['slug'];
-			}
+			$waterfall[] = 'category-'.$this->Query->the_taxonomy()['slug'];
 			$waterfall[] = 'taxonomy-category';
 			$waterfall[] = 'category';
 			$waterfall[] = 'taxonomy';
 		}
 		else if ($pageType === 'author') {
-			if ($this->Response->getstatus() !== 404) {
-				$waterfall[] = 'author-'.$this->Query->the_taxonomy()['slug'];
-			}
+			$waterfall[] = 'author-'.$this->Query->the_taxonomy()['slug'];
 			$waterfall[] = 'taxonomy-author';
 			$waterfall[] = 'author';
 			$waterfall[] = 'taxonomy';
@@ -1057,6 +1055,8 @@ class Kanso
 		if (file_exists("$templateBase$pageType.php")) {
 			return "$templateBase$pageType.php";
 		}
+
+
 
 		return false;
 	}

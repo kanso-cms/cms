@@ -107,26 +107,30 @@ class Query {
     }
 
     /**
+     * Set to not found
+     *
+     */
+    public function setNotFound()
+    {
+        $this->pageIndex    = 0;
+        $this->postIndex    = -1;
+        $this->postCount    = 0;
+        $this->posts        = [];
+        $this->requestType  = NULL;
+        $this->queryStr     = NULL;
+        $this->post         = NULL;
+        $this->taxonomySlug = NULL;
+        $this->searchQuery  = NULL;
+    }
+
+    /**
      * Filter posts based on a request type
      *
      * @param  string $requestType    The requested page type (optional)
      */
     public function filterPosts($requestType)
     {
-        # We need to reset to defaults here incase the router
-        # has called this function twice
-        # e.g example.com/category/cat-slug -> example.com/cat-name/post-name
-        $this->requestType  = $requestType;
-        $this->queryStr     = NULL;
-        $this->pageIndex    = 0;
-        $this->postIndex    = -1;
-        $this->postCount    = 0;
-        $this->posts        = [];
-        $this->post         = NULL;
-        $this->taxonomySlug = NULL;
-        $this->searchQuery  = NULL;
-
-        # We also need to set Kanso's response incase it was set to a 404 by 
+        # We also need to set Kanso's response encase it was set to a 404 by 
         # the previous filter
         \Kanso\Kanso::getInstance()->Response->setStatus(200);
 
@@ -216,8 +220,6 @@ class Query {
             else {
                 return \Kanso\Kanso::getInstance()->Response->setStatus(404);
             }
-            
-
         }
         else if ($requestType === 'single' || \Kanso\Utility\Str::getBeforeFirstChar($requestType, '-') === 'single') {
             $postType = $requestType === 'single' ? 'post' : \Kanso\Utility\Str::getAfterFirstChar($requestType, '-'); 
@@ -1282,6 +1284,9 @@ class Query {
             return $this->cachePut($key, false);
         }
         
+        # Not found don't bother
+        if ($this->is_not_found()) return false;
+
         # If this is a single or custom post just find the next post
         if ($this->is_single() || $this->is_custom_post()) {
             return $this->cachePut($key, $this->findNextPost($this->post));
@@ -1339,6 +1344,9 @@ class Query {
         if (!in_array($this->requestType, $validRequests) && !$this->is_custom_post()) {
             return $this->cachePut($key, false);
         }
+
+        # Not found don't bother
+        if ($this->is_not_found()) return false;
         
         # If this is a single or custom post just find the next post
         if ($this->is_single() || $this->is_custom_post()) {
@@ -1685,6 +1693,8 @@ class Query {
         $titlePage  = $this->pageIndex > 0 ? 'Page '.($this->pageIndex+1).' | ' : '';
         $titleTitle = '';
 
+        if ($this->is_not_found()) return 'Page Not Found';
+
         if ($this->is_single() || $this->is_page() || $this->is_custom_post()) {
             if ($this->have_posts()) {
                 $titleTitle = $this->post->title.' | ';
@@ -1700,7 +1710,6 @@ class Query {
             $titleTitle = 'Archives | ';
         }
 
-        if ($this->is_not_found()) return 'Page Not Found';
 
         return  $titleTitle.$titlePage.$titleBase;
     }

@@ -182,7 +182,7 @@ class Router
         }
 
         # run the error callback if the route was not found
-        if ($found_route == false) {
+        if ($found_route === false) {
             call_user_func(self::$error_callback[0], self::$error_callback[1]);
         }
     }

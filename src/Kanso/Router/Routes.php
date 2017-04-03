@@ -107,9 +107,6 @@ $this->post('/admin/media-library/', '\Kanso\Admin\Controllers\Ajax@dispatch', '
 $this->get('/', '\Kanso\Kanso::loadTemplate', 'home');
 $this->get('/page/(:num)/', '\Kanso\Kanso::loadTemplate', 'home');
 
-# Articles
-$this->get($this->Config['KANSO_PERMALINKS_ROUTE'], '\Kanso\Kanso::loadTemplate', 'single');
-
 # Category
 if ($this->Config['KANSO_ROUTE_CATEGORIES'] === true) {
 	$this->get('/category/(:any)/', '\Kanso\Kanso::loadTemplate', 'category');
@@ -155,3 +152,6 @@ $this->get("/".$this->Config['KANSO_SITEMAP'], '\Kanso\Kanso::loadSiteMap');
 # RSS
 $this->get('/feed/', '\Kanso\Kanso::loadRssFeed', 'home');
 $this->get($this->Config['KANSO_PERMALINKS_ROUTE'].'feed/', '\Kanso\Kanso::loadRssFeed', 'single');
+
+# Articles
+$this->get($this->Config['KANSO_PERMALINKS_ROUTE'], '\Kanso\Kanso::loadTemplate', 'single');
