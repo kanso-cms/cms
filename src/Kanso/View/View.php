@@ -86,7 +86,11 @@ Class View {
      */
     public function display($template = null, $vars = null) 
     {
-        if ($template) $this->template($template);
+    	# Clear the templates if one was provided
+        if ($template) {
+        	$this->templates = [];
+        	$this->template($template);
+        }
         if ($vars) $this->setMultiple($vars);
         $output = '';
         foreach ($this->templates as $file) {

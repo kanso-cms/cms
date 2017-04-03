@@ -1,4 +1,11 @@
 <?php
+
+# Router should not halt on match incase the permalinks
+# route is the same as the category or tags listings
+
+# e.g example.com/category/cat-slug -> example.com/cat-name/post-name
+$this->Router->haltOnMatch(false);
+
 # 404 All Kanso/ .php requests
 $this->get('/Kanso/(:all).php', [$this, 'notFound']);
 

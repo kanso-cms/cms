@@ -103,7 +103,7 @@ class Router
      * Define a callback with args if a route is not found
      *
      * @param   mixed  $callback   Callable route function
-     * @param   array  $args       Array of arguements to be applied to callback (optional)
+     * @param   array  $args       Array of arguments to be applied to callback (optional)
      */
     public static function error($callback, $args = null)
     {
@@ -111,7 +111,7 @@ class Router
     }
     
     /**
-     * Tell the router to halt on match or conitinue
+     * Tell the router to halt on match or continue
      * @param   boolean  $flag   Callable route function
      */
     public static function haltOnMatch($flag = true)

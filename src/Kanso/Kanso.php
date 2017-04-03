@@ -669,7 +669,7 @@ class Kanso
 	 * @param  array  $data        Associative array of data made available to the view (optional)
 	 * @param  int    $status      The HTTP response status code to use (optional)
 	 */
-	public function render($template, $data = null, $status = null)
+	public function render($template = null, $data = null, $status = null)
 	{
 		# Set the status
 		if ($status) $this->Response->setStatus($status);
@@ -678,7 +678,10 @@ class Kanso
 		if ($data) $this->View->setMultiple($data);
 
 		# Append and parse template file
-		$this->Response->appendBody($this->View->display($template));
+		if ($template) {
+			$this->Response->setBody($this->View->display($template));
+		}
+		
 	}
 
 	/********************************************************************************
@@ -964,13 +967,15 @@ class Kanso
 			# Note this does not send a 404 straight away. If you have a custom route
 			# and wanted to display a template, you could still change the the status/response
 			# between now and when kanso sends a response.
+			if ($_this->Response->getstatus() === 404) {
+				return $_this->notFound();
+			}
 			if ($_this->Response->getstatus() !== 404 && $template) {
 
 				# Render the template
 				$_this->render($template);
 			
 			}
-
 		}
 
 	}
