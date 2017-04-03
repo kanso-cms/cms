@@ -724,6 +724,11 @@ class Kanso
 		# Get headers, body, status
 		list($status, $headers, $body, $cookies) = $this->Response->finalize();
 
+		# 404 event
+		if ($this->Response->getStatus() === 404) {
+			\Kanso\Events::fire('notFound', [$this->Environment['REQUEST_URI'], time()]);
+		}
+
 		# Write to the session
 		$this->Session->save();
 
@@ -864,9 +869,6 @@ class Kanso
 		# Remove the query request type
 		$this->Query->setNotFound();
 
-		# Call the pre dispatch event
-		\Kanso\Events::fire('notFound', [$this->Environment['REQUEST_URI'], time()]);
-
 		# Set the default body
 		$body = '<html><head><title>404 Not Found</title></head><body><H1>Not Found</H1><p>The requested document was not found on this server.</P><hr></body></html>';
 		
@@ -973,9 +975,6 @@ class Kanso
 			# between now and when kanso sends a response.
 			if ($_this->Response->getstatus() !== 404 && $template) {
 				$_this->render($template);
-			}
-			else {
-				$_this->notFound();
 			}
 		}
 

@@ -159,7 +159,7 @@ class Query {
             # Double check if the tag exists
             # and 404 if it does NOT 
             if (empty($this->posts)) {
-                return \Kanso\Kanso::getInstance()->Response->setStatus(404);
+                return \Kanso\Kanso::getInstance()->notFound();
             }
 
         }
@@ -180,7 +180,7 @@ class Query {
             # and 404 if it does NOT 
             if (empty($this->posts)) {
                 if (!$this->SQL->SELECT('id')->FROM('tags')->WHERE('slug', '=', explode("/", $uri)[2])->ROW()) {
-                    return \Kanso\Kanso::getInstance()->Response->setStatus(404);
+                    return \Kanso\Kanso::getInstance()->notFound();
                 }
             }
             
@@ -197,7 +197,7 @@ class Query {
             # and 404 if it does NOT 
             if (empty($this->posts)) {
                 if (!$this->SQL->SELECT('id')->FROM('categories')->WHERE('slug', '=', explode("/", $uri)[2])->ROW()) {
-                    return \Kanso\Kanso::getInstance()->Response->setStatus(404);
+                    return \Kanso\Kanso::getInstance()->notFound();
                 }
             }
             
@@ -214,11 +214,11 @@ class Query {
             $role = $this->SQL->SELECT('role')->FROM('users')->WHERE('slug', '=', explode("/", $uri)[2])->ROW();
             if ($role) {
                 if ($role['role'] !== 'administrator' && $role['role'] !== 'writer') {
-                    return \Kanso\Kanso::getInstance()->Response->setStatus(404);
+                    return \Kanso\Kanso::getInstance()->notFound();
                 }
             }
             else {
-                return \Kanso\Kanso::getInstance()->Response->setStatus(404);
+                return \Kanso\Kanso::getInstance()->notFound();
             }
         }
         else if ($requestType === 'single' || \Kanso\Utility\Str::getBeforeFirstChar($requestType, '-') === 'single') {
@@ -237,7 +237,7 @@ class Query {
                 $this->postCount = count($this->posts);
             }
             if (empty($this->posts)) {
-                return \Kanso\Kanso::getInstance()->Response->setStatus(404);
+                return \Kanso\Kanso::getInstance()->notFound();
             }
         }
         else if ($requestType === 'page') {
@@ -255,7 +255,7 @@ class Query {
                 $this->postCount = count($this->posts);
             }
             if (empty($this->posts)) {
-                return \Kanso\Kanso::getInstance()->Response->setStatus(404);
+                return \Kanso\Kanso::getInstance()->notFound();
             }
         }
         else if ($requestType === 'search') {
