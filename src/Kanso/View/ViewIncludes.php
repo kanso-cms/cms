@@ -407,6 +407,18 @@ function the_author_facebook($author_id = null)
 }
 
 /**
+ * Get the author instagram 
+ *
+ * @param   int      $author_id (optional)
+ * @return  string|false
+ */
+function the_author_instagram($author_id = null)
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_author_instagram($author_id);
+}
+
+/**
  * Get the post ID 
  *
  * @return  int|false

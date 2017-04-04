@@ -899,6 +899,24 @@ class Query {
     }
 
     /**
+     * The author instagram 
+     *
+     * @param   int      $author_id (optional)
+     * @return  string|false
+     */
+    public function the_author_instagram($author_id = null)
+    {
+        if ($author_id) {
+            $author = $this->getAuthorById($author_id);
+            if ($author) return $author->instagram;
+        }
+        if (!empty($this->post)) {
+            return $this->post->author->instagram;
+        }
+        return false;
+    }
+
+    /**
      * The post ID 
      *
      * @return  int|false

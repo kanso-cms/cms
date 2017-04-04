@@ -235,6 +235,7 @@ class Settings
             'facebook'    => 'valid_url',
             'twitter'     => 'valid_url',
             'gplus'       => 'valid_url',
+            'instagram'   => 'valid_url',
         ]);
 
         $this->validation->filter_rules([
@@ -244,6 +245,7 @@ class Settings
             'facebook'    => 'trim|sanitize_string',
             'twitter'     => 'trim|sanitize_string',
             'gplus'       => 'trim|sanitize_string',
+            'instagram'   => 'trim|sanitize_string',
         ]);
 
         # Validate POST
@@ -259,6 +261,7 @@ class Settings
         $user->facebook    = $validated_data['facebook'];
         $user->twitter     = $validated_data['twitter'];
         $user->gplus       = $validated_data['gplus'];
+        $user->instagram   = $validated_data['instagram'];
         $user->description = $validated_data['description'];
         $user->save();
 

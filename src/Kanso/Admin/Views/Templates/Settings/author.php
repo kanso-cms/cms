@@ -29,7 +29,7 @@
         </div>
 
         <div class="form-field row floor-sm">
-            <label for="twitter">Twitter+ URL</label>
+            <label for="twitter">Twitter URL</label>
             <input type="text" name="twitter" id="twitter" placeholder="http://twitter.com/example" value="<?php echo $USER->twitter; ?>" data-js-validation="url">
             <p class="help-danger">* Please enter a valid url.</p>
         </div>
@@ -37,6 +37,12 @@
         <div class="form-field row floor-sm">
             <label for="gplus">Google+ URL</label>
             <input type="text" name="gplus" id="gplus" placeholder="http://plus.google.com/example" value="<?php echo $USER->gplus; ?>" data-js-validation="url">
+            <p class="help-danger">* Please enter a valid url.</p>
+        </div>
+
+         <div class="form-field row floor-sm">
+            <label for="gplus">Instagram URL</label>
+            <input type="text" name="instagram" id="instagram" placeholder="http://instagram.com/example" value="<?php echo $USER->instagram; ?>" data-js-validation="url">
             <p class="help-danger">* Please enter a valid url.</p>
         </div>
         
