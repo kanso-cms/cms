@@ -129,7 +129,7 @@
             </p>
             <span class="checkbox checkbox-primary">
                 <input type="checkbox" name="enable_comments" id="enable_comments" <?php echo ($kansoConfig['KANSO_COMMENTS_OPEN'] === true ? 'checked' : '');?>  />
-                <label for="enable_comments">Enable author listings</label>
+                <label for="enable_comments">Enable comments</label>
             </span>
         </div>
 
