@@ -24,7 +24,7 @@ class Mailer
   			'subject' => $emailSubject,
   			'message' => $emailMessage,
   		];
-  		$email_body      = \Kanso\Templates\Templater::getTemplate($data, 'EmailBody');
+  		$email_body      = \Kanso\Templates\Templater::getTemplate('EmailBody', $data);
 	    $email_headers   = 'MIME-Version: 1.0' . "\r\n";
 	    $email_headers  .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
 	    $email_headers  .= 'From: '.$emailSender.' <'.$emailFrom.'>' . "\r\n";
