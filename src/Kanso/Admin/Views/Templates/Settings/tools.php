@@ -26,34 +26,7 @@
         <button type="submit" class="btn btn-success">Import Articles</button>
     </form>
 
-    <!-- BATCH UPLOAD IMAGES -->
-    <form class="row floor-md" method="post" enctype="multipart/form-data">
-        <div class="form-field row">
-            <label>Batch import images</label>
-            <p class="color-gray">
-                Use this tool to batch upload a folder of images into your Kanso installation.
-                This is useful when batch importing articles or when migrating from another framework.
-            </p>
-        </div>
-        <div class="form-field field-group file-field js-file-field row floor-xs">
-            <label class="input-addon" for="import_images">
-                images
-            </label>
-            <input type="text" class="js-file-text file-text" disabled>
-            <button type="button" class="btn btn-upload">
-                <span class="upload-cover">
-                    <input type="file" class="js-file-input" name="import_images[]" id="import_images" accept="image/*" multiple >
-                </span>
-                <span class="glyph-icon glyph-icon-upload"></span>
-            </button>
-        </div>
-        <input type="hidden" name="form_name" value="batch_images">
-        <input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN; ?>">
-        <button type="submit" class="btn btn-success">Import Images</button>
-        
-    </form>
-
-    <!-- BATCH UPLOAD IMAGES -->
+    <!-- RESTORE DEFAULTS -->
     <form method="post">
         <div class="form-field row">
             <label>Restore defaults</label>

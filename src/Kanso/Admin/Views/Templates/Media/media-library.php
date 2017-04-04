@@ -136,6 +136,11 @@
 								<svg viewBox="0 0 64 64" class="loading-spinner"><circle class="path" cx="32" cy="32" r="30" fill="none" stroke-width="4"></circle></svg>
 								Delete attachment
 							</button>
+
+							<button type="button" class="btn with-spinner update-media js-update-media">
+								<svg viewBox="0 0 64 64" class="loading-spinner"><circle class="path" cx="32" cy="32" r="30" fill="none" stroke-width="4"></circle></svg>
+								Update attachment info
+							</button>
 							
 							<button type="button" class="btn btn-success with-spinner insert-media js-insert-media">
 								<svg viewBox="0 0 64 64" class="loading-spinner"><circle class="path" cx="32" cy="32" r="30" fill="none" stroke-width="4"></circle></svg>
@@ -150,11 +155,7 @@
 								Set As Avatar
 							</button>
 							
-							<button type="button" class="btn btn-success with-spinner update-media js-update-media">
-								<svg viewBox="0 0 64 64" class="loading-spinner"><circle class="path" cx="32" cy="32" r="30" fill="none" stroke-width="4"></circle></svg>
-								Update attachment info
-							</button>
-
+							
 						</form>
 					</div>
 				

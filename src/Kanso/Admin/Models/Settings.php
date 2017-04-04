@@ -110,9 +110,6 @@ class Settings
             else if ($postVars['form_name'] === 'batch_articles') {
                 return $this->importArticles($postVars);
             }
-            else if ($postVars['form_name'] === 'batch_images') {
-                return $this->importImages();
-            }
             else if ($postVars['form_name'] === 'restore_kanso') {
                 return $this->restoreKanso();
             }
@@ -414,101 +411,6 @@ class Settings
         else {
             return $this->response('The JSON you uploaded is not a valid Kanso import file.', 'warning');
         }
-    }
-
-    /**
-     * Parse and validate batch uploading of images
-     * 
-     * @return array|false
-     */
-    private function importImages()
-    {
-        # Validate the user is an admin
-        $user = \Kanso\Kanso::getInstance()->Gatekeeper->getUser();
-        if ($user->role !== 'administrator') return false;
-
-        # Validate a file was sent
-        if (empty($_FILES) || !isset($_FILES['import_images']) || !is_array($_FILES['import_images'])) return $this->response('No files were uploaded. Please select a ".json" file to upload.', 'warning');
-
-        # Loop files
-        foreach ($_FILES['import_images'] as $type => $attributes) {
-
-            # Validate the mime
-            if ($type === 'type') {
-                foreach ($attributes as $mimeType) {
-                    if (!in_array($mimeType, ['image/png', 'image/jpeg', 'image/gif'])) return $this->response('You can only upload ".png", ".jpg" or ".gif" images.', 'warning');
-                }
-            }
-            # Validate the sizes (max is 10mb)
-            else if ($type === 'size') {
-                foreach ($attributes as $size) {
-                    if ($size > 10000000) return $this->response('One of files you uploaded is too large.', 'warning');
-                }
-            }
-        }
-
-        # Declare size suffixes for resizing
-        $sizes  = ["small", "medium", "large"];
-
-        # Get the environment
-        $env = \Kanso\Kanso::getInstance()->Environment;
-
-        # Get the config
-        $config = \Kanso\Kanso::getInstance()->Config;
-
-        # Declare config sizes locally
-        $configSizes = $config['KANSO_THUMBNAILS'];
-
-        # Destination for event;
-        $dest = '';
-
-        # Upload the images
-        foreach ($_FILES['import_images']['tmp_name'] as $f => $tmpFile) {
-
-            # Loop through config sizes - maximum is 3 thumbnails
-            for ($i=0; $i < 3; $i++) {
-
-                # Declare the resize
-                $size  = $configSizes[$i];
-
-                # Grab our image processor
-                $Imager = new \Kanso\Utility\Images($tmpFile);
-
-                # Sanitize the file name
-                $name  = str_replace('.jpeg', '.jpg', htmlentities(str_replace("/", "", stripslashes($_FILES['import_images']['name'][$f]))));
-                $ext   = substr($name, strrpos($name, '.') + 1);
-                $name  = substr($name, 0,strrpos($name, '.'));
-
-                # Set the destination and quality
-                $dst   = $env['KANSO_UPLOADS_DIR'].'/Images/'.$name.'_'.$sizes[$i].'.'.$ext;
-                $qual  = $config['KANSO_IMG_QUALITY'];
-                $qual  = $ext === 'png' ? ($qual/10) : $qual;
-
-                # If sizes are declared with width & Height - resize to those dimensions
-                # otherwise just resize to width;
-                if (is_array($size)) {
-                    $Imager->crop($size[0], $size[1], true);
-                }
-                else {
-                    $Imager->resizeToWidth($size, true);
-                }
-
-                # Save the file
-                $saved = $Imager->save($dst, false, $qual);
-
-                $dest = $dst;
-
-                # Return error if file couldnt be saved
-                if (!$saved) return $this->response('There was an error saving one of your files.', 'danger');
-
-            }
-
-        }
-
-        # Fire upload event
-        \Kanso\Events::fire('imageUpload', $dest);
-
-        return $this->response('Your images were successfully uploaded!', 'success');
     }
 
     /**
