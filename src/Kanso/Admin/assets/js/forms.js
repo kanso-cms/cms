@@ -39,6 +39,6 @@
                 formValidator.showInvalid();
             }
         });
-    }   
+    }
 
 }());

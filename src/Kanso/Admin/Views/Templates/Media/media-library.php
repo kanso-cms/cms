@@ -145,6 +145,10 @@
 							<button type="button" class="btn btn-success with-spinner set-feature-image js-set-feature-image">
 								Set As Feature Image
 							</button>
+
+							<button type="button" class="btn btn-success with-spinner set-author-avatar js-set-author-avatar">
+								Set As Avatar
+							</button>
 							
 							<button type="button" class="btn btn-success with-spinner update-media js-update-media">
 								<svg viewBox="0 0 64 64" class="loading-spinner"><circle class="path" cx="32" cy="32" r="30" fill="none" stroke-width="4"></circle></svg>

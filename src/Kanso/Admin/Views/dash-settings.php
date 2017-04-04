@@ -27,6 +27,10 @@
 	<?php elseif ($active_tab === 'author') : ?>
 		<!-- AUTHOR -->
 		<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Settings'.DIRECTORY_SEPARATOR.'author.php'); ?>
+		<!-- MEDIA LIBRARY -->
+		<div class="avatar-media-wrapper js-triggerable-media">
+			<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Media'.DIRECTORY_SEPARATOR.'media-library.php'); ?>
+		</div>
 
 	<?php elseif ($active_tab === 'kanso') : ?>
 		<!-- KANSO -->
@@ -36,9 +40,11 @@
 	 	<!-- USERS -->
 	    <?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Settings'.DIRECTORY_SEPARATOR.'users.php'); ?>
 
+
 	<?php elseif ($active_tab === 'tools') : ?>
 	    <!-- TOOLS -->
 	    <?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Settings'.DIRECTORY_SEPARATOR.'tools.php'); ?>
 	<?php endif;?>
 
 </div>
+

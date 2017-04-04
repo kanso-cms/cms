@@ -229,23 +229,24 @@ class Settings
         $postVars = $this->validation->sanitize($postVars);
 
         $this->validation->validation_rules([
-            'name'        => 'required|alpha_space|max_len,50|min_len,3',
-            'slug'        => 'required|alpha_dash|max_len,50|min_len,3',
-            'description' => 'max_len,255',
-            'facebook'    => 'valid_url',
-            'twitter'     => 'valid_url',
-            'gplus'       => 'valid_url',
-            'instagram'   => 'valid_url',
+            'name'         => 'required|alpha_space|max_len,50|min_len,3',
+            'slug'         => 'required|alpha_dash|max_len,50|min_len,3',
+            'description'  => 'max_len,255',
+            'facebook'     => 'valid_url',
+            'twitter'      => 'valid_url',
+            'gplus'        => 'valid_url',
+            'instagram'    => 'valid_url',
         ]);
 
         $this->validation->filter_rules([
-            'name'        => 'trim|sanitize_string',
-            'slug'        => 'trim|sanitize_string',
-            'description' => 'trim|sanitize_string',
-            'facebook'    => 'trim|sanitize_string',
-            'twitter'     => 'trim|sanitize_string',
-            'gplus'       => 'trim|sanitize_string',
-            'instagram'   => 'trim|sanitize_string',
+            'name'         => 'trim|sanitize_string',
+            'slug'         => 'trim|sanitize_string',
+            'description'  => 'trim|sanitize_string',
+            'facebook'     => 'trim|sanitize_string',
+            'twitter'      => 'trim|sanitize_string',
+            'gplus'        => 'trim|sanitize_string',
+            'instagram'    => 'trim|sanitize_string',
+            'thumbnail_id' => 'trim|sanitize_numbers',
         ]);
 
         # Validate POST
@@ -256,13 +257,14 @@ class Settings
         $user = \Kanso\Kanso::getInstance()->Gatekeeper->getUser();
 
         # Change authors details
-        $user->name        = $validated_data['name'];
-        $user->slug        = $validated_data['slug'];
-        $user->facebook    = $validated_data['facebook'];
-        $user->twitter     = $validated_data['twitter'];
-        $user->gplus       = $validated_data['gplus'];
-        $user->instagram   = $validated_data['instagram'];
-        $user->description = $validated_data['description'];
+        $user->name         = $validated_data['name'];
+        $user->slug         = $validated_data['slug'];
+        $user->facebook     = $validated_data['facebook'];
+        $user->twitter      = $validated_data['twitter'];
+        $user->gplus        = $validated_data['gplus'];
+        $user->instagram    = $validated_data['instagram'];
+        $user->description  = $validated_data['description'];
+        $user->thumbnail_id = empty($validated_data['thumbnail_id']) ? NULL : intval($validated_data['thumbnail_id']);
         $user->save();
 
         return $this->response('Your author information was successfully updated!', 'success');

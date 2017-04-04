@@ -211,6 +211,9 @@ class Includes
 		# Media library
 		$scripts[] = '<script type="text/javascript" src="'.$this->assetsURL().'/js/media-library.js?v='.$this->assetsVersion().'"></script>';
 
+		# Author avatar
+		$scripts[] = '<script type="text/javascript" src="'.$this->assetsURL().'/js/author-avatar.js?v='.$this->assetsVersion().'"></script>';
+
 		$scripts = \Kanso\Filters::apply('adminFooterScripts', $scripts);
 
 		return implode("\n", $scripts);

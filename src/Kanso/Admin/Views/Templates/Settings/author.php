@@ -5,6 +5,25 @@
             linked to your account credentials. You don't need to fill out everything - only 
             your name and slug are mandatory.
         </p>
+
+        <div class="author-avatar-img js-author-avatar-img <?php if (!empty($USER->thumbnail_id)) echo 'active'; ?>">
+            <div class="form-field row floor-xs">
+                <label>Avatar</label>
+                <?php 
+                if (!empty($USER->thumbnail_id)) {
+                    echo display_thumbnail(the_author_thumbnail($USER->id), 'original', '', '', ''); 
+                }
+                else {
+                    echo '<img src="" >';
+                }
+                ?>
+                <input  type="hidden" name="thumbnail_id" class="js-avatar-id" value="<?php echo $USER->thumbnail_id;?>" />
+                <button type="button" class="btn select-img-trigger js-select-img-trigger js-show-media-lib">Select image</button>
+                <button type="button" class="btn remove-img-trigger js-remove-img-trigger">Remove image</button>
+            </div>
+        </div>
+
+
         <div class="form-field row floor-sm">
             <label for="name">Name</label>
             <input type="text" name="name" id="name" placeholder="John" value="<?php echo $USER->name; ?>" data-js-required="true">
