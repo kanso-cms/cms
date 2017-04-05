@@ -3,7 +3,7 @@
   -webkit-text-size-adjust: 100%;
   color: #333;
   overflow: hidden;
-  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif;
+  font-family: Georgia, Times, "Times New Roman", serif;
   font-size: 16px;
   line-height: 1.6;
   word-wrap: break-word;
@@ -343,7 +343,6 @@
 }
 
 .markdown-body table {
-  display: block;
   width: 100%;
   overflow: auto;
   word-break: normal;
@@ -359,6 +358,7 @@
 .markdown-body table th, .markdown-body table td {
   padding: 6px 13px;
   border: 1px solid #ddd;
+  background: #f4f4f4;
 }
 
 .markdown-body table tr {
@@ -382,8 +382,9 @@
   margin: 0;
   font-size: 85%;
   border-radius: 3px;
-  background-color: #fff;
+  background-color: transparent;
   border: none;
+  border: 1px solid #dadada;
 }
 
 .markdown-body code:before, .markdown-body code:after {
@@ -411,9 +412,10 @@
   overflow: auto;
   font-size: 85%;
   line-height: 1.45;
-  background-color: #fff;
+  background-color: transparent;
   border: none;
   border-radius: 3px;
+  border: 1px solid #dadada;
 }
 
 .markdown-body .highlight pre {
@@ -575,3 +577,45 @@
   position: relative;
   border-color: #4183c4;
 }
+
+.markdown-body blockquote {
+  border: none;
+  position: relative;
+  text-align: center;
+  box-shadow: none;
+  font-size: 3.5rem;
+  line-height: 5rem;
+  font-style: italic;
+  margin-top: 6rem;
+  margin-bottom: 6rem;
+  padding: 0;
+  background-color: transparent;
+}
+.markdown-body blockquote p {
+  width: 100%;
+  padding-bottom: 2rem;
+  padding-top: 2rem;
+  font-size: 2rem;
+}
+.markdown-body blockquote:before, .markdown-body blockquote:after {
+  position: absolute;
+  color: gray;
+  font-size: 54px;
+}
+.markdown-body blockquote:before {
+  content: "“";
+  top: -17px;
+  left: 0;
+}
+.markdown-body blockquote:after {
+  content: "”";
+  bottom: -55px;
+  right: 0;
+}
+.markdown-body blockquote > :first-child {
+  padding-top: 0;
+}
+.markdown-body blockquote > :last-child {
+  padding-bottom: 0;
+}
+

@@ -1,80 +1,27 @@
-body.writing #footer {
+/************************* GENERAL *************************/
+.writer-html .sidebar,
+.reading-html .sidebar,
+.review-html .sidebar {
+  transition: opacity .3s ease;
+}
+.writer-html .dash-wrap,
+.reading-html .dash-wrap,
+.review-html .dash-wrap {
   display: none;
 }
-body.writing #content {
-  padding-top: 0;
-}
 
-.writer .writer-textarea,
+.reviewer,
 .writer,
-.reader,
-.reviewer {
+.reader {
   display: none;
 }
 
-.writer.active,
-.reader.active,
-.reviewer.active {
-  display: block;
-}
-
-.reader,
-.reviewer {
-  padding-top: 50px;
-  padding-bottom: 50px;
-}
-
-/* Header */
-.writer-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 501;
-  display: none;
-}
-.writer-progress.active {
-  display: block;
-}
-
-/* Writer */
-html.writer-html {
-  background: #fff;
-}
-html.writer-html .sidebar {
-	transition: opacity .3s ease;
-}
-
-body.writing.markdown {
-  background: #f5f5f5;
-  overflow: hidden;
-}
-
+/************************* WRITING *************************/
 .writer {
   padding: 50px 100px 31px 100px;
   width: 100%;
 }
-
-/* Reader */
-html.reading,
-html.reading body {
-  background: #fff;
-  height: 100% !important;
-}
-
-
-
-body.writing .header {
-  transform: translateY(0);
-  -webkit-transform: translateY(0);
-}
-
-body.writing .header.active {
-  transform: translateY(-62px);
-  -webkit-transform: translateY(-62px);
-}
-
-/* Code Mirror */
-.CodeMirror {
+.writer .CodeMirror {
   font-family: "menlo", Consolas, "Liberation Mono", Courier, monospace;
   font-size: 18px;
   line-height: 28px;
@@ -84,8 +31,91 @@ body.writing .header.active {
   margin-right: auto;
   height: 100%;
 }
+.writer .CodeMirror .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
+  border-bottom: 2px dashed #dc3b3b;
+}
+.writer .CodeMirror span {
+  vertical-align: initial;
+}
 
-/* Writer Footer buttons */
+.writer-html {
+  background: #f4f4f4;
+}
+.writer-html body {
+  background: #f4f4f4;
+  overflow: hidden;
+}
+.writer-html .writer {
+  display: block;
+}
+
+/************************* READING *************************/
+.reader {
+  padding: 50px 0;
+  width: 100%;
+  max-width: 1080px;
+}
+
+.reading-html {
+  background: #f4f4f4;
+}
+.reading-html body {
+  background: #f4f4f4;
+}
+.reading-html .reader {
+  display: block;
+}
+.reading-html .writer-footer .writer-powers {
+  display: none;
+}
+
+/************************* REVIWING *************************/
+.review-html .reviewer {
+  display: block;
+}
+.review-html .writer-footer .writer-powers {
+  display: none;
+}
+.review-html .writer,
+.review-html .reader {
+  display: none;
+}
+
+.reviewer {
+  width: 100%;
+  margin: 0 auto;
+  max-width: 1080px;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  overflow: hidden;
+}
+.reviewer .container {
+  padding-left: 0;
+  padding-right: 0;
+}
+.reviewer .feature-img .remove-img-trigger {
+  display: none;
+}
+.reviewer .feature-img img {
+  height: auto;
+  max-height: 300px;
+  width: auto;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 13px;
+  display: none;
+}
+.reviewer .feature-img.active img {
+  display: block;
+}
+.reviewer .feature-img.active .select-img-trigger {
+  display: none;
+}
+.reviewer .feature-img.active .remove-img-trigger {
+  display: inline-block;
+}
+
+/************************* FOOTER *************************/
 .writer-footer {
   position: fixed;
   -webkit-transition: 0.5s ease;
@@ -99,11 +129,9 @@ body.writing .header.active {
   z-index: 501;
   line-height: 8px;
 }
-
 .writer-footer.active {
   opacity: 1;
 }
-
 .writer-footer button {
   border: none;
   background: transparent;
@@ -111,90 +139,49 @@ body.writing .header.active {
   color: #aba8a6;
   outline: none;
 }
-.writer-footer button:active,
-.writer-footer button:focus {
-	outline: none;
+.writer-footer button:active, .writer-footer button:focus {
+  outline: none;
 }
-
+.writer-footer button:hover {
+  color: #62c4b6;
+}
+.writer-footer button:hover svg {
+  fill: #62c4b6;
+}
 .writer-footer svg {
   width: 10px;
   height: 10px;
   fill: #aba8a6;
 }
-
-.writer-footer button:hover {
-  color: #62c4b6;
-}
-
-.writer-footer button:hover svg {
-  fill: #62c4b6;
-}
-
 .writer-footer .view-toggles {
   border-right: 1px solid #aba8a6;
   line-height: 27px;
 }
-
 .writer-footer .view-toggles button {
   padding: 6px 10px;
 }
-
 .writer-footer .view-toggles svg {
   height: 14px;
   width: 14px;
 }
-
 .writer-footer .view-toggles button.active {
   background: rgba(0, 0, 0, 0.07);
 }
-
 .writer-footer .view-toggles button.active svg {
   fill: #62c4b6;
 }
-
 .writer-footer .view-toggles .save-button.active {
   background: none;
 }
-
 .writer-footer .view-toggles .save-button.active svg {
   fill: #f39c12;
 }
-
 .writer-footer .writer-powers {
   padding: 5px 0;
 }
 
-body.writing.HTML .writer-footer .writer-powers,
-body.writing.review .writer-footer .writer-powers {
-  display: none;
-}
-
-.feature-img  .remove-img-trigger,
-.feature-img.active  .select-img-trigger {
-  display: none;
-}
-.feature-img.active  .remove-img-trigger {
-  display: inline-block;
-}
-.feature-img img {
-  height: auto;
-  max-height: 300px;
-  width: auto;
-  border-radius: 3px;
-  overflow: hidden;
-  margin-bottom: 13px;
-  display: none;
-}
-.feature-img.active img {
-  display: block;
-}
-
+/************************* MEDIA QUERIES *************************/
 @media only screen and (max-width: 1279px) {
-  .CodeMirror {
-    max-width: 860px;
-    font-size: 15px;
-  }
-
   .site-container {
     padding-left: 10px;
     padding-right: 10px;
@@ -206,6 +193,18 @@ body.writing.review .writer-footer .writer-powers {
     font-size: 13px;
   }
 
+  .reader {
+    max-width: 676px;
+    font-size: 18px;
+  }
+  .reader p {
+    font-size: 18px;
+  }
+
+  .reviewer {
+    max-width: 676px;
+  }
+
   .writer-footer .view-toggles {
     width: 25%;
   }
@@ -215,18 +214,9 @@ body.writing.review .writer-footer .writer-powers {
   }
 }
 @media only screen and (max-width: 739px) {
-  body.writing  .site-container {
-    max-width: 100% !important;
-    width: 100%  !important;
-    min-width: 100%  !important;
-  }
-
-  .CodeMirror {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .writer {
+  .writer,
+  .reviewer,
+  .reader {
     padding: 27px 20px;
   }
 
@@ -239,8 +229,5 @@ body.writing.review .writer-footer .writer-powers {
     text-align: center;
   }
 }
-@media only screen and (max-width: 640px) {
-  .hide-header {
-    position: absolute;
-  }
-}
+
+/*# sourceMappingURL=writer.css.map */
