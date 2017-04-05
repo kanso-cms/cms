@@ -202,6 +202,35 @@ class Account
 		$this->renderPage();
 	}
 
+
+	/**
+	 * Run the reset password validation
+	 *
+	 */
+	private function resetpassword() 
+	{
+		# If the user is logged in they can't register 
+		if ($this->isLoggedIn) {
+			return \Kanso\Kanso::getInstance()->redirect($this->adminHomepage);
+		}
+
+		# GET validation
+		if (!$this->is_post) {
+			if (!$this->model->resetpasswordGET()) {
+				return \Kanso\Kanso::getInstance()->notFound();
+			}
+			$this->renderPage();
+		}
+		# POST validation
+		else {
+			$this->postResponse = $this->model->resetpasswordPOST();
+			if (!$this->postResponse) {
+				return \Kanso\Kanso::getInstance()->notFound();
+			}
+			$this->renderPage();
+		}
+	}
+
 	/**
 	 * Run the register validation
 	 *

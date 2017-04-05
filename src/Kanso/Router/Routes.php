@@ -26,8 +26,8 @@ $this->get('/admin/forgot-username/',  '\Kanso\Admin\Controllers\Account@dispatc
 $this->post('/admin/forgot-username/', '\Kanso\Admin\Controllers\Account@dispatch', 'forgotusername');
 
 # Admin reset password
-$this->get('/admin/forgot-username/',  '\Kanso\Admin\Controllers\Account@dispatch', 'forgotusername');
-$this->post('/admin/forgot-username/', '\Kanso\Admin\Controllers\Account@dispatch', 'forgotusername');
+$this->get('/admin/reset-password/(:all)',  '\Kanso\Admin\Controllers\Account@dispatch', 'resetpassword');
+$this->post('/admin/reset-password/(:all)', '\Kanso\Admin\Controllers\Account@dispatch', 'resetpassword');
 
 # Admin register
 $this->get('/admin/register/(:all)',  '\Kanso\Admin\Controllers\Account@dispatch', 'register');

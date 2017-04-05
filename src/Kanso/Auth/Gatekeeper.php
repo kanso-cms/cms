@@ -564,7 +564,7 @@ class Gatekeeper
         $user = new \Kanso\Auth\Adapters\User($userRow);
         $user->kanso_password_key = '';
         $user->password = utf8_encode(\Kanso\Security\Encrypt::hash($password));
-        if ($user->save) return true;
+        if ($user->save()) return true;
 
         return false;
     }

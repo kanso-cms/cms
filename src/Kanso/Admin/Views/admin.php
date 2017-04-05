@@ -30,6 +30,9 @@ else if ($ADMIN_PAGE_TYPE === 'forgotpassword') {
 else if ($ADMIN_PAGE_TYPE === 'forgotusername') {
 	require_once('account-forgotusername.php');
 }
+else if ($ADMIN_PAGE_TYPE === 'resetpassword') {
+	require_once('account-resetpassword.php');
+}
 else if ($ADMIN_PAGE_TYPE === 'writer') {
 	require_once('dash-writer.php');
 }

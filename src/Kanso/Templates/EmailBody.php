@@ -21,8 +21,8 @@ echo '
 	                        <table style="font-family: \'Helvetica Neue\', \'Helvetica\', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; width: 100%; margin: 0; padding: 0;">
 	                            <tr style="font-family: \'Helvetica Neue\', \'Helvetica\', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
 	                                <td style="font-family: \'Helvetica Neue\', \'Helvetica\', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
-	                                	<a href="">
-	                                		<img src="'.\Kanso\utility\Humanizer::dirToURL(dirname(__DIR__)).'/Uploads/Images/kanso-logo-small.jpg" style="width: 48px;height: 48px;margin-bottom: 7px;" />
+	                                	<a href="http://kanso-cms.github.io/">
+	                                		<img src="'.\Kanso\Kanso::getInstance()->Environment['KANSO_IMGS_URL'].'/kanso-logo-small.jpg" style="width: 48px;height: 48px;margin-bottom: 7px;" />
 	                                	</a>
 	                                	'.$data['message'].'
 	                                </td>
@@ -43,7 +43,7 @@ echo '
 	                                <td align="center" style="font-family: \'Helvetica Neue\', \'Helvetica\', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; margin: 0; padding: 0;">
 	                                    <p style="font-family: \'Helvetica Neue\', \'Helvetica\', Helvetica, Arial, sans-serif; font-size: 12px; line-height: 1.6; color: #D5D5D5; font-weight: normal;margin: 18px 0;; padding: 0;">
 	                                    	Message sent via 
-	                                    	<a href="pencilscoop.com/Kanso" style="font-family: \'Helvetica Neue\', \'Helvetica\', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; color: #A5A5A5; margin: 0; padding: 0;">
+	                                    	<a href="http://kanso-cms.github.io/" style="font-family: \'Helvetica Neue\', \'Helvetica\', Helvetica, Arial, sans-serif; font-size: 100%; line-height: 1.6; color: #A5A5A5; margin: 0; padding: 0;">
 	                                    		Kanso CMS
 	                                    	</a>
 	                                    </p>

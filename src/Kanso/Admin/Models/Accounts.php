@@ -123,6 +123,75 @@ class Accounts
     }
 
     /**
+     * Parse a reset password GET request
+     *
+     * @return boolean
+     */
+    public function resetpasswordGET()
+    {
+        # Get the token in the url
+        $token = \Kanso\Kanso::getInstance()->Request->queries('token');
+
+        # If no token was given 404
+        if (!$token || trim($token) === '' || $token === 'null' ) return \Kanso\Kanso::getInstance()->notFound();
+
+        # Get the user based on their token
+        $user = \Kanso\Kanso::getInstance()->Gatekeeper->getUserProvider()->byKey('kanso_password_key', $token, true);
+
+        # Validate the token exists
+        if (empty($user)) return false;
+
+        # Add the token to client's session
+        \Kanso\Kanso::getInstance()->Session->put('kanso_password_key', $token);
+
+        return true;
+    }
+
+    /**
+     * Parse a reset password POST request
+     *
+     * @return boolean
+     */
+    public function resetpasswordPOST()
+    {
+        # Get the token from the referrer
+        $_token = \Kanso\Kanso::getInstance()->Session->getReferrer();
+        if (!$_token) return false;
+        $_token = explode('token=', $_token);
+        if (!isset($_token[1])) return false;
+        $token = $_token[1];
+
+        # If no token was given 404
+        if (!$token || trim($token) === '' || $token === 'null' ) return false;
+
+        # Make sure the user's token is in the session and they match
+        $sesssionToken =  \Kanso\Kanso::getInstance()->Session->get('kanso_password_key');
+        if (!$sesssionToken || $sesssionToken !== $token) return false;
+
+        # Get the user based on their token
+        $user = \Kanso\Kanso::getInstance()->Gatekeeper->getUserProvider()->byKey('kanso_password_key', $token, true);
+
+        # Validate the token exists
+        if (empty($user)) return false;
+
+        # $_POST password must be set - get directly from POST so it is untouched
+        if (!isset($_POST['password'])) return false;
+
+        # Remove the session key
+        \Kanso\Kanso::getInstance()->Session->remove('kanso_password_key');
+
+        # Reset the user's password
+        $reset = \Kanso\Kanso::getInstance()->Gatekeeper->resetPassword($_POST['password'], $token);
+
+        if ($reset) {
+            return ['class' => 'success', 'icon' => 'check', 'msg' => 'Your password was successfully reset.'];
+        }
+        
+        return ['class' => 'danger', 'icon' => 'times', 'msg' => 'There was an error processing your request.'];
+
+    }
+
+    /**
      * Parse a forgot register request via POST
      *
      * @return boolean
