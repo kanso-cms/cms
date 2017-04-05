@@ -21,9 +21,6 @@
 <!-- FOOTER -->
 <?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Writer'.DIRECTORY_SEPARATOR.'footer.php'); ?>
 
-<!-- PROGRESS -->
-<div class="progress-bar bg-gradient writer-progress js-writer-progress"><span style="width:0%;" class="progress"></span></div>
-
 <!-- MEDIA LIBRARY -->
 <div class="writer-media-wrapper js-triggerable-media">
 	<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Media'.DIRECTORY_SEPARATOR.'media-library.php'); ?>
