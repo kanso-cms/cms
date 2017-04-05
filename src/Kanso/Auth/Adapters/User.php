@@ -105,7 +105,7 @@ class User
                 $this->SQL->UPDATE('posts')->SET(['author_id' => 1])->WHERE('author_id', '=', $this->data['id'])->QUERY();
 
                 # Change all their uploaded images
-                $this->SQL->UPDATE('media_uploads')->SET(['uploader_id' => 1])->WHERE('author_id', '=', $this->data['id'])->QUERY();
+                $this->SQL->UPDATE('media_uploads')->SET(['uploader_id' => 1])->WHERE('uploader_id', '=', $this->data['id'])->QUERY();
 
                 # Remove slug
                 $this->removeSlug();
