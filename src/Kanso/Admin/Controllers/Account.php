@@ -193,8 +193,7 @@ class Account
 		if ($this->isLoggedIn) {
 			return \Kanso\Kanso::getInstance()->redirect($this->adminHomepage);
 		}
-		# If this is a POST request parse and 
-		# validate the POST variables
+		# If this is a POST request parse and validate the POST variables
 		else if ($this->is_post) {
 			$this->postResponse = $this->model->forgotusername();
 		}

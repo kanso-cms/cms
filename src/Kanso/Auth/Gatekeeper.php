@@ -583,6 +583,9 @@ class Gatekeeper
         $userRow = $this->SQL->SELECT('*')->FROM('users')->WHERE('email', '=', $email)->ROW();
         if (!$userRow) return false;
 
+        # Get the user
+        $user = new \Kanso\Auth\Adapters\User($userRow);
+
         # email variables
         $env       = \Kanso\Kanso::getInstance()->Environment;
         $config    = \Kanso\Kanso::getInstance()->Config;
@@ -596,7 +599,7 @@ class Gatekeeper
         $emailFrom        = $config['KANSO_SITE_TITLE'];
         $emailAddressFrom = 'no-reply@'.$env['KANSO_WEBSITE_NAME'];
         $emailSubject     = 'Username reminder at '.$env['KANSO_WEBSITE_NAME'];
-        $emailMsg         = \Kanso\Templates\Templater::getTemplate('EmailForgotPassword', $emailData);
+        $emailMsg         = \Kanso\Templates\Templater::getTemplate('EmailForgotUsername', $emailData);
         $emailTo          = $user->email;
 
         # Send email
