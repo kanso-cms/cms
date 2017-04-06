@@ -163,7 +163,7 @@ KansoWriter.prototype.initSbTimer = function() {
     var self = this;
     window.addEventListener("mousemove", function() {
         var fromSide = event.clientX;
-        if (fromSide < 120) {
+        if (fromSide < 70) {
             clearTimeout(sbTimer);
             sb.style.opacity = "1";
             sbTimer = setTimeout(function() {

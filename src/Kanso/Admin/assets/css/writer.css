@@ -16,9 +16,13 @@
   display: none;
 }
 
+.site-container {
+  padding-left: 80px;
+  padding-right: 80px;
+}
+
 /************************* WRITING *************************/
 .writer {
-  padding: 50px 100px 31px 100px;
   width: 100%;
 }
 .writer .CodeMirror {
@@ -36,6 +40,14 @@
 }
 .writer .CodeMirror span {
   vertical-align: initial;
+}
+.writer .CodeMirror-overlayscroll-horizontal,
+.writer .CodeMirror-overlayscroll-vertical {
+  z-index: 500;
+}
+.writer .CodeMirror-lines {
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 
 .writer-html {
@@ -70,6 +82,12 @@
 }
 
 /************************* REVIWING *************************/
+.review-html {
+  background: #f4f4f4;
+}
+.review-html body {
+  background: #f4f4f4;
+}
 .review-html .reviewer {
   display: block;
 }
@@ -126,11 +144,16 @@
   text-align: center;
   border-top: 1px solid #aba8a6;
   background: #f5f5f5;
-  z-index: 501;
+  z-index: 499;
   line-height: 8px;
 }
 .writer-footer.active {
   opacity: 1;
+}
+.writer-footer > div {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
 }
 .writer-footer button {
   border: none;
@@ -181,28 +204,16 @@
 }
 
 /************************* MEDIA QUERIES *************************/
-@media only screen and (max-width: 1279px) {
-  .site-container {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-}
 @media only screen and (max-width: 1069px) {
-  .CodeMirror {
-    max-width: 740px;
-    font-size: 13px;
+  .writer .CodeMirror {
+    font-size: 16px;
   }
 
   .reader {
-    max-width: 676px;
     font-size: 18px;
   }
   .reader p {
     font-size: 18px;
-  }
-
-  .reviewer {
-    max-width: 676px;
   }
 
   .writer-footer .view-toggles {
@@ -214,10 +225,20 @@
   }
 }
 @media only screen and (max-width: 739px) {
-  .writer,
-  .reviewer,
+  .site-container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .writer .CodeMirror {
+    font-size: 13px;
+  }
+
   .reader {
-    padding: 27px 20px;
+    font-size: 16px;
+  }
+  .reader p {
+    font-size: 16px;
   }
 
   .writer-footer .writer-powers {
