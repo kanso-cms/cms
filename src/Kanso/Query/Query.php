@@ -1511,7 +1511,7 @@ class Query {
      *
      */
     public function rewind_posts() {
-        $this->postIndex = 0;
+        $this->postIndex = -1;
         if ($this->postCount > 0 ) $this->post = $this->posts[0];
     }
 

@@ -364,7 +364,7 @@ class CommentManager
             ];
         }
 
-        $msg = $isReply ? \Kanso\Templates\Templater::getTemplate('EmailReplyComment', $commentVars) : \Kanso\Templates\Templater::getTemplate('EmailStandAloneComment', $commentVars);
+        $msg = $isReply ? \Kanso\Templates\Templater::load('EmailReplyComment', $commentVars) : \Kanso\Templates\Templater::load('EmailStandAloneComment', $commentVars);
 
         # Send emails to thread subscribers
         if ( $isReply && !empty($threadEmails) ) {
@@ -425,7 +425,7 @@ class CommentManager
             $commentVars['admin'] = $admin;
 
             # Reset the email message
-            $msg = \Kanso\Templates\Templater::getTemplate('EmailAdminComment', $commentVars);
+            $msg = \Kanso\Templates\Templater::load('EmailAdminComment', $commentVars);
 
             # Send the email
             \Kanso\Utility\Mailer::sendHTMLEmail(

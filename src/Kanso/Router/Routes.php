@@ -106,17 +106,31 @@ $this->post('/admin/media-library/', '\Kanso\Admin\Controllers\Ajax@dispatch', '
 # Homepage
 $this->get('/', '\Kanso\Kanso::loadTemplate', 'home');
 $this->get('/page/(:num)/', '\Kanso\Kanso::loadTemplate', 'home');
+$this->get('/feed/', '\Kanso\Kanso::loadRssFeed', 'home');
+$this->get('/feed/rss/', '\Kanso\Kanso::loadRssFeed', 'home');
+$this->get('/feed/atom/', '\Kanso\Kanso::loadRssFeed', 'home');
+$this->get('/feed/rdf/', '\Kanso\Kanso::loadRssFeed', 'home');
 
 # Category
 if ($this->Config['KANSO_ROUTE_CATEGORIES'] === true) {
 	$this->get('/category/(:any)/', '\Kanso\Kanso::loadTemplate', 'category');
 	$this->get('/category/(:any)/page/(:num)/', '\Kanso\Kanso::loadTemplate', 'category');
+	$this->get('/category/(:any)/feed/', '\Kanso\Kanso::loadRssFeed', 'category');
+	$this->get('/category/(:any)/feed/rss/', '\Kanso\Kanso::loadRssFeed', 'category');
+	$this->get('/category/(:any)/feed/atom/', '\Kanso\Kanso::loadRssFeed', 'category');
+	$this->get('/category/(:any)/feed/rdf/', '\Kanso\Kanso::loadRssFeed', 'category');
+
 }
 
 # Tag
 if ($this->Config['KANSO_ROUTE_TAGS'] === true) {
 	$this->get('/tag/(:any)/', '\Kanso\Kanso::loadTemplate', 'tag');
 	$this->get('/tag/(:any)/page/(:num)/', '\Kanso\Kanso::loadTemplate', 'tag');
+	$this->get('/tag/(:any)/feed/', '\Kanso\Kanso::loadRssFeed', 'tag');
+	$this->get('/tag/(:any)/feed/rss/', '\Kanso\Kanso::loadRssFeed', 'tag');
+	$this->get('/tag/(:any)/feed/atom/', '\Kanso\Kanso::loadRssFeed', 'tag');
+	$this->get('/tag/(:any)/feed/rdf/', '\Kanso\Kanso::loadRssFeed', 'tag');
+
 }
 
 # Author
@@ -124,6 +138,10 @@ if ($this->Config['KANSO_ROUTE_AUTHORS'] === true) {
 	foreach ($this->Config['KANSO_AUTHOR_SLUGS'] as $slug) {
 		$this->get("/authors/$slug/", '\Kanso\Kanso::loadTemplate', 'author');
 		$this->get("/authors/$slug/page/(:num)/", '\Kanso\Kanso::loadTemplate', 'author');
+		$this->get("/authors/$slug/feed/", '\Kanso\Kanso::loadRssFeed', 'author');
+		$this->get("/authors/$slug/feed/rss/", '\Kanso\Kanso::loadRssFeed', 'author');
+		$this->get("/authors/$slug/feed/atom/", '\Kanso\Kanso::loadRssFeed', 'author');
+		$this->get("/authors/$slug/feed/rdf/", '\Kanso\Kanso::loadRssFeed', 'author');
 	}
 }
 
@@ -131,6 +149,10 @@ if ($this->Config['KANSO_ROUTE_AUTHORS'] === true) {
 foreach ($this->Config['KANSO_STATIC_PAGES'] as $slug) {
 	# Published static page
 	$this->get("/$slug/", '\Kanso\Kanso::loadTemplate', 'page');
+	$this->get("/$slug/feed/", '\Kanso\Kanso::loadRssFeed', 'page');
+	$this->get("/$slug/feed/rss", '\Kanso\Kanso::loadRssFeed', 'page');
+	$this->get("/$slug/feed/atom", '\Kanso\Kanso::loadRssFeed', 'page');
+	$this->get("/$slug/feed/rdf", '\Kanso\Kanso::loadRssFeed', 'page');
 }
 
 # Search
@@ -149,9 +171,12 @@ if ($this->Config['KANSO_COMMENTS_OPEN'] === true) {
 # Sitemap
 $this->get("/".$this->Config['KANSO_SITEMAP'], '\Kanso\Kanso::loadSiteMap');
 
-# RSS
-$this->get('/feed/', '\Kanso\Kanso::loadRssFeed', 'home');
-$this->get($this->Config['KANSO_PERMALINKS_ROUTE'].'feed/', '\Kanso\Kanso::loadRssFeed', 'single');
-
 # Articles
 $this->get($this->Config['KANSO_PERMALINKS_ROUTE'], '\Kanso\Kanso::loadTemplate', 'single');
+$this->get($this->Config['KANSO_PERMALINKS_ROUTE'].'feed/', '\Kanso\Kanso::loadRssFeed', 'single');
+$this->get($this->Config['KANSO_PERMALINKS_ROUTE'].'feed/rss/', '\Kanso\Kanso::loadRssFeed', 'single');
+$this->get($this->Config['KANSO_PERMALINKS_ROUTE'].'feed/atom/', '\Kanso\Kanso::loadRssFeed', 'single');
+$this->get($this->Config['KANSO_PERMALINKS_ROUTE'].'feed/rdf/', '\Kanso\Kanso::loadRssFeed', 'single');
+
+
+

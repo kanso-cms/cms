@@ -400,7 +400,7 @@ class Gatekeeper
             $emailFrom        = $config['KANSO_SITE_TITLE'];
             $emailAddressFrom = 'no-reply@'.$env['KANSO_WEBSITE_NAME'];
             $emailSubject     = 'Welcome to '.$config['KANSO_SITE_TITLE'];
-            $emailMsg         = \Kanso\Templates\Templater::getTemplate('EmailNewAdmin', $emailData);
+            $emailMsg         = \Kanso\Templates\Templater::load('EmailNewAdmin', $emailData);
             $emailTo          = $user->email;
 
             # Send email
@@ -464,7 +464,7 @@ class Gatekeeper
             $emailFrom        = $config['KANSO_SITE_TITLE'];
             $emailAddressFrom = 'no-reply@'.$env['KANSO_WEBSITE_NAME'];
             $emailSubject     = 'Please verify your email address';
-            $emailMsg         = \Kanso\Templates\Templater::getTemplate('EmailNewAdmin', $emailData);
+            $emailMsg         = \Kanso\Templates\Templater::load('EmailNewAdmin', $emailData);
             $emailTo          = $user->email;
 
             # Send email
@@ -536,7 +536,7 @@ class Gatekeeper
             $emailFrom        = $config['KANSO_SITE_TITLE'];
             $emailAddressFrom = 'no-reply@'.$env['KANSO_WEBSITE_NAME'];
             $emailSubject     = 'Request to reset your password';
-            $emailMsg         = \Kanso\Templates\Templater::getTemplate('EmailForgotPassword', $emailData);
+            $emailMsg         = \Kanso\Templates\Templater::load('EmailForgotPassword', $emailData);
             $emailTo          = $user->email;
 
             # Send email
@@ -599,7 +599,7 @@ class Gatekeeper
         $emailFrom        = $config['KANSO_SITE_TITLE'];
         $emailAddressFrom = 'no-reply@'.$env['KANSO_WEBSITE_NAME'];
         $emailSubject     = 'Username reminder at '.$env['KANSO_WEBSITE_NAME'];
-        $emailMsg         = \Kanso\Templates\Templater::getTemplate('EmailForgotUsername', $emailData);
+        $emailMsg         = \Kanso\Templates\Templater::load('EmailForgotUsername', $emailData);
         $emailTo          = $user->email;
 
         # Send email

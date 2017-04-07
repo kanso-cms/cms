@@ -24,6 +24,7 @@ class Templater
 	public static function getTemplate($template, $data = []) 
 	{
 		$templateFile = __DIR__.DIRECTORY_SEPARATOR.$template.'.php';
+        if (!file_exists($templateFile)) $templateFile = $template;
 		if (file_exists($templateFile) && is_file($templateFile)) {
         	ob_start();
             extract($data);

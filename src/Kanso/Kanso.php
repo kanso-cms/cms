@@ -1066,33 +1066,35 @@ class Kanso
 	 * Load RSS Feed
 	 *
 	 * This function is called directly from the router 
-	 * when an RSS request for the homepage/single is made.
+	 * when a RSS request for is made.
 	 *
 	 */
 	public static function loadRssFeed($pageType) 
 	{
 		# Get the Kanso Object instance
 		$_this = self::getInstance();
+		
+		if (!$_this->Query->matchedRoute) {
 
-		# Filter the posts based on the pageType
-		$_this->Query->filterPosts($pageType);
+			# Filter the posts based on the pageType
+			$_this->Query->filterPosts($pageType);
 
-		# If there are no posts and this is not a request for the
-		# homepage or search pages - retrun a 404 
-		if (!$_this->Query->have_posts()) {
-			
-			$_this->notFound();
-			
-		}
+			# Load the appropriate template into the view/body
+			$template = $_this->getTemplate($pageType);
 
-		# Otherwise load the appropriate post
-		else {
-			
-			# Set the content type to XML
-			$_this->Response->setheaders(['Content-Type' => 'application/rss+xml']);
+			# If the status was set to 404 here by the query, stop rendering
+			# Note this does not send a 404 straight away. If you have a custom route
+			# and wanted to display a template, you could still change the the status/response
+			# between now and when kanso sends a response.
+			if ($_this->Response->getstatus() !== 404 && $template) {
+				$format = array_filter(explode('/', $_this->Environment['REQUEST_URL']));
+				$format = array_pop($format);
 
-			$_this->Response->setBody(\Kanso\RSS\rssBuilder::buildFeed($pageType));
-
+				# Load the RSS module and render
+				$rss = new \Kanso\Rss\Rss($format);
+				
+				$rss->render();
+			}
 		}
 	}
 
