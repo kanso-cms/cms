@@ -1923,26 +1923,27 @@ class Query {
 
         # Default comment format
         $defaultFormat = '
-            <div (:classes_wrap) data-comment-id="(:id)">
+            <div (:classes_wrap) data-comment-id="(:id)" id="comment-(:id)">
                 
-                <div (:classes_author_wrap)>
-                    <div (:classes_avatar_wrap)>
-                        <img alt="" src="(:avatar_src)" (:classes_avatar_img) width="(:avatar_size)" height="(:avatar_size)" />
-                    </div>
-                    <p (:classes_name)>(:comment_name)</p>
-                    
-                </div>
-
                 <div (:classes_body)>
+                    
+                    <div (:classes_author_wrap)>
+                        <div (:classes_avatar_wrap)>
+                            <img alt="" src="(:avatar_src)" (:classes_avatar_img) width="(:avatar_size)" height="(:avatar_size)" />
+                        </div>
+                        <p (:classes_name)>(:comment_name)</p>
+                    </div>
+
+                     <div (:classes_meta)>
+                        <a (:classes_link) href="(:permalink)#comment-(:id)">(:link_text)</a>  <time (:classes_time) datetime="(:comment_time_GMT)">(:comment_time_format)</time>  
+                    </div>
+
                     <div (:classes_content)>
                         (:comment_content)
                     </div>
-                </div>
 
-                <div (:classes_footer)>
-                    <time (:classes_time) datetime="(:comment_time_GMT)">(:comment_time_format)</time> • 
-                    <a (:classes_link) href="(:permalink)#(:id)">(:link_text)</a> • 
                     <a (:classes_reply) href="#">Reply</a>
+
                 </div>
 
                 <div (:classes_children_wrap)>
@@ -1959,19 +1960,19 @@ class Query {
             'link_text'          => '#',
             'time_format'        => 'F, d, Y',
             'classes'            => [
-                    'wrap'          => 'comment-comment-wrap',
+                    'wrap'          => 'comment',
+                    'body'          => 'comment-body',
                     'avatar_wrap'   => 'comment-avatar-wrap',
                     'avatar_img'    => 'comment-avatar-img',
-                    'body'          => 'comment-comment-body',
                     'author_wrap'   => 'comment-author-wrap',
                     'name'          => 'comment-author-name',
-                    'link'          => 'comment-comment-link',
-                    'time'          => 'comment-comment-time',
-                    'content'       => 'comment-comment-content',
-                    'footer'        => 'comment-comment-footer',
+                    'link'          => 'comment-link',
+                    'time'          => 'comment-time',
+                    'content'       => 'comment-content',
+                    'meta'          => 'comment-meta',
                     'reply'         => 'comment-reply-link',
-                    'children_wrap' => 'comment-comment-chidren',
-                    'child_wrap'    => 'comment-child-comment',
+                    'children_wrap' => 'comment-chidren',
+                    'child_wrap'    => 'child-comment',
                     'no_children'   => 'comment-no-children',
                 ],
         ];
@@ -2122,15 +2123,15 @@ class Query {
         # If there is an error with the emaill or md5 default to fallback 
         # force a mystery man
         if (!$isMd5 && !$isEmail) {
-            if ($srcOnly) return $domain.'/avatar/0?s='.$size.'&d=mm&f=y';
-            return '<img src="'.$domain.'/avatar/0?s='.$size.'&d=mm&f=y"/>';
+            if ($srcOnly) return $domain.'/avatar/0?s='.$size.'&d=mm';
+            return '<img src="'.$domain.'/avatar/0?s='.$size.'&d=mm"/>';
         }
         
         if ($isEmail) $md5 = md5( strtolower( trim( $email_or_md5 ) ) );
         if ($isMd5)   $md5 = $email_or_md5;
        
-        if ($srcOnly) return $domain.'/avatar/'.$md5.'?s='.$size.'&d=mm&f=y';
-        return '<img src="'.$domain.'/avatar/'.$md5.'?s='.$size.'&d=mm&f=y"/>';
+        if ($srcOnly) return $domain.'/avatar/'.$md5.'?s='.$size.'&d=mm';
+        return '<img src="'.$domain.'/avatar/'.$md5.'?s='.$size.'&d=mm"/>';
     
     }
 

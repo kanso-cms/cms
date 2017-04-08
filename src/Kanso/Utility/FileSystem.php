@@ -488,5 +488,26 @@ class FileSystem
 	{
 		return new \SplFileObject($file, $openMode, $useIncludePath);
 	}
-	
+
+
+	/**
+	 * Loads and renders a PHP file
+	 *
+	 * @access  public
+	 * @param   string          $file            Path to file
+	 * @param   array           $vars            Vars to extract
+	 * @param   boolean         $useIncludePath  Use include path?
+	 * @return  \SplFileObject
+	 */
+
+	public static function ob_read($file, $vars = [])
+	{
+		if (self::exists($file) && self::isFile($file)) {
+			ob_start();
+            extract($vars);
+        	require $file;
+        	return ob_get_clean();
+		}
+		return FALSE;	
+	}
 }

@@ -15,7 +15,7 @@ namespace Kanso;
  * @property Gatekeeper     \Kanso\Auth\Gatekeeper
  * @property Bookkeeper     \Kanso\Articles\Bookkeeper
  * @property Router         \Kanso\Router\Router
- * @property Mailer         \Kanso\Utility\Mailer
+ * @property Email          \Kanso\Email\Email
  * @property Query          \Kanso\View\Query
  * @property View           \Kanso\View\View
  * @property Cache          \Kanso\Cache\Cache
@@ -251,8 +251,8 @@ class Kanso
 		});
 
 		# Default Mailer
-		$this->Container->singleton('Mailer', function () {
-			return new \Kanso\Utility\Mailer();
+		$this->Container->singleton('Email', function () {
+			return new \Kanso\Email\Email();
 		});
 
 		# Default Admin
@@ -1114,7 +1114,7 @@ class Kanso
 		$_this->Response->setheaders(['Content-Type' => 'text/xml']);
 
 		# Load the sitemap into the body
-		$_this->Response->setBody(\Kanso\Sitemap\SitemapGenerator::buildSiteMap());
+		$_this->Response->setBody(\Kanso\Sitemap\SiteMap::build());
 	}
 
 	/**

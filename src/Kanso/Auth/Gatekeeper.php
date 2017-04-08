@@ -393,18 +393,19 @@ class Gatekeeper
                 'username'    => $user->username, 
                 'password'    => $password,
                 'websiteName' => $env['KANSO_WEBSITE_NAME'],
-                'loginURL'    => $env['KANSO_ADMIN_URL'].'/login/'
+                'websiteUrl'  => $env['HTTP_HOST'],
+                'loginURL'    => $env['KANSO_ADMIN_URL'].'/login/',
             ];
            
             # Email credentials
-            $emailFrom        = $config['KANSO_SITE_TITLE'];
-            $emailAddressFrom = 'no-reply@'.$env['KANSO_WEBSITE_NAME'];
-            $emailSubject     = 'Welcome to '.$config['KANSO_SITE_TITLE'];
-            $emailMsg         = \Kanso\Templates\Templater::load('EmailNewAdmin', $emailData);
-            $emailTo          = $user->email;
+            $Email        = \Kanso\Kanso::getInstance()->Email;
+            $senderName   = $config['KANSO_SITE_TITLE'];
+            $senderEmail  = 'no-reply@'.$env['KANSO_WEBSITE_NAME'];
+            $emailSubject = 'Welcome to '.$config['KANSO_SITE_TITLE'];
+            $emailContent = $Email->html($emailSubject, $Email->preset('new-admin', $emailData));
+            $emailTo      = $user->email;
 
-            # Send email
-            \Kanso\Utility\Mailer::sendHTMLEmail($emailTo, $emailFrom, $emailAddressFrom, $emailSubject, $emailMsg);
+            $Email->send($emailTo, $senderName, $senderEmail, $emailSubject, $emailContent);
 
         }
        
@@ -454,21 +455,20 @@ class Gatekeeper
             $config    = \Kanso\Kanso::getInstance()->Config;
             $emailData = [
                 'name'        => $user->name, 
-                'username'    => $user->username, 
                 'confirmURL'  => $env['HTTP_HOST'].'/confirm-account/?token='.$user->kanso_register_key,
                 'websiteName' => $env['KANSO_WEBSITE_NAME'],
-                'loginURL'    => $env['HTTP_HOST'].'/login/',
+                'websiteUrl'  => $env['HTTP_HOST'],
             ];
-
+           
             # Email credentials
-            $emailFrom        = $config['KANSO_SITE_TITLE'];
-            $emailAddressFrom = 'no-reply@'.$env['KANSO_WEBSITE_NAME'];
-            $emailSubject     = 'Please verify your email address';
-            $emailMsg         = \Kanso\Templates\Templater::load('EmailNewAdmin', $emailData);
-            $emailTo          = $user->email;
+            $Email        = \Kanso\Kanso::getInstance()->Email;
+            $senderName   = $config['KANSO_SITE_TITLE'];
+            $senderEmail  = 'no-reply@'.$env['KANSO_WEBSITE_NAME'];
+            $emailSubject = 'Please verify your email address';
+            $emailContent = $Email->html($emailSubject, $Email->preset('confirm-account', $emailData));
+            $emailTo      = $user->email;
 
-            # Send email
-            \Kanso\Utility\Mailer::sendHTMLEmail($emailTo, $emailFrom, $emailAddressFrom, $emailSubject, $emailMsg);
+            $Email->send($emailTo, $senderName, $senderEmail, $emailSubject, $emailContent);
 
         }
 
@@ -530,17 +530,19 @@ class Gatekeeper
                 'name'        => $user->name, 
                 'resetUrl'    => $resetUrl,
                 'websiteName' => $env['KANSO_WEBSITE_NAME'],
+                'websiteUrl'  => $env['HTTP_HOST'],
             ];
 
             # Email credentials
-            $emailFrom        = $config['KANSO_SITE_TITLE'];
-            $emailAddressFrom = 'no-reply@'.$env['KANSO_WEBSITE_NAME'];
-            $emailSubject     = 'Request to reset your password';
-            $emailMsg         = \Kanso\Templates\Templater::load('EmailForgotPassword', $emailData);
-            $emailTo          = $user->email;
+            $Email        = \Kanso\Kanso::getInstance()->Email;
+            $senderName   = $config['KANSO_SITE_TITLE'];
+            $senderEmail  = 'no-reply@'.$env['KANSO_WEBSITE_NAME'];
+            $emailSubject = 'Request to reset your password';
+            $emailContent = $Email->html($emailSubject, $Email->preset('forgot-password', $emailData));
+            $emailTo      = $user->email;
 
-            # Send email
-            \Kanso\Utility\Mailer::sendHTMLEmail($emailTo, $emailFrom, $emailAddressFrom, $emailSubject, $emailMsg);
+            $Email->send($emailTo, $senderName, $senderEmail, $emailSubject, $emailContent);
+
         }
 
         return true;
@@ -554,7 +556,7 @@ class Gatekeeper
      * @return boolean
      *
      */
-    public function resetPassword($password, $token)
+    public function resetPassword($password, $token, $sendEamil = true)
     {
         # Validate the user exists
         $userRow = $this->SQL->SELECT('*')->FROM('users')->WHERE('kanso_password_key', '=', $token)->ROW();
@@ -564,7 +566,36 @@ class Gatekeeper
         $user = new \Kanso\Auth\Adapters\User($userRow);
         $user->kanso_password_key = '';
         $user->password = utf8_encode(\Kanso\Security\Encrypt::hash($password));
-        if ($user->save()) return true;
+        if ($user->save()) {
+
+            # email variables
+            $env       = \Kanso\Kanso::getInstance()->Environment;
+            $config    = \Kanso\Kanso::getInstance()->Config;
+            $resetUrl  = $env['HTTP_HOST'].'/reset-password/?token='.$user->kanso_password_key;
+            $loginUrl  = $env['HTTP_HOST'].'/login/';
+            $emailData = [
+                'name'        => $user->name, 
+                'websiteName' => $env['KANSO_WEBSITE_NAME'],
+                'resetUrl'    => $resetUrl,
+                'loginUrl'    => $loginUrl,
+            ];
+            if ($user->role === 'administrator' || $user->role === 'writer') {
+                $emailData['resetUrl']  = $env['KANSO_ADMIN_URL'].'/reset-password/?token='.$user->kanso_password_key;
+                $emailData['loginUrl']  = $env['KANSO_ADMIN_URL'].'/login/';
+            }
+
+            # Email credentials
+            $Email        = \Kanso\Kanso::getInstance()->Email;
+            $senderName   = $config['KANSO_SITE_TITLE'];
+            $senderEmail  = 'no-reply@'.$env['KANSO_WEBSITE_NAME'];
+            $emailSubject = 'Your password was reset at '.$env['KANSO_WEBSITE_NAME'];
+            $emailContent = $Email->html($emailSubject, $Email->preset('reset-password', $emailData));
+            $emailTo      = $user->email;
+
+            $Email->send($emailTo, $senderName, $senderEmail, $emailSubject, $emailContent);
+
+            return true;
+        }
 
         return false;
     }
@@ -593,17 +624,18 @@ class Gatekeeper
             'name'        => $user->name, 
             'username'    => $user->username,
             'websiteName' => $env['KANSO_WEBSITE_NAME'],
+            'websiteUrl'  => $env['HTTP_HOST'],
         ];
 
         # Email credentials
-        $emailFrom        = $config['KANSO_SITE_TITLE'];
-        $emailAddressFrom = 'no-reply@'.$env['KANSO_WEBSITE_NAME'];
-        $emailSubject     = 'Username reminder at '.$env['KANSO_WEBSITE_NAME'];
-        $emailMsg         = \Kanso\Templates\Templater::load('EmailForgotUsername', $emailData);
-        $emailTo          = $user->email;
+        $Email        = \Kanso\Kanso::getInstance()->Email;
+        $senderName   = $config['KANSO_SITE_TITLE'];
+        $senderEmail  = 'no-reply@'.$env['KANSO_WEBSITE_NAME'];
+        $emailSubject = 'Username reminder at '.$env['KANSO_WEBSITE_NAME'];
+        $emailContent = $Email->html($emailSubject, $Email->preset('forgot-username', $emailData));
+        $emailTo      = $user->email;
 
-        # Send email
-        \Kanso\Utility\Mailer::sendHTMLEmail($emailTo, $emailFrom, $emailAddressFrom, $emailSubject, $emailMsg);
+        $Email->send($emailTo, $senderName, $senderEmail, $emailSubject, $emailContent);
 
         return true;
     }

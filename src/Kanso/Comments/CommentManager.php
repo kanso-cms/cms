@@ -12,8 +12,6 @@ namespace Kanso\Comments;
 class CommentManager
 {
 
-    private static $Kanso;
-
     /********************************************************************************
     * PUBLIC ACCESS FOR ADDING NEW COMMENTS
     *******************************************************************************/
@@ -32,29 +30,32 @@ class CommentManager
      *
      * @return mixed
      */
-    public static function dispatch()
+    public function dispatch()
     {
         
-        # Set the Kanso Object instance
-        self::$Kanso = \Kanso\Kanso::getInstance();
-
-        # Add the comment
-        $response = self::add(self::$Kanso->Request->fetch());
+       $Response = \Kanso\Kanso::getInstance()->Response;
+       $isAjax   = \Kanso\Kanso::getInstance()->Request->isAjax();
+       $postVars = \Kanso\Kanso::getInstance()->Request->fetch();
 
         # Ajax response
-        if (self::$Kanso->Request->isAjax()) {
+        if ($isAjax) {
+
+            # Add the comment
+            $result= $this->add($postVars);
         	
             # If the comment was successful return a JSON response
-            if ($response) {
+            if ($result) {
 
-                self::$Kanso->Response->setBody(json_encode( ['response' => 'processed', 'details' => $response]));
+                $Response->setBody(json_encode( ['response' => 'processed', 'details' => $result]));
                 
-                self::$Kanso->Response->setheaders( ['Content-Type' => 'application/json']);
-            }
+                $Response->setheaders( ['Content-Type' => 'application/json']);
 
-            # 404 on error/invalid request
-            self::$Kanso->Response->setStatus(404);
+                return;
+            }
         }
+
+        # 404 on error/invalid request
+        \Kanso\Kanso::getInstance()->notFound();
     }
 
     /**
@@ -65,28 +66,24 @@ class CommentManager
      *                                        (e.g Adding a comment from the admin panel)
      * @return bool   
      */
-    public static function add($commentData, $spamValidation = true)
+    public function add($commentData, $spamValidation = true)
     {
-
-        # Validate that a kanso instance has been called
-        if (is_null(self::$Kanso)) self::$Kanso = \Kanso\Kanso::getInstance();
-
         # Get a new Query builder
-        $Query = self::$Kanso->Database()->Builder();
+        $SQL = \Kanso\Kanso::getInstance()->Database()->Builder();
 
         # Validate the input array
-        $commentData = self::validateInputData($commentData);
+        $commentData = $this->validateInputData($commentData);
 
         # Return false if the input array was invalid
         if (!$commentData) return false;
 
         # Covert string IDs to int
-        $commentData['replyID'] = (int)$commentData['replyID'];
-        $commentData['postID']  = (int)$commentData['postID'];
+        $commentData['replyID'] = intval($commentData['replyID']);
+        $commentData['postID']  = intval($commentData['postID']);
 
         # Convert boolean values
-        $commentData['email-reply']  = $commentData['email-reply'] === 'false'  || ! (bool)$commentData['email-reply']  ? false : true;
-        $commentData['email-thread'] = $commentData['email-thread'] === 'false' || ! (bool)$commentData['email-thread'] ? false : true;
+        $commentData['email-reply']  = \Kanso\Utility\Str::bool($commentData['email-reply']);
+        $commentData['email-thread'] = \Kanso\Utility\Str::bool($commentData['email-thread']);
 
         # Convert the content from markdown to HTML
         $Parser      = new \Kanso\Parsedown\ParsedownExtra();
@@ -97,7 +94,7 @@ class CommentManager
         # Run the comment through the SPAM validator if needed
         if ($spamValidation) {
 
-            $spamFilter  = new \Kanso\Comments\Spam\SpamProtector($commentData['name'], $commentData['email'], $commentData['content'], $htmlContent);
+            $spamFilter = new \Kanso\Comments\Spam\SpamProtector($commentData['name'], $commentData['email'], $commentData['content'], $htmlContent);
 
             # If the user is blacklisted, they can't make comments
             if ($spamFilter->isBlacklistedIP()) return false;
@@ -121,19 +118,19 @@ class CommentManager
         }
 
         # Find the existing article
-        $articleRow = $Query->SELECT('*')->FROM('posts')->WHERE('id', '=', (int)$commentData['postID'])->FIND();
+        $articleRow = $SQL->SELECT('*')->FROM('posts')->WHERE('id', '=', $commentData['postID'])->ROW();
 
         # If the article doesn't exist return false
         if (!$articleRow) return false;
 
-        # Save existing comment id's on article locally
-        $existingComments = $Query->SELECT('*')->FROM('comments')->WHERE('post_id', '=', (int)$commentData['postID'])->FIND_ALL();
-
         # Is this a reply comment ?
-        $parentID = null;
-        if (isset($commentData['replyID'])) {
-            $parent = $Query->SELECT('id')->FROM('comments')->WHERE('id', '=', (int)$commentData['replyID'])->ROW();
-            if ($parent) $parentID = (int)$parent['id'];
+        $parentID  = null;
+        $parentRow = [];
+        if (isset($commentData['replyID']) && $commentData['replyID'] > 0) {
+            $parent = $SQL->SELECT('id')->FROM('comments')->WHERE('id', '=', $commentData['replyID'])->ROW();
+            if (!$parent) return false;
+            $parentID  = intval($parent['id']);
+            $parentRow = $parent;
         }
         $type = !$parentID ? 'comment' : 'reply';
 
@@ -148,43 +145,33 @@ class CommentManager
             'email'        => $commentData['email'],
             'content'      => $commentData['content'],
             'html_content' => $htmlContent,
-            'ip_address'   => self::$Kanso->Environment['CLIENT_IP_ADDRESS'],
+            'ip_address'   => \Kanso\Kanso::getInstance()->Environment['CLIENT_IP_ADDRESS'],
             'email_reply'  => $commentData['email-reply'],
             'email_thread' => $commentData['email-thread'],
             'rating'       => $spamRating,
         ];
 
-        # Validate the parent exists
-        $parentRow = $parentID ? $Query->SELECT('*')->FROM('comments')->WHERE('id', '=', (int)$parentID)->FIND() : null;
-        
-        # You cannot reply to spam, deleted or pending comment
-        if ($parentRow && $parentRow['status'] !== 'approved') return false;
-
         # insert new comment
-        $Query->INSERT_INTO('comments')->VALUES($commentRow)->QUERY();
+        $SQL->INSERT_INTO('comments')->VALUES($commentRow)->QUERY();
 
         # Get the comment id
-        $id = self::$Kanso->Database->lastInsertId();
+        $id = \Kanso\Kanso::getInstance()->Database->lastInsertId();
         $commentRow['id'] = intval($id);
 
         if ($commentRow['id'] === 0) return false;
 
         # Get the id of the new comment and 
         # append/set it to article row in the databse
-        self::sendCommentEmails($articleRow, $commentRow);
+        $this->sendCommentEmails($articleRow, $commentRow);
 
         return $status;
     }
 
 
-    public static function remove($commentID)
+    public function remove($commentID)
     {
-
-        # Validate that a kanso instance has been called
-        if (is_null(self::$Kanso)) self::$Kanso = \Kanso\Kanso::getInstance();
-
         # Get a new Query builder
-        $Query = self::$Kanso->Database()->Builder();
+        $SQL = \Kanso\Kanso::getInstance()->Database()->Builder();
 
         # Validate the status is allowed
         $statuses = ['approved', 'spam', 'deleted', 'pending'];
@@ -197,7 +184,7 @@ class CommentManager
         if (!$commentRow) return false;
 
         # Change and save the status
-        $Query->UPDATE('comments')->SET(['status' => $status])->WHERE('id', '=', (int)$commentID)->QUERY();
+        $SQL->UPDATE('comments')->SET(['status' => $status])->WHERE('id', '=', (int)$commentID)->QUERY();
         
         return true;
     }
@@ -209,13 +196,10 @@ class CommentManager
      * @param  string    $status       The status to be set
      * @return bool   
      */
-    public static function status($commentID, $status) 
+    public function status($commentID, $status) 
     {
-        # Validate that a kanso instance has been called
-        if (is_null(self::$Kanso)) self::$Kanso = \Kanso\Kanso::getInstance();
-
         # Get a new Query builder
-        $Query = self::$Kanso->Database()->Builder();
+        $SQL = \Kanso\Kanso::getInstance()->Database()->Builder();
 
         # Validate the status is allowed
         $statuses = ['approved', 'spam', 'deleted', 'pending'];
@@ -228,7 +212,7 @@ class CommentManager
         if (!$commentRow) return false;
 
         # Change and save the status
-        $Query->UPDATE('comments')->SET(['status' => $status])->WHERE('id', '=', (int)$commentID)->QUERY();
+        $SQL->UPDATE('comments')->SET(['status' => $status])->WHERE('id', '=', (int)$commentID)->QUERY();
         
         return true;
     }
@@ -239,7 +223,7 @@ class CommentManager
      * @param  array    $comment    The comment array from the database
      * @return null
      */
-    public static function moderateIp($ipAddress, $blackOrWhiteList) 
+    public function moderateIp($ipAddress, $blackOrWhiteList) 
     {
         if ($blackOrWhiteList === 'whitelist') {
             \Kanso\Comments\Spam\SpamProtector::appendToDictionary($ipAddress, 'whitelist_ip');
@@ -269,7 +253,7 @@ class CommentManager
      *
      * @return array|bool
      */
-    private static function validateInputData($commentData)
+    private function validateInputData($commentData)
     {
 
         # Set A GUMP object for validation
@@ -285,7 +269,6 @@ class CommentManager
             'content'      => 'required|max_len,2000|min_len,1',
             'postID'       => 'required|integer',
             'email-reply'  => 'required|boolean',
-            'replyID'      => 'integer',
             'email-thread' => 'required|boolean',
         ]);
 
@@ -310,230 +293,85 @@ class CommentManager
      * @param  array    $newComment    Associative array of comment data
      * @return bool   
      */
-    private static function sendCommentEmails($articleRow, $newComment) 
+    private function sendCommentEmails($articleRow, $newComment) 
     {
 
-    	# Is this a reply comment
-    	$isReply = $newComment['type'] === 'reply';
-
-        # Get a new Query builder
-        $Query = self::$Kanso->Database()->Builder();
-
-        # Get all the comments from the article into a multi-array
-        $allComments = self::buildCommentTree(self::$Kanso->Query->get_comments((int)$articleRow['id'], false));
-
-        # Get all the emails that are subscibed to the entire article
-        $allEmails = self::getAllCommentEmails($allComments);
-
-    	# Get all the admin email address 
-        $adminEmails = $Query->SELECT('email')->FROM('users')->WHERE('status', '=', 'confirmed')->AND_WHERE('role', '=', 'administrator')->AND_WHERE('email_notifications', '=', true)->FIND_ALL();
-
-        # Get all the emails that are subscribed to the thread
-        $threadEmails  = [];
-        $parentComment = []; 
-
-        if ($isReply) {
-            $threadEmails      = self::getThreadEmails(self::getTopCommentThread($newComment, $allComments));
-            $parentComment     = self::$Kanso->Query->get_comment($newComment['parent']);
+    	# Emails to send
+        $adminEmails  = $this->adminEmails();
+        $threadEmails = $this->commentsEmails($articleRow['id']);
+        $replyEamil   = [];
+        if ($newComment['type'] === 'reply') {
+            $parent = \Kanso\Kanso::getInstance()->Query->get_comment($newComment['parent']);
+            if ($parent && $parent['email_reply'] == true) {
+                $replyEamil[] = $parent['email'];
+            }
         }
 
-        # Build an array with comment variables to send email
-        $website     = self::$Kanso->Environment['KANSO_WEBSITE_NAME'];
-        $commentVars = [
-            'name'             => $newComment['name'],
-            'id'               => $newComment['id'],
-            'date'             => $newComment['date'],
-            'articlePermalink' => self::$Kanso->Query->the_permalink($articleRow['id']),
-            'articleTitle'     => $articleRow['title'],
-            'avatar'           => self::$Kanso->Query->get_gravatar($newComment['email'], 20, true),
-            'content'          => self::cleanHTMLTags($newComment['html_content']),
-            'websiteLink'      => self::$Kanso->Environment['HTTP_HOST'],
-            'website'          => $website,
+        $emails     = array_unique(array_merge($adminEmails, $threadEmails, $replyEamil));
+        $sentEmails = [];    
+
+        # Email data
+        $env       = \Kanso\Kanso::getInstance()->Environment;
+        $config    = \Kanso\Kanso::getInstance()->Config;
+        $Email     = \Kanso\Kanso::getInstance()->Email;
+
+        $emailData = [
+            'name'          => $newComment['name'],
+            'comment_id'    => $newComment['id'],
+            'the_pemalink'  => \Kanso\Kanso::getInstance()->Query->the_permalink($articleRow['id']),
+            'the_title'     => $articleRow['title'],
+            'the_excerpt'   => \Kanso\Utility\Str::reduce(\Kanso\Kanso::getInstance()->Query->the_excerpt($articleRow['id']), 150).'...',
+            'the_thumbnail' => \Kanso\Kanso::getInstance()->Query->the_post_thumbnail_src($articleRow['id']),
+            'comment_email' => $newComment['email'],
+            'homepageUrl'   => $env['HTTP_HOST'],
+            'websiteName'   => $env['KANSO_WEBSITE_NAME'],
+            'websiteUrl'    => $env['HTTP_HOST'],
         ];
 
-        # If this is a reply we need the parent comment
-        if ($isReply) {
-           
-            # Append the parent comment to the comment vars array
-            $commentVars['parent'] = [
-                'name'       => $parentComment['name'],
-                'id'         => $parentComment['id'],
-                'date'       => $parentComment['date'],
-                'avatar'     => self::$Kanso->Query->get_gravatar($parentComment['email'], 20, true),
-                'content'    => self::cleanHTMLTags($parentComment['html_content']),
-            ];
-        }
-
-        $msg = $isReply ? \Kanso\Templates\Templater::load('EmailReplyComment', $commentVars) : \Kanso\Templates\Templater::load('EmailStandAloneComment', $commentVars);
-
-        # Send emails to thread subscribers
-        if ( $isReply && !empty($threadEmails) ) {
+        foreach ($emails as $emailTo) {
             
-            foreach ($threadEmails as $emailAddress => $name) {
+            if (in_array($emailTo, $sentEmails) || $emailTo === $newComment['email']) continue;
 
-                # Don't send emails to the peson commenting
-                if ($emailAddress === $newComment['email']) continue;
-
-                # Don't send emails to admins
-                if (\Kanso\Utility\Arr::inMulti($emailAddress, $adminEmails)) continue;
-
-                # Send the email
-                \Kanso\Utility\Mailer::sendHTMLEmail(
-                    $emailAddress, 
-                    $website, 
-                    'no-reply@'.$website,
-                    'Someone just replied to a comment at you made at '.$website.' on '.$articleRow['title'].'.',
-                    $msg
-                );
-            }
-
+            $senderName   = $config['KANSO_SITE_TITLE'];
+            $senderEmail  = 'no-reply@'.$env['KANSO_WEBSITE_NAME'];
+            $emailSubject = 'A new comment was made at '.$env['KANSO_WEBSITE_NAME'];
+            $emailContent = $Email->html($emailSubject, $Email->preset('comment', $emailData));
+            $Email->send($emailTo, $senderName, $senderEmail, $emailSubject, $emailContent);
+            $sentEmails[] = $emailTo;
         }
-
-        # Send email to all subscribers
-        if (!empty($allEmails)) {
-            
-            foreach ($allEmails as $emailAddress => $name) {
-
-            	# Don't send emails to the peson commenting
-            	if ($emailAddress === $newComment['email']) continue;
-
-            	 # Don't send email twice to people who have subscribed to their own comment
-                # as well as the entire article
-            	if (isset($threadEmails[$emailAddress])) continue;
-
-               	# Don't send emails to admins
-                if (\Kanso\Utility\Arr::inMulti($emailAddress, $adminEmails)) continue;                   
-             
-                \Kanso\Utility\Mailer::sendHTMLEmail(
-                    $emailAddress, 
-                    $website, 'no-reply@'.$website, 
-                    'A new comment was made at '.$website.' on '.$articleRow['title'], 
-                    $msg
-                );
-        	}
-        }
-
-        # Send the email to all the admins on the Kanso blog
-        $admins = $Query->SELECT('*')->FROM('users')->WHERE('status', '=', 'confirmed')->AND_WHERE('role', '=', 'administrator')->FIND_ALL();
-
-        foreach ($admins as $admin) {
-
-        	# Don't send emails to the peson commenting
-            if ($admin['email'] === $newComment['email']) continue;
-
-            # Add the admin to the comment variables
-            $commentVars['admin'] = $admin;
-
-            # Reset the email message
-            $msg = \Kanso\Templates\Templater::load('EmailAdminComment', $commentVars);
-
-            # Send the email
-            \Kanso\Utility\Mailer::sendHTMLEmail(
-                $admin['email'], 
-                $website, 'no-reply@'.$website, 
-                'A new comment was made at '.$website.' on '.$articleRow['title'], 
-                $msg
-            );
-        }
-
     }
 
     /**
-     * Style <p> tags for email message
+     * Get all the administrator email addresses
      *
-     * @param  string    $HTML
-     * @return string
-     */
-    private static function cleanHTMLTags($HTML)
-    {
-        return str_replace('<p>', '<p style="margin: 10px 0;width: 100%;display: block;margin-top: 0 !important;margin-bottom: 0 !important;color:#2f3335">', $HTML);
-    }
-
-    /**
-     * Recursively iterate a comment thread upwards
-     * untill the top most comment is found
-     *
-     * @param  array    $comment    The comment array from the database
      * @return array
      */
-    private static function getTopCommentThread($comment, $allComments) 
+    private function adminEmails()
     {
-        if ($comment['parent'] > 0 ) {
-        	$parentComment = self::$Kanso->Query->get_comment($comment['parent']);
-            if ($parentComment && !empty($parentComment)) return self::getTopCommentThread($parentComment, $allComments);
+        $result = [];
+        $emails = \Kanso\Kanso::getInstance()->Database()->Builder()->SELECT('email')->FROM('users')->WHERE('status', '=', 'confirmed')->AND_WHERE('role', '=', 'administrator')->AND_WHERE('email_notifications', '=', true)->FIND_ALL();
+        foreach ($emails as $email) {
+            $result[] = $email['email'];
         }
-        else {
-            foreach ($allComments as $thread) {
-                if ($thread['id'] == $comment['id']) return $thread;
-            }
-            return false;
-        }
-        # return the origional comment on fallback
-        return $comment;
+        return $result;
     }
 
     /**
-     * Recursively iterate a comment thread downwards
-     * getting all subscribed emails to the thread
+     * Get all email addresses that are subscribed to receive emails
      *
-     * @param  array    $comment    The comment array from the database
+     * @param  array    $comments    Array of comments
      * @return array
      */
-    private static function getThreadEmails($comment)
+    private function commentsEmails($post_id)
     {
-    	$emails = [];
-        if ($comment['email_reply'] == true) $emails[$comment['email']] = $comment['name'];
-        if (!empty($comment['children'])) {
-            foreach ($comment['children'] as $child) {
-                if ($comment['email_reply'] == true) $emails[$comment['email']] = $comment['name'];
-                $emails = array_merge($emails, self::getThreadEmails($child));
-            }
-        }
-        return $emails;
-    }
-
-    /**
-     * Recursively a flat  array of comments into 
-     * nested threads
-     *
-     * @param  array    $comment    The comment array from the database
-     * @return array
-     */
-    private static function buildCommentTree($comments, $parent_id = 0)
-    {
-        $branch = [];
-    
-        foreach ($comments as $i => $comment) {
-            if ($comment['parent'] == $parent_id) {
-                unset($comments[$i]);
-                $comment['children'] = self::buildCommentTree($comments, $comment['id']);
-                $branch[] = $comment;
-            }
-        }
-    
-        return $branch;
-    }
-
-    /**
-     * Recursively iterate a multi-array of comments downwards
-     * getting all subscribed emails to the article comments
-     *
-     * @param  array    $comment    The comment array from the database
-     * @return array
-     */
-    private static function getAllCommentEmails($comments)
-    {
-        $emails = [];
-
-        foreach($comments as $comment)
-        {
+        $comments = \Kanso\Kanso::getInstance()->Query->get_comments($post_id, false);
+        $emails   = [];
+        foreach($comments as $comment) {
             if ($comment['email_thread'] == true )  {
-                $emails[$comment['email']] = $comment['name'];
+                $emails[] = $comment['email'];
             }
-            if (!empty($comment['children'])) $emails = array_merge($emails, self::getAllCommentEmails($comment['children']));
         }
-
-        return $emails;
+        return array_unique($emails);
     }
 
 }

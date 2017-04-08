@@ -5,23 +5,18 @@ namespace Kanso\SiteMap;
  * This class is used to build a valid sitemap for search engine 
  * access and indexing.
  *
- * When called it will build a valid XML sitemap based on databse
+ * When called it will build a valid XML sitemap based on database
  * entries that are provided and save it.
  *
  */
-class SitemapGenerator
+class SiteMap
 {
 
 	/**
 	 * Build the sitemap
 	 *
-	 * @param  array    $articles       Articles pulled from the databse
-	 * @param  array    $tags    	    Tags pulled from the databse
-	 * @param  array    $categories     Categories pulled from the databse
-	 * @param  array    $authors        Authors pulled from the databse
-	 * @param  string   $websiteBase    Website base url
 	 */
-	public static function buildSiteMap() {
+	public static function build() {
 
 		# Get a Kanso instance
         $Kanso = \Kanso\Kanso::getInstance();
@@ -99,7 +94,7 @@ class SitemapGenerator
 			$XML .='</url>'."\n\t";
 		}
 		$XML .='<url>'."\n\t\t";
-		$XML .='<loc>'.$websiteBase.'/search</loc>'."\n\t\t";
+		$XML .='<loc>'.$websiteBase.'/search-results/</loc>'."\n\t\t";
 		$XML .='<lastmod>'.$now.'</lastmod>'."\n\t\t";
 		$XML .='<changefreq>monthly</changefreq>'."\n\t\t";
 		$XML .='<priority>0.3</priority>'."\n\t";
