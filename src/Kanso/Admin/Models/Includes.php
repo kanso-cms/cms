@@ -214,6 +214,9 @@ class Includes
 		# Author avatar
 		$scripts[] = '<script type="text/javascript" src="'.$this->assetsURL().'/js/author-avatar.js?v='.$this->assetsVersion().'"></script>';
 
+		# Settings tools
+		$scripts[] = '<script type="text/javascript" src="'.$this->assetsURL().'/js/tools.js?v='.$this->assetsVersion().'"></script>';
+
 		$scripts = \Kanso\Filters::apply('adminFooterScripts', $scripts);
 
 		return implode("\n", $scripts);

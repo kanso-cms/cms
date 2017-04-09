@@ -571,16 +571,17 @@ class Gatekeeper
             # email variables
             $env       = \Kanso\Kanso::getInstance()->Environment;
             $config    = \Kanso\Kanso::getInstance()->Config;
-            $resetUrl  = $env['HTTP_HOST'].'/reset-password/?token='.$user->kanso_password_key;
+            $resetUrl  = $env['HTTP_HOST'].'/forgot-password/';
             $loginUrl  = $env['HTTP_HOST'].'/login/';
             $emailData = [
                 'name'        => $user->name, 
                 'websiteName' => $env['KANSO_WEBSITE_NAME'],
+                'websiteUrl'  => $env['HTTP_HOST'],
                 'resetUrl'    => $resetUrl,
                 'loginUrl'    => $loginUrl,
             ];
             if ($user->role === 'administrator' || $user->role === 'writer') {
-                $emailData['resetUrl']  = $env['KANSO_ADMIN_URL'].'/reset-password/?token='.$user->kanso_password_key;
+                $emailData['resetUrl']  = $env['KANSO_ADMIN_URL'].'/forgot-password/';
                 $emailData['loginUrl']  = $env['KANSO_ADMIN_URL'].'/login/';
             }
 

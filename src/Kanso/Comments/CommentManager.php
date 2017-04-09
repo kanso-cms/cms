@@ -167,25 +167,28 @@ class CommentManager
         return $status;
     }
 
-
+    /**
+     * Delete a comment
+     *
+     * @param  int       $commentID    Comment ID to change
+     * @return bool   
+     */
     public function remove($commentID)
     {
+        # Intval
+        $commentID = intval($commentID);
+
         # Get a new Query builder
         $SQL = \Kanso\Kanso::getInstance()->Database()->Builder();
 
-        # Validate the status is allowed
-        $statuses = ['approved', 'spam', 'deleted', 'pending'];
-        if (!in_array($status, $statuses)) return false;
-
         # Get the comment row from the database
-        $commentRow = $Query->SELECT('*')->FROM('comments')->where('id', '=', (int)$commentID)->FIND();
+        $commentRow = $SQL->SELECT('*')->FROM('comments')->where('id', '=', $commentID)->ROW();
 
         # Validate the row exists
         if (!$commentRow) return false;
 
-        # Change and save the status
-        $SQL->UPDATE('comments')->SET(['status' => $status])->WHERE('id', '=', (int)$commentID)->QUERY();
-        
+        $this->deleteThread($commentID);
+
         return true;
     }
 
@@ -198,15 +201,18 @@ class CommentManager
      */
     public function status($commentID, $status) 
     {
+        # Delete
+        if ($status === 'deleted')  return $this->remove($commentID);
+
         # Get a new Query builder
         $SQL = \Kanso\Kanso::getInstance()->Database()->Builder();
 
         # Validate the status is allowed
-        $statuses = ['approved', 'spam', 'deleted', 'pending'];
+        $statuses = ['approved', 'spam', 'pending'];
         if (!in_array($status, $statuses)) return false;
 
         # Get the comment row from the database
-        $commentRow = $Query->SELECT('*')->FROM('comments')->where('id', '=', (int)$commentID)->FIND();
+        $commentRow = $SQL->SELECT('*')->FROM('comments')->where('id', '=', (int)$commentID)->FIND();
 
         # Validate the row exists
         if (!$commentRow) return false;
@@ -239,12 +245,34 @@ class CommentManager
         }
     }
 
-   
-
     /********************************************************************************
     * PRIVATE HELPER METHODS
     *******************************************************************************/
     
+    /**
+     * Recursively delete comment replies
+     *
+     * @param  int    $commentId
+     * @return NULL
+     */
+    private function deleteThread($commentId)
+    {
+        # Get a new Query builder
+        $SQL = \Kanso\Kanso::getInstance()->Database()->Builder();
+
+        # Delete the comment
+        $SQL->DELETE_FROM('comments')->WHERE('id', '=', $commentId)->QUERY();
+
+        # Find the direct children
+        $children = $SQL->SELECT('*')->FROM('comments')->where('parent', '=', $commentId)->FIND_ALL();
+
+        if (!empty($children)) {
+            foreach ($children as $child) {
+                $this->deleteThread($child['id']);
+            }
+        }
+    }
+
     /**
      * Validate comment array 
      *

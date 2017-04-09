@@ -61,7 +61,6 @@
 						<option value="approved" <?php if ($comment['status'] === 'approved') echo 'selected'; ?>>Approved</option>
 						<option value="pending" <?php if ($comment['status'] === 'pending') echo 'selected';?>>Pending</option>
 						<option value="spam" <?php if ($comment['status'] === 'spam') echo 'selected';?>>Spam</option>
-						<option value="deleted" <?php if ($comment['status'] === 'deleted') echo 'selected';?>>Deleted</option>
 					</select>
 					<input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN;?>">
 					<input type="hidden" name="comments[]"   value="<?php echo $comment['id'];?>">

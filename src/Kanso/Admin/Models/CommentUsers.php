@@ -45,7 +45,7 @@ class CommentUsers
 
         # If the commenters are empty,
         # There's no need to check for max pages
-        if (!empty($response['users'])) {
+        if (!empty($response['commenters'])) {
             $response['max_page'] = $this->loadUsers(true);
         }
 

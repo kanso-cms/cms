@@ -277,48 +277,6 @@ class Bookkeeper
 
     }
 
-    /**
-	 * Batch import an array of articles
-	 *
-	 * @param  array    $articles    Associative array of the articles
-	 * @return string
-	*/
-	public function batchImport($articles) 
-	{
-
-	    # Loop the articles
-	  	foreach ($articles as $i => $article) {
-
-	      	# Validate the article's array keys
-	  		if (!\Kanso\Utility\Arr::issets(['created', 'modified', 'status', 'type', 'title', 'excerpt', 'category', 'tags', 'content', 'thumbnail_id', 'comments_enabled'], $article )) return "invalid_json";
-	  		if (!is_numeric($article['created'])) return "invalid_json";
-	  		if (!is_numeric($article['modified'])) return "invalid_json";
-	  		if ($article['type'] !== 'page' && $article['type'] !== 'post') return "invalid_json";
-	  		if ($article['status'] !== 'published' && $article['status'] !== 'draft') return "invalid_json";
-
-	      	# Sanitize values
-	  		$articles[$i]['title']       = filter_var($articles[$i]['title'], FILTER_SANITIZE_STRING);
-	  		$articles[$i]['excerpt']     = filter_var($articles[$i]['excerpt'], FILTER_SANITIZE_STRING);
-	  		$articles[$i]['category']    = filter_var($articles[$i]['category'], FILTER_SANITIZE_STRING);
-	  		$articles[$i]['thumbnail_id']= intval($articles[$i]['thumbnail_id']);
-	  		$articles[$i]['tags']  		 = filter_var($articles[$i]['tags'], FILTER_SANITIZE_STRING);
-	  		$article['comments_enabled'] = (bool) $article['comments_enabled'];
-	  		$articles[$i]['created']     = (int)$articles[$i]['created'];
-	  		$articles[$i]['modified']    = (int)$articles[$i]['modified'];
-	  		if (isset($articles[$i]['author_id'])) $articles[$i]['author_id'] = (int)$articles[$i]['author_id'];
-
-	  		$post = $this->create();
-	  		foreach ($articles[$i] as $key => $value) {
-	  			$post->$key = $value;
-	  		}
-
-	  		if (!$post->save())  return "invalid_json"; 
-
-	  	}
-
-	  	return true;
-	}
-
     /********************************************************************************
 	* TAXONOMY METHODS
 	*******************************************************************************/

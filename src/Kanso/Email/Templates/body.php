@@ -220,7 +220,7 @@
                             <tr>
                                 <td style="text-align: center">
                                     <a href="<?php echo $logo_link;?>">
-                                        <img src="<?php echo $logo_url; ?>" aria-hidden="true" width="80" height="80" alt="alt_text" border="0" style="height: auto; background: <?php echo $content_bg;?>; font-family: <?php echo $font_family;?>; font-size: <?php echo $font_size;?>; line-height: <?php echo $line_height;?>; color: <?php echo $body_bg;?>;">
+                                        <img src="<?php echo $logo_url; ?>" aria-hidden="true" width="60" height="60" alt="alt_text" border="0" style="height: auto; background: <?php echo $content_bg;?>; font-family: <?php echo $font_family;?>; font-size: <?php echo $font_size;?>; line-height: <?php echo $line_height;?>; color: <?php echo $body_bg;?>;">
                                     </a>
                                 </td>
                             </tr>

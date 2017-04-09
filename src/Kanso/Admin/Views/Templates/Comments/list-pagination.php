@@ -10,17 +10,16 @@ if ($max_page == 0) $max_page = 1;
 	    		<li class="disabled"><span>‹</span></li>
 	    	<?php else : ?>
 	    		<?php $prev = $queries['page'] - 1; ?>
-	    		<li><a href="<?php echo "tag=$queries[tag]&category=$queries[category]&status=$queries[status]&sort=$queries[sort]&search=$queries[search]&author=$queries[author]&page=0";?>">«</a></li>
-	    		<li><a href="<?php echo "tag=$queries[tag]&category=$queries[category]&status=$queries[status]&sort=$queries[sort]&search=$queries[search]&author=$queries[author]&page=$prev";?>">‹</a></li>
+	    		<li><a href="<?php echo "/admin/comments/?search=$queries[search]&status=$queries[status]&sort=$queries[sort]&page=0";?>">«</a></li>
+	    		<li><a href="<?php echo "/admin/comments/?search=$queries[search]&status=$queries[status]&sort=$queries[sort]&page=$prev";?>">‹</a></li>
 	    	<?php endif; ?>
 
 	    	<li class="elips"><span><?php echo "$queries[page] of $max_page";?></span></li>
 
-
-	    	<?php if ($queries['page'] < $max_page && $queries['page'] !== 1) : ?>
+	    	<?php if ($queries['page'] < $max_page) : ?>
 				<?php $next = $queries['page'] + 1; ?>
-	    		<li><a href="<?php echo "tag=$queries[tag]&category=$queries[category]&status=$queries[status]&sort=$queries[sort]&search=$queries[search]&author=$queries[author]&page=$next";?>">›</a></li>
-	    		<li><a href="<?php echo "tag=$queries[tag]&category=$queries[category]&status=$queries[status]&sort=$queries[sort]&search=$queries[search]&author=$queries[author]&page=$max_page";?>">»</a></li>
+	    		<li><a href="<?php echo "/admin/comments/?search=$queries[search]&status=$queries[status]&sort=$queries[sort]&page=$next";?>">›</a></li>
+	    		<li><a href="<?php echo "/admin/comments/?search=$queries[search]&status=$queries[status]&sort=$queries[sort]&page=$max_page";?>">»</a></li>
 	    	<?php else : ?>
 	    		<li class="disabled"><span>›</span></li>
 	    		<li class="disabled"><span>»</span></li>

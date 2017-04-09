@@ -1870,7 +1870,7 @@ class Query {
      */
     public function get_comment($comment_id)
     {
-        return $this->SQL->SELECT('*')->FROM('comments')->WHERE('id', '=', (int)$comment_id)->ROW();
+        return $this->SQL->SELECT('*')->FROM('comments')->WHERE('id', '=', intVal($comment_id))->ROW();
     }
 
     /**

@@ -107,9 +107,6 @@ class Settings
             else if ($postVars['form_name'] === 'kanso_settings') {
                 return $this->kansoSettings($postVars);
             }
-            else if ($postVars['form_name'] === 'batch_articles') {
-                return $this->importArticles($postVars);
-            }
             else if ($postVars['form_name'] === 'restore_kanso') {
                 return $this->restoreKanso();
             }
@@ -369,48 +366,6 @@ class Settings
         }
 
         return false;
-    }
-
-    /**
-     * Parse and validate import articles from the POST request
-     * 
-     * @param  $postVars    $_POST
-     * @return array|false
-     */
-    private function importArticles($postVars)
-    {
-        # Validate the user is an admin
-        $user = \Kanso\Kanso::getInstance()->Gatekeeper->getUser();
-        if ($user->role !== 'administrator') return false;
-
-        # Validate a file was sent
-        if (empty($_FILES) || !isset($_FILES['import_articles'])) return $this->response('No files were uploaded. Please select a ".json" file to upload.', 'warning');
-
-        # Validate the file has a mime
-        if (!isset($_FILES['import_articles']['type'])) return $this->response('No files were uploaded. Please select a ".json" file to upload.', 'warning');
-
-        # Validate this is an json file type
-        if ($postVars['import_articles']['type'] !== 'application/json') return $this->response('No files were uploaded. Please select a ".json" file to upload.', 'warning');
-
-        # Convert the mime to an extension
-        $mime = \Kanso\Utility\Mime::toExt($postVars['import_articles']['type']);
-        if ($mime !== 'json') return 'invalid_json';
-
-        # Validate the file is a valid json
-        if (!$this->isJson(file_get_contents($postVars['import_articles']['tmp_name']))) return $this->response('The file you uploaded is not in valid JSON format.', 'warning');
-
-        # Convert the JSON to an array
-        $articles = json_decode(file_get_contents($postVars['import_articles']['tmp_name']), true);
-
-        # Import the articles
-        $import = \Kanso\Kanso::getInstance()->Bookkeeper->batchImport($articles);
-
-        if ($import) {
-            return $this->response('Articles successfully uploaded and imported!', 'success');
-        }
-        else {
-            return $this->response('The JSON you uploaded is not a valid Kanso import file.', 'warning');
-        }
     }
 
     /**
