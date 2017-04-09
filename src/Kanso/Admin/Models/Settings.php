@@ -347,22 +347,30 @@ class Settings
                 "KANSO_COMMENTS_OPEN"    => \Kanso\Utility\Str::bool($validated_data['enable_comments']),
             ];
 
-            $update = \Kanso\Kanso::getInstance()->Settings->putMultiple($config, true);
+            $Settings = \Kanso\Kanso::getInstance()->Settings;
+            $update   = $Settings->putMultiple($config, true);
             
-            if ($update === 700) {
+            if ($update === true) {
                 return $this->response('Kanso settings were successfully updated!', 'success');
             }
-
-            $responses = [
-                100 => 'The theme value was invalid. Please enter a valid theme.',
-                200 => 'The permalinks value you entered is invalid. Please ensure you enter a valid permalink structure - e.g. "year/month/postname/".',
-                300 => 'The image quality value you entered is invalid. Please enter a number between 0 and 10',
-                400 => 'The CDN url you entered is invalid. Please provide a valid URL.',
-                500 => 'The cache life value you entered is invalid. Please ensure you enter a cache lifetime - e.g. "1 month".',
-                600 => 'There was an unknown error. Please log an issue on GitHub.',
-            ];
-
-            return $this->response($responses[$update], 'warning');
+            else if ($update === $Settings::INVALID_THEME) {
+                return $this->response('The theme is not a valid Kanso theme.', 'warning');
+            }
+            else if ($update === $Settings::INVALID_PERMALINKS) {
+                return $this->response('The permalinks value you entered is invalid. Please ensure you enter a valid permalink structure - e.g. "year/month/postname/".', 'warning');
+            }
+            else if ($update === $Settings::INVALID_IMG_QUALITY) {
+                return $this->response('The image quality value you entered is invalid. Please enter a number between 0 and 100.', 'warning');
+            }
+            else if ($update === $Settings::INVALID_CDN_URL) {
+                return $this->response('The CDN url you entered is invalid. Please provide a valid URL.', 'warning');
+            }
+            else if ($update === $Settings::INVALID_CACHE_LIFE) {
+                return $this->response('The cache life value you entered is invalid. Please ensure you enter a cache lifetime - e.g. "1 month" or "3 days".', 'warning');
+            }
+            else if ($update === $Settings::UNKNOWN_ERROR) {
+                return $this->response('There was an unknown error. Please log an issue on GitHub.', 'warning');
+            }
         }
 
         return false;

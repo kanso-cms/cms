@@ -14,19 +14,35 @@ namespace Kanso\Config;
  */
 class Settings 
 {
+    /**
+     * @var int
+     */
+    const INVALID_THEME = 100;
 
     /**
-     * @var array    Response status
+     * @var int
      */
-    private $responseCodes = [
-        'invalid_theme'       => 100,
-        'invalid_permalinks'  => 200,
-        'invalid_img_quality' => 300,
-        'invalid_cdn_url'     => 400,
-        'invalid_cache_life'  => 500,
-        'unknown_error'       => 600,
-        'success'             => 700,
-    ];
+    const INVALID_PERMALINKS = 200;
+
+    /**
+     * @var int
+     */
+    const INVALID_IMG_QUALITY = 300;
+
+    /**
+     * @var int
+     */
+    const INVALID_CDN_URL = 400;
+
+    /**
+     * @var int
+     */
+    const INVALID_CACHE_LIFE = 500;
+
+    /**
+     * @var int
+     */
+    const UNKNOWN_ERROR = 600;
 
     /**
      * @var array    Default Kanso configuration options
@@ -221,10 +237,9 @@ class Settings
         # Validate the config if needed
         if ($throwError) {
             $validation = $this->validateConfig();
-            if (is_integer($validation) && in_array($validation, $this->responseCodes)) {
-                $this->tempConfig = $this->configData;
+            if ($validation !== true) {
                 return $validation;
-            }
+            } 
         }
 
         # Filter the config internally
@@ -257,8 +272,6 @@ class Settings
 
         # Update Kanso
         \Kanso\Kanso::getInstance()->Config = $config;
-
-        if ($throwError) return $this->responseCodes['success'];
 
         return true;
     }
@@ -309,11 +322,11 @@ class Settings
         ];
 
         # Validate things that are required
-        if ($Kanso_Config['KANSO_THEME_NAME'] === '' || !is_dir($env['KANSO_THEMES_DIR'].'/'.$Kanso_Config['KANSO_THEME_NAME'])) return $this->responseCodes['invalid_theme'];
-        if ($KansoPermalinks['KANSO_PERMALINKS'] === '' || $KansoPermalinks['KANSO_PERMALINKS_ROUTE'] === '' || strpos($KansoPermalinks['KANSO_PERMALINKS'], 'postname') === false) return $this->responseCodes['invalid_permalinks'];
-        if ($Kanso_Config['KANSO_IMG_QUALITY'] < 1 || $Kanso_Config['KANSO_IMG_QUALITY'] > 100)return $this->responseCodes['invalid_img_quality'];
-        if ($Kanso_Config['KANSO_USE_CDN'] === true && $Kanso_Config['KASNO_CDN_URL'] === '') return $this->responseCodes['invalid_cdn_url'];
-        if ($Kanso_Config['KANSO_USE_CACHE'] === true && !$KansoCacheLife) return $this->responseCodes['invalid_cache_life'];
+        if ($Kanso_Config['KANSO_THEME_NAME'] === '' || !is_dir($env['KANSO_THEMES_DIR'].'/'.$Kanso_Config['KANSO_THEME_NAME'])) return self::INVALID_THEME;
+        if ($KansoPermalinks['KANSO_PERMALINKS'] === '' || $KansoPermalinks['KANSO_PERMALINKS_ROUTE'] === '' || strpos($KansoPermalinks['KANSO_PERMALINKS'], 'postname') === false) return self::INVALID_PERMALINKS;
+        if ($Kanso_Config['KANSO_IMG_QUALITY'] < 1 || $Kanso_Config['KANSO_IMG_QUALITY'] > 100)return self::INVALID_IMG_QUALITY;
+        if ($Kanso_Config['KANSO_USE_CDN'] === true && $Kanso_Config['KASNO_CDN_URL'] === '') return self::INVALID_CDN_URL;
+        if ($Kanso_Config['KANSO_USE_CACHE'] === true && !$KansoCacheLife) return self::INVALID_CACHE_LIFE;
 
         $this->tempConfig = array_merge($this->tempConfig, $Kanso_Config);
 
