@@ -61,7 +61,7 @@ class Installer
     		if ($this->isInstalled) throw new \Exception("Could not install, Kanso is already installed.");
 
             $settings = new \Kanso\Config\Settings(true);
-            $config   = $settings->get();
+            $config   = $settings->data();
 
     	}
 

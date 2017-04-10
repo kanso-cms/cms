@@ -245,7 +245,7 @@ class Response {
     public function finalize()
     {
         $Kanso = \Kanso\Kanso::getInstance();
-        if ($Kanso->Config()['KANSO_USE_CDN'] && !$Kanso->is_admin) {
+        if ($Kanso->Config['KANSO_USE_CDN'] && !$Kanso->is_admin) {
             $cdnFilter    = new \Kanso\CDN\CDN($Kanso->Environment['HTTP_HOST'], $Kanso->Config['KASNO_CDN_URL'], $this->body);
             $this->body   = $cdnFilter->filter();
             $this->length = strlen($this->body);

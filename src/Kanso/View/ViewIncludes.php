@@ -954,10 +954,10 @@ function home_url()
  * eg http://www.example.com returns example.com
  * @return string
  */
-function website_name() 
+function domain_name() 
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->website_name();
+    return $KANSO_QUERY->domain_name();
 }
 
 /**

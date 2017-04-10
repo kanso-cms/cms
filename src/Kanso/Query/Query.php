@@ -1651,9 +1651,9 @@ class Query {
      *
      * @return string
      */
-    public function website_name() 
+    public function domain_name() 
     {
-        return \Kanso\Kanso::getInstance()->Environment()['KANSO_WEBSITE_NAME'];
+        return \Kanso\Kanso::getInstance()->Environment()['DOMAIN_NAME'];
     }
 
     /**

@@ -352,7 +352,7 @@ class CommentManager
             'the_thumbnail' => \Kanso\Kanso::getInstance()->Query->the_post_thumbnail_src($articleRow['id']),
             'comment_email' => $newComment['email'],
             'homepageUrl'   => $env['HTTP_HOST'],
-            'websiteName'   => $env['KANSO_WEBSITE_NAME'],
+            'websiteName'   => $env['DOMAIN_NAME'],
             'websiteUrl'    => $env['HTTP_HOST'],
         ];
 
@@ -361,8 +361,8 @@ class CommentManager
             if (in_array($emailTo, $sentEmails) || $emailTo === $newComment['email']) continue;
 
             $senderName   = $config['KANSO_SITE_TITLE'];
-            $senderEmail  = 'no-reply@'.$env['KANSO_WEBSITE_NAME'];
-            $emailSubject = 'A new comment was made at '.$env['KANSO_WEBSITE_NAME'];
+            $senderEmail  = 'no-reply@'.$env['DOMAIN_NAME'];
+            $emailSubject = 'A new comment was made at '.$env['DOMAIN_NAME'];
             $emailContent = $Email->html($emailSubject, $Email->preset('comment', $emailData));
             $Email->send($emailTo, $senderName, $senderEmail, $emailSubject, $emailContent);
             $sentEmails[] = $emailTo;

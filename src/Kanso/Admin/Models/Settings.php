@@ -204,7 +204,6 @@ class Settings
         if ($password !== '' && !empty($password)) $user->password = utf8_encode(\Kanso\Security\Encrypt::hash($password));
 
         $user->save();
-
       
         return $this->response('Your account settings were successfully updated!', 'success');
 
@@ -334,12 +333,12 @@ class Settings
                 "KANSO_SITE_DESCRIPTION" => $validated_data['site_description'], 
                 "KANSO_SITEMAP"          => $validated_data['sitemap_url'],
                 "KANSO_PERMALINKS"       => $validated_data['permalinks'],
-                "KANSO_POSTS_PER_PAGE"   => $validated_data['posts_per_page'] < 1 ? 10 : $validated_data['posts_per_page'],
+                "KANSO_POSTS_PER_PAGE"   => $validated_data['posts_per_page'] < 1 ? 10 : intval($validated_data['posts_per_page']),
                 "KANSO_ROUTE_TAGS"       => \Kanso\Utility\Str::bool($validated_data['enable_tags']),
                 "KANSO_ROUTE_CATEGORIES" => \Kanso\Utility\Str::bool($validated_data['enable_cats']),
                 "KANSO_ROUTE_AUTHORS"    => \Kanso\Utility\Str::bool($validated_data['enable_authors']),
                 "KANSO_THUMBNAILS"       => $validated_data['thumbnail_sizes'],
-                "KANSO_IMG_QUALITY"      => (int)$validated_data['thumbnail_quality'],
+                "KANSO_IMG_QUALITY"      => intval($validated_data['thumbnail_quality']),
                 "KANSO_USE_CDN"          => \Kanso\Utility\Str::bool($validated_data['enable_cdn']),
                 "KASNO_CDN_URL"          => $validated_data['cdn_url'],
                 "KANSO_USE_CACHE"        => \Kanso\Utility\Str::bool($validated_data['enable_cache']),
@@ -348,8 +347,11 @@ class Settings
             ];
 
             $Settings = \Kanso\Kanso::getInstance()->Settings;
-            $update   = $Settings->putMultiple($config, true);
-            
+            foreach ($config as $key => $value) {
+                $Settings->$key = $value;
+            }
+            $update = $Settings->save(true);
+
             if ($update === true) {
                 return $this->response('Kanso settings were successfully updated!', 'success');
             }
@@ -367,6 +369,12 @@ class Settings
             }
             else if ($update === $Settings::INVALID_CACHE_LIFE) {
                 return $this->response('The cache life value you entered is invalid. Please ensure you enter a cache lifetime - e.g. "1 month" or "3 days".', 'warning');
+            }
+            else if ($update === $Settings::INVALID_THUMBNAILS) {
+                return $this->response('The thumbnail sizes you entered are invalid.', 'warning');
+            }
+            else if ($update === $Settings::INVALID_POSTS_PER_PAGE) {
+                return $this->response('The posts per page you entered is invalid. You need to enter a number', 'warning');
             }
             else if ($update === $Settings::UNKNOWN_ERROR) {
                 return $this->response('There was an unknown error. Please log an issue on GitHub.', 'warning');

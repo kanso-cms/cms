@@ -142,14 +142,15 @@ class Admin
         $permalink = str_replace([':', '(', ')'], '', $route);
         $permalink = trim($permalink, '/');
 
+        # Settings don't get saved
         if (!isset(\Kanso\Kanso::getInstance()->Config['KANSO_CUSTOM_POSTS'])) {
             $customPosts = [$value => $permalink];
-            \Kanso\Kanso::getInstance()->tmpConfig('KANSO_CUSTOM_POSTS', $customPosts);
+            \Kanso\Kanso::getInstance()->Settings->KANSO_CUSTOM_POSTS = $customPosts;
         }
         else {
             $customPosts = \Kanso\Kanso::getInstance()->Config['KANSO_CUSTOM_POSTS'];
             $customPosts[$value] = $permalink;
-            \Kanso\Kanso::getInstance()->tmpConfig('KANSO_CUSTOM_POSTS', $customPosts);
+            \Kanso\Kanso::getInstance()->Settings->KANSO_CUSTOM_POSTS = $customPosts;
         }
     }
 

@@ -67,6 +67,9 @@ class Environment
         # Http host
         $env['HTTP_HOST'] = $env['HTTP_PROTOCOL'].'://'.$_SERVER['HTTP_HOST'];
 
+        # domain name
+        $env['DOMAIN_NAME'] = str_replace('www.', '', str_replace($env['HTTP_PROTOCOL'].'://', '', $env['HTTP_HOST']));
+
         # Request uri
         $env['REQUEST_URI'] = $_SERVER['REQUEST_URI'];
 
@@ -100,9 +103,6 @@ class Environment
 
         # Kanso admin uri
         $env['KANSO_ADMIN_URL']    = strtolower($env['HTTP_HOST'].DIRECTORY_SEPARATOR.'admin');
-
-        # Kanso website name
-        $env['KANSO_WEBSITE_NAME'] = str_replace('www.', '', str_replace($env['HTTP_PROTOCOL'].'://', '', $env['HTTP_HOST']));
 
         # Kanso's image uploads url
         $env['KANSO_IMGS_URL']     = str_replace($env['DOCUMENT_ROOT'], $env['HTTP_HOST'], $env['KANSO_UPLOADS_DIR']).DIRECTORY_SEPARATOR.'Images';

@@ -30,8 +30,8 @@ class Cookie {
     {
         # Only change the domain if this is not localhost
         $env = \Kanso\Kanso::getInstance()->Environment;
-        if (!\Kanso\Utility\Str::contains($env['KANSO_WEBSITE_NAME'], 'localhost')) {
-            $this->defaults['domain'] = $env['KANSO_WEBSITE_NAME'];
+        if (!\Kanso\Utility\Str::contains($env['DOMAIN_NAME'], 'localhost')) {
+            $this->defaults['domain'] = $env['DOMAIN_NAME'];
             $this->defaults['secure'] = $env['HTTP_PROTOCOL'] === 'https' ? true : false;
         }
         # Merge options

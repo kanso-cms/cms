@@ -10,10 +10,6 @@ class CDN
 
 	private $htmlStr;
 
-	private $selectors = [
-
-	];
-
 	public function __construct($baseUrl, $cdnUrl, $htmlStr)
     {
     	$this->baseUrl = rtrim($baseUrl, '/');

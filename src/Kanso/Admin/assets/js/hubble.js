@@ -4946,14 +4946,10 @@ JSHelper.prototype._removeListener = function(el, eventName, handler, useCapture
      * @return obj
      */
     FormValidator.prototype._generateForm = function() {
-      for (var i = 0; i < this._inputs.length; i++) {
+        for (var i = 0; i < this._inputs.length; i++) {
             var name  = this._inputs[i].name;
             var value = Helper.getInputValue(this._inputs[i]);
             if (this._inputs[i].type === 'radio' && this._inputs[i].checked == false) {
-                continue;
-            }
-            if (this._inputs[i].type === 'checkbox') {
-                this._formObj[name] = (this._inputs[i].checked == true);
                 continue;
             }
             if (Helper.is_numeric(value)) value = parseInt(value);

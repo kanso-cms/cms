@@ -211,9 +211,12 @@ class User
         	foreach ($slugs as $i => $configSlug) {
 	            if ($configSlug === $this->slug) unset($slugs[$i]);
 	        }
-        }       
+        }
 
-        \Kanso\Kanso::getInstance()->Settings->put('KANSO_AUTHOR_SLUGS', array_values($slugs));
+        $settings = \Kanso\Kanso::getInstance()->Settings;
+        $settings->KANSO_AUTHOR_SLUGS = array_values($slugs);
+        $settings->save();
+
     }
 
     /**
@@ -228,9 +231,11 @@ class User
         # If the slug was changed removed the old one
         foreach ($slugs as $i => $configSlug) {
             if ($configSlug === $this->data['slug']) unset($slugs[$i]);
-        }     
+        }
 
-        \Kanso\Kanso::getInstance()->Settings->put('KANSO_AUTHOR_SLUGS', array_values($slugs));
+        $settings = \Kanso\Kanso::getInstance()->Settings;
+        $settings->KANSO_AUTHOR_SLUGS = array_values($slugs);
+        $settings->save();
     }
 
 }

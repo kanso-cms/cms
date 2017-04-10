@@ -660,7 +660,9 @@ class Bookkeeper
             if ($configSlug === $slug) unset($slugs[$i]);
         }
 
-        \Kanso\Kanso::getInstance()->Settings->put('KANSO_STATIC_PAGES', array_values($slugs));
+        $settings = \Kanso\Kanso::getInstance()->Settings;
+        $settings->KANSO_STATIC_PAGES = array_unique(array_values($slugs));
+        $settings->save();
 	}
 
 	/**
@@ -677,7 +679,9 @@ class Bookkeeper
         # Add the slug
         $slugs[] = $slug;
 
-        \Kanso\Kanso::getInstance()->Settings->put('KANSO_STATIC_PAGES', array_unique(array_values($slugs)));
+        $settings = \Kanso\Kanso::getInstance()->Settings;
+        $settings->KANSO_STATIC_PAGES = array_unique(array_values($slugs));
+        $settings->save();
 	}
 
 	/**

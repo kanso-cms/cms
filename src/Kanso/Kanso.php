@@ -147,8 +147,11 @@ class Kanso
 			return new \Kanso\Config\Settings();
 		});
 
-		# Initialize application configuration  
-		$this->Container['Config'] = $this->Settings->get();
+		# Initialize application configuration
+		# Default environment
+		$this->Container->singleton('Config', function () {
+			return $this->Settings->data();
+		});
 
 		# Default environment
 		$this->Container->singleton('Environment', function () {
@@ -326,18 +329,6 @@ class Kanso
 	public function getName()
 	{
 		return $this->name;
-	}
-
-	/**
-	 * Set a config key/par but dont save
-	 *
-	 * @return string|null
-	 */
-	public function tmpConfig($key, $value)
-	{
-		$config = $this->Config;
-		$config[$key] = $value;
-		$this->Container->set('Config', $config);
 	}
 
 	/********************************************************************************
