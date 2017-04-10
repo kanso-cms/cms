@@ -276,7 +276,7 @@ class Response {
         list($status, $headers, $body, $cookies) = $this->finalize();
 
         # Call the mid dispatch event
-        \Kanso\Events::fire('midDispatch', [$status, $headers, $body]);
+        \Kanso\Events::fire('midDispatch', [$status, $headers, $body, $cookies]);
 
         # Send the default headers only if no output has
         # already been sent to the client

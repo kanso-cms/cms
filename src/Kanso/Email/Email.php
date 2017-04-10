@@ -53,6 +53,8 @@ class Email
     /**
      * Load a present template
      *
+     * @param  string    $template     Template name 
+     * @param  array     $vars         Vars to send to the template
      */
     public function preset($template, $vars)
     {

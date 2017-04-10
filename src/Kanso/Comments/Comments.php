@@ -4,13 +4,19 @@ namespace Kanso\Comments;
 
 /**
  * Comments
- *
- * This class acts as an abstraction layer and provides helper methods
- * for adding/deleteing and interacting with comments in the database
- *
  */
-class CommentManager
+class Comments
 {
+
+    /**
+     * @var int
+     */
+    const STATUS_SPAM = 100;
+
+    /**
+     * @var int
+     */
+    const STATUS_PENDING = 200;
 
     /********************************************************************************
     * PUBLIC ACCESS FOR ADDING NEW COMMENTS
@@ -45,6 +51,16 @@ class CommentManager
         	
             # If the comment was successful return a JSON response
             if ($result) {
+
+                if ($result === true) {
+                    $result = 'approved';
+                }
+                else if ($result === self::STATUS_PENDING) {
+                    $result = 'pending';
+                }
+                else if ($result === self::STATUS_SPAM) {
+                    $result = 'spam';
+                }
 
                 $Response->setBody(json_encode( ['response' => 'processed', 'details' => $result]));
                 
@@ -86,8 +102,7 @@ class CommentManager
         $commentData['email-thread'] = \Kanso\Utility\Str::bool($commentData['email-thread']);
 
         # Convert the content from markdown to HTML
-        $Parser      = new \Kanso\Parsedown\ParsedownExtra();
-        $htmlContent = $Parser->text($commentData['content']);
+        $htmlContent = \Kanso\Kanso::getInstance()->Markdown->text($commentData['content']);
         $status      = 'approved';
         $spamRating  = 1;
 
@@ -164,7 +179,15 @@ class CommentManager
         # append/set it to article row in the databse
         $this->sendCommentEmails($articleRow, $commentRow);
 
-        return $status;
+        if ($status === 'approved') {
+            return true;
+        }
+        else if ($status === 'pending') {
+            return self::STATUS_PENDING;
+        }
+        else if ($status === 'spam') {
+            return self::STATUS_SPAM;
+        }
     }
 
     /**

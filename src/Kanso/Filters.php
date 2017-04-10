@@ -16,15 +16,12 @@ class Filters
      * @var array    Default Kanso filter types
      */
     protected static $callbacks = [
-        'configChange'        => [],
         'adminPageTitle'      => [],
         'adminFavicons'       => [],
         'adminHeaderScripts'  => [],
-        'adminSvgSprites'     => [],
+        'adminSidebarLinks'   => [],
         'adminFooterScripts'  => [],
         'adminPostTypes'      => [],
-        'adminSettingsTabs'   => [],
-        'emailBody'           => [],
         'sitemap'             => [],
     ];
 
@@ -48,7 +45,6 @@ class Filters
      */
     private function __construct()
     {
-
     }
 
     /**

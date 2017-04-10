@@ -24,6 +24,7 @@ namespace Kanso;
  * @property Cookie         \Kanso\Storage\Cookie
  * @property Admin          \Kanso\Admin\Admin
  * @property MediaLibray    \Kanso\Media\MediaLibray
+ * @property Comments       \Kanso\Comments\Comments
  *
  */
 class Kanso 
@@ -240,7 +241,7 @@ class Kanso
 
 		# Default Comment manager
 		$this->Container->singleton('Comments', function () {
-			return new \Kanso\Comments\CommentManager();
+			return new \Kanso\Comments\Comments();
 		});
 
 		# Default FileSystem
@@ -261,6 +262,11 @@ class Kanso
 		# Default Admin
 		$this->Container->singleton('Admin', function () {
 			return new \Kanso\Admin\Admin();
+		});
+
+		# Default Markdown
+		$this->Container->singleton('Markdown', function () {
+			return new \Kanso\Utility\Markdown\ParsedownExtra;
 		});
 
 		# Make default if first instance
@@ -607,7 +613,7 @@ class Kanso
 	/**
 	 * Get the Bookkeeper object
 	 *
-	 * @return \Kanso\Comments\CommentManager
+	 * @return \Kanso\Comments\Comments
 	 */
 	public function Comments()
 	{
@@ -719,9 +725,6 @@ class Kanso
 
 		# Write to the session
 		$this->Session->save();
-
-		# Call the mid dispatch event
-		\Kanso\Events::fire('midDispatch', [$status, $headers, $body]);
 
 		# Send headers and cookies
 		$this->Response->sendheaders();

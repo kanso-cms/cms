@@ -96,14 +96,12 @@ class SiteMap
 		$XML .='<url>'."\n\t\t";
 		$XML .='<loc>'.$websiteBase.'/search-results/</loc>'."\n\t\t";
 		$XML .='<lastmod>'.$now.'</lastmod>'."\n\t\t";
-		$XML .='<changefreq>monthly</changefreq>'."\n\t\t";
+		$XML .='<changefreq>always</changefreq>'."\n\t\t";
 		$XML .='<priority>0.3</priority>'."\n\t";
 		$XML .='</url>'."\n\t";
 		$XML .= '</urlset>';
 
 		return \Kanso\Kanso::getInstance()->Filters->apply('sitemap', $XML);
-
-		return $XML;
 
 	}
 

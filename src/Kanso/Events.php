@@ -28,14 +28,6 @@ class Events
      * @var array    Default Kanso event types
      */
     protected static $events = [
-        'newArticle'     => [],
-        'articleSave'    => [],
-        'articlePublish' => [],
-        'articleDelete'  => [],
-        'configChange'   => [],
-        'login'          => [],
-        'logout'         => [],
-        'imageUpload'    => [],
         'preDispatch'    => [],
         'midDispatch'    => [],
         'postDispatch'   => [],
@@ -43,7 +35,6 @@ class Events
         'error'          => [],
         'redirect'       => [],
         'adminInit'      => [],
-        'htmlEmailSend'  => [],
     ];
 
     /**

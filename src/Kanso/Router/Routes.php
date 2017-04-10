@@ -159,13 +159,12 @@ foreach ($this->Config['KANSO_STATIC_PAGES'] as $slug) {
 $this->get('/search-results/(:all)/', '\Kanso\Kanso::loadTemplate', 'search');
 $this->get('/opensearch.xml', '\Kanso\Kanso::loadOpenSearch');
 
-
 # Archive
 $this->get('/archive/',  '\Kanso\Kanso::loadTemplate', 'archive');
 
 # Ajax Post Comments
 if ($this->Config['KANSO_COMMENTS_OPEN'] === true) {
-	$this->post("/comments", '\Kanso\Comments\CommentManager@dispatch');
+	$this->post("/comments", '\Kanso\Comments\Comments@dispatch');
 }
 
 # Sitemap

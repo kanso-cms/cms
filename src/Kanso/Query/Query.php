@@ -673,9 +673,8 @@ class Query {
             if (!empty($this->post)) $content = $this->post->content;
         }
         if (empty($content)) return '';
-        
-        $Parser  = new \Kanso\Parsedown\ParsedownExtra();
-        return $Parser->text($content);
+
+        return \Kanso\Kanso::getInstance()->Markdown->text($content);
     
     }
     

@@ -11,7 +11,7 @@
 # with this source code.
 #
 #
-namespace Kanso\Parsedown;
+namespace Kanso\Utility\Markdown;
 
 class ParsedownExtra extends Parsedown
 {

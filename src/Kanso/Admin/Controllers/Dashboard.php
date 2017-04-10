@@ -71,7 +71,7 @@ class Dashboard
 		$this->is_post = \Kanso\Kanso::getInstance()->Admin->isPost();
 
 		# Fire the adminInit event
-		\Kanso\Events::fire('adminInit', $requestName);
+		\Kanso\Events::fire('adminInit');
 	}
 
 	/**

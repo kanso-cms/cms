@@ -9,8 +9,7 @@
 		<dc:creator><?php echo '<![CDATA['.the_author_name().']]>';?></dc:creator>
 		<category><?php echo '<![CDATA['.the_category_name().']]>';?></category>
 		<guid><?php echo the_permalink();?></guid>
-		<description><?php echo '<![CDATA['.the_excerpt().']]>';?></description>
-		<content:encoded><?php echo '<![CDATA['.the_content().']]>';?></content:encoded>
+		<description:encoded><?php echo '<![CDATA['.the_excerpt().']]>';?></description:encoded>
 		<wfw:commentRss><?php echo the_permalink();?>feed/</wfw:commentRss>
 		<slash:comments><?php echo comments_number();?></slash:comments>
 	</item>

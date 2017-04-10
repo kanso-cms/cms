@@ -125,7 +125,7 @@ class CommentUsers
     private function moderate($ips, $status)
     {
         foreach ($ips as $ip) {
-            \Kanso\Comments\CommentManager::moderateIp($ip, $status);
+            \Kanso\Comments\Comments::moderateIp($ip, $status);
         }
     }
 

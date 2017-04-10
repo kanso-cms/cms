@@ -65,7 +65,7 @@ class Custom
 		$this->loadModel($model);
 
 		# Fire the adminInit event
-		\Kanso\Events::fire('adminInit', 'custom');	
+		\Kanso\Events::fire('adminInit');	
 	}
 
 	/**

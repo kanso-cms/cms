@@ -324,9 +324,6 @@ class Gatekeeper
             # Log the client in
         	$this->logClientIn($user);
 
-            # Fire the event
-            \Kanso\Events::fire('login', $this->user);
-
         	return true;
         }
 
@@ -341,9 +338,6 @@ class Gatekeeper
      */
     public function logout()
     {
-        # Fire the event
-        \Kanso\Events::fire('logout', $this->user);
-
         # Keep the cookie but set as not logged in
         \Kanso\Kanso::getInstance()->Cookie->logout();
 

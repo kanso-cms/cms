@@ -63,7 +63,7 @@ class Ajax
 		\Kanso\Kanso::getInstance()->Admin->setPageName($requestName);
 
 		# Fire the adminInit event
-		\Kanso\Events::fire('adminInit', $requestName);
+		\Kanso\Events::fire('adminInit');
 	}
 
 	/**

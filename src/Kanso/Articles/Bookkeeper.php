@@ -170,18 +170,6 @@ class Bookkeeper
 
 		# Join the content
 		$Query->INSERT_INTO('content_to_posts')->VALUES(['post_id' => $rowData['id'], 'content' => $rowData['content']])->QUERY();
-
-		# Fire the event
-		if ($newArticle) {
-			\Kanso\Events::fire('newArticle', $rowData);
-		}
-		else {
-			\Kanso\Events::fire('articleSave', $rowData);
-		}
-
-		if ($rowData['status'] === 'published') {
-			\Kanso\Events::fire('articlePublish', $rowData);
-		}
 		
 		# If the article is a page and the slug was changed
 		# Remove the old slug and add the new one
@@ -269,9 +257,6 @@ class Bookkeeper
 
     	# If the article was a published page, update kanso's static pages
     	if ($articleRow['type'] === 'page' && $articleRow['status'] === 'published') $this->removeFromStaticPages($articleRow['slug']);
-
-    	# Fire the article delete event
-    	\Kanso\Events::fire('articleDelete', $articleRow);
 
     	return true;
 
