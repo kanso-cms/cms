@@ -81,9 +81,9 @@ class Query {
     /**
      * Constructor
      *
-     * @param  string $queryStr       The string-query to use on the database
-     * @param  string $requestType    Associative array of data made available to the view (optional)
-     * @param  int    $pageIndex      The current page index e.g https://example.com/page3/
+     * @param  string  $queryStr       The string-query to use on the database
+     * @param  string  $requestType    Associative array of data made available to the view (optional)
+     * @param  integer $pageIndex      The current page index e.g https://example.com/page3/
      */
     public function __construct($queryStr = '')
     {
@@ -159,11 +159,6 @@ class Query {
                 return \Kanso\Kanso::getInstance()->notFound();
             }
 
-        }
-        else if ($requestType === 'archive') {
-            $queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC';
-            $posts     = $parser->parseQuery($queryStr);
-            $postCount = count($posts);
         }
         else if ($requestType === 'tag') {
             $queryStr = 'post_status = published : post_type = post : orderBy = post_created, DESC : tag_slug = '.explode("/", $uri)[2]." : limit = $offset, $perPage";
@@ -348,10 +343,10 @@ class Query {
     }
 
     /**
-     * Tag exists
+     * Checks whether a given tag exists by the tag name or id.
      *
-     * @param   string    $tag_name
-     * @return  bool  
+     * @param   string|integer    $tag_name    Tag name or id
+     * @return  boolean
      */
     public function tag_exists($tag_name)
     {
@@ -361,10 +356,10 @@ class Query {
     }
 
     /**
-     * Author exists
+     * Checks whether a given author exists by name or id.
      *
-     * @param   string|int    $author_name 
-     * @return  bool  
+     * @param   string|integer    $author_name    Author name or id
+     * @return  boolean
      */
     public function author_exists($author_name)
     {
@@ -376,10 +371,10 @@ class Query {
     }
 
     /**
-     * Category Exists
+     * Checks whether a given author category by name or id.
      *
-     * @param   string    $category_name 
-     * @return  bool  
+     * @param   string|integer    $category_name    Category name or id
+     * @return  boolean
      */
     public function category_exists($category_name)
     {
@@ -389,12 +384,11 @@ class Query {
     }
 
     /**
-     * The post
-     *
      * Increment the internal pointer by 1 and return the current post 
-     * or just return a single post from the database by id
-     * @param   int    $post_id (optional) 
-     * @return  Kanso\Articles\Article|false 
+     * or just return a single post by id
+     *
+     * @param   integer     $post_id      (optional) (default NULL)
+     * @return  Kanso\Articles\Article|FALSE
      */
     public function the_post($post_id = null)
     {
@@ -405,6 +399,7 @@ class Query {
     /**
      * Get all the posts from the current query
      *
+     * @param   NULL
      * @return  array
      */
     public function the_posts()
@@ -413,10 +408,10 @@ class Query {
     }
 
     /**
-     * The title
+     * Get the title of the current post or a post by id
      *
-     * @param   int    $post_id (optional) 
-     * @return  string|false
+     * @param   integer     $post_id      (optional) (default NULL)
+     * @return  string|FALSE
      */
     public function the_title($post_id = null)
     {
@@ -430,10 +425,10 @@ class Query {
     }
 
     /**
-     * The permalink
+     * Get the full URL of the current post or a post by id
      *
-     * @param   int    $post_id (optional) 
-     * @return  string|false
+     * @param   integer     $post_id      (optional) (default NULL)
+     * @return  string|FALSE
      */
     public function the_permalink($post_id = null)
     {
@@ -447,10 +442,10 @@ class Query {
     }
 
     /**
-     * The slug
+     * Get the slug of the current post or a post by id
      *
-     * @param   int    $post_id (optional) 
-     * @return  string|false
+     * @param   integer     $post_id      (optional) (default NULL)
+     * @return  string|FALSE
      */
     public function the_slug($post_id = null)
     {
@@ -464,27 +459,27 @@ class Query {
     }
 
     /**
-     * The excerpt
+     * Get the excerpt of the current post or a post by id
      *
-     * @param   int    $post_id (optional) 
-     * @return  string|false
+     * @param   integer     $post_id     (optional) (Default NULL)
+     * @return  string|FALSE
      */
     public function the_excerpt($post_id = null)
     {
         if ($post_id) {
             $post = $this->getPostByID($post_id);
-            if ($post) return htmlspecialchars_decode($post->excerpt);
+            if ($post) return trim(strip_tags(\Kanso\Kanso::getInstance()->Markdown->text($post->excerpt)));
             return false;
         }
-        if (!empty($this->post)) return htmlspecialchars_decode($this->post->excerpt);
+        if (!empty($this->post)) return trim(strip_tags(\Kanso\Kanso::getInstance()->Markdown->text($this->post->excerpt)));
         return false;
     }
 
     /**
-     * The category
+     * Get the category array of the current post or a post by id
      *
-     * @param   int    $post_id (optional) 
-     * @return  array|false
+     * @param   integer     $post_id     (optional) (Default NULL)
+     * @return  array|FALSE
      */
     public function the_category($post_id = null)
     {
@@ -498,10 +493,10 @@ class Query {
     }
 
     /**
-     * The category
+     * Get the category name of the current post or a post by id
      *
-     * @param   int    $post_id (optional) 
-     * @return  string|false
+     * @param   integer     $post_id     (optional) (Default NULL)
+     * @return  string|FALSE
      */
     public function the_category_name($post_id = null)
     {
@@ -515,29 +510,29 @@ class Query {
     }
 
     /**
-     * The category url
+     * Get the full URL of the category of the current post or a post by id
      *
-     * @param   int    $category_id (optional) 
-     * @return  string|false
+     * @param   integer     $post_id     (optional) (Default NULL)
+     * @return  string|FALSE
      */
     public function the_category_url($category_id = null)
     {
         if (!$category_id) {
-            if (!empty($this->post)) return \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'].'/category/'.$this->post->category['slug'].'/';
+            if (!empty($this->post)) return \Kanso\Kanso::getInstance()->Environment['HTTP_HOST'].'/category/'.$this->post->category['slug'].'/';
             return false;
         }
         else {
             $category = $this->getCategoryById($category_id);
-            if ($category) return \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'].'/category/'.$category['slug'].'/';
+            if ($category) return \Kanso\Kanso::getInstance()->Environment['HTTP_HOST'].'/category/'.$category['slug'].'/';
         }
         return false;
     }
 
     /**
-     * The category slug
+     * Get the category slug of the current post or a post by id
      *
-     * @param   int    $category_id (optional) 
-     * @return  string|false
+     * @param   integer     $post_id     (optional) (Default NULL)
+     * @return  string|FALSE
      */
     public function the_category_slug($category_id = null)
     {
@@ -553,10 +548,10 @@ class Query {
     }
 
     /**
-     * The category id
+     * Get the category id of the current post or a post by id
      *
-     * @param   string   $category_name (optional) 
-     * @return  int|false
+     * @param   integer     $post_id     (optional) (Default NULL)
+     * @return  integer|FALSE
      */
     public function the_category_id($category_name = null)
     {
@@ -572,9 +567,9 @@ class Query {
     }
 
     /**
-     * The tags
+     * Get an array of tags of the current post or a post by id
      *
-     * @param   int   $post_id (optional) 
+     * @param   integer     $post_id     (optional) (Default NULL)
      * @return  array
      */
     public function the_tags($post_id = null) 
@@ -589,9 +584,9 @@ class Query {
     }
 
     /**
-     * The tags
+     * Get a comma separated list of the tag names of the current post or a post by id
      *
-     * @param   int   $post_id (optional) 
+     * @param   integer     $post_id     (optional) (Default NULL)
      * @return  string
      */
     public function the_tags_list($post_id = null)
@@ -606,10 +601,10 @@ class Query {
     }
 
     /**
-     * The Tags Slug
+     * Get the slug of a tag by id
      *
-     * @param   int   $tag_id 
-     * @return  string|false
+     * @param   integer    $tag_id
+     * @return  string|FALSE
      */
     public function the_tag_slug($tag_id) 
     {
@@ -619,10 +614,10 @@ class Query {
     }
 
     /**
-     * The Tags URL
+     * Get the full URL of a tag by id
      *
-     * @param   int   $tag_id 
-     * @return  string|false
+     * @param   integer    $tag_id
+     * @return  string|FALSE
      */
     public function the_tag_url($tag_id) 
     {
@@ -632,10 +627,11 @@ class Query {
     }
 
     /**
-     * Get the current taxonomy
+     * If the request is for a tag, category or author returns an array of that 
+     * taxonomy
      *
-     * @param   int   $tag_id 
-     * @return  array|false
+     * @param   NULL
+     * @return  string|FALSE
      */
     public function the_taxonomy() 
     {
@@ -656,10 +652,10 @@ class Query {
     }
 
     /**
-     * The content
+     * Gets the HTML content for current post or a post by id
      *
-     * @param   int   $post_id (optional) 
-     * @return  string|false
+     * @param   integer     $post_id     (optional) (Default NULL)
+     * @return  string
      */
     public function the_content($post_id = null) 
     {
@@ -675,15 +671,13 @@ class Query {
         if (empty($content)) return '';
 
         return \Kanso\Kanso::getInstance()->Markdown->text($content);
-    
     }
     
     /**
-     * The post thumbnail
+     * Gets an attachment object for the current post or a post by id thumbnail
      *
-     * @param   string   $size    (optional) "small/medium/large"
-     * @param   int      $post_id (optional)
-     * @return  string|false
+     * @param   integer     $post_id     (optional) (Default NULL)
+     * @return  \Kanso\Media\Attachment|FALSE
      */
     public function the_post_thumbnail($post_id = null) 
     {
@@ -698,11 +692,11 @@ class Query {
     }
 
     /**
-     * The post thumbnail
+     * Gets the thumbnail src for the current post or a post by id in a given size
      *
-     * @param   string   $size    (optional) "small/medium/large" false for original image
-     * @param   int      $post_id (optional)
-     * @return  string|false
+     * @param   integer       $post_id (optional) (Default NULL)
+     * @param   string    $size    The post thumbnail size "small"|"medium"|"large"|"original" (optional) (Default 'original') 
+     * @return  string|FALSE
      */
     public function the_post_thumbnail_src($post_id = null, $size = false) 
     {
@@ -714,9 +708,14 @@ class Query {
     }
 
     /**
-     * The post thumbnail
+     * Prints an HTML img tag from Kanso attachment object.
      *
-     * @param   \Kanso\Media\Attachment $thumbnail
+     * @param   \Kanso\Media\Attachment    $thumbnail    The attachment to print
+     * @param   string                     $size         The post thumbnail size "small"|"medium"|"large"|"original" (optional) (Default 'original') 
+     * @param   string                     $width        The img tag's width attribute  (optional) (Default '') 
+     * @param   string                     $height       The img tag's height attribute (optional) (Default '') 
+     * @param   string                     $classes      The img tag's class attribute  (optional) (Default '') 
+     * @param   string                     $id           The img tag's id attribute (optional) (Default '') 
      * @return  string
      */
     public function display_thumbnail($thumbnail, $size = 'original', $width = '', $height = '', $classes = '', $id = '') 
@@ -731,6 +730,13 @@ class Query {
         return '<img src="'.$src.'" '.$width.' '.$height.' '.$classes.' '.$id.' rel="'.$thumbnail->rel.'" alt="'.$thumbnail->alt.'" title="'.$thumbnail->title.'" >';
     }
 
+    /**
+     * Alter the URL for a media attachment src to a given size
+     *
+     * @param   string    $url    The url to change
+     * @param   string    $size   The post thumbnail size "small"|"medium"|"large"|"original" (optional) (Default 'original') 
+     * @return  string
+     */
     private function media_size($url, $size = false)
     {
         if (!$size || $size === 'original') return $url;
@@ -740,10 +746,10 @@ class Query {
     }
 
     /**
-     * The author
+     * Get the author of the current post or a post by id
      *
-     * @param   int      $post_id (optional)
-     * @return  \Kanso\Auth\Adapters\User|false
+     * @param   integer     $post_id     (optional) (Default NULL)
+     * @return  \Kanso\Auth\Adapters\User|FALSE
      */
     public function the_author($post_id = null) 
     {
@@ -757,19 +763,16 @@ class Query {
     }
 
     /**
-     * The author name
+     * Get the author name of the current post or an author by id
      *
-     * @param   int      $post_id (optional)
-     * @return  string|false
+     * @param   integer     $author_id   (optional) (default NULL)
+     * @return  string|FALSE
      */
-    public function the_author_name($post_id = null) 
+    public function the_author_name($author_id = null) 
     {
-        if ($post_id) {
-            $post = $this->getPostByID($post_id);
-            if ($post) {
-                $author = $this->getAuthorById($post->author_id);
-                if ($author) return $author->name;
-            }
+        if ($author_id) {
+            $author = $this->getAuthorById($author_id);
+            if ($author) return $author->name;
             return false;
         }
         if (!empty($this->post)) {
@@ -780,10 +783,10 @@ class Query {
     }
 
     /**
-     * The author url 
+     * Get the authors full URL of the current post or an author by id
      *
-     * @param   int      $author_id (optional)
-     * @return  string|false
+     * @param   integer     $author_id   (optional) (default NULL)
+     * @return  string|FALSE
      */
     public function the_author_url($author_id = null)
     {
@@ -800,11 +803,10 @@ class Query {
     }
 
     /**
-     * The author thumbnail 
+     * Get the authors thumbnail attachment of the current post or an author by id
      *
-     * @param   string   $size      (optional) "small/medium/large"
-     * @param   int      $author_id (optional)
-     * @return  object|false
+     * @param   integer     $author_id   (optional) (default NULL)
+     * @return  \Kanso\Media\Attachment|FALSE
      */
     public function the_author_thumbnail($author_id = null)
     {
@@ -821,12 +823,11 @@ class Query {
         return false;
     }
 
-
     /**
-     * The author bio 
+     * Get the authors bio of the current post or an author by id
      *
-     * @param   int      $author_id (optional)
-     * @return  string|false
+     * @param   integer     $author_id   (optional) (default NULL)
+     * @return  string|FALSE
      */
     public function the_author_bio($author_id = null)
     {
@@ -836,16 +837,17 @@ class Query {
             return false;
         }
         if (!empty($this->post)) {
-            return $this->post->author->description;
+            $author = $this->getAuthorById($this->post->author_id);
+            if ($author) return $author->description;
         }
         return false;
     }
 
     /**
-     * The author twitter 
+     * Get the authors twitter URL of the current post or an author by id
      *
-     * @param   int      $author_id (optional)
-     * @return  string|false
+     * @param   integer     $author_id   (optional) (default NULL)
+     * @return  string|FALSE
      */
     public function the_author_twitter($author_id = null)
     {
@@ -855,16 +857,17 @@ class Query {
             return false;
         }
         if (!empty($this->post)) {
-            return $this->post->author->twitter;
+            $author = $this->getAuthorById($this->post->author_id);
+            if ($author) return $author->twitter;
         }
         return false;
     }
 
     /**
-     * The author google 
+     * Get the authors google URL of the current post or an author by id
      *
-     * @param   int      $author_id (optional)
-     * @return  string|false
+     * @param   integer     $author_id   (optional) (default NULL)
+     * @return  string|FALSE
      */
     public function the_author_google($author_id = null)
     {
@@ -874,51 +877,56 @@ class Query {
             return false;
         }
         if (!empty($this->post)) {
-            return $this->post->author->gplus;
+            $author = $this->getAuthorById($this->post->author_id);
+            if ($author) return $author->gplus;
         }
         return false;
     }
 
     /**
-     * The author facebook 
+     * Get the authors facebook URL of the current post or an author by id
      *
-     * @param   int      $author_id (optional)
-     * @return  string|false
+     * @param   integer     $author_id   (optional) (default NULL)
+     * @return  string|FALSE
      */
     public function the_author_facebook($author_id = null)
     {
         if ($author_id) {
             $author = $this->getAuthorById($author_id);
             if ($author) return $author->facebook;
+            return false;
         }
         if (!empty($this->post)) {
-            return $this->post->author->facebook;
+            $author = $this->getAuthorById($this->post->author_id);
+            if ($author) return $author->facebook;
         }
         return false;
     }
 
     /**
-     * The author instagram 
+     * Get the authors instagram URL of the current post or an author by id
      *
-     * @param   int      $author_id (optional)
-     * @return  string|false
+     * @param   integer     $author_id   (optional) (default NULL)
+     * @return  string|FALSE
      */
     public function the_author_instagram($author_id = null)
     {
         if ($author_id) {
             $author = $this->getAuthorById($author_id);
             if ($author) return $author->instagram;
+            return false;
         }
         if (!empty($this->post)) {
-            return $this->post->author->instagram;
+            $author = $this->getAuthorById($this->post->author_id);
+            if ($author) return $author->instagram;
         }
         return false;
     }
 
     /**
-     * The post ID 
+     * Get the current post id
      *
-     * @return  int|false
+     * @return  string|FALSE
      */
     public function the_post_id() 
     {
@@ -927,10 +935,10 @@ class Query {
     }
 
     /**
-     * The post status 
+     * Get the status of the current post or post by id
      *
-     * @param   int      $post_id (optional)
-     * @return  string|false
+     * @param   integer     $post_id     (optional) (Default NULL)
+     * @return  string|FALSE
      */
     public function the_post_status($post_id = null) 
     {
@@ -944,10 +952,10 @@ class Query {
     }
 
     /**
-     * The post type 
+     * Get the type of the current post or post by id
      *
-     * @param   int      $post_id (optional)
-     * @return  string|false
+     * @param   integer     $post_id     (optional) (Default NULL)
+     * @return  string|FALSE
      */
     public function the_post_type($post_id = null)
     {
@@ -961,10 +969,10 @@ class Query {
     }
 
     /**
-     * The post meta 
+     * Get the meta for the current post or post by id
      *
-     * @param   int      $post_id (optional)
-     * @return  mixed|false
+     * @param   integer     $post_id     (optional) (Default NULL)
+     * @return  mixed|FALSE
      */
     public function the_post_meta($post_id = null)
     {
@@ -978,11 +986,11 @@ class Query {
     }
 
     /**
-     * The time 
+     * Get the created time of the current post or a post by id 
      *
-     * @param   string   $format  (optional)
-     * @param   int      $post_id (optional)
-     * @return  string|int|false
+     * @param   string       $format  (optional) (Default 'U')
+     * @param   integer      $post_id (optional) (Default NULL)
+     * @return  string|false
      */
     public function the_time($format = 'U', $post_id = null)
     {
@@ -996,11 +1004,11 @@ class Query {
     }
 
     /**
-     * The modified time 
+     * Get the last modified time of the current post or a post by id 
      *
-     * @param   string   $format  (optional)
-     * @param   int      $post_id (optional)
-     * @return  string|int|false
+     * @param   string       $format  (optional) (Default 'U')
+     * @param   integer      $post_id (optional) (Default NULL)
+     * @return  string|false
      */
     public function the_modified_time($format = 'U', $post_id = null)
     {
@@ -1014,49 +1022,63 @@ class Query {
     }
 
     /**
-     * The author posts 
+     * Ge an array of \Kanso\Articles\Article objects by author id
      *
-     * @param   int      $author_id
+     * @param   integer      $author_id    The author id
+     * @param   boolean      $published    Get only published articles (optional) (Default TRUE)
      * @return  array
      */
     public function the_author_posts($author_id, $published = true)
     {
+        $key = $this->cacheKey(__FUNCTION__, func_get_args(), func_num_args());
+        if ($this->cacheHas($key)) return $this->cacheGet($key);
+
         if ($this->author_exists($author_id)) {
-            return \Kanso\Kanso::getInstance()->Bookkeeper->byIndex('author_id', intval($author_id), $published);
+            return $this->cachePut($key,  \Kanso\Kanso::getInstance()->Bookkeeper->byIndex('posts.author_id', intval($author_id), $published));
         }
-        return false;
+        return $this->cachePut($key, []);
     }
 
     /**
-     * The category posts 
+     * Ge an array of \Kanso\Articles\Article objects by category id
      *
-     * @param   int      $category_id
+     * @param   integer      $category_id    The category id
+     * @param   boolean      $published      Get only published articles (optional) (Default TRUE)
      * @return  array
      */
     public function the_category_posts($category_id, $published = true)
     {
+        $key = $this->cacheKey(__FUNCTION__, func_get_args(), func_num_args());
+        if ($this->cacheHas($key)) return $this->cacheGet($key);
+
         if ($this->category_exists($category_id)) {
-            return \Kanso\Kanso::getInstance()->Bookkeeper->byIndex('category_id', intval($category_id), $published);
+            return $this->cachePut($key,  \Kanso\Kanso::getInstance()->Bookkeeper->byIndex('posts.category_id', intval($category_id), $published));
         }
-        return false;
+        return $this->cachePut($key, []);
     }
 
     /**
-     * The tag posts 
+     * Ge an array of \Kanso\Articles\Article objects by tag id
      *
-     * @param   int      $tag_id
+     * @param   integer      $tag_id       The tag id
+     * @param   boolean      $published    Get only published articles (optional) (Default TRUE)
      * @return  array
      */
     public function the_tag_posts($tag_id, $published = true)
     {
+        $key = $this->cacheKey(__FUNCTION__, func_get_args(), func_num_args());
+        if ($this->cacheHas($key)) return $this->cacheGet($key);
+
         if ($this->tag_exists($tag_id)) {
-            return \Kanso\Kanso::getInstance()->Bookkeeper->byIndex('tags.id', intval($tag_id), $published);
+            return $this->cachePut($key,  \Kanso\Kanso::getInstance()->Bookkeeper->byIndex('tags.id', intval($tag_id), $published));
         }
+        return $this->cachePut($key, []);
     }
 
     /**
-     * The page type 
+     * Get the current page type
      *
+     * @param   NULL
      * @return  string
      */
     public function the_page_type()
@@ -1065,9 +1087,10 @@ class Query {
     }
 
     /**
-     * Is single
+     * Is this a single request
      *
-     * @return  bool
+     * @param   NULL
+     * @return  boolean
      */
     public function is_single()
     {
@@ -1075,9 +1098,10 @@ class Query {
     }
 
     /**
-     * Is single
+     * Is this a custom post request
      *
-     * @return  bool
+     * @param   NULL
+     * @return  boolean
      */
     public function is_custom_post()
     {
@@ -1085,9 +1109,10 @@ class Query {
     }
 
     /**
-     * Is home
+     * Is this a request for the homepage
      *
-     * @return  bool
+     * @param   NULL
+     * @return  boolean
      */
     public function is_home()
     {
@@ -1095,9 +1120,10 @@ class Query {
     }
 
     /**
-     * Is front page
+     * Is this the first page of a paginated set of posts ?
      *
-     * @return  bool
+     * @param   NULL
+     * @return  boolean
      */
     function is_front_page()
     {
@@ -1105,9 +1131,10 @@ class Query {
     }
 
     /**
-     * Is page
+     * Is this a page request ?
      *
-     * @return  bool
+     * @param   NULL
+     * @return  boolean
      */
     public function is_page()
     {
@@ -1115,29 +1142,21 @@ class Query {
     }
 
     /**
-     * Is archive
+     * Is this a search results request ?
      *
-     * @return  bool
-     */
-    public function is_archive()
-    {
-        return $this->requestType === 'archive';
-    }
-
-    /**
-     * Is search
-     *
-     * @return  bool
+     * @param   NULL
+     * @return  boolean
      */
     public function is_search()
     {
         return $this->requestType === 'search';
     }
 
-    /**
-     * Is tag
+   /**
+     * Is this a tag request ?
      *
-     * @return  bool
+     * @param   NULL
+     * @return  boolean
      */
     public function is_tag()
     {
@@ -1145,9 +1164,10 @@ class Query {
     }
 
     /**
-     * Is category
+     * Is this a category request ?
      *
-     * @return  bool
+     * @param   NULL
+     * @return  boolean
      */
     public function is_category()
     {
@@ -1155,9 +1175,10 @@ class Query {
     }
 
     /**
-     * Is author
+     * Is this an author request ?
      *
-     * @return  bool
+     * @param   NULL
+     * @return  boolean
      */
     public function is_author()
     {
@@ -1165,9 +1186,10 @@ class Query {
     }
 
     /**
-     * Is admin
+     * Is this an admin request ?
      *
-     * @return  bool
+     * @param   NULL
+     * @return  boolean
      */
     public function is_admin()
     {
@@ -1175,9 +1197,10 @@ class Query {
     }
 
     /**
-     * Is 404
+     * Is this a 404 request/response ?
      *
-     * @return  bool
+     * @param   NULL
+     * @return  boolean
      */
     public function is_not_found()
     {
@@ -1185,10 +1208,10 @@ class Query {
     }
 
     /**
-     * Has post Thumbnail
+     * Does the current post or a post by id have a thumbnail attachment
      *
-     * @param   int   $post_id   (optional)
-     * @return  bool
+     * @param   integer     $post_id     (optional) (Default NULL)
+     * @return  boolean
      */
     public function has_post_thumbnail($post_id = null)
     {
@@ -1202,47 +1225,30 @@ class Query {
     }
 
     /**
-     * Has author Thumbnail
+     * Does the author of the current post or an author by id have a thumbnail attachment
      *
-     * @param   int   $author_id   (optional)
-     * @return  bool
+     * @param   integer     $post_id     (optional) (Default NULL)
+     * @return  boolean
      */
     public function has_author_thumbnail($author_id = null)
     {
         if ($author_id) {
             $author = $this->getAuthorById($author_id);
-            if ($author) return !empty($author_id->thumbnail_id);
+            if ($author) return !empty($this->getMediaById($author_id->thumbnail_id));
             return false;
         }
         if (!empty($this->post)) {
             $author = $this->getAuthorById($this->post->author_id);
-            if ($author) return !empty($author_id->thumbnail_id);
+            if ($author)  return !empty($this->getMediaById($author->thumbnail_id));
         }
         return false;
     }
 
     /**
-     * Has excerpt
+     * Is the current post or a post by id untagged ?
      *
-     * @param   int   $post_id   (optional)
-     * @return  bool
-     */
-    public function has_excerpt($post_id = null)
-    {
-        if ($post_id) {
-            $post = $this->getPostByID($post_id);
-            if ($post) return trim($post->excerpt) !== "";
-            return false;
-        }
-        if (!empty($this->post)) trim($this->post->excerpt) !== "";
-        return false;
-    }
-
-    /**
-     * Has tags
-     *
-     * @param   int   $post_id   (optional)
-     * @return  bool
+     * @param   integer     $post_id     (optional) (Default NULL)
+     * @return  boolean
      */
     public function has_tags($post_id = null)
     {
@@ -1268,10 +1274,10 @@ class Query {
     }
 
     /**
-     * Has category
+     * Is the current post or a post by id uncategorized ?
      *
-     * @param   int   $post_id   (optional)
-     * @return  bool
+     * @param   integer     $post_id     (optional) (Default NULL)
+     * @return  boolean
      */
     public function has_category($post_id = null)
     {
@@ -1285,9 +1291,10 @@ class Query {
     }
 
     /**
-     * The next page
+     * Gets an array for the next page returning its title and slug. Works on single, home, author, tag, category requests
      *
-     * @return  array|false
+     * @param   NULL
+     * @return  array|FALSE
      */
     public function the_next_page()
     {
@@ -1346,9 +1353,10 @@ class Query {
     }
 
     /**
-     * The previous page
+     * Gets an array for the previous page or post returning its title and slug. Works on single, home, author, tag, category requests
      *
-     * @return  array|false
+     * @param   NULL
+     * @return  array|FALSE
      */
     public function the_previous_page()
     {
@@ -1412,9 +1420,10 @@ class Query {
     }
 
     /**
-     * The next page title
+     * Get the title of the next page or post. Works on single, home, author, tag, category requests
      *
-     * @return  string|false
+     * @param   NULL
+     * @return  string|FALSE
      */
     public function the_next_page_title()
     {
@@ -1424,9 +1433,10 @@ class Query {
     }
 
     /**
-     * The previous page title
+     * Get the title of the previous page or post. Works on single, home, author, tag, category requests
      *
-     * @return  string|false
+     * @param   NULL
+     * @return  string|FALSE
      */
     public function the_previous_page_title()
     {
@@ -1436,9 +1446,10 @@ class Query {
     }
 
     /**
-     * The next page url
+     * Get the full URL of the next page or post. Works on single, home, author, tag, category requests
      *
-     * @return  string|false
+     * @param   NULL
+     * @return  string|FALSE
      */
     public function the_next_page_url()
     {
@@ -1448,9 +1459,10 @@ class Query {
     }
 
     /**
-     * The previous page url
+     * Get the full URL of the previous page or post. Works on single, home, author, tag, category requests
      *
-     * @return  string|false
+     * @param   NULL
+     * @return  string|FALSE
      */
     public function the_previous_page_url()
     {
@@ -1460,9 +1472,10 @@ class Query {
     }
 
     /**
-     * The search query
+     * Returns the searched query for search result requests
      *
-     * @return  string|false
+     * @param   NULL
+     * @return  string|FALSE
      */
     public function search_query()
     {
@@ -1471,8 +1484,9 @@ class Query {
     }
 
     /**
-     * The posts count
+     * Returns the post count of the current page of results for the current request
      *
+     * @param   NULL
      * @return  integer
      */
     public function the_posts_count()
@@ -1481,19 +1495,20 @@ class Query {
     }
 
     /**
-     * How many posts are displayed per page
+     * Returns the "KANSO_POSTS_PER_PAGE" value
      *
+     * @param   NULL
      * @return  integer
      */
     public function posts_per_page()
     {
-        return \Kanso\Kanso::getInstance()->Config()['KANSO_POSTS_PER_PAGE'];
+        return \Kanso\Kanso::getInstance()->Config['KANSO_POSTS_PER_PAGE'];
     }
 
     /**
-     * Do we have posts? 
+     * Do we have posts? or does a post by id exist ?
      *
-     * @param   int  $post_id (optional)
+     * @param   integer  $post_id (optional) (default NULL)
      * @return  bool
      */
     public function have_posts($post_id = null)
@@ -1506,8 +1521,10 @@ class Query {
     }
 
     /**
-     * Rewind the posts and reset post index.
+     * Rewind the internal pointer to the '-1'
      *
+     * @param   NULL
+     * @return  NULL
      */
     public function rewind_posts() {
         $this->postIndex = -1;
@@ -1515,7 +1532,10 @@ class Query {
     }
 
     /**
-     * Next post
+     * Iterate to the next post
+     *
+     * @param   NULL
+     * @return  \Kanso\Articles\Article|NULL
      */
     public function _next()
     {
@@ -1530,7 +1550,10 @@ class Query {
     }
 
     /**
-     * Previous post
+     * Iterate to the previous post
+     *
+     * @param   NULL
+     * @return  \Kanso\Articles\Article|NULL
      */
     public function _previous()
     {
@@ -1545,140 +1568,184 @@ class Query {
     }
 
     /**
-     * All the tags 
+     * Get all static pages
+     *
      * @return array
+     */
+    public function all_static_pages($published = true) 
+    {
+        return \Kanso\Kanso::getInstance()->Bookkeeper->byIndex('posts.type', 'page', $published);
+    }
+
+    /**
+     * Get an array of all the tag rows directly from the database.
+     *
+     * @param   NULL
+     * @return  array
      */
     public function all_the_tags()
     {
-        return $this->SQL->SELECT('*')->FROM('tags')->FIND_ALL();
+        $key = $this->cacheKey(__FUNCTION__, func_get_args(), func_num_args());
+        if ($this->cacheHas($key)) return $this->cacheGet($key);
+
+        return $this->cachePut($key,  $this->SQL->SELECT('*')->FROM('tags')->FIND_ALL());
     }
 
     /**
-     * All the categories 
-     * @return array
+     * Get an array of all the category rows directly from the database.
+     *
+     * @param   NULL
+     * @return  array
      */
     public function all_the_categories()
     {
-        return $this->SQL->SELECT('*')->FROM('categories')->FIND_ALL();
+        $key = $this->cacheKey(__FUNCTION__, func_get_args(), func_num_args());
+        if ($this->cacheHas($key)) return $this->cacheGet($key);
+
+        return $this->cachePut($key,  $this->SQL->SELECT('*')->FROM('categories')->FIND_ALL());
     }
 
     /**
-     * All the authors 
-     * @return array
+     * Get an array of all the author rows directly from the database.
+     *
+     * @param   NULL
+     * @return  array
      */
-    public function all_the_authors($registered = true)
+    public function all_the_authors()
     {
-        if ($registered) return $this->SQL->SELECT('*')->FROM('users')->WHERE('status', '=', 'confirmed')->FIND_ALL();
-        return $this->SQL->SELECT('*')->FROM('users')->FIND_ALL();
+        $key = $this->cacheKey(__FUNCTION__, func_get_args(), func_num_args());
+        if ($this->cacheHas($key)) return $this->cacheGet($key);
+        
+        $result  = [];
+        $authors = $this->SQL->SELECT('*')->FROM('users')->WHERE('status', '=', 'confirmed')->FIND_ALL();
+        foreach ($authors as $author) {
+            if ($author['role'] !== 'administrator' && $author['role'] !== 'writer') {
+                continue;
+            }
+            $result[] = $author;
+        }
+        return $this->cachePut($key,  $result);
     }
 
     /**
-     * The header
-     * @return string
+     * Display the contents of header.php
+     *
+     * @param   NULL
+     * @return  string
      */
     public function the_header()
     {
-        return \Kanso\Kanso::getInstance()->View->display(\Kanso\Kanso::getInstance()->Environment()['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.'header.php');
+        return \Kanso\Kanso::getInstance()->View->display(\Kanso\Kanso::getInstance()->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.'header.php');
     }
 
     /**
-     * The footer
-     * @return string
+     * Display the contents of footer.php
+     *
+     * @param   NULL
+     * @return  string
      */
     public function the_footer()
     {
-        return \Kanso\Kanso::getInstance()->View->display(\Kanso\Kanso::getInstance()->Environment()['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.'footer.php');
+        return \Kanso\Kanso::getInstance()->View->display(\Kanso\Kanso::getInstance()->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.'footer.php');
     }
 
     /**
-     * The sidebar
+     * Display the contents of sidebar.php
      *
-     * @return string
+     * @param   NULL
+     * @return  string
      */
     public function the_sidebar()
     {
-        return \Kanso\Kanso::getInstance()->View->display(\Kanso\Kanso::getInstance()->Environment()['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.'sidebar.php');
+        return \Kanso\Kanso::getInstance()->View->display(\Kanso\Kanso::getInstance()->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.'sidebar.php');
     }
 
     /**
-     * Include a template from current theme
+     * Display the contents of any template file relative to the theme's base directory
      *
-     * @param  string $template_name Name of template in current them
-     * @return string
+     * @param   NULL
+     * @return  string
      */
     public function include_template($template_name, $data = null)
     {
-        $template = \Kanso\Kanso::getInstance()->Environment()['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.$template_name.'.php';
+        $template = \Kanso\Kanso::getInstance()->Environment['KANSO_THEME_DIR'].DIRECTORY_SEPARATOR.$template_name.'.php';
         if (file_exists($template)) {
-            return \Kanso\Kanso::getInstance()->View->display($template);
+            return \Kanso\Kanso::getInstance()->View->display($template, $data);
         }
         return '';
     }
 
     /**
-     * Get the theme directory
+     * Get the path to the theme directory that holds the currently active theme.
      *
-     * @return string
+     * @param   NULL
+     * @return  string
      */
     public function theme_directory() 
     {
-        return \Kanso\Kanso::getInstance()->Environment()['KANSO_THEME_DIR'];
+        return \Kanso\Kanso::getInstance()->Environment['KANSO_THEME_DIR'];
     }
 
     /**
-     * Get the theme url
+     * Get the URL to the theme directory that holds the currently active theme.
      *
-     * @return string
+     * @param   NULL
+     * @return  string
      */
     public function theme_url() 
     {
-        return \Kanso\Kanso::getInstance()->Environment()['KANSO_THEME_DIR_URL'];
+        return \Kanso\Kanso::getInstance()->Environment['KANSO_THEME_DIR_URL'];
     }
 
     /**
-     * Get the homepage url
+     * Get the homepage URL
      *
-     * @return string
+     * @param   NULL
+     * @return  string
      */
     public function home_url() 
     {
-        return \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'];
+        return \Kanso\Kanso::getInstance()->Environment['HTTP_HOST'];
     }
 
     /**
-     * Get the website base name
+     * Get the website's domain name (e.g "example.com")
      *
-     * @return string
+     * @param   NULL
+     * @return  string
      */
     public function domain_name() 
     {
-        return \Kanso\Kanso::getInstance()->Environment()['DOMAIN_NAME'];
+        return \Kanso\Kanso::getInstance()->Environment['DOMAIN_NAME'];
     }
 
     /**
-     * Get the website base title
+     * Get the website title from the config
      *
-     * @return string
+     * @param   NULL
+     * @return  string
      */
     public function website_title() 
     {
-        return \Kanso\Kanso::getInstance()->Config()['KANSO_SITE_TITLE'];
+        return \Kanso\Kanso::getInstance()->Config['KANSO_SITE_TITLE'];
     }
 
     /**
-     * Get the website description
+     * Get the website description from the config
      *
-     * @return string
+     * @param   NULL
+     * @return  string
      */
     public function website_description() 
     {
-        return \Kanso\Kanso::getInstance()->Config()['KANSO_SITE_DESCRIPTION'];
+        return \Kanso\Kanso::getInstance()->Config['KANSO_SITE_DESCRIPTION'];
     }
 
     /**
-     * Get the meta description
+     * Get the meta description to display in the website's head
      *
-     * @return string
+     * @param   NULL
+     * @return  string
      */
     public function the_meta_description()
     {
@@ -1699,8 +1766,9 @@ class Query {
     }
 
     /**
-     * The meta title
+     * Get the meta title to display in the website's head
      *
+     * @param   NULL
      * @return  string
      */
     public function the_meta_title()
@@ -1723,18 +1791,15 @@ class Query {
         else if ($this->is_search()) {
             $titleTitle = 'Search Results | ';
         }
-        else if ($this->is_archive()) {
-            $titleTitle = 'Archives | ';
-        }
-
 
         return  $titleTitle.$titlePage.$titleBase;
     }
 
     /**
-     * Get the canonical link
+     * Get the canonical URL
      *
-     * @return  string|false
+     * @param   NULL
+     * @return  string
      */
     public function the_canonical_url()
     {
@@ -1767,19 +1832,10 @@ class Query {
     }
 
     /**
-     * Get all static pages
-     *
-     * @return array
-     */
-    public function static_pages($published = true) 
-    {
-        return \Kanso\Kanso::getInstance()->Bookkeeper->byIndex('type', 'page', $published);
-    }
-
-    /**
      * Get the currently logged in Kanso user (if any)
      *
-     * @return array
+     * @param   NULL
+     * @return \Kanso\Auth\Adapters\User|FALSE
      */
     public function user() 
     {
@@ -1787,8 +1843,10 @@ class Query {
     }
 
     /**
-     * Validate that the current user is logged in to Kanso's admin panel
-     * @return bool
+     * Is the current user (if any) logged in
+     *
+     * @param   NULL
+     * @return  boolean
      */
     public function is_loggedIn() 
     {
@@ -1796,8 +1854,10 @@ class Query {
     }
 
     /**
-     * Validate that the current user is logged in to Kanso's admin panel
-     * @return bool
+     * Is the current user (if any) allowed to access the admin panel
+     *
+     * @param   NULL
+     * @return boolean
      */
     public function user_is_admin() 
     {
@@ -1805,9 +1865,10 @@ class Query {
     }
 
     /**
-     * Validate that an article has comments enabled or not
-     * Or if comments are globally disabled
-     * @return bool
+     * Are comments (if enabled globally) enabled on the current post or a post by id
+     *
+     * @param  integer    $post_id    (optional) (default NULL)
+     * @return boolean
      */
     public function comments_open($post_id = null) 
     {
@@ -1822,8 +1883,10 @@ class Query {
     }
 
     /**
-     * Validate that an article has comments or not
-     * @return bool
+     * Does the current post or a post by id have any comments ?
+     *
+     * @param  integer    $post_id    (optional) (default NULL)
+     * @return boolean
      */
     public function has_comments($post_id = null) 
     {
@@ -1838,8 +1901,10 @@ class Query {
     }
 
     /**
-     * Get a comment count on a given article
-     * @return int
+     * How many approved comments does the current post or a post by id have
+     *
+     * @param  integer    $post_id    (optional) (default NULL)
+     * @return integer
      */
     public function comments_number($post_id = null)
     {
@@ -1864,7 +1929,9 @@ class Query {
     }
 
     /**
-     * Get a single comment by id
+     * Get a single comment row from the databse by id
+     *
+     * @param  integer    $comment_id    
      * @return array
      */
     public function get_comment($comment_id)
@@ -1873,7 +1940,10 @@ class Query {
     }
 
     /**
-     * Get an article's comments  
+     * Get all of the current post or a post by id's comments
+     *
+     * @param  integer    $post_id       (optional) (default NULL)
+     * @param  integer    $approvedOnly  (optional) (default TRUE)
      * @return array
      */
     public function get_comments($post_id = null, $approvedOnly = true)
@@ -1895,9 +1965,11 @@ class Query {
     }
 
     /**
-     * Display the comments
+     * Get the HTML that displays the comments of the current post or a post by id
      *
-     * @return int
+     * @param  array      $args       (optional) (default NULL)
+     * @param  integer    $post_id    (optional) (default NULL)
+     * @return string
      */
     public function display_comments($args = null, $post_id = null)
     {
@@ -2001,8 +2073,11 @@ class Query {
     }
 
     /**
-     * Get a comment count on a given article
-     * @return int
+     * Get the HTML that displays the comment form of the current post or a post by id
+     *
+     * @param  array      $args          (optional) (default NULL)
+     * @param  integer    $post_id       (optional) (default NULL)
+     * @return string
      */
     public function comment_form($args = null, $post_id = null)
     {
@@ -2135,16 +2210,17 @@ class Query {
     }
 
     /**
-     * Build HTML Pagination links
+     * Build the pagination links for the current page. Works on home, search, tag, category, author requests
      *
-     * @param  array       $args    Associative array of options (optional)
+     * @param  array      $args          (optional) (default NULL)
+     * @return string
      */
     public function pagination_links($args = null) 
     {
 
         # Default options
         $options = [
-          'base'               => \Kanso\Kanso::getInstance()->Environment()['HTTP_HOST'],
+          'base'               => \Kanso\Kanso::getInstance()->Environment['HTTP_HOST'],
           'format'             => '<li class="(:class)"><a href="(:link)">(:num)</a></li>',
           'format_disabled'    => '<li class="(:class)"><span>(:num)</span></li>',
           'white_space'        => " ",
@@ -2159,7 +2235,7 @@ class Query {
         ];
 
         # Segment the reuest URI
-        $uri = explode("/", trim(\Kanso\Kanso::getInstance()->Environment()['REQUEST_URI'], '/'));
+        $uri = explode("/", trim(\Kanso\Kanso::getInstance()->Environment['REQUEST_URI'], '/'));
 
         # Declare the pagination string
         $pagination = '';
@@ -2202,9 +2278,6 @@ class Query {
         # Update the base url depending on the page type
         if ($this->is_search()) {
             $options['base'] = $options['base'].DIRECTORY_SEPARATOR.'search-results/?q='.$this->searchQuery;
-        }
-        else if ($this->is_archive()) {
-            $options['base'] = $options['base'].DIRECTORY_SEPARATOR.'archive';
         }
         else if ($this->is_tag()) {
             $options['base'] = $options['base'].DIRECTORY_SEPARATOR.$uri[0].DIRECTORY_SEPARATOR.$uri[1];
@@ -2299,38 +2372,10 @@ class Query {
     }
 
     /**
-     * Get posts archived by year, month
+     * Return the HTML for the search form
      *
-     * @return  array
-     */
-    public function get_archives()
-    {
-        $archive  = [];
-
-        if ($this->is_archive() ) {
-            $posts = $this->posts;
-        }
-        else {
-            $queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC';
-            $parser    = new QueryParser($queryStr);
-            $posts     = $parser->parseQuery($queryStr);
-        }
-
-        if (empty($posts)) return [];
-
-        foreach($posts as $post) {
-            $year  = date('Y', $post->created);
-            $month = date('F', $post->created);
-            $archive[$year][$month][] = $post;
-        }
-
-        return $archive;
-    }
-
-    /**
-     * Get theme search form
-     *
-     * @param  string
+     * @param  NULL
+     * @return string      user's avatar or default mystery on fallback
      */
     public function get_search_form() 
     {
@@ -2344,9 +2389,9 @@ class Query {
 
                 <fieldset>
                         
-                        <label for="q">Search: </label>
+                        <label for="search_input">Search: </label>
                         
-                        <input type="search" name="q" id="q" placeholder="Search...">
+                        <input type="search" name="q" id="search_input" placeholder="Search...">
 
                         <button type"submit">Search</button>
 

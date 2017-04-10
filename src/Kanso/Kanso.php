@@ -1011,10 +1011,6 @@ class Kanso
 			$waterfall[] = 'single-'.array_pop($urlParts);
 			$waterfall[] = 'single';
 		}
-		else if ($pageType === 'archive') {
-			$waterfall[] = 'archive';
-			$waterfall[] = 'index';
-		}
 		else if ($pageType === 'tag') {
 			$waterfall[] = 'tag-'.$this->Query->the_taxonomy()['slug'];
 			$waterfall[] = 'taxonomy-tag';
