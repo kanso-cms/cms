@@ -33,7 +33,7 @@ set_error_handler(function($code, $message, $file, $line)
  * This is REQUIRED for the application to function
  * properly.
  */
-define('KANSO_DIR', dirname(dirname(__FILE__)).'/Kanso');
+define('KANSO_DIR', dirname(dirname(__FILE__)).'/kanso');
 
 /**
  * This constant is not actually required for the application
