@@ -1,0 +1,114 @@
+<?php
+
+/**
+ * @copyright Joe J. Howard
+ * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
+ */
+
+namespace Kanso\CMS\Wrappers;
+
+use InvalidArgumentException;
+use Kanso\CMS\Wrappers\Wrapper;
+use Kanso\Framework\Utility\Str;
+use Kanso\Framework\Utility\UUID;
+
+/**
+ * User utility wrapper
+ *
+ * @author Joe J. Howard
+ */
+class User extends Wrapper
+{
+    /**
+     * Override the set method
+     *
+     * @access public
+     * @param  string $key   Key to set
+     * @param  mixed  $value Value to set
+     */
+    public function __set(string $key, $value)
+    {
+        if ($key === 'slug')
+        {
+            $this->data[$key] = Str::slug($value);
+        }
+        else if ($key === 'username')
+        {
+            $this->data[$key] = Str::alphaNumDash($value);
+        }
+        else
+        {
+            $this->data[$key] = $value;
+        }        
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function save(): bool
+	{
+        $saved = false;
+
+        $userExists = $this->SQL->SELECT('*')->FROM('users')->WHERE('email', '=', $this->data['email'])->ROW();
+
+        if ($userExists)
+        {
+            $saved = $this->SQL->UPDATE('users')->SET($this->data)->WHERE('id', '=', $userExists['id'])->QUERY();
+        }
+        else
+        {
+            if (!isset($this->data['access_token']) || empty($this->data['access_token']))
+            {
+                $this->generateAccessToken();
+            }
+
+            $saved = $this->SQL->INSERT_INTO('users')->VALUES($this->data)->QUERY();
+
+            if ($saved)
+            {
+                $this->data['id'] = intval($this->SQL->connection()->lastInsertId());
+            }
+        }
+
+        return !$saved ? false : true;
+	}
+
+	/**
+     * {@inheritdoc}
+     */
+    public function delete(): bool
+	{
+        if (isset($this->data['id']))
+        {
+            if ($this->data['id'] === 1)
+            {
+                throw new InvalidArgumentException(vsprintf("%s(): The primary user with id '1' is not deletable.", [__METHOD__]));
+            }
+
+            if ($this->SQL->DELETE_FROM('users')->WHERE('id', '=', $this->data['id'])->QUERY())
+            {
+                # Change all their posts
+                $this->SQL->UPDATE('posts')->SET(['author_id' => 1])->WHERE('author_id', '=', $this->data['id'])->QUERY();
+
+                # Change all their uploaded images
+                $this->SQL->UPDATE('media_uploads')->SET(['uploader_id' => 1])->WHERE('uploader_id', '=', $this->data['id'])->QUERY();
+
+                return true;
+            }
+        }
+
+        return false;
+	}
+
+    /**
+     * Generate an access token for this user
+     *
+     * @return \Kanso\CMS\Wrappers\User
+     */
+    public function generateAccessToken(): User
+    {
+        $this->data['access_token'] = UUID::v4();
+
+        return $this;
+    }
+}

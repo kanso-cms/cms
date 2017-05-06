@@ -59,11 +59,7 @@ Options -MultiViews
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-# Send all requests to index.php
-# This snippet does the following:
-# If the request is not for a file
-# If the request is not for a directory
-# Open index.php
+# Send requests to index.php
 <IfModule mod_rewrite.c>
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d

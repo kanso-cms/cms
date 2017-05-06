@@ -1,5 +1,0 @@
-href="javascript
-href='javascript
-<script>
-(javascript:)
-javascript:
