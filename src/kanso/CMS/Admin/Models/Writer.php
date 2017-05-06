@@ -13,7 +13,7 @@ use Kanso\CMS\Admin\Models\Model;
 use Kanso\CMS\Wrappers\Managers\PostManager;
 
 /**
- * Comments page model
+ * Writer page model
  *
  * @author Joe J. Howard
  */

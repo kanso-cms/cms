@@ -30,7 +30,6 @@ use Kanso\Framework\Http\{
 	Session\Token
 };
 
-
 /**
  * HTTP services
  *
@@ -38,6 +37,22 @@ use Kanso\Framework\Http\{
  */
 class HttpService extends Service
 {
+	/**
+	 * {@inheritdoc}
+	 */
+	public function register()
+	{
+		$this->registerRequest();
+
+		$this->registerCookie();
+		
+		$this->registerSession();
+
+		$this->registerResponse();
+
+		$this->registerRouter();
+	}
+
 	/**
      * Registers the Request object
      *
@@ -172,21 +187,5 @@ class HttpService extends Service
 		{
 			return new Router($container->Request, $container->Onion);
 		});
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function register()
-	{
-		$this->registerRequest();
-
-		$this->registerCookie();
-		
-		$this->registerSession();
-
-		$this->registerResponse();
-
-		$this->registerRouter();
-	}
+	}	
 }

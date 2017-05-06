@@ -202,7 +202,7 @@ class Accounts extends Model
     }
 
     /**
-     * Validate request to reset password page
+     * Validate a GET request to reset password page
      *
      * @access private
      * @return bool
@@ -236,7 +236,7 @@ class Accounts extends Model
      * Parse a reset password POST request
      *
      * @access private
-     * @return bool
+     * @return array||false
      */
     private function processResetpasswordPOST()
     {

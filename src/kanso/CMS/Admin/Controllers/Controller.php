@@ -160,15 +160,16 @@ abstract class Controller
 	abstract protected function getModelClass(): string;
 
 	/**
-	 * Saves the row item
+	 * Dispatch the request
 	 *
 	 * @access public
-     * @return bool
 	 */
 	public function dispatch()
 	{
+		# Disabled HTTP caching
 		$this->response->cache()->disable();
 
+		# Disabled the CDN
 		$this->response->CDN()->disable();
 		
 		# Make sure this is a valid Ajax request
@@ -232,7 +233,6 @@ abstract class Controller
 		}
 
 		return $this->response->notFound();
-
 	}
 
 	/**
@@ -254,5 +254,4 @@ abstract class Controller
 
         $this->response->body()->set($this->response->view()->display($template, $vars));
     }
-
 }

@@ -22,6 +22,22 @@ use Kanso\Framework\Security\SPAM\SpamProtector;
 class SecurityService extends Service
 {
 	/**
+	 * {@inheritdoc}
+	 */
+	public function register()
+	{
+		$this->container->singleton('Crypto', function ($container) 
+		{
+			return new Crypto($this->getSinger(), $this->getEncrypter(), $this->getPassword());
+		});
+
+		$this->container->singleton('SpamProtector', function ($container) 
+		{
+			return new SpamProtector($this->getGibberish(), $container->Config);
+		});
+	}
+
+	/**
 	 * Returns the encryption signer
 	 *
 	 * @access private
@@ -81,26 +97,10 @@ class SecurityService extends Service
 	 * Returns the gibberish detector
 	 *
 	 * @access private
-	 * @return mixed
+	 * @return \Kanso\Framework\Security\SPAM\Gibberish\Gibberish
 	 */
 	protected function getGibberish(): Gibberish
 	{
 		return new Gibberish($this->container->Config->get('spam.gibberish_lib'));
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function register()
-	{
-		$this->container->singleton('Crypto', function ($container) 
-		{
-			return new Crypto($this->getSinger(), $this->getEncrypter(), $this->getPassword());
-		});
-
-		$this->container->singleton('SpamProtector', function ($container) 
-		{
-			return new SpamProtector($this->getGibberish(), $container->Config);
-		});
 	}
 }

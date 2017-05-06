@@ -34,7 +34,7 @@ abstract class Model
 	/**
 	 * Gatekeeper instance
 	 *
-	 * @var \Kanso\Framework\Http\Response\Response
+	 * @var \Kanso\CMS\Auth\Gatekeeper
 	 */
 	protected $gatekeeper;
 
@@ -83,6 +83,14 @@ abstract class Model
 	/**
      * Constructor
      *
+     * @param \Kanso\Framework\Http\Request\Request    $request     Request object instance
+     * @param \Kanso\Framework\Http\Response\Response  $response    Response object instance
+     * @param \Kanso\CMS\Auth\Gatekeeper               $gatekeeper  CMS Gatekeeper instance
+     * @param \Kanso\CMS\Wrappers\Managers\UserManager $userManager CMS User manager instance
+     * @param \Kanso\Framework\Database\Query\Builder  $SQL         SQL query builder instance
+     * @param \Kanso\Framework\Utility\GUMP            $validation  GUMP validatior
+     * @param bool   								   $isLoggedIn  Is the HTTP client logged in to the admin panel ?
+     * @param string                                   $requestName The request name (trigger) from the router
      */
     public function __construct(Request $request, Response $response, Gatekeeper $gatekeeper, UserManager $userManager, Builder $SQL, GUMP $validation, bool $isLoggedIn, string $requestName)
     {

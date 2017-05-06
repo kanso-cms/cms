@@ -7,12 +7,11 @@
 
 namespace Kanso\Framework\Application\Services;
 
+use Throwable;
 use Kanso\Framework\Application\Services\Service;
 use Kanso\Framework\Exception\ErrorHandler;
 use Kanso\Framework\Exception\ErrorLogger;
 use Kanso\Framework\Exception\Handlers\WebHandler;
-use ErrorException;
-use Throwable;
 
 /**
  * Error handling service
@@ -25,6 +24,7 @@ class ErrorHandlerService extends Service
 	 * Return the error logger if we are logging errors
 	 *
 	 * @access private
+	 * @param  \Throwable $exception "caught" exception
 	 * @return \Kanso\Framework\Exception\ErrorLogger|null
 	 */	
 	private function getLogger(Throwable $exception)

@@ -502,7 +502,14 @@ class Settings extends Model
         return true;
     }
 
-    private function filterCacheLife($cacheLife)
+    /**
+     * Filter the cache life to a valid timestamp
+     *
+     * @access private
+     * @param  mixed   $cacheLife The url to be converted
+     * @return string
+     */
+    private function filterCacheLife($cacheLife): string
     {
         $default = strtotime('1 week');;
 
@@ -599,8 +606,8 @@ class Settings extends Model
     /**
      * Filter the permalinks
      *
-     * @param  string   $url    The url to be converted
-     * @return array            Array with the the actual link and the route
+     * @param  string $url The url to be converted
+     * @return array  Array with the the actual link and the route
      */
     private function filterPermalinks($url) 
     {
@@ -635,9 +642,10 @@ class Settings extends Model
     }
 
     /**
-     * Parse and validate user invite
+     * Parse, validate and process the add new user form
      * 
-     * @return array|false
+     * @access private
+     * @return array||false
      */
     private function submitInviteUser()
     {
@@ -691,6 +699,12 @@ class Settings extends Model
         return false;
     }
 
+    /**
+     * Parse, validate and process the delete user form
+     * 
+     * @access private
+     * @return array||false
+     */
     private function submitDeleteUser()
     {
         # Validate the user is an admin
@@ -735,6 +749,12 @@ class Settings extends Model
         return false;
     }
 
+    /**
+     * Parse, validate and process the change user role form
+     * 
+     * @access private
+     * @return array||false
+     */
     private function submitChangeUserRole()
     {
         # Validate the user is an admin
@@ -781,9 +801,14 @@ class Settings extends Model
         }
 
         return false;
-
     }
 
+    /**
+     * Parse, validate and process the restore kanso form
+     * 
+     * @access private
+     * @return array||null
+     */
     private function submitRestoreKanso()
     {
         # Validate the user is an admin
@@ -796,6 +821,8 @@ class Settings extends Model
                 $this->response->cookie()->destroy();
 
                 $this->response->redirect($this->request->environment()->HTTP_HOST.'/admin/login/');
+
+                return;
             }  
         }
 

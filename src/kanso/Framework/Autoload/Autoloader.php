@@ -16,50 +16,40 @@ namespace Kanso\Framework\Autoload;
 class Autoloader
 {
     /**
-     *
      * A map of explicit class names to their file paths.
      *
      * @var array
-     *
      */
     protected $class_files = array();
 
     /**
-     *
      * Debug information populated by loadClass().
      *
      * @var array
-     *
      */
     protected $debug = array();
 
     /**
-     *
      * Classes, interfaces, and traits loaded by the autoloader; the key is
      * the class name and the value is the file name.
      *
      * @var array
-     *
      */
     protected $loaded_classes = array();
 
     /**
-     *
      * A map of namespace prefixes to base directories.
      *
      * @var array
-     *
      */
     protected $prefixes = array();
 
     /**
-     *
      * Registers this autoloader with SPL.
      *
      * @param bool $prepend True to prepend to the autoload stack.
      *
      * @return null
-     *
      */
     public function register($prepend = false)
     {
@@ -71,11 +61,9 @@ class Autoloader
     }
 
     /**
-     *
      * Unregisters this autoloader from SPL.
      *
      * @return null
-     *
      */
     public function unregister()
     {
@@ -83,12 +71,10 @@ class Autoloader
     }
 
     /**
-     *
      * Returns the debugging information array from the last loadClass()
      * attempt.
      *
      * @return array
-     *
      */
     public function getDebug()
     {
@@ -96,7 +82,6 @@ class Autoloader
     }
 
     /**
-     *
      * Adds a base directory for a namespace prefix.
      *
      * @param string $prefix The namespace prefix.
@@ -109,7 +94,6 @@ class Autoloader
      * first rather than last.
      *
      * @return null
-     *
      */
     public function addPrefix($prefix, $base_dirs, $prepend = false)
     {
@@ -137,7 +121,6 @@ class Autoloader
     }
 
     /**
-     *
      * Sets all namespace prefixes and their base directories. This overwrites
      * the existing prefixes.
      *
@@ -145,7 +128,6 @@ class Autoloader
      * their base directories.
      *
      * @return null
-     *
      */
     public function setPrefixes(array $prefixes)
     {
@@ -156,11 +138,9 @@ class Autoloader
     }
 
     /**
-     *
      * Returns the list of all class name prefixes and their base directories.
      *
      * @return array
-     *
      */
     public function getPrefixes()
     {
@@ -168,7 +148,6 @@ class Autoloader
     }
 
     /**
-     *
      * Sets the explicit file path for an explicit class name.
      *
      * @param string $class The explicit class name.
@@ -176,7 +155,6 @@ class Autoloader
      * @param string $file The file path to that class.
      *
      * @return null
-     *
      */
     public function setClassFile($class, $file)
     {
@@ -184,7 +162,6 @@ class Autoloader
     }
 
     /**
-     *
      * Sets all file paths for all class names; this overwrites all previous
      * explicit mappings.
      *
@@ -192,7 +169,6 @@ class Autoloader
      * key is the class name and the value is the file path.
      *
      * @return null
-     *
      */
     public function setClassFiles(array $class_files)
     {
@@ -200,14 +176,12 @@ class Autoloader
     }
 
     /**
-     *
      * Adds file paths for class names to the existing explicit mappings.
      *
      * @param array $class_files An array of class-to-file mappings where the
      * key is the class name and the value is the file path.
      *
      * @return null
-     *
      */
     public function addClassFiles(array $class_files)
     {
@@ -215,11 +189,9 @@ class Autoloader
     }
 
     /**
-     *
      * Returns the list of explicit class names and their file paths.
      *
      * @return array
-     *
      */
     public function getClassFiles()
     {
@@ -227,13 +199,11 @@ class Autoloader
     }
 
     /**
-     *
      * Returns the list of classes, interfaces, and traits loaded by the
      * autoloader.
      *
      * @return array An array of key-value pairs where the key is the class
      * or interface name and the value is the file name.
-     *
      */
     public function getLoadedClasses()
     {
@@ -241,14 +211,12 @@ class Autoloader
     }
 
     /**
-     *
      * Loads the class file for a given class name.
      *
      * @param string $class The fully-qualified class name.
      *
      * @return mixed The mapped file name on success, or boolean false on
      * failure.
-     *
      */
     public function loadClass($class)
     {
@@ -301,7 +269,6 @@ class Autoloader
     }
 
     /**
-     *
      * Load the mapped file for a namespace prefix and relative class.
      *
      * @param string $prefix The namespace prefix.
@@ -310,7 +277,6 @@ class Autoloader
      *
      * @return mixed Boolean false if no mapped file can be loaded, or the
      * name of the mapped file that was loaded.
-     *
      */
     protected function loadFile($prefix, $relative_class)
     {
@@ -345,13 +311,11 @@ class Autoloader
     }
 
     /**
-     *
      * If a file exists, require it from the file system.
      *
      * @param string $file The file to require.
      *
      * @return bool True if the file exists, false if not.
-     *
      */
     protected function requireFile($file)
     {

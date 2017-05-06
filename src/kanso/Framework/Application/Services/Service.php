@@ -24,7 +24,7 @@ abstract class Service
 	protected $container;
 
 	/**
-	 * Constructor.
+	 * Constructor
 	 *
 	 * @access public
 	 * @param  \Kanso\Framework\IoC\Container $container IoC container instance

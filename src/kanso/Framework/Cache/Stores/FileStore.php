@@ -109,5 +109,4 @@ Class FileStore implements StoreInterface
     {
         return $this->path . DIRECTORY_SEPARATOR . $key . '.cache';
     }
-  
 }

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @copyright Frederic G. Østby
- * @license   http://www.makoframework.com/license
+ * @copyright Joe J. Howard
+ * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
 namespace Kanso\Framework\Utility;

@@ -35,9 +35,10 @@ class CacheService extends Service
      * Get the cache store
      *
      * @access private
+     * @param  array   $cacheConfiguration Configuration options for the cache
      * @return mixed
      */
-	private function loadCacheStore($cacheConfiguration)
+	private function loadCacheStore(array $cacheConfiguration)
 	{
 		$type = $cacheConfiguration['type'];
 
