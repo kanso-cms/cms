@@ -75,6 +75,8 @@ $autoloader = new Autoloader;
 
 $autoloader->addPrefix('Kanso', KANSO_DIR);
 
+$autoloader->addPrefix('App', APP_DIR);
+
 $autoloader->register();
 
 /**

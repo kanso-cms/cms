@@ -70,10 +70,6 @@ else if (
 {
 	require_once('dash-settings.php');
 }
-else if (isset($CUSTOM_TEMPLATE))
-{
-	require_once('dash-custom.php');
-}
 
 # Include the sidebar
 if (admin_is_dash())

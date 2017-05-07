@@ -9,7 +9,6 @@ use Kanso\Kanso;
  */
 function admin_assets_version()
 {
-	return time();
 	return Kanso::VERSION;
 }
 
@@ -18,15 +17,14 @@ function admin_assets_version()
  * 
  * @return string
  */
-
-
 global $admin_page_request;
 $admin_page_request = $ADMIN_PAGE_TYPE;
 
 function admin_page_name()
 {	
 	global $admin_page_request;
-	return $admin_page_request;
+
+	return Kanso::instance()->Filters->apply('adminRequestName', $admin_page_request);
 }
 
 /**
@@ -107,7 +105,7 @@ function admin_the_title()
 		$title = ucfirst($requestName).' | Kanso';
 	}
 
-	return $title;
+	return Kanso::instance()->Filters->apply('adminPageTitle', $title);
 }
 
 /**
@@ -150,6 +148,8 @@ function admin_header_scripts()
         $stylesheets[] = '<link rel="stylesheet" href="'.admin_assets_url().'/css/markdown.css?v='.admin_assets_version().'">';
         $stylesheets[] = '<link rel="stylesheet" href="'.admin_assets_url().'/css/writer.css?v='.admin_assets_version().'">';
 	}
+
+	$stylesheets = Kanso::instance()->Filters->apply('adminHeaderScripts', $stylesheets);
 
 	return implode("\n", $stylesheets);
 }
@@ -194,6 +194,8 @@ function admin_footer_scripts()
         $scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/markdownIt.js?v='.admin_assets_version().'"></script>';
         $scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/writer.js?v='.admin_assets_version().'"></script>';
 	}
+	
+	$scripts = Kanso::instance()->Filters->apply('adminFooterScripts', $scripts);
 
 	return implode("\n", $scripts);
 }
@@ -292,6 +294,8 @@ function admin_sirebar_links()
 		];
 	}
 
+	$links = Kanso::instance()->Filters->apply('adminSidebar', $links);
+
 	# Logout should always be at the bottom
 	$links['logout'] = [
 		'link'     => '/admin/logout/',
@@ -310,11 +314,13 @@ function admin_sirebar_links()
  */
 function admin_post_types()
 {
-	return 
+	$types = 
 	[
 		'Article' => 'post',
 		'Page'    => 'page',
 	];
+
+	return Kanso::instance()->Filters->apply('adminPostTypes', $types);
 }
 
 /**
@@ -341,6 +347,11 @@ function admin_assets_url()
 	return str_replace($env->DOCUMENT_ROOT, $env->HTTP_HOST, KANSO_DIR.'/CMS/Admin/assets');
 }
 
+/**
+ * Returns a config value
+ * 
+ * @return mixed
+ */
 function admin_kanso_config(string $key)
 {
 	return \Kanso\Kanso::instance()->Config->get($key);

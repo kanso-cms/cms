@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Events;
+namespace Kanso\CMS\Event;
 
 use Kanso\Framework\Utility\Callback;
 
@@ -65,9 +65,9 @@ class Filters
      * @param  mixed  $callback  Callback to apply
      * @param  mixed  $args      Args to add (optional) (default null)
      */
-    public static function on(string $eventName, $callback, $args = null)
-    {
-        self::$callbacks[$eventName][] = [$callback, Callback::normalizeArgs($args)];
+    public function on(string $eventName, $callback)
+    {    
+        self::$callbacks[$eventName][] = $callback;
     }
 
     /**
@@ -76,21 +76,22 @@ class Filters
      * @param string $eventName The name of the filter being fired
      * @param mixed  $args      The arguments to be sent to filter callback (optional) (default [])
      */
-    public static function apply(string $eventName, $args = []) 
+    public function apply(string $eventName, $args) 
     {
-        $result = $args;
-
-        # Convert to an array
-        $args = Callback::normalizeArgs($args);
+        $result = [$args];
 
         # Is there a custom callback for the filter?   
-        if (isset(self::$callbacks[$eventName]) && !empty(self::$callbacks[$eventName]))
+        if (isset(self::$callbacks[$eventName]))
         {
             # Loop the filter callbacks
-            foreach (self::$callbacks[$eventName] as $callbackArr)
+            foreach (self::$callbacks[$eventName] as $callback)
             {
-                $result = Callback::apply($callbackArr[0], array_merge($callbackArr[1], $args));
+                $result = Callback::apply($callback, $result);
             }
+        }
+        else
+        {
+            return $args;
         }
 
         return $result;

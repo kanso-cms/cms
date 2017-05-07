@@ -102,6 +102,8 @@ return
 			'\Kanso\CMS\Application\Services\InstallerService',
 			'\Kanso\CMS\Application\Services\EmailService',
 			'\Kanso\CMS\Application\Services\QueryService',
+			'\Kanso\CMS\Application\Services\EventService',
+			'\Kanso\CMS\Application\Services\AdminService',
 			'\Kanso\CMS\Application\Services\BootService',
 		],
 

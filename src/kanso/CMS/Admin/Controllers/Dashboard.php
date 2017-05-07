@@ -19,7 +19,7 @@ class Dashboard extends Controller
 	/**
      * {@inheritdoc}
      */
-	protected function getModelClass(): string
+	protected function getModelClass()
 	{
 		if ($this->requestName === 'articles')
 		{
@@ -57,5 +57,7 @@ class Dashboard extends Controller
 		{
 			return '\Kanso\CMS\Admin\Models\Settings';
 		}
+
+		return false;
 	}
 }

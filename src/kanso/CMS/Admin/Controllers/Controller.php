@@ -16,6 +16,7 @@ use Kanso\Framework\Database\Query\Builder;
 use Kanso\Framework\Utility\GUMP;
 use Kanso\CMS\Auth\Gatekeeper;
 use Kanso\CMS\Wrappers\Managers\UserManager;
+use Kanso\CMS\Event\Events;
 
 /**
  * Admin panel base controller
@@ -98,23 +99,60 @@ abstract class Controller
     	$this->isLoggedIn = $this->gatekeeper()->isLoggedIn() && $this->gatekeeper()->isAdmin();
 
     	$this->model = $this->loadModel($this->getModelClass(), $this->getModelArgs());
+
+    	$this->events()->fire('adminInit', $requestName);
+    }
+   	
+   	/**
+	 * Returns the events instance
+	 *
+	 * @access protected
+	 * @return \Kanso\CMS\Event\Events
+	 */
+    protected function events(): Events
+    {
+    	return Kanso::instance()->Events;
     }
 
+    /**
+	 * Returns the Gatekeeper instance
+	 *
+	 * @access protected
+	 * @return \Kanso\CMS\Auth\Gatekeeper
+	 */
     protected function gatekeeper(): Gatekeeper
     {
     	return Kanso::instance()->Gatekeeper;
     }
 
+    /**
+	 * Returns the UserManager instance
+	 *
+	 * @access protected
+	 * @return \Kanso\CMS\Wrappers\Managers\UserManager
+	 */
     protected function userManager(): UserManager
     {
     	return Kanso::instance()->UserManager;
     }
 
+    /**
+	 * Returns the SQL query builder instance
+	 *
+	 * @access protected
+	 * @return \Kanso\Framework\Database\Query\Builder
+	 */
     protected function SQL(): Builder
     {
     	return Kanso::instance()->Database->connection()->builder();
     }
 
+    /**
+	 * Returns the validation
+	 *
+	 * @access protected
+	 * @return \Kanso\Framework\Utility\GUMP
+	 */
     protected function validation(): GUMP
     {
     	return new GUMP;
@@ -127,8 +165,13 @@ abstract class Controller
 	 * @param  string    $modelClass Full namespaced class name of the model
 	 * @return mixed
 	 */
-	protected function loadModel(string $class, array $args)
+	protected function loadModel($class, array $args)
 	{
+		if (!$class)
+		{
+			return $this->response->notFound();
+		}
+		
 		return Callback::newClass($class, $args);
 	}
 
@@ -157,7 +200,7 @@ abstract class Controller
 	 *
 	 * @access protected
 	 */
-	abstract protected function getModelClass(): string;
+	abstract protected function getModelClass();
 
 	/**
 	 * Dispatch the request
