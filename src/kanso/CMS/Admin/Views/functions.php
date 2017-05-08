@@ -1,6 +1,6 @@
 <?php
 
-use Kanso\Kanso;
+use kanso\Kanso;
 
 /**
  * Browser caching for assets
@@ -342,7 +342,7 @@ function admin_is_dash()
  */
 function admin_assets_url()
 {
-	$env = \Kanso\Kanso::instance()->Request->environment();
+	$env = \kanso\Kanso::instance()->Request->environment();
 
 	return str_replace($env->DOCUMENT_ROOT, $env->HTTP_HOST, KANSO_DIR.'/CMS/Admin/assets');
 }
@@ -354,5 +354,5 @@ function admin_assets_url()
  */
 function admin_kanso_config(string $key)
 {
-	return \Kanso\Kanso::instance()->Config->get($key);
+	return \kanso\Kanso::instance()->Config->get($key);
 }

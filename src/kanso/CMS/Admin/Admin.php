@@ -5,16 +5,16 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Admin;
+namespace kanso\cms\admin;
 
-use Kanso\Kanso;
-use Kanso\Framework\Http\Route\Router;
-use Kanso\Framework\Http\Request\Request;
-use Kanso\Framework\Http\Response\Response;
-use Kanso\Framework\Config\Config;
-use Kanso\Framework\Utility\Str;
-use Kanso\CMS\Event\Filters;
-use Kanso\CMS\Event\Events;
+use kanso\Kanso;
+use kanso\framework\http\route\Router;
+use kanso\framework\http\request\Request;
+use kanso\framework\http\response\Response;
+use kanso\framework\config\Config;
+use kanso\framework\utility\Str;
+use kanso\cms\event\Filters;
+use kanso\cms\event\Events;
 
 /**
  * Admin panel access
@@ -26,42 +26,42 @@ class Admin
     /**
      * Router instance
      *
-     * @var \Kanso\Framework\Route\Router
+     * @var \kanso\framework\route\Router
      */
     protected $router;
 
     /**
      * Request instance
      *
-     * @var \Kanso\Framework\Http\Request\Request
+     * @var \kanso\framework\http\request\Request
      */
     protected $request;
 
     /**
      * Response instance
      *
-     * @var \Kanso\Framework\Http\Response\Response
+     * @var \kanso\framework\http\response\Response
      */
     protected $response;
 
     /**
      * Framework configuration
      *
-     * @var \Kanso\Config\Config
+     * @var \kanso\config\Config
      */
     protected $config;
 
     /**
      * CMS filters
      *
-     * @var \Kanso\Framework\Event\Filters
+     * @var \kanso\framework\event\Filters
      */
     private $filters;
 
     /**
      * CMS events
      *
-     * @var \Kanso\Framework\Event\Events
+     * @var \kanso\framework\event\Events
      */
     private $events;
 

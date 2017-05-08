@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Email;
+namespace kanso\cms\email;
 
-use Kanso\Framework\File\Filesystem;
-use Kanso\Framework\Config\Config;
+use kanso\framework\file\Filesystem;
+use kanso\framework\config\Config;
 
 /**
  * CMS email utility
@@ -52,7 +52,7 @@ class Email
     /**
      * Framework configuration 
      * 
-     * @var \Kanso\Framework\Config\Config
+     * @var \kanso\framework\config\Config
      */
     private $config;
 
@@ -60,7 +60,7 @@ class Email
      * Constructor
      *
      * @access public
-     * @param  \Kanso\Framework\Config\Config $config Framework configuration
+     * @param  \kanso\framework\config\Config $config Framework configuration
      */
     public function __construct(Config $config)
     {
@@ -81,7 +81,7 @@ class Email
     {
         $variables = array_merge($this->theme, $vars);
         
-        $filePath  = dirname(__FILE__).DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.$template.'.php';
+        $filePath  = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$template.'.php';
         
         return Filesystem::ob_read($filePath, $variables);
     }
@@ -125,7 +125,7 @@ class Email
     */
     public function html(string $subject, string $content): string
     {
-        $body_path = dirname(__FILE__).DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'body.php';
+        $body_path = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'body.php';
 
         $_vars = 
         [

@@ -5,11 +5,11 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Wrappers\Managers;
+namespace kanso\cms\wrappers\managers;
 
-use Kanso\CMS\Wrappers\Managers\Manager;
-use Kanso\CMS\Wrappers\Providers\TagProvider;
-use Kanso\Framework\Utility\Str;
+use kanso\cms\wrappers\managers\Manager;
+use kanso\cms\wrappers\providers\TagProvider;
+use kanso\framework\utility\Str;
 
 /**
  * Tag manager

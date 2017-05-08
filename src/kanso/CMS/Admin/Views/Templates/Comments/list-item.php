@@ -1,6 +1,6 @@
 <?php
 
-use Kanso\Framework\Utility\Humanizer;
+use kanso\framework\utility\Humanizer;
 
 $statusColor = '';
 if ($comment->status === 'approved') {

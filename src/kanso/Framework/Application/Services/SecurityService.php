@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Application\Services;
+namespace kanso\framework\application\services;
 
-use Kanso\Framework\Security\Key;
-use Kanso\Framework\Security\Crypto;
-use Kanso\Framework\Security\Password\Encrypters\NativePHP;
-use Kanso\Framework\Security\Crypto\Signer;
-use Kanso\Framework\Security\SPAM\Gibberish\Gibberish;
-use Kanso\Framework\Security\SPAM\SpamProtector;
+use kanso\framework\security\Key;
+use kanso\framework\security\Crypto;
+use kanso\framework\security\password\encrypters\NativePHP;
+use kanso\framework\security\crypto\Signer;
+use kanso\framework\security\spam\gibberish\Gibberish;
+use kanso\framework\security\spam\SpamProtector;
+use kanso\framework\security\crypto\encrypters\OpenSSL;
 
 /**
  * Security service
@@ -41,7 +42,7 @@ class SecurityService extends Service
 	 * Returns the encryption signer
 	 *
 	 * @access private
-	 * @return \Kanso\Framework\Security\Crypto\Signer
+	 * @return \kanso\framework\security\crypto\Signer
 	 */	
 	private function getSinger(): Signer
 	{
@@ -60,7 +61,22 @@ class SecurityService extends Service
 		
 		$library = $configuration['library'];
 
-		return new $library(Key::decode($configuration['key']), $configuration['cipher']);
+		if ($library === 'openssl')
+		{
+			return $this->openSSLEncrypter($configuration);
+		}
+	}
+
+	/**
+	 * Returns the the Open SSL Encrypter/Decrypter implementation
+	 *
+	 * @access private
+	 * @param  array   $configuration Encryption configuration
+	 * @return \kanso\framework\security\crypto\encrypters\OpenSSL
+	 */
+	protected function openSSLEncrypter(array $configuration): OpenSSL
+	{
+		return new OpenSSL(Key::decode($configuration['key']), $configuration['cipher']);
 	}
 
 	/**
@@ -86,7 +102,7 @@ class SecurityService extends Service
 	 *
 	 * @access private
 	 * @param  array   $passwordConfiguration Configuration to pass to constructor
-	 * @return \Kanso\Framework\Security\Password\Encrypters\NativePHP
+	 * @return \kanso\framework\security\password\encrypters\NativePHP
 	 */
 	protected function nativePasswordHasher(array $passwordConfiguration): NativePHP
 	{
@@ -97,7 +113,7 @@ class SecurityService extends Service
 	 * Returns the gibberish detector
 	 *
 	 * @access private
-	 * @return \Kanso\Framework\Security\SPAM\Gibberish\Gibberish
+	 * @return \kanso\framework\security\spam\gibberish\Gibberish
 	 */
 	protected function getGibberish(): Gibberish
 	{

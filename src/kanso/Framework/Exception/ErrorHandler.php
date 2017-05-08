@@ -5,12 +5,12 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Exception;
+namespace kanso\framework\exception;
 
 use Throwable;
 use Closure;
 use ErrorException;
-use Kanso\Framework\Exception\ErrorLogger;
+use kanso\framework\exception\ErrorLogger;
 
 /**
  * Error handler
@@ -57,7 +57,7 @@ class ErrorHandler
 	/**
 	 * Logger
 	 *
-     * @var \Kanso\Framework\Exception\Logger|null
+     * @var \kanso\framework\exception\Logger|null
      */
 	private $logger;
 

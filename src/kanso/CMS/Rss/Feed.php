@@ -5,11 +5,11 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
  
-namespace Kanso\CMS\Rss;
+namespace kanso\cms\rss;
 
-use Kanso\Framework\Http\Request\Request;
-use Kanso\Framework\Http\Response\Response;
-use Kanso\Framework\Utility\Mime;
+use kanso\framework\http\request\Request;
+use kanso\framework\http\response\Response;
+use kanso\framework\utility\Mime;
 
 /**
  * RSS feeds
@@ -21,14 +21,14 @@ class Feed
 	/**
      * Request object
      *
-     * @var \Kanso\Framework\Http\Request\Request
+     * @var \kanso\framework\http\request\Request
      */
 	private $request;
 
 	/**
      * Response object
      *
-     * @var \Kanso\Framework\Http\Response\Response
+     * @var \kanso\framework\http\response\Response
      */
 	private $response;
 
@@ -43,8 +43,8 @@ class Feed
      * Constructor
      *
      * @access public
-     * @param  \Kanso\Framework\Http\Request\Request   $request  Request object
-     * @param  \Kanso\Framework\Http\Response\Response $response Response object
+     * @param  \kanso\framework\http\request\Request   $request  Request object
+     * @param  \kanso\framework\http\response\Response $response Response object
      * @param  string 								   $format   RSS format 'rss'||'atom'||'rdf' (optional) (default 'rss')
      */
     public function __construct(Request $request, Response $response, string $format = 'rss')
@@ -103,6 +103,6 @@ class Feed
 	 */
 	private function template(string $name): string
 	{
-		return dirname(__FILE__).DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.strtolower($this->format).DIRECTORY_SEPARATOR.$name.'.php';
+		return dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.strtolower($this->format).DIRECTORY_SEPARATOR.$name.'.php';
 	}
 }

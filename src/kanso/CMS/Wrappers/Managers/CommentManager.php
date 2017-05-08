@@ -5,18 +5,18 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Wrappers\Managers;
+namespace kanso\cms\wrappers\managers;
 
-use Kanso\CMS\Wrappers\Managers\Manager;
-use Kanso\CMS\Wrappers\Comment;
-use Kanso\CMS\Email\Email;
-use Kanso\CMS\Wrappers\Providers\CommentProvider;
-use Kanso\Framework\Database\Query\Builder;
-use Kanso\Framework\Security\SPAM\SpamProtector;
-use Kanso\Framework\Http\Request\Environment;
-use Kanso\Framework\Utility\Markdown;
-use Kanso\Framework\Config\Config;
-use Kanso\Framework\Utility\Str;
+use kanso\cms\wrappers\managers\Manager;
+use kanso\cms\wrappers\Comment;
+use kanso\cms\email\Email;
+use kanso\cms\wrappers\providers\CommentProvider;
+use kanso\framework\database\query\Builder;
+use kanso\framework\security\spam\SpamProtector;
+use kanso\framework\http\request\Environment;
+use kanso\framework\utility\Markdown;
+use kanso\framework\config\Config;
+use kanso\framework\utility\Str;
 
 /**
  * Comment manager
@@ -42,28 +42,28 @@ class CommentManager extends Manager
     /**
      * SPAM protector
      *
-     * @var \Kanso\Framework\Security\SPAM\SpamProtector
+     * @var \kanso\framework\security\spam\SpamProtector
      */
     private $spamProtector;
 
     /**
      * HTTP request env
      *
-     * @var \Kanso\Framework\Http\Request\Environment
+     * @var \kanso\framework\http\request\Environment
      */
     private $environment;
 
     /**
      * Framework config
      *
-     * @var \Kanso\Framework\Config\Config
+     * @var \kanso\framework\config\Config
      */
     private $config;
 
     /**
      * CMS Email utility
      *
-     * @var \Kanso\CMS\Email\Email
+     * @var \kanso\cms\email\Email
      */
     private $email;
 
@@ -71,12 +71,12 @@ class CommentManager extends Manager
      * Override inherited constructor
      * 
      * @access public
-     * @param  \Kanso\Framework\Database\Query\Builder       $SQL           SQL query builder
-     * @param  \Kanso\CMS\Wrappers\Providers\CommentProvider $provider      Comment provider
-     * @param  \Kanso\Framework\Security\SPAM\SpamProtector  $spamProtector SPAM protector
-     * @param  \Kanso\CMS\Email\Email                        $email         CMS Email utility
-     * @param  \Kanso\Framework\Config\Config                $config        Framework config
-     * @param  \Kanso\Framework\Http\Request\Environment     $environment   HTTP request env
+     * @param  \kanso\framework\database\query\Builder       $SQL           SQL query builder
+     * @param  \kanso\cms\wrappers\providers\CommentProvider $provider      Comment provider
+     * @param  \kanso\framework\security\spam\SpamProtector  $spamProtector SPAM protector
+     * @param  \kanso\cms\email\Email                        $email         CMS Email utility
+     * @param  \kanso\framework\config\Config                $config        Framework config
+     * @param  \kanso\framework\http\request\Environment     $environment   HTTP request env
 
      */ 
     public function __construct(Builder $SQL, CommentProvider $provider, SpamProtector $spamProtector, Email $email, Config $config, Environment $environment)

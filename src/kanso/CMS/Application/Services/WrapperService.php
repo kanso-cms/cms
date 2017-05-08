@@ -5,21 +5,21 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Application\Services;
+namespace kanso\cms\application\services;
 
-use Kanso\Framework\Application\Services\Service;
-use Kanso\CMS\Wrappers\Managers\CategoryManager;
-use Kanso\CMS\Wrappers\Managers\TagManager;
-use Kanso\CMS\Wrappers\Managers\UserManager;
-use Kanso\CMS\Wrappers\Managers\CommentManager;
-use Kanso\CMS\Wrappers\Managers\PostManager;
-use Kanso\CMS\Wrappers\Managers\MediaManager;
-use Kanso\CMS\Wrappers\Providers\CategoryProvider;
-use Kanso\CMS\Wrappers\Providers\TagProvider;
-use Kanso\CMS\Wrappers\Providers\UserProvider;
-use Kanso\CMS\Wrappers\Providers\CommentProvider;
-use Kanso\CMS\Wrappers\Providers\PostProvider;
-use Kanso\CMS\Wrappers\Providers\MediaProvider;
+use kanso\framework\application\services\Service;
+use kanso\cms\wrappers\managers\CategoryManager;
+use kanso\cms\wrappers\managers\TagManager;
+use kanso\cms\wrappers\managers\UserManager;
+use kanso\cms\wrappers\managers\CommentManager;
+use kanso\cms\wrappers\managers\PostManager;
+use kanso\cms\wrappers\managers\MediaManager;
+use kanso\cms\wrappers\providers\CategoryProvider;
+use kanso\cms\wrappers\providers\TagProvider;
+use kanso\cms\wrappers\providers\UserProvider;
+use kanso\cms\wrappers\providers\CommentProvider;
+use kanso\cms\wrappers\providers\PostProvider;
+use kanso\cms\wrappers\providers\MediaProvider;
 
 /**
  * Database wrapper setup

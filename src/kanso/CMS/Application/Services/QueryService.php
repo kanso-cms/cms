@@ -5,12 +5,12 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Application\Services;
+namespace kanso\cms\application\services;
 
-use Kanso\Framework\Application\Services\Service;
-use Kanso\CMS\Query\Query;
-use Kanso\CMS\Query\QueryParser;
-use Kanso\CMS\Query\Cache;
+use kanso\framework\application\services\Service;
+use kanso\cms\query\Query;
+use kanso\cms\query\QueryParser;
+use kanso\cms\query\Cache;
 
 /**
  * CMS Query
@@ -47,7 +47,7 @@ class QueryService extends Service
      * Loads the query parser
      *
      * @access private
-     * @return \Kanso\CMS\Query\QueryParser
+     * @return \kanso\cms\query\QueryParser
      */
 	private function loadQueryParser(): QueryParser
 	{

@@ -5,9 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Http\Session;
+namespace kanso\framework\http\session;
 
-use Kanso\Framework\Utility\Arr;
+use kanso\framework\utility\Arr;
 
 /**
  * Session storer

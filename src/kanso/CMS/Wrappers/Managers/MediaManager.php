@@ -5,16 +5,16 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Wrappers\Managers;
+namespace kanso\cms\wrappers\managers;
 
-use Kanso\Framework\Database\Query\Builder;
-use Kanso\Framework\Http\Request\Environment;
-use Kanso\Framework\utility\Image;
-use Kanso\Framework\utility\Mime;
-use Kanso\Framework\utility\Str;
-use Kanso\CMS\Auth\Gatekeeper;
-use Kanso\CMS\Wrappers\Managers\Manager;
-use Kanso\CMS\Wrappers\Providers\MediaProvider;
+use kanso\framework\database\query\Builder;
+use kanso\framework\http\request\Environment;
+use kanso\framework\utility\Image;
+use kanso\framework\utility\Mime;
+use kanso\framework\utility\Str;
+use kanso\cms\auth\Gatekeeper;
+use kanso\cms\wrappers\managers\Manager;
+use kanso\cms\wrappers\providers\MediaProvider;
 
 /**
  * Media manager
@@ -81,8 +81,8 @@ class MediaManager extends Manager
      * Override inherited constructor
      * 
      * @access public
-     * @param  \Kanso\Framework\Database\Query\Builder     $SQL          SQL query builder
-     * @param  \Kanso\CMS\Wrappers\Providers\MediaProvider $provider     Provider manager
+     * @param  \kanso\framework\database\query\Builder     $SQL          SQL query builder
+     * @param  \kanso\cms\wrappers\providers\MediaProvider $provider     Provider manager
      * @param  string                                      $uploadDir    Path to upload files to
      * @param  array                                       $acceptedMime Array of accepted mime types
      */

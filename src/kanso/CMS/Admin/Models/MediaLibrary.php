@@ -5,15 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Admin\Models;
+namespace kanso\cms\admin\models;
 
-use Kanso\Kanso;
-use Kanso\Framework\Config\Config;
-use Kanso\Framework\Utility\Humanizer;
-use Kanso\Framework\Utility\Str;
-use Kanso\Framework\Utility\Mime;
-use Kanso\CMS\Admin\Models\Model;
-use Kanso\CMS\Wrappers\Managers\MediaManager;
+use kanso\Kanso;
+use kanso\framework\config\Config;
+use kanso\framework\utility\Humanizer;
+use kanso\framework\utility\Str;
+use kanso\framework\utility\Mime;
+use kanso\cms\admin\models\Model;
+use kanso\cms\wrappers\managers\MediaManager;
 
 /**
  * Media library loader
@@ -82,7 +82,7 @@ class MediaLibrary extends Model
      * Returns the media manager
      *
      * @access private
-     * @return \Kanso\CMS\Wrappers\Managers\MediaManager
+     * @return \kanso\cms\wrappers\managers\MediaManager
      */
     private function mediaManager(): MediaManager
     {
@@ -93,7 +93,7 @@ class MediaLibrary extends Model
      * Returns the framework configuration manager
      *
      * @access private
-     * @return \Kanso\Framework\Config\Config
+     * @return \kanso\framework\config\Config
      */
     private function config(): Config
     {

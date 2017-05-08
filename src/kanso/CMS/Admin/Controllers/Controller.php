@@ -5,18 +5,18 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Admin\Controllers;
+namespace kanso\cms\admin\controllers;
 
 use Closure;
-use Kanso\Kanso;
-use Kanso\Framework\Http\Request\Request;
-use Kanso\Framework\Http\Response\Response;
-use Kanso\Framework\Utility\Callback;
-use Kanso\Framework\Database\Query\Builder;
-use Kanso\Framework\Utility\GUMP;
-use Kanso\CMS\Auth\Gatekeeper;
-use Kanso\CMS\Wrappers\Managers\UserManager;
-use Kanso\CMS\Event\Events;
+use kanso\Kanso;
+use kanso\framework\http\request\Request;
+use kanso\framework\http\response\Response;
+use kanso\framework\utility\Callback;
+use kanso\framework\database\query\Builder;
+use kanso\framework\utility\GUMP;
+use kanso\cms\auth\Gatekeeper;
+use kanso\cms\wrappers\managers\UserManager;
+use kanso\cms\event\Events;
 
 /**
  * Admin panel base controller
@@ -35,21 +35,21 @@ abstract class Controller
 	/**
 	 * Request instance
 	 *
-	 * @var \Kanso\Framework\Http\Request\Request
+	 * @var \kanso\framework\http\request\Request
 	 */
 	protected $request;
 
 	/**
 	 * Response instance
 	 *
-	 * @var \Kanso\Framework\Http\Response\Response
+	 * @var \kanso\framework\http\response\Response
 	 */
 	protected $response;
 
 	/**
 	 * Response instance
 	 *
-	 * @var \Kanso\Framework\Http\Response\Response
+	 * @var \kanso\framework\http\response\Response
 	 */
 	protected $gateKeeper;
 
@@ -107,7 +107,7 @@ abstract class Controller
 	 * Returns the events instance
 	 *
 	 * @access protected
-	 * @return \Kanso\CMS\Event\Events
+	 * @return \kanso\cms\event\Events
 	 */
     protected function events(): Events
     {
@@ -118,7 +118,7 @@ abstract class Controller
 	 * Returns the Gatekeeper instance
 	 *
 	 * @access protected
-	 * @return \Kanso\CMS\Auth\Gatekeeper
+	 * @return \kanso\cms\auth\Gatekeeper
 	 */
     protected function gatekeeper(): Gatekeeper
     {
@@ -129,7 +129,7 @@ abstract class Controller
 	 * Returns the UserManager instance
 	 *
 	 * @access protected
-	 * @return \Kanso\CMS\Wrappers\Managers\UserManager
+	 * @return \kanso\cms\wrappers\managers\UserManager
 	 */
     protected function userManager(): UserManager
     {
@@ -140,7 +140,7 @@ abstract class Controller
 	 * Returns the SQL query builder instance
 	 *
 	 * @access protected
-	 * @return \Kanso\Framework\Database\Query\Builder
+	 * @return \kanso\framework\database\query\Builder
 	 */
     protected function SQL(): Builder
     {
@@ -151,7 +151,7 @@ abstract class Controller
 	 * Returns the validation
 	 *
 	 * @access protected
-	 * @return \Kanso\Framework\Utility\GUMP
+	 * @return \kanso\framework\utility\GUMP
 	 */
     protected function validation(): GUMP
     {

@@ -5,12 +5,12 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Wrappers;
+namespace kanso\cms\wrappers;
 
 use InvalidArgumentException;
-use Kanso\CMS\Wrappers\Wrapper;
-use Kanso\Framework\Utility\Str;
-use Kanso\Framework\Utility\UUID;
+use kanso\cms\wrappers\Wrapper;
+use kanso\framework\utility\Str;
+use kanso\framework\utility\UUID;
 
 /**
  * User utility wrapper
@@ -103,7 +103,7 @@ class User extends Wrapper
     /**
      * Generate an access token for this user
      *
-     * @return \Kanso\CMS\Wrappers\User
+     * @return \kanso\cms\wrappers\User
      */
     public function generateAccessToken(): User
     {

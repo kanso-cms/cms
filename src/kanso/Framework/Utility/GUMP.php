@@ -9,7 +9,7 @@
  * @version     1.0
  */
 
-namespace Kanso\Framework\Utility;
+namespace kanso\framework\utility;
 
 class GUMP
 {

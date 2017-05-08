@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Security\Password\Encrypters;
+namespace kanso\framework\security\password\encrypters;
 
 /**
  * Native PHP hashing with polyfill fallback

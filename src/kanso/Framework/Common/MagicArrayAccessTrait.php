@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Common;
+namespace kanso\framework\common;
 
 /**
  * Array access magic methods trait.

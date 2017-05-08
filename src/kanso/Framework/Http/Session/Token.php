@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Http\Session;
+namespace kanso\framework\http\session;
 
 /**
  * Session CSRF Token

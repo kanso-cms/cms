@@ -1,14 +1,14 @@
 <?php
 
-namespace Kanso\CMS\Admin\Models;
+namespace kanso\cms\admin\models;
 
 use Closure;
-use Kanso\Framework\Http\Request\Request;
-use Kanso\Framework\Http\Response\Response;
-use Kanso\Framework\Database\Query\Builder;
-use Kanso\Framework\Utility\GUMP;
-use Kanso\CMS\Auth\Gatekeeper;
-use Kanso\CMS\Wrappers\Managers\UserManager;
+use kanso\framework\http\request\Request;
+use kanso\framework\http\response\Response;
+use kanso\framework\database\query\Builder;
+use kanso\framework\utility\GUMP;
+use kanso\cms\auth\Gatekeeper;
+use kanso\cms\wrappers\managers\UserManager;
 
 /**
  * Model base class
@@ -20,42 +20,42 @@ abstract class Model
 	/**
 	 * Request instance
 	 *
-	 * @var \Kanso\Framework\Http\Request\Request
+	 * @var \kanso\framework\http\request\Request
 	 */
 	protected $request;
 
 	/**
 	 * Response instance
 	 *
-	 * @var \Kanso\Framework\Http\Response\Response
+	 * @var \kanso\framework\http\response\Response
 	 */
 	protected $response;
 
 	/**
 	 * Gatekeeper instance
 	 *
-	 * @var \Kanso\CMS\Auth\Gatekeeper
+	 * @var \kanso\cms\auth\Gatekeeper
 	 */
 	protected $gatekeeper;
 
 	/**
 	 * User manager instance
 	 *
-	 * @var \Kanso\CMS\Wrappers\Managers\UserManager
+	 * @var \kanso\cms\wrappers\managers\UserManager
 	 */
 	protected $userManager;
 
 	/**
 	 * SQL query builder
 	 *
-	 * @var \Kanso\Framework\Database\Query\Builder
+	 * @var \kanso\framework\database\query\Builder
 	 */
 	protected $SQL;
 
 	/**
 	 * POST validator
 	 *
-     * @var Kanso\Framework\Utility\GUMP
+     * @var kanso\framework\utility\GUMP
      */
     protected $validation;
 
@@ -83,12 +83,12 @@ abstract class Model
 	/**
      * Constructor
      *
-     * @param \Kanso\Framework\Http\Request\Request    $request     Request object instance
-     * @param \Kanso\Framework\Http\Response\Response  $response    Response object instance
-     * @param \Kanso\CMS\Auth\Gatekeeper               $gatekeeper  CMS Gatekeeper instance
-     * @param \Kanso\CMS\Wrappers\Managers\UserManager $userManager CMS User manager instance
-     * @param \Kanso\Framework\Database\Query\Builder  $SQL         SQL query builder instance
-     * @param \Kanso\Framework\Utility\GUMP            $validation  GUMP validatior
+     * @param \kanso\framework\http\request\Request    $request     Request object instance
+     * @param \kanso\framework\http\response\Response  $response    Response object instance
+     * @param \kanso\cms\auth\Gatekeeper               $gatekeeper  CMS Gatekeeper instance
+     * @param \kanso\cms\wrappers\managers\UserManager $userManager CMS User manager instance
+     * @param \kanso\framework\database\query\Builder  $SQL         SQL query builder instance
+     * @param \kanso\framework\utility\GUMP            $validation  GUMP validatior
      * @param bool   								   $isLoggedIn  Is the HTTP client logged in to the admin panel ?
      * @param string                                   $requestName The request name (trigger) from the router
      */

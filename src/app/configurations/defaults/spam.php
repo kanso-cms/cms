@@ -9,7 +9,7 @@ return
 	 *
 	 * Path to gibberish dictionary
 	 */
-	'gibberish_lib' => KANSO_DIR.'/Framework/Security/SPAM/Gibberish/Gibberish.txt',
+	'gibberish_lib' => KANSO_DIR.'/framework/security/spam/gibberish/gibberish.txt',
 
 	/**
 	 * ---------------------------------------------------------

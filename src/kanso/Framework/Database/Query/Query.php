@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Database\Query;
+namespace kanso\framework\database\query;
 
 use PDOException;
-use Kanso\Framework\Database\Connection\Connection;
+use kanso\framework\database\connection\Connection;
 
 /**
  * Database SQL builder
@@ -65,7 +65,7 @@ class Query
 	/**
 	 * Database connection
 	 *
-	 * @var \Kanso\Framework\Database\Connection\Connection
+	 * @var \kanso\framework\database\connection\Connection
 	 */
 	private $connection;
 
@@ -73,7 +73,7 @@ class Query
      * Constructor
      *
      * @access public
-     * @param  \Kanso\Framework\Database\Connection\Connection $connection
+     * @param  \kanso\framework\database\connection\Connection $connection
      */
 	public function __construct(Connection $connection)
 	{

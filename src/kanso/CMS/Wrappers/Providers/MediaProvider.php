@@ -5,11 +5,11 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Wrappers\Providers;
+namespace kanso\cms\wrappers\providers;
 
-use Kanso\CMS\Wrappers\Media;
-use Kanso\Framework\Database\Query\Builder;
-use Kanso\CMS\Wrappers\Providers\Provider;
+use kanso\cms\wrappers\Media;
+use kanso\framework\database\query\Builder;
+use kanso\cms\wrappers\providers\Provider;
 
 /**
  * Media provider
@@ -29,7 +29,7 @@ class MediaProvider extends Provider
      * Override inherited constructor
      * 
      * @access public
-     * @param  \Kanso\Framework\Database\Query\Builder $SQL            SQL query builder
+     * @param  \kanso\framework\database\query\Builder $SQL            SQL query builder
      * @param  array                                   $thumbnailSizes Assoc array of thumbnail sizes
      */
     public function __construct(Builder $SQL, array $thumbnailSizes)

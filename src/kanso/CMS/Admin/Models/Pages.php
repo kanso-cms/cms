@@ -5,11 +5,11 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Admin\Models;
+namespace kanso\cms\admin\models;
 
-use Kanso\CMS\Admin\Models\Model;
-use Kanso\Kanso;
-use Kanso\CMS\Wrappers\Managers\PostManager;
+use kanso\cms\admin\models\Model;
+use kanso\Kanso;
+use kanso\cms\wrappers\managers\PostManager;
 
 /**
  * Pages page model
@@ -56,7 +56,7 @@ class Pages extends Model
      * Returns the post manager
      *
      * @access private
-     * @return \Kanso\CMS\Wrappers\Managers\PostManager
+     * @return \kanso\cms\wrappers\managers\PostManager
      */
     private function postManager(): PostManager
     {

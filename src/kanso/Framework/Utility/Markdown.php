@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Utility;
+namespace kanso\framework\utility;
 
-use Kanso\Framework\Utility\Markdown\Parsedown;
-use Kanso\Framework\Utility\Markdown\ParsedownExtra;
+use kanso\framework\utility\markdown\Parsedown;
+use kanso\framework\utility\markdown\ParsedownExtra;
 
 /**
  * Convert markdown to HTML

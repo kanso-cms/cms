@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Application\Services;
+namespace kanso\framework\application\services;
 
-use Kanso\Framework\Application\Services\Service;
-use \Kanso\Framework\Database\Database;
+use kanso\framework\application\services\Service;
+use \kanso\framework\database\Database;
 
 /**
  * Database services

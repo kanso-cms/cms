@@ -5,17 +5,17 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Wrappers\Providers;
+namespace kanso\cms\wrappers\providers;
 
-use Kanso\Framework\Database\Query\Builder;
-use Kanso\Framework\Config\Config;
-use Kanso\CMS\Wrappers\Post;
-use Kanso\CMS\Wrappers\Providers\Provider;
-use Kanso\CMS\Wrappers\Providers\TagProvider;
-use Kanso\CMS\Wrappers\Providers\CategoryProvider;
-use Kanso\CMS\Wrappers\Providers\UserProvider;
-use Kanso\CMS\Wrappers\Providers\MediaProvider;
-use Kanso\CMS\Wrappers\Providers\CommentProvider;
+use kanso\framework\database\query\Builder;
+use kanso\framework\config\Config;
+use kanso\cms\wrappers\Post;
+use kanso\cms\wrappers\providers\Provider;
+use kanso\cms\wrappers\providers\TagProvider;
+use kanso\cms\wrappers\providers\CategoryProvider;
+use kanso\cms\wrappers\providers\UserProvider;
+use kanso\cms\wrappers\providers\MediaProvider;
+use kanso\cms\wrappers\providers\CommentProvider;
 
 /**
  * Post provider

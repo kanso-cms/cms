@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Autoload;
+namespace kanso\framework\autoload;
 
 /**
  * Alias class loader

@@ -25,9 +25,9 @@ return
 	[
 		'openssl' =>
 		[
-			'library'  => '\Kanso\Framework\Security\Crypto\Encrypters\OpenSSL',
+			'library'  => 'openssl',
 			'cipher'   => 'AES-256-CTR',
-			'key'      => 'hex:3462f179ba7b6606a60bbfa160bc7ff857ee91ad7850c97562229dc7228e5e49',
+			'key'      => '6eedbbb1c2680921e324889ade0187322b5c4e24896bc824dc50559b19cd9ea5',
 		],
 	],
 ];

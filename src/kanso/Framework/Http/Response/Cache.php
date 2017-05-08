@@ -5,9 +5,9 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Http\Response;
+namespace kanso\framework\http\response;
 
-use Kanso\Framework\Cache\Cache as FrameworkCache;
+use kanso\framework\cache\Cache as FrameworkCache;
 
 /**
  * Cache storage
@@ -19,7 +19,7 @@ Class Cache
     /**
      * Cache manager
      *
-     * @var Kanso\Framework\Cache\Cache       
+     * @var kanso\framework\cache\Cache       
      */
     private $cache;
 

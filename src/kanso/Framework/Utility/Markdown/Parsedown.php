@@ -29,7 +29,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Kanso\Framework\Utility\Markdown;
+namespace kanso\framework\utility\markdown;
 
 class Parsedown
 {

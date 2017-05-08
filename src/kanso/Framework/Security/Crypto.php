@@ -5,12 +5,12 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Security;
+namespace kanso\framework\security;
 
 use RuntimeException;
-use Kanso\Framework\Security\Crypto\Signer;
-use Kanso\Framework\Security\Password\Encrypters\Encrypter as passwordEncrypter;
-use Kanso\Framework\Security\Crypto\Encrypters\Encrypter as ctyptoEncrypter;
+use kanso\framework\security\crypto\Signer;
+use kanso\framework\security\password\encrypters\Encrypter as passwordEncrypter;
+use kanso\framework\security\crypto\encrypters\Encrypter as ctyptoEncrypter;
 
 /**
  * Encryption/Decryption and password hashing 
@@ -29,7 +29,7 @@ class Crypto
     /**
      * Encryption/Decryption signer
      *
-     * @var \Kanso\Framework\Security\Crypto\Signer
+     * @var \kanso\framework\security\crypto\Signer
      */
     private $signer;
 
@@ -51,7 +51,7 @@ class Crypto
      * Constructor
      *
      * @access public
-     * @param  \Kanso\Framework\Security\Crypto\Signer $signer     Encryption/Decryption signer
+     * @param  \kanso\framework\security\crypto\Signer $signer     Encryption/Decryption signer
      * @param  object                                  $encrytper  Encryption/Decryption library
      * @param  object                                  $password   Password hashing library
      * @throws RuntimeException If encrypter or password objects are not extensions

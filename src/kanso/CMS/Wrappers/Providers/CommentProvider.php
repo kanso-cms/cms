@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Wrappers\Providers;
+namespace kanso\cms\wrappers\providers;
 
-use Kanso\CMS\Wrappers\Comment;
-use Kanso\CMS\Wrappers\Providers\Provider;
+use kanso\cms\wrappers\Comment;
+use kanso\cms\wrappers\providers\Provider;
 
 /**
  * Comment provider

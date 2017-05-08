@@ -5,19 +5,19 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Wrappers\Managers;
+namespace kanso\cms\wrappers\managers;
 
-use Kanso\CMS\Wrappers\Managers\Manager;
-use Kanso\CMS\Wrappers\Providers\UserProvider;
-use Kanso\Framework\Database\Query\Builder;
-use Kanso\Framework\Http\Cookie\Cookie;
-use Kanso\Framework\Http\Session\Session;
-use Kanso\Framework\Http\Request\Environment;
-use Kanso\Framework\Config\Config;
-use Kanso\Framework\Security\Crypto;
-use Kanso\Framework\Utility\Str;
-use Kanso\Framework\Utility\UUID;
-use Kanso\CMS\Email\Email;
+use kanso\cms\wrappers\managers\Manager;
+use kanso\cms\wrappers\providers\UserProvider;
+use kanso\framework\database\query\Builder;
+use kanso\framework\http\cookie\Cookie;
+use kanso\framework\http\session\Session;
+use kanso\framework\http\request\Environment;
+use kanso\framework\config\Config;
+use kanso\framework\security\Crypto;
+use kanso\framework\utility\Str;
+use kanso\framework\utility\UUID;
+use kanso\cms\email\Email;
 
 /**
  * User manager
@@ -50,42 +50,42 @@ class UserManager extends Manager
     /**
      * Cookie manager
      * 
-     * @var \Kanso\Framework\Http\Cookie\Cookie
+     * @var \kanso\framework\http\cookie\Cookie
      */ 
     private $cookie;
 
     /**
      * Session manager
      * 
-     * @var \Kanso\Framework\Http\Session\Session
+     * @var \kanso\framework\http\session\Session
      */ 
     private $session;
 
     /**
      * Encryption manager
      * 
-     * @var \Kanso\Framework\Security\Crypto
+     * @var \kanso\framework\security\Crypto
      */
     private $crypto;
 
     /**
      * Request environment
      * 
-     * @var \Kanso\Framework\Http\Request\Environment
+     * @var \kanso\framework\http\request\Environment
      */
     private $environment;
 
     /**
      * Config 
      * 
-     * @var \Kanso\Framework\Config\Config
+     * @var \kanso\framework\config\Config
      */
     private $config;
 
     /**
      * Mailer utility 
      * 
-     * @var \Kanso\CMS\Email\Email
+     * @var \kanso\cms\email\Email
      */
     private $email;
 
@@ -93,14 +93,14 @@ class UserManager extends Manager
      * Override inherited constructor
      *
      * @access public
-     * @param  \Kanso\Framework\Database\Query\Builder   $SQL          Query builder instance
-     * @param  \Kanso\CMS\Auth\UserProvider              $provider     User provider instance
-     * @param  \Kanso\Framework\Security\Crypto          $crypto       Encryption manager
-     * @param  \Kanso\Framework\Http\Cookie\Cookie       $cookie       Cookie manager
-     * @param  \Kanso\Framework\Http\Session\Session     $session      Session manager
-     * @param  \Kanso\Framework\Http\Request\Environment $environment  Request environment
-     * @param  \Kanso\Framework\Config\Config            $config       Config
-     * @param  \Kanso\CMS\Email\Email                    $email        Mailer utility
+     * @param  \kanso\framework\database\query\Builder   $SQL          Query builder instance
+     * @param  \kanso\cms\auth\UserProvider              $provider     User provider instance
+     * @param  \kanso\framework\security\Crypto          $crypto       Encryption manager
+     * @param  \kanso\framework\http\cookie\Cookie       $cookie       Cookie manager
+     * @param  \kanso\framework\http\session\Session     $session      Session manager
+     * @param  \kanso\framework\http\request\Environment $environment  Request environment
+     * @param  \kanso\framework\config\Config            $config       Config
+     * @param  \kanso\cms\email\Email                    $email        Mailer utility
      */
     public function __construct(Builder $SQL, UserProvider $provider, Crypto $crypto, Cookie $cookie, Session $session, Config $config, Environment $environment, Email $email)
     {

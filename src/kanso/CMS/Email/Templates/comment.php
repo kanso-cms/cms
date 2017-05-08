@@ -42,7 +42,7 @@
                                     <?php echo $the_excerpt; ?>
                                 <br><br>
                                 <!-- Button : BEGIN -->
-                                <?php echo \Kanso\Kanso::instance()->Email->button($the_pemalink, 'Read', 'sm');?>
+                                <?php echo \kanso\Kanso::instance()->Email->button($the_pemalink, 'Read', 'sm');?>
                                 <!-- Button : END -->
                             </td>
                         </tr>

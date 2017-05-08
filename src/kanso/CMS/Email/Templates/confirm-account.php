@@ -6,7 +6,7 @@
 <table> 
 	<tr>
 		<td>
-	    	<p><?php echo \Kanso\Kanso::instance()->Email->button($confirmURL, 'Verify Your Email');?></p>
+	    	<p><?php echo \kanso\Kanso::instance()->Email->button($confirmURL, 'Verify Your Email');?></p>
 		</td>
 	</tr>
 </table>

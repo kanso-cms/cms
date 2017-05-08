@@ -5,13 +5,13 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Database\Connection;
+namespace kanso\framework\database\connection;
 
 use PDO;
 use PDOException;
 use PDOStatement;
 use RuntimeException;
-use Kanso\Framework\Database\Query\Builder;
+use kanso\framework\database\query\Builder;
 
 /**
  * Database connection
@@ -225,7 +225,7 @@ class Connection
  	/**
 	 * Return a new Query builder instance
 	 *
-	 * @return \Kanso\Framework\Database\Query\Builder
+	 * @return \kanso\framework\database\query\Builder
 	 */
 	public function builder(): Builder
 	{

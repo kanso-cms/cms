@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Database\Query;
+namespace kanso\framework\database\query;
 
 use PDOException;
-use Kanso\Framework\Database\Connection\Connection;
+use kanso\framework\database\connection\Connection;
 
 /**
  * Alter table class
@@ -42,7 +42,7 @@ class Alter
     private $columns;
 
     /**
-     * @var \Kanso\Framework\Database\Connection\Connection
+     * @var \kanso\framework\database\connection\Connection
      */
     private $connection;
     
@@ -50,7 +50,7 @@ class Alter
      * Constructor
      *
      * @access public
-     * @param  \Kanso\Framework\Database\Connection\Connection $connection The database connection to use
+     * @param  \kanso\framework\database\connection\Connection $connection The database connection to use
      * @param  string $tableName The table name we are altering
      */
     public function __construct(Connection $connection, string $tableName)
@@ -75,7 +75,7 @@ class Alter
      * @access public
      * @param  string    $column
      * @param  string    $dataType    The column parameters
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      * @throws PDOException If the column already exists
      */
     public function ADD_COLUMN(string $column, string $dataType): Alter
@@ -104,7 +104,7 @@ class Alter
      *
      * @access public
      * @param  string $column The column name to drop
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      * @throws PDOException If the column does not exist
      */
     public function DROP_COLUMN(string $column): Alter
@@ -138,7 +138,7 @@ class Alter
      * @access public
      * @param  string $column
      * @param  string $dataType (optional) (default null)
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      * @throws PDOException If the column does not exist
      */
     public function MODIFY_COLUMN(string $column, string $dataType = null): Alter
@@ -176,7 +176,7 @@ class Alter
      * Add a primary key to the current column
      *
      * @access public
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      */
     public function ADD_PRIMARY_KEY(): Alter
     {
@@ -211,7 +211,7 @@ class Alter
      * Drop the table's current primary key
      *
      * @access public
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      */
     public function DROP_PRIMARY_KEY(): Alter
     {
@@ -236,7 +236,7 @@ class Alter
      *
      * @access public
      * @param  $notNull mixed Value to set null values to (optional) (default 0)
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      */
     public function ADD_NOT_NULL($notNull = 0): Alter
     {
@@ -274,7 +274,7 @@ class Alter
      * Drop "not null" on a column
      *
      * @access public
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      */
     public function DROP_NOT_NULL(): Alter
     {
@@ -302,7 +302,7 @@ class Alter
      * Add unsinged to an integer or number based column
      *
      * @access public
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      */
     public function ADD_UNSIGNED(): Alter
     {
@@ -333,7 +333,7 @@ class Alter
      * Drop unsigned on an integer or number based column
      *
      * @access public
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      */
     public function DROP_UNSIGNED(): Alter
     {
@@ -362,7 +362,7 @@ class Alter
      * Add auto increment to an integer primary key column
      *
      * @access public
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      */
     public function SET_AUTO_INCREMENT(): Alter
     {
@@ -401,7 +401,7 @@ class Alter
      * DROP auto increment on an integer primary key column
      *
      * @access public
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      */
     public function DROP_AUTO_INCREMENT(): Alter
     {
@@ -425,7 +425,7 @@ class Alter
      * Set default value for column
      *
      * @access public
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      */
     public function SET_DEFAULT($value = 'NULL'): Alter
     {
@@ -443,7 +443,7 @@ class Alter
      * Drop default value for column
      *
      * @access public
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      */
     public function DROP_DEFAULT(): Alter
     {
@@ -464,7 +464,7 @@ class Alter
      * Add unique contraint on column
      *
      * @access public
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      */
     public function ADD_UNIQUE(): Alter
     {
@@ -491,7 +491,7 @@ class Alter
      * Drop unique contraint on column
      *
      * @access public
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      */
     public function DROP_UNIQUE(): Alter
     {
@@ -519,7 +519,7 @@ class Alter
      * @param  string $referenceTable The name of the reference table
      * @param  string $referenceKey   The name of the column on the reference table
      * @param  string $constraint     The constraint name to add (optional) (default null)
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      */
     public function ADD_FOREIGN_KEY(string $referenceTable, string $referenceKey, string $constraint = null): Alter
     {
@@ -551,7 +551,7 @@ class Alter
      * @param  string $referenceTable The name of the reference table
      * @param  string $referenceKey   The name of the column on the reference table
      * @param  string $constraint     The constraint name to remove (optional) (default null)
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      */
     public function DROP_FOREIGN_KEY($referenceTable, $referenceKey, $constraint = null): Alter
     {

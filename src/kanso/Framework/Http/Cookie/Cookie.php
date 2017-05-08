@@ -5,10 +5,10 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Http\Cookie;
+namespace kanso\framework\http\cookie;
 
-use Kanso\Framework\Http\Cookie\Storage\Store;
-use Kanso\Framework\Common\ArrayAccessTrait;
+use kanso\framework\http\cookie\storage\Store;
+use kanso\framework\common\ArrayAccessTrait;
 
 /**
  * Cookie utility

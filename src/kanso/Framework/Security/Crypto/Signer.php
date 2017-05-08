@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Security\Crypto;
+namespace kanso\framework\security\crypto;
 
 /**
  * Encryption/Decryption signer

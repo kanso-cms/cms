@@ -5,9 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Event;
+namespace kanso\cms\event;
 
-use Kanso\Framework\Utility\Callback;
+use kanso\framework\utility\Callback;
 
 /**
  * Events manager
@@ -19,7 +19,7 @@ class Events
     /**
      * Instance of self
      *
-     * @var \Kanso\CMS\Events\Events
+     * @var \kanso\cms\events\Events
      */
     private static $instance;
 
@@ -45,7 +45,7 @@ class Events
      * This creates and/or returns an Events instance (singleton)
      *
      * @access public
-     * @return \Kanso\CMS\Events\Events
+     * @return \kanso\cms\events\Events
      */
     public static function instance(): Events
     {

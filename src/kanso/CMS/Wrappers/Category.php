@@ -5,11 +5,11 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Wrappers;
+namespace kanso\cms\wrappers;
 
 use InvalidArgumentException;
-use Kanso\CMS\Wrappers\Wrapper;
-use Kanso\Framework\Utility\Str;
+use kanso\cms\wrappers\Wrapper;
+use kanso\framework\utility\Str;
 
 /**
  * Category utility wrapper

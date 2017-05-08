@@ -5,9 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Config;
+namespace kanso\framework\config;
 
-use Kanso\Framework\File\CascadingFilesystem;
+use kanso\framework\file\CascadingFilesystem;
 use RuntimeException;
 
 /**

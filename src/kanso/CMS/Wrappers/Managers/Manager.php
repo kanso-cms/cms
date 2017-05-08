@@ -5,9 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Wrappers\Managers;
+namespace kanso\cms\wrappers\managers;
 
-use Kanso\Framework\Database\Query\Builder;
+use kanso\framework\database\query\Builder;
 
 /**
  * Provider manager base class
@@ -19,7 +19,7 @@ abstract class Manager
     /**
      * SQL query builder
      * 
-     * @var \Kanso\Framework\Database\Query\Builder
+     * @var \kanso\framework\database\query\Builder
      */ 
     protected $SQL;
 
@@ -34,7 +34,7 @@ abstract class Manager
      * Default constructor
      * 
      * @access public
-     * @param  \Kanso\Framework\Database\Query\Builder $SQL      SQL query builder
+     * @param  \kanso\framework\database\query\Builder $SQL      SQL query builder
      * @param  mixed                                   $provider Provider manager
      */
     public function __construct(Builder $SQL, $provider)

@@ -5,16 +5,16 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Install;
+namespace kanso\cms\install;
 
 use PDO;
 use PDOException;
 use RuntimeException;
 use Closure;
-use Kanso\Framework\Config\Config;
-use Kanso\Framework\Database\Database;
-use Kanso\Framework\Http\Request\Request;
-use Kanso\Framework\Http\Response\Response;
+use kanso\framework\config\Config;
+use kanso\framework\database\Database;
+use kanso\framework\http\request\Request;
+use kanso\framework\http\response\Response;
 
 /**
  * CMS installer
@@ -26,14 +26,14 @@ class Installer
     /**
      * Database Connection
      *
-     * @var \Kanso\Framework\Database\Database
+     * @var \kanso\framework\database\Database
      */
     private $database;
 
     /**
      * Database Connection
      *
-     * @var \Kanso\Framework\Config\Config
+     * @var \kanso\framework\config\Config
      */
     private $config;
 
@@ -87,8 +87,8 @@ class Installer
      * Install the CMS
      *
      * @access public
-     * @param  \Kanso\Framework\Http\Request\Request   $request  Framework Request instance
-     * @param  \Kanso\Framework\Http\Response\Response $response Framework Response instance
+     * @param  \kanso\framework\http\request\Request   $request  Framework Request instance
+     * @param  \kanso\framework\http\response\Response $response Framework Response instance
      * @param  \Closure                                $next     Next middleware layer
      * @param  string                                  $pageType The page type being loaded
      */
@@ -116,8 +116,8 @@ class Installer
      * Show the install splash
      *
      * @access public
-     * @param  \Kanso\Framework\Http\Request\Request   $request  Framework Request instance
-     * @param  \Kanso\Framework\Http\Response\Response $response Framework Response instance
+     * @param  \kanso\framework\http\request\Request   $request  Framework Request instance
+     * @param  \kanso\framework\http\response\Response $response Framework Response instance
      * @param  \Closure                                $next     Next middleware layer
      * @param  string                                  $pageType The page type being loaded
      */
@@ -127,7 +127,7 @@ class Installer
         $response->format()->set('text/html');
 
         # Set the response body
-        $response->body()->set($response->view()->display(dirname(__FILE__).'/Views/installed.php'));
+        $response->body()->set($response->view()->display(dirname(__FILE__).'/views/installed.php'));
         
         # Set the status
         $response->status()->set(200);

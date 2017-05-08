@@ -5,23 +5,23 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Query;
+namespace kanso\cms\query;
 
-use Kanso\Framework\Http\Request\Request;
-use Kanso\Framework\Http\Response\Response;
-use Kanso\Framework\Database\Query\Builder;
-use Kanso\Framework\Config\Config;
-use Kanso\Framework\Utility\Str;
-use Kanso\Framework\Utility\Arr;
-use Kanso\Framework\Utility\Markdown;
-use Kanso\CMS\Query\QueryParser;
-use Kanso\CMS\Auth\Gatekeeper;
-use Kanso\CMS\Wrappers\Managers\CategoryManager;
-use Kanso\CMS\Wrappers\Managers\TagManager;
-use Kanso\CMS\Wrappers\Managers\UserManager;
-use Kanso\CMS\Wrappers\Managers\CommentManager;
-use Kanso\CMS\Wrappers\Managers\PostManager;
-use Kanso\CMS\Wrappers\Managers\MediaManager;
+use kanso\framework\http\request\Request;
+use kanso\framework\http\response\Response;
+use kanso\framework\database\query\Builder;
+use kanso\framework\config\Config;
+use kanso\framework\utility\Str;
+use kanso\framework\utility\Arr;
+use kanso\framework\utility\Markdown;
+use kanso\cms\query\QueryParser;
+use kanso\cms\auth\Gatekeeper;
+use kanso\cms\wrappers\managers\CategoryManager;
+use kanso\cms\wrappers\managers\TagManager;
+use kanso\cms\wrappers\managers\UserManager;
+use kanso\cms\wrappers\managers\CommentManager;
+use kanso\cms\wrappers\managers\PostManager;
+use kanso\cms\wrappers\managers\MediaManager;
 
 /**
  * CMS Query object
@@ -103,84 +103,84 @@ class Query
     /**
      * Category manager 
      * 
-     * @var \Kanso\CMS\Wrappers\Managers\CategoryManager
+     * @var \kanso\cms\wrappers\managers\CategoryManager
      */
     private $categoryManager;
 
     /**
      * Tag manager 
      * 
-     * @var \Kanso\CMS\Wrappers\Managers\TagManager
+     * @var \kanso\cms\wrappers\managers\TagManager
      */
     private $tagManager;
 
     /**
      * User manager 
      * 
-     * @var \Kanso\CMS\Wrappers\Managers\UserManager
+     * @var \kanso\cms\wrappers\managers\UserManager
      */
     private $userManager;
 
     /**
      * Comment manager 
      * 
-     * @var \Kanso\CMS\Wrappers\Managers\CommentManager
+     * @var \kanso\cms\wrappers\managers\CommentManager
      */
     private $commentManager;
 
     /**
      * Post manager 
      * 
-     * @var \Kanso\CMS\Wrappers\Managers\PostManager
+     * @var \kanso\cms\wrappers\managers\PostManager
      */
     private $postManager;
 
     /**
      * media manager 
      * 
-     * @var \Kanso\CMS\Wrappers\Managers\MediaManager
+     * @var \kanso\cms\wrappers\managers\MediaManager
      */
     private $mediaManager;
 
     /**
      * Request object
      *
-     * @var \Kanso\Framework\Http\Request\Request
+     * @var \kanso\framework\http\request\Request
      */
     private $request;
 
     /**
      * Response object
      *
-     * @var \Kanso\Framework\Http\Response\Response
+     * @var \kanso\framework\http\response\Response
      */
     private $response;
 
     /**
      * SQL query builder instance
      * 
-     * @var \Kanso\Framework\Database\Query\Builder
+     * @var \kanso\framework\database\query\Builder
      */ 
     private $SQL;
 
     /**
      * Config 
      * 
-     * @var \Kanso\Framework\Config\Config
+     * @var \kanso\framework\config\Config
      */
     private $config;
 
     /**
      * Config 
      * 
-     * @var \Kanso\CMS\Query\QueryParser
+     * @var \kanso\cms\query\QueryParser
      */
     private $queryParser;
 
     /**
      * Method cache 
      * 
-     * @var \Kanso\CMS\Query\Cache
+     * @var \kanso\cms\query\Cache
      */
     private $cache;
 
@@ -188,19 +188,19 @@ class Query
      * Constructor
      *
      * @access public
-     * @param  \Kanso\CMS\Auth\Gatekeeper                   $gatekeeper      CMS Gatekeeper
-     * @param  \Kanso\CMS\Wrappers\Managers\CategoryManager $categoryManager Category manager instance
-     * @param  \Kanso\CMS\Wrappers\Managers\TagManager      $tagManager      Tag manager instance
-     * @param  \Kanso\CMS\Wrappers\Managers\UserManager     $userManager     User manager instance
-     * @param  \Kanso\CMS\Wrappers\Managers\CommentManager  $commentManager  Comment manager instance
-     * @param  \Kanso\CMS\Wrappers\Managers\PostManager     $postManager     Post manager instance
-     * @param  \Kanso\CMS\Wrappers\Managers\MediaManager    $MediaManager    Media manager instance
-     * @param  \Kanso\Framework\Http\Request\Request        $request         Request object instance
-     * @param  \Kanso\Framework\Http\Response\Response      $response        Request object instance
-     * @param  \Kanso\Framework\Database\Query\Builder      $SQL             SQL query builder
-     * @param  \Kanso\Framework\Config\Config               $config          Framework configuration
-     * @param  \Kanso\CMS\Query\QueryParser                 $queryParser     Query parser
-     * @param  \Kanso\CMS\Query\Cache                       $cache           Method cache
+     * @param  \kanso\cms\auth\Gatekeeper                   $gatekeeper      CMS Gatekeeper
+     * @param  \kanso\cms\wrappers\managers\CategoryManager $categoryManager Category manager instance
+     * @param  \kanso\cms\wrappers\managers\TagManager      $tagManager      Tag manager instance
+     * @param  \kanso\cms\wrappers\managers\UserManager     $userManager     User manager instance
+     * @param  \kanso\cms\wrappers\managers\CommentManager  $commentManager  Comment manager instance
+     * @param  \kanso\cms\wrappers\managers\PostManager     $postManager     Post manager instance
+     * @param  \kanso\cms\wrappers\managers\MediaManager    $MediaManager    Media manager instance
+     * @param  \kanso\framework\http\request\Request        $request         Request object instance
+     * @param  \kanso\framework\http\response\Response      $response        Request object instance
+     * @param  \kanso\framework\database\query\Builder      $SQL             SQL query builder
+     * @param  \kanso\framework\config\Config               $config          Framework configuration
+     * @param  \kanso\cms\query\QueryParser                 $queryParser     Query parser
+     * @param  \kanso\cms\query\Cache                       $cache           Method cache
      */
     public function __construct(Gatekeeper $gatekeeper, CategoryManager $categoryManager, TagManager $tagManager, UserManager $userManager, PostManager $postManager, MediaManager $mediaManager, CommentManager $commentManager, Request $request, Response $response, Builder $SQL, Config $config, QueryParser $queryParser, Cache $cache)
     {
@@ -240,7 +240,7 @@ class Query
      *
      * @access public
      * @param  string queryStr Query to filter posts
-     * @return \Kanso\CMS\Query
+     * @return \kanso\cms\Query
      */
     public function create(string $queryStr = ''): Query
     {
@@ -521,7 +521,7 @@ class Query
      * or just return a single post by id
      *
      * @param   integer     $post_id      (optional) (default NULL)
-     * @return  Kanso\Articles\Article|FALSE
+     * @return  kanso\articles\Article|FALSE
      */
     public function the_post($post_id = null)
     {        
@@ -971,7 +971,7 @@ class Query
      * Gets an attachment object for the current post or a post by id thumbnail
      *
      * @param   integer     $post_id     (optional) (Default NULL)
-     * @return  \Kanso\Media\Attachment|FALSE
+     * @return  \kanso\media\Attachment|FALSE
      */
     public function the_post_thumbnail($post_id = null) 
     {
@@ -1016,7 +1016,7 @@ class Query
     /**
      * Prints an HTML img tag from Kanso attachment object.
      *
-     * @param   \Kanso\Media\Attachment    $thumbnail    The attachment to print
+     * @param   \kanso\media\Attachment    $thumbnail    The attachment to print
      * @param   string                     $size         The post thumbnail size "small"|"medium"|"large"|"original" (optional) (Default 'original') 
      * @param   string                     $width        The img tag's width attribute  (optional) (Default '') 
      * @param   string                     $height       The img tag's height attribute (optional) (Default '') 
@@ -1044,7 +1044,7 @@ class Query
      * Get the author of the current post or a post by id
      *
      * @param   integer     $post_id     (optional) (Default NULL)
-     * @return  \Kanso\Auth\Adapters\User|FALSE
+     * @return  \kanso\auth\adapters\User|FALSE
      */
     public function the_author($post_id = null) 
     {
@@ -1137,7 +1137,7 @@ class Query
      * Get the authors thumbnail attachment of the current post or an author by id
      *
      * @param   integer     $author_id   (optional) (default NULL)
-     * @return  \Kanso\Media\Attachment|FALSE
+     * @return  \kanso\media\Attachment|FALSE
      */
     public function the_author_thumbnail($author_id = null)
     {        
@@ -1489,7 +1489,7 @@ class Query
     }
 
     /**
-     * Ge an array of \Kanso\Articles\Article objects by author id
+     * Ge an array of \kanso\articles\Article objects by author id
      *
      * @param   integer      $author_id    The author id
      * @param   boolean      $published    Get only published articles (optional) (Default TRUE)
@@ -1513,7 +1513,7 @@ class Query
     }
 
     /**
-     * Ge an array of \Kanso\Articles\Article objects by category id
+     * Ge an array of \kanso\articles\Article objects by category id
      *
      * @param   integer      $category_id    The category id
      * @param   boolean      $published      Get only published articles (optional) (Default TRUE)
@@ -1537,7 +1537,7 @@ class Query
     }
 
     /**
-     * Ge an array of \Kanso\Articles\Article objects by tag id
+     * Ge an array of \kanso\articles\Article objects by tag id
      *
      * @param   integer      $tag_id       The tag id
      * @param   boolean      $published    Get only published articles (optional) (Default TRUE)
@@ -2097,7 +2097,7 @@ class Query
      * Iterate to the next post
      *
      * @param   NULL
-     * @return  \Kanso\Articles\Article|NULL
+     * @return  \kanso\articles\Article|NULL
      */
     public function _next()
     {
@@ -2119,7 +2119,7 @@ class Query
      * Iterate to the previous post
      *
      * @param   NULL
-     * @return  \Kanso\Articles\Article|NULL
+     * @return  \kanso\articles\Article|NULL
      */
     public function _previous()
     {
@@ -2478,7 +2478,7 @@ class Query
      * Get the currently logged in Kanso user (if any)
      *
      * @param   NULL
-     * @return \Kanso\Auth\Adapters\User|FALSE
+     * @return \kanso\auth\adapters\User|FALSE
      */
     public function user() 
     {

@@ -29,7 +29,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-namespace Kanso\Framework\IoC;
+namespace kanso\framework\ioc;
 
 use Closure;
 use ArrayIterator;
@@ -55,7 +55,7 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
      *
      * Used to transform data key into the necessary
      * key format for this set. Used in subclasses
-     * like \Kanso\Framework\Http\Headers.
+     * like \kanso\framework\http\Headers.
      *
      * @param  string $key The data key
      * @return mixed       The transformed/normalized data key

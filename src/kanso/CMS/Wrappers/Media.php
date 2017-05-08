@@ -5,11 +5,11 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Wrappers;
+namespace kanso\cms\wrappers;
 
-use Kanso\CMS\Wrappers\Wrapper;
-use Kanso\Framework\Database\Query\Builder;
-use Kanso\Framework\Utility\Str;
+use kanso\cms\wrappers\Wrapper;
+use kanso\framework\database\query\Builder;
+use kanso\framework\utility\Str;
 
 /**
  * Media utility wrapper
@@ -29,7 +29,7 @@ class Media extends Wrapper
      * Override inherited constructor
      * 
      * @access public
-     * @param  \Kanso\Framework\Database\Query\Builder $SQL            SQL query builder
+     * @param  \kanso\framework\database\query\Builder $SQL            SQL query builder
      * @param  array                                   $data           Array row from Database
      * @param  array                                   $thumbnailSizes Assoc array of thumbnail sizes
      */

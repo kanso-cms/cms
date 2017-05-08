@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanso\Framework\Http\Response;
+namespace kanso\framework\http\response;
 
 
 class Status {

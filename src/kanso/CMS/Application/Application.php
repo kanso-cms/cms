@@ -5,15 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Application;
+namespace kanso\cms\application;
 
 use Closure;
-use Kanso\Framework\Utility\Str;
-use Kanso\Framework\IoC\Container;
-use Kanso\Framework\Http\Request\Request;
-use Kanso\Framework\Http\Response\Response;
-use Kanso\CMS\Rss\Feed;
-use Kanso\CMS\SiteMap\Sitemap;
+use kanso\framework\utility\Str;
+use kanso\framework\ioc\Container;
+use kanso\framework\http\request\Request;
+use kanso\framework\http\response\Response;
+use kanso\cms\rss\Feed;
+use kanso\cms\sitemap\Sitemap;
 
 /**
  * CMS main class
@@ -25,14 +25,14 @@ class Application
 	/**
 	 * IoC container instance
 	 *
-	 * @var \Kanso\Framework\Application\Container
+	 * @var \kanso\framework\application\Container
 	 */
 	private $container;
 
 	/**
 	 * Instance of self
 	 *
-	 * @var \Kanso\Framework\Application\Container
+	 * @var \kanso\framework\application\Container
 	 */
 	private static $instance;
 
@@ -40,7 +40,7 @@ class Application
      * Constructor
      *
      * @access private
-     * @param  \Kanso\Framework\Application\Container $container IoC container
+     * @param  \kanso\framework\application\Container $container IoC container
      */
     private function __construct(Container $container)
     {
@@ -51,8 +51,8 @@ class Application
 	 * Starts and/or returns the instance of the application
 	 *
 	 * @access public
-	 * @param  \Kanso\Framework\Application\Container $container IoC container (optional) (default null)
-	 * @return \Kanso\CMS\CMS
+	 * @param  \kanso\framework\application\Container $container IoC container (optional) (default null)
+	 * @return \kanso\cms\CMS
 	 */
 	public static function instance($container = null): Application
 	{
@@ -100,9 +100,10 @@ class Application
      */
     private function registerViewIncludes()
     {
-    	$this->container->View->template($this->container->Config->get('cms.themes_path').'/'.$this->container->Config->get('cms.theme_name').'/functions.php');
-
-    	$this->container->View->template(KANSO_DIR.'/CMS/Query/Includes.php');
+    	$this->container->View->includes([
+    		$this->container->Config->get('cms.themes_path').'/'.$this->container->Config->get('cms.theme_name').'/functions.php',
+    		KANSO_DIR.'/CMS/Query/Includes.php'
+    	]);
     }
 
     /**
@@ -129,7 +130,7 @@ class Application
 	private function notFoundHandling()
 	{
 		# 404 get displayed the theme 404 template
-		$this->container->ErrorHandler->handle('\Kanso\Framework\Http\Response\Exceptions\NotFoundException', function($exception)
+		$this->container->ErrorHandler->handle('\kanso\framework\http\response\exceptions\NotFoundException', function($exception)
 		{
 			# Only show the template if it exists, not ajax request and not displaying errors
 			# Otherwise we fallback to applications default error handling
@@ -156,8 +157,8 @@ class Application
      * Apply route to filter posts and load theme templates
      *
      * @access public
-     * @param  \Kanso\Framework\Http\Request\Request   $request  Framework Request instance
-     * @param  \Kanso\Framework\Http\Response\Response $response Framework Response instance
+     * @param  \kanso\framework\http\request\Request   $request  Framework Request instance
+     * @param  \kanso\framework\http\response\Response $response Framework Response instance
      * @param  \Closure                                $next     Next middleware layer
      * @param  string                                  $pageType The page type being loaded
      */
@@ -185,8 +186,8 @@ class Application
      * Load an RSS feed
      *
      * @access public
-     * @param  \Kanso\Framework\Http\Request\Request   $request  Framework Request instance
-     * @param  \Kanso\Framework\Http\Response\Response $response Framework Response instance
+     * @param  \kanso\framework\http\request\Request   $request  Framework Request instance
+     * @param  \kanso\framework\http\response\Response $response Framework Response instance
      * @param  \Closure                                $next     Next middleware layer
      * @param  string                                  $pageType The page type being loaded
      */
@@ -222,8 +223,8 @@ class Application
      * Load and render the XML sitemap
      *
      * @access public
-     * @param  \Kanso\Framework\Http\Request\Request   $request  Framework Request instance
-     * @param  \Kanso\Framework\Http\Response\Response $response Framework Response instance
+     * @param  \kanso\framework\http\request\Request   $request  Framework Request instance
+     * @param  \kanso\framework\http\response\Response $response Framework Response instance
      * @param  \Closure                                $next     Next middleware layer
      */
 	public static function loadSiteMap(Request $request, Response $response, Closure $next)

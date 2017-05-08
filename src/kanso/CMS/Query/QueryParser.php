@@ -1,15 +1,15 @@
 <?php
 
-namespace Kanso\CMS\Query;
+namespace kanso\cms\query;
 
 use InvalidArgumentException;
-use Kanso\Framework\Database\Query\Builder;
-use Kanso\CMS\Wrappers\Providers\PostProvider;
+use kanso\framework\database\query\Builder;
+use kanso\cms\wrappers\providers\PostProvider;
 
 /**
  * Query Parser
  *
- * This class is used by \Kanso\Query\Query to parse a string
+ * This class is used by \kanso\query\Query to parse a string
  * query on the the database and return the results
  *
  */
@@ -18,14 +18,14 @@ class QueryParser
     /**
      * SQL query builder instance
      * 
-     * @var \Kanso\Framework\Database\Query\Builder
+     * @var \kanso\framework\database\query\Builder
      */ 
     private $SQL;
 
     /**
      * Post provider
      * 
-     * @var \Kanso\CMS\Wrappers\Providers\PostProvider
+     * @var \kanso\cms\wrappers\providers\PostProvider
      */ 
     private $postProvider;
 
@@ -101,8 +101,8 @@ class QueryParser
      * Constructor
      *
      * @access public
-     * @param  \Kanso\Framework\Database\Query\Builder    $SQL          SQL query builder
-     * @param  \Kanso\CMS\Wrappers\Providers\PostProvider $postProvider Post provider instance
+     * @param  \kanso\framework\database\query\Builder    $SQL          SQL query builder
+     * @param  \kanso\cms\wrappers\providers\PostProvider $postProvider Post provider instance
      */
     public function __construct(Builder $SQL, postProvider $postProvider)
     {

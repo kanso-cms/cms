@@ -5,9 +5,9 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Cache\Stores;
+namespace kanso\framework\cache\stores;
 
-use Kanso\Framework\Cache\Stores\StoreInterface;
+use kanso\framework\cache\stores\StoreInterface;
 
 /**
  * Cache file storage

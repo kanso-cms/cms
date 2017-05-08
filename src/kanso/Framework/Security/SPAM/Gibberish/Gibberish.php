@@ -1,6 +1,6 @@
 <?php
 
-namespace Kanso\Framework\Security\SPAM\Gibberish;
+namespace kanso\framework\security\spam\gibberish;
 /**
  *
  * A small program to determine if text content contains gibberish. 

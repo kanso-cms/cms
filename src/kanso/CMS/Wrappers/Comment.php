@@ -5,9 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Wrappers;
+namespace kanso\cms\wrappers;
 
-use Kanso\CMS\Wrappers\Wrapper;
+use kanso\cms\wrappers\Wrapper;
 
 /**
  * Comment utility wrapper
@@ -78,7 +78,7 @@ class Comment extends Wrapper
      * Recursively delete comment tree
      *
      * @access private
-     * @param  Kanso\CMS\Wrappers\Comment $comment Comment
+     * @param  kanso\cms\wrappers\Comment $comment Comment
      * @return bool
      */
     private function deleteCommentChildren(Comment $comment): bool
@@ -97,7 +97,7 @@ class Comment extends Wrapper
      * Recursively build comment tree
      *
      * @access private
-     * @param  Kanso\CMS\Wrappers\Comment $comment Comment
+     * @param  kanso\cms\wrappers\Comment $comment Comment
      * @return array
      */
     private function commentChildren(Comment $comment): array

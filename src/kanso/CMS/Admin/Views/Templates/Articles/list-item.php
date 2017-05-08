@@ -1,5 +1,5 @@
 <?php
-	use Kanso\Framework\Utility\Humanizer;
+	use kanso\framework\utility\Humanizer;
 ?>
 <div class="row list-row">
 	<div class="media">

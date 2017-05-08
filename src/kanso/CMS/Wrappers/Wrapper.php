@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Wrappers;
+namespace kanso\cms\wrappers;
 
-use Kanso\Framework\Database\Query\Builder;
-use Kanso\Framework\Common\MagicArrayAccessTrait;
+use kanso\framework\database\query\Builder;
+use kanso\framework\common\MagicArrayAccessTrait;
 
 /**
  * Database wrapper base class
@@ -22,7 +22,7 @@ abstract class Wrapper
     /**
      * SQL query builder
      * 
-     * @var \Kanso\Framework\Database\Query\Builder
+     * @var \kanso\framework\database\query\Builder
      */ 
     protected $SQL;
 
@@ -37,7 +37,7 @@ abstract class Wrapper
      * Constructor
      * 
      * @access public
-     * @param \Kanso\Framework\Database\Query\Builder $SQL  SQL query builder
+     * @param \kanso\framework\database\query\Builder $SQL  SQL query builder
      * @param  array                                  $data Array row from Database
      */
     public function __construct(Builder $SQL, array $data = [])

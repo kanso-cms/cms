@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Database\Query;
+namespace kanso\framework\database\query;
 
-use Kanso\Framework\Database\Connection\Connection;
-use Kanso\Framework\Database\Query\Query;
+use kanso\framework\database\connection\Connection;
+use kanso\framework\database\query\Query;
 
 /**
  * Database SQL builder
@@ -20,14 +20,14 @@ class Builder
     /**
      * Connection
      *
-     * @var \Kanso\Framework\Database\Connection\Connection;
+     * @var \kanso\framework\database\connection\Connection;
      */ 
 	private $connection;
 
     /**
      * Query
      * 
-     * @var \Kanso\Framework\Database\Query\Query
+     * @var \kanso\framework\database\query\Query
      */ 
 	private $Query;
 	
@@ -35,7 +35,7 @@ class Builder
      * Constructor
      *
      * @access public
-     * @param  \Kanso\Framework\Database\Connection\Connection $connection Database connection
+     * @param  \kanso\framework\database\connection\Connection $connection Database connection
      */
 	public function __construct(Connection $connection)
 	{
@@ -50,7 +50,7 @@ class Builder
      * Get the database connection
      *
      * @access public
-     * @return \Kanso\Framework\Database\Connection\Connection
+     * @return \kanso\framework\database\connection\Connection
      */
     public function connection(): Connection
     {
@@ -67,7 +67,7 @@ class Builder
      * @access public
      * @param  string $tableName Table name to create
      * @param  array  $params    Table parameters
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function CREATE_TABLE(string $tableName, array $params): Builder
     {
@@ -105,7 +105,7 @@ class Builder
      *
      * @access public
      * @param  string $tableName Table name to use
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function DROP_TABLE(string $tableName): Builder
     {
@@ -123,7 +123,7 @@ class Builder
      *
      * @access public
      * @param  string $tableName Table name to use
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function TRUNCATE_TABLE(string $tableName): Builder
     {
@@ -141,7 +141,7 @@ class Builder
      *
      * @access public
      * @param  string    $tableName
-     * @return \Kanso\Framework\Database\Query\Alter
+     * @return \kanso\framework\database\query\Alter
      */
     public function ALTER_TABLE(string $tableName): Alter
     {
@@ -161,7 +161,7 @@ class Builder
      *
      * @access public
      * @param  string $tableName The table name to use
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function FROM(string $tableName): Builder
     {
@@ -179,7 +179,7 @@ class Builder
      *
      * @access public
      * @param  string $tableName The table name to use
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function UPDATE(string $tableName): Builder
     {
@@ -195,7 +195,7 @@ class Builder
      *
      * @access public
      * @param  string $tableName The table name to use
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function INSERT_INTO(string $tableName): Builder
     {
@@ -213,7 +213,7 @@ class Builder
      *
      * @access public
      * @param  array $values The values to apply
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function VALUES(array $values): Builder
     {
@@ -227,7 +227,7 @@ class Builder
      *
      * @access public
      * @param  array $values The values to apply
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function SET(array $values): Builder
     {
@@ -241,7 +241,7 @@ class Builder
      *
      * @access public
      * @param  string $table The table name to use
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function DELETE_FROM(string $tableName): Builder
     {
@@ -274,7 +274,7 @@ class Builder
      *
      * @access public
      * @param  string $columnNames Column names to select
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function SELECT(string $columnNames): Builder
     {
@@ -292,7 +292,7 @@ class Builder
      * @param  string $column Column name
      * @param  string $op     Logical operator
      * @param  mixed  $value  Value
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function WHERE(string $column, string $op, $value): Builder
     {
@@ -310,7 +310,7 @@ class Builder
      * @param  string $column Column name
      * @param  string $op     Logical operator
      * @param  mixed  $value  Value
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function AND_WHERE(string $column, string $op, $value): Builder
     {
@@ -328,7 +328,7 @@ class Builder
      * @param  string $column Column name
      * @param  string $op     Logical operator
      * @param  mixed  $value  Value
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function OR_WHERE(string $column, string $op, $value): Builder
     {
@@ -345,7 +345,7 @@ class Builder
      * @access public
      * @param  string $tableName The table name to join
      * @param  string $query     Column comparison e.g table1.id = table2.column_name
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function JOIN_ON(string $tableName, string $query): Builder
     {
@@ -364,7 +364,7 @@ class Builder
      * @access public
      * @param  string $tableName The table name to join
      * @param  string $query     Column comparison e.g table1.id = table2.column_name
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function INNER_JOIN_ON(string $tableName, string $query): Builder
     {
@@ -383,7 +383,7 @@ class Builder
      * @access public
      * @param  string $tableName The table name to join
      * @param  string $query     Column comparison e.g table1.id = table2.column_name
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function LEFT_JOIN_ON(string $tableName, string $query): Builder
     {
@@ -402,7 +402,7 @@ class Builder
      * @access public
      * @param  string $tableName The table name to join
      * @param  string $query     Column comparison e.g table1.id = table2.column_name
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function RIGHT_JOIN_ON(string $tableName, string $query): Builder
     {
@@ -421,7 +421,7 @@ class Builder
      * @access public
      * @param  string $tableName The table name to join
      * @param  string $query     Column comparison e.g table1.id = table2.column_name
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function OUTER_JOIN_ON(string $table, string $query): Builder
     {
@@ -440,7 +440,7 @@ class Builder
      * @access public
      * @param  string $key        The column name to use
      * @param  string $direction 'DESC'|'ASC' (optional) (default 'DESC')
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function ORDER_BY(string $key, string $direction = 'DESC'): Builder
     {
@@ -456,7 +456,7 @@ class Builder
      *
      * @access public
      * @param  string $key The column name to group on
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function GROUP_BY(string $key): Builder
     {
@@ -473,7 +473,7 @@ class Builder
      * @access public
      * @param  string $keys Concat keys
      * @param  string $as   As value
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function GROUP_CONCAT(string $keys, string $as): Builder
     {
@@ -490,7 +490,7 @@ class Builder
      * @access public
      * @param  int $offset Offset to start at
      * @param  int $limit  Limit results (optional) (default null)
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     public function LIMIT(int $offset, int $limit = null): Builder
     {

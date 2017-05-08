@@ -5,13 +5,13 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Onion; 
+namespace kanso\framework\onion; 
 
 use RuntimeException;
 use Closure;
-use Kanso\Framework\Http\Request\Request;
-use Kanso\Framework\Http\Response\Response;
-use Kanso\Framework\Onion\Middleware;
+use kanso\framework\http\request\Request;
+use kanso\framework\http\response\Response;
+use kanso\framework\onion\Middleware;
 
 /**
  * Array access trait.
@@ -37,14 +37,14 @@ class Onion
     /**
      * Request object
      *
-     * @var \Kanso\Framework\Http\Request\Request
+     * @var \kanso\framework\http\request\Request
      */
     private $request;
 
     /**
      * Response object
      *
-     * @var \Kanso\Framework\Http\Response\Response
+     * @var \kanso\framework\http\response\Response
      */
     private $response;
 
@@ -52,8 +52,8 @@ class Onion
      * Constructor
      *
      * @access public
-     * @param  \Kanso\Framework\Http\Request\Request   $request Request object
-     * @param  \Kanso\Framework\Http\Response\Response $response Response object
+     * @param  \kanso\framework\http\request\Request   $request Request object
+     * @param  \kanso\framework\http\response\Response $response Response object
      */
     public function __construct(Request $request, Response $response)
     {        

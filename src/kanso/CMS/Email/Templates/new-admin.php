@@ -9,7 +9,7 @@
 <table>
 <tr>
 	<td>
-    	<p><?php echo \Kanso\Kanso::instance()->Email->button($loginURL, 'Login');?></p>
+    	<p><?php echo \kanso\Kanso::instance()->Email->button($loginURL, 'Login');?></p>
 	</td>
 </tr>
 </table>

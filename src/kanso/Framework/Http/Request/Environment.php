@@ -5,9 +5,9 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Http\Request;
+namespace kanso\framework\http\request;
 
-use Kanso\Framework\Common\MagicArrayAccessTrait;
+use kanso\framework\common\MagicArrayAccessTrait;
 
 /**
  * Environment aware class

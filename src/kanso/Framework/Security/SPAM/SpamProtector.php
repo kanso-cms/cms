@@ -5,11 +5,11 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Security\SPAM;
+namespace kanso\framework\security\spam;
 
-use Kanso\Framework\Security\SPAM\Gibberish\Gibberish;
-use Kanso\Framework\Config\Config;
-use Kanso\Framework\Utility\Str;
+use kanso\framework\security\spam\gibberish\Gibberish;
+use kanso\framework\config\Config;
+use kanso\framework\utility\Str;
 
 /**
  * SPAM manager
@@ -21,14 +21,14 @@ class SpamProtector
     /**
      * Gibberish detector
      *
-     * @var \Kanso\Framework\Security\SPAM\Gibberish
+     * @var \kanso\framework\security\spam\Gibberish
      */
     private $gibberish;
 
     /**
      * Config loader
      *
-     * @var \Kanso\Framework\Config\Config
+     * @var \kanso\framework\config\Config
      */
     private $config;
 
@@ -36,8 +36,8 @@ class SpamProtector
      * Constructor
      *
      * @access public
-     * @param \Kanso\Framework\Security\SPAM\Gibberish $gibberish Gibberish detector
-     * @param \Kanso\Framework\Config\Config           $config    Config loader
+     * @param \kanso\framework\security\spam\Gibberish $gibberish Gibberish detector
+     * @param \kanso\framework\config\Config           $config    Config loader
      */
     public function __construct(Gibberish $gibberish, Config $config)
     {

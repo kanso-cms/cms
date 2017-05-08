@@ -5,7 +5,7 @@
  * @license   http://opensource.org/licenses/bsd-license.php BSD
  */
 
-namespace Kanso\Framework\Autoload;
+namespace kanso\framework\autoload;
 
 /**
  * An SPL autoloader adhering to PSR-4.

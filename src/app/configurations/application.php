@@ -82,13 +82,13 @@ return
 		 */
 		'framework' =>
 		[
-			'\Kanso\Framework\Application\Services\SecurityService',
-			'\Kanso\Framework\Application\Services\CacheService',
-			'\Kanso\Framework\Application\Services\HttpService',
-			'\Kanso\Framework\Application\Services\OnionService',
-			'\Kanso\Framework\Application\Services\DatabaseService',
-			'\Kanso\Framework\Application\Services\ViewService',
-			'\Kanso\Framework\Application\Services\ErrorHandlerService',
+			'\kanso\framework\application\services\SecurityService',
+			'\kanso\framework\application\services\CacheService',
+			'\kanso\framework\application\services\HttpService',
+			'\kanso\framework\application\services\OnionService',
+			'\kanso\framework\application\services\DatabaseService',
+			'\kanso\framework\application\services\MVCService',
+			'\kanso\framework\application\services\ErrorHandlerService',
 		],
 
 		/**
@@ -97,14 +97,14 @@ return
 		 */
 		'cms' =>
 		[
-			'\Kanso\CMS\Application\Services\WrapperService',
-			'\Kanso\CMS\Application\Services\GatekeeperService',
-			'\Kanso\CMS\Application\Services\InstallerService',
-			'\Kanso\CMS\Application\Services\EmailService',
-			'\Kanso\CMS\Application\Services\QueryService',
-			'\Kanso\CMS\Application\Services\EventService',
-			'\Kanso\CMS\Application\Services\AdminService',
-			'\Kanso\CMS\Application\Services\BootService',
+			'\kanso\cms\application\services\WrapperService',
+			'\kanso\cms\application\services\GatekeeperService',
+			'\kanso\cms\application\services\InstallerService',
+			'\kanso\cms\application\services\EmailService',
+			'\kanso\cms\application\services\QueryService',
+			'\kanso\cms\application\services\EventService',
+			'\kanso\cms\application\services\AdminService',
+			'\kanso\cms\application\services\BootService',
 		],
 
 		/**

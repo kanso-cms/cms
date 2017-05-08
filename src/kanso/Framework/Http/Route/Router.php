@@ -5,12 +5,12 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Http\Route;
+namespace kanso\framework\http\route;
 
-use Kanso\Framework\Http\Request\Request;
-use Kanso\Framework\Onion\Onion;
-use Kanso\Framework\Http\Response\Exceptions\MethodNotAllowedException;
-use Kanso\Framework\Http\Response\Exceptions\NotFoundException;
+use kanso\framework\http\request\Request;
+use kanso\framework\onion\Onion;
+use kanso\framework\http\response\exceptions\MethodNotAllowedException;
+use kanso\framework\http\response\exceptions\NotFoundException;
 
 /**
  * Application router
@@ -50,14 +50,14 @@ class Router
     /**
      * Kanso Onion instance
      *
-     * @var \Kanso\Framework\Onion\Onion
+     * @var \kanso\framework\onion\Onion
      */
     private $onion;
 
     /**
      * Kanso Request instance
      *
-     * @var \Kanso\Framework\Http\Request\Request
+     * @var \kanso\framework\http\request\Request
      */
     private $request;
 
@@ -85,8 +85,8 @@ class Router
      * Constructor
      *
      * @access public
-     * @param  \Kanso\Framework\Http\Request\Request $request Request instance
-     * @param  \Kanso\Framework\Onion\Onion          $onion   Onion instance
+     * @param  \kanso\framework\http\request\Request $request Request instance
+     * @param  \kanso\framework\onion\Onion          $onion   Onion instance
      */
     public function __construct(Request $request, Onion $onion)
     {
@@ -102,7 +102,7 @@ class Router
      * @param  string $uri      URI to apply
      * @param  mixed  $callback Callback to apply
      * @param  mixed  $args     Args to add (optional) (default null)
-     * @return \Kanso\Framework\Http\Route\Router
+     * @return \kanso\framework\http\route\Router
      */
     public function post(string $uri, $callback, $args = null): Router
     {
@@ -116,7 +116,7 @@ class Router
      * @param  string $uri      URI to apply
      * @param  mixed  $callback Callback to apply
      * @param  mixed  $args     Args to add (optional) (default null)
-     * @return \Kanso\Framework\Http\Route\Router
+     * @return \kanso\framework\http\route\Router
      */
     public function get(string $uri, $callback, $args = null): Router
     {
@@ -130,7 +130,7 @@ class Router
      * @param  string $uri      URI to apply
      * @param  mixed  $callback Callback to apply
      * @param  mixed  $args     Args to add (optional) (default null)
-     * @return \Kanso\Framework\Http\Route\Router
+     * @return \kanso\framework\http\route\Router
      */
     public function head(string $uri, $callback, $args = null): Router
     {
@@ -144,7 +144,7 @@ class Router
      * @param  string $uri      URI to apply
      * @param  mixed  $callback Callback to apply
      * @param  mixed  $args     Args to add (optional) (default null)
-     * @return \Kanso\Framework\Http\Route\Router
+     * @return \kanso\framework\http\route\Router
      */
     public function put(string $uri, $callback, $args = null): Router
     {
@@ -158,7 +158,7 @@ class Router
      * @param  string $uri      URI to apply
      * @param  mixed  $callback Callback to apply
      * @param  mixed  $args     Args to add (optional) (default null)
-     * @return \Kanso\Framework\Http\Route\Router
+     * @return \kanso\framework\http\route\Router
      */
     public function patch(string $uri, $callback, $args = null): Router
     {
@@ -172,7 +172,7 @@ class Router
      * @param  string $uri      URI to apply
      * @param  mixed  $callback Callback to apply
      * @param  mixed  $args     Args to add (optional) (default null)
-     * @return \Kanso\Framework\Http\Route\Router
+     * @return \kanso\framework\http\route\Router
      */
     public function delete(string $uri, $callback, $args = null): Router
     {
@@ -186,7 +186,7 @@ class Router
      * @param  string $uri      URI to apply
      * @param  mixed  $callback Callback to apply
      * @param  mixed  $args     Args to add (optional) (default null)
-     * @return \Kanso\Framework\Http\Route\Router
+     * @return \kanso\framework\http\route\Router
      */
     public function options(string $uri, $callback, $args = null): Router
     {
@@ -201,7 +201,7 @@ class Router
      * @param  string $uri      URI to apply
      * @param  mixed  $callback Callback to apply
      * @param  mixed  $args     Args to add (optional) (default null)
-     * @return \Kanso\Framework\Http\Route\Router
+     * @return \kanso\framework\http\route\Router
      */
     private function map(string $method, string $uri, $callback, $args = null): Router 
     {

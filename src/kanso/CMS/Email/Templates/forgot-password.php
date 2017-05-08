@@ -7,7 +7,7 @@
 <table>
     <tr>
         <td style="padding: 20px;">
-            <p><?php echo \Kanso\Kanso::instance()->Email->button($resetUrl, 'Reset Your Password');?></p>
+            <p><?php echo \kanso\Kanso::instance()->Email->button($resetUrl, 'Reset Your Password');?></p>
         </td>
     </tr>
 </table>

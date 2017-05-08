@@ -5,13 +5,13 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Admin\Models;
+namespace kanso\cms\admin\models;
 
-use Kanso\Kanso;
-use Kanso\Framework\Utility\Arr;
-use Kanso\Framework\Utility\Str;
-use Kanso\CMS\Admin\Models\Model;
-use Kanso\CMS\Wrappers\Managers\CommentManager;
+use kanso\Kanso;
+use kanso\framework\utility\Arr;
+use kanso\framework\utility\Str;
+use kanso\cms\admin\models\Model;
+use kanso\cms\wrappers\managers\CommentManager;
 
 /**
  * Comments page model
@@ -58,7 +58,7 @@ class Comments extends Model
      * Returns the tag manager
      *
      * @access private
-     * @return \Kanso\CMS\Wrappers\Managers\CommentManager
+     * @return \kanso\cms\wrappers\managers\CommentManager
      */
     private function commentManager(): CommentManager
     {

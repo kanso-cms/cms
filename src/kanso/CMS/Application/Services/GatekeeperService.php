@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Application\Services;
+namespace kanso\cms\application\services;
 
-use Kanso\Framework\Application\Services\Service;
-use Kanso\CMS\Auth\Gatekeeper;
+use kanso\framework\application\services\Service;
+use kanso\cms\auth\Gatekeeper;
 
 /**
  * CMS Gatekeeper

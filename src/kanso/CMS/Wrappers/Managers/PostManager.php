@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Wrappers\Managers;
+namespace kanso\cms\wrappers\managers;
 
-use Kanso\CMS\Wrappers\Managers\Manager;
-use Kanso\CMS\Wrappers\Providers\PostProvider;
+use kanso\cms\wrappers\managers\Manager;
+use kanso\cms\wrappers\providers\PostProvider;
 
 /**
  * Post manager

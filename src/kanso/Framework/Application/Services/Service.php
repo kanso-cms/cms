@@ -5,9 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Application\Services;
+namespace kanso\framework\application\services;
 
-use Kanso\Framework\IoC\Container;
+use kanso\framework\ioc\Container;
 
 /**
  * Service provider base class
@@ -19,7 +19,7 @@ abstract class Service
 	/**
 	 * IoC container instance
 	 *
-	 * @var \Kanso\Framework\IoC\Container
+	 * @var \kanso\framework\ioc\Container
 	 */
 	protected $container;
 
@@ -27,7 +27,7 @@ abstract class Service
 	 * Constructor
 	 *
 	 * @access public
-	 * @param  \Kanso\Framework\IoC\Container $container IoC container instance
+	 * @param  \kanso\framework\ioc\Container $container IoC container instance
 	 */
 	public function __construct(Container $container)
 	{

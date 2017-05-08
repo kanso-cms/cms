@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Config;
+namespace kanso\framework\config;
 
-use Kanso\Framework\Config\Loader;
-use Kanso\Framework\Utility\Arr;
+use kanso\framework\config\Loader;
+use kanso\framework\utility\Arr;
 
 /**
  * Kanso framework configuration manager
@@ -20,7 +20,7 @@ class Config
 	/**
 	 * File loader
 	 *
-	 * @var \Kanso\Framework\Config\Loader
+	 * @var \kanso\framework\config\Loader
 	 */
 	 protected $loader;
 
@@ -42,7 +42,7 @@ class Config
 	 * Constructor.
 	 *
 	 * @access public
-	 * @param \Kanso\Framework\Config\Loader $loader Config file reader
+	 * @param \kanso\framework\config\Loader $loader Config file reader
 	 */
 	public function __construct(Loader $loader, string $environment = null)
 	{
@@ -54,7 +54,7 @@ class Config
 	/**
 	 * Returns the config loader.
 	 *
-	 * @return \Kanso\Framework\Config\Loader
+	 * @return \kanso\framework\config\Loader
 	 */
 	public function getLoader(): Loader
 	{

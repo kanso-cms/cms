@@ -5,30 +5,28 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Application\Services;
+namespace kanso\framework\application\services;
 
-use Kanso\Framework\Application\Services\Service;
-use Kanso\Framework\Utility\Str;
-use Kanso\Framework\Http\{
-	Request\Environment,
-	Request\Headers as RequestHeaders,
-	Request\Request,
-	Response\Protocol,
-	Response\Format,
-	Response\Body,
-	Response\Status,
-	Response\Headers as ResponseHeaders,
-	Response\CDN,
-	Response\Cache,
-	Response\Response,
-	Route\Router,
-	Cookie\Cookie,
-	Cookie\Storage\NativeCookieStorage,
-	Session\Session,
-	Session\Store as SessionStore,
-	Session\Flash,
-	Session\Token
-};
+use kanso\framework\application\services\Service;
+use kanso\framework\utility\Str;
+use kanso\framework\http\request\Environment;
+use kanso\framework\http\request\Headers as RequestHeaders;
+use kanso\framework\http\request\Request;
+use kanso\framework\http\response\Protocol;
+use kanso\framework\http\response\Format;
+use kanso\framework\http\response\Body;
+use kanso\framework\http\response\Status;
+use kanso\framework\http\response\Headers as ResponseHeaders;
+use kanso\framework\http\response\CDN;
+use kanso\framework\http\response\Cache;
+use kanso\framework\http\response\Response;
+use kanso\framework\http\route\Router;
+use kanso\framework\http\cookie\Cookie;
+use kanso\framework\http\cookie\storage\NativeCookieStorage;
+use kanso\framework\http\session\Session;
+use kanso\framework\http\session\Store as SessionStore;
+use kanso\framework\http\session\Flash;
+use kanso\framework\http\session\Token;
 
 /**
  * HTTP services
@@ -106,7 +104,7 @@ class HttpService extends Service
      * @access private
      * @param  array   $storeConfig         Configuration for the storage
      * @param  array   $cookieConfiguration Configuration for cookie sending/reading
-     * @return \Kanso\Framework\Http\Cookie\Storage\NativeCookieStorage
+     * @return \kanso\framework\http\cookie\storage\NativeCookieStorage
      */
 	private function nativeCookieStore(array $storeConfig, array $cookieConfiguration): NativeCookieStorage
 	{
@@ -132,7 +130,7 @@ class HttpService extends Service
      * Get the HTTP Response cache
      *
      * @access private
-     * @return \Kanso\Framework\Http\Response\Cache
+     * @return \kanso\framework\http\response\Cache
      */
 	private function getCache(): Cache
 	{
@@ -145,7 +143,7 @@ class HttpService extends Service
      * Get the HTTP response CDN
      *
      * @access private
-     * @return \Kanso\Framework\Http\Response\CDN
+     * @return \kanso\framework\http\response\CDN
      */
 	private function getCDN(): CDN
 	{
@@ -156,7 +154,7 @@ class HttpService extends Service
      * Get the HTTP response protocol
      *
      * @access private
-     * @return \Kanso\Framework\Http\Response\Protocol
+     * @return \kanso\framework\http\response\Protocol
      */
 	private function getProtocol(): Protocol
 	{

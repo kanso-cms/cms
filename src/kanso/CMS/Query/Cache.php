@@ -5,9 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Query;
+namespace kanso\cms\query;
 
-use Kanso\Framework\Common\ArrayAccessTrait;
+use kanso\framework\common\ArrayAccessTrait;
 
 /**
  * Cache for query

@@ -5,15 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Exception\Handlers;
+namespace kanso\framework\exception\handlers;
 
 use Throwable;
-use Kanso\Framework\Exception\ExceptionLogicTrait;
-use Kanso\Framework\Http\Request\Request;
-use Kanso\Framework\http\Response\Response;
-use Kanso\Framework\View\View;
-use Kanso\Framework\Http\Exceptions\RequestException;
-use Kanso\Framework\Http\Exceptions\MethodNotAllowedException;
+use kanso\framework\exception\ExceptionLogicTrait;
+use kanso\framework\http\request\Request;
+use kanso\framework\http\response\Response;
+use kanso\framework\mvc\view\View;
+use kanso\framework\http\exceptions\RequestException;
+use kanso\framework\http\exceptions\MethodNotAllowedException;
 
 /**
  * Error web handler
@@ -27,21 +27,21 @@ class WebHandler
 	/**
 	 * Request instance.
 	 *
-	 * @var \Kanso\Framework\Http\Request
+	 * @var \kanso\framework\http\Request
 	 */
 	protected $request;
 
 	/**
 	 * Response instance.
 	 *
-	 * @var \Kanso\Framework\Http\Response
+	 * @var \kanso\framework\http\Response
 	 */
 	protected $response;
 
 	/**
 	 * View instance.
 	 *
-	 * @var \Kanso\Framework\Http\View
+	 * @var \kanso\framework\http\View
 	 */
 	protected $view;
 
@@ -49,10 +49,10 @@ class WebHandler
 	 * Constructor.
 	 *
 	 * @access public
-	 * @param \Throwable           $exception Throwable
-	 * @param \Kanso\Framework\Http\Request  $request   Request instance
-	 * @param \Kanso\Framework\Http\Response $response  Response instance
-	 * @param \Kanso\Framework\Http\View     $view      View instance
+	 * @param \Throwable          	 		  $exception Throwable
+	 * @param \kanso\framework\http\Request   $request   Request instance
+	 * @param \kanso\framework\http\Response  $response  Response instance
+	 * @param \kanso\framework\mvc\view\View  $view      View instance
 	 */
 	public function __construct(Throwable $exception, Request $request, Response $response, View $view)
 	{
@@ -115,7 +115,7 @@ class WebHandler
 		else
 		{
 			// Return detailed error view
-			return $this->view->display(dirname(__FILE__).'/Views/debug.php', $vars);
+			return $this->view->display(dirname(__FILE__).'/views/debug.php', $vars);
 		}
 	}
 
@@ -151,7 +151,7 @@ class WebHandler
 		}
 		else
 		{
-			$dir = dirname(__FILE__).'/Views';
+			$dir = dirname(__FILE__).'/views';
 
 			$view = $dir.'/500.php';
 

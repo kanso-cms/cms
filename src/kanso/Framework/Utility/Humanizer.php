@@ -5,9 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Utility;
+namespace kanso\framework\utility;
 
-use Kanso\Framework\Utility\Pluralize;
+use kanso\framework\utility\Pluralize;
 
 /**
  * Humanizer class

@@ -5,19 +5,19 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Http\Response;
+namespace kanso\framework\http\response;
 
-use Kanso\Framework\Http\Response\Format;
-use Kanso\Framework\Http\Response\Body;
-use Kanso\Framework\Http\Response\Status;
-use Kanso\Framework\Http\Response\Headers;
-use Kanso\Framework\Http\Response\Cache;
-use Kanso\Framework\Http\Cookie\Cookie;
-use Kanso\Framework\Http\Session\Session;
-use Kanso\Framework\Http\Response\Protocol;
-use Kanso\Framework\View\View;
-use Kanso\Framework\Http\Response\Exceptions\NotFoundException;
-use Kanso\Framework\Http\Response\Exceptions\Stop;
+use kanso\framework\http\response\Format;
+use kanso\framework\http\response\Body;
+use kanso\framework\http\response\Status;
+use kanso\framework\http\response\Headers;
+use kanso\framework\http\response\Cache;
+use kanso\framework\http\cookie\Cookie;
+use kanso\framework\http\session\Session;
+use kanso\framework\http\response\Protocol;
+use kanso\framework\mvc\view\View;
+use kanso\framework\http\response\exceptions\NotFoundException;
+use kanso\framework\http\response\exceptions\Stop;
 
 /**
  * HTTP Response manager
@@ -29,63 +29,63 @@ class Response
     /**
      * The HTTP protocol
      *
-     * @var \Kanso\Framework\Http\Response\Protocol
+     * @var \kanso\framework\http\response\Protocol
      */
     private $protocol;
 
     /**
      * The HTTP format
      *
-     * @var \Kanso\Framework\Http\Response\Format
+     * @var \kanso\framework\http\response\Format
      */
     private $format;
 
     /**
      * The HTTP headers
      *
-     * @var \Kanso\Framework\Http\Response\Headers
+     * @var \kanso\framework\http\response\Headers
      */
     private $headers;
 
     /**
      * Cookie manager
      *
-     * @var \Kanso\Framework\Http\Cookie\Cookie
+     * @var \kanso\framework\http\cookie\Cookie
      */
     private $cookie;
 
     /**
      * Response body
      *
-     * @var \Kanso\Framework\Http\Response\Body
+     * @var \kanso\framework\http\response\Body
      */
     private $body;
 
     /**
      * Response status
      *
-     * @var \Kanso\Framework\Http\Response\Status
+     * @var \kanso\framework\http\response\Status
      */
     private $status;
 
     /**
      * Response cache
      *
-     * @var \Kanso\Framework\Http\Response\Cache
+     * @var \kanso\framework\http\response\Cache
      */
     private $cache;
 
     /**
      * CDN manager
      *
-     * @var \Kanso\Framework\Http\Response\CDN
+     * @var \kanso\framework\http\response\CDN
      */
      private $CDN;
 
     /**
      * View renderer
      *
-     * @var \Kanso\Framework\View\View
+     * @var \kanso\framework\mvc\view\View
      */
      private $view;
 
@@ -100,15 +100,15 @@ class Response
      * Constructor
      *
      * @access public
-     * @param  \Kanso\Framework\Http\Response\Protocol $protocol 
-     * @param  \Kanso\Framework\Http\Response\Format   $format
-     * @param  \Kanso\Framework\Http\Response\Body     $body
-     * @param  \Kanso\Framework\Http\Response\Status   $status     
-     * @param  \Kanso\Framework\Http\Response\Headers  $headers
-     * @param  \Kanso\Framework\Http\Session\Session   $session
-     * @param  \Kanso\Framework\Http\Response\Cache    $cache
-     * @param  \Kanso\Framework\Http\Response\CDN      $CDN
-     * @param  \Kanso\Framework\View\View              $view
+     * @param  \kanso\framework\http\response\Protocol $protocol 
+     * @param  \kanso\framework\http\response\Format   $format
+     * @param  \kanso\framework\http\response\Body     $body
+     * @param  \kanso\framework\http\response\Status   $status     
+     * @param  \kanso\framework\http\response\Headers  $headers
+     * @param  \kanso\framework\http\session\Session   $session
+     * @param  \kanso\framework\http\response\Cache    $cache
+     * @param  \kanso\framework\http\response\CDN      $CDN
+     * @param  \kanso\framework\mvc\view\View          $view
      */
     public function __construct(Protocol $protocol, Format $format, Body $body, Status $status, Headers $headers, Cookie $cookie, Session $session, Cache $cache, CDN $CDN, View $view)
     {
@@ -141,7 +141,7 @@ class Response
      * Get the protocol object
      *
      * @access public
-     * @return \Kanso\Framework\Http\Response\Protocol
+     * @return \kanso\framework\http\response\Protocol
      */
     public function protocol()
     {
@@ -152,7 +152,7 @@ class Response
      * Get the body object
      *
      * @access public
-     * @return \Kanso\Framework\Http\Response\Body
+     * @return \kanso\framework\http\response\Body
      */
     public function body()
     {
@@ -163,7 +163,7 @@ class Response
      * Get the format object
      *
      * @access public
-     * @return \Kanso\Framework\Http\Response\Format
+     * @return \kanso\framework\http\response\Format
      */
     public function format()
     {
@@ -174,7 +174,7 @@ class Response
      * Get the status object
      *
      * @access public
-     * @return \Kanso\Framework\Http\Response\Status
+     * @return \kanso\framework\http\response\Status
      */
     public function status()
     {
@@ -185,7 +185,7 @@ class Response
      * Get the headers object
      *
      * @access public
-     * @return \Kanso\Framework\Http\Response\Headers
+     * @return \kanso\framework\http\response\Headers
      */
     public function headers()
     {
@@ -196,7 +196,7 @@ class Response
      * Get the cache object
      *
      * @access public
-     * @return \Kanso\Framework\Http\Response\Cache
+     * @return \kanso\framework\http\response\Cache
      */
     public function cache()
     {
@@ -207,7 +207,7 @@ class Response
      * Get the cookie manager
      *
      * @access public
-     * @return \Kanso\Framework\Http\Cookie\Cookie
+     * @return \kanso\framework\http\cookie\Cookie
      */
     public function cookie()
     {
@@ -218,7 +218,7 @@ class Response
      * Get the session manager
      *
      * @access public
-     * @return \Kanso\Framework\Http\Session\Session
+     * @return \kanso\framework\http\session\Session
      */
     public function session()
     {
@@ -229,7 +229,7 @@ class Response
      * Get the CDN object
      *
      * @access public
-     * @return \Kanso\Framework\Http\Response\Cache
+     * @return \kanso\framework\http\response\Cache
      */
     public function CDN()
     {
@@ -240,7 +240,7 @@ class Response
      * Get the view object
      *
      * @access public
-     * @return \Kanso\Framework\View\View
+     * @return \kanso\framework\mvc\view\View
      */
     public function view()
     {
@@ -329,7 +329,7 @@ class Response
      * @access public
      * @param  string $url    The absolute URL to redirect to
      * @param  int    $status The redirect status (optional) (default 302)
-     * @return \Kanso\Framework\Http\Response\Response
+     * @return \kanso\framework\http\response\Response
      */
     public function redirect(string $url, int $status = 302)
     {
@@ -350,7 +350,7 @@ class Response
      * Send a not found response
      *
      * @access public
-     * @return \Kanso\Framework\Http\Response\Response
+     * @return \kanso\framework\http\response\Response
      */
     public function notFound()
     {

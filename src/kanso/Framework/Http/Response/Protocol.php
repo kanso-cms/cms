@@ -5,7 +5,7 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Http\Response;
+namespace kanso\framework\http\response;
 
 /**
  * Response protocol

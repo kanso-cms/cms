@@ -5,9 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Admin\Controllers;
+namespace kanso\cms\admin\controllers;
 
-use Kanso\CMS\Admin\Controllers\Controller;
+use kanso\cms\admin\controllers\Controller;
 
 /**
  * Admin panel dashboard pages controller
@@ -23,39 +23,39 @@ class Dashboard extends Controller
 	{
 		if ($this->requestName === 'articles')
 		{
-			return '\Kanso\CMS\Admin\Models\Articles';
+			return '\kanso\cms\admin\models\Articles';
 		}
 		else if ($this->requestName === 'pages')
 		{
-			return '\Kanso\CMS\Admin\Models\Pages';
+			return '\kanso\cms\admin\models\Pages';
 		}
 		else if ($this->requestName === 'tags')
 		{
-			return '\Kanso\CMS\Admin\Models\Tags';
+			return '\kanso\cms\admin\models\Tags';
 		}
 		else if ($this->requestName === 'categories')
 		{
-			return '\Kanso\CMS\Admin\Models\Categories';
+			return '\kanso\cms\admin\models\Categories';
 		}
 		else if ($this->requestName === 'comments')
 		{
-			return '\Kanso\CMS\Admin\Models\Comments';
+			return '\kanso\cms\admin\models\Comments';
 		}
 		else if ($this->requestName === 'commentUsers')
 		{
-			return '\Kanso\CMS\Admin\Models\commentUsers';
+			return '\kanso\cms\admin\models\commentUsers';
 		}
 		else if ($this->requestName === 'mediaLibrary')
 		{
-			return '\Kanso\CMS\Admin\Models\MediaLibrary';
+			return '\kanso\cms\admin\models\MediaLibrary';
 		}
 		else if ($this->requestName === 'writer')
 		{
-			return '\Kanso\CMS\Admin\Models\Writer';
+			return '\kanso\cms\admin\models\Writer';
 		}
 		else if (in_array($this->requestName, ['settings', 'settingsAccount', 'settingsAuthor', 'settingsKanso', 'settingsUsers', 'settingsTools']))
 		{
-			return '\Kanso\CMS\Admin\Models\Settings';
+			return '\kanso\cms\admin\models\Settings';
 		}
 
 		return false;

@@ -5,10 +5,10 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Http\Response\Exceptions;
+namespace kanso\framework\http\response\exceptions;
 
 use Throwable;
-use Kanso\Framework\Http\Response\Exceptions\RequestException;
+use kanso\framework\http\response\exceptions\RequestException;
 
 /**
  * 405 Exception

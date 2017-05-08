@@ -5,12 +5,12 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Admin\Models;
+namespace kanso\cms\admin\models;
 
-use Kanso\Kanso;
-use Kanso\Framework\Utility\Arr;
-use Kanso\CMS\Admin\Models\Model;
-use Kanso\CMS\Wrappers\Managers\CategoryManager;
+use kanso\Kanso;
+use kanso\framework\utility\Arr;
+use kanso\cms\admin\models\Model;
+use kanso\cms\wrappers\managers\CategoryManager;
 
 /**
  * Categories page model
@@ -57,7 +57,7 @@ class Categories extends Model
      * Returns the tag manager
      *
      * @access private
-     * @return \Kanso\CMS\Wrappers\Managers\categoryManager
+     * @return \kanso\cms\wrappers\managers\categoryManager
      */
     private function categoryManager(): CategoryManager
     {

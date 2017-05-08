@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\utility;
+namespace kanso\framework\utility;
 
 use InvalidArgumentException;
 
@@ -143,7 +143,7 @@ class Image
      * @param  mixed  $image_type   PHP image type constant (optional) (default NULL)
      * @param  int    $quality      Quality of image to save (optional)
      * @param  int    $permissions  File permissions to save with (optional)
-     * @return \Kanso\Framework\utility\Image
+     * @return \kanso\framework\utility\Image
      */
     public function save(string $filename, int $image_type = null, int $quality = null, int $permissions = null)
     {
@@ -218,7 +218,7 @@ class Image
      * @access public
      * @param  int  $height        Height in px
      * @param  bool $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
-     * @return \Kanso\Framework\utility\Image
+     * @return \kanso\framework\utility\Image
      */
     public function resizeToHeight(int $height, bool $allow_enlarge = false)
     {
@@ -237,7 +237,7 @@ class Image
      * @access public
      * @param  int                  $width         Width in px
      * @param  bool                 $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
-     * @return \Kanso\Framework\utility\Image
+     * @return \kanso\framework\utility\Image
      */
     public function resizeToWidth(int $width, bool $allow_enlarge = false)
     {
@@ -255,7 +255,7 @@ class Image
      *
      * @param  int                  $scale         Width in px
      * @param  bool                 $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
-     * @return \Kanso\Framework\utility\Image
+     * @return \kanso\framework\utility\Image
      */
     public function scale(int $scale)
     {
@@ -274,7 +274,7 @@ class Image
      * @param  int                  $width         Width in px
      * @param  int                  $height        Height in px
      * @param  bool                 $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
-     * @return \Kanso\Framework\utility\Image
+     * @return \kanso\framework\utility\Image
      */
     public function resize(int $width, int $height, bool $allow_enlarge = false)
     {
@@ -307,7 +307,7 @@ class Image
      * @param  int                  $width         Width in px
      * @param  int                  $height        Height in px
      * @param  bool                 $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
-     * @return \Kanso\Framework\utility\Image
+     * @return \kanso\framework\utility\Image
      */
     public function crop(int $width, int $height, bool $allow_enlarge = false)
     {

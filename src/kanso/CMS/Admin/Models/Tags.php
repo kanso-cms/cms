@@ -5,12 +5,12 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Admin\Models;
+namespace kanso\cms\admin\models;
 
-use Kanso\Kanso;
-use Kanso\Framework\Utility\Arr;
-use Kanso\CMS\Admin\Models\Model;
-use Kanso\CMS\Wrappers\Managers\TagManager;
+use kanso\Kanso;
+use kanso\framework\utility\Arr;
+use kanso\cms\admin\models\Model;
+use kanso\cms\wrappers\managers\TagManager;
 
 /**
  * Tags page model
@@ -57,7 +57,7 @@ class Tags extends Model
      * Returns the tag manager
      *
      * @access private
-     * @return \Kanso\CMS\Wrappers\Managers\TagManager
+     * @return \kanso\cms\wrappers\managers\TagManager
      */
     private function tagManager(): TagManager
     {

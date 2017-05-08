@@ -5,9 +5,8 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Http\Response\Exceptions;
+namespace kanso\framework\http\response\exceptions;
 
-use Throwable;
 use ErrorException;
 
 /**

@@ -1,7 +1,7 @@
 <?php
 
-use \Kanso\Framework\Utility\Str;
-use \Kanso\Framework\Utility\Pluralize;
+use \kanso\framework\utility\Str;
+use \kanso\framework\utility\Pluralize;
 
 $userSlug  =  Str::slug($commenter['email']);
 $rep_text  = 'Average';

@@ -5,7 +5,7 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Http\Cookie\Storage;
+namespace kanso\framework\http\cookie\storage;
 
 /**
  * Cookie encrypt write / read decrypt 

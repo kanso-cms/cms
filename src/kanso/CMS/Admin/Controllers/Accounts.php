@@ -5,9 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Admin\Controllers;
+namespace kanso\cms\admin\controllers;
 
-use Kanso\CMS\Admin\Controllers\Controller;
+use kanso\cms\admin\controllers\Controller;
 
 /**
  * Admin panel account pages controller
@@ -21,6 +21,6 @@ class Accounts extends Controller
      */
 	protected function getModelClass(): string
 	{
-		return '\Kanso\CMS\Admin\Models\Accounts';
+		return '\kanso\cms\admin\models\Accounts';
 	}
 }

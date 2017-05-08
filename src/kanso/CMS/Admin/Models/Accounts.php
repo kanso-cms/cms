@@ -5,9 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Admin\Models;
+namespace kanso\cms\admin\models;
 
-use Kanso\CMS\Admin\Models\Model;
+use kanso\cms\admin\models\Model;
 
 /**
  * Admin panel account pages model

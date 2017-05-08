@@ -5,9 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\File;
+namespace kanso\framework\file;
 
-use Kanso\Framework\Utility\Mime;
+use kanso\framework\utility\Mime;
 
 /**
  * Filesystem helper

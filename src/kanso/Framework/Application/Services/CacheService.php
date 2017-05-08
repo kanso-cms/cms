@@ -5,11 +5,11 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Application\Services;
+namespace kanso\framework\application\services;
 
-use Kanso\Framework\Application\Services\Service;
-use Kanso\Framework\Cache\Stores\FileStore;
-use Kanso\Framework\Cache\Cache;
+use kanso\framework\application\services\Service;
+use kanso\framework\cache\stores\FileStore;
+use kanso\framework\cache\Cache;
 
 /**
  * Cache service
@@ -53,7 +53,7 @@ class CacheService extends Service
      *
      * @access private
      * @param  string  $path Directory to store cached files
-     * @return \Kanso\Framework\Cache\Stores\FileStore
+     * @return \kanso\framework\cache\stores\FileStore
      */
 	private function fileStore(string $path): FileStore
 	{

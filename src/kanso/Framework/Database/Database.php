@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Database;
+namespace kanso\framework\database;
 
-use Kanso\Framework\Database\Connection\Connection;
-use Kanso\Framework\Database\Query\Builder;
+use kanso\framework\database\connection\Connection;
+use kanso\framework\database\query\Builder;
 
 /**
  * Database manager
@@ -56,7 +56,7 @@ class Database
      *
      * @access public
      * @param  string $connectionName Name of the connection (optional) (default null)
-	 * @return \Kanso\Framework\Database\Connection\Connection|false
+	 * @return \kanso\framework\database\connection\Connection|false
 	 * @throws \RuntimeException
      */
 	public function create(string $connectionName = null)
@@ -88,7 +88,7 @@ class Database
      *
      * @access public
      * @param  string $connectionName Name of the connection (optional) (default null)
-     * @return \Kanso\Framework\Database\Connection\Connection
+     * @return \kanso\framework\database\connection\Connection
      */
 	public function connection(string $connectionName = null): Connection
 	{
@@ -102,7 +102,7 @@ class Database
      *
      * @access private
      * @param  string $connectionName Name of the connection
-     * @return \Kanso\Framework\Database\Connection\Connection
+     * @return \kanso\framework\database\connection\Connection
      * @throws \RuntimeException
      */
 	private function connect(string $connectionName): Connection
@@ -126,7 +126,7 @@ class Database
      * Get a database builder by connection name
      *
      * @param  string $connectionName Name of the connection
-     * @return \Kanso\Framework\Database\Query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
 	public function builder(string $connectionName): Builder
 	{

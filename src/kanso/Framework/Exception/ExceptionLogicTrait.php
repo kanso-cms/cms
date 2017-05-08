@@ -1,10 +1,10 @@
 <?php
 
-namespace Kanso\Framework\Exception;
+namespace kanso\framework\exception;
 
 use Throwable;
 use ErrorException;
-use \Kanso\Framework\Utility\Str;
+use \kanso\framework\utility\Str;
 
 /**
  * Exception helper functions
@@ -216,7 +216,7 @@ trait ExceptionLogicTrait
 	 * @return sting
 	 */
 	protected function errClass(): string
-	{
+	{		
 		if(!is_readable($this->exception->getFile()))
 		{
 			return '';
@@ -225,51 +225,41 @@ trait ExceptionLogicTrait
 		$handle      = fopen($this->exception->getFile(), 'r');
 		$class      = '';
 		$namespace  = '';
-		$sourceCode = '';
-		while(!feof($handle))
-		{
-		    if (!empty($class))
-		    {
-		    	break;
-		    }
+		$tokens     = token_get_all(file_get_contents($this->exception->getFile()));
 
-		    $sourceCode .= fgets($handle);
-		    
-		    if (strpos($sourceCode, '{') === false)
-		    {
-		    	continue;
-		    }
+		foreach ($tokens as $i => $token)
+	    {
+	        if ($token[0] === T_NAMESPACE)
+	        {
+	            foreach ($tokens as $j => $_token) 
+	            {
+	                if ($_token[0] === T_STRING)
+	                {
+	                    $namespace .= '\\'.$_token[1];
+	                } 
+	                else if ($_token === '{' || $_token === ';')
+	                {
+	                    break;
+	                }
+	            }
+	        }
+	        else if ($token[0] === T_CLASS)
+	        {
+	            foreach ($tokens as $j => $_token)
+	            {
+	                if ($_token === '{')
+	                {
+	                    $class = $tokens[$i+2][1];
+	                }
+	            }
+	        }
+	    }
 
-		    $tokens = token_get_all($sourceCode);
+	    if (empty($class))
+	    {
+	    	return '';
+	    }
 
-		    foreach ($tokens as $i => $token)
-		    {
-		        if ($token[0] === T_NAMESPACE)
-		        {
-		            foreach ($tokens as $j => $_token) 
-		            {
-		                if ($_token[0] === T_STRING)
-		                {
-		                    $namespace .= '\\'.$_token[1];
-		                } 
-		                else if ($_token === '{' || $_token === ';')
-		                {
-		                    break;
-		                }
-		            }
-		        }
-		        else if ($token[0] === T_CLASS)
-		        {
-		            foreach ($tokens as $j => $_token)
-		            {
-		                if ($_token === '{')
-		                {
-		                    $class = $tokens[$i+2][1];
-		                }
-		            }
-		        }
-		    }
-		}
 		return $namespace.'\\'.$class;
 	}
 }

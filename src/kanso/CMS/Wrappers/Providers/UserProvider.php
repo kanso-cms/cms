@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Wrappers\Providers;
+namespace kanso\cms\wrappers\providers;
 
-use Kanso\CMS\Wrappers\User;
-use Kanso\CMS\Wrappers\Providers\Provider;
+use kanso\cms\wrappers\User;
+use kanso\cms\wrappers\providers\Provider;
 
 /**
  * User provider

@@ -5,17 +5,17 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Application\Services;
+namespace kanso\framework\application\services;
 
-use Kanso\Framework\Application\Services\Service;
-use \Kanso\Framework\View\View;
+use kanso\framework\application\services\Service;
+use kanso\framework\mvc\view\View;
 
 /**
- * View service
+ * MVC Service
  *
  * @author Joe J. Howard
  */
-class ViewService extends Service
+class MVCService extends Service
 {
 	/**
 	 * {@inheritdoc}

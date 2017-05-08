@@ -5,10 +5,10 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Http\Response;
+namespace kanso\framework\http\response;
 
-use Kanso\Framework\Utility\Str;
-use Kanso\Framework\Common\ArrayAccessTrait;
+use kanso\framework\utility\Str;
+use kanso\framework\common\ArrayAccessTrait;
 
 /**
  * Response headers

@@ -5,22 +5,22 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Wrappers;
+namespace kanso\cms\wrappers;
 
-use Kanso\Framework\Database\Query\Builder;
-use Kanso\Framework\Config\Config;
-use Kanso\Framework\Utility\Str;
-use Kanso\Framework\Utility\Arr;
-use Kanso\CMS\Wrappers\Wrapper;
-use Kanso\CMS\Wrappers\Providers\Provider;
-use Kanso\CMS\Wrappers\Providers\TagProvider;
-use Kanso\CMS\Wrappers\Providers\CategoryProvider;
-use Kanso\CMS\Wrappers\Providers\UserProvider;
-use Kanso\CMS\Wrappers\Providers\MediaProvider;
-use Kanso\CMS\Wrappers\Providers\CommentProvider;
-use Kanso\CMS\Wrappers\Category;
-use Kanso\CMS\Wrappers\Tag;
-use Kanso\CMS\Wrappers\PostSaver;
+use kanso\framework\database\query\Builder;
+use kanso\framework\config\Config;
+use kanso\framework\utility\Str;
+use kanso\framework\utility\Arr;
+use kanso\cms\wrappers\Wrapper;
+use kanso\cms\wrappers\providers\Provider;
+use kanso\cms\wrappers\providers\TagProvider;
+use kanso\cms\wrappers\providers\CategoryProvider;
+use kanso\cms\wrappers\providers\UserProvider;
+use kanso\cms\wrappers\providers\MediaProvider;
+use kanso\cms\wrappers\providers\CommentProvider;
+use kanso\cms\wrappers\Category;
+use kanso\cms\wrappers\Tag;
+use kanso\cms\wrappers\PostSaver;
 
 /**
  * Category utility wrapper
@@ -501,7 +501,7 @@ class Post extends Wrapper
 	 * Create a category if it doesn't exist already
 	 *
 	 * @param  mixed $category Category name, id or category wrapper
-	 * @return Kanso\CMS\Wrappers\Category             
+	 * @return kanso\cms\wrappers\Category             
 	 */
 	private function createCategory($category): Category
 	{

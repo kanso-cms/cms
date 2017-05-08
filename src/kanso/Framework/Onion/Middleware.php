@@ -5,12 +5,12 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Onion; 
+namespace kanso\framework\onion; 
 
 use Closure;
-use Kanso\Framework\Http\Request\Request;
-use Kanso\Framework\Http\Response\Response;
-use Kanso\Framework\Utility\Callback;
+use kanso\framework\http\request\Request;
+use kanso\framework\http\response\Response;
+use kanso\framework\utility\Callback;
 
 /**
  * Middleware object
@@ -51,8 +51,8 @@ class Middleware
      * Execute the callback
      *
      * @access public
-     * @param  \Kanso\Framework\Http\Request\Request   $request  
-     * @param  \Kanso\Framework\Http\Response\Response $response
+     * @param  \kanso\framework\http\request\Request   $request  
+     * @param  \kanso\framework\http\response\Response $response
      * @param  \Closure                                $next
      */
     public function execute(Request $request, Response $response, Closure $next)

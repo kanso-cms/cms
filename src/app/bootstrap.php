@@ -1,7 +1,7 @@
 <?php
 
-use Kanso\Framework\Autoload\Autoloader;
-use Kanso\Kanso;
+use kanso\framework\autoload\Autoloader;
+use kanso\Kanso;
 
 /**
  * ---------------------------------------------------------
@@ -29,26 +29,18 @@ set_error_handler(function($code, $message, $file, $line)
  */
 
 /**
- * Path to the Kanso application directory.
+ * Path to the Kanso core directory.
  * This is REQUIRED for the application to function
  * properly.
  */
 define('KANSO_DIR', dirname(dirname(__FILE__)).'/kanso');
 
 /**
- * This constant is not actually required for the application
- * to function properly, however it is used in the configuration
- * files.
+ * Path to the Kanso app directory.
+ * This is REQUIRED for the application to function
+ * properly.
  */
 define('APP_DIR', dirname(__FILE__));
-
-/**
- * Path to the Kanso configuration directory.
- * This is REQUIRED for the application to function
- * properly. This where the configuration files are 
- * stored.
- */
-define('CONFIG_DIR', APP_DIR.'/configurations');
 
 /**
  * Kanso uses a cascading file-system to load configuration
@@ -69,13 +61,13 @@ define('CONFIG_DIR', APP_DIR.'/configurations');
  * Register Kanso autoloader
  * If you are using composer's autoloader you should remove this.
  */
-require_once 'Kanso/Framework/Autoload/AutoLoader.php';
+require_once KANSO_DIR. '/framework/autoload/AutoLoader.php';
 
 $autoloader = new Autoloader;
 
-$autoloader->addPrefix('Kanso', KANSO_DIR);
+$autoloader->addPrefix('kanso', KANSO_DIR);
 
-$autoloader->addPrefix('App', APP_DIR);
+$autoloader->addPrefix('app', APP_DIR);
 
 $autoloader->register();
 
@@ -100,6 +92,7 @@ $kanso = Kanso::instance();
  * Any middleware should go below, i.e after Kanso has been
  * initialized but before any routes are dispatched.
  */
+require_once APP_DIR . DIRECTORY_SEPARATOR . 'routes' . DIRECTORY_SEPARATOR . 'routes.php';
 
 /**
  * Run Kanso

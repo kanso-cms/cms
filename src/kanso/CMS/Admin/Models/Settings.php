@@ -5,15 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Admin\Models;
+namespace kanso\cms\admin\models;
 
-use Kanso\Kanso;
-use Kanso\Framework\Utility\Str;
-use Kanso\Framework\Config\Config;
-use Kanso\Framework\Cache\Cache;
-use Kanso\Framework\Security\Crypto;
-use Kanso\CMS\Admin\Models\Model;
-use \Kanso\CMS\Install\Installer;
+use kanso\Kanso;
+use kanso\framework\utility\Str;
+use kanso\framework\config\Config;
+use kanso\framework\cache\Cache;
+use kanso\framework\security\Crypto;
+use kanso\cms\admin\models\Model;
+use \kanso\cms\install\Installer;
 
 /**
  * Settings pages model
@@ -63,7 +63,7 @@ class Settings extends Model
      * Returns the framework configuration
      *
      * @access private
-     * @return \Kanso\Framework\Config\Config
+     * @return \kanso\framework\config\Config
      */
     private function config(): Config
     {
@@ -74,7 +74,7 @@ class Settings extends Model
      * Returns the framework configuration
      *
      * @access private
-     * @return \Kanso\CMS\Install\Installer
+     * @return \kanso\cms\install\Installer
      */
     private function installer(): Installer
     {
@@ -87,7 +87,7 @@ class Settings extends Model
      * Returns the framework crypto
      *
      * @access private
-     * @return \Kanso\Framework\Security\Crypto
+     * @return \kanso\framework\security\Crypto
      */
     private function crypto(): Crypto
     {
@@ -98,7 +98,7 @@ class Settings extends Model
      * Returns the framework Cache
      *
      * @access private
-     * @return \Kanso\Framework\Cache\Cache
+     * @return \kanso\framework\cache\Cache
      */
     private function cache(): Cache
     {

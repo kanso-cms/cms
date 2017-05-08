@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\Wrappers\Providers;
+namespace kanso\cms\wrappers\providers;
 
-use Kanso\Framework\Database\Query\Builder;
-use Kanso\Framework\Config\Config;
+use kanso\framework\database\query\Builder;
+use kanso\framework\config\Config;
 
 /**
  * Provider base class
@@ -20,7 +20,7 @@ abstract class Provider
     /**
      * SQL query builder
      * 
-     * @var \Kanso\Framework\Database\Query\Builder
+     * @var \kanso\framework\database\query\Builder
      */ 
     protected $SQL;
 
@@ -28,7 +28,7 @@ abstract class Provider
      * Constructor
      * 
      * @access public
-     * @param \Kanso\Framework\Database\Query\Builder $SQL    SQL query builder
+     * @param \kanso\framework\database\query\Builder $SQL    SQL query builder
      */
     public function __construct(Builder $SQL)
     {

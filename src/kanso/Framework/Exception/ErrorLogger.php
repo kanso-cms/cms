@@ -5,10 +5,10 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Exception;
+namespace kanso\framework\exception;
 
-use Kanso\Framework\Http\Request\Environment;
-use Kanso\Framework\Exception\ExceptionLogicTrait;
+use kanso\framework\http\request\Environment;
+use kanso\framework\exception\ExceptionLogicTrait;
 use Throwable;
 
 /**
@@ -30,7 +30,7 @@ class ErrorLogger
     /**
      * HttpEnv instance
      *
-     * @var \Kanso\Framework\Http\Request\Environment;
+     * @var \kanso\framework\http\request\Environment;
      */
     private $httpEnv;
 
@@ -39,7 +39,7 @@ class ErrorLogger
 	 *
 	 * @access public
      * @param \Throwable                                $exception Throwable
-     * @param \Kanso\Framework\Http\Request\Environment $httpEnv   HttpEnv instance for logging details
+     * @param \kanso\framework\http\request\Environment $httpEnv   HttpEnv instance for logging details
      * @param string                                    $path Directory to store log files in
 	 */
     public function __construct(Throwable $exception, Environment $httpEnv, string $path) 

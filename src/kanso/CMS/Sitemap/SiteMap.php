@@ -5,13 +5,13 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\CMS\SiteMap;
+namespace kanso\cms\sitemap;
 
 use Closure;
-use Kanso\Framework\Http\Request\Request;
-use Kanso\Framework\Http\Response\Response;
-use Kanso\Framework\Database\Query\Builder;
-use Kanso\Framework\Config\Config;
+use kanso\framework\http\request\Request;
+use kanso\framework\http\response\Response;
+use kanso\framework\database\query\Builder;
+use kanso\framework\config\Config;
 
 /**
  * Sitemap builder
@@ -23,28 +23,28 @@ class SiteMap
 	/**
      * Request object
      *
-     * @var \Kanso\Framework\Http\Request\Request
+     * @var \kanso\framework\http\request\Request
      */
 	private $request;
 
 	/**
      * Response object
      *
-     * @var \Kanso\Framework\Http\Response\Response
+     * @var \kanso\framework\http\response\Response
      */
 	private $response;
 
 	/**
      * SQL query builder instance
      * 
-     * @var \Kanso\Framework\Database\Query\Builder
+     * @var \kanso\framework\database\query\Builder
      */ 
     private $SQL;
 
     /**
      * Config 
      * 
-     * @var \Kanso\Framework\Config\Config
+     * @var \kanso\framework\config\Config
      */
     private $config;
 
@@ -52,10 +52,10 @@ class SiteMap
      * Constructor
      *
      * @access public
-     * @param  \Kanso\Framework\Http\Request\Request   $request  Request object
-     * @param  \Kanso\Framework\Http\Response\Response $response Response object
-     * @param  \Kanso\Framework\Database\Query\Builder $SQL      SQL query builder
-     * @param  \Kanso\Framework\Config\Config          $config   Framework configuration
+     * @param  \kanso\framework\http\request\Request   $request  Request object
+     * @param  \kanso\framework\http\response\Response $response Response object
+     * @param  \kanso\framework\database\query\Builder $SQL      SQL query builder
+     * @param  \kanso\framework\config\Config          $config   Framework configuration
      */
     public function __construct(Request $request, Response $response, Builder $SQL, Config $config)
     {

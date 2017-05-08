@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Security\Crypto\Encrypters;
+namespace kanso\framework\security\crypto\encrypters;
 
-use Kanso\Framework\Security\Crypto\Encrypters\Encrypter;
-use Kanso\Framework\Security\Crypto\Encrypters\EncrypterInterface;
+use kanso\framework\security\crypto\encrypters\Encrypter;
+use kanso\framework\security\crypto\encrypters\EncrypterInterface;
 
 /**
  * Encryption/Decryption interface

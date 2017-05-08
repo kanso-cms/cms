@@ -1,7 +1,7 @@
 <?php
 
 # Hashed default admin password
-$hashed = \Kanso\Kanso::instance()->Crypto->password()->hash($this->config->get('cms.default_password'));
+$hashed = \kanso\Kanso::instance()->Crypto->password()->hash($this->config->get('cms.default_password'));
 
 # Default articles table
 $KANSO_DEFAULTS_POSTS_TABLE = [
@@ -208,9 +208,9 @@ $KANSO_DEFAULT_ARTICLES = [
 
 # The default article content entries
 $KANSO_DEFAULT_ARTICLE_CONTENT = [
-	file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'HelloWorld.md'),
-	file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'MarkdownBasics.md'),
-	file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'Templates'.DIRECTORY_SEPARATOR.'Elements.md'),
+	file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'HelloWorld.md'),
+	file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'MarkdownBasics.md'),
+	file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'Elements.md'),
 ];
 
 # The default comments entries

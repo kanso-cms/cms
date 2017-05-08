@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Application\Services;
+namespace kanso\framework\application\services;
 
-use Kanso\Framework\Application\Services\Service;
-use Kanso\Framework\Onion\Onion;
+use kanso\framework\application\services\Service;
+use kanso\framework\onion\Onion;
 
 /**
  * Onion/Middleware service

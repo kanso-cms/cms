@@ -5,10 +5,10 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Http\Cookie\Storage;
+namespace kanso\framework\http\cookie\storage;
 
-use Kanso\Framework\Http\Cookie\Storage\StoreInterface;
-use Kanso\Framework\Security\Crypto;
+use kanso\framework\http\cookie\storage\StoreInterface;
+use kanso\framework\security\Crypto;
 
 /**
  * Cookie encrypt/decrypt
@@ -20,7 +20,7 @@ class NativeCookieStorage implements StoreInterface
     /**
      * Encryption service
      *
-     * @var Kanso\Framework\Security\Crypto
+     * @var kanso\framework\security\Crypto
      */
     private $crypto;
 
@@ -35,7 +35,7 @@ class NativeCookieStorage implements StoreInterface
      * Constructor
      *
      * @access public
-     * @param  \Kanso\Framework\Security\Crypto $Crypto        Encryption service
+     * @param  \kanso\framework\security\Crypto $Crypto        Encryption service
      * @param  array                            $configuration Assoc array of cookie configurations
      */
     public function __construct(Crypto $crypto, array $configuration)

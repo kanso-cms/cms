@@ -5,12 +5,12 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace Kanso\Framework\Http\Request;
+namespace kanso\framework\http\request;
 
-use Kanso\Framework\Http\Request\Environment;
-use Kanso\Framework\Http\Request\Headers;
-use Kanso\Framework\Utility\Mime;
-use Kanso\Framework\Utility\Str;
+use kanso\framework\http\request\Environment;
+use kanso\framework\http\request\Headers;
+use kanso\framework\utility\Mime;
+use kanso\framework\utility\Str;
 
 /**
  * Request manager class
@@ -36,14 +36,14 @@ class Request
     /**
      * Request headers
      *
-     * @var \Kanso\Framework\Http\Request\Headers
+     * @var \kanso\framework\http\request\Headers
      */
     private $headers;
 
     /**
      * Http Environment 
      *
-     * @var \Kanso\Framework\Http\Request\Environment
+     * @var \kanso\framework\http\request\Environment
      */
     private $environment;
 
@@ -74,7 +74,7 @@ class Request
      * Environment access
      *
      * @access public
-     * @return \Kanso\Framework\Http\Request\Environment
+     * @return \kanso\framework\http\request\Environment
      */
     public function environment(): Environment
     {
@@ -85,7 +85,7 @@ class Request
      * Headers access
      *
      * @access public
-     * @return \Kanso\Framework\Http\Request\Headers
+     * @return \kanso\framework\http\request\Headers
      */
     public function headers(): Headers
     {
