@@ -17,6 +17,9 @@ use kanso\framework\http\session\Session;
 use kanso\framework\http\response\Protocol;
 use kanso\framework\mvc\view\View;
 use kanso\framework\http\response\exceptions\NotFoundException;
+use \kanso\framework\http\response\exceptions\ForbiddenException;
+use \kanso\framework\http\response\exceptions\InvalidTokenException;
+use \kanso\framework\http\response\exceptions\MethodNotAllowedException;
 use kanso\framework\http\response\exceptions\Stop;
 
 /**
@@ -252,7 +255,7 @@ class Response
      *
      * @access public
      */
-    public function finalize()
+    private function finalize()
     {
         $this->headers->set($this->protocol->get(), $this->status->get().' '.$this->status->message());
 
@@ -329,7 +332,7 @@ class Response
      * @access public
      * @param  string $url    The absolute URL to redirect to
      * @param  int    $status The redirect status (optional) (default 302)
-     * @return \kanso\framework\http\response\Response
+     * @throws \kanso\framework\http\response\exceptions\Stop
      */
     public function redirect(string $url, int $status = 302)
     {
@@ -343,17 +346,50 @@ class Response
 
         $this->send();
 
-        throw new stop();
+        throw new Stop();
     }
 
     /**
      * Send a not found response
      *
      * @access public
-     * @return \kanso\framework\http\response\Response
+     * @throws \kanso\framework\http\response\exceptions\NotFoundException
      */
     public function notFound()
     {
         throw new NotFoundException();
+    }
+
+    /**
+     * Send a forbidden response
+     *
+     * @access public
+     * @throws \kanso\framework\http\response\exceptions\ForbiddenException
+     */
+    public function forbidden()
+    {
+        throw new ForbiddenException();
+    }
+
+    /**
+     * Send a invalid token response
+     *
+     * @access public
+     * @throws \kanso\framework\http\response\exceptions\InvalidTokenException
+     */
+    public function invalidToken()
+    {
+        throw new InvalidTokenException();
+    }
+
+    /**
+     * Send a invalid token response
+     *
+     * @access public
+     * @throws \kanso\framework\http\response\exceptions\MethodNotAllowedException
+     */
+    public function methodNotAllowed()
+    {
+        throw new MethodNotAllowedException();
     }
 }

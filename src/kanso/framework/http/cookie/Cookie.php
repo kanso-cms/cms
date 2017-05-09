@@ -48,6 +48,13 @@ class Cookie
     private $cookieExpires;
 
     /**
+     * Have the cookies been sent ?
+     *
+     * @var bool
+     */
+    private $sent = false;
+
+    /**
      * Constructor
      *
      * @access public
@@ -149,9 +156,22 @@ class Cookie
      */
     public function send() 
     {
-        $this->store->write($this->cookieName, $this->get());
+        if (!$this->sent())
+        {
+            $this->store->write($this->cookieName, $this->get());
 
-        $this->store->write($this->cookieName.'_login', $this->login);
+            $this->store->write($this->cookieName.'_login', $this->login);
+        }   
+    }
+
+    /**
+     * Send the cookies
+     *
+     * @access public
+     */
+    public function sent(): bool 
+    {
+        return $this->sent;
     }
 
     /**

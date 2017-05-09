@@ -29,7 +29,7 @@ return
      * theme_name  : The active theme name (must be the same as its folder).
      */
     'themes_path' => APP_DIR.'/public/themes',
-    'theme_name'  => 'Getstrong',
+    'theme_name'  => 'roshi',
 
     /**
      * ---------------------------------------------------------

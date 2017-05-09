@@ -256,54 +256,43 @@ class Request
      */
     public function fetch(string $key = null)
     {
+        $env = $this->environment->asArray();
+
+        $data = parse_url(rtrim($env['HTTP_HOST'].$env['REQUEST_URI'], '/'));
+
+        $data['page'] = 0;
+
+        preg_match_all("/page\/(\d+)/", $env['REQUEST_URI'], $page);
+
+        if (isset($page[1][0]) && !empty($page[1][0]))
+        {
+            $data['page'] = intval($page[1][0]);
+        }
+        
+        if ($data['page'] === 1)
+        {
+            $data['page'] = 0;
+        }
+
         if (!$this->isGet())
         {
-            if ($key) 
+            foreach ($_POST as $k => $v)
             {
-                if (isset($_POST[$key]))
-                {
-                    return $_POST[$key];
-                }
-                
-                return false;
+                $data[$k] = $v;
             }
-            
-            return $_POST;
         }
-        else
+
+        if ($key)
         {
-            $env = $this->environment->asArray();
-
-            $GETinfo = array_merge(parse_url(rtrim($env['HTTP_HOST'].$env['REQUEST_URI'], '/')), pathinfo(rtrim($env['HTTP_HOST'].$env['REQUEST_URI'], '/')) );
-            
-            $GETinfo['page'] = 0;
-            
-            preg_match_all("/page\/(\d+)/", $env['REQUEST_URI'], $page);
-            
-            if (isset($page[1][0]) && !empty($page[1][0]))
+            if (isset($data[$key]))
             {
-                $GETinfo['page'] = intval($page[1][0]);
+                return $data[$key];
             }
             
-            if ($GETinfo['page'] === 1)
-            {
-                $GETinfo['page'] = 0;
-            }
-
-            if ($key)
-            {
-                if (isset($GETinfo[$key]))
-                {
-                    return $GETinfo[$key];
-                }
-                
-                return false;
-            }
-            
-            return $GETinfo;
+            return false;
         }
-
-        return false;
+        
+        return $data;
     }
 
     /**
