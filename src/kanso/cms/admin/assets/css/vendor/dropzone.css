@@ -1,0 +1,73 @@
+
+.dz-filename, .dz-size {
+  display: none !important;
+}
+
+.hero-drop-zone form {
+  border: 1px solid #dfe2e6;
+  border-top-color: #cbd0d5;
+  background: #fafbfb;
+  color: #363636;
+  height: 150px;
+  overflow: hidden;
+}
+.hero-drop-zone {
+  position: relative;
+  overflow: hidden;
+}
+.hero-drop-zone .upload-prompt {
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+
+.hero-drop-zone .progress-bar {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+.dz-started .upload-prompt {
+  display: none;
+}
+
+.hero-drop-zone .upload-prompt svg {
+  width: 80px;
+  height: 80px;
+  fill: #cbd0d5;
+      margin: 0 auto;
+    display: block;
+}
+
+.hero-drop-zone .upload-prompt p {
+  margin-bottom: 12px;
+  color: #cbd0d5;
+}
+
+.hero-drop-zone .dz-drag-hover .upload-prompt svg {
+  fill: #5182e5;
+}
+
+.hero-drop-zone .dz-drag-hover {
+  border: 1px solid #5182e5;
+}
+
+.hero-drop-zone .upload-bar {
+  height: 3px;
+}
+
+.hero-drop-zone .upload-bar .progress {
+  height: 3px;
+  background: #5182e5;
+}
+
+.hero-drop-zone .dz-started {
+  height: 380px;
+}
+
+.hero-drop-zone img {
+  width: 100%;
+}
