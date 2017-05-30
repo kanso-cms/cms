@@ -1,1 +1,0 @@
-<div class="reader markdown-body js-reader-wrap container"></div>
