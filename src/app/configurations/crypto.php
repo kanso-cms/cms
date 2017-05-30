@@ -26,7 +26,7 @@ return
 		'openssl' =>
 		[
 			'library'  => 'openssl',
-			'cipher'   => 'AES-256-CTR',
+			'cipher'   => 'AES-256-ECB',
 			'key'      => '6eedbbb1c2680921e324889ade0187322b5c4e24896bc824dc50559b19cd9ea5',
 		],
 	],
