@@ -2,12 +2,12 @@
 	"name": "kanso/cms",
 	"description": "Kanso CMS",
 	"keywords": ["kanso", "CMS"],
-	"homepage": "http://kanso-cms.github.io/",
+	"homepage": "http://kanso-cms.github.io",
 	"license": "GNU",
 	"authors": [
 		{
 			"name": "Joe Howard",
-			"email": "joe.howard.au@icloud.com"
+			"email": "joejhoward@mail.com"
 		},
 		{
 			"name": "Contributors",
@@ -15,15 +15,23 @@
 		}
 	],
 	"support": {
-		"issues": "https://github.com/kanso-cms/cms/graphs/issues",
-		"source": "https://github.com/kanso-cms/cms"
+		"issues": "https://github.com/kanso-cms/cms/issues",
+		"source": "https://github.com/kanso-cms"
+	},
+	"autoload": {
+		"psr-4": {
+			"mako\\": "src/mako"
+		}
 	},
 	"require": {
-        "php": ">=7.0.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "Kanso\\": "Kanso"
-        }
-    }
+		"php": ">=7.0.0",
+		"monolog/monolog": "^1.22.0"
+	},
+	"prefer-stable": true,
+	"minimum-stability": "dev",
+	"extra": {
+		"branch-alias": {
+			"dev-master": "1.0-dev"
+		}
+	}
 }
