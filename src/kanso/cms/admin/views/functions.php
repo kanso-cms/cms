@@ -43,8 +43,8 @@ function admin_the_title()
 	if ($requestName === 'writer') {
 		$title = 'Write | New Article';
 	}
-	else if ($requestName === 'articles') {
-		$title = 'Articles | Kanso';
+	else if ($requestName === 'posts') {
+		$title = 'Posts | Kanso';
 	}
 	else if ($requestName === 'pages') {
 		$title = 'Pages | Kanso';
@@ -61,9 +61,6 @@ function admin_the_title()
 	else if ($requestName === 'categories') {
 		$title = 'Categories | Kanso';
 	} 
-	else if ($requestName === 'articles') {
-		$title = 'Articles | Kanso';
-	}
 	else if ($requestName === 'mediaLibrary') {
 		$title = 'Media Library | Kanso';
 	}
@@ -220,9 +217,9 @@ function admin_sirebar_links()
 			'icon'     => 'font',
 			'children' => [],
 		],
-		'articles' => [
-			'link'     => '/admin/articles/',
-			'text'     => 'Articles',
+		'posts' => [
+			'link'     => '/admin/posts/',
+			'text'     => 'Posts',
 			'icon'     => 'align-left',
 			'children' => [],
 		],
@@ -255,7 +252,7 @@ function admin_sirebar_links()
 				],
 			],
 		],
-		'media' => [
+		'mediaLibrary' => [
 			'link'     => '/admin/media/',
 			'text'     => 'Media',
 			'icon'     => 'camera',
@@ -316,8 +313,8 @@ function admin_post_types()
 {
 	$types = 
 	[
-		'Article' => 'post',
-		'Page'    => 'page',
+		'Post' => 'post',
+		'Page' => 'page',
 	];
 
 	return Kanso::instance()->Filters->apply('adminPostTypes', $types);

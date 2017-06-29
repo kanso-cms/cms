@@ -19,13 +19,13 @@
 	<section class="items-list">
 
 		<!-- LIST POWERS -->
-		<?php require($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Comments'.DIRECTORY_SEPARATOR.'list-powers.php'); ?>
+		<?php require($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'comments'.DIRECTORY_SEPARATOR.'list-powers.php'); ?>
 
 		<!-- LIST BODY -->
-		<?php require($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Comments'.DIRECTORY_SEPARATOR.'list-body.php'); ?>
+		<?php require($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'comments'.DIRECTORY_SEPARATOR.'list-body.php'); ?>
 
 		<!-- LIST FOOTER -->
-		<?php require($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Comments'.DIRECTORY_SEPARATOR.'list-pagination.php'); ?>
+		<?php require($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'comments'.DIRECTORY_SEPARATOR.'list-pagination.php'); ?>
 
 	</section>
 

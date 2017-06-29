@@ -19,7 +19,7 @@
 	        </div>
 	        
 	        <span class="color-gray">
-	        	In <a class="color-gray text-underline" href="/admin/articles?category=<?php echo $article->category_id; ?>">
+	        	In <a class="color-gray text-underline" href="/admin/<?php echo $postSlug;?>?category=<?php echo $article->category_id; ?>">
 					<?php echo $article->category->name;?>
 				</a>
 				<span class="p6">&nbsp;&nbsp;•&nbsp;&nbsp;</span>
@@ -27,14 +27,14 @@
 	        	<span class="p6">&nbsp;&nbsp;•&nbsp;&nbsp;</span>
 	        	<?php echo Humanizer::timeAgo($article->created); ?> ago
 	        	<span class="p6">&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-	        	By <a class="color-gray text-underline" href="/admin/articles?author=<?php echo $article->author_id; ?>">
+	        	By <a class="color-gray text-underline" href="/admin/<?php echo $postSlug;?>?author=<?php echo $article->author_id; ?>">
 					<?php echo $article->author->name; ?>
 				</a>
 	        </span>
 	        <div class="margin-xs-n">
 	        	<span class="glyph-icon glyph-icon-tags color-gray"></span>&nbsp;&nbsp;
 		        <?php foreach ($article->tags as $_tag) : ?>
-		        	<a class="label label-outline" style="opacity: 0.5" href="/admin/articles?tag=<?php echo $_tag->id; ?>">
+		        	<a class="label label-outline" style="opacity: 0.5" href="/admin/<?php echo $postSlug;?>?tag=<?php echo $_tag->id; ?>">
 						<?php echo $_tag->name;?>
 					</a>&nbsp;&nbsp;
 		        <?php endforeach;?>

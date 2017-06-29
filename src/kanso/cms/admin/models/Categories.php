@@ -7,17 +7,15 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\Kanso;
+use kanso\cms\admin\models\BaseModel;
 use kanso\framework\utility\Arr;
-use kanso\cms\admin\models\Model;
-use kanso\cms\wrappers\managers\CategoryManager;
 
 /**
- * Categories page model
+ * Categories model
  *
  * @author Joe J. Howard
  */
-class Categories extends Model
+class Categories extends BaseModel
 {
     /**
      * {@inheritdoc}
@@ -51,17 +49,6 @@ class Categories extends Model
     public function onAJAX()
     {
         return false;
-    }
-
-    /**
-     * Returns the tag manager
-     *
-     * @access private
-     * @return \kanso\cms\wrappers\managers\categoryManager
-     */
-    private function categoryManager(): CategoryManager
-    {
-        return Kanso::instance()->CategoryManager;
     }
 
    /**
@@ -159,7 +146,7 @@ class Categories extends Model
     {
         foreach ($ids as $id)
         {
-            $tag = $this->categoryManager()->byId($id);
+            $tag = $this->CategoryManager->byId($id);
 
             if ($tag)
             {
@@ -179,7 +166,7 @@ class Categories extends Model
     {
         foreach ($ids as $id)
         {
-            $tag = $this->categoryManager()->byId($id);
+            $tag = $this->CategoryManager->byId($id);
 
             if ($tag)
             {
@@ -214,7 +201,7 @@ class Categories extends Model
     private function getQueries(): array
     {
         # Get queries
-        $queries = $this->request->queries();
+        $queries = $this->Request->queries();
 
         # Set defaults
         if (!isset($queries['search'])) $queries['search'] = false;
@@ -276,7 +263,7 @@ class Categories extends Model
         {
             $this->SQL->SELECT('id')->FROM('posts')->WHERE('category_id', '=', $row['id']);
 
-            $category = $this->categoryManager()->byId($row['id']);
+            $category = $this->CategoryManager->byId($row['id']);
             
             $category->article_count = count($this->SQL->FIND_ALL());
 

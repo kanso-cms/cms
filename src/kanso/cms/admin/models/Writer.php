@@ -7,17 +7,15 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\Kanso;
+use kanso\cms\admin\models\BaseModel;
 use kanso\framework\utility\Str;
-use kanso\cms\admin\models\Model;
-use kanso\cms\wrappers\managers\PostManager;
 
 /**
- * Writer page model
+ * Comments model
  *
  * @author Joe J. Howard
  */
-class Writer extends Model
+class Writer extends BaseModel
 {
     /**
      * {@inheritdoc}
@@ -48,6 +46,7 @@ class Writer extends Model
         if (isset($this->post['ajax_request']))
         {
             $request = $this->post['ajax_request'];
+
             if ($request === 'writer_publish_article')
             {
                 return $this->publishArticle();
@@ -66,17 +65,6 @@ class Writer extends Model
     }
 
     /**
-     * Returns the tag manager
-     *
-     * @access private
-     * @return \kanso\cms\wrappers\managers\PostManager
-     */
-    private function postManager(): PostManager
-    {
-        return Kanso::instance()->PostManager;
-    }
-
-    /**
      * Parse the $_GET request variables and filter the articles for the requested page.
      *
      * @access private
@@ -84,11 +72,11 @@ class Writer extends Model
      */
     private function parseGet(): array
     {
-        $queries   = $this->request->queries();
+        $queries   = $this->Request->queries();
         $post      = false;
         if (isset($queries['id']))
         {
-            $post = $this->postManager()->byId(intval($queries['id']));
+            $post = $this->PostManager->byId(intval($queries['id']));
         }
 
         return [ 'the_post' => $post ];
@@ -150,7 +138,7 @@ class Writer extends Model
 
         $validated_data['id'] = intval($validated_data['id']);
         
-        $article = $this->postManager()->byId($validated_data['id']);
+        $article = $this->PostManager->byId($validated_data['id']);
         
         if (!$article)
         {
@@ -162,7 +150,7 @@ class Writer extends Model
         $article->tags             = $validated_data['tags'];
         $article->excerpt          = $validated_data['excerpt'];
         $article->type             = $validated_data['type'];
-        $article->author_id        = $this->gatekeeper->getUser()->id;
+        $article->author_id        = $this->Gatekeeper->getUser()->id;
         $article->comments_enabled = Str::bool($validated_data['comments']);
 
         if (isset($_POST['content']))
@@ -223,6 +211,7 @@ class Writer extends Model
         ]);
 
         $validated_data = $this->validation->run($post);
+
         if (!$validated_data)
         {
             return false;
@@ -235,15 +224,21 @@ class Writer extends Model
             $validated_data['content'] = $_POST['content'];
         }
 
-        $post = $this->postManager()->create([
+        # Default is to save as draft
+        if (!isset($validated_data['status']))
+        {
+            $validated_data['status'] = 'draft';
+        }
+
+        $post = $this->PostManager->create([
             'title'        => $validated_data['title'],
             'category'     => $validated_data['category'],
             'tags'         => $validated_data['tags'],
             'excerpt'      => empty($validated_data['excerpt']) ? Str::reduce($validated_data['content'], 255) : Str::reduce($validated_data['excerpt'], 255),
             'thumbnail_id' => $validated_data['thumbnail_id'],
-            'status'       => 'draft',
+            'status'       => $validated_data['status'],
             'type'         => $validated_data['type'],
-            'author_id'    => $this->gatekeeper->getUser()->id,
+            'author_id'    => $this->Gatekeeper->getUser()->id,
             'content'      => !empty($_POST['content']) ? $_POST['content'] : null,
             'comments_enabled' => Str::bool($validated_data['comments']),
         ]);

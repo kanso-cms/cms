@@ -7,20 +7,72 @@
 
 namespace kanso\cms\admin\controllers;
 
-use kanso\cms\admin\controllers\Controller;
+use kanso\cms\admin\controllers\BaseController;
 
 /**
- * Admin panel account pages controller
+ * Admin panel access pages controller
  *
  * @author Joe J. Howard
  */
-class Accounts extends Controller
+class Accounts extends BaseController
 {
 	/**
-     * {@inheritdoc}
-     */
-	protected function getModelClass(): string
+	 * Dispatch login request
+	 *
+	 * @access public
+	 */
+	public function login()
 	{
-		return '\kanso\cms\admin\models\Accounts';
+		$this->init('login');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch logout request
+	 *
+	 * @access public
+	 */
+	public function logout()
+	{
+		$this->init('logout');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch forgotpassword request
+	 *
+	 * @access public
+	 */
+	public function forgotPassword()
+	{
+		$this->init('forgotpassword');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch forgotUsername request
+	 *
+	 * @access public
+	 */
+	public function forgotUsername()
+	{
+		$this->init('forgotusername');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch resetPassword request
+	 *
+	 * @access public
+	 */
+	public function resetPassword()
+	{
+		$this->init('resetpassword');
+
+		$this->dispatch();
 	}
 }

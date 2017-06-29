@@ -45,11 +45,11 @@ class OpenSSL extends Encrypter implements EncrypterInterface
 	 * @param string $key    Encryption key
 	 * @param string $cipher Cipher
 	 */
-	public function __construct(string $key, string $cipher = 'AES-256-ECB')
+	public function __construct(string $key, string $cipher = null)
 	{
 		$this->key = $key;
 
-		$this->cipher = $cipher;
+		$this->cipher = $cipher ?? 'AES-256-CTR';
 
 		$this->ivSize = openssl_cipher_iv_length($this->cipher);
 	}

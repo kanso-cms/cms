@@ -7,20 +7,18 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\Kanso;
-use kanso\framework\config\Config;
-use kanso\framework\utility\Humanizer;
+use kanso\cms\admin\models\BaseModel;
+use kanso\framework\utility\Arr;
 use kanso\framework\utility\Str;
+use kanso\framework\utility\Humanizer;
 use kanso\framework\utility\Mime;
-use kanso\cms\admin\models\Model;
-use kanso\cms\wrappers\managers\MediaManager;
 
 /**
- * Media library loader
+ * Comments model
  *
  * @author Joe J. Howard
  */
-class MediaLibrary extends Model
+class MediaLibrary extends BaseModel
 {
     /**
      * {@inheritdoc}
@@ -79,28 +77,6 @@ class MediaLibrary extends Model
     }
 
     /**
-     * Returns the media manager
-     *
-     * @access private
-     * @return \kanso\cms\wrappers\managers\MediaManager
-     */
-    private function mediaManager(): MediaManager
-    {
-        return Kanso::instance()->MediaManager;
-    }
-
-    /**
-     * Returns the framework configuration manager
-     *
-     * @access private
-     * @return \kanso\framework\config\Config
-     */
-    private function config(): Config
-    {
-        return Kanso::instance()->Config;
-    }
-
-    /**
      * Load images for the media library
      *
      * @access private
@@ -125,7 +101,7 @@ class MediaLibrary extends Model
         $rows         = $this->SQL->SELECT('*')->FROM('media_uploads')->ORDER_BY('date', 'DESC')->LIMIT($offset, $limit)->FIND_ALL();
         $imageTypes   = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'];
 
-        $imagesBaseURL = str_replace($this->request->environment()->DOCUMENT_ROOT, $this->request->environment()->HTTP_HOST, $this->config()->get('cms.uploads.path'));
+        $imagesBaseURL = str_replace($this->Request->environment()->DOCUMENT_ROOT, $this->Request->environment()->HTTP_HOST, $this->Config->get('cms.uploads.path'));
 
         foreach ($rows as $image)
         {
@@ -172,7 +148,7 @@ class MediaLibrary extends Model
 
         foreach ($ids as $id)
         {
-            $attachment = $this->mediaManager()->byId($id);
+            $attachment = $this->MediaManager->byId($id);
             
             $attachment->delete();
         }
@@ -208,7 +184,7 @@ class MediaLibrary extends Model
         }
 
         # Get the attachment
-        $attachment = $this->mediaManager()->byId($id);
+        $attachment = $this->MediaManager->byId($id);
 
         if (!$attachment)
         {
@@ -263,11 +239,11 @@ class MediaLibrary extends Model
         # Upload and prepare the repsonse
         $imageTypes    = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'];
         $uploaded      = [];
-        $imagesBaseURL = str_replace($this->request->environment()->DOCUMENT_ROOT, $this->request->environment()->HTTP_HOST, $this->config()->get('cms.uploads.path'));
+        $imagesBaseURL = str_replace($this->Request->environment()->DOCUMENT_ROOT, $this->Request->environment()->HTTP_HOST, $this->Config->get('cms.uploads.path'));
 
         foreach ($files as $file)
         {
-            $media = $this->mediaManager()->upload($file);
+            $media = $this->MediaManager->upload($file);
 
             if ($media)
             {

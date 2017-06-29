@@ -7,57 +7,210 @@
 
 namespace kanso\cms\admin\controllers;
 
-use kanso\cms\admin\controllers\Controller;
+use kanso\cms\admin\controllers\BaseController;
 
 /**
  * Admin panel dashboard pages controller
  *
  * @author Joe J. Howard
  */
-class Dashboard extends Controller
+class Dashboard extends BaseController
 {
 	/**
-     * {@inheritdoc}
-     */
-	protected function getModelClass()
+	 * Dispatch posts request
+	 *
+	 * @access public
+	 */
+	public function posts()
 	{
-		if ($this->requestName === 'articles')
-		{
-			return '\kanso\cms\admin\models\Articles';
-		}
-		else if ($this->requestName === 'pages')
-		{
-			return '\kanso\cms\admin\models\Pages';
-		}
-		else if ($this->requestName === 'tags')
-		{
-			return '\kanso\cms\admin\models\Tags';
-		}
-		else if ($this->requestName === 'categories')
-		{
-			return '\kanso\cms\admin\models\Categories';
-		}
-		else if ($this->requestName === 'comments')
-		{
-			return '\kanso\cms\admin\models\Comments';
-		}
-		else if ($this->requestName === 'commentUsers')
-		{
-			return '\kanso\cms\admin\models\commentUsers';
-		}
-		else if ($this->requestName === 'mediaLibrary')
-		{
-			return '\kanso\cms\admin\models\MediaLibrary';
-		}
-		else if ($this->requestName === 'writer')
-		{
-			return '\kanso\cms\admin\models\Writer';
-		}
-		else if (in_array($this->requestName, ['settings', 'settingsAccount', 'settingsAuthor', 'settingsKanso', 'settingsUsers', 'settingsTools']))
-		{
-			return '\kanso\cms\admin\models\Settings';
-		}
+		$this->init('posts');
 
-		return false;
+		$this->model->setPostType('post');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch pages request
+	 *
+	 * @access public
+	 */
+	public function pages()
+	{
+		$this->init('pages');
+
+		$this->model->setPostType('page');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch tags request
+	 *
+	 * @access public
+	 */
+	public function tags()
+	{
+		$this->init('tags');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch categories request
+	 *
+	 * @access public
+	 */
+	public function categories()
+	{
+		$this->init('categories');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch comments request
+	 *
+	 * @access public
+	 */
+	public function comments()
+	{
+		$this->init('comments');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch commentUsers request
+	 *
+	 * @access public
+	 */
+	public function commentUsers()
+	{
+		$this->init('commentUsers');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch mediaLibrary request
+	 *
+	 * @access public
+	 */
+	public function mediaLibrary()
+	{
+		$this->init('mediaLibrary');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch writer request
+	 *
+	 * @access public
+	 */
+	public function writer()
+	{
+		$this->init('writer');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch settings request
+	 *
+	 * @access public
+	 */
+	public function settings()
+	{
+		$this->init('settings');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch settingsAccount request
+	 *
+	 * @access public
+	 */
+	public function settingsAccount()
+	{
+		$this->init('settingsAccount');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch settingsAuthor request
+	 *
+	 * @access public
+	 */
+	public function settingsAuthor()
+	{
+		$this->init('settingsAuthor');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch settingsKanso request
+	 *
+	 * @access public
+	 */
+	public function settingsKanso()
+	{
+		$this->init('settingsKanso');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch settingsUsers request
+	 *
+	 * @access public
+	 */
+	public function settingsUsers()
+	{
+		$this->init('settingsUsers');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch settingsTools request
+	 *
+	 * @access public
+	 */
+	public function settingsTools()
+	{
+		$this->init('settingsTools');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch custom page
+	 *
+	 * @access public
+	 */
+	public function blankPage()
+	{
+		$this->init('customPage');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch custom post-type
+	 *
+	 * @access public
+	 */
+	public function customPostType()
+	{
+		$this->init('customposts');
+
+		$this->model->setPostType($this->Filters->apply('adminCustomPostType', null));
+
+		$this->dispatch();
 	}
 }

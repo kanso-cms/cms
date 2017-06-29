@@ -411,6 +411,9 @@ class Post extends Wrapper
 		$row['author']    = $this->getTheAuthor();
 		$row['author_id'] = $row['author']->id;
 
+		# Get the content
+		$row['content'] = $this->getTheContent();
+
 		# Validate the title
 		$row['title'] = trim($row['title']);
 		if (empty($row['title']))
@@ -634,9 +637,9 @@ class Post extends Wrapper
 	  		$format = $this->config->get('cms.permalinks');
 	  	}
 	  	else {
-	  		if ($this->config->get('cms.custom_permalinks.'.$type))
+	  		if ($this->config->get('cms.custom_posts.'.$type))
 	  		{
-	  			$format = $this->config->get('cms.custom_permalinks.'.$type);
+	  			$format = $this->config->get('cms.custom_posts.'.$type);
 	  		}
 	  		else
 	  		{

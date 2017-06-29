@@ -87,7 +87,7 @@ class Str
 	}
 
 	/**
-	 * Converts camel case to underscored.
+	 * Converts camel case to space.
 	 *
 	 * @access public
 	 * @param  string $string The input string
@@ -97,6 +97,7 @@ class Str
 	{
 		$result = '';
 		$chars  = str_split($string);
+
 		foreach ($chars as $char)
 		{
 			if (ctype_upper($char))
@@ -107,6 +108,7 @@ class Str
 				$result .= $char;
 			}
 		}
+
 		return trim($result);
 	}
 

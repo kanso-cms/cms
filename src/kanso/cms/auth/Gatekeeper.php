@@ -334,33 +334,6 @@ class Gatekeeper
     }
 
     /**
-     * Activate an existing user
-     *
-     * @access public
-     * @param  string $token Verification token from DB
-     * @return bool
-     */
-    public function activateUser(string $token): bool
-    {
-        # Validate the user exists
-        $user = $this->provider->byKey('kanso_register_key', $token, true);
-
-        if ($user)
-        {
-            $user->kanso_register_key = '';
-            
-            $user->status = 'confirmed';
-            
-            if ($user->save())
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Forgot password
      *
      * @access public

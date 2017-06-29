@@ -7,14 +7,14 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\cms\admin\models\Model;
+use kanso\cms\admin\models\BaseModel;
 
 /**
  * Admin panel account pages model
  *
  * @author Joe J. Howard
  */
-class Accounts extends Model
+class Accounts extends BaseModel
 {
     /**
      * {@inheritdoc}
@@ -70,7 +70,7 @@ class Accounts extends Model
         {
             if ($this->isLoggedIn)
             {
-                $this->response->redirect($this->request->environment()->HTTP_HOST.'/admin/articles/');
+                $this->Response->redirect($this->Request->environment()->HTTP_HOST.'/admin/posts/');
 
                 return false;
             }
@@ -122,23 +122,23 @@ class Accounts extends Model
 
         if ($validated_data)
         {
-            $login = $this->gatekeeper->login($validated_data['username'], $validated_data['password']);
+            $login = $this->Gatekeeper->login($validated_data['username'], $validated_data['password']);
             
-            if ($login === $this->gatekeeper::LOGIN_ACTIVATING)
+            if ($login === $this->Gatekeeper::LOGIN_ACTIVATING)
             {
                 return $this->postMessage('warning', 'Your account has not yet been activated.');
             }
-            else if ($login === $this->gatekeeper::LOGIN_LOCKED)
+            else if ($login === $this->Gatekeeper::LOGIN_LOCKED)
             {
                 return $this->postMessage('warning', 'That account has been temporarily locked.');
             }
-            else if ($login === $this->gatekeeper::LOGIN_BANNED)
+            else if ($login === $this->Gatekeeper::LOGIN_BANNED)
             {
                 return $this->postMessage('warning', 'hat account has been permanently suspended.');
             }
             else if ($login === true)
             {
-                $this->response->redirect($this->request->environment()->HTTP_HOST.'/admin/articles/');
+                $this->Response->redirect($this->Request->environment()->HTTP_HOST.'/admin/posts/');
             }
         }
 
@@ -167,7 +167,7 @@ class Accounts extends Model
 
         if ($validated_data)
         {
-            $this->gatekeeper->forgotPassword($validated_data['username']);
+            $this->Gatekeeper->forgotPassword($validated_data['username']);
         }
 
         return $this->postMessage('success', 'If a user is registered under that username, they were sent an email to reset their password.');
@@ -195,7 +195,7 @@ class Accounts extends Model
 
         if ($validated_data)
         {
-            $this->gatekeeper->forgotPassword($validated_data['username']);
+            $this->Gatekeeper->forgotPassword($validated_data['username']);
         }
 
         return $this->postMessage('success', 'If a user is registered under that email address, they were sent an email with their username.');
@@ -210,7 +210,7 @@ class Accounts extends Model
     private function validateResetPasswordGET(): bool
     {
         # Get the token in the url
-        $token = $this->request->queries('token');
+        $token = $this->Request->queries('token');
 
         # If no token was given 404
         if (!$token || trim($token) === '' || $token === 'null' )
@@ -219,12 +219,12 @@ class Accounts extends Model
         }
 
         # Get the user based on their token
-        $user = $this->userManager->provider()->byKey('kanso_password_key', $token, true);
+        $user = $this->UserManager->provider()->byKey('kanso_password_key', $token, true);
 
         # Add the token to their session
         if ($user)
         {
-            $this->response->session()->set('kanso_password_key', $token);
+            $this->Response->session()->set('kanso_password_key', $token);
 
             return true;
         }
@@ -259,7 +259,7 @@ class Accounts extends Model
         $validated_data = $this->validation->run($post);
 
         # Make sure the user's token is in the session and they match
-        $token = $this->response->session()->get('kanso_password_key');
+        $token = $this->Response->session()->get('kanso_password_key');
 
         if (!$token)
         {
@@ -267,19 +267,19 @@ class Accounts extends Model
         }
 
         # Get the user based on their token
-        $user = $this->userManager->provider()->byKey('kanso_password_key', $token, true);
+        $user = $this->UserManager->provider()->byKey('kanso_password_key', $token, true);
 
         if ($user)
         {
-            if ($this->gatekeeper->resetPassword($_POST['password'], $token))
+            if ($this->Gatekeeper->resetPassword($_POST['password'], $token))
             {
-                $this->response->session()->remove('kanso_password_key');
+                $this->Response->session()->remove('kanso_password_key');
 
                 return $this->postMessage('success', 'Your password was successfully reset.');
             }
         }
 
-        return  $this->postMessage('danger', 'There was an error processing your request.');
+        return $this->postMessage('danger', 'There was an error processing your request.');
     }
 
     /**
@@ -289,8 +289,9 @@ class Accounts extends Model
      */
     private function processLogoutGET()
     {
-        $this->gatekeeper->logout();
+        $this->Gatekeeper->logout();
 
-        $this->response->redirect($this->request->environment()->HTTP_HOST);
+        $this->Response->redirect($this->Request->environment()->HTTP_HOST);
     }
+    
 }

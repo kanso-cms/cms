@@ -57,7 +57,7 @@ trait ControllerHelperTrait
 	 */
 	protected function jsonResponse(array $data)
 	{
-		$this->response->format()->set('application/json');
+		$this->response->format()->set('json');
 
 		$this->response->body()->set(json_encode($data));
 	}
@@ -70,7 +70,7 @@ trait ControllerHelperTrait
 	 */
 	protected function redirectResponse(string $location)
 	{
-		$this->Response->redirect($this->Request->environment()->HTTP_HOST.'/'.$location);
+		$this->Response->redirect($this->Request->environment()->HTTP_HOST.'/'.ltrim($location, '/'));
 	}
 
 	/**

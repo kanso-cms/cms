@@ -12,13 +12,13 @@
 	<section class="items-list">
 
 		<!-- LIST POWERS -->
-		<?php require($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Tags'.DIRECTORY_SEPARATOR.'list-powers.php'); ?>
+		<?php require($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'tags'.DIRECTORY_SEPARATOR.'list-powers.php'); ?>
 
 		<!-- LIST BODY -->
-		<?php require($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Tags'.DIRECTORY_SEPARATOR.'list-body.php'); ?>
+		<?php require($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'tags'.DIRECTORY_SEPARATOR.'list-body.php'); ?>
 
 		<!-- LIST FOOTER -->
-		<?php require($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Tags'.DIRECTORY_SEPARATOR.'list-pagination.php'); ?>
+		<?php require($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'tags'.DIRECTORY_SEPARATOR.'list-pagination.php'); ?>
 
 	</section>
 

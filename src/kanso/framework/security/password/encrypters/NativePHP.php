@@ -14,6 +14,7 @@ namespace kanso\framework\security\password\encrypters;
  */
 class NativePHP extends Encrypter implements EncrypterInterface
 {
+
 	/**
 	 * PHP password hashing constant
 	 *

@@ -21,6 +21,7 @@
 	        </span>
 		</div>
 		<div class="media-right nowrap">
+			<?php if ($tag->id !== 1) : ?>
 			<a href="#" class="btn btn-pure btn-xs tooltipped tooltipped-n" data-tooltip="Clear tag" onclick="document.getElementById('clear-form-<?php echo $tag->id;?>').submit()">
 				<span class="glyph-icon glyph-icon-chain-broken icon-md"></span>
 			</a>
@@ -37,7 +38,7 @@
 				<input type="hidden" name="bulk_action"  value="delete">
 				<input type="hidden" name="tags[]"      value="<?php echo $tag->id;?>">
 			</form>
-
+			<?php endif;?>
 		</div>
 	</div>
 </div>

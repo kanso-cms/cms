@@ -7,18 +7,16 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\Kanso;
+use kanso\cms\admin\models\BaseModel;
 use kanso\framework\utility\Arr;
 use kanso\framework\utility\Str;
-use kanso\cms\admin\models\Model;
-use kanso\framework\security\spam\SpamProtector;
 
 /**
- * Comments page model
+ * Comment users model
  *
  * @author Joe J. Howard
  */
-class CommentUsers extends Model
+class CommentUsers extends BaseModel
 {
     /**
      * {@inheritdoc}
@@ -52,17 +50,6 @@ class CommentUsers extends Model
     public function onAJAX()
     {
         return false;
-    }
-
-    /**
-     * Returns the tag manager
-     *
-     * @access private
-     * @return \kanso\framework\security\spam\SpamProtector
-     */
-    private function spamProtector(): SpamProtector
-    {
-        return Kanso::instance()->SpamProtector;
     }
 
    /**
@@ -128,18 +115,18 @@ class CommentUsers extends Model
         foreach ($ips as $ip) {
             if ($list === 'blacklist')
             {
-                $this->spamProtector()->unWhitelistIpAddress($ip);
-                $this->spamProtector()->blacklistIpAddress($ip);
+                $this->SpamProtector->unWhitelistIpAddress($ip);
+                $this->SpamProtector->blacklistIpAddress($ip);
             }
             else if ($list === 'whitelist')
             {
-                $this->spamProtector()->whitelistIpAddress($ip);
-                $this->spamProtector()->unBlacklistIpAddress($ip);
+                $this->SpamProtector->whitelistIpAddress($ip);
+                $this->SpamProtector->unBlacklistIpAddress($ip);
             }
             else if ($list === 'nolist')
             {
-                $this->spamProtector()->unWhitelistIpAddress($ip);
-                $this->spamProtector()->unBlacklistIpAddress($ip);
+                $this->SpamProtector->unWhitelistIpAddress($ip);
+                $this->SpamProtector->unBlacklistIpAddress($ip);
             }
         }
     }
@@ -198,7 +185,7 @@ class CommentUsers extends Model
     private function getQueries(): array
     {
         # Get queries
-        $queries = $this->request->queries();
+        $queries = $this->Request->queries();
 
         # Set defaults
         if (!isset($queries['search']))   $queries['search']   = false;
@@ -262,8 +249,8 @@ class CommentUsers extends Model
         $users = [];
         foreach ($comments as $comment)
         {
-            $blacklisted = $this->spamProtector()->isIpBlacklisted($comment['ip_address']);
-            $whitelisted = $this->spamProtector()->isIpWhiteListed($comment['ip_address']);
+            $blacklisted = $this->SpamProtector->isIpBlacklisted($comment['ip_address']);
+            $whitelisted = $this->SpamProtector->isIpWhiteListed($comment['ip_address']);
 
             if ($filter === 'whitelist' && !$whitelisted)
             {

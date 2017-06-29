@@ -107,7 +107,6 @@ class SpamProtector
         return $rating;
     }
 
-
     /**
      * Checks if an IP address is whitelisted
      *

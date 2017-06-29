@@ -7,17 +7,15 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\Kanso;
+use kanso\cms\admin\models\BaseModel;
 use kanso\framework\utility\Arr;
-use kanso\cms\admin\models\Model;
-use kanso\cms\wrappers\managers\TagManager;
 
 /**
- * Tags page model
+ * Tags model
  *
  * @author Joe J. Howard
  */
-class Tags extends Model
+class Tags extends BaseModel
 {
     /**
      * {@inheritdoc}
@@ -51,17 +49,6 @@ class Tags extends Model
     public function onAJAX()
     {
         return false;
-    }
-
-    /**
-     * Returns the tag manager
-     *
-     * @access private
-     * @return \kanso\cms\wrappers\managers\TagManager
-     */
-    private function tagManager(): TagManager
-    {
-        return Kanso::instance()->TagManager;
     }
 
    /**
@@ -159,7 +146,7 @@ class Tags extends Model
     {
         foreach ($ids as $id)
         {
-            $tag = $this->tagManager()->byId($id);
+            $tag = $this->TagManager->byId($id);
 
             if ($tag)
             {
@@ -179,7 +166,7 @@ class Tags extends Model
     {
         foreach ($ids as $id)
         {
-            $tag = $this->tagManager()->byId($id);
+            $tag = $this->TagManager->byId($id);
 
             if ($tag)
             {
@@ -214,7 +201,7 @@ class Tags extends Model
     private function getQueries(): array
     {
         # Get queries
-        $queries = $this->request->queries();
+        $queries = $this->Request->queries();
 
         # Set defaults
         if (!isset($queries['search'])) $queries['search'] = false;
@@ -282,7 +269,7 @@ class Tags extends Model
             ->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id')
             ->WHERE('tags.id', '=', $row['id']);
 
-            $tag = $this->tagManager()->byId($row['id']);
+            $tag = $this->TagManager->byId($row['id']);
             
             $tag->article_count = count($this->SQL->FIND_ALL());
 

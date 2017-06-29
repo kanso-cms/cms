@@ -32,13 +32,9 @@ else if ($ADMIN_PAGE_TYPE === 'writer')
 {
 	require_once('dash-writer.php');
 }
-else if ($ADMIN_PAGE_TYPE === 'articles')
+else if ($ADMIN_PAGE_TYPE === 'posts' || $ADMIN_PAGE_TYPE === 'pages' || $ADMIN_PAGE_TYPE === 'customposts')
 {
-	require_once('dash-articles.php');
-}
-else if ($ADMIN_PAGE_TYPE === 'pages')
-{
-	require_once('dash-pages.php');
+	require_once('dash-posts.php');
 }
 else if ($ADMIN_PAGE_TYPE === 'tags')
 {
@@ -70,6 +66,11 @@ else if (
 {
 	require_once('dash-settings.php');
 }
+else if ($ADMIN_PAGE_TYPE === 'customPage')
+{
+	require_once('dash-custom-page.php');
+}
+
 
 # Include the sidebar
 if (admin_is_dash())

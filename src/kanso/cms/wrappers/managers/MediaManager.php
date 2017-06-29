@@ -196,7 +196,10 @@ class MediaManager extends Manager
         if ($validate === true)
         {
             # Validate this file type is supported
-            if (!in_array($FILE['type'], $this->acceptedMime)) return self::UNSUPPORTED_TYPE;
+            if (!in_array($FILE['type'], $this->acceptedMime))
+            {
+                return self::UNSUPPORTED_TYPE;
+            }
         }
        
         # Is the file an image?

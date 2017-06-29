@@ -7,20 +7,16 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\Kanso;
+use kanso\cms\admin\models\BaseModel;
+use kanso\framework\utility\Arr;
 use kanso\framework\utility\Str;
-use kanso\framework\config\Config;
-use kanso\framework\cache\Cache;
-use kanso\framework\security\Crypto;
-use kanso\cms\admin\models\Model;
-use \kanso\cms\install\Installer;
 
 /**
- * Settings pages model
+ * Settings model
  *
  * @author Joe J. Howard
  */
-class Settings extends Model
+class Settings extends BaseModel
 {
     /**
      * {@inheritdoc}
@@ -42,7 +38,7 @@ class Settings extends Model
     {
         if ($this->isLoggedIn)
         {
-            if ($this->response->session()->token()->verify($this->post['access_token']))
+            if ($this->Response->session()->token()->verify($this->post['access_token']))
             {
                 return $this->parsePost();
             }
@@ -60,52 +56,6 @@ class Settings extends Model
     }
 
     /**
-     * Returns the framework configuration
-     *
-     * @access private
-     * @return \kanso\framework\config\Config
-     */
-    private function config(): Config
-    {
-        return Kanso::instance()->Config;
-    }
-
-    /**
-     * Returns the framework configuration
-     *
-     * @access private
-     * @return \kanso\cms\install\Installer
-     */
-    private function installer(): Installer
-    {
-        return Kanso::instance()->Installer;
-    }
-
-    
-
-    /**
-     * Returns the framework crypto
-     *
-     * @access private
-     * @return \kanso\framework\security\Crypto
-     */
-    private function crypto(): Crypto
-    {
-        return Kanso::instance()->Crypto;
-    }
-
-    /**
-     * Returns the framework Cache
-     *
-     * @access private
-     * @return \kanso\framework\cache\Cache
-     */
-    private function cache(): Cache
-    {
-        return Kanso::instance()->Cache;
-    }
-
-    /**
      * Parse the $_GET request variables and filter the articles for the requested page.
      *
      * @access private
@@ -113,7 +63,7 @@ class Settings extends Model
      */
     private function parseGet(): array
     {
-        $_themes = array_filter(glob($this->config()->get('cms.themes_path').'/*'), 'is_dir');
+        $_themes = array_filter(glob($this->Config->get('cms.themes_path').'/*'), 'is_dir');
         
         $themes  = [];
         
@@ -210,20 +160,20 @@ class Settings extends Model
         $emailNotifications = isset($validated_data['email_notifications']) ? true : false;
 
         # Grab the user's object
-        $user = $this->gatekeeper->getUser();
+        $user = $this->Gatekeeper->getUser();
 
         # Validate that the username/ email doesn't exist already
         # only if the user has changed either value
         if ($email !== $user->email)
         {
-            if ($this->userManager->byEmail($email))
+            if ($this->UserManager->byEmail($email))
             {
                 return $this->postMessage('warning', 'Another user already exists with that email. Please try another email address.');
             }
         }
         if ($username !== $user->username)
         {
-            if ($this->userManager->byUsername($username))
+            if ($this->UserManager->byUsername($username))
             {
                 return $this->postMessage('warning', 'Another user already exists with that username. Please try another username.');
             }
@@ -237,12 +187,12 @@ class Settings extends Model
         # If they changed their password lets update it
         if ($password !== '' && !empty($password))
         {
-            $user->hashed_pass = utf8_encode($this->crypto()->password()->hash($password));
+            $user->hashed_pass = utf8_encode($this->Crypto->password()->hash($password));
         }
 
         $user->save();
 
-        $this->gatekeeper->refreshUser();
+        $this->Gatekeeper->refreshUser();
       
         return $this->postMessage('success', 'Your account settings were successfully updated!');
     }
@@ -289,7 +239,7 @@ class Settings extends Model
         }
 
         # Grab the Row and update settings
-        $user = $this->gatekeeper->getUser();
+        $user = $this->Gatekeeper->getUser();
 
         # Change authors details
         $user->name         = $validated_data['name'];
@@ -302,7 +252,7 @@ class Settings extends Model
         $user->thumbnail_id = empty($validated_data['thumbnail_id']) ? null : intval($validated_data['thumbnail_id']);
         $user->save();
 
-        $this->gatekeeper->refreshUser();
+        $this->Gatekeeper->refreshUser();
 
         return $this->postMessage('success', 'Your author information was successfully updated!');
     }
@@ -316,7 +266,7 @@ class Settings extends Model
     private function submitKansoSettings()
     {
         # Validate the user is an admin
-        if ($this->gatekeeper->getUser()->role !== 'administrator')
+        if ($this->Gatekeeper->getUser()->role !== 'administrator')
         {
             return false;
         }
@@ -356,7 +306,7 @@ class Settings extends Model
 
         if (isset($post['clear_cache']))
         {
-            $this->cache()->clear();
+            $this->Cache->clear();
 
             return $this->postMessage('success', 'The application cache was successfully cleared.');
         }
@@ -423,18 +373,18 @@ class Settings extends Model
 
             foreach ($cms as $key => $val)
             {
-                $this->config()->set('cms.'.$key, $val);
+                $this->Config->set('cms.'.$key, $val);
             }
 
-            $this->config()->set('cms.uploads.thumbnail_quality', $validated_data['thumbnail_quality']);
+            $this->Config->set('cms.uploads.thumbnail_quality', $validated_data['thumbnail_quality']);
 
-            $this->config()->set('cdn.enabled', $validated_data['enable_cdn']);
-            $this->config()->set('cdn.host', $validated_data['cdn_url']);
+            $this->Config->set('cdn.enabled', $validated_data['enable_cdn']);
+            $this->Config->set('cdn.host', $validated_data['cdn_url']);
 
-            $this->config()->set('cache.http_cache_enabled', $validated_data['enable_cache']);
-            $this->config()->set('cache.configurations.'.$this->config()->get('cache.default').'.expire', $validated_data['cache_life']);
+            $this->Config->set('cache.http_cache_enabled', $validated_data['enable_cache']);
+            $this->Config->set('cache.configurations.'.$this->Config->get('cache.default').'.expire', $validated_data['cache_life']);
 
-            $this->config()->save();
+            $this->Config->save();
 
             return $this->postMessage('success', 'Kanso settings successfully updated!');
         }
@@ -650,7 +600,7 @@ class Settings extends Model
     private function submitInviteUser()
     {
         # Validate the user is an admin
-        if (!$this->gatekeeper->getUser()->role === 'administrator')
+        if (!$this->Gatekeeper->getUser()->role === 'administrator')
         {
             return false;
         }
@@ -674,12 +624,12 @@ class Settings extends Model
             return false;
         }
 
-        if ($this->gatekeeper->getUser()->email === $validated_data['email'])
+        if ($this->Gatekeeper->getUser()->email === $validated_data['email'])
         {
             return $this->postMessage('warning', 'Another user is already registered with that email address.');
         }
 
-        $user = $this->userManager->byEmail($validated_data['email']);
+        $user = $this->UserManager->byEmail($validated_data['email']);
 
         if ($user && $user->status === 'confirmed')
         {
@@ -689,7 +639,7 @@ class Settings extends Model
         # If theyre deleted or pending re-invite them
         if (!$user || ($user && $user->status !== 'confirmed'))
         {
-            if ($this->userManager->createAdmin($validated_data['email'], $validated_data['role']))
+            if ($this->UserManager->createAdmin($validated_data['email'], $validated_data['role']))
             {
                 return $this->postMessage('success', 'The user was successfully sent a registration invite.');
             }
@@ -708,7 +658,7 @@ class Settings extends Model
     private function submitDeleteUser()
     {
         # Validate the user is an admin
-        if (!$this->gatekeeper->getUser()->role === 'administrator')
+        if (!$this->Gatekeeper->getUser()->role === 'administrator')
         {
             return false;
         }
@@ -732,12 +682,12 @@ class Settings extends Model
 
         $user_id = intval($validated_data['user_id']);
 
-        if ($user_id === $this->gatekeeper->getUser()->id || $user_id === 1)
+        if ($user_id === $this->Gatekeeper->getUser()->id || $user_id === 1)
         {
             return false;
         }
 
-        $user = $this->userManager->byId($user_id);
+        $user = $this->UserManager->byId($user_id);
 
         if ($user)
         {
@@ -758,7 +708,7 @@ class Settings extends Model
     private function submitChangeUserRole()
     {
         # Validate the user is an admin
-        if (!$this->gatekeeper->getUser()->role === 'administrator')
+        if (!$this->Gatekeeper->getUser()->role === 'administrator')
         {
             return false;
         }
@@ -784,12 +734,12 @@ class Settings extends Model
 
         $user_id = intval($validated_data['user_id']);
 
-        if ($user_id === $this->gatekeeper->getUser()->id || $user_id === 1)
+        if ($user_id === $this->Gatekeeper->getUser()->id || $user_id === 1)
         {
             return false;
         }
 
-        $user = $this->userManager->byId($user_id);
+        $user = $this->UserManager->byId($user_id);
 
         if ($user)
         {
@@ -812,15 +762,15 @@ class Settings extends Model
     private function submitRestoreKanso()
     {
         # Validate the user is an admin
-        if ($this->gatekeeper->getUser()->role === 'administrator')
+        if ($this->Gatekeeper->getUser()->role === 'administrator')
         {
-            if ($this->installer()->reInstall())
+            if ($this->Installer->reInstall())
             {
-                $this->response->session()->destroy();
+                $this->Response->session()->destroy();
 
-                $this->response->cookie()->destroy();
+                $this->Response->cookie()->destroy();
 
-                $this->response->redirect($this->request->environment()->HTTP_HOST.'/admin/login/');
+                $this->Response->redirect($this->Request->environment()->HTTP_HOST.'/admin/login/');
 
                 return;
             }  

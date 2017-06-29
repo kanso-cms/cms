@@ -7,17 +7,34 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\cms\admin\models\Model;
-use kanso\Kanso;
-use kanso\cms\wrappers\managers\PostManager;
-
+use kanso\cms\admin\models\BaseModel;
+use kanso\framework\utility\Str;
+use kanso\framework\utility\Humanizer;
 /**
- * Pages page model
+ * Posts
  *
  * @author Joe J. Howard
  */
-class Pages extends Model
+class Posts extends BaseModel
 {
+    /**
+     * the post type to filter
+     *
+     * @var string
+     */
+    protected $postType;
+
+    /**
+     * Set the post type to filter
+     *
+     * @access public
+     * @param  array   $ids List of post ids
+     */
+    public function setPostType(string $postType)
+    {
+        $this->postType = $postType;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -53,18 +70,7 @@ class Pages extends Model
     }
 
     /**
-     * Returns the post manager
-     *
-     * @access private
-     * @return \kanso\cms\wrappers\managers\PostManager
-     */
-    private function postManager(): PostManager
-    {
-        return Kanso::instance()->PostManager;
-    }
-
-    /**
-     * Parse the $_GET request variables and filter the articles for the requested page.
+     * Parse the $_GET request variables and filter the posts for the requested page.
      *
      * @access private
      * @return array
@@ -74,17 +80,20 @@ class Pages extends Model
         # Prep the response
         $response =
         [
-            'articles'      => $this->loadArticles(),
+            'posts'         => $this->loadPosts(),
             'max_page'      => 0,
             'queries'       => $this->getQueries(),
             'empty_queries' => $this->emptyQueries(),
+            'postType'      => $this->postType,
+            'postSlug'      => Str::getAfterLastChar(trim(Str::getBeforeFirstChar($this->Request->environment()->REQUEST_URI, '?'), '/'), '/'),
+            'postName'      => Humanizer::pluralize(ucfirst(Str::camel2case($this->postType))),
         ];
 
-        # If the articles are empty,
+        # If the posts are empty,
         # There's no need to check for max pages
-        if (!empty($response['articles']))
+        if (!empty($response['posts']))
         {
-            $response['max_page'] = $this->loadArticles(true);
+            $response['max_page'] = $this->loadPosts(true);
         }
 
         return $response;
@@ -111,13 +120,13 @@ class Pages extends Model
             {
                 $this->delete($postIds);
 
-                return $this->postMessage('success', 'Your articles were successfully deleted!');
+                return $this->postMessage('success', 'Your posts were successfully deleted!');
             }
             if ($this->post['bulk_action'] === 'published' || $this->post['bulk_action'] === 'draft')
             {
                 $this->changeStatus($postIds, $this->post['bulk_action']);
                 
-                return $this->postMessage('success', 'Your articles were successfully updated!');
+                return $this->postMessage('success', 'Your posts were successfully updated!');
             }
         }
 
@@ -161,7 +170,7 @@ class Pages extends Model
     {
         foreach ($ids as $id)
         {
-            $post = $this->postManager()->byId($id);
+            $post = $this->PostManager->byId($id);
 
             if ($post)
             {
@@ -181,7 +190,7 @@ class Pages extends Model
     {
         foreach ($ids as $id)
         {
-            $post = $this->postManager()->byId($id);
+            $post = $this->PostManager->byId($id);
 
             if ($post)
             {
@@ -222,7 +231,7 @@ class Pages extends Model
     private function getQueries(): array
     {
         # Get queries
-        $queries = $this->request->queries();
+        $queries = $this->Request->queries();
 
         # Set defaults
         if (!isset($queries['search']))   $queries['search']   = false;
@@ -243,7 +252,7 @@ class Pages extends Model
      * @param  bool $checkMaxPages Count the max pages
      * @return array|int
      */
-    private function loadArticles(bool $checkMaxPages = false)
+    private function loadPosts(bool $checkMaxPages = false)
     {
         # Get queries
         $queries = $this->getQueries();
@@ -274,7 +283,7 @@ class Pages extends Model
         if ($queries['sort'] === 'title')     $sortKey   = 'posts.title';
 
         # Select the posts
-        $this->SQL->SELECT('posts.id')->FROM('posts')->WHERE('posts.type', '=', 'page');
+        $this->SQL->SELECT('posts.id')->FROM('posts')->WHERE('posts.type', '=', $this->postType);
         
         # Set the order
         $this->SQL->ORDER_BY($sortKey, $sort);
@@ -340,7 +349,7 @@ class Pages extends Model
         
         foreach ($rows as $row)
         {
-           $articles[] = $this->postManager()->byId($row['id']);
+           $articles[] = $this->PostManager->byId($row['id']);
         }
 
         return $articles;

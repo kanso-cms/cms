@@ -7,18 +7,16 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\Kanso;
+use kanso\cms\admin\models\BaseModel;
 use kanso\framework\utility\Arr;
 use kanso\framework\utility\Str;
-use kanso\cms\admin\models\Model;
-use kanso\cms\wrappers\managers\CommentManager;
 
 /**
- * Comments page model
+ * Comments model
  *
  * @author Joe J. Howard
  */
-class Comments extends Model
+class Comments extends BaseModel
 {
     /**
      * {@inheritdoc}
@@ -52,17 +50,6 @@ class Comments extends Model
     public function onAJAX()
     {
         return false;
-    }
-
-    /**
-     * Returns the tag manager
-     *
-     * @access private
-     * @return \kanso\cms\wrappers\managers\CommentManager
-     */
-    private function commentManager(): CommentManager
-    {
-        return Kanso::instance()->CommentManager;
     }
 
    /**
@@ -160,7 +147,7 @@ class Comments extends Model
     {
         foreach ($ids as $id)
         {
-            $comment = $this->commentManager()->byId($id);
+            $comment = $this->CommentManager->byId($id);
 
             if ($comment)
             {
@@ -180,7 +167,7 @@ class Comments extends Model
     {
         foreach ($ids as $id)
         {
-            $comment = $this->commentManager()->byId($id);
+            $comment = $this->CommentManager->byId($id);
 
             if ($comment)
             {
@@ -217,7 +204,7 @@ class Comments extends Model
     private function getQueries(): array
     {
         # Get queries
-        $queries = $this->request->queries();
+        $queries = $this->Request->queries();
 
         # Set defaults
         if (!isset($queries['search']))   $queries['search']   = false;
@@ -315,7 +302,7 @@ class Comments extends Model
         
         foreach ($rows as $row)
         {
-            $comments[] = $this->commentManager()->byId($row['id']);
+            $comments[] = $this->CommentManager->byId($row['id']);
         }
 
         return $comments;

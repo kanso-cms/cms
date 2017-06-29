@@ -22,28 +22,28 @@
 	<!-- SETTINGS FORM -->
 	<?php if ($active_tab === 'account') : ?>
 		<!-- ACCOUNT -->
-		<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Settings'.DIRECTORY_SEPARATOR.'account.php'); ?>
+		<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'settings'.DIRECTORY_SEPARATOR.'account.php'); ?>
 		
 	<?php elseif ($active_tab === 'author') : ?>
 		<!-- AUTHOR -->
-		<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Settings'.DIRECTORY_SEPARATOR.'author.php'); ?>
+		<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'settings'.DIRECTORY_SEPARATOR.'author.php'); ?>
 		<!-- MEDIA LIBRARY -->
 		<div class="avatar-media-wrapper js-triggerable-media">
-			<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Media'.DIRECTORY_SEPARATOR.'media-library.php'); ?>
+			<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'media'.DIRECTORY_SEPARATOR.'media-library.php'); ?>
 		</div>
 
 	<?php elseif ($active_tab === 'kanso') : ?>
 		<!-- KANSO -->
-		<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Settings'.DIRECTORY_SEPARATOR.'kanso.php'); ?>
+		<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'settings'.DIRECTORY_SEPARATOR.'kanso.php'); ?>
 
 	<?php elseif ($active_tab === 'users') : ?>
 	 	<!-- USERS -->
-	    <?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Settings'.DIRECTORY_SEPARATOR.'users.php'); ?>
+	    <?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'settings'.DIRECTORY_SEPARATOR.'users.php'); ?>
 
 
 	<?php elseif ($active_tab === 'tools') : ?>
 	    <!-- TOOLS -->
-	    <?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'Settings'.DIRECTORY_SEPARATOR.'tools.php'); ?>
+	    <?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'settings'.DIRECTORY_SEPARATOR.'tools.php'); ?>
 	<?php endif;?>
 
 </div>

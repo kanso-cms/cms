@@ -44,14 +44,9 @@ abstract class Controller
      * @param  \kanso\framework\http\request\Response $response   Response instance
      * @param  \Closure                               $next       Next middleware closure
      * @param  string                                 $modelClass Full namespaced class name of the model
-
      */
     public function __construct(Request $request, Response $response, Closure $next, string $modelClass)
     {
-    	$this->request = $request;
-
-    	$this->response = $response;
-
     	$this->nextMiddleware = $next;
 
     	$this->loadContainer();

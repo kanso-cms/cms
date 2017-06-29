@@ -46,7 +46,7 @@ Class Cache
      * @access public
      * @param  string $key Key to load
      */
-    public function get(string $key)
+    public function get(string $key): string
     {
         return $this->store->get($key);
     }
@@ -69,7 +69,7 @@ Class Cache
      * @access public
      * @param  string $key Key to check
      */
-    public function has(string $key)
+    public function has(string $key): bool
     {
         return $this->store->has($key);
     }
@@ -91,7 +91,7 @@ Class Cache
      * @access public
      * @param  string $key Key to check
      */
-    public function expired(string $key)
+    public function expired(string $key): bool
     {
         return $this->store->expired($key, $this->lifetime);
     }

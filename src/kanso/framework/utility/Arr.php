@@ -179,6 +179,24 @@ class Arr
 	}
 
 	/**
+	 * Insert into an associative array at a specific index
+	 *
+	 * @access public
+	 * @param  array $array Array to use
+	 * @param  mixed $item  Item to insert
+	 * @param  int   $index Index to insert item at
+	 * @return array
+	 */
+	public static function insertAt(array $array, $item, int $index)
+	{
+	    $previous_items = array_slice($array, 0, $index, true);
+	    
+	    $next_items     = array_slice($array, $index, NULL, true);
+	    
+	    return $previous_items + $item + $next_items;
+	}
+
+	/**
 	 * Returns TRUE if all needles exist in target array and FALSE if not.
 	 *
 	 * @access public
@@ -322,7 +340,10 @@ class Arr
             if (isset($arr[$key])) $str .= $arr[$key].$glue;
         }
         
-        if ($glue === '') return $str;
+        if ($glue === '')
+        {
+        	return $str;
+        }
 
         $split = array_filter(explode($glue, $str));
         

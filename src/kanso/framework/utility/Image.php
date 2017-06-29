@@ -133,8 +133,6 @@ class Image
         return $this->source_h;
     }
 
-    
-
     /**
      * Save the new file to disk
      *
