@@ -57,9 +57,9 @@ trait ControllerHelperTrait
 	 */
 	protected function jsonResponse(array $data)
 	{
-		$this->response->format()->set('json');
+		$this->Response->format()->set('json');
 
-		$this->response->body()->set(json_encode($data));
+		$this->Response->body()->set(json_encode($data));
 	}
 
 	/**
