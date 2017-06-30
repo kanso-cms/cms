@@ -356,6 +356,9 @@ class Settings extends BaseModel
             # Filter the permalinks
             $permalinks = $this->filterPermalinks($validated_data['permalinks']);
 
+            # Previous permalinks value
+            $oldPermalinks = $this->Config->get('cms.permalinks');
+
             $cms =
             [
                 "theme_name"       => $validated_data['theme'],
@@ -385,6 +388,12 @@ class Settings extends BaseModel
             $this->Config->set('cache.configurations.'.$this->Config->get('cache.default').'.expire', $validated_data['cache_life']);
 
             $this->Config->save();
+
+            # If permalinks were changed - reset all post slugs
+            if ($oldPermalinks !== $permalinks['permalinks'])
+            {
+                $this->resetPostSlugs();
+            }
 
             return $this->postMessage('success', 'Kanso settings successfully updated!');
         }
@@ -583,7 +592,15 @@ class Settings extends BaseModel
                 $permaLink .= $key.DIRECTORY_SEPARATOR;
                 $route     .= $map[$key].DIRECTORY_SEPARATOR;
             }
+            else
+            {
+                $permaLink .= Str::slug($key).DIRECTORY_SEPARATOR;
+                $route     .= Str::slug($key).DIRECTORY_SEPARATOR;
+            }
         }
+
+        $permaLink = trim($permaLink, '/').'/';
+        $route     = trim($route, '/').'/';
         
         return [
             'permalinks' => $permaLink,
@@ -751,6 +768,25 @@ class Settings extends BaseModel
         }
 
         return false;
+    }
+
+    /**
+     * Update and reset post slugs when permalinks have changed
+     * 
+     * @access private
+     * @return 
+     */
+    private function resetPostSlugs()
+    {
+        # Select the posts
+        $posts = $this->SQL->SELECT('posts.id')->FROM('posts')->FIND_ALL();
+
+        foreach ($posts as $row)
+        {
+            $post = $this->PostManager->byId($row['id']);
+
+            $post->save();
+        }
     }
 
     /**
