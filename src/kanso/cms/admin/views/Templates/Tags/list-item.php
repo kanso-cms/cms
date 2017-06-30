@@ -25,7 +25,7 @@
 			<a href="#" class="btn btn-pure btn-xs tooltipped tooltipped-n" data-tooltip="Clear tag" onclick="document.getElementById('clear-form-<?php echo $tag->id;?>').submit()">
 				<span class="glyph-icon glyph-icon-chain-broken icon-md"></span>
 			</a>
-	        <a href="#" class="btn btn-pure btn-xs tooltipped tooltipped-n js-confirm-delete" data-item="tag" data-form="delete-form-<?php echo $tag->id;?>" data-tooltip="Delete category">
+	        <a href="#" class="btn btn-pure btn-xs tooltipped tooltipped-n js-confirm-delete" data-item="tag" data-form="delete-form-<?php echo $tag->id;?>" data-tooltip="Delete tag">
 				<span class="glyph-icon glyph-icon-trash-o icon-md"></span>
 			</a>
 			<form method="post" id="clear-form-<?php echo $tag->id;?>" style="display: none">

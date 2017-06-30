@@ -22,7 +22,7 @@
 		</div>
 		<div class="media-right nowrap">
 			<?php if ($category->id !== 1) : ?>
-			<a href="#" class="btn btn-pure btn-xs tooltipped tooltipped-n" data-tooltip="Clear tag" onclick="document.getElementById('clear-form-<?php echo $category->id;?>').submit()">
+			<a href="#" class="btn btn-pure btn-xs tooltipped tooltipped-n" data-tooltip="Clear category" onclick="document.getElementById('clear-form-<?php echo $category->id;?>').submit()">
 				<span class="glyph-icon glyph-icon-chain-broken icon-md"></span>
 			</a>
 	        <a href="#" class="btn btn-pure btn-xs tooltipped tooltipped-n js-confirm-delete" data-item="category" data-form="delete-form-<?php echo $category->id;?>" data-tooltip="Delete category">
