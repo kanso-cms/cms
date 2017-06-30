@@ -1836,15 +1836,16 @@ class Query
             return false;
         }
 
+        # Get for the cache
+        $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
+
         # There are only next/prev pages for single, tags, category, author, and homepage 
         if (!in_array($this->requestType, ['single', 'home', 'tag', 'category', 'author']) && !$this->is_custom_post())
         {
             return $this->cache->set($key, false);
         }
-
-        # Get from the cache
-        $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
         
+        # Load from cache if we can 
         if ($this->cache->has($key))
         {
             return $this->cache->get($key);
@@ -1909,15 +1910,16 @@ class Query
             return false;
         }
 
+        # Get from the cache
+        $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
+       
         # There are only next/prev pages for single, tags, category, author, and homepage 
         if (!in_array($this->requestType, ['single', 'home', 'tag', 'category', 'author']) && !$this->is_custom_post())
         {
             return $this->cache->set($key, false);
         }
-
-        # Get from the cache
-        $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
         
+        # Load from cache if we can
         if ($this->cache->has($key))
         {
             return $this->cache->get($key);
