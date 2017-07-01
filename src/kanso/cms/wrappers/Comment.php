@@ -104,7 +104,7 @@ class Comment extends Wrapper
     {
         $children = [];
 
-        $rows = $this->SQL->SELECT('id')->FROM('comments')->WHERE('parent', '=', $comment->id)->FIND_ALL();
+        $rows = $this->SQL->SELECT('*')->FROM('comments')->WHERE('parent', '=', $comment->id)->FIND_ALL();
 
         foreach ($rows as $row)
         {
