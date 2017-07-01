@@ -134,7 +134,7 @@ class Accounts extends BaseModel
             }
             else if ($login === $this->Gatekeeper::LOGIN_BANNED)
             {
-                return $this->postMessage('warning', 'hat account has been permanently suspended.');
+                return $this->postMessage('warning', 'That account has been permanently suspended.');
             }
             else if ($login === true)
             {

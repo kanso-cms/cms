@@ -7,8 +7,10 @@
 
 namespace kanso\framework\http\session;
 
-use kanso\framework\utility\Arr;
 use kanso\framework\common\ArrayAccessTrait;
+use kanso\framework\http\session\Flash;
+use kanso\framework\http\session\Token;
+use kanso\framework\http\session\Store;
 
 /**
  * Session Manager

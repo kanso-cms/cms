@@ -309,7 +309,6 @@ class Gatekeeper
         # Compare the hashed password to the provided password
         if ($this->crypto->password()->verify($password, utf8_decode($user['hashed_pass'])))
         {
-
             # Log the client in
             $this->logClientIn($user);
 
@@ -484,6 +483,7 @@ class Gatekeeper
     {        
         # Create a fresh cookie
         $this->cookie->destroy();
+
         $this->session->destroy();
 
         # Add the user credentials
