@@ -2773,13 +2773,13 @@ class Query
             ',
 
             'post_id_field'  => '
-                <input id="comment-postId" type="hidden" name="postID" style="display:none" value="(:postID)" />
+                <input id="comment-postId" type="hidden" name="post-id" style="display:none" value="(:postID)" />
             ',
 
             'reply_id' => '',
 
             'reply_id_field' => '
-                <input id="comment-replyId" type="hidden" name="replyID" style="display:none" value="(:replyID)" />
+                <input id="comment-replyId" type="hidden" name="reply-id" style="display:none" value="(:replyID)" />
             ',
 
             'submit_field'   => '

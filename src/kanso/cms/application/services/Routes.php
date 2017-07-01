@@ -63,7 +63,7 @@ $router->post('/admin/categories/(:all)', '\kanso\cms\admin\controllers\Dashboar
 # Admin comments
 $router->get('/admin/comments/',          '\kanso\cms\admin\controllers\Dashboard@comments', '\kanso\cms\admin\models\Comments');
 $router->get('/admin/comments/(:all)',    '\kanso\cms\admin\controllers\Dashboard@comments', '\kanso\cms\admin\models\Comments');
-$router->post('/admin/comments/',  	    '\kanso\cms\admin\controllers\Dashboard@comments', '\kanso\cms\admin\models\Comments');
+$router->post('/admin/comments/',  	      '\kanso\cms\admin\controllers\Dashboard@comments', '\kanso\cms\admin\models\Comments');
 $router->post('/admin/comments/(:all)',   '\kanso\cms\admin\controllers\Dashboard@comments', '\kanso\cms\admin\models\Comments');
 
 # Admin comment authors
@@ -173,7 +173,7 @@ $router->get('/opensearch.xml', '\kanso\Kanso::loadOpenSearch');
 # Ajax Post Comments
 if ($config->get('cms.enable_comments') === true)
 {
-	$router->post('/comments/', '\kanso\comments\Comments@dispatch');
+	$router->post('/comments/', '\app\controllers\Comments@addComment', '\app\models\Comments');
 }
 
 # Sitemap

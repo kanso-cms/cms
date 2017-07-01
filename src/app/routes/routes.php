@@ -2,10 +2,10 @@
 
 /**
  * ---------------------------------------------------------
- * Application routes
+ * Example routes
  * ---------------------------------------------------------
  *
- * Define your custom application routes here
+ * Examples that come bundled with the framework
  */
 
 /**
@@ -28,3 +28,11 @@
  * Uncomment below to see how to add a custom post-type to the Admin Panel.
  */
 # $kanso->Admin->registerPostType('Product', 'product', 'shopping-cart', 'products/(:year)/(:month)/(:postname)/');
+
+/**
+ * ---------------------------------------------------------
+ * Application routes
+ * ---------------------------------------------------------
+ *
+ * Define your custom application routes here
+ */

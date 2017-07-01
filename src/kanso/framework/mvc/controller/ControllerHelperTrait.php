@@ -80,6 +80,6 @@ trait ControllerHelperTrait
 	 */
 	protected function notFoundResponse()
 	{
-		$this->response->notFound();
+		$this->Response->notFound();
 	}
 }
