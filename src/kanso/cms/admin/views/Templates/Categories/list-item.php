@@ -2,12 +2,14 @@
 <div class="row list-row">
 	<div class="media">
 		<div class="media-left">
+			<?php if ($category->id !== 1) : ?>
 			<div class="form-field">    
 		        <span class="checkbox checkbox-primary">
 		            <input type="checkbox" class="js-bulk-action-cb" name="tags[]" id="cb-tag-<?php echo $category->id; ?>" value="<?php echo $category->id; ?>" />
 		            <label for="cb-tag-<?php echo $category->id; ?>"></label>
 		        </span>
 		    </div>
+		    <?php endif; ?>
 		</div>
 		<div class="media-body gutter-md">
 			<div>

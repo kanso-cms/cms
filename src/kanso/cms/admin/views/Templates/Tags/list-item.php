@@ -1,6 +1,7 @@
 <!-- LIST ITEM -->
 <div class="row list-row">
 	<div class="media">
+		<?php if ($tag->id !== 1) : ?>
 		<div class="media-left">
 			<div class="form-field">    
 		        <span class="checkbox checkbox-primary">
@@ -9,6 +10,7 @@
 		        </span>
 		    </div>
 		</div>
+		<?php endif; ?>
 		<div class="media-body gutter-md">
 			<div>
 	            <a class="color-black p4 font-bolder" href="/admin/articles/?category=<?php echo $tag->id; ?>" target="_blank">
