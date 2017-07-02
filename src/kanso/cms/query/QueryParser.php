@@ -52,6 +52,13 @@ class QueryParser
     ];
 
     /**
+     * Defaults
+     *
+     * @var array
+     */
+    private $queryVarsDefaults;
+    
+    /**
      * Accepted logical operators
      *
      * @var array    
@@ -109,6 +116,8 @@ class QueryParser
         $this->SQL = $SQL;
 
         $this->postProvider = $postProvider;
+
+        $this->queryVarsDefaults = $this->queryVars;
     }
 
     /**
@@ -127,6 +136,9 @@ class QueryParser
         {
             return [];
         }
+
+        # Reset internals
+        $this->queryVars = $this->queryVarsDefaults;
 
         # Parse the query and execute the chain
         if ($this->parse())
