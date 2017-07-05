@@ -101,6 +101,7 @@ var KansoWriter = function() {
     this.initThumbnailImage();
     this.initWindowResize();
     this.initInputChanges();
+    this.initPostMeta();
     this.initFooter();
 }
 
@@ -513,6 +514,70 @@ KansoWriter.prototype.insertWrapText = function(prefix, suffix, noSelection, sel
     self.writer.focus();
 }
 
+
+// ##############################################################################
+// POST META
+// ##############################################################################
+KansoWriter.prototype.initPostMeta = function() {
+
+    var self        = this;
+    var addTrigger  = $('.js-add-post-meta-btn');
+    var container   = $('.js-post-meta-container');
+    var rmvTriggers = $All('.js-rmv-post-meta-btn');
+
+    for (var i = 0; i < rmvTriggers.length; i++)
+    {
+        this.initMetaRemoveTrigger(rmvTriggers[i]);
+    }
+
+    this.initAddMetaRow(addTrigger, container);
+}
+
+KansoWriter.prototype.initMetaRemoveTrigger = function(trigger) {
+
+    trigger.addEventListener('click', function(e)
+    {
+        e = e || window.event
+        e.preventDefault();
+        removeFromDOM(parentUntillClass(trigger, 'js-meta-row'));
+    });
+}
+
+KansoWriter.prototype.initAddMetaRow = function(trigger, container) {
+
+    var self = this;
+
+    trigger.addEventListener('click', function(e)
+    {
+        e = e || window.event
+        e.preventDefault();
+
+        var row = document.createElement('DIV');
+        row.className = 'row roof-xs js-meta-row';
+
+        row.innerHTML = [
+            '<div class="form-field floor-xs">',
+                '<label>Key</label>',
+                '<input type="text" name="post-meta-keys[]" value="" autocomplete="off" size="20">',
+            '</div>',
+            '&nbsp;&nbsp;&nbsp;',
+            '<div class="form-field floor-xs">',
+                '<label>Value</label>',
+                '<input type="text" name="post-meta-values[]" value="" autocomplete="off" size="60">',
+            '</div>',
+            '&nbsp;&nbsp;&nbsp;',
+            '<button class="btn btn-danger js-rmv-post-meta-btn" type="button">Remove</button>',
+            '<div class="row clearfix"></div>',
+        ].join('');
+        
+        container.appendChild(row);
+
+        self.initMetaRemoveTrigger($('.js-rmv-post-meta-btn', row));
+
+    });
+}
+
+
 // ##############################################################################
 // FILE: Libs/Writer/coreMirror.js
 // ##############################################################################
@@ -643,7 +708,7 @@ KansoWriter.prototype.initThumbnailImage = function() {
 --------------------------------------------------------------*/
 KansoWriter.prototype.initInputChanges = function() {
     var self = this;
-    var allInputs = $All('.js-review-wrap .input-default');
+    var allInputs = $All('.js-review-wrap input, .js-review-wrap textarea, .js-review-wrap select');
     for (var i = 0; i < allInputs.length; i++) {
         allInputs[i].addEventListener('input', function() {
             clearTimeout(self.saveTimer);

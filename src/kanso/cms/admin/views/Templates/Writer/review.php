@@ -65,8 +65,35 @@
 	                <input type="checkbox" name="comments" id="comments" <?php echo $the_post && $the_post->comments_enabled == true ? 'checked' : '';?> >
 	                <label for="comments">Enable comments</label>
 	            </span>
+	        </div>	        
+
+	        <div class="form-field row">
+				<label>Post Meta</label>
+		        <p class="color-gray">Post meta allows you to save additional data to a post.</p>
+		    </div>
+	        	
+        	<div class="row">
+	            <button class="btn js-add-post-meta-btn" type="button">Add field +</button>
+	            
+	            <div class="row floor-sm js-post-meta-container">
+	            	<?php if ($the_post) : 
+            		$post_meta = the_post_meta($the_post->id);
+            		if (is_array($post_meta) && !empty($post_meta)) : foreach ($post_meta as $key => $value) : ?>
+            			<div class="row roof-xs js-meta-row">
+	            			<div class="form-field floor-xs">
+							    <label>Key</label>
+							    <input type="text" name="post-meta-keys[]" value="<?php echo $key; ?>" autocomplete="off" size="20">
+							</div>&nbsp;&nbsp;&nbsp;<div class="form-field floor-xs">
+							    <label>Value</label>
+							    <input type="text" name="post-meta-values[]" value="<?php echo $value; ?>" autocomplete="off" size="60">
+							</div>&nbsp;&nbsp;&nbsp;<button class="btn btn-danger js-rmv-post-meta-btn" type="button">Remove</button>
+
+							<div class="row clearfix"></div>
+						</div>
+	            	<?php endforeach; endif; endif;?>
+	            </div>
 	        </div>
-	        
+
 			<button class="btn btn-success with-spinner" type="submit">
                 <svg viewBox="0 0 64 64" class="loading-spinner"><circle class="path" cx="32" cy="32" r="30" fill="none" stroke-width="4"></circle></svg>
                 Publish

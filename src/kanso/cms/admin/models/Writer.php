@@ -139,6 +139,8 @@ class Writer extends BaseModel
         $validated_data['id'] = intval($validated_data['id']);
         
         $article = $this->PostManager->byId($validated_data['id']);
+
+        $postMeta = $this->getPostMeta();
         
         if (!$article)
         {
@@ -152,6 +154,7 @@ class Writer extends BaseModel
         $article->type             = $validated_data['type'];
         $article->author_id        = $this->Gatekeeper->getUser()->id;
         $article->comments_enabled = Str::bool($validated_data['comments']);
+        $article->meta             = !empty($postMeta) ? $postMeta : null;
 
         if (isset($_POST['content']))
         {
@@ -230,6 +233,8 @@ class Writer extends BaseModel
             $validated_data['status'] = 'draft';
         }
 
+        $postMeta = $this->getPostMeta();
+
         $post = $this->PostManager->create([
             'title'        => $validated_data['title'],
             'category'     => $validated_data['category'],
@@ -241,6 +246,7 @@ class Writer extends BaseModel
             'author_id'    => $this->Gatekeeper->getUser()->id,
             'content'      => !empty($_POST['content']) ? $_POST['content'] : null,
             'comments_enabled' => Str::bool($validated_data['comments']),
+            'meta'         => !empty($postMeta) ? serialize($postMeta) : null,
         ]);
 
         if ($post)
@@ -249,5 +255,32 @@ class Writer extends BaseModel
         }
 
         return false;
+    }
+
+    private function getPostMeta()
+    {
+        $keys     = [];
+        $values   = [];
+        $response = [];
+
+        if (isset($_POST['post-meta-keys'][0]))
+        {
+            $keys = array_map('trim', explode(',', $_POST['post-meta-keys'][0]));
+        }
+        if (isset($_POST['post-meta-values'][0]))
+        {
+            $values = array_map('trim', explode(',', $_POST['post-meta-values'][0]));
+        }
+        if (count($values) !== count($keys))
+        {
+            return false;
+        }
+
+        foreach ($keys as $i => $key)
+        {
+            $response[$key] = $values[$i];
+        }
+
+        return $response;
     }
 }

@@ -4860,7 +4860,7 @@ JSHelper.prototype._removeListener = function(el, eventName, handler, useCapture
      */
     FormValidator.prototype.append = function(key, value) {
         this._formObj[key] = value;
-        return  this._generateForm();
+        return this._formObj;
     };
     
     /**
@@ -4870,7 +4870,7 @@ JSHelper.prototype._removeListener = function(el, eventName, handler, useCapture
      * @return obj
      */
     FormValidator.prototype.form = function() {
-        return  this._generateForm();
+        return this._generateForm();
     };
 
 
@@ -4946,21 +4946,33 @@ JSHelper.prototype._removeListener = function(el, eventName, handler, useCapture
      * @return obj
      */
     FormValidator.prototype._generateForm = function() {
-        for (var i = 0; i < this._inputs.length; i++) {
+    	
+        for (var i = 0; i < this._inputs.length; i++)
+        {
             var name  = this._inputs[i].name;
             var value = Helper.getInputValue(this._inputs[i]);
             if (this._inputs[i].type === 'radio' && this._inputs[i].checked == false) {
                 continue;
             }
-            if (Helper.is_numeric(value)) value = parseInt(value);
-            if (name.indexOf('[]') > -1) {
-                if (!Helper.isset(this._formObj[name])) this._formObj[name] = [];
+            if (Helper.is_numeric(value))
+            {
+            	value = parseInt(value);
+            }
+            if (name.indexOf('[]') > -1)
+            {
+                if (!Helper.isset(this._formObj[name]))
+                {
+                	this._formObj[name] = [];
+                }
+               
                 this._formObj[name].push(value);
             }
-            else {
+            else
+            {
                 this._formObj[name] = value;
             }
         }
+
         return this._formObj;
     };
 

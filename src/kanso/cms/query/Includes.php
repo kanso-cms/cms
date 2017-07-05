@@ -231,6 +231,12 @@ function the_post_type($post_id = null)
     return $KANSO_QUERY->the_post_type($post_id);
 }
 
+function the_post_meta($post_id = null)
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_post_meta($post_id);
+}
+
 function the_time($format = 'U', $post_id = null)
 {
     global $KANSO_QUERY;

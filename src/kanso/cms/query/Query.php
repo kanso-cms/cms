@@ -251,6 +251,11 @@ class Query
         return $instance;
     }
 
+    /**
+     * Apply a query for a custom string
+     *
+     * @access public
+     */
     private function applyQuery($queryStr)
     {
         $this->reset();
@@ -3058,8 +3063,16 @@ class Query
             {
                 $patterns[]     = '/\(:classes_'.$suffix.'\)/';
                 $class          = 'class="'.$classname;
-                if ($suffix === 'wrap' && $isChild) $class .= ' '.$options['classes']['child_wrap'];
-                if ($suffix === 'children_wrap' && empty($comment->children())) $class .= ' '.$options['classes']['no_children'];
+                if ($suffix === 'wrap' && $isChild)
+                {
+                    $class .= ' '.$options['classes']['child_wrap'];
+                }
+
+                if ($suffix === 'children_wrap' && empty($comment->children()))
+                {
+                    $class .= ' '.$options['classes']['no_children'];
+                }
+
                 $replacements[] = $class.'"';
             }
 
