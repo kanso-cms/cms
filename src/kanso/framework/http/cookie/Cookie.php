@@ -112,7 +112,7 @@ class Cookie
     {
         if ((($this->cookieExpires - time()) + $this->get('last_active')) < time())
         {
-            $this->destory();
+            $this->destroy();
         }
     }
 
