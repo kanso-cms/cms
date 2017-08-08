@@ -268,20 +268,21 @@ class Application
 			$waterfall[] = 'page-'.array_pop($urlParts);
 			$waterfall[] = 'page';
 		}
+		else if (Str::getBeforeFirstChar($pageType, '-') === 'single')
+		{
+			$waterfall[] = 'single-'.array_pop($urlParts);
+			if ($this->container->Query->have_posts())
+			{
+				$waterfall[] = 'single-'.$this->container->Query->the_post_type();
+			}
+			$waterfall[] = 'single';
+		}
 		else if ($pageType === 'single')
 		{
 			$waterfall[] = 'single-'.array_pop($urlParts);
 			$waterfall[] = 'single';
 		}
-		else if (Str::getBeforeFirstChar($pageType, '-') === 'single')
-		{
-			if ($this->container->Query->have_posts())
-			{
-				$waterfall[] = 'single-'.$this->container->Query->the_post_type();
-			}
-			$waterfall[] = 'single-'.array_pop($urlParts);
-			$waterfall[] = 'single';
-		}
+		
 		else if ($pageType === 'tag')
 		{
 			$waterfall[] = 'tag-'.$this->container->Query->the_taxonomy()->slug;
@@ -308,7 +309,7 @@ class Application
 			$waterfall[] = 'search';
 			$waterfall[] = 'index';
 		}
-
+		
 		foreach ($waterfall as $name)
 		{
 			$template = "$templateBase/$name.php";
