@@ -147,7 +147,7 @@ function the_post_thumbnail_src($post_id = null, $size = 'original')
     return $KANSO_QUERY->the_post_thumbnail_src($post_id, $size);
 }
 
-function display_thumbnail($thumbnail, $size, $width = '', $height = '', $classes = '', $id = '')
+function display_thumbnail($thumbnail, $size = 'original', $width = '', $height = '', $classes = '', $id = '')
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->display_thumbnail($thumbnail, $size, $width, $height, $classes, $id);
