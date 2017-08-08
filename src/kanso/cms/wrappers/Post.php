@@ -107,21 +107,12 @@ class Post extends Wrapper
 
         $this->data = $data;
 
-        if (isset($this->data['tags']) && !empty($this->data['tags']))
-        {
-        	$this->setPending('tags', $this->data['tags']);
-        	unset($this->data['tags']);
-        }
-        else if (isset($this->data['category']) && !empty($this->data['category']))
-        {
-        	$this->setPending('category', $this->data['category']);
-        	unset($this->data['category']);
-        }
-        else if (isset($this->data['author']) && !empty($this->data['author']))
-        {
-        	$this->setPending('author', $this->data['author']);
-        	unset($this->data['author']);
-        }
+        if (!empty($this->data['id']))
+		{
+			$this->getTheTags();
+			$this->getTheAuthor();
+			$this->getTheCategory();
+		}
 
         if (!isset($this->data['created']))
         {
