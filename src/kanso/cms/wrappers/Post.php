@@ -62,6 +62,7 @@ class Post extends Wrapper
 		'comments'    => null,
 		'thumbnail'   => null,
 		'content'     => null,
+		'meta'        => null,
 	];
 
 	private $tagProvider;
@@ -151,7 +152,7 @@ class Post extends Wrapper
 		}
 		else if ($key === 'meta')
 		{
-			return unserialize($this->data['meta']);
+			return $this->getPostMeta();
 		}
 		else if ($key === 'thumbnail')
 		{
@@ -195,10 +196,6 @@ class Post extends Wrapper
 		else if ($key === 'content')
 		{
 			$this->data['content'] = urlencode($value);
-		}
-		else if ($key === 'meta')
-		{
-			$this->data['meta'] = serialize($value);
 		}
 		else if (array_key_exists($key, $this->data))
 		{
@@ -376,6 +373,36 @@ class Post extends Wrapper
 	}
 
 	/**
+	 * Get the post meta
+	 *
+	 * @access private
+	 * @return array
+	 */
+	private function getPostMeta(): array
+	{
+		if (!empty($this->data['meta']))
+		{
+			return $this->data['meta'];
+		}
+		
+		if (!empty($this->data['id']))
+		{
+			$meta = $this->SQL->SELECT('*')->FROM('post_meta')->WHERE('post_id', '=', $this->data['id'])->ROW();
+
+			if ($meta)
+			{					
+				$this->data['meta'] = unserialize($meta['content']);
+			}
+
+			return $this->data['meta'];
+		}
+
+		$this->data['meta'] = [];
+
+		return $this->data['meta'];
+	}
+
+	/**
      * {@inheritdoc}
      */
 	public function save(): bool
@@ -429,9 +456,12 @@ class Post extends Wrapper
 
 		# Sanitize comments_enabled
 		$row['comments_enabled'] = boolval($row['comments_enabled']);
+
+		# Get the post meta
+		$postMeta = empty($row['meta']) ? $this->getPostMeta() : $row['meta'];
 	
 		# Remove joined rows so we can update/insert
-		$insertRow = Arr::unsets(['thumbnail', 'tags', 'category', 'content', 'comments', 'author'], $row);
+		$insertRow = Arr::unsets(['thumbnail', 'tags', 'category', 'content', 'comments', 'author', 'meta'], $row);
 
 		# Insert a new article
 		if ($newPost)
@@ -451,6 +481,8 @@ class Post extends Wrapper
 			$this->SQL->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', $row['id'])->QUERY();
 			
 			$this->SQL->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $row['id'])->QUERY();
+
+			$this->SQL->DELETE_FROM('post_meta')->WHERE('post_id', '=', $row['id'])->QUERY();
 		}
 
 		# Join the tags
@@ -461,6 +493,12 @@ class Post extends Wrapper
 
 		# Join the content
 		$this->SQL->INSERT_INTO('content_to_posts')->VALUES(['post_id' => $row['id'], 'content' => $row['content']])->QUERY();
+
+		# Join the post meta
+		if (!empty($postMeta))
+		{
+			$this->SQL->INSERT_INTO('post_meta')->VALUES(['post_id' => $row['id'], 'content' => serialize($postMeta)])->QUERY();
+		}
 
 		$this->data = $row;
 
@@ -607,7 +645,7 @@ class Post extends Wrapper
     	return $title;
 	}
 
-		/**
+	/**
 	 * Convert a title to a slug with permalink structure
 	 *
 	 * @param  string    $title             The title of the article

@@ -12,7 +12,6 @@ $KANSO_DEFAULTS_POSTS_TABLE = [
 	'type'        => 'VARCHAR(255)',
 	'slug'        => 'VARCHAR(255)',
 	'title'       => 'VARCHAR(255)',
-	'meta'        => 'VARCHAR(255)',
 	'excerpt'     => 'TEXT',
 	'author_id'   => 'INTEGER | UNSIGNED',
 	'category_id' => 'INTEGER | UNSIGNED',
@@ -317,4 +316,11 @@ $KANSO_DEFAULT_IMAGES = [
 		'date'         => time(),
 		'uploader_id'  => 1,
 	],
+];
+
+# Default post meta table
+$KANSO_DEFAULTS_POST_META_TABLE = [
+	'id' 	   => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'content'  => 'TEXT',
+	'post_id'  => 'INTEGER | UNSIGNED',
 ];

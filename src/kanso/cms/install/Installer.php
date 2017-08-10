@@ -51,7 +51,7 @@ class Installer
      */
     private $isInstalled;
 
-	/**
+    /**
      * Constructor
      *
      * @access public
@@ -166,7 +166,7 @@ class Installer
      */
     private function installDB()
     {
-    	# Save the database name
+        # Save the database name
         $dbname = $this->config->get('database.configurations.'.$this->config->get('database.default').'.name');
 
         # Create the default database
@@ -191,6 +191,8 @@ class Installer
         $SQL->CREATE_TABLE('content_to_posts', $KANSO_DEFAULTS_CONTENT_TO_POSTS_TABLE);
 
         $SQL->CREATE_TABLE('media_uploads', $KANSO_DEFAULTS_MEDIA_TABLE);
+
+        $SQL->CREATE_TABLE('post_meta', $KANSO_DEFAULTS_POST_META_TABLE);
 
         $SQL->ALTER_TABLE('tags_to_posts')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
         $SQL->ALTER_TABLE('tags_to_posts')->MODIFY_COLUMN('tag_id')->ADD_FOREIGN_KEY('tags', 'id');
