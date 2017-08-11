@@ -393,6 +393,10 @@ class Post extends Wrapper
 			{					
 				$this->data['meta'] = unserialize($meta['content']);
 			}
+			else
+			{
+				$this->data['meta'] = [];
+			}
 
 			return $this->data['meta'];
 		}
