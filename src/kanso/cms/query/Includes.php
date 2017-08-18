@@ -279,6 +279,12 @@ function is_single()
     return $KANSO_QUERY->is_single();
 }
 
+function is_custom_post()
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->is_custom_post();
+}
+
 function is_home()
 {
     global $KANSO_QUERY;

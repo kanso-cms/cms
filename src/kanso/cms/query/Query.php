@@ -1035,6 +1035,7 @@ class Query
         $height   = !$height ? '' : 'height="'.$height.'"';
         $classes  = !$classes ? '' : 'class="'.$classes.'"';
         $id       = !$id ? '' : 'id="'.$id.'"';
+        
         if (!$thumbnail)
         {
             return '<img src="_" '.$width.' '.$height.' '.$classes.' '.$id.' rel="" alt="" title="">';
@@ -3105,7 +3106,7 @@ class Query
 
             # Replace content
             $patterns[]     = '/\(:comment_content\)/';
-            $replacements[] = $comment->content;
+            $replacements[] = $comment->html_content;
 
             # Replace permalinks
             $patterns[]     = '/\(:permalink\)/';
@@ -3255,6 +3256,4 @@ class Query
 
         return $this->cache->set($key, $this->mediaManager->provider()->byId($thumb_id));
     }
-
-
 }
