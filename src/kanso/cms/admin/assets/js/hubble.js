@@ -4965,7 +4965,7 @@ JSHelper.prototype._removeListener = function(el, eventName, handler, useCapture
                 	this._formObj[name] = [];
                 }
                
-                this._formObj[name].push(value);
+                this._formObj[name].push("'"+value+"'");
             }
             else
             {

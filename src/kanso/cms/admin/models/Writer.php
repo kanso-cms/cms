@@ -269,7 +269,12 @@ class Writer extends BaseModel
         }
         if (isset($_POST['post-meta-values'][0]))
         {
-            $values = array_map('trim', explode(',', $_POST['post-meta-values'][0]));
+            # Bugfix if a value contains a comma
+            $delimiter = ',';
+            $quote     = "'";
+            $regex = "(?:[^$delimiter$quote]|[$quote][^$quote]*[$quote])+";
+            preg_match_all('/'.str_replace('/', '\\/', $regex).'/', $_POST['post-meta-values'][0], $matches);
+            $values = $matches[0];
         }
         if (count($values) !== count($keys))
         {
@@ -277,8 +282,8 @@ class Writer extends BaseModel
         }
 
         foreach ($keys as $i => $key)
-        {
-            $response[$key] = $values[$i];
+        {            
+            $response[trim($key, "'")] = trim($values[$i], "'");
         }
 
         return $response;
