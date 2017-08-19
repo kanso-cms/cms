@@ -546,10 +546,22 @@ function current_userinfo()
     return $KANSO_QUERY->get_current_userinfo();
 }
 
+function user() 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->user();
+}
+
 function is_loggedin() 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->is_loggedin();
+}
+
+function user_is_admin() 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->user_is_admin();
 }
 
 function get_gravatar($email_or_md5 = null, $size = 160, $srcOnly = null) 
