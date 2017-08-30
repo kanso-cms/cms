@@ -170,6 +170,24 @@ class Gatekeeper
     }
 
     /**
+     * Reload the current user's data from the database
+     *
+     * @access public
+     * @return string
+     */
+    public function token()
+    {
+        if ($this->isLoggedIn())
+        {
+            return $this->user->access_token;
+        }
+        else
+        {
+            return $this->session->token()->get();
+        }
+    }
+
+    /**
      * Validate the current HTTP client is logged in
      *
      * @access public
@@ -270,14 +288,22 @@ class Gatekeeper
      * Try to log the current user in by email and password
      *
      * @access public
-     * @param  string $username Username
+     * @param  string $username Username or email address
      * @param  string $password Raw passowrd
      * @return true|self::LOGIN_INCORRECT|self::LOGIN_ACTIVATING|self::LOGIN_LOCKED|self::LOGIN_BANNED
      */
     public function login(string $username, string $password)
     {
-        # Get the user's row by the username
-        $user = $this->SQL->SELECT('*')->FROM('users')->WHERE('username', '=', $username)->ROW();
+        if (filter_var($username, FILTER_VALIDATE_EMAIL))
+        {
+            # Get the user's row by the email
+            $user = $this->SQL->SELECT('*')->FROM('users')->WHERE('email', '=', $username)->ROW();
+        }
+        else
+        {
+            # Get the user's row by the username
+            $user = $this->SQL->SELECT('*')->FROM('users')->WHERE('username', '=', $username)->ROW();
+        }
 
         # Validate the user exists
         if (!$user || empty($user)) return self::LOGIN_INCORRECT;
@@ -336,14 +362,21 @@ class Gatekeeper
      * Forgot password
      *
      * @access public
-     * @param  string $username  Username for user to reset password
+     * @param  string $username  Username or email address for user to reset password
      * @param  bool   $sendEamil Send the user an email (optional) (default true)
      * @return bool
      */
     public function forgotPassword(string $username, bool $sendEamil = true): bool
     {
-        # Validate the user exists
-        $user = $this->provider->byKey('username', $username, true);
+        if (filter_var($username, FILTER_VALIDATE_EMAIL))
+        {
+            $user = $this->provider->byKey('email', $username, true);
+        }
+        else
+        {
+            $user = $this->provider->byKey('username', $username, true);
+        }
+
         if (!$user)
         {
             return false;
