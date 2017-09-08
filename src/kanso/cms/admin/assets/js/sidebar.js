@@ -52,12 +52,14 @@
             Helper.removeClass(sidebar, 'active');
             Helper.animate(sidebar, 'width', '300px', '66px', 350, 'easeOutQuint');
             Helper.animate(dashWrap, 'padding-left', '324px', '90px', 350, 'easeOutQuint');
+            sidebar.scrollTop = 0;
         }
         else {
             Helper.addClass(sbTrigger, 'active');
             Helper.addClass(sidebar, 'active');
             Helper.animate(sidebar, 'width', '66px', '300px', 350, 'easeOutQuint');
             Helper.animate(dashWrap, 'padding-left', '90px', '324px', 350, 'easeOutQuint');
+            sidebar.scrollTop = 0;
         }   
     }
 
