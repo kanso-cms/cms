@@ -119,6 +119,7 @@ class Onion
      *
      * @access private
      * @return \Closure
+     * @throws \kanso\framework\http\response\exceptions\ForbiddenException If the onion is finished peeling and the response is a 404
      */
     private function getNextLayer(): Closure
     {
@@ -132,15 +133,20 @@ class Onion
 
         return function()
         {
-            $this->peeled();
+            $response = $this->peeled();
+
+            if ($response->status()->get() === 404)
+            {
+                $this->response->notFound();
+            }
         };
     }
 
     /**
-     * Returns the response when the onion is peeled
+     * When the onion is completely peeled return the response
      *
      * @access private
-     * @return \Closure
+     * @throws \kanso\framework\http\response\exceptions\ForbiddenException
      */
     public function peeled(): Response
     {

@@ -87,7 +87,7 @@ class Admin
                 [ "$slug" => 
                     [
                         'link'     => '/admin/'.$slug.'/',
-                        'text'     => $title,
+                        'text'     => Humanizer::pluralize(ucfirst($title)),
                         'icon'     => $icon,
                         'children' => [],
                     ]
@@ -146,12 +146,18 @@ class Admin
      */
     public function addPage(string $title, string $slug, string $icon, string $model, string $view, array $styles = null, array $scripts = null)
     {
-        # Add the route
+        if (! ($this->Gatekeeper->isAdmin() && $this->Gatekeeper->isLoggedIn()) )
+        {
+            return false;
+        }
+
+        # Add the route only if the current user is logged as admin 
         $this->Router->get("/admin/$slug/", '\kanso\cms\admin\controllers\Dashboard@blankPage', $model);
         $this->Router->get("/admin/$slug/(:all)", '\kanso\cms\admin\controllers\Dashboard@blankPage', $model);
         $this->Router->post("/admin/$slug/", '\kanso\cms\admin\controllers\Dashboard@blankPage', $model);
         $this->Router->post("/admin/$slug/(:all)", '\kanso\cms\admin\controllers\Dashboard@blankPage', $model);
-
+        
+       
         # Is this page being requested ?
         $requestSlug = Str::getAfterLastChar(trim(Str::getBeforeFirstChar($this->Request->environment()->REQUEST_URI, '?'), '/'), '/');
         $isPage      = $slug === $requestSlug;
@@ -226,5 +232,4 @@ class Admin
             });
         }
     }
-
 }
