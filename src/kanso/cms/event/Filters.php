@@ -78,7 +78,7 @@ class Filters
      */
     public function apply(string $eventName, $args) 
     {
-        $result = [$args];
+        $result = $args;
 
         # Is there a custom callback for the filter?   
         if (isset(self::$callbacks[$eventName]))
@@ -86,7 +86,7 @@ class Filters
             # Loop the filter callbacks
             foreach (self::$callbacks[$eventName] as $callback)
             {
-                $result = Callback::apply($callback, $result);
+                $result = Callback::apply($callback, [$result]);
             }
         }
         else
