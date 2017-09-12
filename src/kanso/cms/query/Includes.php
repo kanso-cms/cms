@@ -424,6 +424,12 @@ function posts_per_page()
     return $KANSO_QUERY->posts_per_page();
 }
 
+function blog_location()
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->blog_location();
+}
+
 function _next()
 {
     global $KANSO_QUERY;
@@ -500,6 +506,12 @@ function home_url()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->home_url();
+}
+
+function blog_url() 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->blog_url();
 }
 
 function domain_name() 

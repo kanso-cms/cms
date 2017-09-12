@@ -12,9 +12,10 @@
  */
 
 # Defined local variables
-$router = $this->container->Router;
-$config = $this->container->Config;
-$SQL    = $this->container->Database->connection()->builder();
+$router     = $this->container->Router;
+$config     = $this->container->Config;
+$SQL        = $this->container->Database->connection()->builder();
+$blogPrefix = !empty($config->get('cms.blog_location')) ? '/'.$config->get('cms.blog_location') : '';
 
 # Admin login
 $router->get('/admin/login/',  '\kanso\cms\admin\controllers\Accounts@login', '\kanso\cms\admin\models\Accounts');
@@ -114,26 +115,37 @@ $router->get('/feed/rss/', '\kanso\cms\application\Application::loadRssFeed', 'h
 $router->get('/feed/atom/', '\kanso\cms\application\Application::loadRssFeed', 'home');
 $router->get('/feed/rdf/', '\kanso\cms\application\Application::loadRssFeed', 'home');
 
+# Blog Homepage
+if (!empty($blogPrefix))
+{
+	$router->get("$blogPrefix/", '\kanso\cms\application\Application::applyRoute', 'home');
+	$router->get("$blogPrefix/page/(:num)/", '\kanso\cms\application\Application::applyRoute', 'home');
+	$router->get("$blogPrefix/feed/", '\kanso\cms\application\Application::loadRssFeed', 'home');
+	$router->get("$blogPrefix/feed/rss/", '\kanso\cms\application\Application::loadRssFeed', 'home');
+	$router->get("$blogPrefix/feed/atom/", '\kanso\cms\application\Application::loadRssFeed', 'home');
+	$router->get("$blogPrefix/feed/rdf/", '\kanso\cms\application\Application::loadRssFeed', 'home');
+}
+
 # Category
 if ($config->get('cms.route_categories') === true)
 {
-	$router->get('/category/(:any)/', '\kanso\cms\application\Application::applyRoute', 'category');
-	$router->get('/category/(:any)/page/(:num)/', '\kanso\cms\application\Application::applyRoute', 'category');
-	$router->get('/category/(:any)/feed/', '\kanso\cms\application\Application::loadRssFeed', 'category');
-	$router->get('/category/(:any)/feed/rss/', '\kanso\cms\application\Application::loadRssFeed', 'category');
-	$router->get('/category/(:any)/feed/atom/', '\kanso\cms\application\Application::loadRssFeed', 'category');
-	$router->get('/category/(:any)/feed/rdf/', '\kanso\cms\application\Application::loadRssFeed', 'category');
+	$router->get("$blogPrefix/category/(:any)/", '\kanso\cms\application\Application::applyRoute', 'category');
+	$router->get("$blogPrefix/category/(:any)/page/(:num)/", '\kanso\cms\application\Application::applyRoute', 'category');
+	$router->get("$blogPrefix/category/(:any)/feed/", '\kanso\cms\application\Application::loadRssFeed', 'category');
+	$router->get("$blogPrefix/category/(:any)/feed/rss/", '\kanso\cms\application\Application::loadRssFeed', 'category');
+	$router->get("$blogPrefix/category/(:any)/feed/atom/", '\kanso\cms\application\Application::loadRssFeed', 'category');
+	$router->get("$blogPrefix/category/(:any)/feed/rdf/", '\kanso\cms\application\Application::loadRssFeed', 'category');
 }
 
 # Tag
 if ($config->get('cms.route_tags') === true)
 {
-	$router->get('/tag/(:any)/', '\kanso\cms\application\Application::applyRoute', 'tag');
-	$router->get('/tag/(:any)/page/(:num)/', '\kanso\cms\application\Application::applyRoute', 'tag');
-	$router->get('/tag/(:any)/feed/', '\kanso\cms\application\Application::loadRssFeed', 'tag');
-	$router->get('/tag/(:any)/feed/rss/', '\kanso\cms\application\Application::loadRssFeed', 'tag');
-	$router->get('/tag/(:any)/feed/atom/', '\kanso\cms\application\Application::loadRssFeed', 'tag');
-	$router->get('/tag/(:any)/feed/rdf/', '\kanso\cms\application\Application::loadRssFeed', 'tag');
+	$router->get("$blogPrefix/tag/(:any)/", '\kanso\cms\application\Application::applyRoute', 'tag');
+	$router->get("$blogPrefix/tag/(:any)/page/(:num)/", '\kanso\cms\application\Application::applyRoute', 'tag');
+	$router->get("$blogPrefix/tag/(:any)/feed/", '\kanso\cms\application\Application::loadRssFeed', 'tag');
+	$router->get("$blogPrefix/tag/(:any)/feed/rss/", '\kanso\cms\application\Application::loadRssFeed', 'tag');
+	$router->get("$blogPrefix/tag/(:any)/feed/atom/", '\kanso\cms\application\Application::loadRssFeed', 'tag');
+	$router->get("$blogPrefix/tag/(:any)/feed/rdf/", '\kanso\cms\application\Application::loadRssFeed', 'tag');
 }
 
 # Author
@@ -144,17 +156,17 @@ if ($config->get('cms.route_authors') === true)
 	foreach ($authorSlugs as $slug)
 	{
 		$slug = $slug['slug'];
-		$router->get("/authors/$slug/", '\kanso\cms\application\Application::applyRoute', 'author');
-		$router->get("/authors/$slug/page/(:num)/", '\kanso\cms\application\Application::applyRoute', 'author');
-		$router->get("/authors/$slug/feed/", '\kanso\cms\application\Application::loadRssFeed', 'author');
-		$router->get("/authors/$slug/feed/rss/", '\kanso\cms\application\Application::loadRssFeed', 'author');
-		$router->get("/authors/$slug/feed/atom/", '\kanso\cms\application\Application::loadRssFeed', 'author');
-		$router->get("/authors/$slug/feed/rdf/", '\kanso\cms\application\Application::loadRssFeed', 'author');
+		$router->get("$blogPrefix/authors/$slug/", '\kanso\cms\application\Application::applyRoute', 'author');
+		$router->get("$blogPrefix/authors/$slug/page/(:num)/", '\kanso\cms\application\Application::applyRoute', 'author');
+		$router->get("$blogPrefix/authors/$slug/feed/", '\kanso\cms\application\Application::loadRssFeed', 'author');
+		$router->get("$blogPrefix/authors/$slug/feed/rss/", '\kanso\cms\application\Application::loadRssFeed', 'author');
+		$router->get("$blogPrefix/authors/$slug/feed/atom/", '\kanso\cms\application\Application::loadRssFeed', 'author');
+		$router->get("$blogPrefix/authors/$slug/feed/rdf/", '\kanso\cms\application\Application::loadRssFeed', 'author');
 	}
 }
 
 # Static pages
-$staticPages = $SQL->SELECT('slug')->FROM('posts')->WHERE('type', '=', 'page')->AND_WHERE('status', '=', 'published')->FIND_ALL();
+$staticPages = $SQL->SELECT('slug')->FROM('posts')->WHERE('type', '=', 'page')->FIND_ALL();
 
 foreach ($staticPages as $page)
 {
@@ -180,8 +192,9 @@ if ($config->get('cms.enable_comments') === true)
 $router->get('/'.$config->get('cms.sitemap_route'), '\kanso\cms\application\Application::loadSiteMap');
 
 # Articles
-$router->get('/'.$config->get('cms.permalinks_route'),              '\kanso\cms\application\Application::applyRoute', 'single');
-$router->get('/'.$config->get('cms.permalinks_route').'feed/',      '\kanso\cms\application\Application::loadRssFeed', 'single');
-$router->get('/'.$config->get('cms.permalinks_route').'feed/rss/',  '\kanso\cms\application\Application::loadRssFeed', 'single');
-$router->get('/'.$config->get('cms.permalinks_route').'feed/atom/', '\kanso\cms\application\Application::loadRssFeed', 'single');
-$router->get('/'.$config->get('cms.permalinks_route').'feed/rdf/',  '\kanso\cms\application\Application::loadRssFeed', 'single');
+$router->get($blogPrefix.'/'.$config->get('cms.permalinks_route'),              '\kanso\cms\application\Application::applyRoute', 'single');
+$router->get($blogPrefix.'/'.$config->get('cms.permalinks_route').'feed/',      '\kanso\cms\application\Application::loadRssFeed', 'single');
+$router->get($blogPrefix.'/'.$config->get('cms.permalinks_route').'feed/rss/',  '\kanso\cms\application\Application::loadRssFeed', 'single');
+$router->get($blogPrefix.'/'.$config->get('cms.permalinks_route').'feed/atom/', '\kanso\cms\application\Application::loadRssFeed', 'single');
+$router->get($blogPrefix.'/'.$config->get('cms.permalinks_route').'feed/rdf/',  '\kanso\cms\application\Application::loadRssFeed', 'single');
+

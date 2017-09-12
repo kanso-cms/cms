@@ -302,6 +302,7 @@ class Settings extends BaseModel
             'sitemap_url'       => 'trim|sanitize_string|basic_tags',
             'theme'             => 'trim|sanitize_string|basic_tags',
             'permalinks'        => 'trim|sanitize_string|basic_tags',
+            'blog_location'     => 'trim|sanitize_string|basic_tags',
         ]);
 
         if (isset($post['clear_cache']))
@@ -359,11 +360,15 @@ class Settings extends BaseModel
             # Previous permalinks value
             $oldPermalinks = $this->Config->get('cms.permalinks');
 
+            # Sanitize the blog location
+            $validated_data['blog_location'] = !empty($validated_data['blog_location']) ? rtrim(ltrim($validated_data['blog_location'], '/'), '/') : false;
+
             $cms =
             [
                 "theme_name"       => $validated_data['theme'],
                 "site_title"       => $validated_data['site_title'],
-                "site_description" => $validated_data['site_description'], 
+                "site_description" => $validated_data['site_description'],
+                "blog_location"    => $validated_data['blog_location'],
                 "sitemap_route"    => $validated_data['sitemap_url'],
                 "permalinks"       => $permalinks['permalinks'],
                 "permalinks_route" => $permalinks['permalinks_route'],

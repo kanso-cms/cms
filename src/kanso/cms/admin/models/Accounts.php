@@ -122,6 +122,13 @@ class Accounts extends BaseModel
 
         if ($validated_data)
         {
+            $user  = $this->UserManager->byUsername($validated_data['username']);
+            
+            if (!$user || $user->role !== 'administrator')
+            {
+                return $this->postMessage('danger', 'Either the username or password you entered was incorrect.');
+            }
+
             $login = $this->Gatekeeper->login($validated_data['username'], $validated_data['password']);
             
             if ($login === $this->Gatekeeper::LOGIN_ACTIVATING)
@@ -167,7 +174,12 @@ class Accounts extends BaseModel
 
         if ($validated_data)
         {
-            $this->Gatekeeper->forgotPassword($validated_data['username']);
+            $user = $this->UserManager->byUsername($validated_data['username']);
+            
+            if ($user || $user->role === 'administrator')
+            {
+                $this->Gatekeeper->forgotPassword($validated_data['username']);
+            }
         }
 
         return $this->postMessage('success', 'If a user is registered under that username, they were sent an email to reset their password.');
@@ -195,7 +207,12 @@ class Accounts extends BaseModel
 
         if ($validated_data)
         {
-            $this->Gatekeeper->forgotPassword($validated_data['username']);
+            $user = $this->UserManager->byUsername($validated_data['username']);
+            
+            if ($user || $user->role === 'administrator')
+            {
+                $this->Gatekeeper->forgotPassword($validated_data['username']);
+            }
         }
 
         return $this->postMessage('success', 'If a user is registered under that email address, they were sent an email with their username.');

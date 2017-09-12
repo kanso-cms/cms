@@ -318,6 +318,7 @@ class Query
         $limit        = $perPage;
         $taxonomySlug = NULL;
         $uri          = rtrim($this->request->path(), '/');
+        $blogPrefix   = $this->config->get('cms.blog_location');
 
         # Filter and paginate the posts based on the request type
         if ($requestType === 'home')
@@ -334,14 +335,14 @@ class Query
         }
         else if ($requestType === 'tag')
         {
-            $queryStr = 'post_status = published : post_type = post : orderBy = post_created, DESC : tag_slug = '.explode("/", $uri)[1]." : limit = $offset, $perPage";
-            $posts    = $this->queryParser->parseQuery($queryStr);
-            $postCount = count($posts);
-            $taxonomySlug = explode("/", $uri)[1];
-
+            $taxonomySlug = !empty($blogPrefix) ? explode("/", str_replace($blogPrefix.'/tag/', '', $uri))[0] : explode("/", $uri)[1];
+            $queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC : tag_slug = '.$taxonomySlug." : limit = $offset, $perPage";
+            $posts        = $this->queryParser->parseQuery($queryStr);
+            $postCount    = count($posts);
+            
             if (empty($posts))
             {
-                if (!$this->SQL->SELECT('id')->FROM('tags')->WHERE('slug', '=', explode("/", $uri)[1])->ROW())
+                if (!$this->SQL->SELECT('id')->FROM('tags')->WHERE('slug', '=', $taxonomySlug)->ROW())
                 {
                     return $this->response->status()->set(404);
                 }
@@ -350,16 +351,16 @@ class Query
         }
         else if ($requestType === 'category')
         {
-            $queryStr  = 'post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = '.explode("/", $uri)[1]." : limit = $offset, $perPage";
-            $posts     = $this->queryParser->parseQuery($queryStr);
-            $postCount = count($posts);
-            $taxonomySlug = explode("/", $uri)[1];
+            $taxonomySlug = !empty($blogPrefix) ? explode("/", str_replace($blogPrefix.'/category/', '', $uri))[0] : explode("/", $uri)[1];
+            $queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = '.$taxonomySlug." : limit = $offset, $perPage";
+            $posts        = $this->queryParser->parseQuery($queryStr);
+            $postCount    = count($posts);
 
             # Double check if the tag exists
             # and 404 if it does NOT 
             if (empty($posts))
             {
-                if (!$this->SQL->SELECT('id')->FROM('categories')->WHERE('slug', '=', explode("/", $uri)[1])->ROW())
+                if (!$this->SQL->SELECT('id')->FROM('categories')->WHERE('slug', '=', $taxonomySlug)->ROW())
                 {
                     return $this->response->status()->set(404);
                 }
@@ -368,14 +369,15 @@ class Query
         } 
         else if ($requestType === 'author')
         {
-            $queryStr  = ' post_status = published : post_type = post : orderBy = post_created, DESC: author_slug = '.explode("/", $uri)[1].": limit = $offset, $perPage";
-            $posts     = $this->queryParser->parseQuery($queryStr);
-            $postCount = count($posts);
-            $taxonomySlug = explode("/", $uri)[1];
+            
+            $taxonomySlug = !empty($blogPrefix) ? explode("/", str_replace($blogPrefix.'/authors/', '', $uri))[0] : explode("/", $uri)[1];
+            $queryStr     = ' post_status = published : post_type = post : orderBy = post_created, DESC: author_slug = '.$taxonomySlug.": limit = $offset, $perPage";
+            $posts        = $this->queryParser->parseQuery($queryStr);
+            $postCount    = count($posts);
 
             # Double check if the author exists
             # and that they are an admin or writer
-            $role = $this->SQL->SELECT('role')->FROM('users')->WHERE('slug', '=', explode("/", $uri)[1])->ROW();
+            $role = $this->SQL->SELECT('role')->FROM('users')->WHERE('slug', '=', $taxonomySlug)->ROW();
             if ($role)
             {
                 if ($role['role'] !== 'administrator' && $role['role'] !== 'writer')
@@ -392,9 +394,11 @@ class Query
         else if ($requestType === 'single' || Str::getBeforeFirstChar($requestType, '-') === 'single')
         {
             $postType = $requestType === 'single' ? 'post' : Str::getAfterFirstChar($requestType, '-'); 
-            if (strpos($uri,'?draft') !== false)
+            
+            if ($this->request->fetch('query') === 'draft' && $this->gatekeeper->isAdmin())
             {
-                $uri = ltrim(str_replace('?draft', '', $uri), '/');
+                $uri       = ltrim(str_replace('?draft', '', $uri), '/');
+                $uri       = !empty($blogPrefix) ? str_replace($blogPrefix.'/', '', $uri) : $uri;
                 $queryStr  = 'post_status = draft : post_type = '.$postType.' : post_slug = '.$uri.'/';
                 $posts     = $this->queryParser->parseQuery($queryStr);
                 $postCount = count($posts);
@@ -403,6 +407,7 @@ class Query
             {
                 $uri       = Str::GetBeforeLastWord($uri, '/feed');
                 $uri       = ltrim($uri, '/');
+                $uri       = !empty($blogPrefix) ? str_replace($blogPrefix.'/', '', $uri) : $uri;
                 $queryStr  = 'post_status = published : post_type = '.$postType.' : post_slug = '.$uri.'/';
                 $posts     = $this->queryParser->parseQuery($queryStr);
                 $postCount = count($posts);
@@ -415,9 +420,9 @@ class Query
         }
         else if ($requestType === 'page')
         {
-            if (strpos($uri,'?draft') !== false)
+            if ($this->request->fetch('query') === 'draft' && $this->gatekeeper->isAdmin())
             {
-                $uri = ltrim(str_replace('?draft', '', $uri), '/');
+                $uri       = ltrim(str_replace('?draft', '', $uri), '/');
                 $queryStr  = 'post_status = draft : post_type = page : post_slug = '.$uri.'/';
                 $posts     = $this->queryParser->parseQuery($queryStr);
                 $postCount = count($posts);
@@ -591,7 +596,9 @@ class Query
 
             if ($post)
             {
-                return $this->request->environment()->HTTP_HOST.'/'.trim($post->slug, '/').'/';
+                $prefix = !empty($this->blog_location()) && $post->type === 'post' ? '/'.$this->blog_location().'/' : '/';
+
+                return $this->request->environment()->HTTP_HOST.$prefix.trim($post->slug, '/').'/';
             }
 
             return null;
@@ -599,7 +606,9 @@ class Query
 
         if (!empty($this->post))
         {
-            return $this->request->environment()->HTTP_HOST.'/'.trim($this->post->slug, '/').'/';
+            $prefix = !empty($this->blog_location()) && $post->type === 'post' ? '/'.$this->blog_location().'/' : '/';
+
+            return $this->request->environment()->HTTP_HOST.$prefix.trim($this->post->slug, '/').'/';
         }
 
         return null;
@@ -729,7 +738,9 @@ class Query
         {
             if (!empty($this->post))
             {
-                return $this->request->environment()->HTTP_HOST.'/category/'.$this->post->category->slug.'/';
+                $prefix = !empty($this->blog_location()) ? '/'.$this->blog_location().'/' : '/';
+
+                return $this->request->environment()->HTTP_HOST.$prefix.'category/'.$this->post->category->slug.'/';
             }
 
             return null;
@@ -740,7 +751,9 @@ class Query
 
             if ($category)
             {
-                return $this->request->environment()->HTTP_HOST.'/category/'.$category->slug.'/';
+                $prefix = !empty($this->blog_location()) ? '/'.$this->blog_location().'/' : '/';
+
+                return $this->request->environment()->HTTP_HOST.$prefix.'category/'.$category->slug.'/';
             }
         }
 
@@ -900,7 +913,9 @@ class Query
 
         if ($tag)
         {
-            return $this->request->environment()->HTTP_HOST.'/tag/'.$tag->slug;
+            $prefix = !empty($this->blog_location()) ? '/'.$this->blog_location().'/' : '/';
+
+            return $this->request->environment()->HTTP_HOST.$prefix.'tag/'.$tag->slug;
         }
 
         return false;
@@ -1120,7 +1135,9 @@ class Query
             
             if ($author)
             {
-                return $this->request->environment()->HTTP_HOST.'/authors/'.$author->slug;
+                $prefix = !empty($this->blog_location()) ? '/'.$this->blog_location().'/' : '/';
+
+                return $this->request->environment()->HTTP_HOST.$prefix.'authors/'.$author->slug;
             }
 
             return null;
@@ -1132,7 +1149,9 @@ class Query
 
             if ($author)
             {
-                return $this->request->environment()->HTTP_HOST.'/authors/'.$author->slug;
+                $prefix = !empty($this->blog_location()) ? '/'.$this->blog_location().'/' : '/';
+
+                return $this->request->environment()->HTTP_HOST.$prefix.'authors/'.$author->slug;
             }
         }
 
@@ -1992,7 +2011,13 @@ class Query
     public function the_next_page_title()
     {
         $next_page = $this->the_next_page();
-        if ($next_page && isset($next_page['title'])) return $next_page['title'];
+        
+        if ($next_page && isset($next_page['title']))
+        {
+            return $next_page['title'];
+        
+        }
+        
         return false;
     }
 
@@ -2005,7 +2030,12 @@ class Query
     public function the_previous_page_title()
     {
         $prev_page = $this->the_previous_page();
-        if ($prev_page && isset($prev_page['title'])) return $prev_page['title'];
+        
+        if ($prev_page && isset($prev_page['title']))
+        {
+            return $prev_page['title'];
+        }
+        
         return false;
     }
 
@@ -2018,7 +2048,13 @@ class Query
     public function the_next_page_url()
     {
         $next_page = $this->the_next_page();
-        if ($next_page && isset($next_page['slug'])) return $this->request->environment()->HTTP_HOST.'/'.$next_page['slug'];
+        
+        if ($next_page && isset($next_page['slug']))
+        {
+            $prefix = !empty($this->blog_location()) ? '/'.$this->blog_location().'/' : '/';
+            return $this->request->environment()->HTTP_HOST.$prefix.$next_page['slug'];
+        }
+        
         return false;
     }
 
@@ -2031,7 +2067,13 @@ class Query
     public function the_previous_page_url()
     {
         $prev_page = $this->the_previous_page();
-        if ($prev_page && isset($prev_page['slug'])) return $this->request->environment()->HTTP_HOST.'/'.$prev_page['slug'];
+
+        if ($prev_page && isset($prev_page['slug']))
+        {
+            $prefix = !empty($this->blog_location()) ? '/'.$this->blog_location().'/' : '/';
+            return $this->request->environment()->HTTP_HOST.$prefix.$prev_page['slug'];
+        }
+
         return false;
     }
 
@@ -2043,7 +2085,11 @@ class Query
      */
     public function search_query()
     {
-        if ($this->is_search()) return urldecode($this->searchQuery);
+        if ($this->is_search())
+        {
+            return urldecode($this->searchQuery);
+        }
+
         return false;
     }
 
@@ -2067,6 +2113,17 @@ class Query
     public function posts_per_page()
     {
         return $this->config->get('cms.posts_per_page');
+    }
+
+    /**
+     * Returns the "blog_location" value
+     *
+     * @param   NULL
+     * @return  string|false
+     */
+    public function blog_location()
+    {
+        return $this->config->get('cms.blog_location');
     }
 
     /**
@@ -2344,6 +2401,17 @@ class Query
     public function home_url() 
     {
         return $this->request->environment()->HTTP_HOST;
+    }
+
+    /**
+     * Get the homepage URL for the blog
+     *
+     * @param   NULL
+     * @return  string
+     */
+    public function blog_url() 
+    {
+        return !empty($this->blog_location()) ? $this->request->environment()->HTTP_HOST.'/'.$this->blog_location().'/' : $this->request->environment()->HTTP_HOST;
     }
 
     /**
@@ -2846,14 +2914,27 @@ class Query
         # force a mystery man
         if (!$isMd5 && !$isEmail)
         {
-            if ($srcOnly) return $domain.'/avatar/0?s='.$size.'&d=mm';
+            if ($srcOnly)
+            {
+                return $domain.'/avatar/0?s='.$size.'&d=mm';
+            }
+
             return '<img src="'.$domain.'/avatar/0?s='.$size.'&d=mm"/>';
         }
         
-        if ($isEmail) $md5 = md5( strtolower( trim( $email_or_md5 ) ) );
-        if ($isMd5)   $md5 = $email_or_md5;
+        if ($isEmail)
+        {
+            $md5 = md5( strtolower( trim( $email_or_md5 ) ) );
+        }
+        if ($isMd5)
+        {
+            $md5 = $email_or_md5;
+        }
        
-        if ($srcOnly) return $domain.'/avatar/'.$md5.'?s='.$size.'&d=mm';
+        if ($srcOnly)
+        {
+            return $domain.'/avatar/'.$md5.'?s='.$size.'&d=mm';
+        }
         return '<img src="'.$domain.'/avatar/'.$md5.'?s='.$size.'&d=mm"/>';
     
     }
@@ -3256,4 +3337,6 @@ class Query
 
         return $this->cache->set($key, $this->mediaManager->provider()->byId($thumb_id));
     }
+
+
 }

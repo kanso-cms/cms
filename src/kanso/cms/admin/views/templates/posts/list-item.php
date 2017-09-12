@@ -13,11 +13,11 @@
 		</div>
 		<div class="media-body gutter-md">
 			<div>
-	            <a class="h5" href="<?php echo the_permalink($article->id); ?>" target="_blank">
+	            <a class="h5" href="<?php echo the_permalink($article->id); ?><?php echo $article->status === 'published' ? '' : '?draft';?>" target="_blank">
 	            	<?php echo $article->title; ?>
 	            </a>
 	        </div>
-	        
+
 	        <span class="color-gray">
 	        	In <a class="color-gray text-underline" href="/admin/<?php echo $postSlug;?>?category=<?php echo $article->category_id; ?>">
 					<?php echo $article->category->name;?>

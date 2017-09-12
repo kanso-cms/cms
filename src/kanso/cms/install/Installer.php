@@ -51,7 +51,7 @@ class Installer
      */
     private $isInstalled;
 
-    /**
+	/**
      * Constructor
      *
      * @access public
@@ -166,7 +166,7 @@ class Installer
      */
     private function installDB()
     {
-        # Save the database name
+    	# Save the database name
         $dbname = $this->config->get('database.configurations.'.$this->config->get('database.default').'.name');
 
         # Create the default database

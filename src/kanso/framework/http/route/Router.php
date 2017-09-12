@@ -11,6 +11,7 @@ use kanso\framework\http\request\Request;
 use kanso\framework\onion\Onion;
 use kanso\framework\http\response\exceptions\MethodNotAllowedException;
 use kanso\framework\http\response\exceptions\NotFoundException;
+use kanso\framework\utility\Str;
 
 /**
  * Application router
@@ -225,7 +226,7 @@ class Router
     {
         $requestMethod = $this->request->getMethod();
 
-        $requestPath = $this->request->path();
+        $requestPath = rtrim(Str::getBeforeFirstChar($this->request->path(), '?'), '/');
         
         $searches = array_keys($this->patterns);
         

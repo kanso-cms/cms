@@ -244,7 +244,7 @@ class Str
 	 * @param  string $query  The query to check for   
 	 * @return bool
 	 */
-	public static function GetBeforeLastWord(string $string, string $query): string
+	public static function getBeforeLastWord(string $string, string $query): string
 	{
 		if (!self::contains($string, $query)) return $string;
 

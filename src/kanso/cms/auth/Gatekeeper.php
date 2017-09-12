@@ -306,10 +306,7 @@ class Gatekeeper
         }
 
         # Validate the user exists
-        if (!$user || empty($user)) return self::LOGIN_INCORRECT;
-
-        # Users must be a writer or administrator
-        if ($user['role'] !== 'administrator' && $user['role'] !== 'writer')
+        if (!$user || empty($user))
         {
             return self::LOGIN_INCORRECT;
         }
