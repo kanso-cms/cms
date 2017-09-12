@@ -46,6 +46,15 @@ $cdn_enabbled  = admin_kanso_config('cdn.enabled');
         </div>
 
         <div class="form-field row floor-sm">
+            <label for="blog_location">Blog location</label>
+            <p class="color-gray">
+                You can prefix your blog routes with a path (e.g. "blog"). This will add a fixed value prefix to all your post, category, tag and author 
+                pages. Leave this blank if you are unsure.
+            </p>
+            <input type="text" name="blog_location" id="blog_location" value="<?php echo $kansoConfig['blog_location'];?>" autocomplete="off"/>
+        </div>
+
+        <div class="form-field row floor-sm">
             <label for="permalinks">Permalinks</label>
             <p class="color-gray">
                 Permalinks are used to structure URLs. The postname is mandatory. 

@@ -13,13 +13,13 @@
 		</div>
 		<div class="media-body gutter-md">
 			<div>
-	            <a class="color-black p4 font-bolder" href="/admin/articles/?category=<?php echo $category->id; ?>">
+	            <a class="color-black p4 font-bolder" href="/admin/posts/?category=<?php echo $category->id; ?>">
 	            	<?php echo $category->name; ?>
 	            </a>
 	        </div>
 	        
 	        <span class="color-gray p5">
-	        	With <?php echo $category->article_count; ?> articles
+	        	With <?php echo $category->article_count; ?> posts
 	        </span>
 		</div>
 		<div class="media-right nowrap">

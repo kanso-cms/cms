@@ -1,7 +1,7 @@
 <div class="col-12 col-md-8 roof-xs floor-xs">
    <form method="post" class="js-validation-form">
         <p class="color-gray">
-            Your author information is used by Kanso to display on articles you write and is 
+            Your author information is used by Kanso to display on posts you write and is 
             linked to your account credentials. You don't need to fill out everything - only 
             your name and slug are mandatory.
         </p>
