@@ -13,14 +13,14 @@
 		<?php endif; ?>
 		<div class="media-body gutter-md">
 			<div>
-	            <a class="color-black p4 font-bolder" href="/admin/posts/?category=<?php echo $tag->id; ?>" target="_blank">
+	            <a class="color-black p4 font-bolder" href="<?php echo the_tag_url($tag->id);?>" target="_blank">
 	            	<?php echo $tag->name; ?>
 	            </a>
 	        </div>
 	        
-	        <span class="color-gray p5">
-	        	With <?php echo $tag->article_count; ?> posts
-	        </span>
+	        <a class="color-gray p5" href="/admin/posts/?tag=<?php echo $tag->id; ?>">
+	           	With <?php echo $tag->article_count; ?> posts
+	       	</a>
 		</div>
 		<div class="media-right nowrap">
 			<?php if ($tag->id !== 1) : ?>

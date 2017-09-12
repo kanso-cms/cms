@@ -13,14 +13,14 @@
 		</div>
 		<div class="media-body gutter-md">
 			<div>
-	            <a class="color-black p4 font-bolder" href="/admin/posts/?category=<?php echo $category->id; ?>">
+	            <a class="color-black p4 font-bolder" href="<?php echo the_category_url($category->id);?>" target="_blank">
 	            	<?php echo $category->name; ?>
 	            </a>
 	        </div>
 	        
-	        <span class="color-gray p5">
-	        	With <?php echo $category->article_count; ?> posts
-	        </span>
+	        <a class="color-gray p5" href="/admin/posts/?category=<?php echo $category->id; ?>">
+	           	With <?php echo $category->article_count; ?> posts
+	       	</a>
 		</div>
 		<div class="media-right nowrap">
 			<?php if ($category->id !== 1) : ?>
