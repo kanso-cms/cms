@@ -33,11 +33,25 @@ class Tag extends Wrapper
 	{
         $saved = false;
 
-        $tagExists = $this->SQL->SELECT('*')->FROM('tags')->WHERE('slug', '=', $this->data['slug'])->ROW();
+        $isExisting = isset($this->id);
 
-        if ($tagExists)
+        if ($isExisting)
         {
-            $saved = $this->SQL->UPDATE('tags')->SET($this->data)->WHERE('id', '=', $tagExists['id'])->QUERY();
+            $existsSlug = $this->SQL->SELECT('*')->FROM('tags')->WHERE('slug', '=', $this->data['slug'])->ROW();
+
+            if ($existsSlug && $existsSlug['id'] !== $this->id)
+            {
+                $saved = $this->SQL->INSERT_INTO('tags')->VALUES($this->data)->QUERY();
+
+                if ($saved)
+                {
+                    $this->data['id'] = intval($this->SQL->connection()->lastInsertId());
+                }
+            }
+            else
+            {
+                $saved = $this->SQL->UPDATE('tags')->SET($this->data)->WHERE('id', '=', $this->id)->QUERY();
+            }
         }
         else
         {

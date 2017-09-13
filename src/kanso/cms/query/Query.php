@@ -2344,6 +2344,7 @@ class Query
         {
             return $this->response->view()->display($template, $data);
         }
+        
         return '';
     }
 

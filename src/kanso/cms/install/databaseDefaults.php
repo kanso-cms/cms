@@ -21,16 +21,18 @@ $KANSO_DEFAULTS_POSTS_TABLE = [
 
 # Default tags table
 $KANSO_DEFAULTS_TAGS_TABLE = [
-	'id'   => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
-	'name' => 'VARCHAR(255)',
-	'slug' => 'VARCHAR(255)',
+	'id'          => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'name'        => 'VARCHAR(255)',
+	'slug'        => 'VARCHAR(255)',
+	'description' => 'TEXT',
 ];
 
 # Default categories table
 $KANSO_DEFAULTS_CATEGORIES_TABLE = [
-	'id'   => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
-	'name' => 'VARCHAR(255)',
-	'slug' => 'VARCHAR(255)',
+	'id'          => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'name'        => 'VARCHAR(255)',
+	'slug'        => 'VARCHAR(255)',
+	'description' => 'TEXT',
 ];
 
 # Default authors table
@@ -125,40 +127,49 @@ $KANSO_DEFAULT_USER = [
 # The default tags entries
 $KANSO_DEFAULT_TAGS = [
 	[
-		'name' => 'Untagged',
-		'slug' => 'untagged'
+		'name'        => 'Untagged',
+		'slug'        => 'untagged',
+		'description' => '',
 	],
 	[
 		'name' => 'HTML',
-		'slug' => 'html'
+		'slug' => 'html',
+		'description' => 'Posts tags under HTML.',
+
 	],
 	[
-		'name' => 'CSS',
-		'slug' => 'css'
+		'name'        => 'CSS',
+		'slug'        => 'css',
+		'description' => 'Posts tags under CSS.',
 	],
 	[
-		'name' => 'JavaScript',
-		'slug' => 'javascript'
+		'name'        => 'JavaScript',
+		'slug'        => 'javascript',
+		'description' => 'Posts tags under JavaScript.',
 	],
 ];
 
 # The default categories entries
 $KANSO_DEFAULT_CATEGORIES = [
 	[
-		'name' => 'Uncategorized',
-		'slug' => 'uncategorized'
+		'name'        => 'Uncategorized',
+		'slug'        => 'uncategorized',
+		'description' => '',
 	],
 	[
-		'name' => 'HTML',
-		'slug' => 'html'
+		'name'        => 'HTML',
+		'slug'        => 'html',
+		'description' => 'HTML category posts.',
 	],
 	[
-		'name' => 'CSS',
-		'slug' => 'css'
+		'name'        => 'CSS',
+		'slug'        => 'css',
+		'description' => 'CSS category posts.',
 	],
 	[
-		'name' => 'JavaScript',
-		'slug' => 'javascript'
+		'name'        => 'JavaScript',
+		'slug'        => 'javascript',
+		'description' => 'JavaScript category posts.',
 	],
 ];
 

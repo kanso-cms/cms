@@ -9,6 +9,7 @@ namespace kanso\cms\admin\models;
 
 use kanso\cms\admin\models\BaseModel;
 use kanso\framework\utility\Arr;
+use kanso\framework\utility\Str;
 
 /**
  * Tags model
@@ -82,6 +83,7 @@ class Tags extends BaseModel
      */
     public function parsePost()
     {
+       
         if (!$this->validatePost())
         {
             return false;
@@ -103,6 +105,22 @@ class Tags extends BaseModel
                 
                 return $this->postMessage('success', 'Your tags were successfully cleared!');
             }
+            if ($this->post['bulk_action'] === 'update')
+            {
+                $update = $this->update(intval($tagIds[0]));
+
+                if ($update === 'name_exists')
+                {
+                    return $this->postMessage('warning', 'Could not update tag. Another tag with the same name already exists.');
+                }
+
+                if ($update === 'slug_exists')
+                {
+                    return $this->postMessage('warning', 'Could not update tag. Another tag with the same slug already exists.');
+                }
+                
+                return $this->postMessage('success', 'Tag was successfully updated!');
+            }
         }
 
         return false;        
@@ -122,7 +140,7 @@ class Tags extends BaseModel
             return false;
         }
 
-        if (!in_array($this->post['bulk_action'], ['clear', 'delete']))
+        if (!in_array($this->post['bulk_action'], ['clear', 'delete', 'update']))
         {
             return false;
         }
@@ -131,6 +149,54 @@ class Tags extends BaseModel
         {
             return false;
         }
+
+        return true;
+    }
+
+    /**
+     * Updates a tag
+     *
+     * @access private
+     * @param  int     $id Single tag id
+     * @return bool|string
+     */
+    private function update(int $id)
+    {
+        if ( !isset($this->post['name']) || !isset($this->post['slug']) || !isset($this->post['description']))
+        {
+            return false;
+        }
+
+        $name        = trim($this->post['name']);
+        $slug        = Str::slug($this->post['slug']);
+        $description = trim($this->post['description']);
+        $tag         = $this->TagManager->byId($id);
+
+        if (!$tag)
+        {
+            return false;
+        }
+
+        # Validate tag with same name does not already exist
+        $existsName = $this->TagManager->byName($name);
+
+        if ($existsName && $existsName->id !== $id)
+        {
+            return 'name_exists';
+        }
+
+        # Validate tag with same slug does not already exist
+        $existsSlug = $this->TagManager->bySlug($slug);
+
+        if ($existsSlug && $existsSlug->id !== $id)
+        {
+            return 'slug_exists';
+        }
+
+        $tag->name = $name;
+        $tag->slug = $slug;
+        $tag->description = $description;
+        $tag->save();
 
         return true;
     }

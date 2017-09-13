@@ -9,6 +9,7 @@ namespace kanso\cms\admin\models;
 
 use kanso\cms\admin\models\BaseModel;
 use kanso\framework\utility\Arr;
+use kanso\framework\utility\Str;
 
 /**
  * Categories model
@@ -66,7 +67,7 @@ class Categories extends BaseModel
             'empty_queries' => $this->emptyQueries(),
         ];
 
-        if (!empty($response['tags']))
+        if (!empty($response['categories']))
         {
             $response['max_page'] = $this->loadCategories(true);
         }
@@ -87,21 +88,37 @@ class Categories extends BaseModel
             return false;
         }
 
-        $tagIds = array_filter(array_map('intval', $this->post['tags']));
+        $catIds = array_filter(array_map('intval', $this->post['categories']));
 
-        if (!empty($tagIds))
+        if (!empty($catIds))
         {
             if ($this->post['bulk_action'] === 'delete')
             {
-                $this->delete($tagIds);
+                $this->delete($catIds);
 
-                return $this->postMessage('success', 'Your tags were successfully deleted!');
+                return $this->postMessage('success', 'Your categories were successfully deleted!');
             }
             if ($this->post['bulk_action'] === 'clear')
             {
-                $this->clear($tagIds);
+                $this->clear($catIds);
                 
-                return $this->postMessage('success', 'Your tags were successfully cleared!');
+                return $this->postMessage('success', 'Your categories were successfully cleared!');
+            }
+            if ($this->post['bulk_action'] === 'update')
+            {
+                $update = $this->update(intval($catIds[0]));
+
+                if ($update === 'name_exists')
+                {
+                    return $this->postMessage('warning', 'Could not update category. Another category with the same name already exists.');
+                }
+
+                if ($update === 'slug_exists')
+                {
+                    return $this->postMessage('warning', 'Could not update category. Another category with the same slug already exists.');
+                }
+                
+                return $this->postMessage('success', 'Category was successfully updated!');
             }
         }
 
@@ -115,22 +132,70 @@ class Categories extends BaseModel
      * @return bool
      */
     private function validatePost(): bool
-    {
+    {        
         # Validation
         if (!isset($this->post['bulk_action']) || empty($this->post['bulk_action']))
         {
             return false;
         }
 
-        if (!in_array($this->post['bulk_action'], ['clear', 'delete']))
+        if (!in_array($this->post['bulk_action'], ['clear', 'delete', 'update']))
         {
             return false;
         }
 
-        if (!isset($this->post['tags']) || !is_array($this->post['tags']) || empty($this->post['tags']))
+        if (!isset($this->post['categories']) || !is_array($this->post['categories']) || empty($this->post['categories']))
         {
             return false;
         }
+
+        return true;
+    }
+
+     /**
+     * Updates a category
+     *
+     * @access private
+     * @param  int     $id Single category id
+     * @return bool|string
+     */
+    private function update(int $id)
+    {
+        if ( !isset($this->post['name']) || !isset($this->post['slug']) || !isset($this->post['description']))
+        {
+            return false;
+        }
+
+        $name        = trim($this->post['name']);
+        $slug        = Str::slug($this->post['slug']);
+        $description = trim($this->post['description']);
+        $category    = $this->CategoryManager->byId($id);
+
+        if (!$category)
+        {
+            return false;
+        }
+
+        # Validate category with same name does not already exist
+        $existsName = $this->CategoryManager->byName($name);
+
+        if ($existsName && $existsName->id !== $id)
+        {
+            return 'name_exists';
+        }
+
+        # Validate category with same slug does not already exist
+        $existsSlug = $this->CategoryManager->bySlug($slug);
+
+        if ($existsSlug && $existsSlug->id !== $id)
+        {
+            return 'slug_exists';
+        }
+
+        $category->name = $name;
+        $category->slug = $slug;
+        $category->description = $description;
+        $category->save();
 
         return true;
     }
@@ -146,17 +211,17 @@ class Categories extends BaseModel
     {
         foreach ($ids as $id)
         {
-            $tag = $this->CategoryManager->byId($id);
+            $category = $this->CategoryManager->byId($id);
 
-            if ($tag)
+            if ($category)
             {
-                $tag->delete();
+                $category->delete();
             }
         }
     }
 
     /**
-     * Clear tags of articles
+     * Clear categories of articles
      *
      * @access private
      * @param  array   $ids List of post ids
@@ -166,11 +231,11 @@ class Categories extends BaseModel
     {
         foreach ($ids as $id)
         {
-            $tag = $this->CategoryManager->byId($id);
+            $category = $this->CategoryManager->byId($id);
 
-            if ($tag)
+            if ($category)
             {
-                $tag->clear();
+                $category->clear();
             }
         }
     }
@@ -212,7 +277,7 @@ class Categories extends BaseModel
     }
 
     /**
-     * Returns the list of tags for display
+     * Returns the list of categories for display
      *
      * @access private
      * @param  bool $checkMaxPages Count the max pages
@@ -234,7 +299,7 @@ class Categories extends BaseModel
         # Select the posts
         $this->SQL->SELECT('id')->FROM('categories');
 
-        # Set the limit - Only if we're returning the actual tag list
+        # Set the limit - Only if we're returning the actual categories list
         # and not sorting by article count
         if (!$checkMaxPages && $queries['sort'] === 'name')
         {
@@ -271,7 +336,7 @@ class Categories extends BaseModel
         }
 
         # If we're sorting by article count, we need to paginate
-        # all the results and return the requested page of tags
+        # all the results and return the requested page of categories
         if ($queries['sort'] !== 'name' && !$checkMaxPages)
         {
             $result = Arr::sortMulti($result, 'article_count');

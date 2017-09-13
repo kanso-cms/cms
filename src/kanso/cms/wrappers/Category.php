@@ -33,20 +33,35 @@ class Category extends Wrapper
 	{
         $saved = false;
 
-        $catExists = $this->SQL->SELECT('*')->FROM('categories')->WHERE('slug', '=', $this->data['slug'])->ROW();
+        $isExisting = isset($this->id);
 
-        if ($catExists)
+        if ($isExisting)
         {
-            $saved = $this->SQL->UPDATE('categories')->SET($this->data)->WHERE('id', '=', $catExists['id'])->QUERY();
+            $existsSlug = $this->SQL->SELECT('*')->FROM('categories')->WHERE('slug', '=', $this->data['slug'])->ROW();
+
+            if ($existsSlug && $existsSlug['id'] !== $this->id)
+            {
+                $saved = $this->SQL->INSERT_INTO('categories')->VALUES($this->data)->QUERY();
+
+                if ($saved)
+                {
+                    $this->data['id'] = intval($this->SQL->connection()->lastInsertId());
+                }
+            }
+            else
+            {
+                $saved = $this->SQL->UPDATE('categories')->SET($this->data)->WHERE('id', '=', $this->id)->QUERY();
+            }
         }
         else
         {
             $saved = $this->SQL->INSERT_INTO('categories')->VALUES($this->data)->QUERY();
-            
+
             if ($saved)
             {
                 $this->data['id'] = intval($this->SQL->connection()->lastInsertId());
             }
+            
         }
 
         return !$saved ? false : true;
