@@ -51,10 +51,13 @@
 
         this._fileTitleInput        = Helper.$('#media_title');
         this._fileAltInput          = Helper.$('#media_alt');
-        this._fileRelInput          = Helper.$('#media_rel');
         this._fileURLInput          = Helper.$('#media_url');
         this._fileIdInput           = Helper.$('#media_id');
         this._sizeSelect            = Helper.$('#media_size');
+        this._linkToSelect          = Helper.$('#media_link_to_select');
+        this._linkToInput           = Helper.$('#media_link_to_input');
+        this._linkToWrap            = Helper.$('.js-link-to-wrap');
+
 
         this._nextImgTrigger          = Helper.$('.js-image-right-trigger');
         this._prevImgTrigger          = Helper.$('.js-image-left-trigger');
@@ -97,7 +100,35 @@
         this._initBulkSelect();
         this._initDropZones();
         this._initScrollLoad();
+        this._initSelectListener();
     }
+
+    /**
+     * Initialize and display the library to load when a trigger element is clicked
+     */
+    MediaLibrary.prototype._initSelectListener = function()
+    {
+        var _this = this;
+
+        if (Helper.nodeExists(this._linkToSelect))
+        {
+            Helper.addEventListener(this._linkToSelect, 'change', function(e)
+            {
+                e = e || window.event;
+                var val = Helper.getInputValue(this);
+
+                if (val === 'custom')
+                {
+                    _this._linkToWrap.style.height = 'auto';
+                }
+                else
+                {
+                    _this._linkToWrap.style.height = '0';
+                }
+            });
+        }
+    }
+    
 
     /**
      * Initialize and display the library to load when a trigger element is clicked
@@ -307,7 +338,6 @@
             'ajax_request' : 'update_media_info',
             'id'           : this._fileIdInput.value,
             'title'        : this._fileTitleInput.value,
-            'rel'          : this._fileRelInput.value,
             'alt'          : this._fileAltInput.value,
             'access_token' : this._accessToken,
         };
@@ -396,8 +426,8 @@
         this._fileUploaderText.innerHTML = item.dataset.user;
 
         this._fileTitleInput.value = item.dataset.title; 
-        this._fileAltInput.value   = item.dataset.alt; 
-        this._fileRelInput.value   = item.dataset.rel; 
+        this._fileAltInput.value   = item.dataset.alt;
+        this._linkToInput.value    = '';
         this._fileURLInput.value   = item.dataset.url; 
         this._fileIdInput.value    = item.dataset.id;
 
@@ -534,7 +564,6 @@
             node.dataset.path    = details.path;
             node.dataset.date    = details.date;
             node.dataset.alt     = details.alt;
-            node.dataset.rel     = details.rel;
             node.dataset.title   = details.title;
             node.dataset.size    = details.size;
             node.dataset.user    = details.user;
@@ -545,7 +574,7 @@
 
             img.setAttribute('alt',   details.alt);
             img.setAttribute('title', details.title);
-            img.setAttribute('rel',   details.rel);
+
             img.src = details.preview;
 
             var center = document.createElement('div');
@@ -621,7 +650,6 @@
                 function(success) {
                     var responseObj = Helper.isJSON(success);
                     if (responseObj && responseObj.response) {
-                        console.log(responseObj.response);
                         if (Helper.is_array(responseObj.response) && Helper.isset(responseObj.response[0])) {
                             updateUploadedItem(responseObj.response[0], node);
                             resetProgress();
@@ -672,7 +700,6 @@
             item.dataset.path    = details.path;
             item.dataset.date    = details.date;
             item.dataset.alt     = details.alt;
-            item.dataset.rel     = details.rel;
             item.dataset.title   = details.title;
             item.dataset.size    = details.size;
             item.dataset.user    = details.user;
@@ -683,7 +710,6 @@
 
             img.setAttribute('alt',   details.alt);
             img.setAttribute('title', details.title);
-            img.setAttribute('rel',   details.rel);
             img.src = details.preview;
 
             var center = document.createElement('div');
@@ -743,40 +769,51 @@
         var URL    = self._fileURLInput.value;
         var title  = self._fileTitleInput.value;
         var alt    = self._fileAltInput.value;
-        var rel    = self._fileRelInput.value;
         var size   = Helper.getInputValue(self._sizeSelect);
         var writer = Modules.get('KansoWriter');
         var ext    = Helper.$('#media_url', self._detailsForm).value;
+        var linkTo = Helper.getInputValue(self._linkToSelect);
+        var prefix = '';
+        var suffix = '';
+        var img    = '';
+
         ext = ext.split('.');
         ext = ext[ext.length - 1];
 
-
+        if (linkTo === 'file')
+        {
+            prefix = '<a href="'+URL+'" title="'+title+'">';
+            suffix = '</a>';
+        }
+        else if (linkTo === 'attachment')
+        {
+            prefix = '<a href="'+window.location.origin + '/attachment/' + URL.split('/').pop() + '" title="' + title + '" rel="attachment">';
+            suffix = '</a>';
+        }
+        else if (linkTo === 'custom')
+        {
+            prefix = '<a href="' + self._linkToInput.value.trim() + '" title="' + title + '">';
+            suffix = '</a>';
+        }
         if (ext === 'svg')
         {
-            var img = '<img src="'+URL+'" alt="'+alt+'" rel="'+rel+'" title="'+title+'" width="" height="" />';
-            writer.insertWrapText(img, '', img, writer);
-            self._hideLibrary();
-            self._hideMediaDetails();
+            img = '<img src="' + URL + '" alt="' + alt + '" title="' + title + '" width="" height="" />';
         }
-        else if (self._detailsForm.dataset.isimage === 'false') {
-            var prefix = '<a href="'+URL+'" title="'+title+'" rel="'+rel+'">'
-            var suffix = '</a>';
-            writer.insertWrapText(prefix, suffix, prefix+suffix, writer);
-            self._hideLibrary();
-            self._hideMediaDetails();
-        }
-        else {
-            if (size !== 'origional') {
+        else if (self._detailsForm.dataset.isimage !== 'false')
+        {
+            if (size !== 'origional')
+            {
                 var split   = URL.split('.');
                 var ext     = split.pop();
                 var name    = split.join('.');
                 URL         = name+'_'+size+'.'+ext;
             }
-            var img = '<img src="'+URL+'" alt="'+alt+'" rel="'+rel+'" title="'+title+'" width="" height=""/>';
-            writer.insertWrapText(img, '', img, writer);
-            self._hideLibrary();
-            self._hideMediaDetails();
+            var img = '<img src="'+URL+'" alt="'+alt+'" title="'+title+'" width="" height=""/>';
         }
+
+        writer.insertText(prefix+img+suffix, writer);
+        self._hideLibrary();
+        self._hideMediaDetails();
     }
 
     /********************************************************************************************/

@@ -202,7 +202,7 @@ class MediaLibrary extends BaseModel
         }
 
         # Validate the post vars
-        if (!array_key_exists('title', $this->post) || !array_key_exists('rel', $this->post) || !array_key_exists('alt', $this->post))
+        if (!array_key_exists('title', $this->post) || !array_key_exists('alt', $this->post))
         {
             return false;
         }
@@ -216,7 +216,6 @@ class MediaLibrary extends BaseModel
         }
 
         $attachment->title = trim($this->post['title']);
-        $attachment->rel   = trim($this->post['rel']);
         $attachment->alt   = trim($this->post['alt']);
         $attachment->save();
 

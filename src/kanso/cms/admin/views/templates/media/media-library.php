@@ -115,11 +115,7 @@
 								<label for="media_alt">Alt Text</label>
 								<input type="text" name="media_alt" id="media_alt" value="">
 							</div>
-							<div class="form-field row floor-xs">
-								<label for="media_rel">Rel Text</label>
-								<input type="text" name="media_rel" id="media_rel" value="">
-							</div>
-
+							
 							<div class="form-field row floor-xs size-select">
 								<label for="media_size">Attachment Size</label>
 								<select id="media_size" class="js-size-select">
@@ -128,6 +124,21 @@
 									<option value="medium">Medium</option>
 									<option value="large">Large</option>
 								</select>
+							</div>
+
+							<div class="form-field row floor-xs link-to">
+								<label for="media_link_to_select">Link To</label>
+								<select name="media_link_to_select" id="media_link_to_select">
+									<option value="none" selected>None</option>
+										<option value="file">Media File</option>
+										<option value="attachment">Attachment Page</option>
+										<option value="custom">Custom URL</option>
+								</select>
+								<div class="collapsed js-link-to-wrap">
+									<div class="roof-xs">
+										<input type="text" name="media_link_to_input" id="media_link_to_input" value="">
+									</div>
+								</div>
 							</div>
 
 							<input type="hidden" name="media_id" id="media_id" value="">

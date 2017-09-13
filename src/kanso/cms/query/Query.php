@@ -1177,12 +1177,12 @@ class Query
         
         if (!$thumbnail)
         {
-            return '<img src="_" '.$width.' '.$height.' '.$classes.' '.$id.' rel="" alt="" title="">';
+            return '<img src="_" '.$width.' '.$height.' '.$classes.' '.$id.' alt="" title="">';
         }
         
         $src = $thumbnail->imgSize($size);
 
-        return '<img src="'.$src.'" '.$width.' '.$height.' '.$classes.' '.$id.' rel="'.$thumbnail->rel.'" alt="'.$thumbnail->alt.'" title="'.$thumbnail->title.'" >';
+        return '<img src="'.$src.'" '.$width.' '.$height.' '.$classes.' '.$id.' alt="'.$thumbnail->alt.'" title="'.$thumbnail->title.'" >';
     }
 
     /**

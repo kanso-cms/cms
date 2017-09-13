@@ -287,6 +287,13 @@
 .media-library .selected-media-container .media-details-form .set-author-avatar {
   display: none;
 }
+.media-library .selected-media-container .media-details-form .link-to {
+  display: none;
+}
+.writer-html .writer-media-wrapper .media-library .media-details-form .link-to {
+  display: block;
+}
+
 .media-library .selected-media-container .details-wrapper .details div {
   overflow: hidden;
   text-overflow: ellipsis;

@@ -121,10 +121,9 @@ class MediaManager extends Manager
      * @param  string $path  Path to file
      * @param  string $title Attachment title (optional) (default '')
      * @param  string $alt   Attachment alt text (optional) (default '')
-     * @param  string $rel   Attachment rel text (optional) (default '')
      * @return mixed
      */
-    public function create(string $path, string $title = '', string $alt = '', string $rel = 'attachment')
+    public function create(string $path, string $title = '', string $alt = '')
     {
         $url        = str_replace($this->environment->DOCUMENT_ROOT, $this->environment->HTTP_HOST, $path);
         $dimensions = '';
@@ -149,7 +148,6 @@ class MediaManager extends Manager
             'path'  => $path,
             'title' => $title,
             'alt'   => $alt,
-            'rel'   => $rel,
             'size'  => filesize($path),
             'date'  => time(),
             'uploader_id' => $uploaderId,
@@ -175,11 +173,10 @@ class MediaManager extends Manager
      * @param  array      $file        Single file item from the $_FILES super global
      * @param  string     $title       Title for the attachment
      * @param  string     $alt         Alt text for the attachment
-     * @param  string     $rel         Rel text for the attachment
      * @param  bool       $validate    Allow only valid file types 
      * @return bool|CORRUPT_FILE|UNSUPPORTED_TYPE
      */
-    public function upload($FILE, $title = '', $alt = '', $rel = 'attachment', $validate = true)
+    public function upload($FILE, $title = '', $alt = '', $validate = true)
     {
         # Validate all the proper keys are set
         if (!isset($FILE['type']) || !isset($FILE['name']) || !isset($FILE['tmp_name']) || !isset($FILE['size']))
@@ -222,7 +219,7 @@ class MediaManager extends Manager
 
             if ($uploaded)
             {
-                return $this->create($dest, $title, $alt, $rel);
+                return $this->create($dest, $title, $alt);
             } 
         }
         else
@@ -275,7 +272,7 @@ class MediaManager extends Manager
             # Save to the database and update info
             if ($uploaded)
             {
-                return $this->create($destPath, $title, $alt, $rel);
+                return $this->create($destPath, $title, $alt);
             }
         
         }
