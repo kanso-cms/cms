@@ -13,6 +13,20 @@
     // Image resizer
     var ImageResizer=function(t,e,i){return this instanceof ImageResizer?(this.original_w=t,this.original_h=e,this.allow_enlarge=i,this.dest_x=0,this.dest_y=0,this.source_x,this.source_y,this.source_w,this.source_h,this.dest_w,void this.dest_h):new ImageResizer(t,e,i)};ImageResizer.prototype={resizeToHeight:function(t){var e=t/this.getSourceHeight(),i=this.getSourceWidth()*e;return this.resize(i,t),this},resizeToWidth:function(t){var e=t/this.getSourceWidth(),i=this.getSourceHeight()*e;return this.resize(t,i),this},scale:function(t){var e=this.getSourceWidth()*t/100,i=this.getSourceHeight()*t/100;return this.resize(e,i),this},resize:function(t,e){return this.allow_enlarge||(t>this.getSourceWidth()||e>this.getSourceHeight())&&(t=this.getSourceWidth(),e=this.getSourceHeight()),this.source_x=0,this.source_y=0,this.dest_w=t,this.dest_h=e,this.source_w=this.getSourceWidth(),this.source_h=this.getSourceHeight(),this},crop:function(t,e){this.allow_enlarge||(t>this.getSourceWidth()&&(t=this.getSourceWidth()),e>this.getSourceHeight()&&(e=this.getSourceHeight()));var i=this.getSourceWidth()/this.getSourceHeight(),h=t/e;if(i>h){this.resizeToHeight(e);var s=(this.getDestWidth()-t)/this.getDestWidth()*this.getSourceWidth();this.source_w=this.getSourceWidth()-s,this.source_x=s/2,this.dest_w=t}else{this.resizeToWidth(t);var r=(this.getDestHeight()-e)/this.getDestHeight()*this.getSourceHeight();this.source_h=this.getSourceHeight()-r,this.source_y=r/2,this.dest_h=e}return this},getSourceWidth:function(){return this.original_w},getSourceHeight:function(){return this.original_h},getDestWidth:function(){return this.dest_w},getDestHeight:function(){return this.dest_h}};
 
+    // Table temaplate to to insert into writer
+    function tableTemplate()
+    {
+        return [
+        '\n| Tables        | Are           | Cool  |\n',
+        '| ------------- |:-------------:| -----:|\n',
+        '| col 3 is      | right-aligned | $1600 |\n',
+        '| col 2 is      | centered      |   $12 |\n',
+        '| zebra stripes | are neat      |    $1 |\n',].join('');
+    }
+
+    
+
+
     /*-------------------------------------------------------------
     ** Global variables for application
     --------------------------------------------------------------*/
@@ -237,6 +251,11 @@ KansoWriter.prototype.initFooter = function() {
         self.toggleList(self, false);
     });
 
+    // Table listener
+    $('.js-writer-footer .js-insert-table').addEventListener('click', function() {
+        self.insertText(tableTemplate(), self);
+    });
+
     // Text styles
     $('.js-writer-footer .js-insert-bold').addEventListener('click', function() {
         self.toggleTextStyle('**', self);
@@ -252,10 +271,6 @@ KansoWriter.prototype.initFooter = function() {
     $('.js-writer-footer .js-insert-link').addEventListener('click', function() {
         self.insertWrapText('[', '](href)', '[text](href)', self);
     });
-    
-    /*$('.js-writer-footer .js-insert-image').addEventListener('click', function() {
-        self.insertWrapText('![', '](src)', '![altText](src)', self);
-    });*/
 
     window.addEventListener("resize", function() {
         clearTimeout(footerTimer);
@@ -520,6 +535,25 @@ KansoWriter.prototype.insertWrapText = function(prefix, suffix, noSelection, sel
     self.writer.replaceSelection(toInsert, 'start');
     self.showFooter();
     self.writer.focus();
+}
+
+/*-------------------------------------------------------------
+**  Insert some text
+--------------------------------------------------------------*/
+KansoWriter.prototype.insertText = function(text, self)
+{
+    var doc    = self.writer;
+    var cursor = doc.getCursor();
+    var line   = doc.getLine(cursor.line);
+    var pos =
+    {
+        line : cursor.line,
+        ch   : line.length
+    }
+
+    doc.replaceRange(text, pos);
+    self.showFooter();
+    doc.focus();
 }
 
 

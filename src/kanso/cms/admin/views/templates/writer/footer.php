@@ -18,6 +18,7 @@
 			<button class="js-insert-h6 tooltipped tooltipped-n" data-tooltip="Toggle heading 6">h6</button>
 			<button class="js-insert-list-normal tooltipped tooltipped-n" data-tooltip="Toggle unordered-list">- List</button>
 			<button class="js-insert-list-numbered tooltipped tooltipped-n" data-tooltip="Toggle ordered-list">1. List</button>
+			<button class="js-insert-table tooltipped tooltipped-n" data-tooltip="Insert table"><svg viewBox="0 0 500 500"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#table"></use></svg></button>
 			<button class="js-insert-bold tooltipped tooltipped-n" data-tooltip="Toggle bold"><svg viewBox="0 0 500 500"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#bold"></use></svg></button>
 			<button class="js-insert-italic tooltipped tooltipped-n" data-tooltip="Toggle italics"><svg viewBox="0 0 500 500"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#italic"></use></svg></button>
 			<button class="js-insert-strike tooltipped tooltipped-n" data-tooltip="Toggle strike-through"><svg viewBox="0 0 500 500"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#strike-through"></use></svg></span></button>

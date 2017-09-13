@@ -123,7 +123,7 @@ class MediaManager extends Manager
      * @param  string $rel   Attachment rel text (optional) (default '')
      * @return mixed
      */
-    public function create(string $path, string $title = '', string $alt = '', string $rel = '')
+    public function create(string $path, string $title = '', string $alt = '', string $rel = 'attachment')
     {
         $url        = str_replace($this->environment->DOCUMENT_ROOT, $this->environment->HTTP_HOST, $path);
         $dimensions = '';
