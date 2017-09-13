@@ -28,6 +28,7 @@ class Mime
         'bmp'                          => 'image/bmp',
         'tiff'                         => 'image/tiff',
         'ico'                          => 'image/x-icon',
+        'svg'                          => 'image/svg+xml',
 
         // Video formats
         'asf|asx'                      => 'video/x-ms-asf',

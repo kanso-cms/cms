@@ -22,6 +22,26 @@ use kanso\framework\utility\Mime;
 class MediaLibrary extends BaseModel
 {
     /**
+     * Default image types
+     * 
+     * @var array
+     */
+    private $imageTypes = 
+    [
+        'image/png',
+        'image/jpg',
+        'image/jpeg',
+        'image/gif',
+    ];
+
+    /**
+     * SVG Mime Type
+     *
+     * @var string
+     */
+    private $svgMime = 'image/svg+xml';
+
+    /**
      * {@inheritdoc}
      */
     public function onGET()
@@ -103,10 +123,8 @@ class MediaLibrary extends BaseModel
         $limit    = $perPage;
 
         # Select the images
-        $response     = [];
-        $rows         = $this->SQL->SELECT('*')->FROM('media_uploads')->ORDER_BY('date', 'DESC')->LIMIT($offset, $limit)->FIND_ALL();
-        $imageTypes   = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'];
-
+        $response      = [];
+        $rows          = $this->SQL->SELECT('*')->FROM('media_uploads')->ORDER_BY('date', 'DESC')->LIMIT($offset, $limit)->FIND_ALL();
         $imagesBaseURL = str_replace($this->Request->environment()->DOCUMENT_ROOT, $this->Request->environment()->HTTP_HOST, $this->Config->get('cms.uploads.path'));
 
         foreach ($rows as $image)
@@ -120,9 +138,9 @@ class MediaLibrary extends BaseModel
             $image['name']    = Str::getAfterLastChar($image['url'], '/');
 
             # If this is not an image put no preview on it
-            if (!in_array($image['type'], $imageTypes))
+            if (!in_array($image['type'], $this->imageTypes) && $image['type'] !== $this->svgMime)
             {
-                $image['preview'] = $imagesBaseURL.'/Images/no-preview-available.jpg';
+                $image['preview'] = $imagesBaseURL.'/no-preview-available.jpg';
             }
 
             $response[] = $image;
@@ -243,7 +261,6 @@ class MediaLibrary extends BaseModel
         }
 
         # Upload and prepare the repsonse
-        $imageTypes    = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'];
         $uploaded      = [];
         $imagesBaseURL = str_replace($this->Request->environment()->DOCUMENT_ROOT, $this->Request->environment()->HTTP_HOST, $this->Config->get('cms.uploads.path'));
 
@@ -262,7 +279,7 @@ class MediaLibrary extends BaseModel
                 $image['name']    = Str::getAfterLastChar($image['url'], '/');
 
                 # If this is not an image put no preview on it
-                if (!in_array($image['type'], $imageTypes))
+                if (!in_array($image['type'], $this->imageTypes) && $image['type'] !== $this->svgMime)
                 {
                     $image['preview'] = $imagesBaseURL.'/no-preview-available.jpg';
                 }

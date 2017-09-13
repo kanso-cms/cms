@@ -139,6 +139,7 @@ return
             'image/ico',
             'image/vnd.adobe.photoshop',
             'image/webp',
+            'image/svg+xml',
 
             # Microsoft office
             'application/pdf',

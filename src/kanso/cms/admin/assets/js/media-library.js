@@ -81,6 +81,8 @@
      */
     MediaLibrary.prototype.__construct = function() {
 
+        this._accessToken = this._accessToken.value;
+        
         // Check if this media library is hidden by default
         if (Helper.hasClass(this.wrapper.parentNode, 'js-triggerable-media')) {
             this._initTrigger();
@@ -89,7 +91,7 @@
             this._requestImages();
         }
 
-        this._accessToken = this._accessToken.value;
+        
         this._initImgClick();
         this._initModal();
         this._initBulkSelect();
@@ -744,8 +746,19 @@
         var rel    = self._fileRelInput.value;
         var size   = Helper.getInputValue(self._sizeSelect);
         var writer = Modules.get('KansoWriter');
+        var ext    = Helper.$('#media_url', self._detailsForm).value;
+        ext = ext.split('.');
+        ext = ext[ext.length - 1];
 
-        if (self._detailsForm.dataset.isimage === 'false') {
+
+        if (ext === 'svg')
+        {
+            var img = '<img src="'+URL+'" alt="'+alt+'" rel="'+rel+'" title="'+title+'" width="" height="" />';
+            writer.insertWrapText(img, '', img, writer);
+            self._hideLibrary();
+            self._hideMediaDetails();
+        }
+        else if (self._detailsForm.dataset.isimage === 'false') {
             var prefix = '<a href="'+URL+'" title="'+title+'" rel="'+rel+'">'
             var suffix = '</a>';
             writer.insertWrapText(prefix, suffix, prefix+suffix, writer);
@@ -759,7 +772,7 @@
                 var name    = split.join('.');
                 URL         = name+'_'+size+'.'+ext;
             }
-            var img = '<img src="'+URL+'" alt="'+alt+'" rel="'+rel+'" title="'+title+'" />';
+            var img = '<img src="'+URL+'" alt="'+alt+'" rel="'+rel+'" title="'+title+'" width="" height=""/>';
             writer.insertWrapText(img, '', img, writer);
             self._hideLibrary();
             self._hideMediaDetails();

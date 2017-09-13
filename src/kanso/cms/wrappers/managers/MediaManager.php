@@ -70,11 +70,12 @@ class MediaManager extends Manager
      *
      * @var array
      */
-    private $imageMime = [
+    private $imageMime =
+    [
         'image/png',
         'image/jpg',
         'image/jpeg',
-        'image/gif'
+        'image/gif',
     ];
 
     /**
