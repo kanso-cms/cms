@@ -278,21 +278,22 @@ class Settings extends BaseModel
         $post = $this->validation->sanitize($this->post);
 
         $this->validation->validation_rules([
-            'enable_authors '   => 'boolean',
-            'enable_cats'       => 'boolean',
-            'enable_tags'       => 'boolean',
-            'enable_cdn'        => 'boolean',
-            'enable_cache'      => 'boolean',
-            'enable_comments'   => 'boolean',
-            'posts_per_page'    => 'required|integer',
-            'thumbnail_quality' => 'required|integer',
-            'cdn_url'           => 'max_len,100',
-            'cache_life'        => 'max_len,50',
-            'site_title'        => 'required|max_len,100',
-            'site_description'  => 'required|max_len,300',
-            'sitemap_url'       => 'required|max_len,100',
-            'theme'             => 'required|max_len,100',
-            'permalinks'        => 'required|max_len,50',
+            'enable_authors '    => 'boolean',
+            'enable_cats'        => 'boolean',
+            'enable_tags'        => 'boolean',
+            'enable_cdn'         => 'boolean',
+            'enable_cache'       => 'boolean',
+            'enable_comments'    => 'boolean',
+            'enable_attachments' => 'boolean',
+            'posts_per_page'     => 'required|integer',
+            'thumbnail_quality'  => 'required|integer',
+            'cdn_url'            => 'max_len,100',
+            'cache_life'         => 'max_len,50',
+            'site_title'         => 'required|max_len,100',
+            'site_description'   => 'required|max_len,300',
+            'sitemap_url'        => 'required|max_len,100',
+            'theme'              => 'required|max_len,100',
+            'permalinks'         => 'required|max_len,50',
         ]);
 
         $this->validation->filter_rules([
@@ -320,13 +321,14 @@ class Settings extends BaseModel
         if ($validated_data)
         {
             # Filter basic booleans
-            $validated_data['enable_authors']  = !isset($validated_data['enable_authors'])  ? false : Str::bool($validated_data['enable_authors']);
-            $validated_data['enable_cats']     = !isset($validated_data['enable_cats'])     ? false : Str::bool($validated_data['enable_cats']);
-            $validated_data['enable_tags']     = !isset($validated_data['enable_tags'])     ? false : Str::bool($validated_data['enable_tags']);
-            $validated_data['enable_cdn']      = !isset($validated_data['enable_cdn'])      ? false : Str::bool($validated_data['enable_cdn']);
-            $validated_data['enable_cache']    = !isset($validated_data['enable_cache'])    ? false : Str::bool($validated_data['enable_cache']);
-            $validated_data['enable_comments'] = !isset($validated_data['enable_comments']) ? false : Str::bool($validated_data['enable_comments']);
-            $validated_data['thumbnail_quality'] = intval($validated_data['thumbnail_quality']);
+            $validated_data['enable_authors']     = !isset($validated_data['enable_authors'])     ? false : Str::bool($validated_data['enable_authors']);
+            $validated_data['enable_cats']        = !isset($validated_data['enable_cats'])        ? false : Str::bool($validated_data['enable_cats']);
+            $validated_data['enable_tags']        = !isset($validated_data['enable_tags'])        ? false : Str::bool($validated_data['enable_tags']);
+            $validated_data['enable_cdn']         = !isset($validated_data['enable_cdn'])         ? false : Str::bool($validated_data['enable_cdn']);
+            $validated_data['enable_cache']       = !isset($validated_data['enable_cache'])       ? false : Str::bool($validated_data['enable_cache']);
+            $validated_data['enable_comments']    = !isset($validated_data['enable_comments'])    ? false : Str::bool($validated_data['enable_comments']);
+            $validated_data['enable_attachments'] = !isset($validated_data['enable_attachments']) ? false : Str::bool($validated_data['enable_attachments']);
+            $validated_data['thumbnail_quality']  = intval($validated_data['thumbnail_quality']);
 
 
             # Validate the permalinks
@@ -368,18 +370,19 @@ class Settings extends BaseModel
 
             $cms =
             [
-                "theme_name"       => $validated_data['theme'],
-                "site_title"       => $validated_data['site_title'],
-                "site_description" => $validated_data['site_description'],
-                "blog_location"    => $validated_data['blog_location'],
-                "sitemap_route"    => $validated_data['sitemap_url'],
-                "permalinks"       => $permalinks['permalinks'],
-                "permalinks_route" => $permalinks['permalinks_route'],
-                "posts_per_page"   => $validated_data['posts_per_page'] < 1 ? 10 : intval($validated_data['posts_per_page']),
-                "route_tags"       => Str::bool($validated_data['enable_tags']),
-                "route_categories" => Str::bool($validated_data['enable_cats']),
-                "route_authors"    => Str::bool($validated_data['enable_authors']),
-                "enable_comments"  => Str::bool($validated_data['enable_comments']),
+                "theme_name"        => $validated_data['theme'],
+                "site_title"        => $validated_data['site_title'],
+                "site_description"  => $validated_data['site_description'],
+                "blog_location"     => $validated_data['blog_location'],
+                "sitemap_route"     => $validated_data['sitemap_url'],
+                "permalinks"        => $permalinks['permalinks'],
+                "permalinks_route"  => $permalinks['permalinks_route'],
+                "posts_per_page"    => $validated_data['posts_per_page'] < 1 ? 10 : intval($validated_data['posts_per_page']),
+                "route_tags"        => Str::bool($validated_data['enable_tags']),
+                "route_categories"  => Str::bool($validated_data['enable_cats']),
+                "route_attachments" => Str::bool($validated_data['enable_attachments']),
+                "route_authors"     => Str::bool($validated_data['enable_authors']),
+                "enable_comments"   => Str::bool($validated_data['enable_comments']),
             ];
 
             foreach ($cms as $key => $val)

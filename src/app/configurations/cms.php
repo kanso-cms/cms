@@ -47,26 +47,25 @@ return
      * Routing
      * ---------------------------------------------------------
      *
-     * sitemap_route    : Route to the XML sitemap.
-     * posts_per_page   : Posts per page for pagination. 
-     * permalinks       : Permalinks structure
-     * permalinks_route : The permalinks route for the router
-     * blog_location    : Optional prefix for blog posts, category, tags, author pages location e.g my/blog/location
-     * route_tags       : Should Kanso route tags e.g example.com/tag/tag-slug/
-     * route_categories : Should Kanso route categories e.g example.com/category/category-slug/
-     * route_authors    : Should Kanso route authors e.g example.com/author/author-slug/
-     * enable_comments  : Disable or enable comments globally
+     * sitemap_route     : Route to the XML sitemap.
+     * posts_per_page    : Posts per page for pagination. 
+     * permalinks        : Permalinks structure
+     * permalinks_route  : The permalinks route for the router
+     * route_tags        : Should Kanso route tags e.g example.com/tag/tag-slug/
+     * route_categories  : Should Kanso route categories e.g example.com/category/category-slug/
+     * route_authors     : Should Kanso route authors e.g example.com/author/author-slug/
+     * route_attachments : Should Kanso route attachments e.g example.com/attachment/foobar.png/
+     * enable_comments   : Disable or enable comments globally
      */
-    'sitemap_route'    => 'sitemap.xml',
-    'posts_per_page'   => 10,
-    'permalinks'       => 'year/month/postname/',
-    'permalinks_route' => '(:year)/(:month)/(:postname)/',
-    'blog_location'    => false,
-    'route_tags'       => true,
-    'route_categories' => true,
-    'route_authors'    => true,
-    'enable_comments'  => true,
-
+    'sitemap_route'     => 'sitemap.xml',
+    'posts_per_page'    => 10,
+    'permalinks'        => 'year/month/postname/',
+    'permalinks_route'  => '(:year)/(:month)/(:postname)/',
+    'route_tags'        => true,
+    'route_categories'  => true,
+    'route_authors'     => true,
+    'route_attachments' => true,
+    'enable_comments'   => true,
 
     /**
      * ---------------------------------------------------------

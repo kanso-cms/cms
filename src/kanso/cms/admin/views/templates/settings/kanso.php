@@ -125,6 +125,17 @@ $cdn_enabbled  = admin_kanso_config('cdn.enabled');
         </div>
 
         <div class="form-field row floor-sm">
+            <label for="enable_attachments">Attachments</label>
+            <p class="color-gray">
+                Do you want media uploads to have publicly accessible attachment pages.
+            </p>
+            <span class="checkbox checkbox-primary">
+                <input type="checkbox" name="enable_attachments" id="enable_attachments" <?php echo ($kansoConfig['route_attachments'] === true ? 'checked' : '');?>  />
+                <label for="enable_attachments">Enable attachment pages</label>
+            </span>
+        </div>
+
+        <div class="form-field row floor-sm">
             <label for="enable_comments">Comments</label>
             <p class="color-gray">
                 Enable comments globally on posts and page.

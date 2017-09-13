@@ -231,7 +231,7 @@ class MediaLibrary extends BaseModel
      */
     private function uploadMedia()
     {
-         # Validate files
+        # Validate files
         if (empty($_FILES) || !isset($_FILES['file']))
         {
             return false;

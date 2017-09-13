@@ -41,11 +41,13 @@ class Humanizer
 
 			$e = floor(log($size, $base));
 
-			return round($size / pow($base, $e), 2) . ' ' . $terms[$e];
+			$s = round($size / pow($base, $e), 2);
+
+			return $s . ' ' . self::pluralize($terms[$e], $s);
 		}
 		else
 		{
-			return '0 byte';
+			return '0 bytes';
 		}
 	}
 

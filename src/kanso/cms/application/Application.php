@@ -282,7 +282,6 @@ class Application
 			$waterfall[] = 'single-'.array_pop($urlParts);
 			$waterfall[] = 'single';
 		}
-		
 		else if ($pageType === 'tag')
 		{
 			$waterfall[] = 'tag-'.$this->container->Query->the_taxonomy()->slug;
@@ -309,11 +308,26 @@ class Application
 			$waterfall[] = 'search';
 			$waterfall[] = 'index';
 		}
+		else if ($pageType === 'attachment')
+		{
+			$waterfall[] = 'attachment-'.array_pop($urlParts);
+			$waterfall[] = 'attachment';
+		}
 		
 		foreach ($waterfall as $name)
 		{
 			$template = "$templateBase/$name.php";
 			
+			if (file_exists($template))
+			{
+				return $template;
+			}
+		}
+
+		if ($pageType === 'attachment')
+		{
+			$template = APP_DIR.'/views/attachment.php';
+
 			if (file_exists($template))
 			{
 				return $template;

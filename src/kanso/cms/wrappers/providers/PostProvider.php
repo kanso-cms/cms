@@ -56,7 +56,14 @@ class PostProvider extends Provider
         $this->userProvider = $userProvider;
     }
 
-    private function newPost(array $row)
+    /**
+     * Create and return new post wrapper around a database entry
+     * 
+     * @access public
+     * @param  array  $row Row from the database
+     * @return Post
+     */
+    public function newPost(array $row): Post
     {
         return new Post($this->SQL, $this->config, $this->tagProvider, $this->categoryProvider, $this->mediaProvider, $this->commentProvider, $this->userProvider, $row);
     }

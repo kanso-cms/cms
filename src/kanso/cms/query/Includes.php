@@ -128,6 +128,29 @@ function the_taxonomy()
     return $KANSO_QUERY->the_taxonomy();
 }
 
+function the_attachment() 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_attachment();
+}
+
+function the_attachment_url() 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_attachment_url();
+}
+
+function the_attachment_size() 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_attachment_size();
+}
+
+function the_attachments_url() 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_attachments_url();
+}
 
 function the_content($post_id = null) 
 {

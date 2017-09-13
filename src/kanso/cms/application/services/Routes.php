@@ -191,10 +191,20 @@ if ($config->get('cms.enable_comments') === true)
 # Sitemap
 $router->get('/'.$config->get('cms.sitemap_route'), '\kanso\cms\application\Application::loadSiteMap');
 
+# Attachments
+if ($config->get('cms.route_attachments') === true)
+{
+	$router->get("$blogPrefix/attachment/(:any)/", '\kanso\cms\application\Application::applyRoute', 'attachment');
+	$router->get("$blogPrefix/attachment/(:any)/page/(:num)/", '\kanso\cms\application\Application::applyRoute', 'attachment');
+	$router->get("$blogPrefix/attachment/(:any)/feed/", '\kanso\cms\application\Application::loadRssFeed', 'attachment');
+	$router->get("$blogPrefix/attachment/(:any)/feed/rss/", '\kanso\cms\application\Application::loadRssFeed', 'attachment');
+	$router->get("$blogPrefix/attachment/(:any)/feed/atom/", '\kanso\cms\application\Application::loadRssFeed', 'attachment');
+	$router->get("$blogPrefix/attachment/(:any)/feed/rdf/", '\kanso\cms\application\Application::loadRssFeed', 'attachment');
+}
+
 # Articles
 $router->get($blogPrefix.'/'.$config->get('cms.permalinks_route'),              '\kanso\cms\application\Application::applyRoute', 'single');
 $router->get($blogPrefix.'/'.$config->get('cms.permalinks_route').'feed/',      '\kanso\cms\application\Application::loadRssFeed', 'single');
 $router->get($blogPrefix.'/'.$config->get('cms.permalinks_route').'feed/rss/',  '\kanso\cms\application\Application::loadRssFeed', 'single');
 $router->get($blogPrefix.'/'.$config->get('cms.permalinks_route').'feed/atom/', '\kanso\cms\application\Application::loadRssFeed', 'single');
 $router->get($blogPrefix.'/'.$config->get('cms.permalinks_route').'feed/rdf/',  '\kanso\cms\application\Application::loadRssFeed', 'single');
-

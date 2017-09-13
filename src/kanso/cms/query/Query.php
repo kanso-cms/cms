@@ -87,6 +87,20 @@ class Query
     private $taxonomySlug;
 
     /**
+     * Current attachment URL: if applicable (e.g foo.com/app/public/uploads/my-image_large.png)
+     *
+     * @var string    
+     */
+    private $attachmentURL;
+
+    /**
+     * Current attachment size: if applicable (image_large)
+     *
+     * @var string    
+     */
+    private $attachmentSize;
+
+    /**
      * Search term if applicable
      *
      * @var string    
@@ -405,7 +419,7 @@ class Query
             }
             else
             {
-                $uri       = Str::GetBeforeLastWord($uri, '/feed');
+                $uri       = Str::getBeforeLastWord($uri, '/feed');
                 $uri       = ltrim($uri, '/');
                 $uri       = !empty($blogPrefix) ? str_replace($blogPrefix.'/', '', $uri) : $uri;
                 $queryStr  = 'post_status = published : post_type = '.$postType.' : post_slug = '.$uri.'/';
@@ -429,7 +443,7 @@ class Query
             }
             else
             {
-                $uri = Str::GetBeforeLastWord($uri, '/feed');
+                $uri = Str::getBeforeLastWord($uri, '/feed');
                 $uri = ltrim($uri, '/');
                 $queryStr  = 'post_status = published : post_type = page : post_slug = '.$uri.'/';
                 $posts     = $this->queryParser->parseQuery($queryStr);
@@ -462,6 +476,64 @@ class Query
             $postCount = count($posts);
             $this->searchQuery = $query;
         }
+        else if ($requestType === 'attachment')
+        {
+            $attachmentName  = !empty($blogPrefix) ? explode("/", str_replace($blogPrefix.'/attachment/', '', $uri))[0] : explode("/", $uri)[1];
+            $attachmentSlug  = Str::getBeforeLastChar($attachmentName, '.');
+            $attachemmentExt = Str::getAfterLastChar($attachmentName, '.');
+            $uploadsUrl      = str_replace($this->request->environment()->DOCUMENT_ROOT, $this->request->environment()->HTTP_HOST, $this->config->get('cms.uploads.path'));
+            $isImage         = in_array($attachemmentExt, ['jpg', 'jpeg', 'png', 'gif']);
+            $thumbnailSizes  = array_keys($this->config->get('cms.uploads.thumbnail_sizes'));
+            $attachmentURL   = $uploadsUrl.'/'.$attachmentSlug.'.'.$attachemmentExt;
+            $attachment      = $this->mediaManager->provider()->byKey('url', $attachmentURL, true);
+            $attachmentSize  = 'original';
+            $queryStr        = '';
+            $postCount       = 1;
+            $posts           = [];
+
+            # We may need to check if the attachment exists but we are requesting a sized version
+            if ($isImage && !$attachment)
+            {
+                foreach ($thumbnailSizes as $suffix)
+                {
+                    if (Str::contains($attachmentSlug, '_'.$suffix))
+                    { 
+                        $attachmentURL = $uploadsUrl.'/'.Str::getBeforeLastWord($attachmentSlug, '_'.$suffix).'.'.$attachemmentExt;
+                        $attachment    = $this->mediaManager->provider()->byKey('url', $attachmentURL, true);
+                        if ($attachment)
+                        {
+                            $attachmentSize = $suffix;
+                        }
+                    }
+                }
+            }
+
+            # 404 If the attachment does not exist
+            if (!$attachment)
+            {
+                return $this->response->status()->set(404);
+            }
+
+            $postRow =
+            [
+                'created'      => $attachment->date,
+                'modified'     => $attachment->date,
+                'status'       => 'published',
+                'type'         => 'attachment',
+                'author_id'    => $attachment->uploader_id,
+                'title'        => $attachment->title,
+                'excerpt'      => $attachment->alt,
+                'category_id'  => 1,
+                'thumbnail_id' => $attachment->id,
+                'comments_enabled' => -1,
+                
+            ];
+
+            $this->attachmentSize = $attachmentSize;
+            $this->attachmentURL  = $attachmentURL;
+
+            $posts[] = $this->postManager->provider()->newPost($postRow);
+        } 
 
         # Set the_post so we're looking at the first item
         if (isset($posts[0])) $this->post = $posts[0];
@@ -950,6 +1022,58 @@ class Query
         }
 
         return null;
+    }
+
+    /**
+     * If the request is for an attachment returns an array of that attachment
+     *
+     * @return Attachment|null 
+     */
+    public function the_attachment() 
+    {
+        $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
+        
+        if ($this->cache->has($key))
+        {
+            return $this->cache->get($key);
+        }
+
+        if ($this->requestType === 'attachment')
+        {
+            return $this->cache->set($key, $this->mediaManager->provider()->byKey('url', $this->attachmentURL, true));
+        }        
+        
+        return null;
+    }
+
+    /**
+     * If the request is for an attachment returns the attachment URL
+     *
+     * @return string|null 
+     */
+    public function the_attachment_url() 
+    {
+        return $this->attachmentURL;
+    }
+
+    /**
+     * If the request is for an attachment returns the attachment size suffix
+     *
+     * @return string|null 
+     */
+    function the_attachment_size() 
+    {
+        return $this->attachmentSize;
+    }
+
+    /**
+     * Returns the configured attachments upload directory
+     *
+     * @return string 
+     */
+    function the_attachments_url() 
+    {
+        return str_replace($this->request->environment()->DOCUMENT_ROOT, $this->request->environment()->HTTP_HOST, $this->config->get('cms.uploads.path'));
     }
 
     /**
