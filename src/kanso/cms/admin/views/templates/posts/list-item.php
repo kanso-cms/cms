@@ -47,10 +47,10 @@
 					<label for="status-switch-<?php echo $article->id;?>"></label>
 				</span>
 	        </div>
-	        <a href="/admin/writer/?id=<?php echo $article->id;?>" class="btn btn-pure btn-xs tooltipped tooltipped-n" data-tooltip="Edit article" style="margin-top: 6px;">
+	        <a href="/admin/writer/?id=<?php echo $article->id;?>" class="btn btn-pure btn-xs tooltipped tooltipped-n" data-tooltip="Edit <?php echo $postType;?>" style="margin-top: 6px;">
 				<span class="glyph-icon glyph-icon-font icon-md"></span>
 			</a>
-	        <a href="#" class="btn btn-pure btn-xs btn-danger tooltipped tooltipped-n js-confirm-delete" data-item="post" data-form="delete-form-<?php echo $article->id;?>" data-tooltip="Delete article" style="margin-top: 6px;">
+	        <a href="#" class="btn btn-pure btn-xs btn-danger tooltipped tooltipped-n js-confirm-delete" data-item="post" data-form="delete-form-<?php echo $article->id;?>" data-tooltip="Delete <?php echo $postType;?>" style="margin-top: 6px;">
 				<span class="glyph-icon glyph-icon-trash-o icon-md"></span>
 			</a>
 			<form method="post" id="status-switch-form-<?php echo $article->id;?>" style="display: none">

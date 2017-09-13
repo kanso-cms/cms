@@ -95,6 +95,8 @@ var KansoWriter = function() {
     this.articleID = null;
     this.ajaxType = 'writer_save_new_article';
 
+    this._accessToken = $('.js-access-token');
+
     // Initialize the application
     this.initialize();
     this.initCodeMirror();
@@ -115,6 +117,12 @@ KansoWriter.prototype = {};
 KansoWriter.prototype.initialize = function() {
 
     var self = this;
+
+    // Save the acccess token
+    if (nodeExists(this._accessToken))
+    {
+        this._accessToken = this._accessToken.value;
+    }
 
     // Set the post id if it exists
     var postID = writerTextArea.dataset.id;
@@ -739,6 +747,7 @@ KansoWriter.prototype.saveArticle = function(e, self) {
     validator.append('ajax_request', self.ajaxType);
     validator.append('id', self.articleID);
     validator.append('content', self.writer.getValue());
+    validator.append('access_token', self._accessToken);
 
     Ajax.post(ajaxURL, validator.form(), function(success) {
         var responseObj = isJSON(success);
@@ -780,6 +789,7 @@ KansoWriter.prototype.publishArticle = function(e, self) {
     validator.append('ajax_request', 'writer_publish_article');
     validator.append('id', self.articleID);
     validator.append('content', self.writer.getValue());
+    validator.append('access_token', self._accessToken);
 
 
     Ajax.post(ajaxURL, validator.form(), function(success) {

@@ -7,6 +7,7 @@
 
 namespace kanso\cms\admin\models;
 
+use Exception;
 use kanso\cms\admin\models\BaseModel;
 use kanso\framework\utility\Arr;
 use kanso\framework\utility\Str;
@@ -51,6 +52,11 @@ class MediaLibrary extends BaseModel
      */
     public function onAJAX()
     {
+        if (!isset($this->post['access_token']) || !$this->Gatekeeper->verifyToken($this->post['access_token']))
+        {
+            throw new Exception('Bad Admin Panel POST Request. The CSRF token was either not provided or invalid.');
+        }
+        
         if (isset($this->post['ajax_request']))
         {
             $request = $this->post['ajax_request'];

@@ -7,6 +7,7 @@
 
 namespace kanso\cms\admin\models;
 
+use Exception;
 use kanso\cms\admin\models\BaseModel;
 
 /**
@@ -21,6 +22,11 @@ class Accounts extends BaseModel
      */
     public function onPOST()
     {
+        if (!isset($this->post['access_token']) || !$this->Gatekeeper->verifyToken($this->post['access_token']))
+        {
+            throw new Exception('Bad Admin Panel POST Request. The CSRF token was either not provided or invalid.');
+        }
+        
         if ($this->requestName === 'login')
         {
             if (!$this->isLoggedIn)

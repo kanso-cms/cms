@@ -7,6 +7,7 @@
 
 namespace kanso\cms\admin\models;
 
+use Exception;
 use kanso\cms\admin\models\BaseModel;
 use kanso\framework\utility\Str;
 use kanso\framework\utility\Humanizer;
@@ -142,6 +143,11 @@ class Posts extends BaseModel
     private function validatePost(): bool
     {
         # Validation
+        if (!isset($this->post['access_token']) || !$this->Gatekeeper->verifyToken($this->post['access_token']))
+        {
+            throw new Exception('Bad Admin Panel POST Request. The CSRF token was either not provided or invalid.');
+        }
+        
         if (!isset($this->post['bulk_action']) || empty($this->post['bulk_action']))
         {
             return false;

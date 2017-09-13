@@ -62,9 +62,11 @@
         this._delMediaTrigger         = Helper.$('.js-delete-media');
         this._submitInsertTrigger     = Helper.$('.js-insert-media');
         this._submitUpdateTrigger     = Helper.$('.js-update-media');
+        this._accessToken             = Helper.$('.js-access-token');
 
         // Self initialize
-        if (Helper.nodeExists(this.wrapper)) {
+        if (Helper.nodeExists(this.wrapper))
+        {
             this.__construct();
         }
     }
@@ -87,6 +89,7 @@
             this._requestImages();
         }
 
+        this._accessToken = this._accessToken.value;
         this._initImgClick();
         this._initModal();
         this._initBulkSelect();
@@ -205,6 +208,7 @@
         var ids = this._bulkSelectIds();
         var form = {
             'ajax_request' : 'delete_media',
+            'access_token' :  this._accessToken,
             'ids'          :  ids,
         };
 
@@ -303,6 +307,7 @@
             'title'        : this._fileTitleInput.value,
             'rel'          : this._fileRelInput.value,
             'alt'          : this._fileAltInput.value,
+            'access_token' : this._accessToken,
         };
 
         var self = this;
@@ -339,6 +344,7 @@
         var form = {
             'ajax_request' : 'delete_media',
             'ids'          : [id],
+            'access_token' :  this._accessToken,
         };
 
         var self = this;
@@ -605,6 +611,7 @@
             }
             var form = {
                 'ajax_request' : 'file_upload',
+                'access_token' : self._accessToken,
                 'file'         : file,
             };
             
@@ -818,6 +825,7 @@
         return {
             'ajax_request' : 'load_media',
             'page'         : this._currPage,
+            'access_token' :  this._accessToken,
         };
     }
     

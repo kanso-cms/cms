@@ -40,7 +40,6 @@
 	 	<!-- USERS -->
 	    <?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'settings'.DIRECTORY_SEPARATOR.'users.php'); ?>
 
-
 	<?php elseif ($active_tab === 'tools') : ?>
 	    <!-- TOOLS -->
 	    <?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'settings'.DIRECTORY_SEPARATOR.'tools.php'); ?>

@@ -7,6 +7,7 @@
 
 namespace kanso\cms\admin\models;
 
+use Exception;
 use kanso\cms\admin\models\BaseModel;
 use kanso\framework\utility\Arr;
 use kanso\framework\utility\Str;
@@ -38,10 +39,12 @@ class Settings extends BaseModel
     {
         if ($this->isLoggedIn)
         {
-            if ($this->Response->session()->token()->verify($this->post['access_token']))
+            if (!isset($this->post['access_token']) || !$this->Gatekeeper->verifyToken($this->post['access_token']))
             {
-                return $this->parsePost();
+                throw new Exception('Bad Admin Panel POST Request. The CSRF token was either not provided or invalid.');
             }
+
+            return $this->parsePost();
         }
 
         return false;

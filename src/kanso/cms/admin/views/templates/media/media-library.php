@@ -172,6 +172,8 @@
 		</svg>
 	</div>
 
+	<input type="hidden" class="hidden js-access-token" name="access_token" value="<?php echo $ACCESS_TOKEN;?>">
+
 </div>
 
 <div class="progress-bar bg-gradient media-progress js-media-progress"><span style="width:0%;" class="progress"></span></div>
