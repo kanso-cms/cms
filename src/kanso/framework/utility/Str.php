@@ -301,7 +301,7 @@ class Str
 	 */
 	public static function slug(string $str): string 
 	{
-		return urlencode(mb_strtolower(preg_replace('/\s{1,}/', '-', trim(preg_replace("/[^a-z-]/", '', $str)))));
+    	return urlencode(ltrim(rtrim(preg_replace('/[^a-z_-]/', '', preg_replace('/[\s-]+/', '-', strtolower($str))), '-'), '-'));
 	}
 
 	/**
@@ -325,8 +325,7 @@ class Str
 	 */
 	public static function alphaDash(string $str): string
 	{
-		
-		return preg_replace('/\s{1,}/', '-', trim(preg_replace("/[^a-zA-Z-]/", '', $str)));
+		return ltrim(rtrim(preg_replace('/[^a-zA-Z_-]/', '', preg_replace('/[\s-]+/', '-', $str)), '-'), '-');
 	}
 
 	/**
@@ -350,7 +349,7 @@ class Str
 	 */
 	public static function alphaNumDash(string $str): string
 	{
-		return preg_replace('/\s{1,}/', '-', trim(preg_replace("/[^a-zA-Z0-9-]/", '', $str)));
+		return ltrim(rtrim(preg_replace('/[^a-zA-Z0-9_-]/', '', preg_replace('/[\s-]+/', '-', $str)), '-'), '-');
 	}
 
 	/**

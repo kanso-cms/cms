@@ -454,9 +454,12 @@ class Post extends Wrapper
 		{
 			$row['thumbnail_id'] = NULL;
 		}
+
+		# Slug may or may not have been set manually
+		$row['slug'] = isset($row['slug']) ? $row['slug'] : false;
 		
 		# Create a slug based on the category, tags, slug, author
-		$row['slug'] = $this->titleToSlug($row['title'], $row['category']->slug, $row['author']->slug, $row['created'], $row['type']);
+		$row['slug'] = $this->titleToSlug($row['title'], $row['category']->slug, $row['author']->slug, $row['created'], $row['type'], $row['slug']);
 
 		# Sanitize comments_enabled
 		$row['comments_enabled'] = boolval($row['comments_enabled']);
@@ -652,13 +655,14 @@ class Post extends Wrapper
 	/**
 	 * Convert a title to a slug with permalink structure
 	 *
-	 * @param  string    $title             The title of the article
-	 * @param  string    $categorySlug      The category slug
-	 * @param  string    $authorSlug        The author's slug
-	 * @param  int       $created           A unix timestamp of when the article was created
-	 * @return string                       The slug to the article             
+	 * @param  string      $title         The title of the article
+	 * @param  string      $categorySlug  The category slug
+	 * @param  string      $authorSlug    The author's slug
+	 * @param  int         $created       A unix timestamp of when the article was created
+	 * @param  sting|false $_slug         Existing slug - may or may not be set
+	 * @return string                     The slug to the article             
 	 */
-	private function titleToSlug($title, $categorySlug, $authorSlug, $created, $type) 
+	private function titleToSlug($title, $categorySlug, $authorSlug, $created, $type, $_slug) 
 	{
 		# Custom posts have their own route, thus their own slug structure
 	  	if ($type === 'page')
@@ -669,7 +673,8 @@ class Post extends Wrapper
 	  	{
 	  		$format = $this->config->get('cms.permalinks');
 	  	}
-	  	else {
+	  	else 
+	  	{
 	  		if ($this->config->get('cms.custom_posts.'.$type))
 	  		{
 	  			$format = $this->config->get('cms.custom_posts.'.$type);
@@ -680,7 +685,8 @@ class Post extends Wrapper
 	  		}
 	  	}
 
-	  	$dateMap = [
+	  	$dateMap =
+	  	[
 	  		'year'     => 'Y',
 	  		'month'    => 'm',
 	  		'day'      => 'd',
@@ -688,25 +694,55 @@ class Post extends Wrapper
 	  		'minute'   => 'i',
 	  		'second'   => 's',
 	  	];
-	  	$varMap  = [
+	  	$varMap =
+	  	[
 	  		'postname' => Str::slug($title),
 	  		'category' => $categorySlug,
 	  		'author'   => $authorSlug,
 	  	];
+	  	
 	  	$slug = '';
-	  	$urlPieces = explode('/', $format);
-	  	foreach ($urlPieces as $key) {
-	  		if (isset($dateMap[$key])) {
+	  	
+	  	$slugPieces   = !$_slug ? [] : explode('/', trim($_slug, '/'));
+	  	$formatPieces = explode('/', $format);
+
+	  	# if the slug is being set pragmatically
+	  	# e.g $post->slug = 'foobar'; $post->save();
+	  	# Then the slug pieces should always be the postname
+	  	# and $slugPieces should have only 1 item
+
+	  	foreach ($formatPieces as $i => $key)
+	  	{
+	  		if (isset($dateMap[$key]))
+	  		{
 	  			$slug .= date($dateMap[$key], $created).'/';
 	  		}
-	  		else if (isset($varMap[$key])) {
-	  			$slug .= $varMap[$key].'/';
+	  		else if (isset($varMap[$key]))
+	  		{
+	  			if ($key === 'postname')
+	  			{
+	  				if (count($slugPieces) === 1)
+	  				{
+	  					$slug .= Str::slug($slugPieces[0]).'/';
+	  				}
+	  				else
+	  				{
+	  					$slug .= $varMap[$key].'/';
+	  				}
+	  			}
+	  			else
+	  			{
+	  				$slug .= $varMap[$key].'/';
+	  			}
 	  		}
-	  		else {
+	  		else
+	  		{
 	  			$slug .= $key.'/';
 	  		}
 	  	}
+
 	  	$slug = trim($slug, '/').'/';
+	  	
 	  	return $slug;
 
 	}

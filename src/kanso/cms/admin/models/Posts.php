@@ -123,6 +123,22 @@ class Posts extends BaseModel
 
                 return $this->postMessage('success', 'Your posts were successfully deleted!');
             }
+            if ($this->post['bulk_action'] === 'update')
+            {
+                $update = $this->update(intval($postIds[0]));
+
+                if ($update === 'name_exists')
+                {
+                    return $this->postMessage('warning', 'Could not update '.$this->postType.'. Another '.$this->postType.' with the same name already exists.');
+                }
+
+                if ($update === 'slug_exists')
+                {
+                    return $this->postMessage('warning', 'Could not update '.$this->postType.'. Another '.$this->postType.' with the same slug already exists.');
+                }
+                
+                return $this->postMessage('success', ucfirst($this->postType).' was successfully updated!');
+            }
             if ($this->post['bulk_action'] === 'published' || $this->post['bulk_action'] === 'draft')
             {
                 $this->changeStatus($postIds, $this->post['bulk_action']);
@@ -153,7 +169,7 @@ class Posts extends BaseModel
             return false;
         }
 
-        if (!in_array($this->post['bulk_action'], ['published', 'draft', 'delete']))
+        if (!in_array($this->post['bulk_action'], ['published', 'draft', 'delete', 'update']))
         {
             return false;
         }
@@ -162,6 +178,54 @@ class Posts extends BaseModel
         {
             return false;
         }
+
+        return true;
+    }
+
+    /**
+     * Updates a post
+     *
+     * @access private
+     * @param  int     $id Single post id
+     * @return bool|string
+     */
+    private function update(int $id)
+    {
+        if ( !isset($this->post['title']) || !isset($this->post['slug']) || !isset($this->post['excerpt']))
+        {
+            return false;
+        }
+
+        $title       = trim($this->post['title']);
+        $slug        = Str::slug($this->post['slug']);
+        $excerpt     = trim($this->post['excerpt']);
+        $post        = $this->PostManager->byId($id);
+
+        if (!$post)
+        {
+            return false;
+        }
+
+        # Validate post with same title does not already exist
+        $existsName = $this->PostManager->provider()->byKey('title', $title, true);
+
+        if ($existsName && $existsName->id !== $id)
+        {
+            return 'name_exists';
+        }
+
+        # Validate post with same slug does not already exist
+        $existsSlug = $this->PostManager->provider()->byKey('slug', $slug, true);
+
+        if ($existsSlug && $existsSlug->id !== $id)
+        {
+            return 'slug_exists';
+        }
+
+        $post->title   = $title;
+        $post->slug    = $slug;
+        $post->excerpt = $excerpt;
+        $post->save();
 
         return true;
     }
