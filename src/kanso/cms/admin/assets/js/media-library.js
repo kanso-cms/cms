@@ -773,12 +773,23 @@
         var writer = Modules.get('KansoWriter');
         var ext    = Helper.$('#media_url', self._detailsForm).value;
         var linkTo = Helper.getInputValue(self._linkToSelect);
+        var blogLocation = self.wrapper.dataset.blogLocation || false;
+        blogLocation = blogLocation === 'null' || blogLocation === 'false' ? false : blogLocation;
+
         var prefix = '';
         var suffix = '';
         var img    = '';
 
         ext = ext.split('.');
         ext = ext[ext.length - 1];
+
+        if (self._detailsForm.dataset.isimage !== 'false' && size !== 'origional')
+        {
+            var split   = URL.split('.');
+            var ext     = split.pop();
+            var name    = split.join('.');
+            URL         = name+'_'+size+'.'+ext;   
+        }
 
         if (linkTo === 'file')
         {
@@ -787,7 +798,14 @@
         }
         else if (linkTo === 'attachment')
         {
-            prefix = '<a href="'+window.location.origin + '/attachment/' + URL.split('/').pop() + '" title="' + title + '" rel="attachment">';
+            var attachmentUrl = window.location.origin + '/attachment/' + URL.split('/').pop();
+            
+            if (blogLocation)
+            {
+                attachmentUrl = window.location.origin + '/' + blogLocation +  '/attachment/' + URL.split('/').pop();
+            }
+
+            prefix = '<a href="'+ attachmentUrl + '" title="' + title + '" rel="attachment">';
             suffix = '</a>';
         }
         else if (linkTo === 'custom')
@@ -795,19 +813,13 @@
             prefix = '<a href="' + self._linkToInput.value.trim() + '" title="' + title + '">';
             suffix = '</a>';
         }
+
         if (ext === 'svg')
         {
             img = '<img src="' + URL + '" alt="' + alt + '" title="' + title + '" width="" height="" />';
         }
         else if (self._detailsForm.dataset.isimage !== 'false')
         {
-            if (size !== 'origional')
-            {
-                var split   = URL.split('.');
-                var ext     = split.pop();
-                var name    = split.join('.');
-                URL         = name+'_'+size+'.'+ext;
-            }
             var img = '<img src="'+URL+'" alt="'+alt+'" title="'+title+'" width="" height=""/>';
         }
 

@@ -8,7 +8,7 @@ use kanso\Kanso;
  * @return string
  */
 function admin_assets_version()
-{	
+{
 	return Kanso::VERSION;
 }
 

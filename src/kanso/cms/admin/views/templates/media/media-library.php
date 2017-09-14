@@ -1,5 +1,5 @@
 <!-- MEDIA LIBRARY WRAPPER -->
-<div class="media-library js-media-library loading">
+<div class="media-library js-media-library loading" data-blog-location="<?php echo blog_location();?>">
 
 	<!-- POWERS -->
 	<div class="list-powers media-powers js-media-powers">
