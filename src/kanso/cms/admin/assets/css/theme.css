@@ -404,6 +404,31 @@
 .writer-media-wrapper .media-library .media-details-form .size-select {
   display: block;
 }
+.media-library .selected-media-container .media-details-form .delete-media
+{
+  width: 49%;
+  float: left;
+}
+.media-library .selected-media-container .media-details-form .update-media
+{
+  width: 49%;
+  float: right;
+}
+
+.review-html .writer-media-wrapper .media-library .media-details-form .delete-media,
+.writer-html .writer-media-wrapper .media-library .media-details-form .delete-media
+{
+  width: 49%;
+  float: left;
+}
+.review-html .writer-media-wrapper .media-library .media-details-form .update-media,
+.writer-html .writer-media-wrapper .media-library .media-details-form .update-media
+{
+    width: 49%;
+    float: right;
+}
+
+
 
 .accnt-form-card {
   max-width: 650px;
