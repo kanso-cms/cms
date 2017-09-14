@@ -232,7 +232,7 @@ use kanso\framework\utility\Str;
 					    	<a href="<?php echo the_post_thumbnail_src();?>"><?php echo the_attachment()->height();?> x <?php echo the_attachment()->width();?></a>
 					    	&nbsp;•&nbsp;
 					    	<?php 
-					    	$sizes = $kanso->Config->get('cms.uploads.thumbnail_sizes');
+					    	$sizes = array_reverse($kanso->Config->get('cms.uploads.thumbnail_sizes'));
 					    	foreach ($sizes as $name => $size) : ?>
 							<a href="<?php echo the_post_thumbnail_src(null, $name);?>"><?php echo is_array($size) ? $size[0].' x '.$size[1] : $size; ?></a>
 							<?php echo ($size === end($sizes)) ? '' : '&nbsp;•&nbsp;';?>
