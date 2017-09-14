@@ -48,6 +48,8 @@ class CDN
         $this->currHost = rtrim($currHost, '/');
 
         $this->cdnHost = rtrim($cdnHost, '/');
+
+        $this->enabled = $enabled;
     }
 
     /**
@@ -112,7 +114,7 @@ class CDN
         }, $html);
 
         # Replace favicions and style sheets
-        $html = preg_replace_callback('/<link rel="(shortcut icon|icon|stylesheet|apple-touch-icon)" href="([^"]+)"/', function($matches) use ($currHost, $cdnHost)
+        $html = preg_replace_callback('/<link rel="(shortcut icon|icon|stylesheet|apple-touch-icon)".+href="([^"]+)"/', function($matches) use ($currHost, $cdnHost)
         {    
             if (strpos($matches[0], $currHost) !== false)
             {
@@ -147,7 +149,7 @@ class CDN
         }, $html);
         
         # Background URLS
-		$html = preg_replace_callback('/background:url\(([^)]+)\)/', function($matches) use ($currHost, $cdnHost)
+		$html = preg_replace_callback('/background:(\s+|)url\(([^)]+)\)/', function($matches) use ($currHost, $cdnHost)
         {    
             if (strpos($matches[0], $currHost) !== false)
             {
