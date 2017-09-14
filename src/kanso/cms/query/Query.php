@@ -678,7 +678,7 @@ class Query
 
         if (!empty($this->post))
         {
-            $prefix = !empty($this->blog_location()) && $this->post === 'post' ? '/'.$this->blog_location().'/' : '/';
+            $prefix = !empty($this->blog_location()) && $this->post->type === 'post' ? '/'.$this->blog_location().'/' : '/';
 
             return $this->request->environment()->HTTP_HOST.$prefix.trim($this->post->slug, '/').'/';
         }
