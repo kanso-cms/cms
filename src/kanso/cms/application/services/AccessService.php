@@ -11,7 +11,7 @@ use kanso\framework\application\services\Service;
 use kanso\cms\access\Access;
 
 /**
- * Admin access service
+ * Access service
  *
  * @author Joe J. Howard
  */

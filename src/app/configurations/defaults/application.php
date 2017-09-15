@@ -98,7 +98,7 @@ return
 		 */
 		'cms' =>
 		[
-			'\kanso\framework\application\services\SecurityService',
+			'\kanso\cms\application\services\AccessService',
 			'\kanso\cms\application\services\WrapperService',
 			'\kanso\cms\application\services\GatekeeperService',
 			'\kanso\cms\application\services\InstallerService',
