@@ -7,6 +7,8 @@
 
 namespace kanso\framework\http\response;
 
+use Kanso\framework\utility\Str;
+
 /**
  * CDN class
  *
@@ -100,6 +102,7 @@ class CDN
         $currHost = $this->currHost;
     	$cdnHost  = $this->cdnHost;
 
+        
         # Replace <img> tags
         $html = preg_replace_callback('/<img [^>]*src="([^"]+)"[^>]*/', function($matches) use ($currHost, $cdnHost) 
         {
@@ -158,7 +161,7 @@ class CDN
             
             return $matches[0];
         
-        }, $html);
+        }, $html);  
 
 		return $html;
     }

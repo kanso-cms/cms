@@ -48,6 +48,7 @@
 				        <input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN;?>">
 				        <input type="hidden" name="bulk_action"  value="update">
 
+				        <button type="button" class="btn js-collapse" data-collapse-target="category-edit-<?php echo $category->id; ?>">Cancel</button>
 				        <button type="submit" class="btn btn-success">Update Category</button>
 				    </form>
 	       		</div>
@@ -56,7 +57,7 @@
 		</div>
 		<div class="media-right nowrap">
 			<?php if ($category->id !== 1) : ?>
-			<a href="#" class="btn btn-pure btn-xs tooltipped tooltipped-n js-collapse" data-collapse-target="category-edit-<?php echo $category->id; ?>" data-tooltip="Edit category">
+			<a href="#" class="btn btn-pure btn-xs tooltipped tooltipped-n js-collapse" data-collapse-target="category-edit-<?php echo $category->id; ?>" data-tooltip="Quick edit category">
 				<span class="glyph-icon glyph-icon-pencil-square-o icon-md"></span>
 			</a>
 			<a href="#" class="btn btn-pure btn-xs tooltipped tooltipped-n" data-tooltip="Clear category" onclick="document.getElementById('clear-form-<?php echo $category->id;?>').submit()">

@@ -67,16 +67,17 @@
 				        <input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN;?>">
 				        <input type="hidden" name="bulk_action"  value="update">
 
+				        <button type="button" class="btn js-collapse" data-collapse-target="post-edit-<?php echo $article->id; ?>">Cancel</button>
 				        <button type="submit" class="btn btn-success">Update <?php echo ucfirst($postType);?></button>
 				    </form>
 	       		</div>
 	       	</div>
 		</div>
 		<div class="media-right nowrap">
-			<a href="#" class="btn btn-pure btn-xs tooltipped tooltipped-n js-collapse" data-collapse-target="post-edit-<?php echo $article->id; ?>" data-tooltip="Quick Edit <?php echo ucfirst($postType);?>">
+			<a href="#" class="btn btn-pure btn-xs tooltipped tooltipped-n js-collapse" data-collapse-target="post-edit-<?php echo $article->id; ?>" data-tooltip="Quick edit <?php echo strtolower($postType);?>">
 				<span class="glyph-icon glyph-icon-pencil icon-md"></span>
 			</a>
-			<a href="/admin/writer/?id=<?php echo $article->id;?>" class="btn btn-pure btn-xs tooltipped tooltipped-n" data-tooltip="Edit <?php echo $postType;?>" style="margin-top: 6px;">
+			<a href="/admin/writer/?id=<?php echo $article->id;?>" class="btn btn-pure btn-xs tooltipped tooltipped-n" data-tooltip="Open <?php echo strtolower($postType);?> in writer" style="margin-top: 6px;">
 				<span class="glyph-icon glyph-icon-align-left icon-md"></span>
 			</a>
 			<div class="form-field inline-block">
