@@ -278,6 +278,12 @@ class Application
 			$waterfall[] = 'homepage';
 			$waterfall[] = 'index';
 		}
+		else if ($pageType === 'home-page')
+		{
+			$waterfall[] = 'home-'.array_pop($urlParts);
+			$waterfall[] = 'homepage';
+			$waterfall[] = 'index';
+		}
 		else if ($pageType === 'page')
 		{
 			$waterfall[] = 'page-'.array_pop($urlParts);

@@ -122,12 +122,12 @@ $router->get('/feed/rdf/', '\kanso\cms\application\Application::loadRssFeed', 'h
 # Blog Homepage
 if (!empty($blogPrefix))
 {
-	$router->get("$blogPrefix/", '\kanso\cms\application\Application::applyRoute', 'home');
-	$router->get("$blogPrefix/page/(:num)/", '\kanso\cms\application\Application::applyRoute', 'home');
-	$router->get("$blogPrefix/feed/", '\kanso\cms\application\Application::loadRssFeed', 'home');
-	$router->get("$blogPrefix/feed/rss/", '\kanso\cms\application\Application::loadRssFeed', 'home');
-	$router->get("$blogPrefix/feed/atom/", '\kanso\cms\application\Application::loadRssFeed', 'home');
-	$router->get("$blogPrefix/feed/rdf/", '\kanso\cms\application\Application::loadRssFeed', 'home');
+	$router->get("$blogPrefix/", '\kanso\cms\application\Application::applyRoute', 'home-page');
+	$router->get("$blogPrefix/page/(:num)/", '\kanso\cms\application\Application::applyRoute', 'home-page');
+	$router->get("$blogPrefix/feed/", '\kanso\cms\application\Application::loadRssFeed', 'home-page');
+	$router->get("$blogPrefix/feed/rss/", '\kanso\cms\application\Application::loadRssFeed', 'home-page');
+	$router->get("$blogPrefix/feed/atom/", '\kanso\cms\application\Application::loadRssFeed', 'home-page');
+	$router->get("$blogPrefix/feed/rdf/", '\kanso\cms\application\Application::loadRssFeed', 'home-page');
 }
 
 # Category

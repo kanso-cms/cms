@@ -335,7 +335,7 @@ class Query
         $blogPrefix   = $this->config->get('cms.blog_location');
 
         # Filter and paginate the posts based on the request type
-        if ($requestType === 'home')
+        if ($requestType === 'home' || $requestType === 'home-page')
         {
             $queryStr  = "post_status = published : post_type = post : orderBy = post_created, DESC : limit = $offset, $perPage";
             $posts     = $this->queryParser->parseQuery($queryStr);
@@ -1750,7 +1750,7 @@ class Query
      */
     public function is_home()
     {
-        return $this->requestType === 'home';
+        return $this->requestType === 'home' || $this->requestType === 'home-page';
     }
 
     /**
@@ -1989,7 +1989,7 @@ class Query
         $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
 
         # There are only next/prev pages for single, tags, category, author, and homepage 
-        if (!in_array($this->requestType, ['single', 'home', 'tag', 'category', 'author']) && !$this->is_custom_post())
+        if (!in_array($this->requestType, ['single', 'home', 'home-page', 'tag', 'category', 'author']) && !$this->is_custom_post())
         {
             return $this->cache->set($key, false);
         }
@@ -2022,9 +2022,11 @@ class Query
             $titleBase  = $this->website_title();
             $titlePage  = $nextPage > 1 ? 'Page '.$nextPage.' | ' : '';
             $titleTitle = '';
+
             if ($this->is_home() )
             {
-                $slug = 'page/'.$nextPage.'/';
+                $prefix = !empty($this->blog_location()) ? $this->blog_location().'/' : '';
+                $slug   = $prefix.'page/'.$nextPage.'/';
             }
             else if ($this->is_tag() || $this->is_category() || $this->is_author() )
             {
@@ -2063,7 +2065,7 @@ class Query
         $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
        
         # There are only next/prev pages for single, tags, category, author, and homepage 
-        if (!in_array($this->requestType, ['single', 'home', 'tag', 'category', 'author']) && !$this->is_custom_post())
+        if (!in_array($this->requestType, ['single', 'home', 'home-page', 'tag', 'category', 'author']) && !$this->is_custom_post())
         {
             return $this->cache->set($key, false);
         }
@@ -2105,7 +2107,8 @@ class Query
             $titleTitle = '';
             if ($this->is_home() )
             {
-                $slug = $prevpage > 1 ? 'page/'.$prevpage.'/' : '';
+                $prefix = !empty($this->blog_location()) ? $this->blog_location().'/' : '';
+                $slug   = $prevpage > 1 ? $prefix.'page/'.$prevpage.'/' : '';
             }
             else if ($this->is_tag() || $this->is_category() || $this->is_author() )
             {
@@ -2658,7 +2661,8 @@ class Query
         }
         if ($this->is_home() )
         {
-            $slug = $page > 1 ? 'page/'.$page.'/' : '';
+            $prefix = !empty($this->blog_location()) ? $this->blog_location().'/' : '';
+            $slug   = $page > 1 ? $prefix.'page/'.$page.'/' : '';
         }
         else if ($this->is_tag() || $this->is_category() || $this->is_author() )
         {
@@ -3462,6 +3466,4 @@ class Query
 
         return $this->cache->set($key, $this->mediaManager->provider()->byId($thumb_id));
     }
-
-
 }
