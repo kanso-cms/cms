@@ -9,3 +9,5 @@
  */
 ?>
 <h3>Hello World!</h3>
+
+<?php var_export(array_keys(get_defined_vars())); ?>
