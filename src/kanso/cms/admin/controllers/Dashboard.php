@@ -165,6 +165,18 @@ class Dashboard extends BaseController
 	}
 
 	/**
+	 * Dispatch settingsAccess request
+	 *
+	 * @access public
+	 */
+	public function settingsAccess()
+	{
+		$this->init('settingsAccess');
+
+		$this->dispatch();
+	}
+
+	/**
 	 * Dispatch settingsUsers request
 	 *
 	 * @access public

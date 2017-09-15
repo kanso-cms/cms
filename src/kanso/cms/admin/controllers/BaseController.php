@@ -153,7 +153,7 @@ abstract class BaseController extends Controller
 
     	$vars['ACCESS_TOKEN'] = $this->Response->session()->token()->get();
 
-        $template = KANSO_DIR.DIRECTORY_SEPARATOR.'CMS'.DIRECTORY_SEPARATOR.'Admin'.DIRECTORY_SEPARATOR.'Views'.DIRECTORY_SEPARATOR.'admin.php';
+        $template = KANSO_DIR.DIRECTORY_SEPARATOR.'cms'.DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'admin.php';
 
         $this->Response->body()->set($this->Response->view()->display($template, $vars));
     }

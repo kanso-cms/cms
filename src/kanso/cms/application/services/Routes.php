@@ -89,6 +89,10 @@ $router->post('/admin/settings/author/', '\kanso\cms\admin\controllers\Dashboard
 $router->get('/admin/settings/kanso/',  '\kanso\cms\admin\controllers\Dashboard@settingsKanso', '\kanso\cms\admin\models\Settings');
 $router->post('/admin/settings/kanso/', '\kanso\cms\admin\controllers\Dashboard@settingsKanso', '\kanso\cms\admin\models\Settings');
 
+# Admin access settings
+$router->get('/admin/settings/access/',  '\kanso\cms\admin\controllers\Dashboard@settingsAccess', '\kanso\cms\admin\models\Settings');
+$router->post('/admin/settings/access/', '\kanso\cms\admin\controllers\Dashboard@settingsAccess', '\kanso\cms\admin\models\Settings');
+
 # Admin kanso users
 $router->get('/admin/settings/users/',  '\kanso\cms\admin\controllers\Dashboard@settingsUsers', '\kanso\cms\admin\models\Settings');
 $router->post('/admin/settings/users/', '\kanso\cms\admin\controllers\Dashboard@settingsUsers', '\kanso\cms\admin\models\Settings');

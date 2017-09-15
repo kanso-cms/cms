@@ -24,7 +24,7 @@ class InstallerService extends Service
 	{
 		$this->container->singleton('Installer', function ($container) 
 		{
-			return new Installer($container->Config, $container->Database, KANSO_DIR);
+			return new Installer($container->Config, $container->Database, $container->Access, KANSO_DIR);
 		});
 	}
 }

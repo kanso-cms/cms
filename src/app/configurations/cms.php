@@ -78,6 +78,38 @@ return
 
     /**
      * ---------------------------------------------------------
+     * Security
+     * ---------------------------------------------------------
+     *
+     * CMS security and access settings
+     */
+    'security' =>
+    [
+        /**
+         * ---------------------------------------------------------
+         * Robots.txt search engine/bot indexing
+         * ---------------------------------------------------------
+         *
+         * enable_robots       : Enable/disable bots from access indexing site
+         * robots_text_content : When 'enable_robots' is set to TRUE - the content for the robots.text file.
+         */
+        'enable_robots'       => true,
+        'robots_text_content' => "User-agent: Google\nDisallow:\n\nUser-agent: *\nDisallow: /",
+
+        /**
+         * ---------------------------------------------------------
+         * Ip address blocking
+         * ---------------------------------------------------------
+         *
+         * ip_blocked   : Enable/disable access to the site via ip blocking
+         * ip_whitelist : When 'ip_blocked' is set to TRUE - A list of ip address that are allowed access
+         */
+        'ip_blocked'   => false,
+        'ip_whitelist' => [],
+    ],
+    
+    /**
+     * ---------------------------------------------------------
      * Uploads
      * ---------------------------------------------------------
      *

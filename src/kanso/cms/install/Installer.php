@@ -15,6 +15,7 @@ use kanso\framework\config\Config;
 use kanso\framework\database\Database;
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
+use kanso\cms\access\Access;
 
 /**
  * CMS installer
@@ -38,6 +39,13 @@ class Installer
     private $config;
 
     /**
+     * Access manager
+     *
+     * @var \kanso\cms\access\Access 
+     */
+    private $access;
+
+    /**
      * The path to "Install.php"
      *
      * @var string
@@ -55,12 +63,17 @@ class Installer
      * Constructor
      *
      * @access public
+     * @param  \kanso\framework\config\Config     $config     Config manager
+     * @param  \kanso\framework\database\Database $Database   Database manager
+     * @param  \kanso\cms\access\Access           $access     Access module
      */
-    public function __construct(Config $config, Database $database, string $installPath)
+    public function __construct(Config $config, Database $database, Access $access, string $installPath)
     {
         $this->config = $config;
 
         $this->database = $database;
+
+        $this->access = $access;
 
         $this->installPath = $installPath.DIRECTORY_SEPARATOR.'Install.php';
 
@@ -105,6 +118,9 @@ class Installer
 
         # Install the Kanso database
         $this->installDB();
+
+        # Create robots.txt
+        $this->installRobots();
 
         # Delete the install file
         unlink($this->installPath);
@@ -249,6 +265,30 @@ class Installer
         foreach ($KANSO_DEFAULT_COMMENTS as $comment)
         {
             $SQL->INSERT_INTO('comments')->VALUES($comment)->QUERY();
+        }
+    }
+
+    /**
+     * Create the robots.txt file
+     *
+     * @access private
+     */
+    private function installRobots()
+    {
+        $enabled = $this->config->get('cms.security.enable_robots');
+        $content = $this->config->get('cms.security.robots_text_content');
+
+        if (!$enabled)
+        {
+            $this->access->saveRobots($this->access->blockAllRobotsText());
+        }
+        else if ($enabled && empty($content))
+        {
+            $this->access->saveRobots($this->access->defaultRobotsText());
+        }
+        else
+        {
+            $this->access->saveRobots($content);
         }
     }
 }

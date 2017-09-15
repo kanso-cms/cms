@@ -71,6 +71,8 @@ class Application
      */
     public function boot()
     {
+    	$this->precheckAccess();
+
     	$this->registerViewIncludes();
 
     	$this->bootInstaller();
@@ -82,6 +84,19 @@ class Application
 			$this->applyRoutes();
 		}
     }
+
+    /**
+	 * Validate the incoming request with the access conditions
+	 *
+	 * @access private
+	 */
+	private function precheckAccess()
+	{
+		if ($this->container->Access->ipBlockEnabled() && !$this->container->Access->isIpAllowed())
+		{
+			$this->container->Access->block();
+		}
+	}
 
     /**
 	 * Apply the CMS routes

@@ -73,6 +73,9 @@ function admin_the_title()
 	else if ($requestName === 'settingsKanso') {
 		$title = 'Kanso Settings | Kanso';
 	}
+	else if ($requestName === 'settingsAccess') {
+		$title = 'Access & Security Settings | Kanso';
+	}
 	else if ($requestName === 'settingsUsers') {
 		$title = 'Users | Kanso';
 	}
@@ -280,6 +283,10 @@ function admin_sirebar_links()
 		$links['settings']['children']['settingsKanso'] = [
 			'link'     => '/admin/settings/kanso/',
 			'text'     => 'Kanso',
+		];
+		$links['settings']['children']['settingsAccess'] = [
+			'link'     => '/admin/settings/access/',
+			'text'     => 'Access & Security',
 		];
 		$links['settings']['children']['settingsUsers'] = [
 			'link'     => '/admin/settings/users/',

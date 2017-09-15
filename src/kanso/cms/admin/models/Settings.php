@@ -107,6 +107,10 @@ class Settings extends BaseModel
             {
                 return $this->submitKansoSettings();
             }
+            else if ($formName === 'access_settings')
+            {
+                return $this->submitAccessSettings();
+            }
             else if ($formName === 'restore_kanso')
             {
                 return $this->submitRestoreKanso();
@@ -208,7 +212,6 @@ class Settings extends BaseModel
      */
     private function submitAuthorSettings()
     {
-
         # Sanitize and validate the POST
         $post = $this->validation->sanitize($this->post);
 
@@ -263,7 +266,6 @@ class Settings extends BaseModel
     /**
      * Parse and validate the Kanso settings from the POST request
      * 
-     * @param  $postVars    $_POST
      * @return array|false
      */
     private function submitKansoSettings()
@@ -410,6 +412,46 @@ class Settings extends BaseModel
         }
 
         return false;
+    }
+
+    /**
+     * Parse and validate the access settings
+     * 
+     * @return array|false
+     */
+    private function submitAccessSettings()
+    {
+        $enableIpBlock = !isset($this->post['enable_ip_block']) ? false : Str::bool($this->post['enable_ip_block']);
+        $blockRobots   = isset($this->post['block_robots']) ? true : false;
+
+        $robotsContent = !isset($this->post['robots_content']) ? '' : trim($this->post['robots_content']);
+        $ipWhitelist   = !isset($this->post['ip_whitelist']) ? [] : array_filter(array_map('trim', explode(',', $this->post['ip_whitelist'])));
+
+        # Save robots
+        if ($blockRobots)
+        {
+            $this->Access->saveRobots($this->Access->blockAllRobotsText());
+            $robotsContent = $this->Access->blockAllRobotsText();
+        }
+        else if (empty($robotsContent))
+        {
+            $this->Access->saveRobots($this->Access->defaultRobotsText());
+            $robotsContent = $this->Access->defaultRobotsText();
+        }
+        else
+        {
+            $this->Access->saveRobots($robotsContent);
+        }
+
+        # Enable ip blocking
+        $this->Config->set('cms.security.enable_robots', !$blockRobots);
+        $this->Config->set('cms.security.ip_blocked', $enableIpBlock);
+        $this->Config->set('cms.security.ip_whitelist', $ipWhitelist);
+        $this->Config->set('cms.security.robots_text_content', $robotsContent);
+        $this->Config->save();
+
+        return $this->postMessage('success', 'Security settings successfully updated!');
+
     }
 
     /**
