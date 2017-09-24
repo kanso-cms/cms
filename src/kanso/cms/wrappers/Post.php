@@ -51,13 +51,12 @@ class Post extends Wrapper
 		'title'       => '',
 		'excerpt'     => '',
 		'author_id'   => 1,
-		'category_id' => 1,
 		'thumbnail_id'     => null,
 		'comments_enabled' => false,
 
 		# Joins
 		'tags' 	      => null,
-		'category'    => null,
+		'categories'  => null,
 		'author'      => null,
 		'comments'    => null,
 		'thumbnail'   => null,
@@ -112,7 +111,7 @@ class Post extends Wrapper
 		{
 			$this->getTheTags();
 			$this->getTheAuthor();
-			$this->getTheCategory();
+			$this->getTheCategories();
 		}
 
         if (!isset($this->data['created']))
@@ -126,9 +125,13 @@ class Post extends Wrapper
      */
 	public function __get(string $key)
 	{
-		if ($key === 'category')
+		if ($key === 'categories')
 		{
-			return $this->getTheCategory();
+			return $this->getTheCategories();
+		}
+		else if ($key === 'category')
+		{
+			return $this->getTheCategories()[0];
 		}
 		else if ($key === 'tags')
 		{
@@ -181,9 +184,9 @@ class Post extends Wrapper
 		{
 			$this->setPending('tags', $value);
 		}
-		else if ($key === 'category')
+		else if ($key === 'categories')
 		{
-			$this->setPending('category', $value);
+			$this->setPending('categories', $value);
 		}
 		else if ($key === 'author')
 		{
@@ -216,30 +219,38 @@ class Post extends Wrapper
 	}
 
 	/**
-	 * Get the category row
+	 *  Get the array of category objects
 	 *
 	 * @access private
 	 * @return array
 	 */
-	private function getTheCategory()
+	private function getTheCategories(): array
 	{
-		if (!empty($this->data['category_id']))
+		if (!empty($this->data['id']))
 		{
-			if (is_null($this->data['category']))
+			if (is_null($this->data['categories']))
 			{
-				$this->data['category'] = $this->categoryProvider->byId($this->data['category_id']);
+				$this->data['categories'] = [];
+
+				$cats = $this->SQL->SELECT('categories.*')->FROM('categories_to_posts')->LEFT_JOIN_ON('categories', 'categories.id = categories_to_posts.category_id')->WHERE('post_id', '=', $this->data['id'])->FIND_ALL();
+
+				foreach ($cats as $cat)
+				{
+					$this->data['categories'][] = $this->categoryProvider->byId($cat['id']);
+				}
 			}
 		}
-		else
+		
+		if (empty($this->data['categories']))
 		{
-			$this->data['category'] = $this->categoryProvider->byId(1);
+			$this->data['categories'] = [$this->categoryProvider->byId(1)];
 		}
 
-		return $this->data['category'];
+		return $this->data['categories'];
 	}
 
 	/**
-	 * Get the array of tag rows
+	 * Get the array of tag objects
 	 *
 	 * @access private
 	 * @return array
@@ -260,7 +271,8 @@ class Post extends Wrapper
 				}
 			}
 		}
-		else
+
+		if (empty($this->data['tags']))
 		{
 			$this->data['tags'] = [$this->tagProvider->byId(1)];
 		}
@@ -422,12 +434,11 @@ class Post extends Wrapper
 
 		$row['modified'] = time();
 
-		# If the category doesn't exist - create it
-		$row['category']    = $this->createCategory($row['category']);
-		$row['category_id'] = $row['category']->id;
-
 		# If the tags don't exist - create them
 		$row['tags'] = $this->createTags($row['tags']);
+
+		# If the tags don't exist - create them
+		$row['categories'] = $this->createCategories($row['categories']);
 
 		# Make sure there is a valid author
 		$row['author']    = $this->getTheAuthor();
@@ -459,7 +470,7 @@ class Post extends Wrapper
 		$row['slug'] = isset($row['slug']) ? $row['slug'] : false;
 		
 		# Create a slug based on the category, tags, slug, author
-		$row['slug'] = $this->titleToSlug($row['title'], $row['category']->slug, $row['author']->slug, $row['created'], $row['type'], $row['slug']);
+		$row['slug'] = $this->titleToSlug($row['title'], $row['categories'][0]->slug, $row['author']->slug, $row['created'], $row['type'], $row['slug']);
 
 		# Sanitize comments_enabled
 		$row['comments_enabled'] = boolval($row['comments_enabled']);
@@ -468,7 +479,7 @@ class Post extends Wrapper
 		$postMeta = empty($row['meta']) ? $this->getPostMeta() : $row['meta'];
 	
 		# Remove joined rows so we can update/insert
-		$insertRow = Arr::unsets(['thumbnail', 'tags', 'category', 'content', 'comments', 'author', 'meta'], $row);
+		$insertRow = Arr::unsets(['thumbnail', 'tags', 'categories', 'content', 'comments', 'author', 'meta'], $row);
 
 		# Insert a new article
 		if ($newPost)
@@ -486,6 +497,8 @@ class Post extends Wrapper
 			$this->SQL->UPDATE('posts')->SET($insertRow)->WHERE('id', '=', $row['id'])->QUERY();
 			
 			$this->SQL->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', $row['id'])->QUERY();
+
+			$this->SQL->DELETE_FROM('categories_to_posts')->WHERE('post_id', '=', $row['id'])->QUERY();
 			
 			$this->SQL->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $row['id'])->QUERY();
 
@@ -496,6 +509,12 @@ class Post extends Wrapper
 		foreach ($row['tags'] as $tag)
 		{
 			$this->SQL->INSERT_INTO('tags_to_posts')->VALUES(['post_id' => $row['id'], 'tag_id' => $tag->id])->QUERY();
+		}
+
+		# Join the categories
+		foreach ($row['categories'] as $cat)
+		{
+			$this->SQL->INSERT_INTO('categories_to_posts')->VALUES(['post_id' => $row['id'], 'category_id' => $cat->id])->QUERY();
 		}
 
 		# Join the content
@@ -526,6 +545,8 @@ class Post extends Wrapper
 
 			$this->SQL->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', $this->data['id'])->QUERY();
 			
+			$this->SQL->DELETE_FROM('categories_to_posts')->WHERE('post_id', '=', $this->data['id'])->QUERY();
+
 			$this->SQL->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $this->data['id'])->QUERY();
 			
 			$this->SQL->DELETE_FROM('posts')->WHERE('id', '=', $this->data['id'])->QUERY();
@@ -537,37 +558,62 @@ class Post extends Wrapper
 	}
 
 	/**
-	 * Create a category if it doesn't exist already
+	 * Creates categories if they don't already exist
 	 *
-	 * @param  mixed $category Category name, id or category wrapper
-	 * @return kanso\cms\wrappers\Category             
+	 * @access private
+	 * @param  mixed $cats categories names, or category wrapper
+	 * @return array         
 	 */
-	private function createCategory($category): Category
+	private function createCategories($cats): array
 	{
-		if ($category instanceOf Category)
-        {
-        	return $category;
-        }
-        else if (empty($category))
-        {
-        	return $this->categoryProvider->byId(1);
-        }
-        else if (is_integer($category))
-        {
-        	return $this->categoryProvider->byId($category);
-        }
+		$default = [$this->categoryProvider->byId(1)];
+		$result  = [];
 
-        $cat = $this->categoryProvider->byKey('name', $category, true);
+	  	if (is_string($cats))
+	   	{
+	   		$cats = array_filter(array_map('trim', explode(',', $cats)));
+	   	}
 
-	  	if ($cat)
+	   	if (empty($cats) || !is_array($cats))
+		{
+			return $default;
+		}
+
+	  	foreach ($cats as $cat)
 	  	{
-	  		return $cat;
+	  		if ($cat instanceOf Category)
+	        {
+	        	$result[] = $cat;
+	        }
+	        else if (is_string($cat))
+		   	{
+		   		if (ucfirst($cat) === 'Uncategorized')
+		   		{
+		   			continue;
+		   		}
+		   		
+		   		$catWrapper = $this->categoryProvider->byKey('name', $cat, true);
+		   		
+		   		if ($catWrapper)
+		   		{
+		   			$result[] = $catWrapper;
+		   		}
+		   		else
+		   		{
+		   			$result[] = $this->categoryProvider->create([
+				  		'name' => $cat,
+				  		'slug' => Str::slug($cat),
+				  	]);
+		   		}
+		   	}
 	  	}
 
-	  	return $this->categoryProvider->create([
-	  		'name' => $category,
-	  		'slug' => Str::slug($category),
-	  	]);
+	  	if (empty($result))
+	  	{
+	  		return $default;
+	  	}
+
+	  	return $result;
 	}
 
 	/**
@@ -667,6 +713,11 @@ class Post extends Wrapper
 		# Custom posts have their own route, thus their own slug structure
 	  	if ($type === 'page')
 	  	{
+	  		if ($_slug)
+	  		{
+	  			return Str::slug($_slug).'/';
+	  		}
+	  		
 	  		return Str::slug($title).'/';
 	  	}
 	  	else if ($type === 'post')

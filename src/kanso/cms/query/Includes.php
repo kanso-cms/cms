@@ -98,6 +98,12 @@ function the_category_id($category_name = null)
     return $KANSO_QUERY->the_category_id($category_name);
 }
 
+function the_categories_list($post_id = null, $glue = ', ')
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_categories_list($post_id, $glue);
+}
+
 function the_tags($post_id = null) 
 {
     global $KANSO_QUERY;

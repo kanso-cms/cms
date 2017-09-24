@@ -97,4 +97,16 @@ class Loader
 
 		return true;
 	}
+
+	/**
+	 * Will soon be used to format var_export into better formatting
+	 *
+	 * @access protected
+	 * @param  array       $data        Data to save
+	 * @return string
+	 */
+	private function var_export(array $data): string
+	{		
+		
+	}
 }

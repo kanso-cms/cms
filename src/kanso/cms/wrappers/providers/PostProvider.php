@@ -104,7 +104,8 @@ class PostProvider extends Provider
         $this->SQL->SELECT('posts.*')->FROM('posts')->WHERE($index, '=', $value)
         ->LEFT_JOIN_ON('users', 'users.id = posts.author_id')
         ->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id')
-        ->LEFT_JOIN_ON('categories', 'posts.category_id = categories.id')
+        ->LEFT_JOIN_ON('categories_to_posts', 'posts.id = categories_to_posts.post_id')
+        ->LEFT_JOIN_ON('categories', 'categories.id = categories_to_posts.category_id')
         ->LEFT_JOIN_ON('tags_to_posts', 'posts.id = tags_to_posts.post_id')
         ->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id')
         ->GROUP_BY('posts.id');

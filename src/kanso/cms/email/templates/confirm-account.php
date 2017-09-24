@@ -1,4 +1,4 @@
-<p style="text-align: center;font-size: <?php echo $font_size_h3;?>;font-weight: 300;color: <?php echo $body_color;?>;">Your Almost There</p>
+<p style="text-align: center;font-size: <?php echo $font_size_h3;?>;font-weight: 300;color: <?php echo $body_color;?>;">You're Almost There</p>
 <p>Hi <?php echo $name;?>,</p>
 <p>Welcome to <a href="<?php echo $websiteUrl;?>" style="color: <?php echo $link_color;?>"><?php echo $websiteName;?></a>. Before we can get started, we need to quickly verify your email address.</p>
 <p>You can verify your email address and get started by following the link below:</p>

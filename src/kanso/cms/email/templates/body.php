@@ -211,7 +211,7 @@
             <!-- Email Header : END -->
 
             <!-- Email Body : BEGIN -->
-            <table class="content-wrapper" role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;border: <?php echo $content_border;?>; border-radius: <?php echo $border_radius;?>">
+            <table class="content-wrapper" role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px; border: <?php echo $content_border;?>; border-radius: <?php echo $border_radius;?>">
 
                 <!-- LOGO COLUM : BEGIN -->
                 <tr>
@@ -220,7 +220,7 @@
                             <tr>
                                 <td style="text-align: center">
                                     <a href="<?php echo $logo_link;?>">
-                                        <img src="<?php echo $logo_url; ?>" aria-hidden="true" width="60" height="60" alt="alt_text" border="0" style="height: auto; background: <?php echo $content_bg;?>; font-family: <?php echo $font_family;?>; font-size: <?php echo $font_size;?>; line-height: <?php echo $line_height;?>; color: <?php echo $body_bg;?>;">
+                                        <img src="<?php echo $logo_url; ?>" aria-hidden="true" width="60" height="60" alt="" border="0" style="height: auto; background: <?php echo $content_bg;?>; font-family: <?php echo $font_family;?>; font-size: <?php echo $font_size;?>; line-height: <?php echo $line_height;?>; color: <?php echo $body_bg;?>;">
                                     </a>
                                 </td>
                             </tr>

@@ -178,7 +178,7 @@ class Application
      * @param  string                                  $pageType The page type being loaded
      */
     public static function applyRoute(Request $request, Response $response, Closure $next, string $pageType)
-    {
+    {    	
     	$_this = static::instance();
 		
 		$_this->container->Query->filterPosts($pageType);
@@ -280,13 +280,13 @@ class Application
 		}
 		else if ($pageType === 'home-page')
 		{
-			$waterfall[] = 'home-'.array_pop($urlParts);
-			$waterfall[] = 'homepage';
+			$waterfall[] = 'home-'.array_shift($urlParts);
+			$waterfall[] = 'blog';
 			$waterfall[] = 'index';
 		}
 		else if ($pageType === 'page')
 		{
-			$waterfall[] = 'page-'.array_pop($urlParts);
+			$waterfall[] = 'page-'.array_shift($urlParts);
 			$waterfall[] = 'page';
 		}
 		else if (Str::getBeforeFirstChar($pageType, '-') === 'single')
@@ -310,9 +310,27 @@ class Application
 			$waterfall[] = 'tag';
 			$waterfall[] = 'taxonomy';
 		}
-		else if ($pageType === 'category')
+		else if ($pageType === 'category1' || $pageType === 'category2' || $pageType === 'category3')
 		{
-			$waterfall[] = 'category-'.$this->container->Query->the_taxonomy()->slug;
+			if ($this->container->Query->blog_location())
+			{
+				array_shift($urlParts);
+			}
+			array_shift($urlParts);
+
+			if ($pageType === 'category1')
+			{
+				$waterfall[] = 'category-'.$urlParts[0];
+			}
+			else if ($pageType === 'category2')
+			{
+				$waterfall[] = 'category-'.$urlParts[1];
+			}
+			else if ($pageType === 'category3')
+			{
+				$waterfall[] = 'category-'.$urlParts[2];
+			}
+
 			$waterfall[] = 'taxonomy-category';
 			$waterfall[] = 'category';
 			$waterfall[] = 'taxonomy';

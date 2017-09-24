@@ -149,15 +149,15 @@ class UserManager extends Manager
         $key = !$activate ? UUID::v4() : null;
 
         # username, email and slug must be unique
-        if ($this->SQL->SELECT('id')->FROM('users')->WHERE('username', '=', $username)->ROW())
+        if ($this->SQL->SELECT('id')->FROM('users')->WHERE('username', '=', $username)->AND_WHERE('status', '=', 'confirmed')->ROW())
         {
             return self::USERNAME_EXISTS;
         }
-        else if ($this->SQL->SELECT('id')->FROM('users')->WHERE('slug', '=', $slug)->ROW())
+        else if ($this->SQL->SELECT('id')->FROM('users')->WHERE('slug', '=', $slug)->AND_WHERE('status', '=', 'confirmed')->ROW())
         {
             return self::SLUG_EXISTS;
         }
-        else if ($this->SQL->SELECT('id')->FROM('users')->WHERE('email', '=', $email)->ROW())
+        else if ($this->SQL->SELECT('id')->FROM('users')->WHERE('email', '=', $email)->AND_WHERE('status', '=', 'confirmed')->ROW())
         {
             return self::EMAIL_EXISTS;
         }

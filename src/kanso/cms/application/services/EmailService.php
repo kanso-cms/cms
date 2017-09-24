@@ -24,7 +24,7 @@ class EmailService extends Service
 	{
 		$this->container->singleton('Email', function ($container) 
 		{
-			return new Email($this->container->Config);
+			return new Email($container->Config->get('email.theme'));
 		});
 	}
 }

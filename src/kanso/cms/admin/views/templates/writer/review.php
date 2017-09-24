@@ -31,8 +31,8 @@
 
 			<div class="form-field row floor-xs">
 				<label for="category">Category</label>
-				<p class="color-gray">Choose an article category.</p>
-				<input type="text" name="category" id="category" value="<?php echo $the_post ? $the_post->category->name : null; ?>" autocomplete="off"/>
+				<p class="color-gray">Enter a comma separated list of categoires.</p>
+				<input type="text" name="category" id="category" value="<?php echo $the_post ? the_categories_list($the_post->id) : null; ?>" autocomplete="off"/>
 			</div>
 
 			<div class="form-field row floor-xs">

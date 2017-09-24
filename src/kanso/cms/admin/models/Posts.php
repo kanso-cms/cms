@@ -361,7 +361,8 @@ class Posts extends BaseModel
         # Apply basic joins for queries
         $this->SQL->LEFT_JOIN_ON('users', 'users.id = posts.author_id');
         $this->SQL->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id');
-        $this->SQL->LEFT_JOIN_ON('categories', 'posts.category_id = categories.id');
+        $this->SQL->LEFT_JOIN_ON('categories_to_posts', 'posts.id = categories_to_posts.post_id');
+        $this->SQL->LEFT_JOIN_ON('categories', 'categories.id = categories_to_posts.category_id');
         $this->SQL->LEFT_JOIN_ON('tags_to_posts', 'posts.id = tags_to_posts.post_id');
         $this->SQL->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id');
         $this->SQL->GROUP_BY('posts.id');
@@ -397,7 +398,7 @@ class Posts extends BaseModel
         # Filter by category
         if ($category)
         {
-            $this->SQL->AND_WHERE('category_id', '=', intval($category));
+            $this->SQL->AND_WHERE('categories.id', '=', intval($category));
         }
 
         # Set the limit - Only if we're returning the actual articles

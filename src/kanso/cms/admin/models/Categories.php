@@ -133,13 +133,13 @@ class Categories extends BaseModel
      * @return bool
      */
     private function validatePost(): bool
-    {        
+    {
         # Validation
         if (!isset($this->post['access_token']) || !$this->Gatekeeper->verifyToken($this->post['access_token']))
         {
             throw new Exception('Bad Admin Panel POST Request. The CSRF token was either not provided or invalid.');
         }
-
+        
         if (!isset($this->post['bulk_action']) || empty($this->post['bulk_action']))
         {
             return false;
@@ -158,7 +158,7 @@ class Categories extends BaseModel
         return true;
     }
 
-     /**
+    /**
      * Updates a category
      *
      * @access private
@@ -167,7 +167,7 @@ class Categories extends BaseModel
      */
     private function update(int $id)
     {
-        if ( !isset($this->post['name']) || !isset($this->post['slug']) || !isset($this->post['description']))
+        if ( !isset($this->post['name']) || !isset($this->post['slug']) || !isset($this->post['description']) || !isset($this->post['parent']))
         {
             return false;
         }
@@ -175,6 +175,7 @@ class Categories extends BaseModel
         $name        = trim($this->post['name']);
         $slug        = Str::slug($this->post['slug']);
         $description = trim($this->post['description']);
+        $parent      = intval($this->post['parent']);
         $category    = $this->CategoryManager->byId($id);
 
         if (!$category)
@@ -200,6 +201,7 @@ class Categories extends BaseModel
 
         $category->name = $name;
         $category->slug = $slug;
+        $category->parent_id = $parent;
         $category->description = $description;
         $category->save();
 
@@ -227,7 +229,7 @@ class Categories extends BaseModel
     }
 
     /**
-     * Clear categories of articles
+     * Clear tags of articles
      *
      * @access private
      * @param  array   $ids List of post ids
@@ -291,8 +293,10 @@ class Categories extends BaseModel
      */
     private function loadCategories(bool $checkMaxPages = false)
     {
+       # Get queries
         $queries = $this->getQueries();
- # Default operation values
+
+        # Default operation values
         $page         = ((int)$queries['page']);
         $page         = $page === 1 || $page === 0 ? 0 : $page-1;
         $sort         = 'ASC';
@@ -303,13 +307,14 @@ class Categories extends BaseModel
         $search       = $queries['search'];
 
         # Select the posts
-        $this->SQL->SELECT('id')->FROM('categories');
+        $this->SQL->SELECT('categories.id')->FROM('categories');
 
-        # Set the limit - Only if we're returning the actual categories list
+        # Set the limit - Only if we're returning the actual category list
         # and not sorting by article count
         if (!$checkMaxPages && $queries['sort'] === 'name')
         {
             $this->SQL->LIMIT($offset, $limit);
+            
             $this->SQL->ORDER_BY($sortKey, $sort);
         }
         
@@ -328,11 +333,14 @@ class Categories extends BaseModel
             return ceil(count($rows) / $perPage);
         }
 
+        # Add all the article count
         $result = [];
-
         foreach ($rows as $row)
         {
-            $this->SQL->SELECT('id')->FROM('posts')->WHERE('category_id', '=', $row['id']);
+            $this->SQL->SELECT('posts.id')->FROM('posts')
+            ->LEFT_JOIN_ON('categories_to_posts', 'posts.id = categories_to_posts.post_id')
+            ->LEFT_JOIN_ON('categories', 'categories.id = categories_to_posts.category_id')
+            ->WHERE('categories.id', '=', $row['id']);
 
             $category = $this->CategoryManager->byId($row['id']);
             

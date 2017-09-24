@@ -26,7 +26,7 @@
                     <table role="presentation" aria-hidden="true" align="center" border="0" cellpadding="0" cellspacing="0" width="100%">
                         <tr>
                             <td dir="ltr" valign="top">
-                                <img src="<?php echo $the_thumbnail;?>" aria-hidden="true" width="170" height="170" alt="alt_text" border="0" class="center-on-narrow hero-img" style="height: auto; display: block; width: 100%;">
+                                <img src="<?php echo $the_thumbnail;?>" aria-hidden="true" width="170" height="170" alt="<?php echo $websiteName;?>" border="0" class="center-on-narrow hero-img" style="height: auto; display: block; width: 100%;">
                             </td>
                         </tr>
                     </table>

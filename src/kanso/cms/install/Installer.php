@@ -204,6 +204,8 @@ class Installer
 
         $SQL->CREATE_TABLE('tags_to_posts', $KANSO_DEFAULTS_TAGS_TO_POSTS_TABLE);
 
+        $SQL->CREATE_TABLE('categories_to_posts', $KANSO_DEFAULTS_CATEGORIES_TO_POSTS_TABLE);
+
         $SQL->CREATE_TABLE('content_to_posts', $KANSO_DEFAULTS_CONTENT_TO_POSTS_TABLE);
 
         $SQL->CREATE_TABLE('media_uploads', $KANSO_DEFAULTS_MEDIA_TABLE);
@@ -213,7 +215,8 @@ class Installer
         $SQL->ALTER_TABLE('tags_to_posts')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
         $SQL->ALTER_TABLE('tags_to_posts')->MODIFY_COLUMN('tag_id')->ADD_FOREIGN_KEY('tags', 'id');
 
-        $SQL->ALTER_TABLE('posts')->MODIFY_COLUMN('category_id')->ADD_FOREIGN_KEY('categories', 'id');
+        $SQL->ALTER_TABLE('categories_to_posts')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
+        $SQL->ALTER_TABLE('categories_to_posts')->MODIFY_COLUMN('category_id')->ADD_FOREIGN_KEY('categories', 'id');
         
         $SQL->ALTER_TABLE('posts')->MODIFY_COLUMN('author_id')->ADD_FOREIGN_KEY('users', 'id');
 
@@ -253,9 +256,23 @@ class Installer
             foreach ($KANSO_DEFAULT_TAGS as $t => $tag)
             {
                 # skip untagged
-                if ($t === 0) continue;
+                if ($t === 0)
+                {
+                    continue;
+                }
                 
                 $SQL->INSERT_INTO('tags_to_posts')->VALUES(['post_id' => $i+1, 'tag_id' => $t+1])->QUERY();
+            }
+
+            foreach ($KANSO_DEFAULT_CATEGORIES as $j => $tag)
+            {
+                # skip uncategorized
+                if ($j === 0)
+                {
+                    continue;
+                }
+                
+                $SQL->INSERT_INTO('categories_to_posts')->VALUES(['post_id' => $i+1, 'category_id' => $j+1])->QUERY();
             }
             
             $SQL->INSERT_INTO('content_to_posts')->VALUES(['post_id' => $i+1, 'content' => $KANSO_DEFAULT_ARTICLE_CONTENT[$i]])->QUERY();

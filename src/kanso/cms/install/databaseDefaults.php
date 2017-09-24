@@ -14,9 +14,15 @@ $KANSO_DEFAULTS_POSTS_TABLE = [
 	'title'       => 'VARCHAR(255)',
 	'excerpt'     => 'TEXT',
 	'author_id'   => 'INTEGER | UNSIGNED',
-	'category_id' => 'INTEGER | UNSIGNED',
 	'thumbnail_id'     => 'INTEGER | UNSIGNED',
 	'comments_enabled' => 'BOOLEAN DEFAULT FALSE',
+];
+
+# Default post meta table
+$KANSO_DEFAULTS_POST_META_TABLE = [
+	'id' 	   => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'content'  => 'TEXT',
+	'post_id'  => 'INTEGER | UNSIGNED',
 ];
 
 # Default tags table
@@ -33,6 +39,7 @@ $KANSO_DEFAULTS_CATEGORIES_TABLE = [
 	'name'        => 'VARCHAR(255)',
 	'slug'        => 'VARCHAR(255)',
 	'description' => 'TEXT',
+	'parent_id'   => 'INTEGER | UNSIGNED',
 ];
 
 # Default authors table
@@ -81,6 +88,13 @@ $KANSO_DEFAULTS_TAGS_TO_POSTS_TABLE = [
 	'id' 	  => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'tag_id'  => 'INTEGER | UNSIGNED',
 	'post_id' => 'INTEGER | UNSIGNED',
+];
+
+# Default tags to posts table
+$KANSO_DEFAULTS_CATEGORIES_TO_POSTS_TABLE = [
+	'id' 	      => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'category_id' => 'INTEGER | UNSIGNED',
+	'post_id'     => 'INTEGER | UNSIGNED',
 ];
 
 # Default content to articles table
@@ -183,7 +197,6 @@ $KANSO_DEFAULT_ARTICLES = [
 		'title'       => 'Hello World!',
 		'excerpt'     => 'Welcome to Kanso. This is your first post. Edit or delete it, then start blogging!',
 		'author_id'   => 1,
-		'category_id' => 2,
 		'thumbnail_id'   => 2,
 		'comments_enabled' => true,
 	],
@@ -196,7 +209,6 @@ $KANSO_DEFAULT_ARTICLES = [
 		'title'       => 'Markdown Basics',
 		'excerpt'     => 'This is intended as a quick reference and showcase.Kanso uses Markdown Extra to parse article content. Content written within the Kanso Writer application is stored in the database as raw text. When the article content is loaded, it is parsed using ParseDown Extra.',
 		'author_id'   => 1,
-		'category_id' => 3,
 		'thumbnail_id'     => 3,
 		'comments_enabled' => true,
 	],
@@ -209,7 +221,6 @@ $KANSO_DEFAULT_ARTICLES = [
 		'title'       => 'Elements',
 		'excerpt'     => 'The purpose of this HTML is to help determine what default settings are with CSS and to make sure that all possible HTML Elements are included in this HTML so as to not miss any possible Elements when designing a site.',
 		'author_id'   => 1,
-		'category_id' => 4,
 		'thumbnail_id'     => 4,
 		'comments_enabled' => true,
 	],
@@ -322,11 +333,4 @@ $KANSO_DEFAULT_IMAGES = [
 		'date'         => time(),
 		'uploader_id'  => 1,
 	],
-];
-
-# Default post meta table
-$KANSO_DEFAULTS_POST_META_TABLE = [
-	'id' 	   => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
-	'content'  => 'TEXT',
-	'post_id'  => 'INTEGER | UNSIGNED',
 ];

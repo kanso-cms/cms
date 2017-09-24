@@ -154,7 +154,7 @@ class Writer extends BaseModel
         }
 
         $article->title            = $validated_data['title'];
-        $article->category         = $validated_data['category'];
+        $article->categories       = $validated_data['category'];
         $article->tags             = $validated_data['tags'];
         $article->excerpt          = $validated_data['excerpt'];
         $article->type             = $validated_data['type'];
@@ -243,7 +243,7 @@ class Writer extends BaseModel
 
         $post = $this->PostManager->create([
             'title'        => $validated_data['title'],
-            'category'     => $validated_data['category'],
+            'categories'   => $validated_data['category'],
             'tags'         => $validated_data['tags'],
             'excerpt'      => empty($validated_data['excerpt']) ? Str::reduce($validated_data['content'], 255) : Str::reduce($validated_data['excerpt'], 255),
             'thumbnail_id' => $validated_data['thumbnail_id'],

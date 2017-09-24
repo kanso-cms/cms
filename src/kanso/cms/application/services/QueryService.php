@@ -27,17 +27,7 @@ class QueryService extends Service
 		$this->container->singleton('Query', function ($container) 
 		{
 			return new Query(
-				$container->Gatekeeper,
-				$container->CategoryManager,
-				$container->TagManager,
-				$container->UserManager,
-				$container->PostManager,
-				$container->MediaManager,
-				$container->CommentManager,
-				$container->Request,
-				$container->Response,
-				$container->Database->connection()->builder(),
-				$container->Config, $this->loadQueryParser(),
+				$this->loadQueryParser(),
 				new Cache
 			);
 		});

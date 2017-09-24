@@ -8,7 +8,6 @@
 namespace kanso\cms\email;
 
 use kanso\framework\file\Filesystem;
-use kanso\framework\config\Config;
 
 /**
  * CMS email utility
@@ -22,7 +21,8 @@ class Email
      *
      * @var array
      */
-    private $theme = [
+    private $theme = 
+    [
         'body_bg'         => '#FFFFFF',
         'content_bg'      => '#FFFFFF',
         'content_border'  => '1px solid #DADADA',
@@ -50,23 +50,14 @@ class Email
     ];
 
     /**
-     * Framework configuration 
-     * 
-     * @var \kanso\framework\config\Config
-     */
-    private $config;
-
-    /**
      * Constructor
      *
      * @access public
-     * @param  \kanso\framework\config\Config $config Framework configuration
+     * @param  array  $theme Array of theme options (optional) (default [])
      */
-    public function __construct(Config $config)
+    public function __construct(array $theme = [])
     {
-        $this->config = $config;
-
-        $this->theme['logo_url'] = $this->config->get('cms.uploads.path').'/images/kanso-logo-small.jpg';
+        $this->theme = array_merge($this->theme, $theme);
     }
 
     /**

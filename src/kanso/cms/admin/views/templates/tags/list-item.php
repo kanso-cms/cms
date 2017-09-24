@@ -19,7 +19,7 @@
 	            </a>
 	        </div>
 	        <span class="color-gray">Slug:&nbsp;"<?php echo $tag->slug; ?>"&nbsp;-&nbsp;</span>
-	        <a class="color-gray p5" href="/admin/posts/?tag=<?php echo $tag->id; ?>">
+	        <a class="p5" href="/admin/posts/?tag=<?php echo $tag->id; ?>">
 	           	with <?php echo $tag->article_count; ?> posts
 	       	</a>
 	       

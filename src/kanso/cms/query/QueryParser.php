@@ -89,7 +89,7 @@ class QueryParser
         'tag_name'       => 'tags.name',
         'tag_slug'       => 'tags.slug',
 
-        'category_id'    => 'categories.id',
+        'category_id'    => 'categories_to_posts.id',
         'category_name'  => 'categories.name',
         'category_slug'  => 'categories.slug',
 
@@ -296,7 +296,9 @@ class QueryParser
 
         $this->SQL->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id');
 
-        $this->SQL->LEFT_JOIN_ON('categories', 'posts.category_id = categories.id');
+        $this->SQL->LEFT_JOIN_ON('categories_to_posts', 'posts.id = categories_to_posts.post_id');
+
+        $this->SQL->LEFT_JOIN_ON('categories', 'categories.id = categories_to_posts.category_id');
 
         $this->SQL->LEFT_JOIN_ON('tags_to_posts', 'posts.id = tags_to_posts.post_id');
 
@@ -340,11 +342,26 @@ class QueryParser
      * Returns all the post id's from the query
      * 
      * @access public
+     * @param  string  $queryStr Query string to parse
      * @return array
      */
-    public function countQuery(): array
-    {
-       $this->SQL->SELECT("posts.id");
+    public function countQuery(string $queryStr): array
+    {        
+        # Set the query string
+        $this->queryStr = $queryStr;
+
+        if (empty($this->queryStr))
+        {
+            return [];
+        }
+
+        # Reset internals
+        $this->queryVars = $this->queryVarsDefaults;
+
+        # Parse the query and execute the chain
+        $this->parse();
+
+        $this->SQL->SELECT("posts.id");
 
         $this->SQL->FROM($this->queryVars['FROM']);
 
@@ -378,7 +395,9 @@ class QueryParser
 
         $this->SQL->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id');
 
-        $this->SQL->LEFT_JOIN_ON('categories', 'posts.category_id = categories.id');
+        $this->SQL->LEFT_JOIN_ON('categories_to_posts', 'posts.id = categories_to_posts.post_id');
+
+        $this->SQL->LEFT_JOIN_ON('categories', 'categories.id = categories_to_posts.category_id');
 
         $this->SQL->LEFT_JOIN_ON('tags_to_posts', 'posts.id = tags_to_posts.post_id');
 

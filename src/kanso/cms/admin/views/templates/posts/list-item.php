@@ -22,7 +22,7 @@
 	        <span class="color-gray">
 	        	<span>Slug:&nbsp;"<?php echo Str::getAfterLastChar(rtrim($article->slug, '/'), '/'); ?>"&nbsp;-&nbsp;</span>
 
-	        	In <a class="color-gray text-underline" href="/admin/<?php echo $postSlug;?>?category=<?php echo $article->category_id; ?>">
+	        	In <a class="color-gray text-underline" href="/admin/<?php echo $postSlug;?>?category=<?php echo $article->category->id; ?>">
 					<?php echo $article->category->name;?>
 				</a>
 				<span class="p6">&nbsp;&nbsp;•&nbsp;&nbsp;</span>

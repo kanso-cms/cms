@@ -290,9 +290,10 @@ class Gatekeeper
      * @access public
      * @param  string $username Username or email address
      * @param  string $password Raw passowrd
+     * @param  bool   $force    Login a user without their password needed (optional) (default false)
      * @return true|self::LOGIN_INCORRECT|self::LOGIN_ACTIVATING|self::LOGIN_LOCKED|self::LOGIN_BANNED
      */
-    public function login(string $username, string $password)
+    public function login(string $username, string $password, bool $force = false)
     {
         if (filter_var($username, FILTER_VALIDATE_EMAIL))
         {
@@ -309,6 +310,15 @@ class Gatekeeper
         if (!$user || empty($user))
         {
             return self::LOGIN_INCORRECT;
+        }
+
+        # Forced login
+        if ($force === true)
+        {
+            # Log the client in
+            $this->logClientIn($user);
+
+            return true;
         }
 
         # Pending users
@@ -381,11 +391,12 @@ class Gatekeeper
 
         # Create a token for them
         $user->kanso_password_key = UUID::v4();
+        
         $user->save();
 
         if ($sendEamil)
         {
-            $resetUrl = $this->environment->HTTP_HOST.'/reset-password/?token='.$user->kanso_password_key;
+            $resetUrl = $this->environment->HTTP_HOST.'/'.$this->config->get('email.urls.reset_password').'?token='.$user->kanso_password_key;
             
             if ($user->role === 'administrator' || $user->role === 'writer')
             {
@@ -436,15 +447,13 @@ class Gatekeeper
 
         if ($sendEamil)
         {
-            $resetUrl  = $this->environment->HTTP_HOST.'/forgot-password/';
-            $loginUrl  = $this->environment->HTTP_HOST.'/login/';
             $emailData =
             [
                 'name'        => $user->name, 
                 'websiteName' => $this->environment->DOMAIN_NAME,
                 'websiteUrl'  => $this->environment->HTTP_HOST,
-                'resetUrl'    => $resetUrl,
-                'loginUrl'    => $loginUrl,
+                'resetUrl'    => $this->environment->HTTP_HOST.'/'.$this->config->get('email.urls.forgot_password'),
+                'loginUrl'    => $this->environment->HTTP_HOST.'/'.$this->config->get('email.urls.login'),
             ];
 
             if ($user->role === 'administrator' || $user->role === 'writer')
@@ -478,6 +487,7 @@ class Gatekeeper
     {
         # Validate the user exists
         $user = $this->provider->byKey('email', $email, true);
+
         if (!$user)
         {
             return false;

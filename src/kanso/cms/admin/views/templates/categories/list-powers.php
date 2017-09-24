@@ -41,9 +41,45 @@
 		        </div>
 		    </div>
 		</div>
+		<a href="#" class="btn tooltipped tooltipped-s js-expand-collapse-all" data-tooltip="Expad/Collapse all">
+			<span class="glyph-icon glyph-icon-list-ul"></span>
+		</a>
 		<a href="/admin/categories/" class="btn tooltipped <?php echo !$empty_queries ? 'btn-info' : '';?> tooltipped-s" data-tooltip="Clear filters &amp; sorts">
 			<span class="glyph-icon glyph-icon-times"></span>
 		</a>
+		<script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function()
+            {
+                document.querySelector('.js-expand-collapse-all').addEventListener('click', function (e)
+                {
+                	e = e || window.event;
+                	e.preventDefault();
+                	var helper      = Modules.get('JSHelper');
+                	var collapseAll = helper.$All('.taxonomy-edit-wrap');
+                	var isOpen      = false;
+
+                	for (i = 0; i < collapseAll.length; i++)
+                	{
+                		if (collapseAll[i].style.height === 'auto')
+                		{
+                			isOpen = true;
+                		}
+                	}
+
+                	for (j = 0; j < collapseAll.length; j++)
+                	{
+                		if (isOpen)
+                		{
+                			collapseAll[j].style.height = '0';
+                		}
+                		else
+                		{
+                			collapseAll[j].style.height = 'auto';
+                		}
+					}                    
+                });
+            });
+		</script>
 	</div>
 
 	<!-- SEARCH -->

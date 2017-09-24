@@ -30,7 +30,7 @@ class Category extends Wrapper
      * {@inheritdoc}
      */
     public function save(): bool
-	{
+    {
         $saved = false;
 
         $isExisting = isset($this->id);
@@ -65,13 +65,13 @@ class Category extends Wrapper
         }
 
         return !$saved ? false : true;
-	}
+    }
 
-	/**
+    /**
      * {@inheritdoc}
      */
     public function delete(): bool
-	{
+    {
         if (isset($this->data['id']))
         {
             if ($this->data['id'] === 1)
@@ -79,14 +79,14 @@ class Category extends Wrapper
                 throw new InvalidArgumentException(vsprintf("%s(): The 'uncategorized' taxonomy is not deletable.", [__METHOD__]));
             }
 
-            $this->clear();
+            if ($this->removeAllJoins())
             {
                 return $this->SQL->DELETE_FROM('categories')->WHERE('id', '=', $this->data['id'])->QUERY() ? true : false;
             }
         }
 
         return false;
-	}
+    }
 
     /**
      * Clears all posts from the category
@@ -101,10 +101,106 @@ class Category extends Wrapper
         {
             if ($this->data['id'] === 1)
             {
-                throw new InvalidArgumentException(vsprintf("%s(): The 'uncategorized' taxonomy cannot be cleared.", [__METHOD__]));
+                throw new InvalidArgumentException(vsprintf("%s():  The 'uncategorized' taxonomy cannot be cleared.", [__METHOD__]));
             }
 
-            $this->SQL->UPDATE('posts')->SET(['category_id' => 1])->WHERE('category_id', '=', $this->data['id'])->QUERY();
+            return $this->removeAllJoins();
+        }
+
+        return false;
+    }
+
+    /**
+     * Get the parent category if it is set
+     *
+     * @access public
+     * @return Category|false
+     */
+    public function parent()
+    {
+        if (isset($this->data['id']))
+        {
+            if ($this->data['parent_id'] > 0)
+            {
+                $row = $this->SQL->SELECT('*')->FROM('categories')->WHERE('id', '=', $this->data['parent_id'])->ROW();
+
+                if ($row)
+                {
+                    return $this->categoryFromRow($row);
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get children categories
+     *
+     * @access public
+     * @return array
+     */
+    public function children(): array
+    {
+        $children = [];
+
+        if (isset($this->data['id']))
+        {
+            $cats = $this->SQL->SELECT('*')->FROM('categories')->WHERE('parent_id', '=', $this->data['id'])->FIND_ALL();
+
+            foreach ($cats as $cat)
+            {                
+                $children[] = $this->categoryFromRow($cat);
+            }
+        }
+
+        return $children;
+    }
+
+    /**
+     * Create a category from a databse row
+     *
+     * @access private
+     * @param  array   $data Category database row
+     * @return Category
+     */
+    private function categoryFromRow(array $data): Category
+    {
+        return new Category($this->SQL, $data);
+    }
+
+    /**
+     * Unjoin all posts and reset to uncategorized if no categories left
+     *
+     * @access private
+     * @return bool
+     */
+    private function removeAllJoins(): bool
+    {
+        if (isset($this->data['id']))
+        {
+            # Remove post joins
+            $posts = $this->SQL->SELECT('posts.*')->FROM('categories_to_posts')->LEFT_JOIN_ON('posts', 'categories_to_posts.post_id = posts.id')->WHERE('categories_to_posts.category_id', '=', $this->data['id'])->FIND_ALL();
+            
+            foreach ($posts as $post)
+            {
+                $postCats = $this->SQL->SELECT('*')->FROM('categories_to_posts')->WHERE('post_id', '=', $post['id'])->FIND_ALL();
+                
+                if (count($postCats) === 1)
+                {
+                    $this->SQL->INSERT_INTO('categories_to_posts')->VALUES(['post_id' => $post['id'], 'category_id' => 1])->QUERY();
+                }
+            }
+
+            $this->SQL->DELETE_FROM('categories_to_posts')->WHERE('category_id', '=',  $this->data['id'])->QUERY();
+
+            # Children now have no parent
+            foreach ($this->children() as $child)
+            {
+                $child->parent_id = 0;
+
+                $child->save();
+            }
 
             return true;
         }
