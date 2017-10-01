@@ -120,10 +120,16 @@ trait Validation
      * Is this a static page request ?
      *
      * @access public
+     * @param  string  $slug Requested page slug (optional) (default null)
      * @return bool
      */
-    public function is_page(): bool
+    public function is_page($slug = null): bool
     {
+        if ($slug)
+        {
+            return strtolower(trim($slug, '/')) === strtolower(trim($this->Request->environment()->REQUEST_URI, '/'));
+        }
+
         return $this->requestType === 'page';
     }
 

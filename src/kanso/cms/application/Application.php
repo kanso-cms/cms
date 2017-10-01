@@ -207,7 +207,7 @@ class Application
      * @param  string                                  $pageType The page type being loaded
      */
 	public static function loadRssFeed(Request $request, Response $response, Closure $next, string $pageType)
-	{
+	{		
 		# Get the Kanso Object instance
 		$_this = static::instance();
 		

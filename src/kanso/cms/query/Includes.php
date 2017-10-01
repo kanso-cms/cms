@@ -326,10 +326,10 @@ function is_front_page()
     return $KANSO_QUERY->is_front_page();
 }
 
-function is_page()
+function is_page($slug = null)
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->is_page();
+    return $KANSO_QUERY->is_page($slug);
 }
 
 function is_search()
