@@ -302,8 +302,20 @@ trait Filter
             $this->taxonomySlug = $urlParts[0];
         }
 
+        # Find child categories to include 
+        # posts from all children
+        $category      = $this->SQL->SELECT('id')->FROM('categories')->WHERE('slug', '=', $this->taxonomySlug)->ROW();
+        $categorySlugs = [$this->taxonomySlug];
+        
+        if ($category)
+        {
+            $categorySlugs = $this->childrenCategories($category['id'], $categorySlugs);
+        }
+
+        $slugFilter = trim('category_slug = '.implode(' || category_slug = ', $categorySlugs));
+
         $this->requestType = 'category';
-        $this->queryStr    = 'post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = '.$this->taxonomySlug." : limit = $offset, $perPage";
+        $this->queryStr    = 'post_status = published : post_type = post : orderBy = post_created, DESC : '.$slugFilter." : limit = $offset, $perPage";
         $this->posts       = $this->queryParser->parseQuery($this->queryStr);
         $this->postCount   = count($this->posts);
 
@@ -311,7 +323,7 @@ trait Filter
         # and 404 if it does NOT 
         if ($this->postCount === 0)
         {
-            if (!$this->SQL->SELECT('id')->FROM('categories')->WHERE('slug', '=', $this->taxonomySlug)->ROW())
+            if (!$category)
             {
                 $this->Response->status()->set(404);
 
@@ -534,5 +546,26 @@ trait Filter
         $this->requestType = 'attachment';
 
         return true;
+    }
+
+    /**
+     * Filter the posts based on an attachment request
+     *
+     * @access private
+     * @param  int     $parentId Parent category id
+     * @param  array   $slugs    Array of category slugs
+     * @return array 
+     */
+    private function childrenCategories(int $parentId, array $slugs = [])
+    {
+        $children = $this->SQL->SELECT('*')->FROM('categories')->WHERE('parent_id', '=', $parentId)->FIND_ALL();
+        
+        foreach ($children as $child)
+        {
+            $slugs[] = $child['slug'];
+            $slugs   = array_unique(array_merge($slugs, $this->childrenCategories($child['id'], $slugs)));
+        }
+
+        return $slugs;
     }
 }

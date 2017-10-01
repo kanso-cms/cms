@@ -80,7 +80,7 @@ trait Validation
      */
     public function is_custom_post(): bool
     {
-        return Str::getBeforeFirstChar($this->requestType, '-') === 'single';
+        return Str::getBeforeFirstChar($this->requestType, '-') === 'single' && !$this->is_single();
     }
 
     /**

@@ -164,13 +164,11 @@ trait Category
         $category = false;
 
         if (!$category_id)
-        {
+        {            
             if (!empty($this->post))
             {
                 $category = $this->post->category;
             }
-
-            return null;
         }
         else
         {

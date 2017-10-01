@@ -333,9 +333,10 @@ trait Post
      *
      * @access public
      * @param  int    $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  bool   $raw     Return raw content not HTML formatted (optional) (default false)
      * @return string
      */
-    public function the_content(int $post_id = null): string
+    public function the_content(int $post_id = null, $raw = false): string
     {
         $content = '';
 
@@ -359,6 +360,11 @@ trait Post
         if (empty($content))
         {
             return '';
+        }
+
+        if ($raw)
+        {
+            return trim($content);
         }
 
         return Markdown::convert(trim($content));

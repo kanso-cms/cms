@@ -270,7 +270,7 @@ class UserManager extends Manager
             $emailData =
             [
                 'name'        => $user->name, 
-                'confirmURL'  => $this->environment->HTTP_HOST.'/confirm-account/?token='.$user->kanso_register_key,
+                'confirmURL'  => $this->environment->HTTP_HOST.'/'.$this->config->get('email.urls.confirm_account').'?token='.$user->kanso_register_key,
                 'websiteName' => $this->environment->DOMAIN_NAME,
                 'websiteUrl'  => $this->environment->HTTP_HOST,
             ];

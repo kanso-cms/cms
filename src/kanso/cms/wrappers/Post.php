@@ -143,7 +143,7 @@ class Post extends Wrapper
 		}
 		else if ($key === 'content')
 		{
-			return $this->getTheContent();
+			return html_entity_decode($this->getTheContent());
 		}
 		else if ($key === 'comments')
 		{
@@ -151,7 +151,7 @@ class Post extends Wrapper
 		}
 		else if ($key === 'excerpt')
 		{
-			return urldecode($this->data['excerpt']);
+			return html_entity_decode($this->data['excerpt']);
 		}
 		else if ($key === 'meta')
 		{
@@ -194,11 +194,11 @@ class Post extends Wrapper
 		}
 		else if ($key === 'excerpt')
 		{
-			$this->data['excerpt'] = urlencode($value);
+			$this->data['excerpt'] = $value;
 		}
 		else if ($key === 'content')
 		{
-			$this->data['content'] = urlencode($value);
+			$this->data['content'] = $value;
 		}
 		else if (array_key_exists($key, $this->data))
 		{
@@ -309,7 +309,7 @@ class Post extends Wrapper
 			$this->data['content'] = '';
 		}
 
-		return urldecode($this->data['content']);
+		return $this->data['content'];
 	}
 
 	/**
@@ -445,7 +445,15 @@ class Post extends Wrapper
 		$row['author_id'] = $row['author']->id;
 
 		# Get the content
-		$row['content'] = $this->getTheContent();
+		$row['content'] = htmlentities($this->getTheContent());
+
+		# excerpt
+		if (!isset($row['excerpt']) || !is_string($row['excerpt']))
+		{
+			$row['excerpt'] = '';
+		}
+		
+		$row['excerpt'] = htmlentities($row['excerpt']);
 
 		# Validate the title
 		$row['title'] = trim($row['title']);

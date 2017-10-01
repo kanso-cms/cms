@@ -158,10 +158,10 @@ function the_attachments_url()
     return $KANSO_QUERY->the_attachments_url();
 }
 
-function the_content($post_id = null) 
+function the_content($post_id = null, $raw = false) 
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->the_content($post_id);
+    return $KANSO_QUERY->the_content($post_id, $raw);
 }
 
 function the_post_thumbnail($post_id = null, $size = 'original') 
