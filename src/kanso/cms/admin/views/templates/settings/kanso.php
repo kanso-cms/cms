@@ -17,7 +17,7 @@ $cdn_enabbled  = admin_kanso_config('cdn.enabled');
             <p class="color-gray">
                 The name of your website. This is used by Kanso to structure page titles for SEO.
             </p>
-            <input type="text" name="site_title" id="site_title" data-js-required="true"  data-js-min-legnth="1" data-js-max-legnth="50" maxlength="50" value="<?php echo $kansoConfig['site_title']; ?>" placeholder="My Website" autocomplete="off">
+            <input type="text" name="site_title" id="site_title" data-js-required="true"  data-js-min-legnth="1" data-js-max-legnth="255" maxlength="255" value="<?php echo $kansoConfig['site_title']; ?>" placeholder="My Website" autocomplete="off">
             <p class="help-danger">* Please enter a website title.</p>
         </div>
 
