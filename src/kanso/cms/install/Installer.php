@@ -77,6 +77,11 @@ class Installer
 
         $this->installPath = $installPath.DIRECTORY_SEPARATOR.'Install.php';
 
+        if (file_exists($installPath.DIRECTORY_SEPARATOR.'Install.sample.php'))
+        {
+            throw new RuntimeException('Could not install Kanso. You need to rename the "Install.sample.php" to "Install.php".');
+        }
+
         $this->isInstalled();
     }
 

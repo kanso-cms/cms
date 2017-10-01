@@ -51,7 +51,7 @@ class Loader
 		}
 
 		// Validate
-		if(!isset($config))
+		if (!isset($config))
 		{
 			throw new RuntimeException(vsprintf("%s(): The [ %s ] config file does not exist.", [__METHOD__, $file]));
 		}

@@ -1,6 +1,6 @@
 <?php
 
-$_TEMPLATES_DIR = dirname(__FILE__).DIRECTORY_SEPARATOR.'Templates';
+$_TEMPLATES_DIR = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates';
 
 require_once('functions.php');
 

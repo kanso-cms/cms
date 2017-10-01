@@ -48,7 +48,8 @@ return
      * ---------------------------------------------------------
      *
      * sitemap_route     : Route to the XML sitemap.
-     * posts_per_page    : Posts per page for pagination. 
+     * posts_per_page    : Posts per page for pagination.
+     * blog_location     : Default blog location
      * permalinks        : Permalinks structure
      * permalinks_route  : The permalinks route for the router
      * route_tags        : Should Kanso route tags e.g example.com/tag/tag-slug/
@@ -59,6 +60,7 @@ return
      */
     'sitemap_route'     => 'sitemap.xml',
     'posts_per_page'    => 10,
+    'blog_location'     => '',
     'permalinks'        => 'year/month/postname/',
     'permalinks_route'  => '(:year)/(:month)/(:postname)/',
     'route_tags'        => true,

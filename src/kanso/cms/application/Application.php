@@ -105,7 +105,7 @@ class Application
 	 */
 	private function applyRoutes()
 	{
-		include_once 'Services/Routes.php';
+		include_once 'services/Routes.php';
 	}
 
     /**
@@ -115,10 +115,12 @@ class Application
      */
     private function registerViewIncludes()
     {
-    	$this->container->View->includes([
-    		$this->container->Config->get('cms.themes_path').'/'.$this->container->Config->get('cms.theme_name').'/functions.php',
-    		KANSO_DIR.'/CMS/Query/Includes.php'
-    	]);
+    	$this->container->View->includes(
+    		[
+    			$this->container->Config->get('cms.themes_path').'/'.$this->container->Config->get('cms.theme_name').'/functions.php',
+    			KANSO_DIR.'/cms/query/Includes.php'
+    		]
+    	);
     }
 
     /**

@@ -62,10 +62,10 @@ $router->post('/admin/comments/',  	      '\kanso\cms\admin\controllers\Dashboar
 $router->post('/admin/comments/(:all)',   '\kanso\cms\admin\controllers\Dashboard@comments', '\kanso\cms\admin\models\Comments');
 
 # Admin comment authors
-$router->get('/admin/comment-users/',         '\kanso\cms\admin\controllers\Dashboard@commentUsers', '\kanso\cms\admin\models\commentUsers');
-$router->get('/admin/comment-users/(:all)',   '\kanso\cms\admin\controllers\Dashboard@commentUsers', '\kanso\cms\admin\models\commentUsers');
-$router->post('/admin/comment-users/',  	    '\kanso\cms\admin\controllers\Dashboard@commentUsers', '\kanso\cms\admin\models\commentUsers');
-$router->post('/admin/comments-users/(:all)', '\kanso\cms\admin\controllers\Dashboard@commentUsers', '\kanso\cms\admin\models\commentUsers');
+$router->get('/admin/comment-users/',         '\kanso\cms\admin\controllers\Dashboard@commentUsers', '\kanso\cms\admin\models\CommentUsers');
+$router->get('/admin/comment-users/(:all)',   '\kanso\cms\admin\controllers\Dashboard@commentUsers', '\kanso\cms\admin\models\CommentUsers');
+$router->post('/admin/comment-users/',  	    '\kanso\cms\admin\controllers\Dashboard@commentUsers', '\kanso\cms\admin\models\CommentUsers');
+$router->post('/admin/comments-users/(:all)', '\kanso\cms\admin\controllers\Dashboard@commentUsers', '\kanso\cms\admin\models\CommentUsers');
 
 # Admin settings
 $router->get('/admin/settings/',         '\kanso\cms\admin\controllers\Dashboard@settings', '\kanso\cms\admin\models\Settings');

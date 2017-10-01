@@ -61,13 +61,15 @@ class Environment
         $env['SERVER_NAME'] = $_SERVER['SERVER_NAME'];
 
         # Number of server port that is running the script
-        $env['SERVER_PORT'] = isset($_SERVER['SERVER_PORT']) ? $_SERVER['SERVER_PORT'] : 80;
+        $env['SERVER_PORT'] = isset($_SERVER['SERVER_PORT']) ? intval($_SERVER['SERVER_PORT']) : 80;
 
         # Is the application running under HTTPS or HTTP protocol?
-        if ( (isset($_SERVER['HTTPS']) && $env['SERVER_PORT'] === 443) && ($_SERVER['HTTPS'] === 1 || $_SERVER['HTTPS'] === 'on')) {
+        if ( (isset($_SERVER['HTTPS']) && $env['SERVER_PORT'] === 443) && ($_SERVER['HTTPS'] === 1 || $_SERVER['HTTPS'] === 'on') )
+        {
             $env['HTTP_PROTOCOL'] = 'https';
         }
-        else {
+        else
+        {
             $env['HTTP_PROTOCOL'] = 'http';
         }
 

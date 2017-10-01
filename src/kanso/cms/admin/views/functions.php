@@ -348,7 +348,7 @@ function admin_assets_url()
 {
 	$env = \kanso\Kanso::instance()->Request->environment();
 
-	return str_replace($env->DOCUMENT_ROOT, $env->HTTP_HOST, KANSO_DIR.'/CMS/Admin/assets');
+	return str_replace($env->DOCUMENT_ROOT, $env->HTTP_HOST, KANSO_DIR.'/cms/admin/assets');
 }
 
 /**
