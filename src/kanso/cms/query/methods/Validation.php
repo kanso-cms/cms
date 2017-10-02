@@ -127,7 +127,47 @@ trait Validation
     {
         if ($slug)
         {
-            return strtolower(trim($slug, '/')) === strtolower(trim($this->Request->environment()->REQUEST_URI, '/'));
+            $uri = strtolower(trim($this->Request->environment()->REQUEST_URI, '/'));
+
+            $slug = strtolower(trim($slug, '/'));
+
+            if ($slug === $uri)
+            {
+                return true;
+            }
+
+            $patterns = 
+            [
+                ':any'      => '[^/]+',
+                ':num'      => '[0-9]+',
+                ':all'      => '.*',
+                ':year'     => '\d{4}',
+                ':month'    => '0?[1-9]|1[012]',
+                ':day'      => '0[1-9]|[12]\d|3[01]',
+                ':hour'     => '0?[1-9]|1[012]',
+                ':minute'   => '[0-5]?\d',
+                ':second'   => '[0-5]?\d',
+                ':postname' => '[a-z0-9 -]+',
+                ':category' => '[a-z0-9 -]+',
+                ':author'   => '[a-z0-9 -]+',
+            ];
+
+            $requestPath = trim(Str::getBeforeFirstChar($this->Request->path(), '?'), '/');
+            $searches    = array_keys($patterns);
+            $replaces    = array_values($patterns);
+            $route       = $slug;
+
+            if (strpos($route, ':') !== false)
+            {
+                $route = str_replace($searches, $replaces, $route);
+            }
+
+            if (preg_match('#^' . $route . '$#', $requestPath, $matches))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         return $this->requestType === 'page';
