@@ -24,7 +24,7 @@
 	       	</a>
 	       
 	       	<div class="color-gray p5">
-	       		<?php echo Str::reduce($tag->description, 100, '...'); ?>
+	       		<?php echo !empty($tag->description) ? Str::reduce($tag->description, 100, '...') : ''; ?>
 	       	</div>
 	       	<div class="taxonomy-edit-wrap collapsed" id="tag-edit-<?php echo $tag->id; ?>">
 	       		<div class="roof-xs col-8">

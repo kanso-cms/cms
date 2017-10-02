@@ -47,7 +47,7 @@
 	       	</a>
 
 	       	<div class="color-gray p5">
-	       		<?php echo Str::reduce($category->description, 100, '...'); ?>
+	       		<?php echo !empty($category->description) ? Str::reduce($category->description, 100, '...') : ''; ?>
 	       	</div>
 	       	<div class="taxonomy-edit-wrap collapsed" id="category-edit-<?php echo $category->id; ?>">
 	       		<div class="roof-xs col-8">

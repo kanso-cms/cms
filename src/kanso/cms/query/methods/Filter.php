@@ -446,7 +446,7 @@ trait Filter
         $offset  = $this->pageIndex * $perPage;
 
         # Get the query
-        $query = $this->Request->fetch('query');
+        $query = $this->Request->queries('q');
         
         # Validate the query exists
         if (!$query || empty(trim($query)))
