@@ -13,4 +13,3 @@
 
 # Search
 $router->get('/search-results/', '\kanso\cms\application\Application::applyRoute', 'search');
-$router->get('/opensearch.xml', '\kanso\Kanso::loadOpenSearch');

@@ -89,7 +89,7 @@ trait Properties
      *
      * @var string    
      */
-    private $searchQuery;
+    public $searchQuery;
 
     /**
      * Array of previously called methods and results

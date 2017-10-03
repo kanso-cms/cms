@@ -469,7 +469,7 @@ trait Filter
         }
 
         # Filter the posts
-        $this->queryStr    = "post_status = published : post_type = post : orderBy = post_created, DESC : post_title LIKE $query || post_excerpt LIKE $query : limit = $offset, $perPage";
+        $this->queryStr    = "post_status = published : post_type = post : orderBy = post_created, DESC : post_title LIKE $query : limit = $offset, $perPage";
         $this->posts       = $this->queryParser->parseQuery($this->queryStr);
         $this->postCount   = count($this->posts);
         $this->searchQuery = $query;
