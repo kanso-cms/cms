@@ -1,3 +1,4 @@
+<?php use \kanso\Kanso; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -220,7 +221,7 @@
                             <tr>
                                 <td style="text-align: center">
                                     <a href="<?php echo $logo_link;?>">
-                                        <img src="<?php echo $logo_url; ?>" aria-hidden="true" width="60" height="60" alt="" border="0" style="height: auto; background: <?php echo $content_bg;?>; font-family: <?php echo $font_family;?>; font-size: <?php echo $font_size;?>; line-height: <?php echo $line_height;?>; color: <?php echo $body_bg;?>;">
+                                        <img src="<?php echo $logo_url; ?>?v=<?php echo time();?>" title="<?php echo Kanso::instance()->Request->environment()->DOMAIN_NAME;?>" alt="<?php echo Kanso::instance()->Request->environment()->DOMAIN_NAME;?> Logo" aria-hidden="true" width="60" height="60" alt="" border="0" style="height: auto; background: <?php echo $content_bg;?>; font-family: <?php echo $font_family;?>; font-size: <?php echo $font_size;?>; line-height: <?php echo $line_height;?>; color: <?php echo $body_bg;?>;">
                                     </a>
                                 </td>
                             </tr>
