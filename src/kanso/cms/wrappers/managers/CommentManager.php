@@ -321,7 +321,7 @@ class CommentManager extends Manager
 
         foreach($comments as $comment)
         {
-            if ($comment['email_thread'] == true )
+            if ($comment['email_thread'] > 0 )
             {
                 $emails[$comment['email']] = $comment['name'];
             }
@@ -346,7 +346,7 @@ class CommentManager extends Manager
 
         foreach($comments as $comment)
         {
-            if ($comment['email_reply'] == true && $comment['id'] !== $commentId)
+            if ($comment['email_reply'] > 0 && $comment['id'] !== $commentId)
             {
                $emails[$comment['email']] = $comment['name'];
             }
