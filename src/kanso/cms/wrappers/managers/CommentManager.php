@@ -276,7 +276,7 @@ class CommentManager extends Manager
             
             $senderName   = $this->config->get('cms.site_title');
             $senderEmail  = 'no-reply@'.$this->environment->DOMAIN_NAME;
-            $emailSubject = 'Welcome to '.$this->config->get('cms.site_title');
+            $emailSubject = 'New Comment on '.$this->config->get('cms.site_title');
             $emailContent = $this->email->html($emailSubject, $this->email->preset('comment', $emailData));
             $emailTo      = $email;
 
