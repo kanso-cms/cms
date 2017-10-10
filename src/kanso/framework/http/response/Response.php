@@ -257,6 +257,8 @@ class Response
      */
     private function finalize()
     {
+        $this->headers->set('Status', $this->status->get());
+
         $this->headers->set('HTTP', $this->status->get().' '.$this->status->message());
 
         $this->headers->set('Content-length', $this->body->length());

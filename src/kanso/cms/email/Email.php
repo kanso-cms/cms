@@ -99,7 +99,6 @@ class Email
         }
         else
         {
-            $content = wordwrap($content, 70, "\r\n");
             $headers = 'From: '.$senderEmail.' <'.$senderName.'>' . "\r\n";
         }
         

@@ -220,8 +220,8 @@
                         <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                                 <td style="text-align: center">
-                                    <a href="<?php echo $logo_link;?>">
-                                        <img src="<?php echo $logo_url; ?>?v=<?php echo time();?>" title="<?php echo Kanso::instance()->Request->environment()->DOMAIN_NAME;?>" alt="<?php echo Kanso::instance()->Request->environment()->DOMAIN_NAME;?> Logo" aria-hidden="true" width="60" height="60" alt="" border="0" style="height: auto; background: <?php echo $content_bg;?>; font-family: <?php echo $font_family;?>; font-size: <?php echo $font_size;?>; line-height: <?php echo $line_height;?>; color: <?php echo $body_bg;?>;">
+                                    <a href="<?php echo $logo_link;?>" style="display: inline-block;">
+                                        <img src="<?php echo $logo_url; ?>?v=<?php echo time();?>" title="<?php echo Kanso::instance()->Request->environment()->DOMAIN_NAME;?>" alt="<?php echo Kanso::instance()->Request->environment()->DOMAIN_NAME;?> Logo" width="60" height="60" style="display: block; width: 60px; height: 60px;">
                                     </a>
                                 </td>
                             </tr>

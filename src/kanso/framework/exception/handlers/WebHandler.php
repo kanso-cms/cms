@@ -88,11 +88,13 @@ class WebHandler
 	 *
 	 * @access protected
 	 * @param  bool      $returnAsJson Should we return JSON?
+	 * @param  bool      $isBot        Is the user-agent a bot?
 	 * @return string
 	 */
-	protected function getDetailedError(bool $returnAsJson): string
+	protected function getDetailedError(bool $returnAsJson, bool $isBot): string
 	{
-		$vars = [
+		$vars = 
+		[
     		'errcode'      => $this->exception->getCode(),
     		'errName'      => $this->errName(),
     		'errtype'      => $this->errtype(),
@@ -108,7 +110,13 @@ class WebHandler
     		'errFileLines' => $this->errSource(),
     	];
 
-		if($returnAsJson)
+    	# Bots get a plain error message
+    	if ($isBot)
+    	{
+    		return $vars['errmsg'];
+    	}
+
+		if ($returnAsJson)
 		{
 			return json_encode($vars);
 		}
@@ -124,13 +132,33 @@ class WebHandler
 	 *
 	 * @access protected
 	 * @param  bool      $returnAsJson Should we return JSON?
+	 * @param  bool      $isBot        Is the user-agent a bot?
 	 * @return string
 	 */
-	protected function getGenericError(bool $returnAsJson): string
+	protected function getGenericError(bool $returnAsJson, bool $isBot): string
 	{
 		$code = $this->exception->getCode();
 
-		if($returnAsJson)
+		if ($isBot)
+		{
+			switch($code)
+			{
+				case 403:
+					$message = 'You don\'t have permission to access the requested resource.';
+					break;
+				case 404:
+					$message = 'The resource you requested could not be found. It may have been moved or deleted.';
+					break;
+				case 405:
+					$message = 'The request method that was used is not supported by this resource.';
+					break;
+				default:
+					$message = 'An error has occurred while processing your request.';
+			}
+
+			return $message;
+		}
+		else if ($returnAsJson)
 		{
 			switch($code)
 			{
@@ -176,10 +204,8 @@ class WebHandler
 	 */
 	public function handle(bool $showDetails = true): bool
 	{
-
 		# Set appropriate content type header
-
-		if(($returnAsJson = $this->returnAsJson()) === true)
+		if (($returnAsJson = $this->returnAsJson()) === true)
 		{
 			$this->response->format()->set('application/json');
 		}
@@ -189,19 +215,17 @@ class WebHandler
 		}
 
 		# Set the response body
-
-		if($showDetails)
+		if ($showDetails)
 		{
-			$this->response->body()->set($this->getDetailedError($returnAsJson));
+			$this->response->body()->set($this->getDetailedError($returnAsJson, $this->request->isBot()));
 		}
 		else
 		{
-			$this->response->body()->set($this->getGenericError($returnAsJson));
+			$this->response->body()->set($this->getGenericError($returnAsJson, $this->request->isBot()));
 		}
 
 		# Send the response along with appropriate headers
-
-		if($this->exception instanceof RequestException || $this->exceptionParentName() === 'RequestException')
+		if($this->exception instanceof RequestException || $this->exceptionClassName() === 'RequestException' || $this->exceptionParentName() === 'RequestException')
 		{
 			$status = $this->exception->getCode();
 
@@ -214,15 +238,14 @@ class WebHandler
 		{
 			$status = 500;
 		}
-		
+
 		$this->response->status()->set($status);
 
 		$this->response->cache()->disable();
 
 		$this->response->send();
 
-		// Return false to stop further error handling
-
+		# Return false to stop further error handling
 		return false;
 	}
 }

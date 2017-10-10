@@ -48,6 +48,23 @@ class Request
     private $environment;
 
     /**
+     * List of bot user agnets
+     *
+     * @var array
+     */
+    private $bots =
+    [
+        'bot',
+        'slurp',
+        'crawler',
+        'spider',
+        'curl',
+        'facebook',
+        'fetch',
+        'github',
+    ];
+
+    /**
      * Constructor
      *
      * @access public
@@ -369,4 +386,29 @@ class Request
         return false;
     }
 
+    /**
+     * Is the user-agent a bot?
+     *
+     * @access public
+     * @return bool
+     */
+    public function isBot(): bool
+    {
+        $userAgent = $this->headers->HTTP_USER_AGENT;
+
+        if ($userAgent)
+        {
+            $userAgent = strtolower($userAgent);
+
+            foreach ($this->bots as $identifier)
+            {
+                if (Str::contains($userAgent, $identifier))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
