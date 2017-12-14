@@ -61,7 +61,7 @@ define('APP_DIR', dirname(__FILE__));
  * Register Kanso autoloader
  * If you are using composer's autoloader you should remove this.
  */
-require_once KANSO_DIR. '/framework/autoload/AutoLoader.php';
+require_once KANSO_DIR. '/framework/autoload/Autoloader.php';
 
 $autoloader = new Autoloader;
 

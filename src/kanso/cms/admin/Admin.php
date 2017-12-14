@@ -67,11 +67,11 @@ class Admin
         $this->Router->post("/admin/$slug/(:all)", '\kanso\cms\admin\controllers\Dashboard@customPostType', '\kanso\cms\admin\models\Posts');
 
         # Add the front-end routes
+        $this->Router->get('/'.$route.'/feed/rss/',  '\kanso\cms\application\Application::loadRssFeed', 'single-'.$slug);
+        $this->Router->get('/'.$route.'/feed/atom/', '\kanso\cms\application\Application::loadRssFeed', 'single-'.$slug);
+        $this->Router->get('/'.$route.'/feed/rdf/',  '\kanso\cms\application\Application::loadRssFeed', 'single-'.$slug);
+        $this->Router->get('/'.$route.'/feed/',      '\kanso\cms\application\Application::loadRssFeed', 'single-'.$slug);
         $this->Router->get('/'.$route,              '\kanso\cms\application\Application::applyRoute',  'single-'.$slug);
-        $this->Router->get('/'.$route.'feed/',      '\kanso\cms\application\Application::loadRssFeed', 'single-'.$slug);
-        $this->Router->get('/'.$route.'feed/rss/',  '\kanso\cms\application\Application::loadRssFeed', 'single-'.$slug);
-        $this->Router->get('/'.$route.'feed/atom/', '\kanso\cms\application\Application::loadRssFeed', 'single-'.$slug);
-        $this->Router->get('/'.$route.'feed/rdf/',  '\kanso\cms\application\Application::loadRssFeed', 'single-'.$slug);
 
         # Add the custom post type to the config
         # So that when the post is saved, the CMS knows what permalink structure to use

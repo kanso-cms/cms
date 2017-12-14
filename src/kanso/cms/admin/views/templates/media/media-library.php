@@ -25,7 +25,7 @@
 	<!-- DROPZONE -->
 	<div class="hide-overflow collapsed" id="dz-wrap">
 		<div class="card dz js-dz">
-			<div class="pad-40 text-center">
+			<div class="pad-40 text-center dz-message">
 				<div class="prompt">
 					<div class="floor-sm">
 						<span class="glyph-icon glyph-icon-camera-retro color-primary icon-xl"></span>

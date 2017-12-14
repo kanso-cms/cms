@@ -263,6 +263,11 @@ trait Post
             return $this->post->title;
         }
 
+        if (is_category() || is_tag() || is_author())
+        {
+            return the_taxonomy()->name;
+        }
+
         return null;
     }
 

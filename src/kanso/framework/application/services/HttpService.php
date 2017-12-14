@@ -24,7 +24,8 @@ use kanso\framework\http\route\Router;
 use kanso\framework\http\cookie\Cookie;
 use kanso\framework\http\cookie\storage\NativeCookieStorage;
 use kanso\framework\http\session\Session;
-use kanso\framework\http\session\Store as SessionStore;
+use kanso\framework\http\session\storage\NativeSessionStorage;
+use kanso\framework\http\session\storage\FileSessionStorage;
 use kanso\framework\http\session\Flash;
 use kanso\framework\http\session\Token;
 
@@ -122,8 +123,57 @@ class HttpService extends Service
 		{
 			$sessionConfiguration = $this->container->Config->get('session.configurations.'.$this->container->Config->get('session.default'));
 
-			return new Session(new SessionStore, New Token, new Flash, $sessionConfiguration);
+			$store = $this->loadSessionStore($sessionConfiguration);
+
+			return new Session(New Token, new Flash, $store, $sessionConfiguration);
 		});
+	}
+
+	/**
+     * Loads the session storage implementation
+     *
+     * @access private
+     * @param  array   $cookieConfiguration Cookie configuration to use
+     * @return mixed
+     */
+	private function loadSessionStore(array $cookieConfiguration)
+	{
+		$storeConfig = $cookieConfiguration['storage'];
+
+		if ($storeConfig['type'] === 'native')
+		{
+			return $this->nativeSessionStore($storeConfig, $cookieConfiguration);
+		}
+		else if ($storeConfig['type'] === 'file')
+		{
+			return $this->fileSessionStore($storeConfig, $cookieConfiguration);
+		}
+	}
+
+	/**
+     * Loads the native session storage implementation
+     *
+     * @access private
+     * @param  array   $storeConfig         Configuration for the storage
+     * @param  array   $cookieConfiguration Configuration for session sending/reading
+     * @return \kanso\framework\http\session\storage\NativeSessionStorage
+     */
+	private function nativeSessionStore(array $storeConfig, array $cookieConfiguration): NativeSessionStorage
+	{
+		return new NativeSessionStorage($this->container->Crypto, $cookieConfiguration);
+	}
+
+	/**
+     * Loads the file session storage implementation
+     *
+     * @access private
+     * @param  array   $storeConfig         Configuration for the storage
+     * @param  array   $cookieConfiguration Configuration for session sending/reading
+     * @return \kanso\framework\http\session\storage\FileSessionStorage
+     */
+	private function fileSessionStore(array $storeConfig, array $cookieConfiguration): FileSessionStorage
+	{
+		return new FileSessionStorage($this->container->Crypto, $cookieConfiguration, $cookieConfiguration['storage']['path']);
 	}
 
 	/**

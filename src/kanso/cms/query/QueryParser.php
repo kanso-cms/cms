@@ -5,6 +5,7 @@ namespace kanso\cms\query;
 use InvalidArgumentException;
 use kanso\framework\database\query\Builder;
 use kanso\cms\wrappers\providers\PostProvider;
+use kanso\framework\utility\Str;
 
 /**
  * Query Parser
@@ -249,6 +250,32 @@ class QueryParser
         if ($this->queryVars === $defaults)
         {
             throw new InvalidArgumentException('Invalid query supplied QueryParser. The supplied query "'.$this->queryStr.'" is invalid.');
+        }
+
+        # Child categories
+        foreach ($queries as $query)
+        {
+            if (Str::contains($query[0], 'category') && $query[1] === '=')
+            {
+                $key      = explode('_', $query[0]);
+                $key      = array_pop($key);
+                $value    = array_pop($query);
+                $category = $this->SQL->SELECT('*')->FROM('categories')->WHERE($key, '=', $value)->ROW();
+                $children = [];
+                if ($category)
+                {
+                    $children = $this->recursiveCategoryChildren($category['id']);
+                    foreach ($children as $child)
+                    {
+                        $this->queryVars['OR_WHERE'][] = 
+                        [
+                            'field' => 'categories.slug',
+                            'op'    => '=',
+                            'val'   => $child['slug']
+                        ];
+                    }
+                }
+            }
         }
 
         return true;
@@ -535,5 +562,29 @@ class QueryParser
 
         # Be sure that Group funcs are not empty
         return !empty($groupFuncs);
+    }
+
+    /**
+     * Recursively get category children
+     *
+     * @access private
+     * @param  int     $parent_id  Category parent id
+     * @param  array   $categories Recursevily stored results array (optional) (default [])
+     * @return array
+     */
+    private function recursiveCategoryChildren(int $parent_id, array $categories = []): array
+    {
+        $children = $this->SQL->SELECT('*')->FROM('categories')->WHERE('parent_id', '=', $parent_id)->FIND_ALL();
+ 
+        if (count($children) > 0 && is_array($children))
+        {      
+            $categories = array_merge($categories, $children);
+        }
+        foreach ($children as $child)
+        {
+            $categories = array_merge($categories, $this->recursiveCategoryChildren($child['id']));
+        }
+
+        return $categories;
     }
 }

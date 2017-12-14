@@ -78,7 +78,7 @@ class Router
         ':minute'   => '[0-5]?\d',
         ':second'   => '[0-5]?\d',
         ':postname' => '[a-z0-9 -]+',
-        ':category' => '[a-z0-9 -]+',
+        ':category' => '.*',
         ':author'   => '[a-z0-9 -]+',
     ];
 

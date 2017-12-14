@@ -14,29 +14,13 @@
 # Category
 if ($config->get('cms.route_categories') === true)
 {
-	# Base category
-	$router->get("$blogPrefix/category/(:any)/", '\kanso\cms\application\Application::applyRoute', 'category1');
-	$router->get("$blogPrefix/category/(:any)/page/(:num)/", '\kanso\cms\application\Application::applyRoute', 'category1');
-	$router->get("$blogPrefix/category/(:any)/feed/", '\kanso\cms\application\Application::loadRssFeed', 'category1');
-	$router->get("$blogPrefix/category/(:any)/feed/rss/", '\kanso\cms\application\Application::loadRssFeed', 'category1');
-	$router->get("$blogPrefix/category/(:any)/feed/atom/", '\kanso\cms\application\Application::loadRssFeed', 'category1');
-	$router->get("$blogPrefix/category/(:any)/feed/rdf/", '\kanso\cms\application\Application::loadRssFeed', 'category1');
-
-	# Parent/Child category
-	$router->get("$blogPrefix/category/(:any)/(:any)/", '\kanso\cms\application\Application::applyRoute', 'category2');
-	$router->get("$blogPrefix/category/(:any)/(:any)/page/(:num)/", '\kanso\cms\application\Application::applyRoute', 'category2');
-	$router->get("$blogPrefix/category/(:any)/(:any)/feed/", '\kanso\cms\application\Application::loadRssFeed', 'category2');
-	$router->get("$blogPrefix/category/(:any)/(:any)/feed/rss/", '\kanso\cms\application\Application::loadRssFeed', 'category2');
-	$router->get("$blogPrefix/category/(:any)/(:any)/feed/atom/", '\kanso\cms\application\Application::loadRssFeed', 'category2');
-	$router->get("$blogPrefix/category/(:any)/(:any)/feed/rdf/", '\kanso\cms\application\Application::loadRssFeed', 'category2');
-
-	# Parent/Child category
-	$router->get("$blogPrefix/category/(:any)/(:any)/(:any)/", '\kanso\cms\application\Application::applyRoute', 'category3');
-	$router->get("$blogPrefix/category/(:any)/(:any)/(:any)/page/(:num)/", '\kanso\cms\application\Application::applyRoute', 'category3');
-	$router->get("$blogPrefix/category/(:any)/(:any)/(:any)/feed/", '\kanso\cms\application\Application::loadRssFeed', 'category3');
-	$router->get("$blogPrefix/category/(:any)/(:any)/(:any)/feed/rss/", '\kanso\cms\application\Application::loadRssFeed', 'category3');
-	$router->get("$blogPrefix/category/(:any)/(:any)/(:any)/feed/atom/", '\kanso\cms\application\Application::loadRssFeed', 'category3');
-	$router->get("$blogPrefix/category/(:any)/(:any)/(:any)/feed/rdf/", '\kanso\cms\application\Application::loadRssFeed', 'category3');
+	
+	$router->get("$blogPrefix/category/(:all)/feed/rss/", '\kanso\cms\application\Application::loadRssFeed', 'category');
+	$router->get("$blogPrefix/category/(:all)/feed/atom/", '\kanso\cms\application\Application::loadRssFeed', 'category');
+	$router->get("$blogPrefix/category/(:all)/feed/rdf/", '\kanso\cms\application\Application::loadRssFeed', 'category');
+	$router->get("$blogPrefix/category/(:all)/page/(:num)/", '\kanso\cms\application\Application::applyRoute', 'category');
+	$router->get("$blogPrefix/category/(:all)/feed/", '\kanso\cms\application\Application::loadRssFeed', 'category');
+	$router->get("$blogPrefix/category/(:all)/", '\kanso\cms\application\Application::applyRoute', 'category');
 }
 
 # Tag

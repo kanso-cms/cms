@@ -56,7 +56,7 @@ trait Meta
      * @return string
      */
     public function the_meta_description(): string
-    {
+    {        
         if ($this->is_not_found())
         {
             return 'The page you are looking for could not be found.';
@@ -68,9 +68,18 @@ trait Meta
         {
             $description = $this->post->excerpt;
         }
+        else if ($this->is_tag() || $this->is_category() || $this->is_author())
+        {
+            $description = $this->the_taxonomy()->description;
+        }
         else if ($this->is_search())
         {
             $description = 'Search Results for: '.$this->search_query().' - '.$this->website_title();
+        }
+
+        if (!$description)
+        {
+            $description = '';
         }
 
         return Str::reduce($description, 180);
@@ -102,7 +111,7 @@ trait Meta
             }
         }
         else if ($this->is_tag() || $this->is_category() || $this->is_author())
-        {
+        {            
             $titleTitle = $this->the_taxonomy()->name.' | ';
         }
         else if ($this->is_search())
@@ -121,52 +130,27 @@ trait Meta
      */
     public function the_canonical_url(): string
     {
-        $page = $this->pageIndex;
-        $env  = $this->Request->environment()->asArray();
-        $base = $env['HTTP_HOST'];
-        $uri  = explode("/", trim($env['REQUEST_URI'], '/'));
-        $slug = '';
+        $env      = $this->Request->environment()->asArray();
+        $urlParts = array_filter(explode('/', trim($env['REQUEST_URI'], '/')));
+        $last     = isset($urlParts[0]) ? array_values(array_slice($urlParts, -1))[0] : false;
 
-        if (!$this->have_posts() || $this->is_not_found())
+        if (!$last || is_home())
         {
-            return $env['HTTP_HOST'].$env['REQUEST_URI'];
+            return $this->home_url();
         }
 
-        if ($this->is_home() || $this->is_single() || $this->is_tag() || $this->is_category() || $this->is_author() || $this->is_blog_location() )
+        if ($last === 'rss' || $last === 'rdf' || $last == 'atom')
         {
-            $prefix = !empty($this->blog_location()) ? '/'.$this->blog_location() : '';
-            $base   .= $prefix;
+            array_pop($urlParts);
+            array_pop($urlParts);
+        }
+        else if ($last === 'feed')
+        {
+            array_pop($urlParts);
         }
 
-        if ($this->is_single() || $this->is_page() || $this->is_custom_post())
-        {
-            $slug = $this->post->slug;
-        }
-        if ($this->is_home() )
-        {
-            $slug = $page > 1 ? 'page/'.$page.'/' : '';
-        }
-        else if ($this->is_blog_location())
-        {
-            $slug = $page > 1 ? $base.'page/'.$page.'/' : '';
-        }
-        else if ($this->is_tag() || $this->is_category() || $this->is_author() )
-        {
-            $taxonomy   = $this->is_tag() ? 'tag' : 'author';
-            $taxonomy   = $this->is_category() ? 'category' : $taxonomy;
-            $titleTitle = $this->the_taxonomy()->name.' | ';
-            $slug       = $page > 1 ? $base.$taxonomy.'/'.$this->taxonomySlug.'/page/'.$page.'/' : $base.$taxonomy.'/'.$this->taxonomySlug.'/';
-        }
-        else if ($this->is_search())
-        {
-            $slug = $page > 1 ? $uri[0].'/'.$uri[1].'/page/'.$page.'/' : $uri[0].'/'.$uri[1].'/';
-        }
-        else
-        {
-            return $env['HTTP_HOST'].$env['REQUEST_URI'];
-        }
 
-        return "$base/$slug";
+        return $env['HTTP_HOST'].'/'.implode('/', $urlParts).'/';
     }
 
     /**

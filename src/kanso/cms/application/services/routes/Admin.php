@@ -28,8 +28,8 @@ $router->get('/admin/forgot-username/',  '\kanso\cms\admin\controllers\Accounts@
 $router->post('/admin/forgot-username/', '\kanso\cms\admin\controllers\Accounts@forgotUsername', '\kanso\cms\admin\models\Accounts');
 
 # Admin reset password
-$router->get('/admin/reset-password/(:all)',  '\kanso\cms\admin\controllers\Accounts@resetPassword', '\kanso\cms\admin\models\Accounts');
-$router->post('/admin/reset-password/(:all)', '\kanso\cms\admin\controllers\Accounts@resetPassword', '\kanso\cms\admin\models\Accounts');
+$router->get('/admin/reset-password/',  '\kanso\cms\admin\controllers\Accounts@resetPassword', '\kanso\cms\admin\models\Accounts');
+$router->post('/admin/reset-password/', '\kanso\cms\admin\controllers\Accounts@resetPassword', '\kanso\cms\admin\models\Accounts');
 
 # Admin posts
 $router->get('/admin/posts/',  	  '\kanso\cms\admin\controllers\Dashboard@posts', '\kanso\cms\admin\models\Posts');

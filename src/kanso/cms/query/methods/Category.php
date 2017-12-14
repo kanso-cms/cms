@@ -177,25 +177,25 @@ trait Category
 
         if ($category)
         {
-            $parent1 = $category->parent();
+            $slugs  = [];
+            $parent = $category->parent();
 
-            $parent2 = '';
-
-            $path = '';
-
-            if ($parent1)
+            if ($parent)
             {
-                $path = $parent1->slug.'/';
+                $slugs[] = $category->slug;
 
-                $parent2 = $parent1->parent();
-
-                if ($parent2)
+                while ($parent)
                 {
-                    $path = $parent2->slug.'/'.$parent1->slug.'/';
+                    $slugs[] = $parent->slug;
+                    $parent  = $parent->parent();
                 }
-            }
 
-            return $path.$category->slug;
+                $slugs = array_reverse($slugs);
+                
+                return trim(implode('/', $slugs), '/');
+            }
+            
+            return $category->slug;
         }
 
         return null;
@@ -310,7 +310,7 @@ trait Category
 
         if ($this->category_exists($category_id))
         {
-            return $this->cache->set($key,  $this->PostManager->provider()->byKey('categories.id', $category_id, false, $published));
+            return $this->cache->set($key, $this->create('post_status = published : category_id = '.$category_id)->the_posts());
         }
 
         return $this->cache->set($key, []);

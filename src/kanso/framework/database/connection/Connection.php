@@ -11,6 +11,8 @@ use PDO;
 use PDOException;
 use PDOStatement;
 use RuntimeException;
+use Exception;
+use kanso\framework\database\connection\Cache;
 use kanso\framework\database\query\Builder;
 
 /**
@@ -138,6 +140,8 @@ class Connection
 		$this->options = $config['options'] ?? null;
 
 		$this->tablePrefix = $config['table_prefix'] ?? '';
+
+		$this->cache = new cache;
 		
 		$this->pdo = $this->connect();
 	}
@@ -261,13 +265,13 @@ class Connection
 	private function parseQuery(string $query, array $_params = [])
 	{
 		# Start time
-		$start = microtime(true);
+		$start = microtime(true);	
 
 		# If not connected, connect to the database.
 		if (!$this->isConnected())
 		{
 			$this->reconnect();
-		} 
+		}
 
 		# Prepare query
 		$this->pdoStatement = $this->pdo->prepare($query);
@@ -341,16 +345,42 @@ class Connection
 	 */			
 	public function query(string $query, $params = [], int $fetchmode = PDO::FETCH_ASSOC)
 	{
-		# Get the statement type
-		$queryType = strtolower(explode(" ", trim($query))[0]);
+		# Initiate the cache
+		$this->cache->setQuery($query, array_merge($this->parameters, $params));
 
-		# Run the query
-		$this->parseQuery($query, $params);	
+		# Get the statement type
+		$queryType = $this->getQueryType($query);
+
+		# If this is a SELECT we can test the cache
+		if ($queryType === 'select')
+		{
+			if (!$this->cache->has())
+			{
+				$this->parseQuery($query, $params);
+			}			
+		}
+		# Otherwise we can PDO
+		else
+		{
+			$this->parseQuery($query, $params);
+		}
+
+		# Reset the parameters incase we didn't parse the query
+		$this->parameters = [];
 
 		# Return appropriate
 		if ($queryType === 'select' || $queryType === 'show')
 		{
-			return $this->pdoStatement->fetchAll($fetchmode);
+			if ($this->cache->has())
+			{				
+				return $this->cache->get();
+			}
+
+			$result = $this->pdoStatement->fetchAll($fetchmode);
+
+			$this->cache->put($result);
+
+			return $result;
 		}
 		elseif ( $queryType === 'insert' ||  $queryType === 'update' || $queryType === 'delete' )
 		{
@@ -372,7 +402,7 @@ class Connection
 	 */	
 	public function column(string $query, array $params = [])
 	{
-		$this->Init($query,$params);
+		$this->parseQuery($query, $params);
 		
 		$cols = $this->pdoStatement->fetchAll(PDO::FETCH_NUM);		
 		
@@ -397,7 +427,7 @@ class Connection
 	 */	
 	public function row(string $query, array $params = [], $fetchmode = PDO::FETCH_ASSOC)
 	{				
-		$this->Init($query,$params);
+		$this->parseQuery($query,$params);
 		
 		return $this->pdoStatement->fetch($fetchmode);			
 	}
@@ -412,7 +442,7 @@ class Connection
 	 */	
 	public function single(string $query, array $params = [])
 	{
-		$this->Init($query,$params);
+		$this->parseQuery($query,$params);
 		
 		return $this->pdoStatement->fetchColumn();
 	}
@@ -480,5 +510,17 @@ class Connection
 		$query = $this->prepareQueryForLog($query, $params);
 
 		$this->log[] = ['query' => $query, 'time' => $time];
+	}
+
+	/**
+	 * Gets the query type from the query string
+	 *
+	 * @access protected
+	 * @param  string    $query SQL query
+	 * @return string
+	 */
+	protected function getQueryType(string $query): string
+	{
+		return strtolower(explode(" ", trim($query))[0]);
 	}
 }

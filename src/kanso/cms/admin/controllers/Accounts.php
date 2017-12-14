@@ -70,7 +70,7 @@ class Accounts extends BaseController
 	 * @access public
 	 */
 	public function resetPassword()
-	{
+	{		
 		$this->init('resetpassword');
 
 		$this->dispatch();

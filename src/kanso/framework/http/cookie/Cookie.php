@@ -93,13 +93,7 @@ class Cookie
 
         if ($login)
         {
-            $this->login = $login;
             $this->login = $login === 'yes' ? 'yes' : 'no';
-        }
-
-        if (!$this->get('last_active'))
-        {
-            $this->set('last_active', time());
         }
     }
 
@@ -113,6 +107,10 @@ class Cookie
         if ((($this->cookieExpires - time()) + $this->get('last_active')) < time())
         {
             $this->destroy();
+        }
+        else
+        {
+            $this->set('last_active', time());
         }
     }
 

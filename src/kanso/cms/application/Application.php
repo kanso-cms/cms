@@ -187,6 +187,12 @@ class Application
 
 		$template = $_this->getTemplate($pageType);
 
+		# Disable cache for non page/single/custom post types
+		if ($pageType !== 'page' && $pageType !== 'single' && Str::getBeforeFirstChar($pageType, '-') !== 'single')
+		{
+			$_this->container->Response->cache()->disable();
+		}
+		
 		if ($response->status()->get() !== 404 && $template)
 		{
 			$response->body()->set($response->view()->display($template));
@@ -312,27 +318,16 @@ class Application
 			$waterfall[] = 'tag';
 			$waterfall[] = 'taxonomy';
 		}
-		else if ($pageType === 'category1' || $pageType === 'category2' || $pageType === 'category3')
+		else if ($pageType === 'category')
 		{
 			if ($this->container->Query->blog_location())
 			{
 				array_shift($urlParts);
 			}
+
 			array_shift($urlParts);
-
-			if ($pageType === 'category1')
-			{
-				$waterfall[] = 'category-'.$urlParts[0];
-			}
-			else if ($pageType === 'category2')
-			{
-				$waterfall[] = 'category-'.$urlParts[1];
-			}
-			else if ($pageType === 'category3')
-			{
-				$waterfall[] = 'category-'.$urlParts[2];
-			}
-
+			
+			$waterfall[] = 'category-'.$this->container->Query->the_taxonomy()->slug;
 			$waterfall[] = 'taxonomy-category';
 			$waterfall[] = 'category';
 			$waterfall[] = 'taxonomy';
@@ -354,7 +349,7 @@ class Application
 			$waterfall[] = 'attachment-'.array_pop($urlParts);
 			$waterfall[] = 'attachment';
 		}
-		
+
 		foreach ($waterfall as $name)
 		{
 			$template = "$templateBase/$name.php";

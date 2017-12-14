@@ -10,7 +10,6 @@ namespace kanso\framework\http\session;
 use kanso\framework\common\ArrayAccessTrait;
 use kanso\framework\http\session\Flash;
 use kanso\framework\http\session\Token;
-use kanso\framework\http\session\Store;
 
 /**
  * Session Manager
@@ -36,13 +35,6 @@ class Session
     private $token;
 
     /**
-     * The key that is used to save data to $_SESSION
-     *
-     * @var string
-     */
-    private $sessionKey;
-
-    /**
      * The key that is used to store flash data inside $_SESSION[$sessionKey]
      *
      * @var string
@@ -61,14 +53,7 @@ class Session
      *
      * @var string
      */
-    private $dataKey = 'kano_data';
-
-    /**
-     * Time when the cookie expires
-     *
-     * @var int
-     */
-    private $cookieExpires;
+    private $dataKey = 'kanso_data';
 
     /**
      * Constructor
@@ -76,13 +61,13 @@ class Session
      * @access public
      * @param  $configuration array Array of configuration options
      */
-    public function __construct(Store $store, Token $token, Flash $flash, array $configuration)
+    public function __construct(Token $token, Flash $flash, $store, array $configuration)
     {
         $this->token = $token;
 
-        $this->store = $store;
-
         $this->flash = $flash;
+
+        $this->store = $store;
 
         $this->configure($configuration);
 
@@ -97,19 +82,9 @@ class Session
      */
     public function configure(array $configuration)
     {
-        session_name($configuration['cookie_name']);
+        $this->store->session_name($configuration['cookie_name']);
 
-        session_set_cookie_params(
-            $configuration['expire'],
-            $configuration['path'],
-            $configuration['domain'],
-            $configuration['secure'],
-            $configuration['httponly']
-        );
-
-        $this->sessionKey = $configuration['session_key'];
-
-        $this->cookieExpires = $configuration['expire'];
+        $this->store->session_set_cookie_params($configuration);
     }
 
     /**
@@ -128,7 +103,9 @@ class Session
             $this->tokenKey => $this->token->get(),
         ];
 
-        $this->store->write($this->sessionKey, $data);
+        $this->store->write($data);
+
+        $this->store->send();
     }
 
     /**
@@ -138,34 +115,15 @@ class Session
      */
     private function initializeSession()
     {
-        $this->start();
+        $this->store->session_start();
 
         $this->loadData();
 
         $this->flash->iterate();
 
-        $this->validateExpiry();
-
         if (empty($this->token->get()))
         {
             $this->token->regenerate();
-        }
-    }
-
-    /**
-     * Start the PHP session
-     *
-     * @access private
-     */
-    private function start()
-    {
-        # Start a PHP session
-        if ( session_id() == '' || !isset($_SESSION))
-        {
-            if (!headers_sent())
-            { 
-                session_start();
-            }
         }
     }
 
@@ -176,7 +134,7 @@ class Session
      */
     private function loadData()
     {
-        $data = $this->store->read($this->sessionKey);
+        $data = $this->store->read();
 
         if ($data && is_array($data))
         {
@@ -197,28 +155,6 @@ class Session
                 $this->token->set($data[$this->tokenKey]);
             }
         }
-
-        if (!$this->get('last_active'))
-        {
-            $this->set('last_active', time());
-        }
-    }
-
-    /**
-     * Iterate and validate the expire time
-     *
-     * @access private
-     */
-    private function validateExpiry()
-    {
-        $lastActive = $this->get('last_active');
-
-        if ((($this->cookieExpires - time()) + $this->get('last_active')) < time())
-        {
-            $this->destroy();
-        }
-
-        $this->set('last_active', time());
     }
 
     /**
@@ -249,6 +185,7 @@ class Session
      */
     public function destroy()
     {
+        # Clear the internal session data
         $this->clear();
 
         # Clear the flash data
@@ -256,8 +193,5 @@ class Session
 
         # Generate a new access token
         $this->token->regenerate();
-
-        # Append Kanso session data
-        $this->set('last_active', time());
     }
 }

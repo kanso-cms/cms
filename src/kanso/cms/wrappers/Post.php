@@ -20,7 +20,6 @@ use kanso\cms\wrappers\providers\MediaProvider;
 use kanso\cms\wrappers\providers\CommentProvider;
 use kanso\cms\wrappers\Category;
 use kanso\cms\wrappers\Tag;
-use kanso\cms\wrappers\PostSaver;
 
 /**
  * Category utility wrapper
@@ -64,16 +63,46 @@ class Post extends Wrapper
 		'meta'        => null,
 	];
 
+	/**
+     * Tag provider
+     * 
+     * @var kanso\cms\wrappers\providers\TagProvider
+     */ 
 	private $tagProvider;
 
+	/**
+     * Category provider
+     * 
+     * @var kanso\cms\wrappers\providers\CategoryProvider
+     */ 
     private $categoryProvider;
 
+    /**
+     * Media provider
+     * 
+     * @var kanso\cms\wrappers\providers\MediaProvider
+     */ 
     private $mediaProvider;
 
+    /**
+     * User provider
+     * 
+     * @var kanso\cms\wrappers\providers\UserProvider
+     */ 
     private $userProvider;
 
+    /**
+     * Comment provider
+     * 
+     * @var kanso\cms\wrappers\providers\CommentProvider
+     */
     private $commentProvider;
 
+    /**
+     * Framework configuration
+     * 
+     * @var kanso\framework\config\Config
+     */
     private $config;
 
 	/**
@@ -478,7 +507,7 @@ class Post extends Wrapper
 		$row['slug'] = isset($row['slug']) ? $row['slug'] : false;
 		
 		# Create a slug based on the category, tags, slug, author
-		$row['slug'] = $this->titleToSlug($row['title'], $row['categories'][0]->slug, $row['author']->slug, $row['created'], $row['type'], $row['slug']);
+		$row['slug'] = trim(preg_replace('/-+/', '-', $this->titleToSlug($row['title'], $row['categories'][0]->slug, $row['author']->slug, $row['created'], $row['type'], $row['slug'])), '-');
 
 		# Sanitize comments_enabled
 		$row['comments_enabled'] = boolval($row['comments_enabled']);
@@ -789,6 +818,21 @@ class Post extends Wrapper
 	  					$slug .= $varMap[$key].'/';
 	  				}
 	  			}
+
+	  			# Nested categories
+	  			else if ($key === 'category')
+	  			{
+	  				$category = $this->categoryProvider->byKey('slug', $varMap['category'], true);
+	  				
+	  				if (!$category->parent())
+	  				{
+	  					$slug .= $varMap[$key].'/';
+	  				}
+	  				else
+	  				{
+	  					$slug .= $this->the_category_slug($category).'/';
+	  				}
+	  			}
 	  			else
 	  			{
 	  				$slug .= $varMap[$key].'/';
@@ -805,4 +849,33 @@ class Post extends Wrapper
 	  	return $slug;
 
 	}
+
+	/**
+     * Returns the category slug with nested
+     *
+     * @access  public
+     * @param   kanso\cms\wrappers\Category $category Category wrapper
+     * @return  string
+     */
+    private function the_category_slug(Category $category = null): string
+    {
+    	$slugs  = [];
+    	$parent = $category->parent();
+
+	    if ($parent)
+	    {
+	    	$slugs[] = $category->slug;
+
+	    	while ($parent)
+	    	{
+	    		$slugs[] = $parent->slug;
+	    		$parent  = $parent->parent();
+	    	}
+
+	    	$slugs = array_reverse($slugs);
+	    	return trim(implode('/', $slugs), '/');
+	    }
+	    
+	    return $category->slug;
+    }
 }

@@ -4415,6 +4415,8 @@ form.success .msg-success {
   list-style: none;
   margin: 0;
   padding: 0;
+  max-height: 300px;
+  overflow: auto;
 }
 .drop ul li {
   padding: 0;

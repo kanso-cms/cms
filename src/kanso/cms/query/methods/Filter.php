@@ -34,19 +34,19 @@ trait Filter
         $this->searchQuery  = NULL;
     }
 
-	/**
+    /**
      * Fetch and set the currently requested page
      *
      * @access private
      */
-	private function fetchPageIndex()
-	{
-		$this->pageIndex = $this->Request->fetch('page');
+    private function fetchPageIndex()
+    {
+        $this->pageIndex = $this->Request->fetch('page');
         
         $this->pageIndex = $this->pageIndex === 1 || $this->pageIndex === 0 ? 0 : $this->pageIndex-1;
-	}
+    }
 
-	/**
+    /**
      * Apply a query for a custom string
      *
      * @access public
@@ -105,7 +105,7 @@ trait Filter
                 return false;
             }
         }
-        else if ($requestType === 'category1' || $requestType === 'category2' || $requestType === 'category3')
+        else if ($requestType === 'category')
         {
             if (!$this->filterCategory($requestType))
             {
@@ -196,11 +196,13 @@ trait Filter
         $postType   = $requestType === 'single' ? 'post' : Str::getAfterFirstChar($requestType, '-'); 
 
         $this->requestType = $requestType;
-        
+
         if ($this->Request->fetch('query') === 'draft' && $this->Gatekeeper->isAdmin())
         {
-            $uri = ltrim(str_replace('?draft', '', $uri), '/');
-            $uri = !empty($blogPrefix) ? str_replace($blogPrefix.'/', '', $uri) : $uri;
+            $uri       = Str::getBeforeLastChar($uri, '?');
+            $uri       = ltrim($uri, '/');
+            $uri       = rtrim($uri, '/');
+            $uri       = !empty($blogPrefix) ? str_replace($blogPrefix.'/', '', $uri) : $uri;
             $this->queryStr  = 'post_status = draft : post_type = '.$postType.' : post_slug = '.$uri.'/';
             $this->posts     = $this->queryParser->parseQuery($this->queryStr);
             $this->postCount = count($this->posts);
@@ -275,6 +277,8 @@ trait Filter
         $perPage      = $this->Config->get('cms.posts_per_page');
         $offset       = $this->pageIndex * $perPage;
         $urlParts     = array_filter(explode('/', trim($this->container->Request->environment()->REQUEST_URI, '/')));
+        $isPage       = in_array('page', $urlParts);
+        $isFeed       = in_array('feed', $urlParts);
 
         if ($blogPrefix)
         {
@@ -283,79 +287,54 @@ trait Filter
 
         array_shift($urlParts);
 
-        $parent1 = null;
-        $parent2 = null;
-
-        if ($requestType === 'category1')
+        # Remove /page/number/
+        if ($isPage)
         {
-            $this->taxonomySlug = $urlParts[0];
-        }
-        else if ($requestType === 'category2')
-        {
-            $parent1 = array_shift($urlParts);
-            $this->taxonomySlug = $urlParts[0];
-        }
-        else if ($requestType === 'category3')
-        {
-            $parent1 = array_shift($urlParts);
-            $parent2 = array_shift($urlParts);
-            $this->taxonomySlug = $urlParts[0];
+            array_pop($urlParts);
+            array_pop($urlParts);
         }
 
-        # Find child categories to include 
-        # posts from all children
-        $category      = $this->SQL->SELECT('id')->FROM('categories')->WHERE('slug', '=', $this->taxonomySlug)->ROW();
-        $categorySlugs = [$this->taxonomySlug];
-        
-        if ($category)
+        # Remove /feed/rss 
+        if ($isFeed)
         {
-            $categorySlugs = $this->childrenCategories($category['id'], $categorySlugs);
-        }
+            $last = array_values(array_slice($urlParts, -1))[0];
 
-        $slugFilter = trim('category_slug = '.implode(' || category_slug = ', $categorySlugs));
-
-        $this->requestType = 'category';
-        $this->queryStr    = 'post_status = published : post_type = post : orderBy = post_created, DESC : '.$slugFilter." : limit = $offset, $perPage";
-        $this->posts       = $this->queryParser->parseQuery($this->queryStr);
-        $this->postCount   = count($this->posts);
-
-        # Double check if the tag exists
-        # and 404 if it does NOT 
-        if ($this->postCount === 0)
-        {
-            if (!$category)
+            if ($last === 'rss' || $last === 'rdf' || $last == 'atom')
             {
-                $this->Response->status()->set(404);
-
-                return false;
+                array_pop($urlParts);
+                array_pop($urlParts);
+            }
+            else
+            {
+                array_pop($urlParts);
             }
         }
 
-        # Validate the parent categories exist
-        # and are parents of each other
-        $category = $this->SQL->SELECT('parent_id')->FROM('categories')->WHERE('slug', '=', $this->taxonomySlug)->ROW();
-        
-        if ($parent2)
+        # Get the last category slug
+        $lastCat = $this->CategoryManager->provider()->byKey('slug', array_values(array_slice($urlParts, -1))[0], true);
+
+        # Make sure the category exists
+        if (!$lastCat)
         {
-            $parent2 = $this->SQL->SELECT('*')->FROM('categories')->WHERE('slug', '=', $parent2)->ROW();
+            $this->Response->status()->set(404);
             
-            if (!$parent2 || ($parent2 && $parent2['id'] !== $category['parent_id']))
-            {
-                $this->Response->status()->set(404);
-
-                return false;
-            }
-
-            $parent1 = $this->SQL->SELECT('id')->FROM('categories')->WHERE('slug', '=', $parent1)->ROW();
-            
-            if (!$parent1 || ($parent1 && $parent1['id'] !== $parent2['parent_id']))
-            {
-                $this->Response->status()->set(404);
-
-                return false;
-            }
+            return false;
         }
 
+        # Make sure the path to a nested category is correct
+        if (!$this->the_category_slug($lastCat->id) === implode('/', $urlParts))
+        {
+            $this->Response->status()->set(404);
+
+            return false;
+        }
+
+        $this->requestType  = 'category';
+        $this->taxonomySlug = array_pop($urlParts);
+        $this->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = '.$this->taxonomySlug." : limit = $offset, $perPage";
+        $this->posts        = $this->queryParser->parseQuery($this->queryStr);
+        $this->postCount    = count($this->posts);
+                
         return true;
     }
 

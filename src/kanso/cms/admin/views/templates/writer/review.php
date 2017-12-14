@@ -60,6 +60,19 @@
 				</select>
 			</div>
 
+			<div class="form-field row floor-xs">
+				<label for="all_the_authors">Author</label>
+				<p class="color-gray">Set the post author.</p>
+				<select name="author" id="author">
+					<?php foreach (all_the_authors() as $i => $author) : ?>
+						<option value="<?php echo $author->id; ?>" <?php echo $i === 0 ? 'selected' : '' ;?>>
+							<?php echo $author->name; ?>	
+						</option>
+					<?php endforeach; ?>
+					
+				</select>
+			</div>
+
 			<div class="form-field row floor-sm">
 	            <span class="checkbox checkbox-primary">
 	                <input type="checkbox" name="comments" id="comments" <?php echo $the_post && $the_post->comments_enabled == true ? 'checked' : '';?> >

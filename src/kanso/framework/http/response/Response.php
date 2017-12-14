@@ -283,7 +283,7 @@ class Response
      * @access private
      */
     private function finalizeBody()
-    {
+    {        
         if ($this->cache->enabled())
         {
             if ($this->cache->has())

@@ -204,6 +204,7 @@ class Categories extends BaseModel
         $category->parent_id = $parent;
         $category->description = $description;
         $category->save();
+        $this->resetPostSlugs();
 
         return true;
     }
@@ -224,6 +225,8 @@ class Categories extends BaseModel
             if ($category)
             {
                 $category->delete();
+
+                $this->resetPostSlugs();
             }
         }
     }
@@ -244,6 +247,8 @@ class Categories extends BaseModel
             if ($category)
             {
                 $category->clear();
+
+                $this->resetPostSlugs();
             }
         }
     }
@@ -308,15 +313,6 @@ class Categories extends BaseModel
 
         # Select the posts
         $this->SQL->SELECT('categories.id')->FROM('categories');
-
-        # Set the limit - Only if we're returning the actual category list
-        # and not sorting by article count
-        if (!$checkMaxPages && $queries['sort'] === 'name')
-        {
-            $this->SQL->LIMIT($offset, $limit);
-            
-            $this->SQL->ORDER_BY($sortKey, $sort);
-        }
         
         # Search the name
         if ($search)
@@ -327,14 +323,9 @@ class Categories extends BaseModel
         # Find the articles
         $rows = $this->SQL->FIND_ALL();
 
-        # Are we checking the pages ?
-        if ($checkMaxPages)
-        {
-            return ceil(count($rows) / $perPage);
-        }
-
         # Add all the article count
         $result = [];
+
         foreach ($rows as $row)
         {
             $this->SQL->SELECT('posts.id')->FROM('posts')
@@ -351,20 +342,95 @@ class Categories extends BaseModel
 
         # If we're sorting by article count, we need to paginate
         # all the results and return the requested page of categories
-        if ($queries['sort'] !== 'name' && !$checkMaxPages)
+        if (!$checkMaxPages)
         {
-            $result = Arr::sortMulti($result, 'article_count');
-            
-            $result = Arr::paginate($result, $page, $perPage);
-
-            if (isset($result[0]))
+            if ($queries['sort'] === 'name')
             {
-                return $result[0];
+                if (!$search)
+                {
+                    foreach ($result as $i => $category)
+                    {
+                        if ($category->parent_id > 0)
+                        {
+                            unset($result[$i]);
+                        }
+                    }
+
+                    $result = Arr::sortMulti($result, 'name');
+                    $withChildren = [];
+
+                    foreach ($result as $i => $category)
+                    {
+                        $withChildren[] = $category;
+                        $children       = $this->recursiveChildren($category);
+
+                        if ($children)
+                        {
+                            $withChildren = array_merge($withChildren, $children); 
+                        }
+                    }
+
+                    $result = $withChildren;
+                }
+            }
+            else
+            {
+                $result = Arr::sortMulti($result, 'article_count');
             }
             
+        }
+
+        # Are we checking the pages ?
+        if ($checkMaxPages)
+        {
+            return ceil(count($result) / $perPage);
+        }
+
+        $result = Arr::paginate($result, $page, $perPage);
+
+        if (!$result)
+        {
             return [];
         }
 
-        return $result;
+        return $result[$page];
+    }
+
+    /**
+     * Recursively get category children
+     * 
+     * @access private
+     * @param  Category $parent Category parent object
+     * @param  array    $parent Category parent children (optional) (default [])
+     * @return array
+     */
+    private function recursiveChildren($parent, $children = []): array
+    {
+        foreach ($parent->children() as $child)
+        {
+            $children[] = $child;
+            $children = array_merge($children, $this->recursiveChildren($child));
+        }
+        
+        return $children;
+    }
+
+    /**
+     * Update and reset post slugs when permalinks have changed
+     * 
+     * @access private
+     * @return 
+     */
+    private function resetPostSlugs()
+    {
+        # Select the posts
+        $posts = $this->SQL->SELECT('posts.id')->FROM('posts')->FIND_ALL();
+
+        foreach ($posts as $row)
+        {
+            $post = $this->PostManager->byId($row['id']);
+
+            $post->save();
+        }
     }
 }

@@ -40,8 +40,15 @@ function admin_the_title()
 	$title = 'Kanso';
 
 	# Dashboard pages
-	if ($requestName === 'writer') {
-		$title = 'Write | New Article';
+	if ($requestName === 'writer')
+	{
+		$title  = 'Write | New Article';
+		$postId = Kanso::instance()->Request->queries('id');
+		
+		if ($postId)
+		{
+			$title = 'Write | '.the_title(intval($postId));
+		}
 	}
 	else if ($requestName === 'posts') {
 		$title = 'Posts | Kanso';
@@ -145,6 +152,7 @@ function admin_header_scripts()
 	{
 		$stylesheets[] = '<link rel="stylesheet" href="'.admin_assets_url().'/css/vendor/codemirror.css?v='.admin_assets_version().'">';
         $stylesheets[] = '<link rel="stylesheet" href="'.admin_assets_url().'/css/vendor/highlight.css?v='.admin_assets_version().'">';
+        $stylesheets[] = '<link rel="stylesheet" href="'.admin_assets_url().'/css/vendor/offline.css?v='.admin_assets_version().'">';
         $stylesheets[] = '<link rel="stylesheet" href="'.admin_assets_url().'/css/markdown.css?v='.admin_assets_version().'">';
         $stylesheets[] = '<link rel="stylesheet" href="'.admin_assets_url().'/css/writer.css?v='.admin_assets_version().'">';
 	}
@@ -189,6 +197,9 @@ function admin_footer_scripts()
 
 	if (admin_page_name() === 'writer')
 	{
+		$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/offline.js?v='.admin_assets_version().'"></script>';
+		$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/JavaScriptSpellCheck/include.js?v='.admin_assets_version().'"></script>';
+		$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/clipboard.js?v='.admin_assets_version().'"></script>';
 		$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/codemirror.js?v='.admin_assets_version().'"></script>';
         $scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/highlight.js?v='.admin_assets_version().'"></script>';
         $scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/markdownIt.js?v='.admin_assets_version().'"></script>';

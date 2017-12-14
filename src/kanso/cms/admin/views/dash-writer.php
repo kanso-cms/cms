@@ -25,3 +25,9 @@
 <div class="writer-media-wrapper js-triggerable-media">
 	<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'media'.DIRECTORY_SEPARATOR.'media-library.php'); ?>
 </div>
+
+<!-- OFFLINE JS -->
+<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'writer'.DIRECTORY_SEPARATOR.'offline.php'); ?>
+
+<!-- CONTEXT MENU -->
+<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'writer'.DIRECTORY_SEPARATOR.'context-menu.php'); ?>

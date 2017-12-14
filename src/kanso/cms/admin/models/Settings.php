@@ -343,7 +343,6 @@ class Settings extends BaseModel
             if ($validated_data['enable_cache'] && !$this->validateCacheLife($validated_data['cache_life']))
             {
                 return $this->postMessage('warning', 'The cache life value you entered is invalid. Please ensure you enter a cache lifetime - e.g. "1 month" or "3 days".');
-
             }
 
             # Validate thumbnail quality

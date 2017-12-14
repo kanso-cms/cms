@@ -68,7 +68,7 @@ trait Properties
      *
      * @var string    
      */
-    private $taxonomySlug;
+    public $taxonomySlug;
 
     /**
      * Current attachment URL: if applicable (e.g foo.com/app/public/uploads/my-image_large.png)

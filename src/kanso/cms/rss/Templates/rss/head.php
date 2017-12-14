@@ -9,7 +9,7 @@
 >
 <channel>
 	<title><?php echo website_title();?></title>
-	<atom:link href="<?php echo the_canonical_url();?>feed/" rel="self" type="application/rss+xml" />
+	<atom:link href="<?php echo rtrim(the_canonical_url(), '/');?>/feed/" rel="self" type="application/rss+xml" />
 	<link><?php echo the_canonical_url();?></link>
 	<description><?php echo website_description();?></description>
 	<lastBuildDate><?php echo the_modified_time('D, d M Y H:i:s');?></lastBuildDate>

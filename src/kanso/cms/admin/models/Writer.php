@@ -10,6 +10,7 @@ namespace kanso\cms\admin\models;
 use Exception;
 use kanso\cms\admin\models\BaseModel;
 use kanso\framework\utility\Str;
+use kanso\framework\utility\Markdown;
 
 /**
  * Comments model
@@ -133,6 +134,7 @@ class Writer extends BaseModel
             'status'       => 'trim|sanitize_string',
             'id'           => 'trim|sanitize_numbers',
             'thumbnail_id' => 'trim|sanitize_numbers',
+            'author'       => 'trim|sanitize_numbers',
         ]);
 
         $validated_data = $this->validation->run($post);
@@ -143,6 +145,7 @@ class Writer extends BaseModel
         }
 
         $validated_data['id'] = intval($validated_data['id']);
+        $validated_data['author'] = intval($validated_data['author']);
         
         $article = $this->PostManager->byId($validated_data['id']);
 
@@ -158,7 +161,7 @@ class Writer extends BaseModel
         $article->tags             = $validated_data['tags'];
         $article->excerpt          = $validated_data['excerpt'];
         $article->type             = $validated_data['type'];
-        $article->author_id        = $this->Gatekeeper->getUser()->id;
+        $article->author_id        = $validated_data['author'];
         $article->comments_enabled = Str::bool($validated_data['comments']);
         $article->meta             = !empty($postMeta) ? $postMeta : null;
 
@@ -174,7 +177,19 @@ class Writer extends BaseModel
 
         if (empty($validated_data['excerpt']))
         {
-            $article->excerpt = Str::reduce($validated_data['content'], 255);
+
+            $article->excerpt = trim(Str::reduce(strip_tags(Markdown::convert(trim(preg_replace('/[\r\n]+/', ' ', $validated_data['content'])))), 255));
+        }
+        else
+        {
+            if (empty($article->excerpt))
+            {
+                $article->excerpt = trim(Str::reduce(strip_tags(Markdown::convert(trim(preg_replace('/[\r\n]+/', ' ', $validated_data['excerpt'])))), 255));
+            }
+            else
+            {
+                $article->excerpt = $article->excerpt;
+            }
         }
 
         if (!empty($validated_data['thumbnail_id']))
@@ -188,7 +203,25 @@ class Writer extends BaseModel
 
         if ($article->save())
         {
-            return ['id' => $article->id, 'slug' => $article->slug];
+            # Clear from cache
+            if ($this->Config->get('cache.http_cache_enabled') === true)
+            {
+                $key = $this->Config->get('cms.blog_location').'/'.$this->Query->the_slug($article->id);
+                $key = Str::alphaDash($key);
+                $this->Cache->delete($key);
+            }
+
+            # Return slug/id
+            $suffix = $article->status === 'published' ? '' : '?draft';
+
+            if ($validated_data['type'] === 'post')
+            {
+                $blogPrefix = $this->Config->get('cms.blog_location');
+
+                return ['id' => $article->id, 'slug' => !$blogPrefix ? $article->slug.$suffix : $blogPrefix.'/'.$article->slug.$suffix];
+            }
+
+            return ['id' => $article->id, 'slug' => $article->slug.$suffix];
         }
 
         return false;
@@ -217,6 +250,7 @@ class Writer extends BaseModel
             'excerpt'      => 'trim|sanitize_string',
             'status'       => 'trim|sanitize_string',
             'thumbnail_id' => 'trim|sanitize_numbers',
+            'author'       => 'trim|sanitize_numbers',
         ]);
 
         $validated_data = $this->validation->run($post);
@@ -239,17 +273,30 @@ class Writer extends BaseModel
             $validated_data['status'] = 'draft';
         }
 
+        $validated_data['author'] = intval($validated_data['author']);
+
         $postMeta = $this->getPostMeta();
+
+        $excerpt = '';
+
+        if (empty($validated_data['excerpt']))
+        {
+            $excerpt = trim(Str::reduce(strip_tags(Markdown::convert(trim(preg_replace('/[\r\n]+/', ' ', $validated_data['content'])))), 255));
+        }
+        else
+        {
+            $excerpt = trim(Str::reduce(strip_tags(Markdown::convert(trim(preg_replace('/[\r\n]+/', ' ', $validated_data['excerpt'])))), 255));
+        }
 
         $post = $this->PostManager->create([
             'title'        => $validated_data['title'],
             'categories'   => $validated_data['category'],
             'tags'         => $validated_data['tags'],
-            'excerpt'      => empty($validated_data['excerpt']) ? Str::reduce($validated_data['content'], 255) : Str::reduce($validated_data['excerpt'], 255),
+            'excerpt'      => $excerpt,
             'thumbnail_id' => $validated_data['thumbnail_id'],
             'status'       => $validated_data['status'],
             'type'         => $validated_data['type'],
-            'author_id'    => $this->Gatekeeper->getUser()->id,
+            'author_id'    => $validated_data['author'],
             'content'      => !empty($_POST['content']) ? $_POST['content'] : null,
             'comments_enabled' => Str::bool($validated_data['comments']),
             'meta'         => !empty($postMeta) ? serialize($postMeta) : null,
@@ -257,7 +304,16 @@ class Writer extends BaseModel
 
         if ($post)
         {
-            return ['id' => $post->id, 'slug' => $post->slug];
+            $suffix = $validated_data['status'] === 'published' ? '' : '?draft';
+
+            if ($post->type === 'post')
+            {
+                $blogPrefix = $this->Config->get('cms.blog_location');
+
+                return ['id' => $post->id, 'slug' => !$blogPrefix ? $post->slug.$suffix : $blogPrefix.'/'.$post->slug.$suffix];
+            }
+
+            return ['id' => $post->id, 'slug' => $post->slug.$suffix];
         }
 
         return false;

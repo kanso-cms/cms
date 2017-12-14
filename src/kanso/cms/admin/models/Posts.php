@@ -226,6 +226,7 @@ class Posts extends BaseModel
         $post->slug    = $slug;
         $post->excerpt = $excerpt;
         $post->save();
+        $this->clearPostFromCache($post->id);
 
         return true;
     }
@@ -244,6 +245,7 @@ class Posts extends BaseModel
 
             if ($post)
             {
+                $this->clearPostFromCache($post->id);
                 $post->delete();
             }
         }
@@ -267,6 +269,8 @@ class Posts extends BaseModel
                 $post->status = $status;
 
                 $post->save();
+
+                $this->clearPostFromCache($post->id);
             }
         }
     }
@@ -424,5 +428,19 @@ class Posts extends BaseModel
         }
 
         return $articles;
+    }
+
+    /**
+     * Clears a post from the cache
+     *
+     * @access private
+     * @param  int $postId Post id to clear
+     */
+    private function clearPostFromCache(int $postId)
+    {
+        if ($this->Config->get('cache.http_cache_enabled') === true)
+        {
+            $this->Cache->delete(Str::alphaDash($this->Config->get('cms.blog_location').'/'.$this->Query->the_slug($postId)));
+        }
     }
 }

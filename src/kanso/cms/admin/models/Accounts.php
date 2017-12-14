@@ -130,7 +130,7 @@ class Accounts extends BaseModel
         {
             $user  = $this->UserManager->byUsername($validated_data['username']);
             
-            if (!$user || $user->role !== 'administrator')
+            if (!$user || ($user->role !== 'administrator' && $user->role !== 'writer'))
             {
                 return $this->postMessage('danger', 'Either the username or password you entered was incorrect.');
             }
@@ -182,7 +182,7 @@ class Accounts extends BaseModel
         {
             $user = $this->UserManager->byUsername($validated_data['username']);
             
-            if ($user || $user->role === 'administrator')
+            if ($user || ($user->role !== 'administrator' && $user->role !== 'writer'))
             {
                 $this->Gatekeeper->forgotPassword($validated_data['username']);
             }
@@ -215,7 +215,7 @@ class Accounts extends BaseModel
         {
             $user = $this->UserManager->byUsername($validated_data['username']);
             
-            if ($user || $user->role === 'administrator')
+            if ($user || ($user->role !== 'administrator' && $user->role !== 'writer'))
             {
                 $this->Gatekeeper->forgotPassword($validated_data['username']);
             }
@@ -233,7 +233,7 @@ class Accounts extends BaseModel
     private function validateResetPasswordGET(): bool
     {
         # Get the token in the url
-        $token = $this->Request->queries('token');
+        $token = $this->Request->queries('token');        
 
         # If no token was given 404
         if (!$token || trim($token) === '' || $token === 'null' )
