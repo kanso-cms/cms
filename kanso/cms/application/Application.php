@@ -256,7 +256,7 @@ class Application
 		$_this = static::instance();
 
 		# Current theme dir
-		$template = $this->container->Config->get('cms.themes_path').'/'.$this->container->Config->get('cms.theme_name').'/sitemap.php';
+		$template = $_this->container->Config->get('cms.themes_path').'/'.$_this->container->Config->get('cms.theme_name').'/sitemap.php';
 
 		if (file_exists($template))
 		{
