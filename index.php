@@ -19,7 +19,7 @@ ini_set('display_errors', 0);
  * error_reporting is enabled. It will also only log errors NOT caught by 
  * the Kanso error and exception handlers.
  */
-ini_set('error_log', dirname(__FILE__).'/app/storage/logs/'. date('Y_m_d') . '_php_errors.log');
+ini_set('error_log', dirname(__FILE__).'/app/storage/logs/'. date('d_m_y') . '_php_errors.log');
 
 /**
  * Start using Kanso
