@@ -73,6 +73,12 @@ function the_category($post_id = null)
     return $KANSO_QUERY->the_category($post_id);
 }
 
+function the_categories($post_id = null)
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_categories($post_id);
+}
+
 function the_category_name($post_id = null)
 {
     global $KANSO_QUERY;
@@ -84,7 +90,6 @@ function the_category_url($category_id = null)
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_category_url($category_id);
 }
-
 
 function the_category_slug($category_id = null)
 {

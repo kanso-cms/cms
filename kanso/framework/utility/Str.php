@@ -353,6 +353,30 @@ class Str
 	}
 
 	/**
+	 * Escapes text for entry into mySQL
+	 *
+	 * @access public
+	 * @param  string $str The input string
+	 * @return string
+	 */
+	public static function mysqlEncode(string $str): string
+	{
+		return htmlentities($str, ENT_QUOTES, 'UTF-8', false);
+	}
+
+	/**
+	 * Un-escapes text from entry into mySQL
+	 *
+	 * @access public
+	 * @param  string $str The input string
+	 * @return string
+	 */
+	public static function mysqlDecode(string $str): string
+	{
+		return html_entity_decode($str, ENT_QUOTES, 'UTF-8');
+	}
+
+	/**
 	 * Create a boolean value from a mixed variable
 	 *
 	 * @access public

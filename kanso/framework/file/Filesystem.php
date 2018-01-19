@@ -246,6 +246,19 @@ class Filesystem
 	}
 
 	/**
+	 * Returns an array of pathnames from a directory
+	 *
+	 * @access  public
+	 * @param   string  $dir      Directory to list
+	 * @param   array   $excludes File names to exclude
+	 * @return  array
+	 */
+	public static function list(string $dir, array $excludes = ['..', '.']): array
+	{
+		return array_diff(scandir($dir), $excludes);
+	}
+
+	/**
 	 * Returns the contents of the file.
 	 *
 	 * @access public
@@ -387,6 +400,17 @@ class Filesystem
 	public static function file(string $file, string $openMode = 'r', bool $useIncludePath = false)
 	{
 		return new \SplFileObject($file, $openMode, $useIncludePath);
+	}
+
+	/**
+	 * Creates a temporary file and returns the handle
+	 *
+	 * @access  public
+	 * @return  handle
+	 */
+	public static function tmpfile()
+	{
+		return tmpfile();
 	}
 
 	/**

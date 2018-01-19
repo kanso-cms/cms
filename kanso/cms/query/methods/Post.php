@@ -47,7 +47,7 @@ trait Post
             
             if ($post)
             {
-                return trim(strip_tags(Markdown::convert(trim($post->excerpt))));
+                return $post->excerpt;
             }
 
             return null;
@@ -55,7 +55,7 @@ trait Post
         
         if (!empty($this->post))
         {
-            return trim(strip_tags(Markdown::convert(trim($this->post->excerpt))));
+            return $this->post->excerpt;
         }
 
         return null;
