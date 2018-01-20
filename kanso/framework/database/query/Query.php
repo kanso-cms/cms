@@ -233,16 +233,33 @@ class Query
 			'type'   => $type,
 			'column' => $column,
 			'op'     => $op,
-			'value'  => (string)$value,
 		];
 
-		$key = $this->queryFilter("$query[table]$query[type]$query[column]$query[value]");
+		if (!is_array($value))
+		{	
+			$key = $this->queryFilter("$query[table]$query[type]$query[column]$value");
 
-		$query['value'] = $key;
+			$query['value'] = $key;
 
-		$this->pending['where'][] = $query;
+			$this->pending['where'][] = $query;
 
-		$this->SQL_bindings[$key] = $value;
+			$this->SQL_bindings[$key] = $value;
+		}
+		else
+		{
+			$query['value'] = [];
+
+			foreach ($value as $val)
+			{
+				$key = $this->queryFilter("$query[table]$query[type]$query[column]".$val);
+				
+				$this->SQL_bindings[$key] = $val;
+
+				$query['value'][] = $key;
+			}
+			
+			$this->pending['where'][] = $query;
+		}	
 	}
 
 	/**
@@ -556,6 +573,7 @@ class Query
 		# Build inner join
 		$JOINS = $this->joinsPending();
 
+		# Add weheres
 		$WHERE = $this->wherePending();
 
 		# Build order
@@ -602,12 +620,30 @@ class Query
 		$hasJoin = count($this->pending['column']) > 1;
 
 		$wheres = [];
+
 		if (!empty($this->pending['where']))
 		{
 			$count = 0;
+
 			foreach ($this->pending['where'] as $clause)
 			{
-				$SQL = $hasJoin ? "$clause[table].$clause[column] $clause[op] :$clause[value]" : "$clause[column] $clause[op] :$clause[value]";
+				if (is_array($clause['value']))
+				{
+					$_value = array_shift($clause['value']);
+
+					$SQL = $hasJoin ? "$clause[table].$clause[column] $clause[op] :$_value" : "$clause[column] $clause[op] :$_value";
+
+					foreach ($clause['value'] as $value)
+					{
+						$SQL .= $hasJoin ? " OR $clause[table].$clause[column] $clause[op] :$value" : " OR $clause[column] $clause[op] :$value";
+					}
+
+					$SQL = "($SQL)";
+				}
+				else
+				{
+					$SQL = $hasJoin ? "$clause[table].$clause[column] $clause[op] :$clause[value]" : "$clause[column] $clause[op] :$clause[value]";
+				}
 				
 				if ($count > 0)
 				{

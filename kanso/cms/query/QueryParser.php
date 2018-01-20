@@ -252,32 +252,37 @@ class QueryParser
             throw new InvalidArgumentException('Invalid query supplied QueryParser. The supplied query "'.$this->queryStr.'" is invalid.');
         }
 
-        # Child categories
-        foreach ($queries as $query)
+        # Special case for category children
+        # So we get nested posts from category parents
+        foreach ($this->queryVars['AND_WHERE'] as $i => $query)
         {
-            if (Str::contains($query[0], 'category') && $query[1] === '=')
+            if (Str::contains($query['field'], 'categories') && $query['op'] === '=')
             {
-                $key      = explode('_', $query[0]);
-                $key      = array_pop($key);
-                $value    = array_pop($query);
-                $category = $this->SQL->SELECT('*')->FROM('categories')->WHERE($key, '=', $value)->ROW();
+                $val      = $query['val'];
+                $category = false;
+                $keys     = array_flip(self::$acceptedKeys);
+                $key      = $keys[$query['field']];
+                $key      = Str::getAfterLastChar($key, '_');
+                $category = $this->SQL->SELECT('*')->FROM('categories')->WHERE($key, '=', $query['val'])->ROW();
                 $children = [];
+
                 if ($category)
                 {
+                    if (!is_array($this->queryVars['AND_WHERE'][$i]['val']))
+                    {
+                        $this->queryVars['AND_WHERE'][$i]['val'] = [$val];
+                    }
+
                     $children = $this->recursiveCategoryChildren($category['id']);
+
                     foreach ($children as $child)
                     {
-                        $this->queryVars['OR_WHERE'][] = 
-                        [
-                            'field' => 'categories.slug',
-                            'op'    => '=',
-                            'val'   => $child['slug']
-                        ];
+                        $this->queryVars['AND_WHERE'][$i]['val'][] = $child[$key];
                     }
                 }
             }
         }
-
+        
         return true;
     }
 
