@@ -7,10 +7,11 @@
 
 namespace kanso\cms\admin\models;
 
-use Exception;
 use kanso\cms\admin\models\BaseModel;
 use kanso\framework\utility\Arr;
 use kanso\framework\utility\Str;
+use kanso\framework\http\response\exceptions\InvalidTokenException;
+use kanso\framework\http\response\exceptions\RequestException;
 
 /**
  * Comments model
@@ -121,22 +122,22 @@ class Comments extends BaseModel
         # Validation
         if (!isset($this->post['access_token']) || !$this->Gatekeeper->verifyToken($this->post['access_token']))
         {
-            throw new Exception('Bad Admin Panel POST Request. The CSRF token was either not provided or invalid.');
+            throw new InvalidTokenException('Bad Admin Panel POST Request. The CSRF token was either not provided or was invalid.');
         }
         
         if (!isset($this->post['bulk_action']) || empty($this->post['bulk_action']))
         {
-            return false;
+            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         if (!in_array($this->post['bulk_action'], ['spam', 'delete', 'pending', 'approved']))
         {
-            return false;
+            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         if (!isset($this->post['comments']) || !is_array($this->post['comments']) || empty($this->post['comments']))
         {
-            return false;
+            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         return true;

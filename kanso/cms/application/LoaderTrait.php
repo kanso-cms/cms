@@ -130,6 +130,9 @@ trait LoaderTrait
 	 */
 	protected function notFoundHandling()
 	{
+		# Disable logging 404s
+		$this->container->ErrorHandler->disableLoggingFor('kanso\framework\http\response\exceptions\NotFoundException');
+
 		# 404 get displayed the theme 404 template
 		$this->container->ErrorHandler->handle('\kanso\framework\http\response\exceptions\NotFoundException', function($exception)
 		{
