@@ -7,10 +7,11 @@
 
 namespace kanso\cms\admin\models;
 
-use Exception;
 use kanso\cms\admin\models\BaseModel;
 use kanso\framework\utility\Arr;
 use kanso\framework\utility\Str;
+use kanso\framework\http\response\exceptions\InvalidTokenException;
+use kanso\framework\http\response\exceptions\RequestException;
 
 /**
  * Settings model
@@ -41,13 +42,13 @@ class Settings extends BaseModel
         {
             if (!isset($this->post['access_token']) || !$this->Gatekeeper->verifyToken($this->post['access_token']))
             {
-                throw new Exception('Bad Admin Panel POST Request. The CSRF token was either not provided or invalid.');
+                throw new InvalidTokenException('Bad Admin Panel POST Request. The CSRF token was either not provided or was invalid.');
             }
 
             return $this->parsePost();
         }
 
-        return false;
+        throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
     }
 
     /**

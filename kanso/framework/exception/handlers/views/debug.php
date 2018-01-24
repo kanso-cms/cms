@@ -66,14 +66,12 @@
 
 				<div class="row">
 					<h2>Trace</h2>
-					<ul>
+					<ul class="trace-list">
 						<?php foreach ($errTrace as $file) : ?>
 							<li><code><?php echo $file; ?></code></li>
 						<?php endforeach; ?>
 					</ul>
 				</div>
-
-				
 
 			</div>
 		</div>

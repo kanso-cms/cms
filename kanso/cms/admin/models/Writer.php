@@ -7,10 +7,11 @@
 
 namespace kanso\cms\admin\models;
 
-use Exception;
 use kanso\cms\admin\models\BaseModel;
 use kanso\framework\utility\Str;
 use kanso\framework\utility\Markdown;
+use kanso\framework\http\response\exceptions\InvalidTokenException;
+use kanso\framework\http\response\exceptions\RequestException;
 
 /**
  * Comments model
@@ -47,7 +48,7 @@ class Writer extends BaseModel
     {
         if (!isset($this->post['access_token']) || !$this->Gatekeeper->verifyToken($this->post['access_token']))
         {
-            throw new Exception('Bad Admin Panel POST Request. The CSRF token was either not provided or invalid.');
+            throw new InvalidTokenException('Bad Admin Panel POST Request. The CSRF token was either not provided or was invalid.');
         }
         
         if (isset($this->post['ajax_request']))
@@ -68,7 +69,7 @@ class Writer extends BaseModel
             }
         }
 
-        return false;
+        throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
     }
 
     /**
@@ -81,6 +82,7 @@ class Writer extends BaseModel
     {
         $queries   = $this->Request->queries();
         $post      = false;
+        
         if (isset($queries['id']))
         {
             $post = $this->PostManager->byId(intval($queries['id']));
@@ -178,13 +180,13 @@ class Writer extends BaseModel
         if (empty($validated_data['excerpt']))
         {
 
-            $article->excerpt = trim(Str::reduce(strip_tags(Markdown::convert(trim(preg_replace('/[\r\n]+/', ' ', $validated_data['content'])))), 255));
+            $article->excerpt = $validated_data['content'];
         }
         else
         {
             if (empty($article->excerpt))
             {
-                $article->excerpt = trim(Str::reduce(strip_tags(Markdown::convert(trim(preg_replace('/[\r\n]+/', ' ', $validated_data['excerpt'])))), 255));
+                $article->excerpt = $validated_data['excerpt'];
             }
             else
             {
@@ -281,11 +283,11 @@ class Writer extends BaseModel
 
         if (empty($validated_data['excerpt']))
         {
-            $excerpt = trim(Str::reduce(strip_tags(Markdown::convert(trim(preg_replace('/[\r\n]+/', ' ', $validated_data['content'])))), 255));
+            $excerpt = $validated_data['content'];
         }
         else
         {
-            $excerpt = trim(Str::reduce(strip_tags(Markdown::convert(trim(preg_replace('/[\r\n]+/', ' ', $validated_data['excerpt'])))), 255));
+            $excerpt = $validated_data['excerpt'];
         }
 
         $post = $this->PostManager->create([
@@ -319,6 +321,12 @@ class Writer extends BaseModel
         return false;
     }
 
+    /**
+     * Sorts and organises the post meta
+     *
+     * @access private
+     * @return array|false
+     */
     private function getPostMeta()
     {
         $keys     = [];

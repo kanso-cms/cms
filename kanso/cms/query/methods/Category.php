@@ -85,22 +85,46 @@ trait Category
      */
     public function the_categories(int $post_id = null): array
     {
+        $categories = [];
+
         if ($post_id)
         {
             $post = $this->getPostByID($post_id);
             
             if ($post)
             {
-                return $post->categories;
+                $categories = $post->categories;
             }
         }
 
         else if (!empty($this->post))
         {
-            return $this->post->categories;
+            $categories = $this->post->categories;
         }
 
-        return [];
+        if ($categories && isset($categories[0]))
+        {
+            $flattened = [];
+            $category  = $categories[0];
+            $parent    = $category->parent();
+
+            if ($parent)
+            {
+                $flattened[] = $category;
+
+                while ($parent)
+                {
+                    $flattened[] = $parent;
+                    $parent      = $parent->parent();
+                }
+
+                $flattened = array_reverse($flattened);
+                
+                return $flattened;
+            }
+        }
+
+        return $categories;
     }
 
     /**
@@ -119,12 +143,12 @@ trait Category
             
             if ($post)
             {
-                return $this->listCategories($post->categories, $glue);
+                return $this->listCategories($this->the_categories($post->id), $glue);
             }
         }
         else if (!empty($this->post))
         {
-            return $this->listCategories($this->post->categories, $glue);
+            return $this->listCategories($this->the_categories($this->post->id), $glue);
         }
 
         return '';
@@ -139,7 +163,7 @@ trait Category
      * @return string
      */
     private function listCategories(array $categories, string $glue): string
-    {
+    {        
         $str = '';
         
         foreach ($categories as $category)

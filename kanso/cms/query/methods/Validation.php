@@ -58,6 +58,11 @@ trait Validation
      */
     public function the_page_type(): string
     {
+        if (empty($this->requestType))
+        {
+            return '';
+        }
+
         return $this->requestType;
     }
 

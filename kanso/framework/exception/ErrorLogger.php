@@ -32,21 +32,21 @@ class ErrorLogger
      *
      * @var \kanso\framework\http\request\Environment;
      */
-    private $httpEnv;
+    private $environment;
 
 	/**
 	 * Constructor
 	 *
 	 * @access public
      * @param \Throwable                                $exception Throwable
-     * @param \kanso\framework\http\request\Environment $httpEnv   HttpEnv instance for logging details
+     * @param \kanso\framework\http\request\Environment $environment   HttpEnv instance for logging details
      * @param string                                    $path Directory to store log files in
 	 */
-    public function __construct(Throwable $exception, Environment $httpEnv, string $path) 
+    public function __construct(Throwable $exception, Environment $environment, string $path) 
     {
         $this->path = $path;
 
-        $this->httpEnv = $httpEnv;
+        $this->environment = $environment;
 
         $this->setException($exception);
     }
@@ -86,12 +86,13 @@ class ErrorLogger
         return 
         'DATE    : '.date('l jS \of F Y h:i:s A', time())."\n".
         'TYPE    : '.$this->errType().' ['.$this->exception->getCode()."]\n".
-        'URL     : '.$this->httpEnv->REQUEST_URL."\n".
+        'URL     : '.$this->environment->REQUEST_URL."\n".
         'CLASS   : '.$this->errClass()."\n".
         'FILE    : '.$this->exception->getFile()."\n".
         'LINE    : '.$this->exception->getLine()."\n".
         'MESSAGE : '.$this->exception->getMessage()."\n".
-        'IP      : '.$this->httpEnv->REMOTE_ADDR."\n".
+        'IP      : '.$this->environment->REMOTE_ADDR."\n".
+        'AGENT   : '.$this->environment->HTTP_USER_AGENT."\n".
         'TRACE   : '.ltrim(implode("\n\t\t ", $this->errTrace()))."\n\n\n";
     }
 

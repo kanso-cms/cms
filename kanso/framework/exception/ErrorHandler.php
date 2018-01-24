@@ -31,7 +31,7 @@ class ErrorHandler
 	 *
 	 * @var array
 	 */
-	protected $disableLoggingFor = [];
+	protected $disableLoggingFor = ['kanso\framework\http\response\exceptions\Stop'];
 
 	/**
 	 * Exception handlers.

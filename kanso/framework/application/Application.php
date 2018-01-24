@@ -153,6 +153,8 @@ class Application
         mb_internal_encoding($this->container->Config->get('application.charset'));
 
         date_default_timezone_set($this->container->Config->get('application.timezone'));
+
+        ini_set('date.timezone', $this->container->Config->get('application.timezone'));
     }
 
     /**

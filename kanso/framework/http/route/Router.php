@@ -236,6 +236,8 @@ class Router
 
         $callbacks = [];
 
+        $allowedMethod = '';
+
         # check if route is defined without regex
         if (in_array($requestPath, $this->routes))
         {
@@ -245,6 +247,8 @@ class Router
             {
                 # Found route
                 $matched = true;
+
+                $allowedMethod = $this->methods[$route];
 
                 if ($this->methods[$route] == $requestMethod)
                 {
@@ -269,6 +273,8 @@ class Router
                 {
                     # Found route
                     $matched = true;
+
+                    $allowedMethod = $this->methods[$pos];
                     
                     if ($this->methods[$pos] == $requestMethod)
                     {
@@ -282,9 +288,9 @@ class Router
         }
 
         # We found a matching route but it does not allow the request method so we'll throw a 405 exception
-        if($matched && empty($callbacks))
+        if ($matched && empty($callbacks))
         {
-            throw new MethodNotAllowedException([$requestMethod]);
+            throw new MethodNotAllowedException([$allowedMethod], 'Page requested over "'.$requestMethod.'". Only "'.$allowedMethod.'" is accepted.');
         }
 
         # No routes matched so we'll throw a 404 exception

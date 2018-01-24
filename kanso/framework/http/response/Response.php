@@ -17,9 +17,9 @@ use kanso\framework\http\session\Session;
 use kanso\framework\http\response\Protocol;
 use kanso\framework\mvc\view\View;
 use kanso\framework\http\response\exceptions\NotFoundException;
-use \kanso\framework\http\response\exceptions\ForbiddenException;
-use \kanso\framework\http\response\exceptions\InvalidTokenException;
-use \kanso\framework\http\response\exceptions\MethodNotAllowedException;
+use kanso\framework\http\response\exceptions\ForbiddenException;
+use kanso\framework\http\response\exceptions\InvalidTokenException;
+use kanso\framework\http\response\exceptions\MethodNotAllowedException;
 use kanso\framework\http\response\exceptions\Stop;
 
 /**
@@ -348,7 +348,7 @@ class Response
 
         $this->send();
 
-        throw new Stop();
+        throw new Stop;
     }
 
     /**

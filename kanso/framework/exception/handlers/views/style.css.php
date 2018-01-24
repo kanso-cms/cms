@@ -197,9 +197,22 @@
 	.line.error {
 		background-color: rgb(255,82,82);
 		color: #fff;
+		display: table;
 	}
 	.line.error .lineno {
 		color: #fff;
 		border-right: 1px dotted #e82222;
-	}	
+	}
+	.trace-list
+	{
+		border: 1px solid #e1e0e1;
+		border-radius: 1px;
+		white-space: nowrap;
+    	overflow-x: auto;
+    	padding: 15px 40px;
+	}
+	.trace-list li
+	{
+		margin-bottom: 4px;
+	}
 </style>

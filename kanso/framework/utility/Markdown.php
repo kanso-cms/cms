@@ -9,6 +9,7 @@ namespace kanso\framework\utility;
 
 use kanso\framework\utility\markdown\Parsedown;
 use kanso\framework\utility\markdown\ParsedownExtra;
+use kanso\framework\utility\Str;
 
 /**
  * Convert markdown to HTML
@@ -32,4 +33,16 @@ class Markdown
 
 		return $parser->text($text);
 	}
+
+     /**
+      * Converts markdown to plain text
+      *
+      * @access public
+      * @param  string $str The input string
+      * @return string
+      */
+     public static function plainText(string $str): string
+     {
+          return trim(strip_tags(self::convert(trim(preg_replace('/[\r\n]+/', ' ', $str)))));
+     }
 }

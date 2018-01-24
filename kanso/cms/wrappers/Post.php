@@ -11,6 +11,7 @@ use kanso\framework\database\query\Builder;
 use kanso\framework\config\Config;
 use kanso\framework\utility\Str;
 use kanso\framework\utility\Arr;
+use kanso\framework\utility\Markdown;
 use kanso\cms\wrappers\Wrapper;
 use kanso\cms\wrappers\providers\Provider;
 use kanso\cms\wrappers\providers\TagProvider;
@@ -20,6 +21,7 @@ use kanso\cms\wrappers\providers\MediaProvider;
 use kanso\cms\wrappers\providers\CommentProvider;
 use kanso\cms\wrappers\Category;
 use kanso\cms\wrappers\Tag;
+
 
 /**
  * Category utility wrapper
@@ -172,7 +174,7 @@ class Post extends Wrapper
 		}
 		else if ($key === 'content')
 		{
-			return html_entity_decode($this->getTheContent());
+			return $this->getTheContent();
 		}
 		else if ($key === 'comments')
 		{
@@ -180,7 +182,7 @@ class Post extends Wrapper
 		}
 		else if ($key === 'excerpt')
 		{
-			return html_entity_decode($this->data['excerpt']);
+			return $this->getTheExceprt();
 		}
 		else if ($key === 'meta')
 		{
@@ -223,7 +225,7 @@ class Post extends Wrapper
 		}
 		else if ($key === 'excerpt')
 		{
-			$this->data['excerpt'] = $value;
+			$this->data['excerpt'] = Str::reduce(Markdown::plainText($value), 255);
 		}
 		else if ($key === 'content')
 		{
@@ -338,7 +340,18 @@ class Post extends Wrapper
 			$this->data['content'] = '';
 		}
 
-		return $this->data['content'];
+		return Str::mysqlDecode($this->data['content']);
+	}
+
+	/**
+	 * Get the post excerpt
+	 *
+	 * @access private
+	 * @return string
+	 */
+	private function getTheExceprt(): string
+	{
+		return Str::mysqlDecode($this->data['excerpt']);
 	}
 
 	/**
@@ -474,15 +487,9 @@ class Post extends Wrapper
 		$row['author_id'] = $row['author']->id;
 
 		# Get the content
-		$row['content'] = htmlentities($this->getTheContent());
+		$row['content'] = Str::mysqlEncode($this->getTheContent());
 
-		# excerpt
-		if (!isset($row['excerpt']) || !is_string($row['excerpt']))
-		{
-			$row['excerpt'] = '';
-		}
-		
-		$row['excerpt'] = htmlentities($row['excerpt']);
+		$row['excerpt'] = Str::mysqlEncode($this->getTheExceprt());
 
 		# Validate the title
 		$row['title'] = trim($row['title']);
