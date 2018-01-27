@@ -182,7 +182,7 @@ class Cache
      */
     private function getTableName(string $query): string
     {
-        if (in_array($this->queryType, ['drop', 'create', 'show', 'alter']))
+        if (in_array($this->queryType, ['drop', 'create', 'show', 'alter', 'start', 'stop']))
         {
             return 'NULL';
         }
