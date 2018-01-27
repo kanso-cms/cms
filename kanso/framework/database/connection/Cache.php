@@ -7,6 +7,8 @@
 
 namespace kanso\framework\database\connection;
 
+use Exception;
+
 /**
  * Database Connection Cache
  *
