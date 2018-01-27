@@ -182,11 +182,16 @@ class Cache
      */
     private function getTableName(string $query): string
     {
+        if (in_array($this->queryType, ['drop', 'create', 'show', 'alter']))
+        {
+            return 'NULL';
+        }
+
         preg_match("/(FROM|INTO|UPDATE)(\s+)(\w+)/i", $query, $matches);
 
         if (!$matches || !isset($matches[3]))
         {
-            throw new Exception('Error retriving database query table name. Query: "'.$query.'"');
+            throw new Exception('Error retrieving database query table name. Query: "'.$query.'"');
         }
 
         return trim($matches[3]);

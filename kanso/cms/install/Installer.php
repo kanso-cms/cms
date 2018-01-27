@@ -118,9 +118,6 @@ class Installer
             throw new RuntimeException("Could not install Kanso. Kanso is already installed. If you want to reinstall it, use the <code>reInstall()</code> method.");
         }
 
-        # Load the Kanso settings
-        $settings = $this->config->get('cms');
-
         # Install the Kanso database
         $this->installDB();
 

@@ -9,6 +9,7 @@ namespace kanso\framework\database;
 
 use kanso\framework\database\connection\Connection;
 use kanso\framework\database\query\Builder;
+use RuntimeException;
 
 /**
  * Database manager
@@ -63,7 +64,7 @@ class Database
 	{
 		$connectionName = !$connectionName ? $this->default : $connectionName;
 
-		if(!isset($this->configurations[$connectionName]['name']))
+		if (!isset($this->configurations[$connectionName]['name']))
 		{
 			throw new RuntimeException(vsprintf("%s(): [ %s ] has not been defined in the database configuration.", [__METHOD__, $connectionName]));
 		}

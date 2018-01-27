@@ -54,7 +54,7 @@ return
 			 * the cookie will only be set if a secure connection exists. On the server-side, it's on the programmer to send this kind of cookie
 			 * only on secure connection (e.g. with respect to $this->request->secure()).
 			 */
-			'secure'       => true,
+			'secure'       => false,
 
 			/**
 			 * When TRUE the cookie will be made accessible only through the HTTP protocol.
