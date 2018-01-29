@@ -142,7 +142,7 @@ class Arr
 	 */
 	public static function isAssoc(array $array): bool
 	{
-		return count(array_filter(array_keys($array), 'is_string')) === count($array);
+		return count(array_filter(array_keys($array), 'is_string')) > 0;
 	}
 
 	/**
@@ -156,7 +156,10 @@ class Arr
     {
         foreach ($array as $key => $value)
         {
-            if (is_array($value)) return true;
+            if (is_array($value))
+            {
+            	return true;
+            }
         }
 
         return false;
@@ -187,13 +190,47 @@ class Arr
 	 * @param  int   $index Index to insert item at
 	 * @return array
 	 */
-	public static function insertAt(array $array, $item, int $index)
+	public static function insertAt(array $array, $item, int $index): array
 	{
-	    $previous_items = array_slice($array, 0, $index, true);
+		if (!self::isAssoc($array))
+		{
+			array_splice($array, $index, 0, $item);
+
+			return $array;
+		}
+
+		if (!is_array($item))
+		{
+			$result   = [];
+			$i        = 0;
+			$inserted = false;
+			
+			foreach ($array as $key => $value)
+			{
+				if ($i === $index)
+				{
+					$inserted   = true;
+					$result[] = $item;
+					$i++;
+				}
+				
+				$result[$key] = $value;
+
+				$i++;
+			}
+			if (!$inserted)
+			{
+				$result[] = $item;
+			}
+
+			return $result;
+		}
+
+		$previousItems = array_slice($array, 0, $index, true);
 	    
-	    $next_items     = array_slice($array, $index, NULL, true);
+	    $nextItems     = array_slice($array, $index, NULL, true);
 	    
-	    return $previous_items + $item + $next_items;
+	    return $previousItems + $item + $nextItems;
 	}
 
 	/**

@@ -1,0 +1,48 @@
+{
+	"name": "kanso/cms",
+	"description": "Kanso Framework",
+	"keywords": ["kanso", "framework"],
+	"homepage": "https://kanso-cms.github.io",
+	"license": "BSD-3-Clause",
+	"authors": [
+		{
+			"name": "Joe J. Howard",
+			"email": "joejhoward@mail.com"
+		},
+		{
+			"name": "Contributors",
+			"homepage": "https://github.com/kanso-cms/cms/graphs/contributors"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/kanso-cms/cms/issues",
+		"source": "https://github.com/kanso-cms/cms"
+	},
+	"autoload": {
+		"psr-4": {
+			"kanso\\": "kanso",
+			"app\\": "app"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"tests\\": "tests"
+		}
+	},
+	"require": {
+		"php": ">=7.0.0",
+		"monolog/monolog": "^1.22.0"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^6.5",
+		"mockery/mockery": "^1.0",
+		"php-mock/php-mock": "^1.0"
+	},
+	"prefer-stable": true,
+	"minimum-stability": "dev",
+	"extra": {
+		"branch-alias": {
+			 "dev-master": "5.4-dev"
+		}
+	}
+}
