@@ -19,7 +19,7 @@ class Mime
      *
      * @var array
      */
-    private static $mimeMap = [
+    public static $mimeMap = [
 
         // Image formats
         'jpg|jpeg|jpe'                 => 'image/jpeg',
