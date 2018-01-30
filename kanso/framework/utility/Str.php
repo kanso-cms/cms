@@ -83,7 +83,7 @@ class Str
 	 */
 	public static function camel2underscored(string $string): string
 	{
-		return mb_strtolower(preg_replace('/([^A-Z])([A-Z])/u', "$1_$2", $string));
+		return mb_strtolower(preg_replace('/([a-z])([A-Z])/u', "$1_$2", $string));
 	}
 
 	/**
@@ -96,15 +96,24 @@ class Str
 	public static function camel2case(string $string): string
 	{
 		$result = '';
+
 		$chars  = str_split($string);
 
-		foreach ($chars as $char)
+		foreach ($chars as $i => $char)
 		{
 			if (ctype_upper($char))
 			{
-				$result .= " $char";
+				if (isset($chars[$i-1]) && $chars[$i-1] === ' ')
+				{
+					$result .= $char;
+				}
+				else
+				{
+					$result .= " $char";
+				}
 			}
-			else {
+			else
+			{
 				$result .= $char;
 			}
 		}
@@ -229,11 +238,14 @@ class Str
 	 */
 	public static function getAfterLastWord(string $string, string $query): string
 	{
-		if (!self::contains($string, $query)) return $string;
+		if (!self::contains($string, $query))
+		{
+			return $string;
+		}
 
-		$prefix = strpos($string, $query) + strlen($query);
-		
-		return substr($string, $prefix);
+		$split = explode($query, $string);
+
+		return array_pop($split);
 	}
 
 	/**
@@ -246,11 +258,16 @@ class Str
 	 */
 	public static function getBeforeLastWord(string $string, string $query): string
 	{
-		if (!self::contains($string, $query)) return $string;
+		if (!self::contains($string, $query))
+		{
+			return $string;
+		}
 
 		$arr = explode($query, $string);
-		
-		return $arr[0];
+
+		array_pop($arr);
+
+		return implode($query, $arr);
 	}
 
 	/**
@@ -325,7 +342,7 @@ class Str
 	 */
 	public static function alphaDash(string $str): string
 	{
-		return ltrim(rtrim(preg_replace('/[^a-zA-Z_-]/', '', preg_replace('/[\s-]+/', '-', $str)), '-'), '-');
+		return preg_replace('/-+/', '-', ltrim(rtrim(preg_replace('/[^a-zA-Z_-]/', '', preg_replace('/[\s-]+/', '-', $str)), '-'), '-'));
 	}
 
 	/**
@@ -337,7 +354,7 @@ class Str
 	 */
 	public static function alphaNum(string $str): string
 	{
-		return trim(preg_replace("/[^a-zA-Z0-9]/", '', $str));
+		return preg_replace('/-+/', '-',  ltrim(rtrim(trim(preg_replace("/[^a-zA-Z0-9]/", '', $str)), '-'), '-'));
 	}
 
 	/**
@@ -349,7 +366,7 @@ class Str
 	 */
 	public static function alphaNumDash(string $str): string
 	{
-		return ltrim(rtrim(preg_replace('/[^a-zA-Z0-9_-]/', '', preg_replace('/[\s-]+/', '-', $str)), '-'), '-');
+		return preg_replace('/-+/', '-', ltrim(rtrim(preg_replace('/[^a-zA-Z0-9_-]/', '', preg_replace('/[\s-]+/', '-', $str)), '-'), '-'));
 	}
 
 	/**

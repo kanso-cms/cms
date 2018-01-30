@@ -287,7 +287,9 @@ class Arr
 			$key = explode('.', $key);
 		}
 
-		uasort($array, function($a, $b) use ($key)
+		$usort = self::isAssoc($array) ? 'uasort' : 'usort';
+
+		$usort($array, function($a, $b) use ($key)
 	    {
 	    	$aV = null;
 	        $bV = null;
@@ -319,21 +321,25 @@ class Arr
 	        {
 	            if (is_numeric($aV))
 	            {
-	            	return intval($aV) - intval($bV);
+	            	return intval($aV) >= intval($bV);
 	            }
-	            if (is_string($aV))
+	            else if (is_string($aV))
 	            {
 	            	return strcasecmp($aV, $bV);
 	            }
-	            if (is_array($aV))
+	            else if (is_array($aV))
 	            {
-	            	return  count($bV) - count($aV);
+	            	return count($bV) - count($aV);
 	            }
 	        }
+
 	        return true;
 	    });
 	    
-	    if ($direction === 'DESC') return array_reverse($array);
+	    if ($direction !== 'ASC')
+	    {
+	    	$array = array_reverse($array);
+	    }
 
 	    return $array;
 	}
@@ -353,8 +359,8 @@ class Arr
 			return isset($mixed[$key]) ? $mixed[$key] : null;
 		}
 		else if (is_object($mixed))
-		{
-			return isset($object->{$key}) ? $object->{$key} : null;
+		{			
+			return isset($mixed->{$key}) ? $mixed->{$key} : null;
 		}
 		return null;
 	}
@@ -374,7 +380,10 @@ class Arr
         
         foreach ($array as $arr)
         {
-            if (isset($arr[$key])) $str .= $arr[$key].$glue;
+            if (isset($arr[$key]))
+            {
+            	$str .= $arr[$key].$glue;
+            }
         }
         
         if ($glue === '')
