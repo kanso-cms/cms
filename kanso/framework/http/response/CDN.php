@@ -43,9 +43,9 @@ class CDN
      * @access public
      * @param  string $currrHost HTTP host of current server
      * @param  string $cdnHost   Http host of CDN
-     * @param  bool   $enabled   Is the CDN enabled ?
+     * @param  bool   $enabled   Is the CDN enabled ? (optional) (default false)
      */
-	public function __construct(string $currHost, string $cdnHost, bool $enabled)
+	public function __construct(string $currHost, string $cdnHost, bool $enabled = false)
     {
         $this->currHost = rtrim($currHost, '/');
 
@@ -161,7 +161,18 @@ class CDN
             
             return $matches[0];
         
-        }, $html);  
+        }, $html);
+
+        $html = preg_replace_callback('/background-image:(\s+|)url\(([^)]+)\)/', function($matches) use ($currHost, $cdnHost)
+        {    
+            if (strpos($matches[0], $currHost) !== false)
+            {
+                return str_replace($currHost, $cdnHost, $matches[0]);
+            }
+            
+            return $matches[0];
+        
+        }, $html);
 
 		return $html;
     }

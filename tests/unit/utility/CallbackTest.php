@@ -27,6 +27,12 @@ class CallbackTest extends TestCase
 		$this->assertEquals('foobar', Callback::apply('tests\unit\utility\CallbackTester::testStaticMethods', ['foo', 'bar']));
 
 		$this->assertEquals('foobar', Callback::apply('tests\unit\utility\CallbackTesters@testMethods', ['foo', 'bar']));
+
+		$this->assertEquals('foobar', Callback::apply(function($foo, $bar)
+		{
+			return $foo.$bar;
+
+		}, ['foo', 'bar']));
 	}
 }
 

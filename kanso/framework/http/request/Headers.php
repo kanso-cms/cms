@@ -25,7 +25,8 @@ class Headers
      *
      * @var array
      */
-    private $special = [
+    private $special =
+    [
         'CONTENT_TYPE',
         'CONTENT_LENGTH',
         'PHP_AUTH_USER',
@@ -39,35 +40,39 @@ class Headers
      * Constructor. Loads the properties internally
      *
      * @access public
+     * @param  array  $server Optional server overrides (optional) (default [])
      */
-    public function __construct()
+    public function __construct(array $server = [])
     {
-        $this->data = $this->extract();
+        $this->data = $this->extract($server);
     }
 
     /**
      * Reload the headers
      *
      * @access public
-     * @return array
+     * @param  array  $server Optional server overrides (optional) (default [])
      */
-    public function reload()
+    public function reload(array $server = [])
     {
-        $this->data = $this->extract();
+        $this->data = $this->extract($server);
     }
 
     /**
      * Returns a fresh copy of the headers
      *
      * @access private
+     * @param  array  $server Optional server overrides (optional) (default [])
      * @return array
      */
-    private function extract(): array
+    private function extract($server): array
     {
         $results = [];
 
+        $server = empty($server) ? $_SERVER : $server;
+
         # Loop through the $_SERVER superglobal and save result consistently
-        foreach ($_SERVER as $key => $value)
+        foreach ($server as $key => $value)
         {
             $key = strtoupper($key);
             

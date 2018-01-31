@@ -127,7 +127,7 @@ class Request
      */
     public function isSecure(): bool
     {
-        return $this->environment->HTTP_HOST === 'https';
+        return strtolower($this->environment->HTTP_PROTOCOL) === 'https';
     }
 
     /**
@@ -291,9 +291,16 @@ class Request
             $data['page'] = 0;
         }
 
-        if (!$this->isGet())
+        if ($this->isPost())
         {
-            foreach ($_POST as $k => $v)
+            foreach (array_merge($this->queries(), $_POST) as $k => $v)
+            {
+                $data[$k] = $v;
+            }
+        }
+        else
+        {
+            foreach (array_merge($this->queries(), $_GET) as $k => $v)
             {
                 $data[$k] = $v;
             }
@@ -326,7 +333,7 @@ class Request
     {
         $result   = [];
 
-        $queryStr = $this->fetch('query');
+        $queryStr = $this->environment->QUERY_STRING;
 
         if (!empty($queryStr))
         {
@@ -373,14 +380,11 @@ class Request
      */
     public function mimeType()
     {
-        if (!headers_sent())
-        {
-            $pathinfo = $this->fetch();
+        $pathinfo = $this->fetch();
             
-            if (isset($pathinfo['path']))
-            {
-                return Mime::fromExt(Str::getAfterLastChar($pathinfo['path'], '.'));
-            }
+        if (isset($pathinfo['path']))
+        {
+            return Mime::fromExt(Str::getAfterLastChar($pathinfo['path'], '.'));
         }
 
         return false;

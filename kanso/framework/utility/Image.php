@@ -119,6 +119,11 @@ class Image
      */
     public function width(): int
     {
+        if ($this->dest_w > 0)
+        {
+            return $this->dest_w;
+        }
+
         return $this->source_w;
     }
 
@@ -130,6 +135,11 @@ class Image
      */
     public function height(): int
     {
+        if ($this->dest_h > 0)
+        {
+            return $this->dest_h;
+        }
+
         return $this->source_h;
     }
 
@@ -251,7 +261,7 @@ class Image
     /**
      * Scale image by a percentage
      *
-     * @param  int                  $scale         Width in px
+     * @param  int                  $scale         Scale percentage
      * @param  bool                 $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
      * @return \kanso\framework\utility\Image
      */
@@ -281,7 +291,8 @@ class Image
             // but either of the dimensions are larger then the original,
             // then just use original dimensions - this logic may need rethinking
 
-            if ($width > $this->source_w || $height > $this->source_h) {
+            if ($width > $this->source_w || $height > $this->source_h)
+            {
                 $width  = $this->source_w;
                 $height = $this->source_h;
             }
