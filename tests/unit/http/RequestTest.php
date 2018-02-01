@@ -28,14 +28,13 @@ class RequestTest extends TestCase
 		[
 			'REQUEST_METHOD'  => 'GET',
 			'SCRIPT_NAME'     => 'index.php',
-			'SERVER_NAME'     => 'example.com',
+			'SERVER_NAME'     => 'localhost:8888',
 			'SERVER_PORT'     => '8888',
 			'HTTP_PROTOCOL'   => 'http',
 			'DOCUMENT_ROOT'   => '/usr/name/httpdocs',
-			'HTTP_HOST'       => 'http://example.com',
-			'DOMAIN_NAME'     => 'example.com',
+			'HTTP_HOST'       => 'http://localhost:8888',
+			'DOMAIN_NAME'     => 'localhost:8888',
 			'REQUEST_URI'     => '/foobar',
-			'REQUEST_URL'     => 'http://example.com/foobar',
 			'QUERY_STRING'    => '?foo=bar',
 			'REMOTE_ADDR'     => '192.168.1.1',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17',
@@ -252,8 +251,7 @@ class RequestTest extends TestCase
 	{
 		$server  = $this->getServerData();
 
-		$server['REQUEST_URI']  = 'foobar.jpg';
-		$server['QUERY_STRING'] = '';
+		$server['REQUEST_URI']  = '/foobar.jpg';
 
 		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
 		$this->assertTrue($request->isFileGet());
@@ -285,8 +283,8 @@ class RequestTest extends TestCase
 		$server['REQUEST_URI']    = '/foobar.html?foo=bar&bar=foo';
 		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
 		$this->assertEquals('http', $request->fetch('scheme'));
-		$this->assertEquals('http', $request->fetch('host'));
-		$this->assertEquals('//example.com/foobar.html', $request->fetch('path'));
+		$this->assertEquals('localhost', $request->fetch('host'));
+		$this->assertEquals('/foobar.html', $request->fetch('path'));
 		$this->assertEquals('foo=bar&bar=foo', $request->fetch('query'));
 		$this->assertEquals(0, $request->fetch('page'));
 	}

@@ -7,8 +7,6 @@
 
 namespace kanso\framework\http\request;
 
-use kanso\framework\common\MagicArrayAccessTrait;
-
 /**
  * Request headers class
  *
@@ -16,7 +14,12 @@ use kanso\framework\common\MagicArrayAccessTrait;
  */
 class Headers 
 {
-    use MagicArrayAccessTrait;
+    /**
+     * Array access
+     *
+     * @var string
+     */
+    protected $data = [];
 
     /**
      * Acceptable content types.
@@ -170,7 +173,7 @@ class Headers
      */
     public function acceptableContentTypes(string $default = null): array
     {
-        if(!isset($this->acceptableContentTypes) && isset($this->data['HTTP_ACCEPT']))
+        if (!isset($this->acceptableContentTypes) && isset($this->data['HTTP_ACCEPT']))
         {
             $this->acceptableContentTypes = $this->parseAcceptHeader($this->data['HTTP_ACCEPT']);
         }
@@ -218,11 +221,72 @@ class Headers
      */
     public function acceptableEncodings(string $default = null): array
     {
-        if(!isset($this->acceptableEncodings) && $this->data['HTTP_ACCEPT_ENCODING'])
+        if(!isset($this->acceptableEncodings) && isset($this->data['HTTP_ACCEPT_ENCODING']))
         {
             $this->acceptableEncodings = $this->parseAcceptHeader($this->data['HTTP_ACCEPT_ENCODING']);
         }
 
         return $this->acceptableEncodings ?: (array) $default;
+    }
+
+    /**
+     * Return all properties
+     *
+     * @access public
+     * @return array
+     */
+    public function asArray(): array
+    {
+        return $this->data;
+    }
+
+    /**
+     * Get a property by key
+     *
+     * @access public
+     * @return string|null
+     */
+    public function __get(string $key)
+    {
+        if (isset($this->data[$this->normalizeKey($key)]))
+        {
+            return $this->data[$this->normalizeKey($key)];
+        }
+
+        return null;
+    }
+
+    /**
+     * Set a property by key
+     *
+     * @access public
+     */
+    public function __set(string $key, $value)
+    {
+        $this->data[$this->normalizeKey($key)] = $value;
+    }
+
+    /**
+     * Check if a property by key exists
+     *
+     * @access public
+     * @return bool
+     */
+    public function __isset(string $key): bool
+    {
+        return isset($this->data[$this->normalizeKey($key)]);
+    }
+
+    /**
+     * Unset a property by key
+     *
+     * @access public
+     */
+    public function __unset(string $key)
+    {
+        if (isset($this->data[$this->normalizeKey($key)]))
+        {
+            unset($this->data[$this->normalizeKey($key)]);
+        } 
     }
 }

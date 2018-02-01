@@ -54,7 +54,7 @@ class Environment
         $env = [];
  
         # The HTTP request method
-        $env['REQUEST_METHOD'] = $server['REQUEST_METHOD'];
+        $env['REQUEST_METHOD'] = !isset($server['REQUEST_METHOD']) ? 'CLI' : $server['REQUEST_METHOD'];
 
         # Script Name
         $scriptName  = isset($server['SCRIPT_NAME']) && !empty($server['SCRIPT_NAME']) ? $server['SCRIPT_NAME'] : substr($server['PHP_SELF'], strrpos($server['PHP_SELF'], '/') + 1);
@@ -82,7 +82,7 @@ class Environment
         $env['DOCUMENT_ROOT'] = $server['DOCUMENT_ROOT'];
 
         # Http host
-        $env['HTTP_HOST'] = $env['HTTP_PROTOCOL'].'://'.$server['HTTP_HOST'];
+        $env['HTTP_HOST'] = $env['HTTP_PROTOCOL'].'://'.str_replace(['http://', 'https://'], ['', ''], $server['HTTP_HOST']);
 
         # domain name
         $env['DOMAIN_NAME'] = str_replace('www.', '', str_replace($env['HTTP_PROTOCOL'].'://', '', $env['HTTP_HOST']));

@@ -148,7 +148,7 @@ class Response
      */
     public function protocol()
     {
-        return $this->protocol();
+        return $this->protocol;
     }
 
     /**
@@ -255,7 +255,7 @@ class Response
      *
      * @access public
      */
-    private function finalize()
+    public function finalize()
     {
         $this->headers->set('Status', $this->status->get());
 
