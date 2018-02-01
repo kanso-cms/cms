@@ -7,9 +7,11 @@
 
 namespace tests\unit\http\response;
 
+use Mockery;
 use tests\TestCase;
 use kanso\framework\http\request\Environment;
 use kanso\framework\http\request\Headers;
+use kanso\framework\http\request\Files;
 use kanso\framework\http\request\Request;
 
 /**
@@ -37,8 +39,83 @@ class RequestTest extends TestCase
 			'QUERY_STRING'    => '?foo=bar',
 			'REMOTE_ADDR'     => '192.168.1.1',
 			'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.57 Safari/537.17',
+			'HTTP_CONNECTION' => 'keep-alive',
+			'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,foo/bar; q=0.1,application/xml;q=0.9,image/webp,*/*;q=0.8',
+			'HTTP_ACCEPT_CHARSET' => 'UTF-8,FOO-1; q=0.1,UTF-16;q=0.9',
+			'HTTP_ACCEPT_ENCODING' => 'gzip,foobar;q=0.1,deflate,sdch',
+			'HTTP_ACCEPT_LANGUAGE' => 'en-US,en;q=0.8,da;q=0.6,fr;q=0.4,foo; q=0.1,nb;q=0.2,sv;q=0.2',
+			'PATH' => '/usr/local/bin:/usr/bin:/bin',
 		];
 	}
+
+	/**
+	 *
+	 */
+	public function testScriptName()
+	{
+		$server  = $this->getServerData();
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
+		$this->assertEquals('index.php', $request->environment()->SCRIPT_NAME);
+
+		$server['SCRIPT_NAME'] = '/var/www/app.php';
+		$request->environment()->reload($server);
+		$this->assertEquals('app.php', $request->environment()->SCRIPT_NAME);
+	}
+
+	/**
+	 *
+	 */
+	public function testAcceptableContentTypes()
+	{
+		$server  = $this->getServerData();
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
+		$acceptableContentTypes = ['text/html', 'application/xhtml+xml', 'image/webp', 'application/xml', '*/*', 'foo/bar'];
+		$this->assertEquals($acceptableContentTypes, $request->headers()->acceptableContentTypes());
+	}
+
+	/**
+	 *
+	 */
+	public function testAcceptableLanguages()
+	{
+		$server = $this->getServerData();
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
+		$acceptableLanguages = ['en-US', 'en', 'da', 'fr', 'nb', 'sv', 'foo'];
+		$this->assertEquals($acceptableLanguages, $request->headers()->acceptableLanguages());
+	}
+
+	/**
+	 *
+	 */
+	public function testAcceptableCharsets()
+	{
+		$server = $this->getServerData();
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
+		$acceptableCharsets = ['UTF-8', 'UTF-16', 'FOO-1'];
+		$this->assertEquals($acceptableCharsets, $request->headers()->acceptableCharsets());
+	}
+
+	/**
+	 *
+	 */
+	public function testAcceptableEncodings()
+	{
+		$server = $this->getServerData();
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
+		$acceptableEncodings = ['gzip', 'deflate', 'sdch', 'foobar'];
+		$this->assertEquals($acceptableEncodings, $request->headers()->acceptableEncodings());
+	}
+
+	/**
+	 *
+	 */
+	public function testIP()
+	{
+		$server  = $this->getServerData();
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
+		$this->assertEquals('192.168.1.1', $request->environment()->REMOTE_ADDR);
+	}
+
 
 	/**
 	 *
@@ -46,7 +123,7 @@ class RequestTest extends TestCase
 	public function testGetMethod()
 	{
 		$server  = $this->getServerData();
-		$request = new Request(new Environment($server), new Headers($server));
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
 		$this->assertEquals('GET', $request->getMethod());
 
 		$server['REQUEST_METHOD'] = 'POST';
@@ -60,7 +137,7 @@ class RequestTest extends TestCase
 	public function testIsSecure()
 	{
 		$server  = $this->getServerData();
-		$request = new Request(new Environment($server), new Headers($server));
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
 		$this->assertFalse($request->isSecure());
 
 		$server['HTTP_PROTOCOL'] = 'https';
@@ -76,7 +153,7 @@ class RequestTest extends TestCase
 	public function testIsGet()
 	{
 		$server  = $this->getServerData();
-		$request = new Request(new Environment($server), new Headers($server));
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
 		$this->assertTrue($request->isGet());
 
 		$server['REQUEST_METHOD'] = 'POST';
@@ -90,7 +167,7 @@ class RequestTest extends TestCase
 	public function testIsPost()
 	{
 		$server  = $this->getServerData();
-		$request = new Request(new Environment($server), new Headers($server));
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
 		$this->assertFalse($request->isPost());
 
 		$server['REQUEST_METHOD'] = 'POST';
@@ -104,7 +181,7 @@ class RequestTest extends TestCase
 	public function testIsPut()
 	{
 		$server  = $this->getServerData();
-		$request = new Request(new Environment($server), new Headers($server));
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
 		$this->assertFalse($request->isPut());
 
 		$server['REQUEST_METHOD'] = 'PUT';
@@ -118,7 +195,7 @@ class RequestTest extends TestCase
 	public function testIsPatch()
 	{
 		$server  = $this->getServerData();
-		$request = new Request(new Environment($server), new Headers($server));
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
 		$this->assertFalse($request->isPatch());
 
 		$server['REQUEST_METHOD'] = 'PATCH';
@@ -132,7 +209,7 @@ class RequestTest extends TestCase
 	public function testIsDelete()
 	{
 		$server  = $this->getServerData();
-		$request = new Request(new Environment($server), new Headers($server));
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
 		$this->assertFalse($request->isDelete());
 
 		$server['REQUEST_METHOD'] = 'DELETE';
@@ -146,7 +223,7 @@ class RequestTest extends TestCase
 	public function testIsHead()
 	{
 		$server  = $this->getServerData();
-		$request = new Request(new Environment($server), new Headers($server));
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
 		$this->assertFalse($request->isHead());
 
 		$server['REQUEST_METHOD'] = 'HEAD';
@@ -160,7 +237,7 @@ class RequestTest extends TestCase
 	public function testIsOptions()
 	{
 		$server  = $this->getServerData();
-		$request = new Request(new Environment($server), new Headers($server));
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
 		$this->assertFalse($request->isOptions());
 
 		$server['REQUEST_METHOD'] = 'OPTIONS';
@@ -178,7 +255,7 @@ class RequestTest extends TestCase
 		$server['REQUEST_URI']  = 'foobar.jpg';
 		$server['QUERY_STRING'] = '';
 
-		$request = new Request(new Environment($server), new Headers($server));
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
 		$this->assertTrue($request->isFileGet());
 	}
 
@@ -189,7 +266,7 @@ class RequestTest extends TestCase
 	{
 		$server  = $this->getServerData();
 		$server['REQUEST_METHOD'] = 'POST';
-		$request = new Request(new Environment($server), new Headers($server));
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
 		$this->assertFalse($request->isAjax());
 
 		$server['HTTP_REQUESTED_WITH'] = 'XMLHttpRequest';
@@ -206,7 +283,7 @@ class RequestTest extends TestCase
 		$server  = $this->getServerData();
 		$server['REQUEST_METHOD'] = 'POST';
 		$server['REQUEST_URI']    = '/foobar.html?foo=bar&bar=foo';
-		$request = new Request(new Environment($server), new Headers($server));
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
 		$this->assertEquals('http', $request->fetch('scheme'));
 		$this->assertEquals('http', $request->fetch('host'));
 		$this->assertEquals('//example.com/foobar.html', $request->fetch('path'));
@@ -222,7 +299,7 @@ class RequestTest extends TestCase
 		$server  = $this->getServerData();
 		$server['REQUEST_METHOD'] = 'POST';
 		$server['REQUEST_URI']    = '/foobar.html?foo=bar&bar=foo';
-		$request = new Request(new Environment($server), new Headers($server));
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
 		$this->assertEquals('bar', $request->fetch('foo'));
 		$this->assertEquals('foo', $request->fetch('bar'));
 		$this->assertEquals('foo', $request->fetch()['bar']);
@@ -232,10 +309,90 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
+	public function testFile()
+	{
+		$server = $this->getServerData();
+		$server['REQUEST_METHOD'] = 'POST';
+		$files =
+		[
+			'upload' =>
+			[
+				'name'     => 'foo',
+				'tmp_name' => '/tmp/qwerty',
+				'type'     => 'foo/bar',
+				'size'     => 123,
+				'error'    => 0,
+			],
+		];
+
+		$request = new Request(new Environment($server), new Headers($server), new Files($files));
+		$file   = $request->files()->get('upload');
+
+		$this->assertTrue(is_array($file));
+		$this->assertEquals('foo', $file['name']);
+		$this->assertEquals('/tmp/qwerty', $file['tmp_name']);
+		$this->assertEquals(123, $file['size']);
+		$this->assertEquals(0, $file['error']);
+	}
+
+	/**
+	 *
+	 */
+	public function testFileMultiUpload()
+	{
+		$server = $this->getServerData();
+		$server['REQUEST_METHOD'] = 'POST';
+		$files =
+		[
+			'upload' =>
+			[
+				'name'     => ['foo', 'bar'],
+				'tmp_name' => ['/tmp/qwerty', '/tmp/azerty'],
+				'type'     => ['foo/bar', 'foo/bar'],
+				'size'     => [123, 456],
+				'error'    => [0, 0],
+			],
+		];
+
+		$request = new Request(new Environment($server), new Headers($server), new Files($files));
+		
+		# file 1
+		$file = $request->files()->get('upload.0');
+		$this->assertTrue(is_array($file));
+		$this->assertEquals('foo', $file['name']);
+		$this->assertEquals('/tmp/qwerty', $file['tmp_name']);
+		$this->assertEquals(123, $file['size']);
+		$this->assertEquals(0, $file['error']);
+
+		# File 2
+		$file = $request->files()->get('upload.1');
+		$this->assertTrue(is_array($file));
+		$this->assertEquals('bar', $file['name']);
+		$this->assertEquals('/tmp/azerty', $file['tmp_name']);
+		$this->assertEquals(456, $file['size']);
+		$this->assertEquals(0, $file['error']);
+	}
+
+	/**
+	 *
+	 */
+	public function testFileNone()
+	{
+		$server = $this->getServerData();
+		$server['REQUEST_METHOD'] = 'POST';
+		$request = new Request(new Environment($server), new Headers($server), new Files);
+
+		$this->assertEquals([], $request->files()->get());
+		$this->assertNull($request->files()->get('foo'));
+	}
+
+	/**
+	 *
+	 */
 	public function testMimeType()
 	{
 		$server  = $this->getServerData();
-		$request = new Request(new Environment($server), new Headers($server));
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
 		$this->assertFalse($request->mimeType());
 
 		$server['REQUEST_URI'] = '/foobar.png';
@@ -249,26 +406,12 @@ class RequestTest extends TestCase
 	public function testIsBot()
 	{
 		$server  = $this->getServerData();
-		$request = new Request(new Environment($server), new Headers($server));
+		$request = new Request(new Environment($server), new Headers($server), Mockery::mock('\kanso\framework\http\request\Files'));
 		$this->assertFalse($request->isBot());
 
 		$server['HTTP_USER_AGENT'] = 'Googlebot-Image/1.0';
 		$request->environment()->reload($server);
 		$request->headers()->reload($server);
 		$this->assertTrue($request->isBot());
-	}
-	
-	/**
-	 *
-	 */
-	public function testScriptName()
-	{
-		$server  = $this->getServerData();
-		$request = new Request(new Environment($server), new Headers($server));
-		$this->assertEquals('index.php', $request->environment()->SCRIPT_NAME);
-
-		$server['SCRIPT_NAME'] = '/var/www/app.php';
-		$request->environment()->reload($server);
-		$this->assertEquals('app.php', $request->environment()->SCRIPT_NAME);
 	}
 }

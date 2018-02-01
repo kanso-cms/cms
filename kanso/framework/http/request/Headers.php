@@ -19,6 +19,34 @@ class Headers
     use MagicArrayAccessTrait;
 
     /**
+     * Acceptable content types.
+     *
+     * @var array
+     */
+    protected $acceptableContentTypes;
+
+    /**
+     * Acceptable languages.
+     *
+     * @var array
+     */
+    protected $acceptableLanguages;
+
+    /**
+     * Acceptable character sets.
+     *
+     * @var array
+     */
+    protected $acceptableCharsets;
+
+    /**
+     * Acceptable encodings.
+     *
+     * @var array
+     */
+    protected $acceptableEncodings;
+
+    /**
      * Special-case HTTP headers that are otherwise unidentifiable as HTTP headers.
      * Typically, HTTP headers in the $_SERVER array will be prefixed with
      * `HTTP_` or `X_`. These are not so we list them here for later reference.
@@ -83,9 +111,118 @@ class Headers
                     continue;
                 }
                 
-                $results[$key] = $value;
+                $results[$this->normalizeKey($key)] = $value;
             }
         }
         return $results;
-    }   
+    }
+
+    /**
+     * Normalizes header names.
+     *
+     * @param  string $name Header name
+     * @return string
+     */
+    protected function normalizeKey(string $name): string
+    {
+        return strtoupper(str_replace('-', '_', $name));
+    }
+
+    /**
+     * Parses a accpet header and returns the values in descending order of preference.
+     *
+     * @param  string|null $headerValue Header value
+     * @return array
+     */
+    protected function parseAcceptHeader(string $headerValue = null): array
+    {
+        $groupedAccepts = [];
+        
+        if(empty($headerValue))
+        {
+            return $groupedAccepts;
+        }
+
+        # Collect acceptable values
+        foreach(explode(',', $headerValue) as $accept)
+        {
+            $quality = 1;
+            if(strpos($accept, ';'))
+            {
+                # We have a quality so we need to split some more
+                list($accept, $quality) = explode(';', $accept, 2);
+                # Strip the "q=" part so that we're left with only the numeric value
+                $quality = substr(trim($quality), 2);
+            }
+            $groupedAccepts[$quality][] = trim($accept);
+        }
+        # Sort in descending order of preference
+        krsort($groupedAccepts);
+        # Flatten array and return it
+        return array_merge(...array_values($groupedAccepts));
+    }
+
+    /**
+     * Returns an array of acceptable content types in descending order of preference.
+     *
+     * @param  string|null $default Default content type
+     * @return array
+     */
+    public function acceptableContentTypes(string $default = null): array
+    {
+        if(!isset($this->acceptableContentTypes) && isset($this->data['HTTP_ACCEPT']))
+        {
+            $this->acceptableContentTypes = $this->parseAcceptHeader($this->data['HTTP_ACCEPT']);
+        }
+
+        return $this->acceptableContentTypes ?: (array) $default;
+    }
+
+    /**
+     * Returns an array of acceptable content types in descending order of preference.
+     *
+     * @param  string|null $default Default language
+     * @return array
+     */
+    public function acceptableLanguages(string $default = null): array
+    {
+        if(!isset($this->acceptableLanguages) && isset($this->data['HTTP_ACCEPT_LANGUAGE']))
+        {
+            $this->acceptableLanguages = $this->parseAcceptHeader($this->data['HTTP_ACCEPT_LANGUAGE']);
+        }
+
+        return $this->acceptableLanguages ?: (array) $default;
+    }
+
+    /**
+     * Returns an array of acceptable content types in descending order of preference.
+     *
+     * @param  string|null $default Default charset
+     * @return array
+     */
+    public function acceptableCharsets(string $default = null): array
+    {
+        if(!isset($this->acceptableCharsets) && isset($this->data['HTTP_ACCEPT_CHARSET']))
+        {
+            $this->acceptableCharsets = $this->parseAcceptHeader($this->data['HTTP_ACCEPT_CHARSET']);
+        }
+
+        return $this->acceptableCharsets ?: (array) $default;
+    }
+
+    /**
+     * Returns an array of acceptable content types in descending order of preference.
+     *
+     * @param  string|null $default Default encoding
+     * @return array
+     */
+    public function acceptableEncodings(string $default = null): array
+    {
+        if(!isset($this->acceptableEncodings) && $this->data['HTTP_ACCEPT_ENCODING'])
+        {
+            $this->acceptableEncodings = $this->parseAcceptHeader($this->data['HTTP_ACCEPT_ENCODING']);
+        }
+
+        return $this->acceptableEncodings ?: (array) $default;
+    }
 }

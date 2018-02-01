@@ -9,6 +9,7 @@ namespace kanso\framework\http\request;
 
 use kanso\framework\http\request\Environment;
 use kanso\framework\http\request\Headers;
+use kanso\framework\http\request\Files;
 use kanso\framework\utility\Mime;
 use kanso\framework\utility\Str;
 
@@ -48,6 +49,13 @@ class Request
     private $environment;
 
     /**
+     * Http files  
+     *
+     * @var \kanso\framework\http\request\Files
+     */
+    private $files;
+
+    /**
      * List of bot user agnets
      *
      * @var array
@@ -68,12 +76,17 @@ class Request
      * Constructor
      *
      * @access public
+     * @param  \kanso\framework\http\request\Environment $environment Environment wrapper
+     * @param  \kanso\framework\http\request\Headers     $headers     Headers wrapper
+     * @param  \kanso\framework\http\request\Files       $files       Files wrapper
      */
-    public function __construct(Environment $environment, Headers $headers)
+    public function __construct(Environment $environment, Headers $headers, Files $files)
     {
         $this->environment = $environment;
 
         $this->headers = $headers;
+
+        $this->files = $files;
     }
 
     /**
@@ -107,6 +120,17 @@ class Request
     public function headers(): Headers
     {
         return $this->headers;
+    }
+
+    /**
+     * Returns uploaded files wrapper
+     *
+     * @access public
+     * @return \kanso\framework\http\request\Files
+     */
+    public function files(): Files
+    {
+        return $this->files;
     }
 
     /**

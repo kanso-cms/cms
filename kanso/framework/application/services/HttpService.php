@@ -12,6 +12,7 @@ use kanso\framework\utility\Str;
 use kanso\framework\http\request\Environment;
 use kanso\framework\http\request\Headers as RequestHeaders;
 use kanso\framework\http\request\Request;
+use kanso\framework\http\request\Files;
 use kanso\framework\http\response\Protocol;
 use kanso\framework\http\response\Format;
 use kanso\framework\http\response\Body;
@@ -61,7 +62,7 @@ class HttpService extends Service
 	{
 		$this->container->singleton('Request', function ()
 		{
-			return new Request(new Environment, new RequestHeaders);
+			return new Request(new Environment, new RequestHeaders, new Files);
 		});
 	}
 
