@@ -159,6 +159,8 @@ class Cookie
             $this->store->write($this->cookieName, $this->get());
 
             $this->store->write($this->cookieName.'_login', $this->login);
+
+            $this->sent = true;
         }   
     }
 

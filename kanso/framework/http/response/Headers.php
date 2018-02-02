@@ -19,6 +19,8 @@ class Headers
 {
     use ArrayAccessTrait;
 
+    private $sent = false;
+
     /**
      * Constructor
      *
@@ -50,6 +52,8 @@ class Headers
                     header($name.':'.$value, true);
                 }                
             }
+
+            $this->sent = true;
         }
     }
 
@@ -60,6 +64,6 @@ class Headers
      */
     public function sent(): bool
     {
-        return headers_sent();
+        return $this->sent;
     }
 }

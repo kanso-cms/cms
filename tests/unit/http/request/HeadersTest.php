@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\http\response;
+namespace tests\unit\http\request;
 
 use tests\TestCase;
 use kanso\framework\http\request\Headers;

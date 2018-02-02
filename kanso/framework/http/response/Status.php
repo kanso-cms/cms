@@ -126,8 +126,9 @@ class Status {
      *
      * @access public
      */
-    public function __construct()
+    public function __construct(int $code = 200)
     {
+        $this->code = $code;
     }
     
     /**
