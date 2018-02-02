@@ -112,4 +112,26 @@ class HeadersTest extends TestCase
 
 		$this->assertTrue($headers->sent());
 	}
+
+	/**
+	 *
+	 */
+	public function testIteration()
+	{
+		$headers = new Headers;
+
+		$headers->setMultiple([
+		    'Keep-Alive' => 'timeout=5, max=100',
+		    'Date'       => date('c'),
+		]);
+
+		$count = 0;
+
+		foreach ($headers as $key => $value)
+		{
+			$count++;
+		}
+
+		$this->assertEquals(2, $count);
+	}
 }

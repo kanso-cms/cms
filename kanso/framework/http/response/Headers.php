@@ -9,16 +9,22 @@ namespace kanso\framework\http\response;
 
 use kanso\framework\utility\Str;
 use kanso\framework\common\ArrayAccessTrait;
+use kanso\framework\common\ArrayIterator;
 
 /**
  * Response headers
  *
  * @author Joe J. Howard
  */
-class Headers
+class Headers implements \IteratorAggregate
 {
     use ArrayAccessTrait;
 
+    /**
+     * Have the headers been sent?
+     *
+     * @var bool
+     */
     private $sent = false;
 
     /**
@@ -27,7 +33,15 @@ class Headers
      * @access public
      */
     public function __construct()
-    { 
+    {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->data);
     }
 
     /**

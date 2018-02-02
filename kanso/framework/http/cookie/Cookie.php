@@ -9,13 +9,14 @@ namespace kanso\framework\http\cookie;
 
 use kanso\framework\http\cookie\storage\Store;
 use kanso\framework\common\ArrayAccessTrait;
+use kanso\framework\common\ArrayIterator;
 
 /**
  * Cookie utility
  *
  * @author Joe J. Howard
  */
-class Cookie
+class Cookie implements \IteratorAggregate
 {
     use ArrayAccessTrait;
 
@@ -73,6 +74,14 @@ class Cookie
         $this->readCookie(); 
         
         $this->validateExpiry();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->data);
     }
 
     /**

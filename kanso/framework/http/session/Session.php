@@ -10,13 +10,14 @@ namespace kanso\framework\http\session;
 use kanso\framework\common\ArrayAccessTrait;
 use kanso\framework\http\session\Flash;
 use kanso\framework\http\session\Token;
+use kanso\framework\common\ArrayIterator;
 
 /**
  * Session Manager
  *
  * @author Joe J. Howard
  */
-class Session
+class Session implements \IteratorAggregate
 {
     use ArrayAccessTrait;
 
@@ -72,6 +73,14 @@ class Session
         $this->configure($configuration);
 
         $this->initializeSession();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->data);
     }
 
     /**

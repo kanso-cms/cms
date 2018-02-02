@@ -14,7 +14,7 @@ use kanso\framework\http\cookie\Cookie;
 /**
  * @group unit
  */
-class CacheTest extends TestCase
+class CookieTest extends TestCase
 {
 	/**
 	 *
@@ -299,5 +299,30 @@ class CacheTest extends TestCase
 		$cookie = new Cookie($store, 'cookie_name', strtotime('+1 month'));
 
 		$this->assertEquals(['last_active' => time()], $cookie->asArray());
+	}
+
+	/**
+	 *
+	 */
+	public function testIterator()
+	{
+		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
+
+		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn([]);
+
+		$store->shouldReceive('read')->withArgs(['cookie_name_login'])->andReturn('no');
+
+		$cookie = new Cookie($store, 'cookie_name', strtotime('+1 month'));
+
+		$cookie->set('foo', 'bar');
+
+		$count = 0;
+
+		foreach ($cookie as $key => $value)
+		{
+			$count++;
+		}
+
+		$this->assertEquals(2, $count);
 	}
 }
