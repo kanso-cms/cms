@@ -14,7 +14,7 @@ use kanso\framework\utility\Arr;
  *
  * @author Joe J. Howard
  */
-class Flash
+class Flash implements \Iterator
 {
     /**
      * The session flash data
@@ -34,6 +34,50 @@ class Flash
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function rewind()
+    {
+        reset($this->data);
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function current()
+    {
+        return current($this->data)['key'];
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function key() 
+    {        
+        return key($this->data);
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function next() 
+    {
+        return next($this->data)['key'];
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function valid()
+    {
+        $key = key($this->data);
+        
+        $data = ($key !== NULL && $key !== FALSE);
+        
+        return $data;
+    }
+
+    /**
      * Get the raw data including the iterators
      *
      * @access public
@@ -48,11 +92,24 @@ class Flash
      * Set the raw data including the iterators
      *
      * @access public
-     * @return array
      */
     public function putRaw(array $data)
     {
-        return $this->data = $data;
+        $result = [];
+
+        foreach ($data as $key => $value)
+        {
+            if (isset($value['key']) && isset($value['count']))
+            {
+                $result[$key] =
+                [
+                    'key'   => $value['key'],
+                    'count' => intval($value['count']),
+                ];
+            }
+        }
+
+        $this->data = $result;
     }
 
     /**

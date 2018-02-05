@@ -25,19 +25,17 @@ class NativeStorageTest extends TestCase
 			'path'         => '/',
 			'domain'       => '',
 			'secure'       => false,
-			'httponly'     => true,
-			'storage'      =>
-			[
-				'type' => 'native',
-			],
+			'httponly'     => false,
 		];
 	}
 
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testRead()
 	{
+		$_COOKIE = [];
+
 		$_COOKIE['foobar_cookie'] = 's:0{fdf[$@#$!sd23fs==}';
 
 		$crypto = Mockery::mock('kanso\framework\security\Crypto');
@@ -50,10 +48,12 @@ class NativeStorageTest extends TestCase
 	}
 
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testReadInvalid()
 	{
+		$_COOKIE = [];
+
 		$crypto = Mockery::mock('kanso\framework\security\Crypto');
 
 		$store = new NativeCookieStorage($crypto, $this->getCookieConfig());
@@ -64,19 +64,18 @@ class NativeStorageTest extends TestCase
 	}
 
 	/**
-	 * @runInSeparateProcess
-	 * 
+	 * @runInSeparateProcess 
 	 */
 	public function testWrite()
 	{
+		$_COOKIE = [];
+
 		$crypto = Mockery::mock('kanso\framework\security\Crypto');
 
 		$store = new NativeCookieStorage($crypto, $this->getCookieConfig());
 
 		$crypto->shouldReceive('encrypt')->withArgs([serialize(['foo' => 'bar'])])->andReturn('s:0{fdf[$@#$!sd23fs==}');
-		
-		$store->write('foobar_cookie', ['foo' => 'bar']);
 
-		$this->assertEquals('s:0{fdf[$@#$!sd23fs==}', $_COOKIE['foobar_cookie']);
+		$this->assertEquals(true, $store->write('foobar_cookie', ['foo' => 'bar']));
 	}
 }

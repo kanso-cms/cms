@@ -17,7 +17,7 @@ use kanso\framework\http\cookie\Cookie;
 class CookieTest extends TestCase
 {
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testConstructor()
 	{
@@ -31,7 +31,7 @@ class CookieTest extends TestCase
 	}
 
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testIsLoggedIn()
 	{
@@ -47,7 +47,7 @@ class CookieTest extends TestCase
 	}
 
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testLogin()
 	{
@@ -65,7 +65,7 @@ class CookieTest extends TestCase
 	}
 
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testLogout()
 	{
@@ -83,7 +83,7 @@ class CookieTest extends TestCase
 	}
 
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testSend()
 	{
@@ -103,7 +103,7 @@ class CookieTest extends TestCase
 	}
 
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testExpired()
 	{
@@ -123,7 +123,7 @@ class CookieTest extends TestCase
 	}
 
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testSent()
 	{
@@ -147,7 +147,7 @@ class CookieTest extends TestCase
 	}
 
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testDestroy()
 	{
@@ -169,7 +169,7 @@ class CookieTest extends TestCase
 	}
 
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testSet()
 	{
@@ -187,7 +187,7 @@ class CookieTest extends TestCase
 	}
 
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testSetMultiple()
 	{
@@ -207,7 +207,7 @@ class CookieTest extends TestCase
 	}
 
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testGetAll()
 	{
@@ -225,7 +225,7 @@ class CookieTest extends TestCase
 	}
 
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testHas()
 	{
@@ -245,7 +245,7 @@ class CookieTest extends TestCase
 	}
 
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testRemove()
 	{
@@ -267,7 +267,7 @@ class CookieTest extends TestCase
 	}
 
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testClear()
 	{
@@ -285,7 +285,7 @@ class CookieTest extends TestCase
 	}
 
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testAsArray()
 	{
@@ -302,7 +302,7 @@ class CookieTest extends TestCase
 	}
 
 	/**
-	 *
+	 * @runInSeparateProcess
 	 */
 	public function testIterator()
 	{

@@ -8,7 +8,7 @@
 namespace kanso\framework\database\query;
 
 use PDOException;
-use kanso\framework\database\connection\Connection;
+use kanso\framework\database\connection\ConnectionHandler;
 
 /**
  * Alter table class
@@ -42,21 +42,21 @@ class Alter
     private $columns;
 
     /**
-     * @var \kanso\framework\database\connection\Connection
+     * @var \kanso\framework\database\connection\ConnectionHandler
      */
-    private $connection;
+    private $connectionHandler;
     
     /**
      * Constructor
      *
      * @access public
-     * @param  \kanso\framework\database\connection\Connection $connection The database connection to use
+     * @param  \kanso\framework\database\connection\ConnectionHandler $connectionHandler The database connection handler to use
      * @param  string $tableName The table name we are altering
      */
-    public function __construct(Connection $connection, string $tableName)
+    public function __construct(ConnectionHandler $connectionHandler, string $tableName)
     {
         # Set the current database object instance
-        $this->connection  = $connection;
+        $this->connectionHandler  = $connectionHandler;
 
         # Set the current table name to operate on
         $this->tableName = $tableName;
@@ -90,7 +90,7 @@ class Alter
         }
 
         # Execute the SQL
-        $this->connection->query("ALTER TABLE `$this->tableName` ADD `$column` $dataType");
+        $this->connectionHandler->query($this->connectionHandler->cleanQuery("ALTER TABLE `$this->tableName` ADD `$column` $dataType"));
 
         # Reload the columns
         $this->loadColumns();
@@ -119,7 +119,7 @@ class Alter
         }
 
         # Execute the SQL
-        $this->connection->query("ALTER TABLE `$this->tableName` DROP `$column`");
+        $this->connectionHandler->query($this->connectionHandler->cleanQuery("ALTER TABLE `$this->tableName` DROP `$column`"));
         
         # Remove the column from list
         unset($this->columns[$column]);
@@ -149,7 +149,6 @@ class Alter
         # Validate the column already exists
         if (!$this->columnExists($column))
         {
-
             throw new PDOException("Error modifying column $column. The column does NOT exist.");
         }
 
@@ -163,7 +162,7 @@ class Alter
         }
 
         # Otherwise change the columns datatype
-        $this->connection->query("ALTER TABLE `$this->tableName` MODIFY COLUMN `$column` $dataType");
+        $this->connectionHandler->query($this->connectionHandler->cleanQuery("ALTER TABLE `$this->tableName` MODIFY COLUMN `$column` $dataType"));
 
         # Reload the column config
         $this->loadColumns();
@@ -184,7 +183,7 @@ class Alter
         $colConfig = $this->getColumnConfig();
 
         # If PRIMARY KEY is already set on this column return
-        if (strpos($colConfig, 'PRIMARY KEY') !== FALSE)
+        if (strpos(strtoupper($colConfig), 'PRIMARY KEY') !== FALSE)
         {
             return $this;
         }
@@ -194,11 +193,11 @@ class Alter
         
         if ($PK)
         {
-            $this->connection->query("ALTER TABLE `$this->tableName` MODIFY COLUMN `$PK` INT(11) NOT NULL UNIQUE, DROP PRIMARY KEY");
+            $this->connectionHandler->query($this->connectionHandler->cleanQuery("ALTER TABLE `$this->tableName` MODIFY COLUMN `$PK` INT(11) NOT NULL UNIQUE, DROP PRIMARY KEY"));
         }
         
         # Set the PRIMARY KEY to this column
-        $this->connection->query("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` INT(11) NOT NULL UNIQUE PRIMARY KEY");
+        $this->connectionHandler->query($this->connectionHandler->cleanQuery("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` INT(11) NOT NULL UNIQUE PRIMARY KEY"));
         
         # Reload the column config
         $this->loadColumns();
@@ -221,7 +220,7 @@ class Alter
         # Drop the primary key
         if ($PK)
         {
-            $this->connection->query("ALTER TABLE `$this->tableName` DROP PRIMARY KEY");
+            $this->connectionHandler->query($this->connectionHandler->cleanQuery("ALTER TABLE `$this->tableName` DROP PRIMARY KEY"));
         }
         
         # Reload the column config
@@ -244,16 +243,16 @@ class Alter
         $colConfig = $this->getColumnConfig();
 
         # If not null is already set return
-        if (strpos($colConfig, 'NOT NULL') !== FALSE)
+        if (strpos(strtoupper($colConfig), 'NOT NULL') !== FALSE)
         {
             return $this;
         }
 
         # Remove all null values
-        $this->connection->query("UPDATE `$this->tableName` SET `$this->column` = :not_null WHERE `$this->column` IS NULL", ['not_null' => $notNull]);
+        $this->connectionHandler->query("UPDATE `$this->tableName` SET `$this->column` = :not_null WHERE `$this->column` IS NULL", ['not_null' => $notNull]);
 
         # If the default is set to null remove it
-        if (strpos($colConfig, 'DEFAULT NULL') !== FALSE)
+        if (strpos(strtoupper($colConfig), 'DEFAULT NULL') !== FALSE)
         {
             $colConfig = str_replace('DEFAULT NULL', "DEFAULT $notNull", $colConfig);
         }
@@ -261,7 +260,7 @@ class Alter
         $colConfig = "$colConfig NOT NULL";
 
         # Change the column config
-        $this->connection->query("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` $colConfig");
+        $this->connectionHandler->query($this->connectionHandler->cleanQuery("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` $colConfig"));
 
         # Reload the column config
         $this->loadColumns();
@@ -282,13 +281,13 @@ class Alter
         $colConfig = $this->getColumnConfig();
 
         # Only change the config if NOT NULL exists
-        if (strpos($colConfig, 'NOT NULL') !== FALSE)
-        {    
+        if (strpos(strtoupper($colConfig), 'NOT NULL') !== FALSE)
+        {
             # Remove the NOT NULL
             $colConfig = str_replace('NOT NULL', '', $colConfig);
             
             # Change the column config
-            $this->connection->query("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` $colConfig");
+            $this->connectionHandler->query($this->connectionHandler->cleanQuery("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` $colConfig"));
         }
 
         # Reload the column config
@@ -310,7 +309,7 @@ class Alter
         $colConfig = $this->getColumnConfig();
 
         # If UNSIGNED is already set return
-        if (strpos($colConfig, 'UNSIGNED') !== FALSE)
+        if (strpos(strtoupper($colConfig), 'UNSIGNED') !== FALSE)
         {
             return $this;
         }
@@ -320,7 +319,7 @@ class Alter
         $colConfig = substr_replace($colConfig, ' UNSIGNED ', $pos, 0);
 
         # Change the column config
-        $this->connection->query("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` $colConfig");
+        $this->connectionHandler->query($this->connectionHandler->cleanQuery("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` $colConfig"));
         
         # Reload the column config
         $this->loadColumns();
@@ -348,7 +347,7 @@ class Alter
             $colConfig = str_replace('unsigned', '', $colConfig);
 
             # Change the column config
-            $this->connection->query("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` $colConfig");
+            $this->connectionHandler->query($this->connectionHandler->cleanQuery("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` $colConfig"));
         }
 
         # Reload the column config
@@ -379,15 +378,18 @@ class Alter
         if (strpos(strtoupper($colConfig), 'PRIMARY KEY') !== FALSE)
         {
             # Change the column config
-            $this->connection->query("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` INT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY");
+            $this->connectionHandler->query($this->connectionHandler->cleanQuery("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` INT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY"));
         }
         else 
         {
             # Drop the primary key
-            if ($this->getPrimaryKey()) $this->DROP_PRIMARY_KEY();
+            if ($this->getPrimaryKey())
+            {
+                $this->DROP_PRIMARY_KEY();
+            }
            
             # Change the column config
-            $this->connection->query("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` INT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY");
+            $this->connectionHandler->query($this->connectionHandler->cleanQuery("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` INT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY"));
         }
       
         # Reload the column config
@@ -411,7 +413,7 @@ class Alter
         # Only change if AUTO_INCREMENT is set 
         if (strpos(strtoupper($colConfig), 'AUTO_INCREMENT') !== FALSE)
         {
-            $this->connection->query("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` INT NOT NULL UNIQUE");
+            $this->connectionHandler->query($this->connectionHandler->cleanQuery("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` INT NOT NULL UNIQUE"));
         }      
       
         # Reload the column config
@@ -430,7 +432,7 @@ class Alter
     public function SET_DEFAULT($value = 'NULL'): Alter
     {
         # Set the default value
-        $this->connection->query("ALTER TABLE `$this->tableName` ALTER `$this->column` SET DEFAULT $value");
+        $this->connectionHandler->query($this->connectionHandler->cleanQuery("ALTER TABLE `$this->tableName` ALTER `$this->column` SET DEFAULT $value"));
 
         # Reload the column config
         $this->loadColumns();
@@ -451,7 +453,7 @@ class Alter
         $colConfig = str_replace('DEFAULT NULL', '', $this->setColumnConfig('DEFAULT', 'NULL'));
 
         # Save the column params
-        $this->connection->query("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` $colConfig");
+        $this->connectionHandler->query($this->connectionHandler->cleanQuery("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` $colConfig"));
 
         # Reload the column config
         $this->loadColumns();
@@ -478,7 +480,7 @@ class Alter
         $colConfig = str_replace('DEFAULT NULL', '', $this->setColumnConfig('Key', 'UNI'));
 
         # Save the column params
-        $this->connection->query("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` $colConfig");
+        $this->connectionHandler->query($this->connectionHandler->cleanQuery("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` $colConfig"));
         
         # Reload the column config
         $this->loadColumns();
@@ -502,7 +504,7 @@ class Alter
             $colConfig = str_replace('DEFAULT NULL', '', $this->setColumnConfig('Key', ''));
 
             # Save the column params
-            $this->connection->query("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` $colConfig");
+            $this->connectionHandler->query($this->connectionHandler->cleanQuery("ALTER TABLE `$this->tableName` MODIFY COLUMN `$this->column` $colConfig"));
             
             # Reload the column config
             $this->loadColumns();
@@ -524,19 +526,17 @@ class Alter
     public function ADD_FOREIGN_KEY(string $referenceTable, string $referenceKey, string $constraint = null): Alter
     {
         # Prefix the reference table
-        $referenceTable = $this->connection->tablePrefix().$this->indexFilter($referenceTable);
+        $referenceTable = $this->connectionHandler->tablePrefix().$this->indexFilter($referenceTable);
 
         # Create a constraint if it was not provided
-        $kCol   = substr(str_replace($this->connection->tablePrefix(), '', $this->column), 0, 3);
-        $ktble  = substr(str_replace($this->connection->tablePrefix(), '', $referenceTable), 0, 3);
-        $ktble2 = substr(str_replace($this->connection->tablePrefix(), '', $this->tableName), 0, 3);
-        $kkey   = substr(str_replace($this->connection->tablePrefix(), '', $referenceKey), 0, 3);
+        $kCol   = substr(str_replace($this->connectionHandler->tablePrefix(), '', $this->column), 0, 3);
+        $ktble  = substr(str_replace($this->connectionHandler->tablePrefix(), '', $referenceTable), 0, 3);
+        $ktble2 = substr(str_replace($this->connectionHandler->tablePrefix(), '', $this->tableName), 0, 3);
+        $kkey   = substr(str_replace($this->connectionHandler->tablePrefix(), '', $referenceKey), 0, 3);
         $constraint   = $constraint ? $constraint : str_replace(" ", "_", "fk $kCol toTable $ktble fromT $ktble2 onCol $kkey");
 
-        $SQL = "ALTER TABLE `$this->tableName` ADD CONSTRAINT `$constraint` FOREIGN KEY (`$this->column`) REFERENCES $referenceTable(`$referenceKey`)";
-
         # Save the FK
-        $this->connection->query("ALTER TABLE `$this->tableName` ADD CONSTRAINT `$constraint` FOREIGN KEY (`$this->column`) REFERENCES $referenceTable(`$referenceKey`)");
+        $this->connectionHandler->query("ALTER TABLE `$this->tableName` ADD CONSTRAINT `$constraint` FOREIGN KEY (`$this->column`) REFERENCES $referenceTable(`$referenceKey`)");
 
         # Reload the column config
         $this->loadColumns();
@@ -556,17 +556,17 @@ class Alter
     public function DROP_FOREIGN_KEY($referenceTable, $referenceKey, $constraint = null): Alter
     {
         # Prefix the reference table
-        $referenceTable = $this->connection->tablePrefix().$this->indexFilter($referenceTable);
+        $referenceTable = $this->connectionHandler->tablePrefix().$this->indexFilter($referenceTable);
 
         # Create a constraint if it was not provided
-        $kCol   = substr(str_replace($this->connection->tablePrefix(), '', $this->column), 0, 3);
-        $ktble  = substr(str_replace($this->connection->tablePrefix(), '', $referenceTable), 0, 3);
-        $ktble2 = substr(str_replace($this->connection->tablePrefix(), '', $this->tableName), 0, 3);
-        $kkey   = substr(str_replace($this->connection->tablePrefix(), '', $referenceKey), 0, 3);
+        $kCol   = substr(str_replace($this->connectionHandler->tablePrefix(), '', $this->column), 0, 3);
+        $ktble  = substr(str_replace($this->connectionHandler->tablePrefix(), '', $referenceTable), 0, 3);
+        $ktble2 = substr(str_replace($this->connectionHandler->tablePrefix(), '', $this->tableName), 0, 3);
+        $kkey   = substr(str_replace($this->connectionHandler->tablePrefix(), '', $referenceKey), 0, 3);
         $constraint = $constraint ? $constraint : str_replace(" ", "_", "fk $kCol toTable $ktble fromT $ktble2 onCol $kkey");
 
         # Remove the FK
-        $this->connection->query("ALTER TABLE `$this->tableName` DROP FOREIGN KEY `$constraint`");
+        $this->connectionHandler->query("ALTER TABLE `$this->tableName` DROP FOREIGN KEY `$constraint`");
 
         # Reload the column config
         $this->loadColumns();
@@ -589,7 +589,7 @@ class Alter
     {
         $columns = [];
         
-        $cols = $this->connection->query("SHOW COLUMNS FROM `$this->tableName`");
+        $cols = $this->connectionHandler->query("SHOW COLUMNS FROM `$this->tableName`");
         
         foreach ($cols as $col)
         {
@@ -619,7 +619,7 @@ class Alter
      */
     private function getPrimaryKey()
     {
-        $key = $this->connection->query("SHOW KEYS FROM `$this->tableName` WHERE Key_name = 'PRIMARY'");
+        $key = $this->connectionHandler->query("SHOW KEYS FROM `$this->tableName` WHERE Key_name = 'PRIMARY'");
         
         if (isset($key[0]['Column_name']))
         {
@@ -700,5 +700,17 @@ class Alter
     private function indexFilter(string $str): string
     {
         return strtolower(str_replace(' ', '_', $str));
+    }
+
+    /**
+     * Safely format the query consistently
+     *
+     * @access  private
+     * @param   string $sql SQL query statement 
+     * @return  string
+     */
+    private function cleanQuery(string $sql): string
+    {
+       return trim(preg_replace('/\s+/', ' ', $sql));
     }
 }

@@ -29,17 +29,6 @@ class Admin
      */
     public function __construct()
     {
-        $this->loadContainer();
-    }
-
-    /**
-     * Loads the container into the container aware trait
-     *
-     * @access private
-     */
-    private function loadContainer()
-    {
-        $this->setContainer(Kanso::instance()->container());
     }
 
     /**

@@ -7,7 +7,7 @@
 
 namespace kanso\framework\database\query;
 
-use kanso\framework\database\connection\Connection;
+use kanso\framework\database\connection\ConnectionHandler;
 use kanso\framework\database\query\Query;
 
 /**
@@ -18,43 +18,44 @@ use kanso\framework\database\query\Query;
 class Builder
 {
     /**
-     * Connection
+     * Connection handler
      *
-     * @var \kanso\framework\database\connection\Connection;
+     * @var \kanso\framework\database\connection\ConnectionHandler;
      */ 
-	private $connection;
+	private $connectionHandler;
 
     /**
      * Query
      * 
      * @var \kanso\framework\database\query\Query
      */ 
-	private $Query;
+	private $query;
 	
     /**
      * Constructor
      *
      * @access public
-     * @param  \kanso\framework\database\connection\Connection $connection Database connection
+     * @param  \kanso\framework\database\connection\ConnectionHandler $connectionHandler Database connection handler
+     * @param  \kanso\framework\database\query\Query                  $query             Builder Query
      */
-	public function __construct(Connection $connection)
+	public function __construct(ConnectionHandler $connectionHandler, Query $query)
 	{
         # Save the database access instance locally
-		$this->connection = $connection;
+		$this->connectionHandler = $connectionHandler;
 
         # create a new query object
-        $this->Query = new Query($connection);
+        $this->query = $query;
 	}
 
     /**
      * Get the database connection
      *
      * @access public
-     * @return \kanso\framework\database\connection\Connection
+     * @return \kanso\framework\database\connection\ConnectionHandler
      */
-    public function connection(): Connection
+    public function connectionHandler(): ConnectionHandler
     {
-        return $this->connection;
+        return $this->connectionHandler;
     }
 
 	/********************************************************************************
@@ -91,10 +92,10 @@ class Builder
         $SQL[] = "PRIMARY KEY (id)\n) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;";
     
         # Execute the query
-        $this->connection->query(implode(' ', $SQL));
+        $this->connectionHandler->query($this->connectionHandler->cleanQuery(implode(' ', $SQL)));
 
         # Set the table in the query
-        $this->Query->setTable($tableName);
+        $this->query->setTable($tableName);
 
         # Return Builder for chaining
         return $this;
@@ -111,9 +112,9 @@ class Builder
     {
         $tableName = $this->indexFilter($tableName);
         
-        $this->Query->setTable(null);
+        $this->query->setTable('');
         
-        $this->connection->query("DROP TABLE $tableName");
+        $this->connectionHandler->query("DROP TABLE `$tableName`");
         
         return $this;
     }
@@ -129,9 +130,9 @@ class Builder
     {
         $tableName = $this->indexFilter($tableName);
         
-        $this->Query->setTable($tableName);
+        $this->query->setTable($tableName);
         
-        $this->connection->query("TRUNCATE TABLE $tableName"); 
+        $this->connectionHandler->query("TRUNCATE TABLE `$tableName`");
         
         return $this;
     }
@@ -147,9 +148,9 @@ class Builder
     {
         $tableName = $this->indexFilter($tableName);
         
-        $this->Query->setTable($tableName);
+        $this->query->setTable($tableName);
         
-        return new Alter($this->connection, $tableName);
+        return new Alter($this->connectionHandler, $tableName);
     }
 
     /********************************************************************************
@@ -167,9 +168,9 @@ class Builder
     {
         $tableName = $this->indexFilter($tableName);
         
-        $this->Query->setTable($tableName);
+        $this->query->setTable($tableName);
         
-        $this->Query->setOperation('QUERY');        
+        $this->query->setOperation('QUERY');        
         
         return $this;
     }
@@ -185,7 +186,7 @@ class Builder
     {
         $tableName = $this->indexFilter($tableName);
         
-        $this->Query->setTable($tableName);
+        $this->query->setTable($tableName);
         
         return $this;
     }
@@ -201,9 +202,9 @@ class Builder
     {
         $tableName = $this->indexFilter($tableName);
         
-        $this->Query->setTable($tableName);
+        $this->query->setTable($tableName);
         
-        $this->Query->setOperation('INSERT INTO');
+        $this->query->setOperation('INSERT INTO');
         
         return $this;
     }
@@ -217,7 +218,7 @@ class Builder
      */
     public function VALUES(array $values): Builder
     {
-        $this->Query->setOperation('INSERT INTO', $values);
+        $this->query->setOperation('INSERT INTO', $values);
         
         return $this;
     }
@@ -231,7 +232,7 @@ class Builder
      */
     public function SET(array $values): Builder
     {
-        $this->Query->setOperation('SET', $values);
+        $this->query->setOperation('SET', $values);
         
         return $this;
     }
@@ -247,9 +248,9 @@ class Builder
     {
         $tableName = $this->indexFilter($tableName);
         
-        $this->Query->setTable($tableName);
+        $this->query->setTable($tableName);
         
-        $this->Query->setOperation('DELETE');
+        $this->query->setOperation('DELETE');
         
         return $this;
     }
@@ -262,7 +263,7 @@ class Builder
      */
     public function QUERY()
     {
-        return $this->Query->query();
+        return $this->query->query();
     }
     
     /********************************************************************************
@@ -280,7 +281,7 @@ class Builder
     {
         $columnNames = $this->queryFilter($columnNames);
         
-        $this->Query->select($columnNames);
+        $this->query->select($columnNames);
         
         return $this;
     }
@@ -298,7 +299,7 @@ class Builder
     {
         $column = $this->queryFilter($column);
         
-        $this->Query->where($column, $op, $value);
+        $this->query->where($column, $op, $value);
         
         return $this;
     }
@@ -316,7 +317,7 @@ class Builder
     {
         $column = $this->queryFilter($column);
         
-        $this->Query->and_where($column, $op, $value);
+        $this->query->and_where($column, $op, $value);
         
         return $this;
     }
@@ -334,7 +335,7 @@ class Builder
     {
         $column = $this->queryFilter($column);
         
-        $this->Query->or_where($column, $op, $value);
+        $this->query->or_where($column, $op, $value);
         
         return $this;
     }   
@@ -353,7 +354,7 @@ class Builder
         
         $query = $this->queryFilter($query);
         
-        $this->Query->join($tableName, $query);
+        $this->query->join($tableName, $query);
         
         return $this;
     }
@@ -372,7 +373,7 @@ class Builder
 
         $query = $this->queryFilter($query);
 
-        $this->Query->join($tableName, $query);
+        $this->query->join($tableName, $query);
 
         return $this;
     }
@@ -391,7 +392,7 @@ class Builder
         
         $query = $this->queryFilter($query);
         
-        $this->Query->left_join($tableName, $query);
+        $this->query->left_join($tableName, $query);
         
         return $this;
     }
@@ -410,7 +411,7 @@ class Builder
         
         $query = $this->queryFilter($query);
         
-        $this->Query->right_join($tableName, $query);
+        $this->query->right_join($tableName, $query);
         
         return $this;
     }
@@ -429,7 +430,7 @@ class Builder
         
         $query = $this->queryFilter($query);
         
-        $this->Query->full_outer_join($table, $query);
+        $this->query->full_outer_join($table, $query);
         
         return $this;
     }
@@ -446,7 +447,7 @@ class Builder
     {
         $key = $this->queryFilter($key);
         
-        $this->Query->order_by($key, $direction);
+        $this->query->order_by($key, $direction);
         
         return $this;
     }
@@ -462,7 +463,7 @@ class Builder
     {
         $key = $this->queryFilter($key);
         
-        $this->Query->group_by($key);
+        $this->query->group_by($key);
         
         return $this;
     }
@@ -479,7 +480,7 @@ class Builder
     {
         $keys = $this->queryFilter($keys);
         
-        $this->Query->group_concat($keys, $as);
+        $this->query->group_concat($keys, $as);
         
         return $this;
     }
@@ -494,7 +495,7 @@ class Builder
      */
     public function LIMIT(int $offset, int $limit = null): Builder
     {
-        $this->Query->limit($offset, $limit);
+        $this->query->limit($offset, $limit);
         
         return $this;
     }
@@ -507,7 +508,7 @@ class Builder
      */
     public function ROW()
     {
-        return $this->Query->row();
+        return $this->query->row();
     }
 
     /**
@@ -520,7 +521,7 @@ class Builder
      */
     public function FIND(int $id = null)
     {
-        return $this->Query->find($id);
+        return $this->query->find($id);
     }
 
     /**
@@ -531,7 +532,7 @@ class Builder
      */
     public function FIND_ALL()
     {
-        return $this->Query->find_all();
+        return $this->query->find_all();
     }
 
     /********************************************************************************
@@ -548,7 +549,7 @@ class Builder
     private function indexFilter(string $str): string
     {
         # append the table prefix
-        return $this->connection->tablePrefix().strtolower(str_replace(' ', '_', $str));
+        return $this->connectionHandler->tablePrefix().strtolower(str_replace(' ', '_', $str));
     }
 
     /**
@@ -565,13 +566,13 @@ class Builder
         # e.g turn  posts.id -> kanso_posts.id
         if (strpos($query, '.') !== false)
         {
-            return preg_replace('/(\w+\.)/', $this->connection->tablePrefix()."$1", $query);
+            return preg_replace('/(\w+\.)/', $this->connectionHandler->tablePrefix()."$1", $query);
         }
 
         # e.g turn  posts(id) -> kanso_posts(id)
         if (strpos($query, '(') !== false)
         {
-            return preg_replace('/(\w+\()/', $this->connection->tablePrefix()."$1", $query);
+            return preg_replace('/(\w+\()/', $this->connectionHandler->tablePrefix()."$1", $query);
         }
         
         return $query;

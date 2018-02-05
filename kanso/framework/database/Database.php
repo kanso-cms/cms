@@ -131,6 +131,6 @@ class Database
      */
 	public function builder(string $connectionName): Builder
 	{
-		return new Builder($this->connect($connectionName));
+		return $this->connect($connectionName)->builder();
 	}
 }

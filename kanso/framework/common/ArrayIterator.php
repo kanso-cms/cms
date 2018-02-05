@@ -48,12 +48,18 @@ class ArrayIterator implements \Iterator
     {        
         return key($this->data);
     }
-  
+    
+    /**
+     * {@inheritdoc}
+     */
     public function next() 
     {
         return next($this->data);
     }
-  
+    
+    /**
+     * {@inheritdoc}
+     */
     public function valid()
     {
         $key = key($this->data);

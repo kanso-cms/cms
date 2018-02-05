@@ -49,8 +49,6 @@ class Kanso
 	protected function __construct()
 	{
 		$this->application = Application::instance();
-
-		$this->setContainer($this->application->container());
 	}
 
 	/**
@@ -67,17 +65,6 @@ class Kanso
 		}
 
 		return static::$instance = new static;
-	}
-
-	/**
-	 * Returns the application container
-	 *
-	 * @access public
-	 * @return \kanso\framework\ioc\Container
-	 */
-	public function container(): Container
-	{
-		return $this->application->container();
 	}
 
 	/**

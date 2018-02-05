@@ -105,7 +105,7 @@ class Application
      */
     protected function initialize()
     {
-        $this->container = new Container();
+        $this->container = Container::instance();
 
         $this->container->singleton('Config', function ()
         {
@@ -121,7 +121,8 @@ class Application
      */
     public function environment()
     {
-        if (defined('KANSO_ENV')) {
+        if (defined('KANSO_ENV'))
+        {
             return KANSO_ENV;
         }
 

@@ -66,21 +66,9 @@ class Query
      */
     public function __construct(QueryParser $queryParser, Cache $cache)
     {
-        $this->loadContainer();
-
         $this->loadDependencies($queryParser, $cache);
 
         $this->fetchPageIndex();
-    }
-
-    /**
-     * Loads the container into the container aware trait
-     *
-     * @access private
-     */
-    private function loadContainer()
-    {
-        $this->setContainer(Kanso::instance()->container());
     }
 
     /**

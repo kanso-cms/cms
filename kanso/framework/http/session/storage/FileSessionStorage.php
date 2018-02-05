@@ -196,7 +196,7 @@ class FileSessionStorage implements StoreInterface
         {
             $this->id = $id;
 
-            $_COOKIE[$this->session_name()] = $this->id;  
+            $_COOKIE[$this->session_name()] =  $this->crypto->encrypt($this->id);
         }
 
         return $this->id;
@@ -261,6 +261,8 @@ class FileSessionStorage implements StoreInterface
      */
     public function session_gc()
     {
+        $deleted = false;
+
         if (!$this->garbageColltected)
         {
             $gc_time = $this->storageDir.DIRECTORY_SEPARATOR.$this->GCFileName;
@@ -269,7 +271,7 @@ class FileSessionStorage implements StoreInterface
             {
                 if (filemtime($gc_time) < time() - $this->gCPeriod)
                 {
-                    $this->deleteOldSessions();
+                    $deleted = $this->deleteOldSessions();
 
                     touch($gc_time);
                 }
@@ -281,6 +283,8 @@ class FileSessionStorage implements StoreInterface
 
             $this->garbageColltected = true;
         }
+
+        return $deleted;
     }
 
     /**
@@ -293,7 +297,7 @@ class FileSessionStorage implements StoreInterface
             return unserialize(file_get_contents($this->sessionFile()));
         }
 
-        return [];
+        return null;
     }
 
     /**
@@ -358,9 +362,12 @@ class FileSessionStorage implements StoreInterface
      * Delete old session files
      *
      * @access private
+     * @return array
      */
-    private function deleteOldSessions()
+    private function deleteOldSessions(): int
     {
+        $deleted = 0;
+
         $files = scandir($this->storageDir);
 
         foreach ($files as $file)
@@ -374,7 +381,11 @@ class FileSessionStorage implements StoreInterface
             if ( time() - filemtime($this->storageDir.DIRECTORY_SEPARATOR.$file) > 86400)
             {
                 unlink($this->storageDir.DIRECTORY_SEPARATOR.$file);
+
+                $deleted++;
             }
         }
+
+        return $deleted;
     }
 }
