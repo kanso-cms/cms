@@ -14,7 +14,6 @@ namespace kanso\framework\security\password\encrypters;
  */
 class NativePHP extends Encrypter implements EncrypterInterface
 {
-
 	/**
 	 * PHP password hashing constant
 	 *
@@ -29,7 +28,7 @@ class NativePHP extends Encrypter implements EncrypterInterface
 	 * @param int $algo PHP password hashing constant
 	 * @see   http://php.net/manual/en/password.constants.php
 	 */
-	public function __construct(int $algo)
+	public function __construct(int $algo = PASSWORD_DEFAULT)
 	{
 		$this->algo = $algo;
 	}
