@@ -54,4 +54,44 @@ class ShellTest extends TestCase
 
 		$this->assertTrue($cli->is_successful());
 	}
+
+	/**
+	 *
+	 */
+	public function testCd()
+	{
+		$cli = new Shell;
+
+		$cli->cd(dirname(__FILE__))->cmd('ruby')->option('v')->run();
+
+		$this->assertTrue($cli->is_successful());
+	}
+
+	/**
+	 *
+	 */
+	public function testInputOutput()
+	{
+		$cli = new Shell;
+
+		$input = dirname(__FILE__).'/input.scss';
+
+		$output = dirname(__FILE__).'/output.css';
+
+		$sass = "\$blue: #3bbfce;\n\nbody{\n\tcolor: \$blue\n}";
+
+		$css = 'body{color:#3bbfce}';
+
+		file_put_contents($input, $sass);
+
+		$cli->cmd('sass')->input($input)->output($output)->option('style', 'compressed')->option('scss')->option('no-cache')->run();
+
+		$this->assertTrue($cli->is_successful());
+
+		$this->assertEquals($css, trim(file_get_contents($output)));
+
+		unlink($input);
+
+		unlink($output);
+	}
 }
