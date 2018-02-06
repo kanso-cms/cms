@@ -7,10 +7,10 @@
 
 namespace kanso\framework\application\services;
 
-use kanso\framework\security\Key;
 use kanso\framework\security\Crypto;
 use kanso\framework\security\password\encrypters\NativePHP;
 use kanso\framework\security\crypto\Signer;
+use kanso\framework\security\crypto\Key;
 use kanso\framework\security\spam\gibberish\Gibberish;
 use kanso\framework\security\spam\SpamProtector;
 use kanso\framework\security\crypto\encrypters\OpenSSL;
