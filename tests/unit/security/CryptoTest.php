@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\security\crypto\encrypters;
+namespace tests\unit\security\crypto;
 
 use Mockery;
 use tests\TestCase;

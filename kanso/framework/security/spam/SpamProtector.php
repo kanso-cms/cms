@@ -193,9 +193,13 @@ class SpamProtector
      */
     private function listContains(array $list, string $term): bool
     {
+        $term = strtolower($term);
+
         foreach ($list as $item)
         {
-            if ($item === $term || Str::contains($item, $term))
+            $item = strtolower($item);
+
+            if ($item === $term || Str::contains($term, $item))
             {
                 return true;
             }
@@ -289,27 +293,23 @@ class SpamProtector
     {
         $count = 0;
 
-        $words = preg_split("/\s+/", $text);
+        $words = preg_split("/[^\w]*([\s]+[^\w]*|$)/", $text, -1, PREG_SPLIT_NO_EMPTY);
+
+        $constructs = $this->config->get('spam.graylist.constructs');
+
+        $urls = $this->config->get('spam.graylist.urls');
+
+        $terms = $this->config->get('spam.graylist.words');
+
+        $html = $this->config->get('spam.graylist.html');
 
         foreach ($words as $word)
         {
-            $term = trim(preg_replace("/([\.\,\;\:\"\'!])/", "", $word));
+            $word = trim(preg_replace("/([\.\,\;\:\"\'!])/", '', $word));
             
-            if (!empty($term) && $term !== '' && !in_array($term, ['!', '.', ',', '-', '&', ';', ':', '"', "'"]))
+            if (!empty($word) && !in_array($word, ['!', '.', ',', '-', '&', ';', ':', '"', "'"]))
             {
-                if (in_array($term, $this->config->get('spam.graylist.constructs')))
-                {
-                    $count++;
-                }
-                if (in_array($term, $this->config->get('spam.graylist.urls')))
-                {
-                    $count++;
-                }
-                if (in_array($term, $this->config->get('spam.graylist.words')))
-                {
-                    $count++;
-                }
-                if (in_array($term, $this->config->get('spam.graylist.html')))
+                if ($this->listContains($constructs, $word) || $this->listContains($urls, $word) || $this->listContains($terms, $word) || $this->listContains($html, $word))
                 {
                     $count++;
                 }
