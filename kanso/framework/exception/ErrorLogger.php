@@ -10,6 +10,7 @@ namespace kanso\framework\exception;
 use kanso\framework\http\request\Environment;
 use kanso\framework\exception\ExceptionLogicTrait;
 use Throwable;
+use PDOException;
 
 /**
  * Error logger class 
@@ -126,7 +127,7 @@ class ErrorLogger
      */
     private function errnoToFile(): string
     {
-        if($this->exception instanceof PDOException || get_class($this->exception) === 'PDOException' || strpos($this->exception->getMessage(), 'SQLSTATE') !== false)
+        if ($this->exception instanceof PDOException || get_class($this->exception) === 'PDOException' || strpos($this->exception->getMessage(), 'SQLSTATE') !== false)
         {
             return 'database_errors'; 
         }
