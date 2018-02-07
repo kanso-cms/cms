@@ -7,7 +7,7 @@
 
 namespace kanso\framework\config;
 
-use kanso\framework\file\FileSystem;
+use kanso\framework\file\Filesystem;
 use kanso\framework\file\CascadingFilesystem;
 use RuntimeException;
 
@@ -23,20 +23,20 @@ class Loader
     /**
 	 * File system instance.
 	 *
-	 * @var \mako\file\FileSystem
+	 * @var \mako\file\Filesystem
 	 */
-	private $fileSystem;
+	private $filesystem;
 
 	/**
 	 * Constructor.
 	 *
 	 * @access public
-	 * @param \kanso\framework\file\FileSystem $fileSystem File system instance
+	 * @param \kanso\framework\file\Filesystem $filesystem File system instance
 	 * @param string                           $path       Default path
 	 */
-	public function __construct(FileSystem $filesystem, string $path)
+	public function __construct(Filesystem $filesystem, string $path)
 	{
-		$this->fileSystem = $filesystem;
+		$this->filesystem = $filesystem;
 
 		$this->path = $path;
 	}
@@ -54,9 +54,9 @@ class Loader
 		// Load configuration
 		foreach($this->getCascadingFilePaths($file) as $path)
 		{			
-			if($this->fileSystem->exists($path))
+			if($this->filesystem->exists($path))
 			{
-				$config = $this->fileSystem->include($path);
+				$config = $this->filesystem->include($path);
 
 				break;
 			}
@@ -78,9 +78,9 @@ class Loader
 
 			foreach($this->getCascadingFilePaths($namespaced) as $path)
 			{
-				if($this->fileSystem->exists($path))
+				if($this->filesystem->exists($path))
 				{
-					$config = array_replace_recursive($config, $this->fileSystem->include($path));
+					$config = array_replace_recursive($config, $this->filesystem->include($path));
 
 					break;
 				}
@@ -104,7 +104,7 @@ class Loader
 		{
 			$path = $this->getFilePath($file, null, $environment);
 
-			$this->fileSystem->putContents($path, "<?php\nreturn\n".$this->var_export($fileData).";\n?>\n");
+			$this->filesystem->putContents($path, "<?php\nreturn\n".$this->var_export($fileData).";\n?>\n");
 		}
 
 		return true;

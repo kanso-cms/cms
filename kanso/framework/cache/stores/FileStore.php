@@ -8,6 +8,7 @@
 namespace kanso\framework\cache\stores;
 
 use kanso\framework\cache\stores\StoreInterface;
+use kanso\framework\file\Filesystem;
 
 /**
  * Cache file storage
@@ -22,11 +23,23 @@ Class FileStore implements StoreInterface
     private $path;
 
     /**
-     * {@inheritdoc}
+     * Filesystem instance
+     * 
+     * @var \kanso\framework\file\Filesystem
      */
-    public function __construct(string $path)
+    private $filesystem;
+
+    /**
+     * Constructo
+     * 
+     * @param \kanso\framework\file\Filesystem $filesystem Filesystem instance
+     * @param string                           $path       Directory to store cache files
+     */
+    public function __construct(Filesystem $filesystem, string $path)
     {
         $this->path = $path;
+
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -36,7 +49,7 @@ Class FileStore implements StoreInterface
     {
         if ($this->has($key))
         {
-            return file_get_contents($this->keyToFile($key));
+            return $this->filesystem->getContents($this->keyToFile($key));
         }
     }
 
@@ -45,7 +58,7 @@ Class FileStore implements StoreInterface
      */
     public function put(string $key, string $data)
     {
-        file_put_contents($this->keyToFile($key), $data);
+        $this->filesystem->putContents($this->keyToFile($key), $data);
     }
 
     /**
@@ -53,7 +66,7 @@ Class FileStore implements StoreInterface
      */
     public function has(string $key): bool
     {
-        return file_exists($this->keyToFile($key));
+        return $this->filesystem->exists($this->keyToFile($key));
     }
 
     /**
@@ -63,7 +76,7 @@ Class FileStore implements StoreInterface
     {
         if ($this->has($key))
         {
-            unlink($this->keyToFile($key));
+            $this->filesystem->delete($this->keyToFile($key));
         }
     }
 
@@ -74,7 +87,7 @@ Class FileStore implements StoreInterface
     {
         if ($this->has($key))
         {
-            if ((($maxAge - time()) + filemtime($this->keyToFile($key))) < time())
+            if ((($maxAge - time()) + $this->filesystem->lastModified($this->keyToFile($key))) < time())
             {
                 return true;
             }
@@ -88,13 +101,15 @@ Class FileStore implements StoreInterface
      */
     public function clear()
     {
-        $files = glob($this->path.DIRECTORY_SEPARATOR.'*');
+        $files = $this->filesystem->list($this->path);
 
         foreach ($files as $file)
         { 
-            if (is_file($file))
+            $path = $this->path . DIRECTORY_SEPARATOR . $file;
+
+            if ($this->filesystem->exists($path))
             {
-                unlink($file);
+                $this->filesystem->delete($path);
             }
         }
     }

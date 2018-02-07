@@ -253,7 +253,7 @@ class Filesystem
 	 * @param   array   $excludes File names to exclude
 	 * @return  array
 	 */
-	public static function list(string $dir, array $excludes = ['..', '.']): array
+	public static function list(string $dir, array $excludes = ['..', '.', '.ds_store']): array
 	{
 		return array_diff(scandir($dir), $excludes);
 	}
