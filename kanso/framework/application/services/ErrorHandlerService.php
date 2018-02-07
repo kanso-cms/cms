@@ -65,6 +65,6 @@ class ErrorHandlerService extends Service
 		});
 
 		# Save the instance
-		$this->container->instance('ErrorHandler', $handler);
+		$this->container->setInstance('ErrorHandler', $handler);
 	}
 }

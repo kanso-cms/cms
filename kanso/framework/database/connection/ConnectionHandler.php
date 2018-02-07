@@ -261,7 +261,18 @@ class ConnectionHandler
 		}
 
 		return $result;
-	}	
+	}
+
+	/**
+	 * Returns the table prefix for the connection
+	 *
+	 * @access public
+	 * @return string
+	 */	
+	public function tablePrefix(): string
+	{						
+		return $this->connection->tablePrefix();			
+	}
 
     /**
 	 * Returns an array which represents a row from the result set 

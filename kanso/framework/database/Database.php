@@ -77,9 +77,9 @@ class Database
 		
 		$connection = new Connection($config);
 
-		$connection->Query("DROP DATABASE IF EXISTS $databaseName");
+		$connection->handler()->query("DROP DATABASE IF EXISTS $databaseName");
 
-		$connection->Query("CREATE DATABASE $databaseName");
+		$connection->handler()->query("CREATE DATABASE $databaseName");
 
 		return $this->connect($connectionName);
 	}

@@ -19,3 +19,7 @@ Thumbs.db
 composer.phar
 composer.lock
 /vendor
+
+# Kanso #
+######################
+robots.txt
