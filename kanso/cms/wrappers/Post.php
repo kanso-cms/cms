@@ -532,7 +532,7 @@ class Post extends Wrapper
 
 			$this->SQL->INSERT_INTO('posts')->VALUES($insertRow)->QUERY();
 
-			$row['id'] = intval($this->SQL->connection()->lastInsertId());
+			$row['id'] = intval($this->SQL->connectionHandler()->lastInsertId());
 		}
 
 		# Or update an existing row

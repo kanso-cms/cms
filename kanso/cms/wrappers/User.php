@@ -66,7 +66,7 @@ class User extends Wrapper
 
             if ($saved)
             {
-                $this->data['id'] = intval($this->SQL->connection()->lastInsertId());
+                $this->data['id'] = intval($this->SQL->connectionHandler()->lastInsertId());
             }
         }
 

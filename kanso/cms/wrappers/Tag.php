@@ -45,7 +45,7 @@ class Tag extends Wrapper
 
                 if ($saved)
                 {
-                    $this->data['id'] = intval($this->SQL->connection()->lastInsertId());
+                    $this->data['id'] = intval($this->SQL->connectionHandler()->lastInsertId());
                 }
             }
             else
@@ -59,7 +59,7 @@ class Tag extends Wrapper
 
             if ($saved)
             {
-                $this->data['id'] = intval($this->SQL->connection()->lastInsertId());
+                $this->data['id'] = intval($this->SQL->connectionHandler()->lastInsertId());
             }
             
         }
