@@ -105,10 +105,14 @@ class GD implements ProcessorInterface
      * Constructor
      *
      * @access public
-     * @param string $filename Absolute path to file
+     * @param string  $filename Absolute path to file
      */
-    public function __construct(string $filename)
+    public function __construct(string $filename = null)
     {
+        if ($filename)
+        {
+            $this->load($filename);
+        }
     }
 
     /**
