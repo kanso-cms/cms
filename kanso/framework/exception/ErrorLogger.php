@@ -9,6 +9,7 @@ namespace kanso\framework\exception;
 
 use kanso\framework\http\request\Environment;
 use kanso\framework\exception\ExceptionLogicTrait;
+use kanso\framework\file\FileSystem;
 use Throwable;
 use PDOException;
 
@@ -35,16 +36,26 @@ class ErrorLogger
      */
     private $environment;
 
+    /**
+     * Filesystem instance
+     *
+     * @var \kanso\framework\file\FileSystem
+     */
+    private $fileSystem;
+
 	/**
 	 * Constructor
 	 *
 	 * @access public
-     * @param \Throwable                                $exception Throwable
-     * @param \kanso\framework\http\request\Environment $environment   HttpEnv instance for logging details
-     * @param string                                    $path Directory to store log files in
+     * @param \Throwable                                $exception   Throwable
+     * @param \kanso\framework\file\FileSystem          $filesystem  Filesystem instance
+     * @param \kanso\framework\http\request\Environment $environment HttpEnv instance for logging details
+     * @param string                                    $path        Directory to store log files in
 	 */
-    public function __construct(Throwable $exception, Environment $environment, string $path) 
+    public function __construct(Throwable $exception, FileSystem $filesystem, Environment $environment, string $path) 
     {
+        $this->fileSystem = $filesystem;
+
         $this->path = $path;
 
         $this->environment = $environment;
@@ -61,9 +72,9 @@ class ErrorLogger
     {
         $msg = $this->logMsg();
 
-        file_put_contents($this->genericPath(), $msg, FILE_APPEND);
+        $this->fileSystem->putContents($this->genericPath(), $msg, FILE_APPEND);
         
-        file_put_contents($this->errnoPath(), $msg, FILE_APPEND);
+        $this->fileSystem->putContents($this->errnoPath(), $msg, FILE_APPEND);
     }
 
     /**

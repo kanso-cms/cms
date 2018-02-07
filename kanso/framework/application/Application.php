@@ -9,6 +9,7 @@ namespace kanso\framework\application;
 
 use kanso\framework\ioc\Container;
 use kanso\framework\config\Config;
+use kanso\framework\file\FileSystem;
 use kanso\framework\config\Loader;
 use kanso\framework\autoload\AliasLoader;
 
@@ -107,6 +108,11 @@ class Application
     {
         $this->container = Container::instance();
 
+        $this->container->singleton('FileSystem', function ()
+        {
+            return new FileSystem;
+        });
+
         $this->container->singleton('Config', function ()
         {
             return $this->configFactory();
@@ -166,7 +172,7 @@ class Application
      */
     protected function configFactory(): Config
     {
-        return new Config( new Loader($this->configurationPath()), $this->environment());
+        return new Config( new Loader($this->container->FileSystem, $this->configurationPath()), $this->environment());
     }
 
     /**
