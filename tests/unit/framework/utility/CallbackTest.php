@@ -10,31 +10,9 @@ namespace tests\unit\framework\utility;
 use tests\TestCase;
 use kanso\framework\utility\Callback;
 
-/**
- * @group unit
- */
-class CallbackTest extends TestCase
-{
-	/**
-	 *
-	 */
-	public function testCallbacks()
-	{
-		$this->assertEquals('foo', Callback::apply('tests\unit\framework\utility\CallbackTester@testMethod', 'foo'));
-
-		$this->assertEquals('foo', Callback::apply('tests\unit\framework\utility\CallbackTester::testStaticMethod', 'foo'));
-
-		$this->assertEquals('foobar', Callback::apply('tests\unit\framework\utility\CallbackTester::testStaticMethods', ['foo', 'bar']));
-
-		$this->assertEquals('foobar', Callback::apply('tests\unit\framework\utility\CallbackTesters@testMethods', ['foo', 'bar']));
-
-		$this->assertEquals('foobar', Callback::apply(function($foo, $bar)
-		{
-			return $foo.$bar;
-
-		}, ['foo', 'bar']));
-	}
-}
+// --------------------------------------------------------------------------
+// START CLASSES
+// --------------------------------------------------------------------------
 
 class CallbackTester
 {
@@ -77,5 +55,35 @@ class CallbackTesters
 	public function testMethods()
 	{
 		return $this->foo.$this->bar;
+	}
+}
+
+// --------------------------------------------------------------------------
+// END CLASSES
+// --------------------------------------------------------------------------
+
+/**
+ * @group unit
+ */
+class CallbackTest extends TestCase
+{
+	/**
+	 *
+	 */
+	public function testCallbacks()
+	{
+		$this->assertEquals('foo', Callback::apply('tests\unit\framework\utility\CallbackTester@testMethod', 'foo'));
+
+		$this->assertEquals('foo', Callback::apply('tests\unit\framework\utility\CallbackTester::testStaticMethod', 'foo'));
+
+		$this->assertEquals('foobar', Callback::apply('tests\unit\framework\utility\CallbackTester::testStaticMethods', ['foo', 'bar']));
+
+		$this->assertEquals('foobar', Callback::apply('tests\unit\framework\utility\CallbackTesters@testMethods', ['foo', 'bar']));
+
+		$this->assertEquals('foobar', Callback::apply(function($foo, $bar)
+		{
+			return $foo.$bar;
+
+		}, ['foo', 'bar']));
 	}
 }

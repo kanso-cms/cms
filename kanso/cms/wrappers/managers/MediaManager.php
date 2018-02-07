@@ -9,7 +9,8 @@ namespace kanso\cms\wrappers\managers;
 
 use kanso\framework\database\query\Builder;
 use kanso\framework\http\request\Environment;
-use kanso\framework\utility\Image;
+use kanso\framework\pixl\Image;
+use kanso\framework\pixl\processor\GD;
 use kanso\framework\utility\Mime;
 use kanso\framework\utility\Str;
 use kanso\cms\auth\Gatekeeper;
@@ -225,7 +226,7 @@ class MediaManager extends Manager
         else
         {
             # Grab our image processor
-            $Imager = new Image($FILE['tmp_name']);
+            $Imager = new Image($FILE['tmp_name'], new GD);
 
             # Get the file extension from the mime type
             $ext = Mime::toExt($FILE['type']);

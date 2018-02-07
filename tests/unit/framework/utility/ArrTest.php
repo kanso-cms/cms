@@ -10,6 +10,24 @@ namespace tests\unit\framework\utility;
 use tests\TestCase;
 use kanso\framework\utility\Arr;
 
+// --------------------------------------------------------------------------
+// START CLASSES
+// --------------------------------------------------------------------------
+
+class fooArrayAccess
+{
+	public $test_key;
+
+	public function __construct($var)
+	{
+		$this->test_key = $var;
+	}
+}
+
+// --------------------------------------------------------------------------
+// END CLASSES
+// --------------------------------------------------------------------------
+
 /**
  * @group unit
  */
@@ -246,15 +264,5 @@ class ArrTest extends TestCase
 		$this->assertEquals($result, Arr::paginate($input, 1, 2));
 
 		$this->assertEquals(false, Arr::paginate($input, 10, 2));
-	}
-}
-
-class fooArrayAccess
-{
-	public $test_key;
-
-	public function __construct($var)
-	{
-		$this->test_key = $var;
 	}
 }
