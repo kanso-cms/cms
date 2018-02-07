@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\http\session;
+namespace tests\unit\framework\http\session\storage;
 
 use Mockery;
 use tests\TestCase;
