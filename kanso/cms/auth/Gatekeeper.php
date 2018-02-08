@@ -11,11 +11,9 @@ use kanso\cms\wrappers\providers\UserProvider;
 use kanso\framework\database\query\Builder;
 use kanso\framework\http\cookie\Cookie;
 use kanso\framework\http\session\Session;
-use kanso\framework\http\request\Environment;
-use kanso\framework\config\Config;
 use kanso\framework\security\Crypto;
 use kanso\framework\utility\UUID;
-use kanso\cms\email\Email;
+use kanso\cms\auth\adapters\EmailAdapter;
 
 /**
  * CMS gatekeeper
@@ -81,25 +79,11 @@ class Gatekeeper
     private $crypto;
 
     /**
-     * Request environment
-     * 
-     * @var \kanso\framework\http\request\Environment
-     */
-    private $environment;
-
-    /**
-     * Config 
-     * 
-     * @var \kanso\framework\config\Config
-     */
-    private $config;
-
-    /**
      * Mailer utility 
      * 
-     * @var \kanso\cms\email\Email
+     * @var \kanso\cms\email\EmailAdapter
      */
-    private $email;
+    private $emailAdapter;
 
     /**
      * Constructor
@@ -110,11 +94,9 @@ class Gatekeeper
      * @param  \kanso\framework\security\Crypto          $crypto       Encryption manager
      * @param  \kanso\framework\http\cookie\Cookie       $cookie       Cookie manager
      * @param  \kanso\framework\http\session\Session     $session      Session manager
-     * @param  \kanso\framework\http\request\Environment $environment  Request environment
-     * @param  \kanso\framework\config\Config            $config       Config
-     * @param  \kanso\cms\email\Email                    $email        Mailer utility
+     * @param  \kanso\cms\email\EmailAdapter             $emailAdapter Mailer utility
      */
-    public function __construct(Builder $SQL, UserProvider $provider, Crypto $crypto, Cookie $cookie, Session $session, Config $config, Environment $environment, Email $email)
+    public function __construct(Builder $SQL, UserProvider $provider, Crypto $crypto, Cookie $cookie, Session $session, EmailAdapter $emailAdapter)
     {
         $this->SQL = $SQL;
 
@@ -122,15 +104,11 @@ class Gatekeeper
 
         $this->crypto = $crypto;
 
-        $this->environment = $environment;
-
-        $this->config = $config;
-
         $this->cookie = $cookie;
 
         $this->session = $session;
 
-        $this->email = $email;
+        $this->emailAdapter = $emailAdapter;
 
         $this->isLoggedIn(true);
     }
@@ -396,28 +374,7 @@ class Gatekeeper
 
         if ($sendEamil)
         {
-            $resetUrl = $this->environment->HTTP_HOST.'/'.$this->config->get('email.urls.reset_password').'?token='.$user->kanso_password_key;
-            
-            if ($user->role === 'administrator' || $user->role === 'writer')
-            {
-                $resetUrl = $this->environment->HTTP_HOST.'/admin/reset-password/?token='.$user->kanso_password_key;
-            }
-
-            $emailData = [
-                'name'        => $user->name, 
-                'resetUrl'    => $resetUrl,
-                'websiteName' => $this->environment->DOMAIN_NAME,
-                'websiteUrl'  => $this->environment->HTTP_HOST,
-            ];
-
-            # Email credentials
-            $senderName   = $this->config->get('cms.site_title');
-            $senderEmail  = 'no-reply@'.$this->environment->DOMAIN_NAME;
-            $emailSubject = 'Request to reset your password';
-            $emailContent = $this->email->html($emailSubject, $this->email->preset('forgot-password', $emailData));
-            $emailTo      = $user->email;
-
-            $this->email->send($emailTo, $senderName, $senderEmail, $emailSubject, $emailContent);
+            $this->emailAdapter->forgotPassword($user);
         }
 
         return true;
@@ -448,34 +405,11 @@ class Gatekeeper
 
         if ($sendEamil)
         {
-            $emailData =
-            [
-                'name'        => $user->name, 
-                'websiteName' => $this->environment->DOMAIN_NAME,
-                'websiteUrl'  => $this->environment->HTTP_HOST,
-                'resetUrl'    => $this->environment->HTTP_HOST.'/'.$this->config->get('email.urls.forgot_password'),
-                'loginUrl'    => $this->environment->HTTP_HOST.'/'.$this->config->get('email.urls.login'),
-            ];
-
-            if ($user->role === 'administrator' || $user->role === 'writer')
-            {
-                $emailData['resetUrl']  = $this->environment->HTTP_HOST.'/admin/forgot-password/';
-                $emailData['loginUrl']  = $this->environment->HTTP_HOST.'/admin/login/';
-            }
-
-            # Email credentials
-            $senderName   = $this->config->get('cms.site_title');
-            $senderEmail  = 'no-reply@'.$this->environment->DOMAIN_NAME;
-            $emailSubject = 'Your password was reset at '.$this->environment->DOMAIN_NAME;
-            $emailContent = $this->email->html($emailSubject, $this->email->preset('reset-password', $emailData));
-            $emailTo      = $user->email;
-
-            $this->email->send($emailTo, $senderName, $senderEmail, $emailSubject, $emailContent);
+            $this->emailAdapter->resetPassword($user);
         }
 
         return true;
     }
-
 
     /**
      * Forgot username
@@ -494,22 +428,7 @@ class Gatekeeper
             return false;
         }
 
-        # email variables
-        $emailData = [
-            'name'        => $user->name, 
-            'username'    => $user->username,
-            'websiteName' => $this->environment->DOMAIN_NAME,
-            'websiteUrl'  => $this->environment->HTTP_HOST,
-        ];
-
-        # Email credentials
-        $senderName   = $this->config->get('cms.site_title');
-        $senderEmail  = 'no-reply@'.$this->environment->DOMAIN_NAME;
-        $emailSubject = 'Username reminder at '.$this->environment->DOMAIN_NAME;
-        $emailContent = $this->email->html($emailSubject, $this->email->preset('forgot-username', $emailData));
-        $emailTo      = $user->email;
-
-        $this->email->send($emailTo, $senderName, $senderEmail, $emailSubject, $emailContent);
+        $this->emailAdapter->forgotUsername($user);
 
         return true;
     }
