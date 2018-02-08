@@ -13,7 +13,6 @@ use kanso\framework\utility\Str;
 use kanso\framework\utility\Arr;
 use kanso\framework\utility\Markdown;
 use kanso\cms\wrappers\Wrapper;
-use kanso\cms\wrappers\providers\Provider;
 use kanso\cms\wrappers\providers\TagProvider;
 use kanso\cms\wrappers\providers\CategoryProvider;
 use kanso\cms\wrappers\providers\UserProvider;

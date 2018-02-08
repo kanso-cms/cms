@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace mako\tests\unit\config;
+namespace tests\unit\framework\config;
 
 use Mockery;
 use tests\TestCase;

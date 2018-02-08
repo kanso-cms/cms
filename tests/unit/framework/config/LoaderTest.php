@@ -5,24 +5,23 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace mako\tests\unit\config\loaders;
+namespace tests\unit\framework\config;
 
 use Mockery;
-
 use tests\TestCase;
 use kanso\framework\config\Loader;
 
 /**
  * @group unit
  */
-class ConfigTest extends TestCase
+class LoaderTest extends TestCase
 {
     /**
      *
      */
-    public function getFileSystem()
+    public function getFilesystem()
     {
-        return Mockery::mock('\kanso\framework\file\FileSystem');
+        return Mockery::mock('\kanso\framework\file\Filesystem');
     }
 
     /**
@@ -30,7 +29,7 @@ class ConfigTest extends TestCase
      */
     public function testLoad()
     {
-        $fileSystem = $this->getFileSystem();
+        $fileSystem = $this->getFilesystem();
 
         $fileSystem->shouldReceive('exists')->once()->with('/app/config/settings.php')->andReturn(true);
 
@@ -46,7 +45,7 @@ class ConfigTest extends TestCase
      */
     public function testLoadNonExistingFile()
     {
-        $fileSystem = $this->getFileSystem();
+        $fileSystem = $this->getFilesystem();
 
         $fileSystem->shouldReceive('exists')->once()->with('/app/config/settings.php')->andReturn(false);
 
@@ -60,7 +59,7 @@ class ConfigTest extends TestCase
      */
     public function testLoadPackage()
     {
-        $fileSystem = $this->getFileSystem();
+        $fileSystem = $this->getFilesystem();
 
         $fileSystem->shouldReceive('exists')->once()->with('/app/config/packages/baz/settings.php')->andReturn(false);
 
@@ -80,7 +79,7 @@ class ConfigTest extends TestCase
      */
     public function testLoadPackageOverride()
     {
-        $fileSystem = $this->getFileSystem();
+        $fileSystem = $this->getFilesystem();
 
         $fileSystem->shouldReceive('exists')->with('/app/packages/baz/config/settings.php')->andReturn(true);
 
@@ -102,7 +101,7 @@ class ConfigTest extends TestCase
      */
     public function testLoadEvironmentOverride()
     {
-        $fileSystem = $this->getFileSystem();
+        $fileSystem = $this->getFilesystem();
 
         $fileSystem->shouldReceive('exists')->once()->with('/app/config/settings.php')->andReturn(true);
 

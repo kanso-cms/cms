@@ -8,8 +8,6 @@
 namespace kanso\framework\http\session\storage;
 
 use kanso\framework\http\session\storage\StoreInterface;
-use kanso\framework\utility\UUID;
-use kanso\framework\security\Crypto;
 
 /**
  * Session encrypt/decrypt
@@ -19,13 +17,6 @@ use kanso\framework\security\Crypto;
 class NativeSessionStorage implements StoreInterface
 {
     /**
-     * Crypto instance
-     *
-     * @var kanso\framework\security\Crypto
-     */
-    private $crypto;
-
-    /**
      * Constructor
      *
      * @access public
@@ -33,10 +24,8 @@ class NativeSessionStorage implements StoreInterface
      * @param  array                            $cookieParams  Assoc array of cookie configurations
      * @param  string                           $path          Where to save the cookie files to
      */
-    public function __construct(Crypto $crypto, array $cookieParams = [], string $path = '')
+    public function __construct(array $cookieParams = [], string $path = '')
     {
-        $this->crypto = $crypto;
-
         if ($cookieParams)
         {
             $this->session_set_cookie_params($cookieParams);

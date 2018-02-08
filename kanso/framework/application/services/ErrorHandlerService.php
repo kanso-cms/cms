@@ -31,7 +31,7 @@ class ErrorHandlerService extends Service
 	{
 		if ($this->container->Config->get('application.error_handler.error_reporting') > 0)
 		{
-			return new ErrorLogger($exception, $this->container->FileSystem, $this->container->Request->environment(), $this->container->Config->get('application.error_handler.log_path'));
+			return new ErrorLogger($exception, $this->container->Filesystem, $this->container->Request->environment(), $this->container->Config->get('application.error_handler.log_path'));
 		}
 
 		return null;

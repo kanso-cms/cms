@@ -171,7 +171,7 @@ class HttpService extends Service
      */
 	private function nativeSessionStore(array $storeConfig, array $cookieConfiguration): NativeSessionStorage
 	{
-		return new NativeSessionStorage($this->container->Crypto, $cookieConfiguration);
+		return new NativeSessionStorage($cookieConfiguration, $cookieConfiguration['storage']['path']);
 	}
 
 	/**
@@ -184,7 +184,7 @@ class HttpService extends Service
      */
 	private function fileSessionStore(array $storeConfig, array $cookieConfiguration): FileSessionStorage
 	{
-		return new FileSessionStorage($this->container->Crypto, $cookieConfiguration, $cookieConfiguration['storage']['path']);
+		return new FileSessionStorage($this->container->Crypto, $this->container->Filesystem, $cookieConfiguration, $cookieConfiguration['storage']['path']);
 	}
 
 	/**

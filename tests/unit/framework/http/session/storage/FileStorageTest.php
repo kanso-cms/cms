@@ -10,6 +10,7 @@ namespace tests\unit\framework\http\session\storage;
 use Mockery;
 use tests\TestCase;
 use kanso\framework\http\session\storage\FileSessionStorage;
+use kanso\framework\utility\UUID;
 
 /**
  * @group unit
@@ -32,188 +33,293 @@ class FileStorageTest extends TestCase
 	/**
 	 *
 	 */
-	private function mockStorage()
+	private function mockFilesystem()
 	{
-		$crypto = Mockery::mock('kanso\framework\security\Crypto');
-
-		return new FileSessionStorage($crypto, $this->getSessionConfig(), sys_get_temp_dir());
+		return Mockery::mock('\kanso\framework\file\Filesystem');
 	}
 
 	/**
-	 * @runInSeparateProcess
+	 *
 	 */
-	public function testSavePath()
+	private function mockCrypto()
 	{
-		$storage = $this->mockStorage();
-
-		$savePath = $storage->session_save_path();
-
-		$storage->session_save_path('foo/bar');
-
-		$this->assertEquals('foo/bar', $storage->session_save_path());
+		return Mockery::mock('\kanso\framework\security\Crypto');
 	}
 
 	/**
-	 * @runInSeparateProcess
+	 * 
 	 */
-	public function testWrite()
+	public function testStart()
 	{
 		$_COOKIE = [];
 
-		$crypto = Mockery::mock('kanso\framework\security\Crypto');
+		$_COOKIE['kanso_session'] = 'encrypted session id';
 
-		$storage = new FileSessionStorage($crypto, $this->getSessionConfig(), sys_get_temp_dir());
+		$crypto = $this->mockCrypto();
+
+		$filesystem = $this->mockFilesystem();
+
+		$storageDir = sys_get_temp_dir();
+
+		$storage = new FileSessionStorage($crypto, $filesystem, $this->getSessionConfig(), $storageDir);
+
+		$filesystem->shouldReceive('exists')->with($storageDir.'/php_session_last_gc')->once()->andReturn(true);
+
+		$filesystem->shouldReceive('lastModified')->with($storageDir.'/php_session_last_gc')->once()->andReturn(strtotime('-10 seconds'));
+
+		$crypto->shouldReceive('decrypt')->with('encrypted session id')->once()->andReturn('7d5934e6-3984-4ee9-9e56-2555af59948f');
+
+		$filesystem->shouldReceive('exists')->with($storageDir.'/7d5934e6-3984-4ee9-9e56-2555af59948f')->once()->andReturn(true);
 
 		$storage->session_start();
 
-		$storage->write(['foo' => 'bar']);
-
-		$this->assertEquals('bar', $storage->read()['foo']);
+		$_COOKIE = [];
 	}
 
 	/**
-	 * @runInSeparateProcess
+	 * 
 	 */
 	public function testRead()
 	{
 		$_COOKIE = [];
 
-		$_COOKIE['kanso_session'] = 'fdsfsaf#$@#==';
+		$_COOKIE['kanso_session'] = 'encrypted session id';
 
-		$crypto = Mockery::mock('kanso\framework\security\Crypto');
+		$crypto = $this->mockCrypto();
 
-		$storage = new FileSessionStorage($crypto, $this->getSessionConfig(), sys_get_temp_dir());
+		$filesystem = $this->mockFilesystem();
 
-		$crypto->shouldReceive('decrypt')->withArgs(['fdsfsaf#$@#=='])->andReturn('foobar_session_id');
+		$storageDir = sys_get_temp_dir();
+
+		$storage = new FileSessionStorage($crypto, $filesystem, $this->getSessionConfig(), $storageDir);
+
+		$filesystem->shouldReceive('exists')->with($storageDir.'/php_session_last_gc')->once()->andReturn(true);
+
+		$filesystem->shouldReceive('lastModified')->with($storageDir.'/php_session_last_gc')->once()->andReturn(strtotime('-10 seconds'));
+
+		$crypto->shouldReceive('decrypt')->with('encrypted session id')->once()->andReturn('7d5934e6-3984-4ee9-9e56-2555af59948f');
+
+		$filesystem->shouldReceive('exists')->with($storageDir.'/7d5934e6-3984-4ee9-9e56-2555af59948f')->twice()->andReturn(true);
+
+		$filesystem->shouldReceive('getContents')->with($storageDir.'/7d5934e6-3984-4ee9-9e56-2555af59948f')->once()->andReturn(serialize(['foo' => 'bar']));
+
+		$storage->session_start();
+
+		$this->assertEquals(['foo' => 'bar'], $storage->read());
+
+		$_COOKIE = [];
+	}
+
+	/**
+	 * 
+	 */
+	public function testWrite()
+	{
+		$_COOKIE = [];
+
+		$_COOKIE['kanso_session'] = 'encrypted session id';
+
+		$crypto = $this->mockCrypto();
+
+		$filesystem = $this->mockFilesystem();
+
+		$storageDir = sys_get_temp_dir();
+
+		$storage = new FileSessionStorage($crypto, $filesystem, $this->getSessionConfig(), $storageDir);
+
+		$filesystem->shouldReceive('exists')->with($storageDir.'/php_session_last_gc')->once()->andReturn(true);
+
+		$filesystem->shouldReceive('lastModified')->with($storageDir.'/php_session_last_gc')->once()->andReturn(strtotime('-10 seconds'));
+
+		$crypto->shouldReceive('decrypt')->with('encrypted session id')->once()->andReturn('7d5934e6-3984-4ee9-9e56-2555af59948f');
+
+		$filesystem->shouldReceive('exists')->with($storageDir.'/7d5934e6-3984-4ee9-9e56-2555af59948f')->once()->andReturn(true);
+
+		$filesystem->shouldReceive('putContents')->with($storageDir.'/7d5934e6-3984-4ee9-9e56-2555af59948f', serialize(['foo' => 'bar']))->once();
 
 		$storage->session_start();
 
 		$storage->write(['foo' => 'bar']);
 
-		$this->assertEquals('bar', $storage->read()['foo']);
+		$_COOKIE = [];
 	}
-	
+
 	/**
-	 * @runInSeparateProcess
+	 * 
+	 */
+	public function testSavePath()
+	{
+		$crypto = $this->mockCrypto();
+
+		$filesystem = $this->mockFilesystem();
+
+		$storage = new FileSessionStorage($crypto, $filesystem, $this->getSessionConfig(), sys_get_temp_dir());
+
+		$storage->session_save_path('foo/bar');
+
+		$this->assertEquals('foo/bar', $storage->session_save_path());
+
+		$_COOKIE = [];
+	}
+
+	/**
+	 * 
 	 */
 	public function testDestroy()
 	{
 		$_COOKIE = [];
 
-		$storage = $this->mockStorage();
+		$_COOKIE['kanso_session'] = 'encrypted session id';
+
+		$crypto = $this->mockCrypto();
+
+		$filesystem = $this->mockFilesystem();
+
+		$storageDir = sys_get_temp_dir();
+
+		$storage = new FileSessionStorage($crypto, $filesystem, $this->getSessionConfig(), $storageDir);
+
+		$filesystem->shouldReceive('exists')->with($storageDir.'/php_session_last_gc')->once()->andReturn(true);
+
+		$filesystem->shouldReceive('lastModified')->with($storageDir.'/php_session_last_gc')->once()->andReturn(strtotime('-10 seconds'));
+
+		$crypto->shouldReceive('decrypt')->with('encrypted session id')->once()->andReturn('7d5934e6-3984-4ee9-9e56-2555af59948f');
+
+		$filesystem->shouldReceive('exists')->with($storageDir.'/7d5934e6-3984-4ee9-9e56-2555af59948f')->once()->andReturn(true);
+
+		$filesystem->shouldReceive('delete')->with($storageDir.'/7d5934e6-3984-4ee9-9e56-2555af59948f')->once();
 
 		$storage->session_start();
-
-		$storage->write(['foo' => 'bar']);
 
 		$storage->session_destroy();
 
-		$this->assertEquals(null, $storage->read());
+		$_COOKIE = [];
 	}
 
 	/**
-	 * @runInSeparateProcess
+	 * 
 	 */
-	public function testSessionId()
+	public function testGetSessionId()
 	{
 		$_COOKIE = [];
 
-		$crypto = Mockery::mock('kanso\framework\security\Crypto');
+		$_COOKIE['kanso_session'] = 'encrypted session id';
 
-		$storage = new FileSessionStorage($crypto, $this->getSessionConfig(), sys_get_temp_dir());
+		$crypto = $this->mockCrypto();
 
-		$crypto->shouldReceive('encrypt')->withArgs(['foo'])->andReturn('fdsadf432==');
+		$filesystem = $this->mockFilesystem();
 
-		$storage->session_id('foo');
+		$storageDir = sys_get_temp_dir();
 
-		$this->assertEquals('foo', $storage->session_id());
-	}
+		$storage = new FileSessionStorage($crypto, $filesystem, $this->getSessionConfig(), $storageDir);
 
-	/**
-	 * @runInSeparateProcess
-	 */
-	public function testSessionName()
-	{
-		$_COOKIE = [];
+		$filesystem->shouldReceive('exists')->with($storageDir.'/php_session_last_gc')->once()->andReturn(true);
 
-		$storage = $this->mockStorage();
+		$filesystem->shouldReceive('lastModified')->with($storageDir.'/php_session_last_gc')->once()->andReturn(strtotime('-10 seconds'));
 
-		$storage->session_name('foo');
+		$crypto->shouldReceive('decrypt')->with('encrypted session id')->once()->andReturn('7d5934e6-3984-4ee9-9e56-2555af59948f');
 
-		$this->assertEquals('foo', $storage->session_name());
-	}
+		$filesystem->shouldReceive('exists')->with($storageDir.'/7d5934e6-3984-4ee9-9e56-2555af59948f')->once()->andReturn(true);
 
-	/**
-	 * @runInSeparateProcess
-	 */
-	public function testRegenId()
-	{
-		$_COOKIE = [];
-
-		$_COOKIE['kanso_session'] = 'fdsfsaf#$@#==';
-
-		$crypto = Mockery::mock('kanso\framework\security\Crypto');
-
-		$storage = new FileSessionStorage($crypto, $this->getSessionConfig(), sys_get_temp_dir());
-
-		$crypto->shouldReceive('decrypt')->withArgs(['fdsfsaf#$@#=='])->andReturn('foobar_session_id');
+		$this->assertEquals(null, $storage->session_id());
 
 		$storage->session_start();
 
-		$oldId = $storage->session_id();
+		$this->assertEquals('7d5934e6-3984-4ee9-9e56-2555af59948f', $storage->session_id());
+
+		$_COOKIE = [];
+	}
+
+	/**
+	 * 
+	 */
+	public function testSetSessionId()
+	{
+		$_COOKIE = [];
+
+		$_COOKIE['kanso_session'] = 'old encrypted session id';
+
+		$crypto = $this->mockCrypto();
+
+		$filesystem = $this->mockFilesystem();
+
+		$storageDir = sys_get_temp_dir();
+
+		$newid = UUID::v4();
+
+		$storage = new FileSessionStorage($crypto, $filesystem, $this->getSessionConfig(), $storageDir);
+
+		$filesystem->shouldReceive('exists')->with($storageDir.'/php_session_last_gc')->once()->andReturn(true);
+
+		$filesystem->shouldReceive('lastModified')->with($storageDir.'/php_session_last_gc')->once()->andReturn(strtotime('-10 seconds'));
+
+		$crypto->shouldReceive('decrypt')->with('encrypted session id')->once()->andReturn($newid);
+
+		$crypto->shouldReceive('encrypt')->with($newid)->once()->andReturn('encrypted session id');
+
+		$filesystem->shouldReceive('exists')->with($storageDir.'/'.$newid)->once()->andReturn(true);
+
+		$this->assertEquals($newid, $storage->session_id($newid));
+
+		$storage->session_start();
+
+		$_COOKIE = [];
+	}
+
+	/**
+	 * 
+	 */
+	public function testSetSessionName()
+	{
+		$_COOKIE = [];
+
+		$_COOKIE['foobar'] = 'encrypted session id';
+
+		$crypto = $this->mockCrypto();
+
+		$filesystem = $this->mockFilesystem();
+
+		$storageDir = sys_get_temp_dir();
+
+		$storage = new FileSessionStorage($crypto, $filesystem, $this->getSessionConfig(), $storageDir);
+
+		$filesystem->shouldReceive('exists')->with($storageDir.'/php_session_last_gc')->once()->andReturn(true);
+
+		$filesystem->shouldReceive('lastModified')->with($storageDir.'/php_session_last_gc')->once()->andReturn(strtotime('-10 seconds'));
+
+		$crypto->shouldReceive('decrypt')->with('encrypted session id')->once()->andReturn('7d5934e6-3984-4ee9-9e56-2555af59948f');
+
+		$filesystem->shouldReceive('exists')->with($storageDir.'/7d5934e6-3984-4ee9-9e56-2555af59948f')->once()->andReturn(true);
+
+		$storage->session_name('foobar');
+
+		$storage->session_start();
+
+		$_COOKIE = [];
+	}
+
+	/**
+	 * 
+	 */
+	public function testRegenerateId()
+	{
+		$_COOKIE = [];
+
+		$_COOKIE['kanso_session'] = 'old encrypted session id';
+
+		$crypto = $this->mockCrypto();
+
+		$filesystem = $this->mockFilesystem();
+
+		$storageDir = sys_get_temp_dir();
+
+		$storage = new FileSessionStorage($crypto, $filesystem, $this->getSessionConfig(), $storageDir);
+
+		$crypto->shouldReceive('encrypt')->once()->andReturn('encrypted session id');
 
 		$storage->session_regenerate_id();
 
-		$this->assertFalse($oldId === $storage->session_id());
-	}
-
-	/**
-	 * @runInSeparateProcess
-	 */
-	public function testSessionParams()
-	{
-		$storage = $this->mockStorage();
-
-		$params = $this->getSessionConfig();
-
-		$storage->session_set_cookie_params($params);
-
-		$this->assertEquals($params, $storage->session_get_cookie_params());
-	}
-
-	/**
-	 * @runInSeparateProcess
-	 */
-	public function testGc()
-	{
 		$_COOKIE = [];
-
-		$crypto = Mockery::mock('kanso\framework\security\Crypto');
-
-		$storage = new FileSessionStorage($crypto, $this->getSessionConfig(), sys_get_temp_dir());
-
-		$storage->session_start();
-
-		$gc = $storage->session_gc();
-
-		$this->assertEquals(0, $gc);
 	}
 
-	/**
-	 * @runInSeparateProcess
-	 */
-	public function testSend()
-	{
-		$_COOKIE = [];
-
-		$crypto = Mockery::mock('kanso\framework\security\Crypto');
-
-		$storage = new FileSessionStorage($crypto, $this->getSessionConfig(), sys_get_temp_dir());
-
-		$crypto->shouldReceive('encrypt')->andReturn('fdsfsf$#@==');
-
-		$storage->session_start();
-
-		$storage->send();
-	}
 }

@@ -7,10 +7,11 @@
 
 namespace kanso\framework\http\session;
 
+use kanso\framework\common\ArrayIterator;
 use kanso\framework\common\ArrayAccessTrait;
 use kanso\framework\http\session\Flash;
 use kanso\framework\http\session\Token;
-use kanso\framework\common\ArrayIterator;
+use kanso\framework\http\session\storage\StoreInterface;
 
 /**
  * Session Manager
@@ -60,9 +61,11 @@ class Session implements \IteratorAggregate
      * Constructor
      *
      * @access public
-     * @param  $configuration array Array of configuration options
+     * @param  kanso\framework\http\session\Token                   $token Token wrapper
+     * @param  kanso\framework\http\session\Flash                   $flash Flash wrapper
+     * @param  kanso\framework\http\session\storage\StoreInterface  $store Store implementation
      */
-    public function __construct(Token $token, Flash $flash, $store, array $configuration)
+    public function __construct(Token $token, Flash $flash, StoreInterface $store, array $configuration)
     {
         $this->token = $token;
 

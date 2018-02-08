@@ -63,7 +63,7 @@ class Gatekeeper
      * Cookie manager
      * 
      * @var \kanso\framework\http\cookie\Cookie
-     */ 
+     */
     private $cookie;
 
     /**
@@ -240,7 +240,7 @@ class Gatekeeper
             return $this->user->role !== 'administrator' && $this->user->role !== 'writer';
         }
 
-        return false;        
+        return true;        
     }
 
     /**
@@ -436,6 +436,7 @@ class Gatekeeper
     {
         # Validate the user exists
         $user = $this->provider->byKey('kanso_password_key', $token, true);
+        
         if (!$user)
         {
             return false;
@@ -526,6 +527,10 @@ class Gatekeeper
 
         $this->session->destroy();
 
+        # Get the new access token
+        $token = $this->session->token()->get();
+        $_user['access_token'] = $token;
+
         # Add the user credentials
         $this->cookie->setMultiple([
             'user_id' => $_user['id'],
@@ -538,7 +543,7 @@ class Gatekeeper
         # Update the user's access token in the DB
         # to match the newly created one
         $this->SQL
-            ->UPDATE('users')->SET(['access_token' => $this->session->token()->get()])
+            ->UPDATE('users')->SET(['access_token' => $token])
             ->WHERE('id', '=', $_user['id'])
             ->QUERY();
 

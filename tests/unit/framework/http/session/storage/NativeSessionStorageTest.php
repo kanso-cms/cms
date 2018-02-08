@@ -34,9 +34,7 @@ class NativeStorageTest extends TestCase
 	 */
 	private function mockStorage()
 	{
-		$crypto = Mockery::mock('kanso\framework\security\Crypto');
-
-		return new NativeSessionStorage($crypto, $this->getSessionConfig(), session_save_path());
+		return new NativeSessionStorage($this->getSessionConfig(), session_save_path());
 	}
 
 	/**

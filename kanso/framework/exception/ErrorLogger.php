@@ -9,7 +9,7 @@ namespace kanso\framework\exception;
 
 use kanso\framework\http\request\Environment;
 use kanso\framework\exception\ExceptionLogicTrait;
-use kanso\framework\file\FileSystem;
+use kanso\framework\file\Filesystem;
 use Throwable;
 use PDOException;
 
@@ -39,7 +39,7 @@ class ErrorLogger
     /**
      * Filesystem instance
      *
-     * @var \kanso\framework\file\FileSystem
+     * @var \kanso\framework\file\Filesystem
      */
     private $fileSystem;
 
@@ -48,11 +48,11 @@ class ErrorLogger
 	 *
 	 * @access public
      * @param \Throwable                                $exception   Throwable
-     * @param \kanso\framework\file\FileSystem          $filesystem  Filesystem instance
+     * @param \kanso\framework\file\Filesystem          $filesystem  Filesystem instance
      * @param \kanso\framework\http\request\Environment $environment HttpEnv instance for logging details
      * @param string                                    $path        Directory to store log files in
 	 */
-    public function __construct(Throwable $exception, FileSystem $filesystem, Environment $environment, string $path) 
+    public function __construct(Throwable $exception, Filesystem $filesystem, Environment $environment, string $path) 
     {
         $this->fileSystem = $filesystem;
 

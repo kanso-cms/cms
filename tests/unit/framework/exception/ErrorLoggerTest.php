@@ -24,7 +24,7 @@ class ErrorLoggerTest extends TestCase
     {
         $path        = dirname(__FILE__);
         $environment = Mockery::mock('\kanso\framework\http\request\Environment');
-        $fileSystem  = Mockery::mock('\kanso\framework\file\FileSystem');
+        $fileSystem  = Mockery::mock('\kanso\framework\file\Filesystem');
         $logger      = new ErrorLogger(new ErrorException, $fileSystem, $environment, $path);
 
         $environment->shouldReceive('__get')->withArgs(['REQUEST_URL'])->andReturn('http:/foo.com/bar');

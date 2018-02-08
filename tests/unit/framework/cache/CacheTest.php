@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace mako\tests\unit\cache;
+namespace tests\unit\framework\cache;
 
 use Mockery;
 use tests\TestCase;

@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace mako\tests\unit\cache\stores;
+namespace tests\unit\framework\cache\stores;
 
 use Mockery;
 use tests\TestCase;
@@ -19,7 +19,7 @@ class FileStoreTest extends TestCase
 	/**
 	 *
 	 */
-	public function getFileSystem()
+	public function getFilesystem()
 	{
 		return Mockery::mock('\kanso\framework\file\Filesystem');
 	}
@@ -29,7 +29,7 @@ class FileStoreTest extends TestCase
 	 */
 	public function testGet()
 	{
-		$filesystem = $this->getFileSystem();
+		$filesystem = $this->getFilesystem();
 
 		$store = new FileStore($filesystem, '/app/storage/cache');
 
@@ -45,7 +45,7 @@ class FileStoreTest extends TestCase
 	 */
 	public function testPut()
 	{
-		$filesystem = $this->getFileSystem();
+		$filesystem = $this->getFilesystem();
 
 		$store = new FileStore($filesystem, '/app/storage/cache');
 
@@ -59,7 +59,7 @@ class FileStoreTest extends TestCase
 	 */
 	public function testHas()
 	{
-		$filesystem = $this->getFileSystem();
+		$filesystem = $this->getFilesystem();
 
 		$store = new FileStore($filesystem, '/app/storage/cache');
 
@@ -77,7 +77,7 @@ class FileStoreTest extends TestCase
 	 */
 	public function testDelete()
 	{
-		$filesystem = $this->getFileSystem();
+		$filesystem = $this->getFilesystem();
 
 		$store = new FileStore($filesystem, '/app/storage/cache');
 
@@ -97,7 +97,7 @@ class FileStoreTest extends TestCase
 	 */
 	public function testExpired()
 	{
-		$filesystem = $this->getFileSystem();
+		$filesystem = $this->getFilesystem();
 
 		$store = new FileStore($filesystem, '/app/storage/cache');
 
@@ -119,7 +119,7 @@ class FileStoreTest extends TestCase
 	 */
 	public function testClear()
 	{
-		$filesystem = $this->getFileSystem();
+		$filesystem = $this->getFilesystem();
 
 		$store = new FileStore($filesystem, '/app/storage/cache');
 
