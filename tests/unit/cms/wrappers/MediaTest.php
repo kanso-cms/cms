@@ -1,0 +1,214 @@
+<?php
+
+/**
+ * @copyright Joe J. Howard
+ * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
+ */
+
+namespace tests\unit\cms\wrappers;
+
+use Mockery;
+use tests\TestCase;
+use kanso\cms\wrappers\Media;
+
+/**
+ * @group unit
+ */
+class MediaTest extends TestCase
+{
+	/**
+     *
+     */
+    public function testInstantiate()
+    {
+    	$sql = Mockery::mock('\kanso\framework\database\query\Builder');
+		
+		$media = new Media($sql, [], ['name' => 'foo']);
+
+        $this->assertEquals('foo', $media->name);
+    }
+
+    /**
+     *
+     */
+    public function testSetGet()
+    {
+       	$sql = Mockery::mock('\kanso\framework\database\query\Builder');
+		
+		$media = new Media($sql);
+
+        $media->name = 'baz';
+
+        $this->assertEquals('baz', $media->name);
+    }
+
+    /**
+     *
+     */
+    public function testHas()
+    {
+        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+		
+		$media = new Media($sql);
+
+        $media->name = 'baz';
+
+        $this->assertTrue(isset($media->name));
+
+        $this->assertFalse(isset($media->email));
+    }
+
+    /**
+     *
+     */
+    public function testRemove()
+    {
+        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+		
+		$media = new Media($sql);
+
+        $media->name = 'baz';
+
+        unset($media->name);
+
+        $this->assertEquals(null, $media->name);
+    }
+
+    /**
+     *
+     */
+    public function testAsArray()
+    {
+        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+		
+		$media = new Media($sql, [], ['name' => 'foo']);
+
+        $this->assertEquals(['name' => 'foo'], $media->asArray());
+    }
+
+    /**
+     *
+     */
+    public function testDeleteEmpty()
+    {
+        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+		
+		$media = new Media($sql, [], ['name' => 'foo']);
+
+        $this->assertFalse($media->delete());
+    }
+
+    /**
+     *
+     */
+    public function testDeleteTrue()
+    {
+        $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+        
+        $media = new Media($sql, [], ['id' => 2, 'path' => '/foo/bar/foo.jpg']);
+
+        $sql->shouldReceive('DELETE_FROM')->with('media_uploads')->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('id', '=', 2)->once()->andReturn($sql);
+
+        $sql->shouldReceive('QUERY')->once()->andReturn(true);
+
+        $this->assertTrue($media->delete());
+    }
+
+    /**
+     *
+     */
+    public function testSaveNew()
+    {
+        $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+
+        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        
+        $media = new Media($sql, [], ['id' => 2, 'path' => '/foo/bar/foo.jpg']);
+
+        $sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);
+
+        $sql->shouldReceive('FROM')->with('media_uploads')->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('path', '=', '/foo/bar/foo.jpg')->once()->andReturn($sql);
+
+        $sql->shouldReceive('ROW')->andReturn([]);
+
+        $sql->shouldReceive('INSERT_INTO')->with('media_uploads')->once()->andReturn($sql);
+
+        $sql->shouldReceive('VALUES')->with(['id' => 2, 'path' => '/foo/bar/foo.jpg'])->once()->andReturn($sql);
+
+        $sql->shouldReceive('QUERY')->once()->andReturn(true);
+
+        $sql->shouldReceive('connectionHandler')->once()->andReturn($cHandler);
+
+        $cHandler->shouldReceive('lastInsertId')->once()->andReturn(4);
+
+        $this->assertTrue($media->save());
+
+        $this->assertEquals(4, $media->id);
+    }
+
+    /**
+     *
+     */
+    public function testSaveExisting()
+    {
+        $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+
+        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        
+        $media = new Media($sql, [], ['id' => 2, 'path' => '/foo/bar/foo.jpg']);
+
+        $sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);
+
+        $sql->shouldReceive('FROM')->with('media_uploads')->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('path', '=', '/foo/bar/foo.jpg')->once()->andReturn($sql);
+
+        $sql->shouldReceive('ROW')->andReturn(['id' => 2, 'path' => '/foo/bar/foo.jpg']);
+
+        $sql->shouldReceive('UPDATE')->with('media_uploads')->once()->andReturn($sql);
+
+        $sql->shouldReceive('SET')->with(['id' => 2, 'path' => '/foo/bar/foo.jpg'])->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('id', '=', 2)->once()->andReturn($sql);
+
+        $sql->shouldReceive('QUERY')->once()->andReturn(true);
+
+        $this->assertTrue($media->save());
+    }
+
+    /**
+     *
+     */
+    public function testIsImage()
+    {
+        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        
+        $media = new Media($sql, [], ['id' => 2, 'url' => '/foo/bar/foo.jpg']);
+
+        $this->assertTrue($media->isImage());
+
+        $media->url = 'foo/bar.png';
+
+        $this->assertTrue($media->isImage());
+
+        $media->url = 'foo/bar.gif';
+
+        $this->assertTrue($media->isImage());
+    }
+
+    /**
+     *
+     */
+    public function testImgSize()
+    {
+        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        
+        $media = new Media($sql, [], ['id' => 2, 'url' => '/foo/bar/foo.jpg']);
+
+        $this->assertEquals('/foo/bar/foo_small.jpg', $media->imgSize('small'));
+    }
+}
