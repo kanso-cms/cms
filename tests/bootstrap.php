@@ -26,4 +26,9 @@ define('KANSO_DIR', dirname(dirname(__FILE__)).'/kanso');
  */
 define('APP_DIR',  dirname(dirname(__FILE__)).'/app');
 
+/**
+ * Kanso env for testing
+ */
+define('KANSO_ENV', 'tests');
+
 require_once dirname(__DIR__) . '/vendor/autoload.php';

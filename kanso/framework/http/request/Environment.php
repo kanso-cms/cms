@@ -61,7 +61,6 @@ class Environment
         $scriptName  = explode('/', trim($scriptName, '/'));
         $env['SCRIPT_NAME'] = array_pop($scriptName);
 
-
         # Name of server host that is running the script
         $env['SERVER_NAME'] = $server['SERVER_NAME'];
 

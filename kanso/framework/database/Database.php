@@ -73,8 +73,11 @@ class Database
 
 		$databaseName = $config['name'];
 
-		$config['dsn'] = "mysql:host=$config[host]";
-		
+		if (!isset($config['dsn']))
+		{
+			$config['dsn'] = "mysql:host=$config[host]";
+		}
+
 		$connection = new Connection($config);
 
 		$connection->handler()->query("DROP DATABASE IF EXISTS $databaseName");
