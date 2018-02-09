@@ -19,6 +19,30 @@ class CommentProviderTest extends TestCase
     /**
      *
      */
+    public function testCreate()
+    {
+        $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
+        $provider = new CommentProvider($sql);
+
+        $sql->shouldReceive('INSERT_INTO')->with('comments')->once()->andReturn($sql);
+
+        $sql->shouldReceive('VALUES')->with(['post_id' => 1])->once()->andReturn($sql);
+
+        $sql->shouldReceive('QUERY')->once()->andReturn(true);
+
+        $sql->shouldReceive('connectionHandler')->once()->andReturn($cHandler);
+
+        $cHandler->shouldReceive('lastInsertId')->once()->andReturn(4);
+
+        $comment = $provider->create(['post_id' => 1]);
+
+        $this->assertEquals(4, $comment->id);
+    }
+
+    /**
+     *
+     */
     public function testById()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');

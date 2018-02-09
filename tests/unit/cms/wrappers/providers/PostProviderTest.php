@@ -19,6 +19,102 @@ class PostProviderTest extends TestCase
     /**
      *
      */
+    public function testCreate()
+    {
+        $cHandler         = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
+        $config           = Mockery::mock('\kanso\framework\config\Config');
+        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+        
+        $provider = new PostProvider($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider);
+
+        $config->shouldReceive('get')->with('cms.permalinks')->andReturn('year/month/postname/');
+        
+        $tag = Mockery::mock('\kanso\cms\wrappers\Tag');
+        $tag->name = 'html';
+        $tag->slug = 'html';
+        $tag->id   = 1;
+        $tagProvider->shouldReceive('byId')->with(1)->once()->andReturn($tag);
+
+        $cat = Mockery::mock('\kanso\cms\wrappers\Category');
+        $cat->name = 'html';
+        $cat->slug = 'html';
+        $cat->id   = 1;
+        $categoryProvider->shouldReceive('byId')->with(1)->once()->andReturn($cat);
+
+        $user = Mockery::mock('\kanso\cms\wrappers\User');
+        $user->name = 'foo';
+        $user->slug = 'foo';
+        $user->id   = 1;
+        $userProvider->shouldReceive('byId')->with(1)->once()->andReturn($user);
+
+        $postData = $this->getExistingPostData();
+
+        unset($postData['id']);
+
+        $sql->shouldReceive('SELECT')->with('id')->once()->andReturn($sql);
+
+        $sql->shouldReceive('FROM')->with('posts')->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('title', '=', 'Foo Bar')->once()->andReturn($sql);
+
+        $sql->shouldReceive('ROW')->andReturn([])->once();
+
+        $sql->shouldReceive('INSERT_INTO')->with('posts')->once()->andReturn($sql);
+        $sql->shouldReceive('VALUES')->with($postData)->once()->andReturn($sql);
+        $sql->shouldReceive('QUERY')->once();
+
+        $sql->shouldReceive('connectionHandler')->once()->andReturn($cHandler);
+        $cHandler->shouldReceive('lastInsertId')->once()->andReturn(1);
+
+        $sql->shouldReceive('INSERT_INTO')->with('tags_to_posts')->once()->andReturn($sql);
+        $sql->shouldReceive('VALUES')->with(['post_id' => 1, 'tag_id' => 1])->once()->andReturn($sql);
+        $sql->shouldReceive('QUERY')->once();
+
+        $sql->shouldReceive('INSERT_INTO')->with('categories_to_posts')->once()->andReturn($sql);
+        $sql->shouldReceive('VALUES')->with(['post_id' => 1, 'category_id' => 1])->once()->andReturn($sql);
+        $sql->shouldReceive('QUERY')->once();
+
+        $sql->shouldReceive('INSERT_INTO')->with('content_to_posts')->once()->andReturn($sql);
+        $sql->shouldReceive('VALUES')->with(['post_id' => 1, 'content' => ''])->once()->andReturn($sql);
+        $sql->shouldReceive('QUERY')->once();
+
+        $data = $this->getExistingPostData();
+        unset($data['id']);
+
+        $post = $provider->create($data);
+
+        $this->assertEquals(1, $post->id);
+    }
+
+    /**
+     *
+     */
+    private function getExistingPostData()
+    {
+        return
+        [
+            'id'          => 1,
+            'created'     => time(),
+            'modified'    => time(),
+            'status'      => 'published',
+            'type'        => 'post',
+            'slug'        =>  date('Y').'/'.date('m').'/foo-bar/',
+            'title'       => 'Foo Bar',
+            'excerpt'     => 'Hello foo bar',
+            'author_id'   => 1,
+            'thumbnail_id'     => 1,
+            'comments_enabled' => true,
+        ];
+    }
+
+    /**
+     *
+     */
     public function testById()
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');

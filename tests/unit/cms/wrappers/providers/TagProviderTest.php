@@ -19,6 +19,30 @@ class TagProviderTest extends TestCase
     /**
      *
      */
+    public function testCreate()
+    {
+        $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
+        $provider = new TagProvider($sql);
+
+        $sql->shouldReceive('INSERT_INTO')->with('tags')->once()->andReturn($sql);
+
+        $sql->shouldReceive('VALUES')->with(['name' => 'foo', 'slug' => 'bar'])->once()->andReturn($sql);
+
+        $sql->shouldReceive('QUERY')->once()->andReturn(true);
+
+        $sql->shouldReceive('connectionHandler')->once()->andReturn($cHandler);
+
+        $cHandler->shouldReceive('lastInsertId')->once()->andReturn(4);
+
+        $tag = $provider->create(['name' => 'foo', 'slug' => 'bar']);
+
+        $this->assertEquals(4, $tag->id);
+    }
+
+    /**
+     *
+     */
     public function testById()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');

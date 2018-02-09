@@ -111,7 +111,7 @@ class TagManager extends Manager
 
 		if ($tag)
 		{
-			return $tag->delete();
+			return $tag->delete() ? true : false;
 		}
 		
 		return false;	

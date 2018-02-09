@@ -19,6 +19,38 @@ class MediaProviderTest extends TestCase
     /**
      *
      */
+    public function testCreate()
+    {
+        $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
+        $provider = new MediaProvider($sql, []);
+
+        $sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);
+
+        $sql->shouldReceive('FROM')->with('media_uploads')->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('path', '=', '/foo/bar/foo.jpg')->once()->andReturn($sql);
+
+        $sql->shouldReceive('ROW')->andReturn([]);
+
+        $sql->shouldReceive('INSERT_INTO')->with('media_uploads')->once()->andReturn($sql);
+
+        $sql->shouldReceive('VALUES')->with(['path' => '/foo/bar/foo.jpg'])->once()->andReturn($sql);
+
+        $sql->shouldReceive('QUERY')->once()->andReturn(true);
+
+        $sql->shouldReceive('connectionHandler')->once()->andReturn($cHandler);
+
+        $cHandler->shouldReceive('lastInsertId')->once()->andReturn(4);
+
+        $media = $provider->create(['path' => '/foo/bar/foo.jpg']);
+
+        $this->assertEquals(4, $media->id);
+    }
+
+    /**
+     *
+     */
     public function testById()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');

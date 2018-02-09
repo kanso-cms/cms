@@ -19,6 +19,30 @@ class CategoryProviderTest extends TestCase
     /**
      *
      */
+    public function testCreate()
+    {
+        $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
+        $provider = new CategoryProvider($sql);
+
+        $sql->shouldReceive('INSERT_INTO')->with('categories')->once()->andReturn($sql);
+
+        $sql->shouldReceive('VALUES')->with(['name' => 'foo', 'slug' => 'bar'])->once()->andReturn($sql);
+
+        $sql->shouldReceive('QUERY')->once()->andReturn(true);
+
+        $sql->shouldReceive('connectionHandler')->once()->andReturn($cHandler);
+
+        $cHandler->shouldReceive('lastInsertId')->once()->andReturn(4);
+
+        $category = $provider->create(['name' => 'foo', 'slug' => 'bar']);
+
+        $this->assertEquals(4, $category->id);
+    }
+
+    /**
+     *
+     */
     public function testById()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
