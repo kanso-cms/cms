@@ -1,0 +1,251 @@
+<?php
+
+/**
+ * @copyright Joe J. Howard
+ * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
+ */
+
+namespace tests\unit\cms\wrappers\providers;
+
+use Mockery;
+use tests\TestCase;
+use kanso\cms\wrappers\providers\PostProvider;
+
+/**
+ * @group unit
+ */
+class PostProviderTest extends TestCase
+{
+    /**
+     *
+     */
+    public function testById()
+    {
+        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
+        $config           = Mockery::mock('\kanso\framework\config\Config');
+        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+        
+        $provider = new PostProvider($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider);
+
+        $sql->shouldReceive('SELECT')->with('posts.*')->once()->andReturn($sql);
+
+        $sql->shouldReceive('FROM')->with('posts')->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('posts.id', '=', 32)->once()->andReturn($sql);
+
+        $sql->shouldReceive('LEFT_JOIN_ON')->times(6)->andReturn($sql);
+
+        $sql->shouldReceive('GROUP_BY')->once()->andReturn($sql);
+
+        $sql->shouldReceive('ROW')->once()->andReturn(['id' => 32, 'name' => 'foo', 'slug' => 'bar', 'author_id' => 1]);
+
+        $this->getTheTags($sql, $tagProvider);
+
+        $this->getTheCategories($sql, $categoryProvider);
+
+        $this->getTheAuthor($userProvider);
+
+        $provider->byId(32);
+    }
+
+    /**
+     *
+     */
+    public function testByKey()
+    {
+        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
+        $config           = Mockery::mock('\kanso\framework\config\Config');
+        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+        
+        $provider = new PostProvider($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider);
+
+        $sql->shouldReceive('SELECT')->with('posts.*')->once()->andReturn($sql);
+
+        $sql->shouldReceive('FROM')->with('posts')->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('name', '=', 'foo')->once()->andReturn($sql);
+
+        $sql->shouldReceive('LEFT_JOIN_ON')->times(6)->andReturn($sql);
+
+        $sql->shouldReceive('GROUP_BY')->once()->andReturn($sql);
+
+        $sql->shouldReceive('ROW')->once()->andReturn(['id' => 32, 'name' => 'foo', 'slug' => 'bar', 'author_id' => 1]);
+
+        $this->getTheTags($sql, $tagProvider);
+
+        $this->getTheCategories($sql, $categoryProvider);
+
+        $this->getTheAuthor($userProvider);
+
+        $provider->byKey('name', 'foo', true, false);
+    }
+
+    /**
+     *
+     */
+    public function testByKeys()
+    {
+        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
+        $config           = Mockery::mock('\kanso\framework\config\Config');
+        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+        
+        $provider = new PostProvider($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider);
+
+        $sql->shouldReceive('SELECT')->with('posts.*')->once()->andReturn($sql);
+
+        $sql->shouldReceive('FROM')->with('posts')->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('name', '=', 'foo')->once()->andReturn($sql);
+
+        $sql->shouldReceive('LEFT_JOIN_ON')->times(6)->andReturn($sql);
+
+        $sql->shouldReceive('GROUP_BY')->once()->andReturn($sql);
+
+        $sql->shouldReceive('FIND_ALL')->once()->andReturn([['id' => 32, 'name' => 'foo', 'slug' => 'bar', 'author_id' => 1]]);
+
+        $this->getTheTags($sql, $tagProvider);
+
+        $this->getTheCategories($sql, $categoryProvider);
+
+        $this->getTheAuthor($userProvider);
+
+        $provider->byKey('name', 'foo', false, false);
+    }
+
+    /**
+     *
+     */
+    public function testPublished()
+    {
+        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
+        $config           = Mockery::mock('\kanso\framework\config\Config');
+        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+        
+        $provider = new PostProvider($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider);
+
+        $sql->shouldReceive('SELECT')->with('posts.*')->once()->andReturn($sql);
+
+        $sql->shouldReceive('FROM')->with('posts')->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('name', '=', 'foo')->once()->andReturn($sql);
+
+        $sql->shouldReceive('AND_WHERE')->with('status', '=', 'published')->once()->andReturn($sql);
+
+        $sql->shouldReceive('LEFT_JOIN_ON')->times(6)->andReturn($sql);
+
+        $sql->shouldReceive('GROUP_BY')->once()->andReturn($sql);
+
+        $sql->shouldReceive('ROW')->once()->andReturn(['id' => 32, 'name' => 'foo', 'slug' => 'bar', 'author_id' => 1]);
+
+        $this->getTheTags($sql, $tagProvider);
+
+        $this->getTheCategories($sql, $categoryProvider);
+
+        $this->getTheAuthor($userProvider);
+
+        $provider->byKey('name', 'foo', true, true);
+    }
+
+    /**
+     *
+     */
+    private function getTheTags($sql, $tagProvider)
+    {
+        $sql->shouldReceive('SELECT')->with('tags.*')->once()->andReturn($sql);
+
+        $sql->shouldReceive('FROM')->with('tags_to_posts')->once()->andReturn($sql);
+
+        $sql->shouldReceive('LEFT_JOIN_ON')->with('tags', 'tags.id = tags_to_posts.tag_id')->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('post_id', '=', 32)->once()->andReturn($sql);
+
+        $sql->shouldReceive('FIND_ALL')->andReturn([
+            ['id' => 1, 'slug' => 'html', 'name' => 'html'],
+            ['id' => 2, 'slug' => 'css',  'name' => 'css']
+        ])->once();
+
+        $tag1 = Mockery::mock('\kanso\cms\wrappers\Tag');
+        $tag1->name = 'html';
+        $tag1->slug = 'html';
+        $tag1->id   = 1;
+
+        $tag2 = Mockery::mock('\kanso\cms\wrappers\Tag');
+        $tag2->name = 'css';
+        $tag2->slug = 'css';
+        $tag2->id   = 2;
+
+        $tagProvider->shouldReceive('byId')->andReturn($tag1)->once();
+
+        $tagProvider->shouldReceive('byId')->andReturn($tag2)->once();
+
+        return [$tag1, $tag2];
+    }
+
+    /**
+     *
+     */
+    private function getTheCategories($sql, $categoryProvider)
+    {
+        $sql->shouldReceive('SELECT')->with('categories.*')->once()->andReturn($sql);
+
+        $sql->shouldReceive('FROM')->with('categories_to_posts')->once()->andReturn($sql);
+
+        $sql->shouldReceive('LEFT_JOIN_ON')->with('categories', 'categories.id = categories_to_posts.category_id')->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('post_id', '=', 32)->once()->andReturn($sql);
+
+        $sql->shouldReceive('FIND_ALL')->andReturn([
+            ['id' => 1, 'slug' => 'html', 'name' => 'html'],
+            ['id' => 2, 'slug' => 'css',  'name' => 'css']
+        ])->once();
+
+        $cat1 = Mockery::mock('\kanso\cms\wrappers\Category');
+        $cat1->name = 'html';
+        $cat1->slug = 'html';
+        $cat1->id   = 1;
+
+        $cat2 = Mockery::mock('\kanso\cms\wrappers\Category');
+        $cat2->name = 'css';
+        $cat2->slug = 'css';
+        $cat2->id   = 2;
+
+        $categoryProvider->shouldReceive('byId')->andReturn($cat1)->once();
+
+        $categoryProvider->shouldReceive('byId')->andReturn($cat2)->once();
+
+        return [$cat1, $cat2];
+    }
+
+    /**
+     *
+     */
+    private function getTheAuthor($userProvider)
+    {
+        $author = Mockery::mock('\kanso\cms\wrappers\User');
+        $author->name = 'foobar';
+        $author->slug = 'foobar';
+        $author->id = 1;
+
+        $userProvider->shouldReceive('byId')->andReturn($author)->once();
+
+        return $author;
+    }
+
+   
+}
