@@ -50,13 +50,23 @@ class Email
     ];
 
     /**
+     * Filesystem instance
+     *
+     * @var \kanso\framework\file\Filesystem
+     */
+    private $filesystem;
+
+    /**
      * Constructor
      *
      * @access public
-     * @param  array  $theme Array of theme options (optional) (default [])
+     * @param  \kanso\framework\file\Filesystem $filesystem Filesystem instance
+     * @param  array.                           $theme      Array of theme options (optional) (default [])
      */
-    public function __construct(array $theme = [])
+    public function __construct(Filesystem $filesystem, $theme = [])
     {
+        $this->filesystem = $filesystem;
+
         $this->theme = array_merge($this->theme, $theme);
     }
 
@@ -68,13 +78,13 @@ class Email
      * @param  array  $vars     Vars to send to the template
      * @return string
      */
-    public function preset(string $template, array $vars): string
+    public function preset(string $template, array $vars = []): string
     {
         $variables = array_merge($this->theme, $vars);
         
         $filePath  = dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$template.'.php';
         
-        return Filesystem::ob_read($filePath, $variables);
+        return $this->filesystem->ob_read($filePath, $variables);
     }
 
     /**
@@ -126,7 +136,7 @@ class Email
 
         $variables = array_merge($this->theme, $_vars);
         
-        return Filesystem::ob_read($body_path, $variables);
+        return $this->filesystem->ob_read($body_path, $variables);
     }
 
     /**
