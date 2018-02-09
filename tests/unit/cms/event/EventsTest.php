@@ -15,7 +15,7 @@ use kanso\cms\event\Events;
 // START CLASSES
 // --------------------------------------------------------------------------
 
-class CallbackTester
+class EventsCallbackTester
 {
 	public $var;
 
@@ -46,7 +46,7 @@ class CallbackTester
 /**
  * @group unit
  */
-class GatekeeperTest extends TestCase
+class EventsTest extends TestCase
 {
 	/**
 	 *
@@ -57,9 +57,9 @@ class GatekeeperTest extends TestCase
 
 		$events = Events::instance();
 
-		$events->on('foo1', 'tests\unit\cms\event\CallbackTester@testMethod');
+		$events->on('foo1', 'tests\unit\cms\event\EventsCallbackTester@testMethod');
 
-		$events->on('foo2', 'tests\unit\cms\event\CallbackTester::testStaticMethod');
+		$events->on('foo2', 'tests\unit\cms\event\EventsCallbackTester::testStaticMethod');
 
 		$events->on('foo3', function($_this, $foo)
 		{
