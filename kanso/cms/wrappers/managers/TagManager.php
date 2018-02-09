@@ -144,7 +144,7 @@ class TagManager extends Manager
 
 		if ($tag)
 		{
-			return $tag->clear();
+			return $tag->clear() ? true : false;
 		}
 		
 		return false;	

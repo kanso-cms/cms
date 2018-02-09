@@ -322,6 +322,7 @@ class QueryIncludesTest extends TestCase
 		}
 
 		unset($KANSO_QUERY);
+    	
     	$KANSO_QUERY = null;
 	}
 }

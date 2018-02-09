@@ -341,7 +341,7 @@ class UserManager extends Manager
 
 		if ($user)
 		{
-			return $user->delete();
+			return $user->delete() ? true : false;
 		}
 		
 		return false;	
