@@ -140,7 +140,9 @@ class Post extends Wrapper
         if (!empty($this->data['id']))
 		{
 			$this->getTheTags();
+
 			$this->getTheAuthor();
+			
 			$this->getTheCategories();
 		}
 
