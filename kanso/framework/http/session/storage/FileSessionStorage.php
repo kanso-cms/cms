@@ -9,7 +9,9 @@ namespace kanso\framework\http\session\storage;
 
 use kanso\framework\http\session\storage\StoreInterface;
 use kanso\framework\utility\UUID;
+use kanso\framework\file\Filesystem;
 use kanso\framework\security\Crypto;
+use RuntimeException;
 
 /**
  * Session encrypt/decrypt
@@ -89,16 +91,33 @@ class FileSessionStorage implements StoreInterface
     private $isHttpRequest = false;
 
     /**
+     * Filesystem instance
+     *
+     * @var \kanso\framework\file\Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * Crypto instance
+     *
+     * @var \kanso\framework\file\Filesystem
+     */
+    private $crypto;
+
+    /**
      * Constructor
      *
      * @access public
-     * @param  \kanso\framework\security\Crypto $Crypto        Encryption service
-     * @param  array                            $cookieParams  Assoc array of cookie configurations
-     * @param  string                           $storageDir    Path to save session files to (optional) (default null)
+     * @param  \kanso\framework\security\Crypto $crypto       Crypto instance
+     * @param  \kanso\framework\file\Filesystem $filesystem   Filesystem instance
+     * @param  array                            $cookieParams Assoc array of cookie configurations
+     * @param  string                           $storageDir   Path to save session files to (optional) (default null)
      */
-    public function __construct(Crypto $crypto, array $cookieParams = [], string $storageDir = null)
+    public function __construct(Crypto $crypto, Filesystem $filesystem, array $cookieParams = [], string $storageDir = null)
     {
         $this->crypto = $crypto;
+
+        $this->filesystem = $filesystem;
 
         $this->session_set_cookie_params($cookieParams);
 
@@ -179,11 +198,15 @@ class FileSessionStorage implements StoreInterface
      */
     public function session_destroy()
     {
-        if ($this->started && isset($_COOKIE) && !$this->sent)
+        if ($this->started && !$this->sent)
         {
-            unset($_COOKIE[$this->session_name()]);
+            $this->filesystem->delete($this->sessionFile());
+
+            $this->id = null;
 
             $this->started = false;
+
+            unset($_COOKIE[$this->session_name()]);
         }
     }
 
@@ -194,9 +217,20 @@ class FileSessionStorage implements StoreInterface
     {
         if ($id)
         {
-            $this->id = $id;
+            if ($this->started)
+            {
+                throw new RuntimeException('Error replacing session id. This method must be called before "session_start()" is called.');
+            }
 
-            $_COOKIE[$this->session_name()] = $this->id;  
+            if (!UUID::validate($id))
+            {
+                throw new RuntimeException('Error replacing session id. The provided id ['.$id.'] is not a valid UUID.');
+            }
+
+            $this->id = $id;
+                
+            $_COOKIE[$this->session_name()] = $this->crypto->encrypt($this->id);
+
         }
 
         return $this->id;
@@ -209,6 +243,11 @@ class FileSessionStorage implements StoreInterface
     {
         if ($name)
         {
+            if ($this->started)
+            {
+                throw new RuntimeException('Error replacing session name. This method must be called before "session_start()" is called.');
+            }
+
             $this->session_name = $name;
         }
 
@@ -226,18 +265,20 @@ class FileSessionStorage implements StoreInterface
         {
             if ($this->sessionFileExists())
             {
-                rename($this->sessionFile(), $this->storageDir.DIRECTORY_SEPARATOR.$newId);
+                $this->filesystem->rename($this->sessionFile(), $this->storageDir.DIRECTORY_SEPARATOR.$newId);
             }
         }
         else
         {
             if ($this->sessionFileExists())
             {
-                file_put_contents($this->storageDir.DIRECTORY_SEPARATOR.$newId, file_get_contents($this->sessionFile()));
+                $this->filesystem->putContents($this->storageDir.DIRECTORY_SEPARATOR.$newId, $this->filesystem->getContents($this->sessionFile()));
             }
         }
 
         $this->id = $newId;
+
+        $_COOKIE[$this->session_name()] = $this->crypto->encrypt($this->id);
     }
 
     /**
@@ -261,26 +302,30 @@ class FileSessionStorage implements StoreInterface
      */
     public function session_gc()
     {
+        $deleted = false;
+
         if (!$this->garbageColltected)
         {
             $gc_time = $this->storageDir.DIRECTORY_SEPARATOR.$this->GCFileName;
 
-            if (file_exists($gc_time))
+            if ($this->filesystem->exists($gc_time))
             {
-                if (filemtime($gc_time) < time() - $this->gCPeriod)
+                if ($this->filesystem->lastModified($gc_time) < time() - $this->gCPeriod)
                 {
-                    $this->deleteOldSessions();
+                    $deleted = $this->deleteOldSessions();
 
-                    touch($gc_time);
+                    $this->filesystem->touch($gc_time);
                 }
             }
             else
             {
-                touch($gc_time);
+                $this->filesystem->touch($gc_time);
             }
 
             $this->garbageColltected = true;
         }
+
+        return $deleted;
     }
 
     /**
@@ -290,10 +335,10 @@ class FileSessionStorage implements StoreInterface
     {
         if ($this->started && $this->sessionFileExists())
         {
-            return unserialize(file_get_contents($this->sessionFile()));
+            return unserialize($this->filesystem->getContents($this->sessionFile()));
         }
 
-        return [];
+        return null;
     }
 
     /**
@@ -303,7 +348,7 @@ class FileSessionStorage implements StoreInterface
     {
         if ($this->started)
         {
-            file_put_contents($this->sessionFile(), serialize($data));
+            $this->filesystem->putContents($this->sessionFile(), serialize($data));
         }
     }
 
@@ -348,7 +393,7 @@ class FileSessionStorage implements StoreInterface
 
         if ($path)
         {
-            return is_file($path) && file_exists($path);
+            return $this->filesystem->exists($path);
         }
 
         return false;
@@ -358,9 +403,12 @@ class FileSessionStorage implements StoreInterface
      * Delete old session files
      *
      * @access private
+     * @return array
      */
-    private function deleteOldSessions()
+    private function deleteOldSessions(): int
     {
+        $deleted = 0;
+
         $files = scandir($this->storageDir);
 
         foreach ($files as $file)
@@ -373,8 +421,12 @@ class FileSessionStorage implements StoreInterface
             # Sessions more than 12 hours are deleted
             if ( time() - filemtime($this->storageDir.DIRECTORY_SEPARATOR.$file) > 86400)
             {
-                unlink($this->storageDir.DIRECTORY_SEPARATOR.$file);
+                $this->filesystem->delete($this->storageDir.DIRECTORY_SEPARATOR.$file);
+
+                $deleted++;
             }
         }
+
+        return $deleted;
     }
 }

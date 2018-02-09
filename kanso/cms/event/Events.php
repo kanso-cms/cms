@@ -78,15 +78,13 @@ class Events
      */
     public function fire(string $eventName, $args) 
     {
-        $result = [$args];
-
         # Is there a custom callback for the filter?   
         if (isset(self::$callbacks[$eventName]))
         {
             # Loop the filter callbacks
             foreach (self::$callbacks[$eventName] as $callback)
             {
-                Callback::apply($callback, $result);
+                Callback::apply($callback, $args);
             }
         }
     }

@@ -146,6 +146,13 @@ trait Filter
             {
                 return false;
             }
+        }
+        else if ($requestType === 'sitemap')
+        {
+            if (!$this->filterSitemap())
+            {
+                return false;
+            }
         } 
 
         # Set the_post so we're looking at the first item
@@ -523,6 +530,23 @@ trait Filter
         $this->posts       = [$this->PostManager->provider()->newPost($postRow)];
         $this->postCount   = count($this->posts);
         $this->requestType = 'attachment';
+
+        return true;
+    }
+
+    /**
+     * Filter the posts for sitemap
+     *
+     * @access private
+     * @param  string  $requestType The incoming request type ('home'|'home-blog')
+     * @return bool 
+     */
+    private function filterSitemap(): bool
+    {
+        $this->requestType = 'sitemap';
+        $this->queryStr    = "post_status = published : post_type = post : orderBy = post_created";
+        $this->posts       = $this->queryParser->parseQuery($this->queryStr);
+        $this->postCount   = count($this->posts);
 
         return true;
     }

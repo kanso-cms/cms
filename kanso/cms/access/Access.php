@@ -9,6 +9,7 @@ namespace kanso\cms\access;
 
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
+use kanso\framework\file\Filesystem;
 use kanso\framework\http\response\exceptions\ForbiddenException;
 
 /**
@@ -59,14 +60,17 @@ class Access
      * @access public
      * @param  \kanso\framework\http\request\Request   $request     Request object
      * @param  \kanso\framework\http\response\Response $response    Response object
+     * @param  \kanso\framework\file\Filesystem        $filesystem  Filesystem instancea
      * @param  bool                                    $blockIps    Should we block all IP address except the whitelist (optional) (default false)
      * @param  array                                   $ipWhitelist Array of whitelisted ip addresses (optional) (default [])
      */
-    public function __construct(Request $request, Response $response, $blockIps = false, $ipWhitelist = [])
+    public function __construct(Request $request, Response $response, Filesystem $filesystem, $blockIps = false, $ipWhitelist = [])
     {
         $this->request = $request;
 
         $this->response = $response;
+
+        $this->filesystem = $filesystem;
 
         $this->robotsPath = $request->environment()->DOCUMENT_ROOT.'/robots.txt';
 
@@ -100,7 +104,7 @@ class Access
 		}
 
 		$ip = $this->request->environment()->REMOTE_ADDR;
-		
+
 		if (!empty($ip))
 		{
 			return in_array($ip, $this->ipWhitelist);
@@ -149,7 +153,7 @@ class Access
 	 */
 	public function saveRobots(string $content = '')
 	{
-		file_put_contents($this->robotsPath, $content);
+		$this->filesystem->putContents($this->robotsPath, $content);
 	}
 
 	/**
@@ -159,9 +163,9 @@ class Access
 	 */
 	public function deleteRobots()
 	{
-		if (file_exists($this->robotsPath))
+		if ($this->filesystem->exists($this->robotsPath))
 		{
-			unlink($this->robotsPath);
+			$this->filesystem->delete($this->robotsPath);
 		}
 	}
 }

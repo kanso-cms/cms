@@ -7,7 +7,6 @@
 
 namespace kanso\framework\ioc;
 
-use RuntimeException;
 use kanso\framework\ioc\Container;
 
 /**
@@ -25,14 +24,19 @@ trait ContainerAwareTrait
 	protected $container;
 
 	/**
-	 * Sets the container instance.
+	 * Sets and or gets the container
 	 *
 	 * @access public
 	 * @param \kanso\framework\ioc\Container $container IoC container instance
 	 */
-	public function setContainer(Container $container)
+	public function container(): Container
 	{
-		$this->container = $container;
+		if (!$this->container)
+		{
+			$this->container = Container::instance();
+		}
+
+		return $this->container;
 	}
 
 	/**
@@ -44,6 +48,6 @@ trait ContainerAwareTrait
 	 */
 	public function __get(string $key)
 	{
-		return $this->container->get($key);
+		return $this->container()->get($key);
 	}
 }

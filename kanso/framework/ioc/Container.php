@@ -38,16 +38,41 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
 {
     /**
      * Key-value array of arbitrary data
+     * 
      * @var array
      */
     protected $data = [];
 
     /**
-     * Constructor
-     * @param array $items Pre-populate set with this key-value array
+     * Singleton instance of self
+     * 
+     * @var \kanso\framework\ioc\Container
      */
-    public function __construct()
+    private static $instance;
+
+    /**
+     * Constructor. 
+     *
+     * @access protected
+     */
+    protected function __construct()
     {
+    }
+
+    /**
+     * Get the global Container instance
+     *
+     * @access public
+     * @return \kanso\framework\ioc\Container
+     */
+    public static function instance(): Container
+    {
+        if (!empty(static::$instance))
+        {
+            return static::$instance;
+        }
+
+        return static::$instance = new static;
     }
 
     /**
@@ -169,7 +194,7 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function clear()
     {
-        $this->data = array();
+        $this->data = [];
     }
 
     /**
@@ -222,7 +247,8 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
      */
     public function singleton($key, $value)
     {
-        $this->set($key, function ($c) use ($value) {
+        $this->set($key, function ($c) use ($value)
+        {
             static $object;
 
             if (null === $object) {
@@ -241,9 +267,10 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
      * @param  \Closure $value The closure that defines the object
      * @return mixed
      */
-    public function instance($key, $object)
+    public function setInstance($key, $object)
     {
-        $this->set($key, function () use ($object) {
+        $this->set($key, function () use ($object)
+        {
             return $object;
         });
     }

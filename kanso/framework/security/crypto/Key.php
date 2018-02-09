@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\framework\security;
+namespace kanso\framework\security\crypto;
 
 /**
  * Encryption key converter

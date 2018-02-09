@@ -80,7 +80,7 @@ if( NOT SaveToCentralDictionary) THEN response.write "!! SaveToCentralDictionary
 		  
 			on error resume next
 			FilePath=Server.MapPath(centralDictionaryFile) 
-			Set FSOobj = Server.CreateObject("Scripting.FileSystemObject")
+			Set FSOobj = Server.CreateObject("Scripting.FilesystemObject")
 			Set OpenFileobj = FSOobj.OpenTextFile(FilePath, 8)
 			OpenFileobj.WriteLine(args)
 			OpenFileobj.Close

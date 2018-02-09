@@ -26,7 +26,7 @@ class PostManager extends Manager
 	}
 
     /**
-     * Creates a new category
+     * Creates a new post
      * 
      * @access public
      * @param  array $row Entry row
@@ -48,4 +48,23 @@ class PostManager extends Manager
 	{
 		return $this->provider->byId($id);
 	}
+
+    /**
+     * Deletes a post by id
+     * 
+     * @access public
+     * @param  string $id Post name id or slug
+     * @return bool
+     */
+    public function delete($id): bool
+    {
+        $post = $this->byId($id);
+
+        if ($post)
+        {
+            return $post->delete() ? true : false;
+        }
+        
+        return false;   
+    }
 }

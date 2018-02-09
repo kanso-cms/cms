@@ -1,0 +1,8 @@
+<phpunit colors="true" bootstrap="tests/bootstrap.php">
+	<testsuites>
+		<testsuite name="Kanso CMS Tests">
+			<directory>tests/unit</directory>
+			<directory>tests/integration</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>

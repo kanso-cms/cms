@@ -73,13 +73,16 @@ class Database
 
 		$databaseName = $config['name'];
 
-		$config['dsn'] = "mysql:host=$config[host]";
-		
+		if (!isset($config['dsn']))
+		{
+			$config['dsn'] = "mysql:host=$config[host]";
+		}
+
 		$connection = new Connection($config);
 
-		$connection->Query("DROP DATABASE IF EXISTS $databaseName");
+		$connection->handler()->query("DROP DATABASE IF EXISTS $databaseName");
 
-		$connection->Query("CREATE DATABASE $databaseName");
+		$connection->handler()->query("CREATE DATABASE $databaseName");
 
 		return $this->connect($connectionName);
 	}
@@ -131,6 +134,6 @@ class Database
      */
 	public function builder(string $connectionName): Builder
 	{
-		return new Builder($this->connect($connectionName));
+		return $this->connect($connectionName)->builder();
 	}
 }

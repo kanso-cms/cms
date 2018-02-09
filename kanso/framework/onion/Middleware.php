@@ -61,4 +61,26 @@ class Middleware
         
         return Callback::apply($this->callback, $args);
     }
+
+    /**
+     * Returns the callback
+     *
+     * @access public
+     * @return \closure|string
+     */
+    public function getCallback()
+    {
+        return $this->callback;
+    }
+
+    /**
+     * Returns the callback
+     *
+     * @access public
+     * @return mixed
+     */
+    public function getArgs()
+    {
+        return $this->args;
+    }
 }

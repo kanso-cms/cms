@@ -111,9 +111,21 @@ trait Tag
      * @param   int    $tag_id Tag id or null for tag of current post (optional) (Default NULL)
      * @return  string|null
      */
-    public function the_tag_slug(int $tag_id) 
+    public function the_tag_slug(int $tag_id = null) 
     {
-        $tag = $this->getTagById($tag_id);
+        $tag = false;
+
+        if (!$tag_id)
+        {            
+            if (!empty($this->post))
+            {
+                $tag = $this->post->tags[0];
+            }
+        }
+        else
+        {
+            $tag = $this->getTagById($tag_id);
+        }
 
         if ($tag)
         {
@@ -130,9 +142,21 @@ trait Tag
      * @param   int    $tag_id Tag id or null for tag of current post (optional) (Default NULL)
      * @return  string|null
      */
-    public function the_tag_url(int $tag_id) 
+    public function the_tag_url(int $tag_id = null) 
     {
-        $tag = $this->getTagById($tag_id);
+        $tag = false;
+
+        if (!$tag_id)
+        {            
+            if (!empty($this->post))
+            {
+                $tag = $this->post->tags[0];
+            }
+        }
+        else
+        {
+            $tag = $this->getTagById($tag_id);
+        }
 
         if ($tag)
         {
@@ -245,14 +269,14 @@ trait Tag
         return false;
     }
 
-     /**
+    /**
      * Ge an array of Post objects by tag id
      *
      * @param   int  $tag_id    The Tag id
      * @param   bool $published Get only published articles (optional) (Default TRUE)
      * @return  array
      */
-    public function the_tag_posts(array $tag_id, bool $published = true): array
+    public function the_tag_posts(int $tag_id, bool $published = true): array
     {
         $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
         

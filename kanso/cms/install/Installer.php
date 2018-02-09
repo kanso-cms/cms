@@ -7,8 +7,6 @@
 
 namespace kanso\cms\install;
 
-use PDO;
-use PDOException;
 use RuntimeException;
 use Closure;
 use kanso\framework\config\Config;
@@ -16,6 +14,7 @@ use kanso\framework\database\Database;
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
 use kanso\cms\access\Access;
+use kanso\framework\http\response\exceptions\NotFoundException;
 
 /**
  * CMS installer
@@ -79,7 +78,7 @@ class Installer
 
         if (file_exists($installPath.DIRECTORY_SEPARATOR.'Install.sample.php'))
         {
-            throw new RuntimeException('Could not install Kanso. You need to rename the "Install.sample.php" to "Install.php".');
+            throw new NotFoundException('Could not install Kanso. You need to rename the "Install.sample.php" to "Install.php".');
         }
 
         $this->isInstalled();

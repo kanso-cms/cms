@@ -24,7 +24,7 @@ class AccessService extends Service
 	{
 		$this->container->singleton('Access', function ($container)
 		{
-			return new Access($container->Request, $container->Response, $container->Config->get('cms.security.ip_blocked'), $container->Config->get('cms.security.ip_whitelist'));
+			return new Access($container->Request, $container->Response, $container->Filesystem, $container->Config->get('cms.security.ip_blocked'), $container->Config->get('cms.security.ip_whitelist'));
 		});
 	}
 }

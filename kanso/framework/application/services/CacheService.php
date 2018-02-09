@@ -62,6 +62,6 @@ class CacheService extends Service
      */
 	private function fileStore(string $path): FileStore
 	{
-		return new FileStore($path);	
+		return new FileStore($this->container->Filesystem, $path);	
 	}
 }

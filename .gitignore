@@ -1,4 +1,25 @@
+# Minified Scripts #
+###################
+*.min.css
+*.min.js
+*.min.css.map
+
+# OS generated files #
+######################
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Composer #
+######################
 composer.phar
 composer.lock
 /vendor
+
+# Kanso #
+######################
+robots.txt

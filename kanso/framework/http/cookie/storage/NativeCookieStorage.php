@@ -63,6 +63,6 @@ class NativeCookieStorage implements StoreInterface
      */
     public function write(string $name, $data)
     {
-        setcookie($name, $this->crypto->encrypt(serialize($data)), $this->configuration['expire'], $this->configuration['path'], $this->configuration['domain'], $this->configuration['secure'], $this->configuration['httponly']);
+        return setcookie($name, $this->crypto->encrypt(serialize($data)), $this->configuration['expire'], $this->configuration['path'], $this->configuration['domain'], $this->configuration['secure'], $this->configuration['httponly']);
     }
 }

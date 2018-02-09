@@ -152,4 +152,14 @@ class Onion
     {
         return $this->response;
     }
+
+    /**
+     * Get middleware layers
+     *
+     * @access public
+     */
+    public function layers(): array
+    {
+        return $this->layers;
+    }
 }

@@ -7,15 +7,16 @@
 
 namespace kanso\framework\http\cookie;
 
-use kanso\framework\http\cookie\storage\Store;
+use kanso\framework\http\cookie\storage\StoreInterface;
 use kanso\framework\common\ArrayAccessTrait;
+use kanso\framework\common\ArrayIterator;
 
 /**
  * Cookie utility
  *
  * @author Joe J. Howard
  */
-class Cookie
+class Cookie implements \IteratorAggregate
 {
     use ArrayAccessTrait;
 
@@ -58,11 +59,11 @@ class Cookie
      * Constructor
      *
      * @access public
-     * @param  object     $store         Cookie storage implementation
-     * @param  string     $cookieName    Name of the cookie
-     * @param  int        $cookieExpires Date the cookie will expire (unix timestamp)
+     * @param  \kanso\framework\http\cookie\storage\StoreInterface $store         Cookie storage implementation
+     * @param  string                                              $cookieName    Name of the cookie
+     * @param  int                                                 $cookieExpires Date the cookie will expire (unix timestamp)
      */
-    public function __construct($store, string $cookieName, int $cookieExpires)
+    public function __construct(StoreInterface $store, string $cookieName, int $cookieExpires)
     {
         $this->store = $store;
 
@@ -73,6 +74,14 @@ class Cookie
         $this->readCookie(); 
         
         $this->validateExpiry();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->data);
     }
 
     /**
@@ -159,6 +168,8 @@ class Cookie
             $this->store->write($this->cookieName, $this->get());
 
             $this->store->write($this->cookieName.'_login', $this->login);
+
+            $this->sent = true;
         }   
     }
 

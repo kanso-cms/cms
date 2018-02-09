@@ -9,6 +9,7 @@ namespace kanso\framework\http\request;
 
 use kanso\framework\http\request\Environment;
 use kanso\framework\http\request\Headers;
+use kanso\framework\http\request\Files;
 use kanso\framework\utility\Mime;
 use kanso\framework\utility\Str;
 
@@ -48,6 +49,13 @@ class Request
     private $environment;
 
     /**
+     * Http files  
+     *
+     * @var \kanso\framework\http\request\Files
+     */
+    private $files;
+
+    /**
      * List of bot user agnets
      *
      * @var array
@@ -68,12 +76,17 @@ class Request
      * Constructor
      *
      * @access public
+     * @param  \kanso\framework\http\request\Environment $environment Environment wrapper
+     * @param  \kanso\framework\http\request\Headers     $headers     Headers wrapper
+     * @param  \kanso\framework\http\request\Files       $files       Files wrapper
      */
-    public function __construct(Environment $environment, Headers $headers)
+    public function __construct(Environment $environment, Headers $headers, Files $files)
     {
         $this->environment = $environment;
 
         $this->headers = $headers;
+
+        $this->files = $files;
     }
 
     /**
@@ -110,6 +123,17 @@ class Request
     }
 
     /**
+     * Returns uploaded files wrapper
+     *
+     * @access public
+     * @return \kanso\framework\http\request\Files
+     */
+    public function files(): Files
+    {
+        return $this->files;
+    }
+
+    /**
      * Returns the HTTP request method
      *
      * @return string
@@ -127,7 +151,7 @@ class Request
      */
     public function isSecure(): bool
     {
-        return $this->environment->HTTP_HOST === 'https';
+        return strtolower($this->environment->HTTP_PROTOCOL) === 'https';
     }
 
     /**
@@ -291,9 +315,16 @@ class Request
             $data['page'] = 0;
         }
 
-        if (!$this->isGet())
+        if ($this->isPost())
         {
-            foreach ($_POST as $k => $v)
+            foreach (array_merge($this->queries(), $_POST) as $k => $v)
+            {
+                $data[$k] = $v;
+            }
+        }
+        else
+        {
+            foreach (array_merge($this->queries(), $_GET) as $k => $v)
             {
                 $data[$k] = $v;
             }
@@ -326,7 +357,7 @@ class Request
     {
         $result   = [];
 
-        $queryStr = $this->fetch('query');
+        $queryStr = $this->environment->QUERY_STRING;
 
         if (!empty($queryStr))
         {
@@ -373,14 +404,11 @@ class Request
      */
     public function mimeType()
     {
-        if (!headers_sent())
-        {
-            $pathinfo = $this->fetch();
+        $pathinfo = $this->fetch();
             
-            if (isset($pathinfo['path']))
-            {
-                return Mime::fromExt(Str::getAfterLastChar($pathinfo['path'], '.'));
-            }
+        if (isset($pathinfo['path']))
+        {
+            return Mime::fromExt(Str::getAfterLastChar($pathinfo['path'], '.'));
         }
 
         return false;

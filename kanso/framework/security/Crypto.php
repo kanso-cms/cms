@@ -58,16 +58,6 @@ class Crypto
      */
 	public function __construct(Signer $signer, $encrytper, $password)
 	{
-        if (get_parent_class($encrytper) !== ctyptoEncrypter::class) 
-        {
-            throw new RuntimeException(vsprintf("%s(): The provided encrypter class [ %s ] must extend [ %s ]", [__METHOD__, get_class($encrytper), ctyptoEncrypter::class]));
-        }
-
-        if (get_parent_class($password) !== passwordEncrypter::class) 
-        {
-            throw new RuntimeException(vsprintf("%s(): The provided password hashing class [ %s ] must extend [ %s ]", [__METHOD__, get_class($password), passwordEncrypter::class]));
-        }
-
         $this->defaultMemory = $this->getDefaultMemory();
 
         $this->encrytper = $encrytper;
@@ -129,6 +119,17 @@ class Crypto
 	public function password()
     {
         return $this->password;
+    }
+
+    /**
+     * Get the data signer
+     *
+     * @access public
+     * @return object
+     */
+    public function signer()
+    {
+        return $this->singer;
     }
 
     /**

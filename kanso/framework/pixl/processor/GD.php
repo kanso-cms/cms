@@ -5,16 +5,17 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\framework\utility;
+namespace kanso\framework\pixl\processor;
 
-use InvalidArgumentException;
+use RuntimeException;
+use kanso\framework\pixl\processor\ProcessorInterface;
 
 /**
  * GD image manager
  *
  * @author Joe J. Howard
  */
-class Image
+class GD implements ProcessorInterface
 {
     /**
      * Default jpg quality
@@ -104,52 +105,91 @@ class Image
      * Constructor
      *
      * @access public
-     * @param string $filename Absolute path to file
+     * @param string  $filename Absolute path to file
      */
-    public function __construct(string $filename)
+    public function __construct(string $filename = null)
     {
-        $this->load($filename);
-    }   
+        if ($filename)
+        {
+            $this->load($filename);
+        }
+    }
 
     /**
-     * Get the image width in px
-     *
-     * @access public
-     * @return int
-     */
+	 * {@inheritdoc}
+	 */
+    public function load(string $filename)
+    {
+        $image_info = getimagesize($filename);
+
+        if (!$image_info)
+        {
+            throw new RuntimeException("$filename : The provided file path is not an image.");
+        }
+
+        list (
+            $this->source_w,
+            $this->source_h,
+            $this->source_type
+        ) = $image_info;
+
+        switch ($this->source_type)
+        {
+            case IMAGETYPE_GIF:
+                $this->source_image = imagecreatefromgif($filename);
+            break;
+
+            case IMAGETYPE_JPEG:
+                $this->source_image = imagecreatefromjpeg($filename);
+            break;
+
+            case IMAGETYPE_PNG:
+                $this->source_image = imagecreatefrompng($filename);
+            break;
+
+            default:
+                throw new RuntimeException("$filename : The provided file path is not a supported image.");
+            break;
+        }
+    }
+
+    /**
+	 * {@inheritdoc}
+	 */
     public function width(): int
     {
+        if ($this->dest_w > 0)
+        {
+            return $this->dest_w;
+        }
+
         return $this->source_w;
     }
 
     /**
-     * Get the image height in px
-     *
-     * @access public
-     * @return int
-     */
+	 * {@inheritdoc}
+	 */
     public function height(): int
     {
+        if ($this->dest_h > 0)
+        {
+            return $this->dest_h;
+        }
+
         return $this->source_h;
     }
 
     /**
-     * Save the new file to disk
-     *
-     * @access public
-     * @param  string $filename     Absolute path to file
-     * @param  mixed  $image_type   PHP image type constant (optional) (default NULL)
-     * @param  int    $quality      Quality of image to save (optional)
-     * @param  int    $permissions  File permissions to save with (optional)
-     * @return \kanso\framework\utility\Image
-     */
+	 * {@inheritdoc}
+	 */
     public function save(string $filename, int $image_type = null, int $quality = null, int $permissions = null)
     {
         $image_type = $image_type ?: $this->source_type;
 
         $dest_image = imagecreatetruecolor($this->dest_w, $this->dest_h);
 
-        switch ($image_type) {
+        switch ($image_type)
+        {
             case IMAGETYPE_GIF:
                 $background = imagecolorallocatealpha($dest_image, 255, 255, 255, 1);
                 imagecolortransparent($dest_image, $background);
@@ -181,7 +221,8 @@ class Image
             $this->source_h
         );
 
-        switch ($image_type) {
+        switch ($image_type)
+        {
             case IMAGETYPE_GIF:
                 imagegif($dest_image, $filename);
             break;
@@ -203,7 +244,8 @@ class Image
             break;
         }
 
-        if ($permissions) {
+        if ($permissions)
+        {
             chmod($filename, $permissions);
         }
 
@@ -211,13 +253,8 @@ class Image
     }
 
     /**
-     * Resize to height
-     *
-     * @access public
-     * @param  int  $height        Height in px
-     * @param  bool $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
-     * @return \kanso\framework\utility\Image
-     */
+	 * {@inheritdoc}
+	 */
     public function resizeToHeight(int $height, bool $allow_enlarge = false)
     {
         $ratio = $height / $this->source_h;
@@ -230,13 +267,8 @@ class Image
     }
 
     /**
-     * Resize to width
-     *
-     * @access public
-     * @param  int                  $width         Width in px
-     * @param  bool                 $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
-     * @return \kanso\framework\utility\Image
-     */
+	 * {@inheritdoc}
+	 */
     public function resizeToWidth(int $width, bool $allow_enlarge = false)
     {
         $ratio  = $width / $this->source_w;
@@ -249,12 +281,8 @@ class Image
     }
 
     /**
-     * Scale image by a percentage
-     *
-     * @param  int                  $scale         Width in px
-     * @param  bool                 $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
-     * @return \kanso\framework\utility\Image
-     */
+	 * {@inheritdoc}
+	 */
     public function scale(int $scale)
     {
         $width  = $this->source_w * $scale / 100;
@@ -267,13 +295,8 @@ class Image
     }
 
     /**
-     * Resize image to height and width
-     *
-     * @param  int                  $width         Width in px
-     * @param  int                  $height        Height in px
-     * @param  bool                 $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
-     * @return \kanso\framework\utility\Image
-     */
+	 * {@inheritdoc}
+	 */
     public function resize(int $width, int $height, bool $allow_enlarge = false)
     {
         if (!$allow_enlarge) {
@@ -281,7 +304,8 @@ class Image
             // but either of the dimensions are larger then the original,
             // then just use original dimensions - this logic may need rethinking
 
-            if ($width > $this->source_w || $height > $this->source_h) {
+            if ($width > $this->source_w || $height > $this->source_h)
+            {
                 $width  = $this->source_w;
                 $height = $this->source_h;
             }
@@ -299,14 +323,9 @@ class Image
         return $this;
     }
 
-    /**
-     * Crop to width and height
-     *
-     * @param  int                  $width         Width in px
-     * @param  int                  $height        Height in px
-     * @param  bool                 $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
-     * @return \kanso\framework\utility\Image
-     */
+   	/**
+	 * {@inheritdoc}
+	 */
     public function crop(int $width, int $height, bool $allow_enlarge = false)
     {
         if (!$allow_enlarge) {
@@ -348,49 +367,4 @@ class Image
 
         return $this;
     }
-
-    /**
-     * Load image parameters for internal use
-     *
-     * @access private
-     * @param  string         $filename Absolute path to file
-     * @throws Exception      If file is not an image
-     * @return Exception|null
-     */
-    private function load(string $filename)
-    {
-        $image_info = getimagesize($filename);
-
-        if (!$image_info)
-        {
-            throw new InvalidArgumentException("$filename : The provided file path is not an image.");
-        }
-
-        list (
-            $this->source_w,
-            $this->source_h,
-            $this->source_type
-        ) = $image_info;
-
-        switch ($this->source_type)
-        {
-            case IMAGETYPE_GIF:
-                $this->source_image = imagecreatefromgif($filename);
-            break;
-
-            case IMAGETYPE_JPEG:
-                $this->source_image = imagecreatefromjpeg($filename);
-            break;
-
-            case IMAGETYPE_PNG:
-                $this->source_image = imagecreatefrompng($filename);
-            break;
-
-            default:
-            throw new InvalidArgumentException("$filename : The provided file path is not a supported image.");
-            break;
-        }
-    }
-
-   
 }

@@ -49,20 +49,8 @@ abstract class Controller
     {
     	$this->nextMiddleware = $next;
 
-    	$this->loadContainer();
-
     	$this->loadModel($modelClass);
     }
-
-   	/**
-	 * Loads the container into the container aware trait
-	 *
-	 * @access private
-	 */
-    private function loadContainer()
-	{
-		$this->setContainer(Kanso::instance()->container());
-	}
 
 	/**
 	 * Loads and instantiates the model

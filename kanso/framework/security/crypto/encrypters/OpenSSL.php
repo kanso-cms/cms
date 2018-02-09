@@ -39,6 +39,13 @@ class OpenSSL extends Encrypter implements EncrypterInterface
 	protected $ivSize;
 
 	/**
+	 * Initialization vector size.
+	 *
+	 * @var string
+	 */
+	protected $ciphers;
+
+	/**
 	 * Constructor.
 	 *
 	 * @access public
@@ -47,11 +54,31 @@ class OpenSSL extends Encrypter implements EncrypterInterface
 	 */
 	public function __construct(string $key, string $cipher = null)
 	{
+		$this->loadCyphers();
+
 		$this->key = $key;
 
-		$this->cipher = $cipher ?? 'AES-256-CTR';
+		$this->cipher = !$cipher || !in_array($cipher, $this->ciphers) ? 'AES-256-CTR' : $cipher;
 
 		$this->ivSize = openssl_cipher_iv_length($this->cipher);
+	}
+
+	/**
+	 * Load compatible ciphers
+	 *
+	 * @access private
+	 */
+	private function loadCyphers()
+	{
+		$this->ciphers = array_filter(openssl_get_cipher_methods(), function($cypher)
+		{
+			if (strpos(strtolower($cypher), 'gcm') !== false || strpos(strtolower($cypher), 'ccm') !== false || strpos(strtolower($cypher), 'des-') !== false )
+			{
+			    return false;
+			}
+
+			return true;
+		});
 	}
 
 	/**

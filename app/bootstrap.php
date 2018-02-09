@@ -33,14 +33,20 @@ set_error_handler(function($code, $message, $file, $line)
  * This is REQUIRED for the application to function
  * properly.
  */
-define('KANSO_DIR', dirname(dirname(__FILE__)).'/kanso');
+if (!defined('KANSO_DIR'))
+{
+	define('KANSO_DIR', dirname(dirname(__FILE__)).'/kanso');
+}
 
 /**
  * Path to the Kanso app directory.
  * This is REQUIRED for the application to function
  * properly.
  */
-define('APP_DIR', dirname(__FILE__));
+if (!defined('APP_DIR'))
+{
+	define('APP_DIR', dirname(__FILE__));
+}
 
 /**
  * Kanso uses a cascading file-system to load configuration
@@ -51,7 +57,12 @@ define('APP_DIR', dirname(__FILE__));
  */
 
 # Uncomment this to add the sanbox config environment
-# define('KANSO_ENV', 'sandbox');
+/*
+if (!defined('KANSO_ENV'))
+{
+	define('KANSO_ENV', 'sandbox');
+}
+*/
 
 /**
  * ---------------------------------------------------------

@@ -7,16 +7,18 @@
 
 namespace kanso\framework\http\session;
 
+use kanso\framework\common\ArrayIterator;
 use kanso\framework\common\ArrayAccessTrait;
 use kanso\framework\http\session\Flash;
 use kanso\framework\http\session\Token;
+use kanso\framework\http\session\storage\StoreInterface;
 
 /**
  * Session Manager
  *
  * @author Joe J. Howard
  */
-class Session
+class Session implements \IteratorAggregate
 {
     use ArrayAccessTrait;
 
@@ -59,9 +61,11 @@ class Session
      * Constructor
      *
      * @access public
-     * @param  $configuration array Array of configuration options
+     * @param  kanso\framework\http\session\Token                   $token Token wrapper
+     * @param  kanso\framework\http\session\Flash                   $flash Flash wrapper
+     * @param  kanso\framework\http\session\storage\StoreInterface  $store Store implementation
      */
-    public function __construct(Token $token, Flash $flash, $store, array $configuration)
+    public function __construct(Token $token, Flash $flash, StoreInterface $store, array $configuration)
     {
         $this->token = $token;
 
@@ -72,6 +76,14 @@ class Session
         $this->configure($configuration);
 
         $this->initializeSession();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIterator()
+    {
+        return new ArrayIterator($this->data);
     }
 
     /**

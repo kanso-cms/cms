@@ -8,7 +8,7 @@
 namespace kanso\framework\database\query;
 
 use PDOException;
-use kanso\framework\database\connection\Connection;
+use kanso\framework\database\connection\ConnectionHandler;
 
 /**
  * Database SQL builder
@@ -65,9 +65,9 @@ class Query
 	/**
 	 * Database connection
 	 *
-	 * @var \kanso\framework\database\connection\Connection
+	 * @var \kanso\framework\database\connection\ConnectionHandler
 	 */
-	private $connection;
+	private $connectionHandler;
 
 	/**
      * Constructor
@@ -75,9 +75,9 @@ class Query
      * @access public
      * @param  \kanso\framework\database\connection\Connection $connection
      */
-	public function __construct(Connection $connection)
+	public function __construct(ConnectionHandler $connectionHandler)
 	{
-		$this->connection = $connection;
+		$this->connectionHandler = $connectionHandler;
 
 		# Reset the pending functions
 		$this->setPending();
@@ -377,7 +377,6 @@ class Query
      */
 	public function order_by(string $column, string $direction = 'DESC')
 	{
-
 		$table  = $this->table;
 		
 		if (strpos($column, '.') !== FALSE)
@@ -585,7 +584,7 @@ class Query
 		$GROUP = $this->groupByPending();
 
 		# Build SQL statement
-		$this->SQL = "$SELECT $FROM $JOINS $WHERE $GROUP $ORDERBY $LIMIT";
+		$this->SQL = $this->connectionHandler->cleanQuery("$SELECT $FROM $JOINS $WHERE $GROUP $ORDERBY $LIMIT");
 	}
 
 	/**
@@ -597,7 +596,7 @@ class Query
 	private function execSQL()
 	{
 		# Execute the SQL
-		$results = $this->connection->query(trim($this->SQL), $this->SQL_bindings);
+		$results = $this->connectionHandler->query(trim($this->SQL), $this->SQL_bindings);
 		
 		# If this was a row query - flatten and return only the first result
 		if (!empty($results) && count($this->pending['limit']) === 1 && $this->pending['limit'] === 1 && $this->operation === 'QUERY')

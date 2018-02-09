@@ -9,11 +9,10 @@ namespace kanso\framework\database\connection;
 
 use PDO;
 use PDOException;
-use PDOStatement;
 use RuntimeException;
-use Exception;
 use kanso\framework\database\connection\Cache;
 use kanso\framework\database\query\Builder;
+use kanso\framework\database\query\Query;
 
 /**
  * Database connection
@@ -79,25 +78,11 @@ class Connection
 	protected $pdo;
 
 	/**
-	 * Query log.
-	 *
-	 * @var array
-	 */
-	protected $log = [];
-
-	/**
-	 * Parameters for currently executing query statement
-	 *
-	 * @var array
-	 */
-	protected $parameters = [];
-
-	/**
-     * @var PDO statement object returned from \PDO::prepare()
+     *  Connection handler
      *
-     * \PDOStatement
-     */ 
-	private $pdoStatement;
+     * @var \kanso\framework\database\connection\ConnectionHandler
+     */
+	private $handler;
 
 	/**
 	 * Constructor.
@@ -141,8 +126,6 @@ class Connection
 
 		$this->tablePrefix = $config['table_prefix'] ?? '';
 
-		$this->cache = new cache;
-		
 		$this->pdo = $this->connect();
 	}
 
@@ -156,14 +139,14 @@ class Connection
 	{
 		try
 		{
-			$pdo = new PDO($this->dsn, $this->username, $this->password, $this->getConnectionOptions());
+			$this->pdo = new PDO($this->dsn, $this->username, $this->password, $this->getConnectionOptions());
 		}
 		catch(PDOException $e)
 		{
 			throw new PDOException(vsprintf("%s(): Failed to connect to the [ %s ] database. %s", [__METHOD__, $this->name, $e->getMessage()]));
 		}
 		
-		return $pdo;
+		return $this->pdo;
 	}
 
 	/**
@@ -184,6 +167,23 @@ class Connection
 	public function reconnect()
 	{
 		$this->pdo = $this->connect();
+
+		return $this->pdo;
+	}
+
+	/**
+	 * Creates a new PDO instance.
+	 *
+	 * @access public
+	 */
+	public function pdo()
+	{
+		if (!$this->isConnected())
+		{
+			return $this->connect();
+		}
+
+		return $this->pdo;
 	}
 
 	/**
@@ -233,7 +233,22 @@ class Connection
 	 */
 	public function builder(): Builder
 	{
-		return new Builder($this);
+		return new Builder($this->handler(), new Query($this->handler()));
+	}
+
+	/**
+	 * Return a new Query builder instance
+	 *
+	 * @return \kanso\framework\database\connection\ConnectionHandler
+	 */
+	public function handler(): ConnectionHandler
+	{
+		if (!$this->handler)
+		{
+			$this->handler = new ConnectionHandler($this, new Cache);
+		}
+
+		return $this->handler;
 	}
 
 	/**
@@ -253,274 +268,5 @@ class Connection
 			PDO::ATTR_STRINGIFY_FETCHES  => $this->options['ATTR_STRINGIFY_FETCHES'] ?? false,
 			PDO::ATTR_EMULATE_PREPARES   => $this->options['ATTR_EMULATE_PREPARES'] ?? false,
 		];
-	}
-
-	/**
-	 * All SQL queries pass through this method
-	 * 
-	 * @access private
-	 * @param  string  $query      SQL query statement
-	 * @param  array   $parameters Array of parameters to bind (optional) (default [])
-	 */	
-	private function parseQuery(string $query, array $_params = [])
-	{
-		# Start time
-		$start = microtime(true);	
-
-		# If not connected, connect to the database.
-		if (!$this->isConnected())
-		{
-			$this->reconnect();
-		}
-
-		# Prepare query
-		$this->pdoStatement = $this->pdo->prepare($query);
-		
-		# Add parameters to the parameter array	
-		$this->bindMore($_params);
-
-		# Bind parameters
-		if (!empty($this->parameters))
-		{
-			foreach($this->parameters as $param)
-			{
-				$params = explode("\x7F", $param);
-				
-				$this->pdoStatement->bindParam($params[0], $params[1]);
-			}		
-		}
-
-		# Execute SQL
-		$this->pdoStatement->execute();
-
-		# Log
-		$this->log($query, $this->parameters, $start);
-
-		# Reset the parameters
-		$this->parameters = [];
-	}
-
-    /**
-	 * Add the parameter to the parameter array
-	 * 
-	 * @access public
-	 * @param string $column Column key name
-	 * @param string $value  Value to bind
-	 */	
-	public function bind(string $column, $value)
-	{
-		$this->parameters[sizeof($this->parameters)] = ":" . $column . "\x7F" . utf8_encode($value);
-	}
-   
-    /**
-	 * Add more parameters to the parameter array
-	 *
-	 * @access public
-	 * @param  array  $parray Array of column => value
-	 */	
-	public function bindMore(array $parray = [])
-	{
-		if (empty($this->parameters) && is_array($parray) && !empty($parray))
-		{
-			$columns = array_keys($parray);
-
-			foreach($columns as $i => &$column)
-			{
-				$this->bind($column, $parray[$column]);
-			}
-		}
-	}
-   
-    /**
-	 * If the SQL query contains a SELECT or SHOW statement it 
-	 * returns an array containing all of the result set row.
-	 * If the SQL statement is a DELETE, INSERT, or UPDATE statement 
-	 * it returns the number of affected rows
-	 *
-	 * @access public
-	 * @param  string $query     The query to execute
-	 * @param  array  $params    Assoc array of parameters to bind (optional) (default [])
-	 * @param  int    $fetchmode PHP PDO::ATTR_DEFAULT_FETCH_MODE constant or integer
-	 * @return mixed
-	 */			
-	public function query(string $query, $params = [], int $fetchmode = PDO::FETCH_ASSOC)
-	{
-		# Initiate the cache
-		$this->cache->setQuery($query, array_merge($this->parameters, $params));
-
-		# Get the statement type
-		$queryType = $this->getQueryType($query);
-
-		# If this is a SELECT we can test the cache
-		if ($queryType === 'select')
-		{
-			if (!$this->cache->has())
-			{
-				$this->parseQuery($query, $params);
-			}			
-		}
-		# Otherwise we can PDO
-		else
-		{
-			$this->parseQuery($query, $params);
-		}
-
-		# Reset the parameters incase we didn't parse the query
-		$this->parameters = [];
-
-		# Return appropriate
-		if ($queryType === 'select' || $queryType === 'show')
-		{
-			if ($this->cache->has())
-			{				
-				return $this->cache->get();
-			}
-
-			$result = $this->pdoStatement->fetchAll($fetchmode);
-
-			$this->cache->put($result);
-
-			return $result;
-		}
-		elseif ( $queryType === 'insert' ||  $queryType === 'update' || $queryType === 'delete' )
-		{
-			return $this->pdoStatement->rowCount();	
-		}	
-		else
-		{
-			return NULL;
-		}
-	}
-		
-    /**
-	 *Returns an array which represents a column from the result set 
-	 *
-	 * @access public
-	 * @param  string $query  The query to execute
-	 * @param  array  $params Assoc array of parameters to bind (optional) (default [])
-	 * @return array
-	 */	
-	public function column(string $query, array $params = [])
-	{
-		$this->parseQuery($query, $params);
-		
-		$cols = $this->pdoStatement->fetchAll(PDO::FETCH_NUM);		
-		
-		$result = [];
-
-		foreach($cols as $cells)
-		{
-			$result[] = $cells[0];
-		}
-
-		return $result;
-	}	
-
-    /**
-	 * Returns an array which represents a row from the result set 
-	 *
-	 * @access public
-	 * @param  string $query     The query to execute
-	 * @param  array  $params    Assoc array of parameters to bind (optional) (default [])
-	 * @param  int    $fetchmode PHP PDO::ATTR_DEFAULT_FETCH_MODE constant or integer
-	 * @return array
-	 */	
-	public function row(string $query, array $params = [], $fetchmode = PDO::FETCH_ASSOC)
-	{				
-		$this->parseQuery($query,$params);
-		
-		return $this->pdoStatement->fetch($fetchmode);			
-	}
-   
-    /**
-	 * Returns the value of one single field/column
-	 *
-	 * @access public
- 	 * @param  string $query  The query to execute
-	 * @param  array  $params Assoc array of parameters to bind (optional) (default [])
-	 * @return string
-	 */	
-	public function single(string $query, array $params = [])
-	{
-		$this->parseQuery($query,$params);
-		
-		return $this->pdoStatement->fetchColumn();
-	}
-
-    /**
-     *  Returns the last inserted id.
-     *
-     * @access public
-     * @return mixed
-     */	
-	public function lastInsertId() 
-	{
-		return $this->pdo->lastInsertId();
-	}
-
-	/**
-	 * Prepares query for logging.
-	 *
-	 * @access protected
-	 * @param  string $query  SQL query
-	 * @param  array  $params Query paramaters
-	 * @return string
-	 */
-	protected function prepareQueryForLog(string $query, array $params): string
-	{
-		return preg_replace_callback('/\?/', function($matches) use (&$params)
-		{
-			$param = array_shift($params);
-
-			if(is_int($param) || is_float($param))
-			{
-				return $param;
-			}
-			elseif(is_bool(($param)))
-			{
-				return $param ? 'TRUE' : 'FALSE';
-			}
-			elseif(is_object($param))
-			{
-				return get_class($param);
-			}
-			elseif(is_null($param))
-			{
-				return 'NULL';
-			}
-			else
-			{
-				return $this->pdo->quote($param);
-			}
-		}, $query);
-	}
-
-	/**
-	 * Adds a query to the query log.
-	 *
-	 * @access protected
-	 * @param string $query  SQL query
-	 * @param array  $params Query parameters
-	 * @param float  $start  Start time in microseconds
-	 */
-	protected function log(string $query, array $params, float $start)
-	{
-		$time = microtime(true) - $start;
-
-		$query = $this->prepareQueryForLog($query, $params);
-
-		$this->log[] = ['query' => $query, 'time' => $time];
-	}
-
-	/**
-	 * Gets the query type from the query string
-	 *
-	 * @access protected
-	 * @param  string    $query SQL query
-	 * @return string
-	 */
-	protected function getQueryType(string $query): string
-	{
-		return strtolower(explode(" ", trim($query))[0]);
 	}
 }

@@ -357,7 +357,10 @@ class Shell
         # Do a soft reset - keeps the dir, result and output
         $this->reset();
 
-        if (!$this->result && !$showErrors) return $errors;
+        if (!$this->result && !$showErrors)
+        {
+            return $errors;
+        }
 
         # Return the result
         return $output;
@@ -391,7 +394,10 @@ class Shell
     private function resolveBins($cmd)
     {   
         # If this is a built in command we can skip
-        if (in_array($cmd, $this->built_ins)) return $cmd;
+        if (in_array($cmd, $this->built_ins))
+        {
+            return $cmd;
+        }
         
         # Get the env paths
         $paths = array_map('trim', explode(':', getenv('PATH')));
@@ -399,12 +405,13 @@ class Shell
         # Loop the current env paths for the binary
         foreach ($paths as $path)
         {
-
             # The bin should exist
             $bin = rtrim($path, '/').'/'.$cmd;
 
-            if (file_exists($bin)) return $bin;
-
+            if (file_exists($bin))
+            {
+                return $bin;
+            }
         }
 
         # If that failed let's add "/usr/local/bin" to the evn paths

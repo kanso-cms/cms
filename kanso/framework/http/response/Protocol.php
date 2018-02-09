@@ -62,6 +62,6 @@ class Protocol
      */
     public function isSecure(): bool
     {
-        return $this->protocol = 'https';
+        return $this->protocol === 'https';
     }
 }

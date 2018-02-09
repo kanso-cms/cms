@@ -13,7 +13,6 @@ use kanso\framework\utility\Str;
 use kanso\framework\utility\Arr;
 use kanso\framework\utility\Markdown;
 use kanso\cms\wrappers\Wrapper;
-use kanso\cms\wrappers\providers\Provider;
 use kanso\cms\wrappers\providers\TagProvider;
 use kanso\cms\wrappers\providers\CategoryProvider;
 use kanso\cms\wrappers\providers\UserProvider;
@@ -141,7 +140,9 @@ class Post extends Wrapper
         if (!empty($this->data['id']))
 		{
 			$this->getTheTags();
+
 			$this->getTheAuthor();
+			
 			$this->getTheCategories();
 		}
 
@@ -168,6 +169,10 @@ class Post extends Wrapper
 		{
 			return $this->getTheTags();
 		}
+		else if ($key === 'tag')
+		{
+			return $this->getTheTags()[0];
+		}
 		else if ($key === 'author')
 		{
 			return $this->getTheAuthor();
@@ -190,7 +195,7 @@ class Post extends Wrapper
 		}
 		else if ($key === 'thumbnail')
 		{
-			$this->getTheThumbnail();
+			return $this->getTheThumbnail();
 		}
 		else if (array_key_exists($key, $this->data))
 		{
@@ -378,7 +383,7 @@ class Post extends Wrapper
 	}
 
 	/**
-	 * Get the post thumbnail
+	 * Get the post comments
 	 *
 	 * @access private
 	 * @return array
@@ -532,7 +537,7 @@ class Post extends Wrapper
 
 			$this->SQL->INSERT_INTO('posts')->VALUES($insertRow)->QUERY();
 
-			$row['id'] = intval($this->SQL->connection()->lastInsertId());
+			$row['id'] = intval($this->SQL->connectionHandler()->lastInsertId());
 		}
 
 		# Or update an existing row
@@ -594,6 +599,8 @@ class Post extends Wrapper
 			$this->SQL->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $this->data['id'])->QUERY();
 			
 			$this->SQL->DELETE_FROM('posts')->WHERE('id', '=', $this->data['id'])->QUERY();
+
+			$this->SQL->DELETE_FROM('post_meta')->WHERE('post_id', '=', $this->data['id'])->QUERY();
 
 			return true;
 		}
@@ -670,6 +677,7 @@ class Post extends Wrapper
 	private function createTags($tags): array
 	{
 		$default = [$this->tagProvider->byId(1)];
+
 		$result  = [];
 
 	  	if (is_string($tags))
@@ -733,7 +741,7 @@ class Post extends Wrapper
     	$i = 1;
 
         # Loop and append number
-    	while(!empty($this->SQL->SELECT('*')->FROM('posts')->WHERE('title', '=', $title)->ROW()))
+    	while(!empty($this->SQL->SELECT('id')->FROM('posts')->WHERE('title', '=', $title)->ROW()))
     	{
     		$title = preg_replace("/(".$baseTitle.")(-\d+)/", "$1"."", $title).'-'.$i;
     		$i++;
@@ -880,6 +888,7 @@ class Post extends Wrapper
 	    	}
 
 	    	$slugs = array_reverse($slugs);
+	    	
 	    	return trim(implode('/', $slugs), '/');
 	    }
 	    

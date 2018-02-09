@@ -112,7 +112,7 @@ class CategoryManager extends Manager
 
 		if ($cat)
 		{
-			return $cat->delete();
+			return $cat->delete() ? true : false;
 		}
 		
 		return false;	
@@ -145,7 +145,7 @@ class CategoryManager extends Manager
 
 		if ($cat)
 		{
-			return $cat->clear();
+			return $cat->clear() ? true : false;
 		}
 		
 		return false;	

@@ -462,4 +462,16 @@ trait Post
     {
         return $this->PostManager->provider()->byKey('posts.type', 'page', false, $published);
     }
+
+    /**
+     * Get an array of POST objects of custom post types by type
+     *
+     * @access public
+     * @param  bool   $published Return only published posts (optional) (default true)
+     * @return array
+     */
+    public function all_custom_posts(string $type, bool $published = true): array
+    {
+        return $this->PostManager->provider()->byKey('posts.type', $type, false, $published);
+    }
 }

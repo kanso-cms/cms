@@ -19,6 +19,23 @@ use kanso\framework\mvc\view\ViewInterface;
 class View extends ViewBase implements ViewInterface
 {
     /**
+     * Should the "$kanso" variable be made available to all templates ?
+     *
+     * @var bool
+     */
+    private $includeKanso = true;
+
+    /**
+     * Should the "$kanso" variable be made available to all templates ?
+     *
+     * @param bool $toggle Enable/disable local kanso instance (optional) (default true)
+     */
+    public function includeKanso(bool $toggle = true)
+    {
+        $this->includeKanso = $toggle;
+    }
+
+    /**
 	 * {@inheritdoc}
 	 */
 	public function include(string $file)
@@ -54,8 +71,13 @@ class View extends ViewBase implements ViewInterface
      */
     private function sandbox(string $file, array $data): string
     {
-        $kanso = Kanso::instance();
+        $data = array_merge($this->data, $data);
 
+        if ($this->includeKanso === true)
+        {
+            $kanso = Kanso::instance();
+        }
+        
         foreach ($this->includes as $include)
         {
             if (file_exists($include))

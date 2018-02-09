@@ -31,7 +31,7 @@ class ErrorHandlerService extends Service
 	{
 		if ($this->container->Config->get('application.error_handler.error_reporting') > 0)
 		{
-			return new ErrorLogger($exception, $this->container->Request->environment(), $this->container->Config->get('application.error_handler.log_path'));
+			return new ErrorLogger($exception, $this->container->Filesystem, $this->container->Request->environment(), $this->container->Config->get('application.error_handler.log_path'));
 		}
 
 		return null;
@@ -65,6 +65,6 @@ class ErrorHandlerService extends Service
 		});
 
 		# Save the instance
-		$this->container->instance('ErrorHandler', $handler);
+		$this->container->setInstance('ErrorHandler', $handler);
 	}
 }

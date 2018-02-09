@@ -7,16 +7,89 @@
 
 namespace kanso\cms\sitemap;
 
-use kanso\framework\mvc\model\Model;
+use kanso\framework\http\request\Request;
+use kanso\framework\http\response\Response;
 
 /**
  * Sitemap builder
  *
  * @author Joe J. Howard
  */
-class SiteMap extends model
+class SiteMap
 {
-	
+	/**
+     * Request object
+     *
+     * @var \kanso\framework\http\request\Request
+     */
+	private $request;
+
+	/**
+     * Response object
+     *
+     * @var \kanso\framework\http\response\Response
+     */
+	private $response;
+
+	/**
+     * Route tags
+     *
+     * @var bool
+     */
+	private $routeTags;
+
+	/**
+     * Route categories
+     *
+     * @var bool
+     */
+	private $routeCategories;
+
+	/**
+     * Route authors
+     *
+     * @var bool
+     */
+	private $routeAuthors;
+
+	/**
+     * Route authors
+     *
+     * @var bool
+     */
+	private $routeAttachements;
+
+	/**
+     * Array of custom post type routes
+     *
+     * @var array
+     */
+	private $customPostTypes;
+
+	/**
+     * Constructor
+     *
+     * @access public
+     * @param  \kanso\framework\http\request\Request   $request  Request object
+     * @param  \kanso\framework\http\response\Response $response Response object
+     */
+    public function __construct(Request $request, Response $response, bool $routeTags, bool $routeCategories, bool $routeAuthors, bool $routeAttachements, array $customPostTypes = [])
+    {
+        $this->request = $request;
+
+        $this->response = $response;
+
+        $this->routeTags = $routeTags;
+
+        $this->routeCategories = $routeCategories;
+
+        $this->routeAuthors = $routeAuthors;
+
+        $this->routeAttachements = $routeAttachements;
+
+        $this->customPostTypes = $customPostTypes;
+    }
+
 	/**
      * Outputs the sitemap to the response
      *
@@ -25,16 +98,16 @@ class SiteMap extends model
     public function display()
     {
 		# Set appropriate content type header
-        $this->Response->format()->set('xml');
+        $this->response->format()->set('xml');
 
         # Set the response body
-        $this->Response->body()->set($this->build());
+        $this->response->body()->set($this->build());
         
         # Set the status
-        $this->Response->status()->set(200);
+        $this->response->status()->set(200);
 
         # Disable the cache
-        $this->Response->cache()->disable();
+        $this->response->cache()->disable();
     }
 
     /**
@@ -45,131 +118,50 @@ class SiteMap extends model
 	 */
 	private function build(): string
 	{
-		# Save SQL builder locally
-        $SQL = $this->Database->connection()->builder();
+		$XML = $this->response->view()->display($this->template('head'));
 
-        # Get required data from the database
-        $posts           = $SQL->SELECT('*')->FROM('posts')->WHERE('status', '=', 'published')->AND_WHERE('type', '=', 'post')->FIND_ALL();
-        $staticPages     = $SQL->SELECT('*')->FROM('posts')->WHERE('status', '=', 'published')->AND_WHERE('type', '=', 'page')->FIND_ALL();
-        $customPostTypes = $this->Config->get('cms.custom_posts');
+		$XML .= $this->response->view()->display($this->template('pages'));
 
-        $customPosts = [];
-        $tags        = [];
-        $categories  = [];
-        $authors     = [];
-        $websiteBase = $this->Request->environment()->HTTP_HOST;
-
-        # Only load the tags if tags are being routed
-        if ($this->Config->get('cms.route_tags') === true)
+		if ($this->routeTags)
 		{
-            $tags = $SQL->SELECT('*')->FROM('tags')->WHERE('id', '!=', 1)->FIND_ALL();
-        }
-        
-        # Only load the categories if categories are being routed
-        if ($this->Config->get('cms.route_categories') === true)
-		{
-            $categories = $SQL->SELECT('*')->FROM('categories')->WHERE('id', '!=', 1)->FIND_ALL();
-        }
-        
-        # Only load the authors if authors are being routed
-        if ($this->Config->get('cms.route_authors') === true)
-		{
-            $authors = $SQL->SELECT('*')->FROM('users')->WHERE('status', '=', 'confirmed')->FIND_ALL();
+            $XML .= $this->response->view()->display($this->template('tags'));
         }
 
-        # Only load custom posts if they exist
-        if (!empty($customPostTypes))
-        {
-        	foreach ($customPostTypes as $type => $route)
-        	{
-        		$cPosts      = $SQL->SELECT('*')->FROM('posts')->WHERE('status', '=', 'published')->AND_WHERE('type', '=', $type)->FIND_ALL();
-        		$customPosts = array_merge($customPosts, $cPosts);
-        	}
+        if ($this->routeCategories)
+		{
+            $XML .= $this->response->view()->display($this->template('categories'));
         }
 
-		$now    = date("Y-m-d", time());
-		$now   .= 'T'.date("H:i:sP", time());
-		$XML    = "";
+        if ($this->routeAuthors)
+		{
+            $XML .= $this->response->view()->display($this->template('authors'));
+        }
 
-		$XML .='<?xml version="1.0" encoding="UTF-8"?>'."\n\t";
-		$XML .='<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'."\n\t\t";
-		$XML .='<url>'."\n\t\t";
-		$XML .='<loc>'.$websiteBase.'</loc>'."\n\t\t\t";
-		$XML .='<lastmod>'.$now.'</lastmod>'."\n\t\t\t";
-		$XML .='<changefreq>daily</changefreq>'."\n\t\t\t";
-		$XML .='<priority>1.0</priority>'."\n\t\t";
-		$XML .='</url>'."\n\t";
+		$XML .= $this->response->view()->display($this->template('posts'));
 
-		foreach ($staticPages as $page)
-		{
-			$mod  = date("Y-m-d", $page['modified']);
-			$mod .= 'T'.date("H:i:sP", $page['modified']);
-			$XML .='<url>'."\n\t\t";
-			$XML .='<loc>'.$this->Query->the_permalink($page['id']).'</loc>'."\n\t\t";
-			$XML .='<lastmod>'.$mod.'</lastmod>'."\n\t\t";
-			$XML .='<changefreq>monthly</changefreq>'."\n\t\t";
-			$XML .='<priority>0.6</priority>'."\n\t";
-			$XML .='</url>'."\n\t";
-		}
-		foreach ($tags as $tag)
-		{
-			$XML .='<url>'."\n\t\t";
-			$XML .='<loc>'.$this->Query->the_tag_url($tag['id']).'</loc>'."\n\t\t";
-			$XML .='<lastmod>'.$now.'</lastmod>'."\n\t\t";
-			$XML .='<changefreq>monthly</changefreq>'."\n\t\t";
-			$XML .='<priority>0.3</priority>'."\n\t";
-			$XML .='</url>'."\n\t";
-		}
-		foreach ($categories as $category)
-		{
-			$XML .='<url>'."\n\t\t";
-			$XML .='<loc>'.$this->Query->the_category_url($category['id']).'</loc>'."\n\t\t";
-			$XML .='<lastmod>'.$now.'</lastmod>'."\n\t\t";
-			$XML .='<changefreq>monthly</changefreq>'."\n\t\t";
-			$XML .='<priority>0.3</priority>'."\n\t";
-			$XML .='</url>'."\n\t";
-		}
-		foreach ($authors as $author)
-		{
-			$XML .='<url>'."\n\t\t";
-			$XML .='<loc>'.$this->Query->the_author_url($author['id']).'/</loc>'."\n\t\t";
-			$XML .='<lastmod>'.$now.'</lastmod>'."\n\t\t";
-			$XML .='<changefreq>monthly</changefreq>'."\n\t\t";
-			$XML .='<priority>0.3</priority>'."\n\t";
-			$XML .='</url>'."\n\t";
-		}
-		foreach ($posts as $post)
-		{
-			$mod  = date("Y-m-d", $post['modified']);
-			$mod .= 'T'.date("H:i:sP", $post['modified']);
-			$XML .='<url>'."\n\t\t";
-			$XML .='<loc>'.$this->Query->the_permalink($post['id']).'</loc>'."\n\t\t";
-			$XML .='<lastmod>'.$mod.'</lastmod>'."\n\t\t";
-			$XML .='<changefreq>monthly</changefreq>'."\n\t\t";
-			$XML .='<priority>0.6</priority>'."\n\t";
-			$XML .='</url>'."\n\t";
-		}
-		foreach ($customPosts as $post)
-		{
-			$mod  = date("Y-m-d", $post['modified']);
-			$mod .= 'T'.date("H:i:sP", $post['modified']);
-			$XML .='<url>'."\n\t\t";
-			$XML .='<loc>'.$this->Query->the_permalink($post['id']).'</loc>'."\n\t\t";
-			$XML .='<lastmod>'.$mod.'</lastmod>'."\n\t\t";
-			$XML .='<changefreq>monthly</changefreq>'."\n\t\t";
-			$XML .='<priority>0.6</priority>'."\n\t";
-			$XML .='</url>'."\n\t";
-		}
+		foreach ($this->customPostTypes as $type => $route)
+    	{
+    		$XML .= $this->response->view()->display($this->template('custom-posts'), ['type' => $type]);
+    	}
 
-		$XML .='<url>'."\n\t\t";
-		$XML .='<loc>'.$websiteBase.'/search-results/</loc>'."\n\t\t";
-		$XML .='<lastmod>'.$now.'</lastmod>'."\n\t\t";
-		$XML .='<changefreq>always</changefreq>'."\n\t\t";
-		$XML .='<priority>0.3</priority>'."\n\t";
-		$XML .='</url>'."\n\t";
+    	if ($this->routeAttachements)
+		{
+            $XML .= $this->response->view()->display($this->template('attachments'));
+        }
 
-		$XML .= '</urlset>';
+		$XML .= $this->response->view()->display($this->template('footer'));
 
 		return $XML;
+	}
+
+	/**
+	 * Load an RSS template file
+	 * 
+	 * @param  string $name The name of the template to load
+	 * @return string
+	 */
+	private function template(string $name): string
+	{
+		return dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$name.'.php';
 	}
 }

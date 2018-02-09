@@ -43,10 +43,11 @@ class Media extends Wrapper
      * 
      * @access public
      * @param  \kanso\framework\database\query\Builder $SQL            SQL query builder
-     * @param  array                                   $data           Array row from Database
      * @param  array                                   $thumbnailSizes Assoc array of thumbnail sizes
+     * @param  array                                   $data           Array row from Database
+
      */
-    public function __construct(Builder $SQL, array $thumbnailSizes, array $data = [])
+    public function __construct(Builder $SQL, array $thumbnailSizes = ['small'  => 400,'medium' => 800,'large' => 1200] , array $data = [])
     {
         $this->SQL = $SQL;
 
@@ -74,7 +75,7 @@ class Media extends Wrapper
 
             if ($saved)
             {
-                $this->data['id'] = intval($this->SQL->connection()->lastInsertId());
+                $this->data['id'] = intval($this->SQL->connectionHandler()->lastInsertId());
             }
         }
 

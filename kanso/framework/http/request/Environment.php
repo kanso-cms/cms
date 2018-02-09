@@ -22,21 +22,22 @@ class Environment
      * Constructor. Loads the properties internally
      *
      * @access public
+     * @param  array  $server Optional server overrides (optional) (default [])
      */
-    public function __construct()
+    public function __construct(array $server = [])
     {
-        $this->data = $this->extract();
+        $this->data = $this->extract($server);
     }
 
     /**
      * Reload the environment properties
      *
      * @access public
-     * @return array
+     * @param  array  $server Optional server overrides (optional) (default [])
      */
-    public function reload()
+    public function reload(array $server = [])
     {
-        $this->data = $this->extract();
+        $this->data = $this->extract($server);
     }
    
     /**
@@ -45,26 +46,29 @@ class Environment
      * @access private
      * @return array
      */
-    private function extract(): array
+    private function extract(array $server): array
     {
+        $server = empty($server) ? $_SERVER : $server;
+
         # Array of config variables
         $env = [];
  
         # The HTTP request method
-        $env['REQUEST_METHOD'] = $_SERVER['REQUEST_METHOD'];
+        $env['REQUEST_METHOD'] = !isset($server['REQUEST_METHOD']) ? 'CLI' : $server['REQUEST_METHOD'];
 
         # Script Name
-        $scriptName         = isset($_SERVER['SCRIPT_NAME']) && !empty($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : substr($_SERVER['PHP_SELF'], strrpos($_SERVER['PHP_SELF'], '/') + 1);
-        $env['SCRIPT_NAME'] = trim($scriptName, '/'); 
+        $scriptName  = isset($server['SCRIPT_NAME']) && !empty($server['SCRIPT_NAME']) ? $server['SCRIPT_NAME'] : substr($server['PHP_SELF'], strrpos($server['PHP_SELF'], '/') + 1);
+        $scriptName  = explode('/', trim($scriptName, '/'));
+        $env['SCRIPT_NAME'] = array_pop($scriptName);
 
         # Name of server host that is running the script
-        $env['SERVER_NAME'] = $_SERVER['SERVER_NAME'];
+        $env['SERVER_NAME'] = $server['SERVER_NAME'];
 
         # Number of server port that is running the script
-        $env['SERVER_PORT'] = isset($_SERVER['SERVER_PORT']) ? intval($_SERVER['SERVER_PORT']) : 80;
+        $env['SERVER_PORT'] = isset($server['SERVER_PORT']) ? intval($server['SERVER_PORT']) : 80;
 
         # Is the application running under HTTPS or HTTP protocol?
-        if ( (isset($_SERVER['HTTPS']) && $env['SERVER_PORT'] === 443) && ($_SERVER['HTTPS'] === 1 || $_SERVER['HTTPS'] === 'on') )
+        if ( (isset($server['HTTPS']) && $env['SERVER_PORT'] === 443) && ($server['HTTPS'] === 1 || $server['HTTPS'] === 'on') )
         {
             $env['HTTP_PROTOCOL'] = 'https';
         }
@@ -74,45 +78,58 @@ class Environment
         }
 
         # Document root
-        $env['DOCUMENT_ROOT'] = $_SERVER['DOCUMENT_ROOT'];
+        $env['DOCUMENT_ROOT'] = $server['DOCUMENT_ROOT'];
 
         # Http host
-        $env['HTTP_HOST'] = $env['HTTP_PROTOCOL'].'://'.$_SERVER['HTTP_HOST'];
+        $env['HTTP_HOST'] = $env['HTTP_PROTOCOL'].'://'.str_replace(['http://', 'https://'], ['', ''], $server['HTTP_HOST']);
 
         # domain name
         $env['DOMAIN_NAME'] = str_replace('www.', '', str_replace($env['HTTP_PROTOCOL'].'://', '', $env['HTTP_HOST']));
 
         # Request uri
-        $env['REQUEST_URI'] = $_SERVER['REQUEST_URI'];
+        $env['REQUEST_URI'] = $server['REQUEST_URI'];
 
         # Request full URL
         $env['REQUEST_URL'] = $env['HTTP_HOST'].$env['REQUEST_URI'];
 
         # Query string (without leading "?")
-        $queryString         = isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+        $queryString         = isset($server['REQUEST_URI']) && !empty($server['REQUEST_URI']) ? $server['REQUEST_URI'] : '';
         $env['QUERY_STRING'] = (strpos($queryString, '?') !== false) ? substr($queryString, strrpos($queryString, '?') + 1) : '';
 
         # Save the clients IP address
-        $ipaddress = '';
-        if (getenv('HTTP_CLIENT_IP'))
-            $ipaddress = getenv('HTTP_CLIENT_IP');
-        else if(getenv('HTTP_X_FORWARDED_FOR'))
-            $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
-        else if(getenv('HTTP_X_FORWARDED'))
-            $ipaddress = getenv('HTTP_X_FORWARDED');
-        else if(getenv('HTTP_FORWARDED_FOR'))
-            $ipaddress = getenv('HTTP_FORWARDED_FOR');
-        else if(getenv('HTTP_FORWARDED'))
-           $ipaddress = getenv('HTTP_FORWARDED');
-        else if(getenv('REMOTE_ADDR'))
-            $ipaddress = getenv('REMOTE_ADDR');
+        if (isset($server['HTTP_CLIENT_IP']))
+        {
+            $ipaddress = $server['HTTP_CLIENT_IP'];
+        }
+        else if (isset($server['HTTP_X_FORWARDED_FOR']))
+        {
+            $ipaddress = $server['HTTP_X_FORWARDED_FOR'];
+        }
+        else if (isset($server['HTTP_X_FORWARDED']))
+        {
+            $ipaddress = $server['HTTP_X_FORWARDED'];
+        }
+        else if (isset($server['HTTP_FORWARDED_FOR']))
+        {
+            $ipaddress = $server['HTTP_FORWARDED_FOR'];
+        }
+        else if (isset($server['HTTP_FORWARDED']))
+        {
+            $ipaddress = $server['HTTP_FORWARDED'];
+        }
+        else if (isset($server['REMOTE_ADDR']))
+        {
+            $ipaddress = $server['REMOTE_ADDR'];
+        }
         else
+        {
             $ipaddress = 'UNKNOWN';
+        }
 
         $env['REMOTE_ADDR'] = $ipaddress;
 
         # Save the browser user agent
-        $env['HTTP_USER_AGENT'] = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'UNKNOWN';
+        $env['HTTP_USER_AGENT'] = isset($server['HTTP_USER_AGENT']) ? $server['HTTP_USER_AGENT'] : 'UNKNOWN';
         
         return $env;
     }

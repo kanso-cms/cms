@@ -72,11 +72,11 @@ class Router
         ':num'      => '[0-9]+',
         ':all'      => '.*',
         ':year'     => '\d{4}',
-        ':month'    => '0?[1-9]|1[012]',
+        ':month'    => '0[1-9]|1[012]',
         ':day'      => '0[1-9]|[12]\d|3[01]',
-        ':hour'     => '0?[1-9]|1[012]',
-        ':minute'   => '[0-5]?\d',
-        ':second'   => '[0-5]?\d',
+        ':hour'     => '0?[0-5]\d',
+        ':minute'   => '0?[0-5]\d',
+        ':second'   => '0?[0-5]\d',
         ':postname' => '[a-z0-9 -]+',
         ':category' => '.*',
         ':author'   => '[a-z0-9 -]+',
@@ -94,6 +94,28 @@ class Router
         $this->onion = $onion;
 
         $this->request = $request;
+    }
+
+    /**
+     * Get current routes
+     *
+     */
+    public function getRoutes(): array
+    {
+        $routes = [];
+
+        foreach ($this->routes as $i => $uri)
+        {
+            $routes[] =
+            [
+                'uri'      => $uri,
+                'method'   => $this->methods[$i],
+                'callback' => $this->callbacks[$i],
+                'args'     => $this->callbackArgs[$i],
+            ];
+        }
+
+        return $routes;
     }
 
     /**
@@ -226,7 +248,7 @@ class Router
     {
         $requestMethod = $this->request->getMethod();
 
-        $requestPath = rtrim(Str::getBeforeFirstChar($this->request->path(), '?'), '/');
+        $requestPath = ltrim(rtrim(Str::getBeforeFirstChar($this->request->path(), '?'), '/'), '/');
         
         $searches = array_keys($this->patterns);
         

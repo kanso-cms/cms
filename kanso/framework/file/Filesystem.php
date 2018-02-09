@@ -183,6 +183,31 @@ class Filesystem
 	}
 
 	/**
+	 * Renames a file
+	 *
+	 * @access  public
+	 * @param   string $src Path to old file
+	 * @param   string $dst Path to new file
+	 * @return  bool
+	 */
+	public static function rename(string $src, string $dst): bool
+	{
+		return rename($src, $dst);
+	}
+
+	/**
+	 * Creates a new empty file
+	 *
+	 * @access  public
+	 * @param   string $path Path to old file
+	 * @return  bool
+	 */
+	public static function touch(string $path): bool
+	{
+		return touch($path);
+	}
+
+	/**
 	 * Deletes a directory and its contents from disk.
 	 *
 	 * @access  public
@@ -253,7 +278,7 @@ class Filesystem
 	 * @param   array   $excludes File names to exclude
 	 * @return  array
 	 */
-	public static function list(string $dir, array $excludes = ['..', '.']): array
+	public static function list(string $dir, array $excludes = ['..', '.', '.ds_store']): array
 	{
 		return array_diff(scandir($dir), $excludes);
 	}

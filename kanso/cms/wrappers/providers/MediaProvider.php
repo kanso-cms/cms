@@ -92,4 +92,24 @@ class MediaProvider extends Provider
             return $media;
     	}
     }
+
+    /**
+     * Get all media objects
+     * 
+     * @access public
+     * @return array
+     */
+    public function all(): array
+    {
+        $media = [];
+
+        $rows = $this->SQL->SELECT('*')->FROM('media_uploads')->FIND_ALL();
+
+        foreach ($rows as $row)
+        {
+            $media[] = new Media($this->SQL, $this->thumbnailSizes, $row);
+        }
+
+        return $media;
+    }
 }

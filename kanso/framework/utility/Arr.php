@@ -142,7 +142,7 @@ class Arr
 	 */
 	public static function isAssoc(array $array): bool
 	{
-		return count(array_filter(array_keys($array), 'is_string')) === count($array);
+		return count(array_filter(array_keys($array), 'is_string')) > 0;
 	}
 
 	/**
@@ -156,7 +156,10 @@ class Arr
     {
         foreach ($array as $key => $value)
         {
-            if (is_array($value)) return true;
+            if (is_array($value))
+            {
+            	return true;
+            }
         }
 
         return false;
@@ -187,13 +190,47 @@ class Arr
 	 * @param  int   $index Index to insert item at
 	 * @return array
 	 */
-	public static function insertAt(array $array, $item, int $index)
+	public static function insertAt(array $array, $item, int $index): array
 	{
-	    $previous_items = array_slice($array, 0, $index, true);
+		if (!self::isAssoc($array))
+		{
+			array_splice($array, $index, 0, $item);
+
+			return $array;
+		}
+
+		if (!is_array($item))
+		{
+			$result   = [];
+			$i        = 0;
+			$inserted = false;
+			
+			foreach ($array as $key => $value)
+			{
+				if ($i === $index)
+				{
+					$inserted   = true;
+					$result[] = $item;
+					$i++;
+				}
+				
+				$result[$key] = $value;
+
+				$i++;
+			}
+			if (!$inserted)
+			{
+				$result[] = $item;
+			}
+
+			return $result;
+		}
+
+		$previousItems = array_slice($array, 0, $index, true);
 	    
-	    $next_items     = array_slice($array, $index, NULL, true);
+	    $nextItems     = array_slice($array, $index, NULL, true);
 	    
-	    return $previous_items + $item + $next_items;
+	    return $previousItems + $item + $nextItems;
 	}
 
 	/**
@@ -250,7 +287,9 @@ class Arr
 			$key = explode('.', $key);
 		}
 
-		uasort($array, function($a, $b) use ($key)
+		$usort = self::isAssoc($array) ? 'uasort' : 'usort';
+
+		$usort($array, function($a, $b) use ($key)
 	    {
 	    	$aV = null;
 	        $bV = null;
@@ -282,21 +321,25 @@ class Arr
 	        {
 	            if (is_numeric($aV))
 	            {
-	            	return intval($aV) - intval($bV);
+	            	return intval($aV) >= intval($bV);
 	            }
-	            if (is_string($aV))
+	            else if (is_string($aV))
 	            {
 	            	return strcasecmp($aV, $bV);
 	            }
-	            if (is_array($aV))
+	            else if (is_array($aV))
 	            {
-	            	return  count($bV) - count($aV);
+	            	return count($bV) - count($aV);
 	            }
 	        }
+
 	        return true;
 	    });
 	    
-	    if ($direction === 'DESC') return array_reverse($array);
+	    if ($direction !== 'ASC')
+	    {
+	    	$array = array_reverse($array);
+	    }
 
 	    return $array;
 	}
@@ -316,8 +359,8 @@ class Arr
 			return isset($mixed[$key]) ? $mixed[$key] : null;
 		}
 		else if (is_object($mixed))
-		{
-			return isset($object->{$key}) ? $object->{$key} : null;
+		{			
+			return isset($mixed->{$key}) ? $mixed->{$key} : null;
 		}
 		return null;
 	}
@@ -337,7 +380,10 @@ class Arr
         
         foreach ($array as $arr)
         {
-            if (isset($arr[$key])) $str .= $arr[$key].$glue;
+            if (isset($arr[$key]))
+            {
+            	$str .= $arr[$key].$glue;
+            }
         }
         
         if ($glue === '')

@@ -9,7 +9,9 @@ namespace kanso\framework\exception;
 
 use kanso\framework\http\request\Environment;
 use kanso\framework\exception\ExceptionLogicTrait;
+use kanso\framework\file\Filesystem;
 use Throwable;
+use PDOException;
 
 /**
  * Error logger class 
@@ -34,16 +36,26 @@ class ErrorLogger
      */
     private $environment;
 
+    /**
+     * Filesystem instance
+     *
+     * @var \kanso\framework\file\Filesystem
+     */
+    private $fileSystem;
+
 	/**
 	 * Constructor
 	 *
 	 * @access public
-     * @param \Throwable                                $exception Throwable
-     * @param \kanso\framework\http\request\Environment $environment   HttpEnv instance for logging details
-     * @param string                                    $path Directory to store log files in
+     * @param \Throwable                                $exception   Throwable
+     * @param \kanso\framework\file\Filesystem          $filesystem  Filesystem instance
+     * @param \kanso\framework\http\request\Environment $environment HttpEnv instance for logging details
+     * @param string                                    $path        Directory to store log files in
 	 */
-    public function __construct(Throwable $exception, Environment $environment, string $path) 
+    public function __construct(Throwable $exception, Filesystem $filesystem, Environment $environment, string $path) 
     {
+        $this->fileSystem = $filesystem;
+
         $this->path = $path;
 
         $this->environment = $environment;
@@ -60,9 +72,9 @@ class ErrorLogger
     {
         $msg = $this->logMsg();
 
-        file_put_contents($this->genericPath(), $msg, FILE_APPEND);
+        $this->fileSystem->putContents($this->genericPath(), $msg, FILE_APPEND);
         
-        file_put_contents($this->errnoPath(), $msg, FILE_APPEND);
+        $this->fileSystem->putContents($this->errnoPath(), $msg, FILE_APPEND);
     }
 
     /**
@@ -126,7 +138,7 @@ class ErrorLogger
      */
     private function errnoToFile(): string
     {
-        if($this->exception instanceof PDOException || get_class($this->exception) === 'PDOException' || strpos($this->exception->getMessage(), 'SQLSTATE') !== false)
+        if ($this->exception instanceof PDOException || get_class($this->exception) === 'PDOException' || strpos($this->exception->getMessage(), 'SQLSTATE') !== false)
         {
             return 'database_errors'; 
         }

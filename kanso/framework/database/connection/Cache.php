@@ -59,6 +59,13 @@ class Cache
     private $cacheKey;
 
     /**
+     * Is the cache enabled?
+     *
+     * @var bool
+     */
+    private $enabled = true;
+
+    /**
      * Constructor
      *
      * @access public
@@ -66,6 +73,36 @@ class Cache
 	public function __construct()
 	{
 	}
+
+    /**
+     * Enable the cache
+     *
+     * @access public
+     */
+    public function enabled()
+    {
+        return $this->enabled;
+    }
+
+    /**
+     * Enable the cache
+     *
+     * @access public
+     */
+    public function enable()
+    {
+        $this->enabled = true;
+    }
+
+    /**
+     * Disable the cache
+     *
+     * @access public
+     */
+    public function disable()
+    {
+        $this->enabled = false;
+    }
 
     /**
      * Set the current query being executed
@@ -76,9 +113,9 @@ class Cache
      */
     public function setQuery(string $queryStr, array $params)
     {
-        $this->queryStr  = $queryStr;
+        $this->queryStr = $queryStr;
 
-        $this->params    = $params;
+        $this->params = $params;
 
         $this->queryType = $this->getQueryType($queryStr);
 
@@ -100,6 +137,11 @@ class Cache
      */
 	public function has(): bool
     {
+        if (!$this->enabled)
+        {
+            return false;
+        }
+
         if ($this->queryType !== 'select')
         {
             return false;
@@ -121,7 +163,7 @@ class Cache
      */
     public function get()
     {
-        if ($this->has())
+        if ($this->has() && $this->enabled)
         {            
             return $this->data[$this->tableName][$this->cacheKey];
         }
@@ -137,7 +179,10 @@ class Cache
      */
     public function put($result)
     {
-        $this->data[$this->tableName][$this->cacheKey] = $result;
+        if ($this->enabled)
+        {
+            $this->data[$this->tableName][$this->cacheKey] = $result;
+        }
     }
 
     /**

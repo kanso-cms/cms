@@ -121,19 +121,19 @@ function the_tags_list($post_id = null, $glue = ', ')
     return $KANSO_QUERY->the_tags_list($post_id, $glue);
 }
 
-function the_tag_slug($tag_id) 
+function the_tag_slug($tag_id = null) 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_tag_slug($tag_id);
 }
 
-function the_tag_url($tag_id) 
+function the_tag_url($tag_id = null) 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_tag_url($tag_id);
 }
 
-function the_taxonomy() 
+function the_taxonomy()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_taxonomy();
@@ -145,10 +145,16 @@ function the_attachment()
     return $KANSO_QUERY->the_attachment();
 }
 
-function the_attachment_url() 
+function all_the_attachments() 
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->the_attachment_url();
+    return $KANSO_QUERY->all_the_attachments();
+}
+
+function the_attachment_url($id = null) 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_attachment_url($id);
 }
 
 function the_attachment_size() 
@@ -373,6 +379,12 @@ function is_admin()
     return $KANSO_QUERY->is_admin();
 }
 
+function is_attachment()
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->is_attachment();
+}
+
 function is_not_found()
 {
     global $KANSO_QUERY;
@@ -494,6 +506,12 @@ function all_the_categories()
     return $KANSO_QUERY->all_the_categories();
 }
 
+function has_categories($postid = null)
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->has_categories($postid);
+}
+
 function all_the_authors()
 {
     global $KANSO_QUERY;
@@ -504,6 +522,12 @@ function all_static_pages($publihsed = true)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->all_static_pages($publihsed);
+}
+
+function all_custom_posts($type, $publihsed = true) 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->all_custom_posts($type, $publihsed);
 }
 
 function the_header()
@@ -530,16 +554,34 @@ function include_template($template_name, $data = [])
     echo $KANSO_QUERY->include_template($template_name, $data);
 }
 
+function themes_directory() 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->themes_directory();
+}
+
 function theme_directory() 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->theme_directory();
 }
 
+function theme_name() 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->theme_name();
+}
+
 function theme_url() 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->theme_url();
+}
+
+function base_url() 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->base_url();
 }
 
 function home_url() 
@@ -616,7 +658,7 @@ function user_is_admin()
     return $KANSO_QUERY->user_is_admin();
 }
 
-function get_gravatar($email_or_md5 = null, $size = 160, $srcOnly = null) 
+function get_gravatar($email_or_md5 = null, $size = 160, $srcOnly = false) 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->get_gravatar($email_or_md5, $size, $srcOnly);
@@ -638,6 +680,12 @@ function comments_number($postId = null)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->comments_number($postId);
+}
+
+function comment($commentid)
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->get_comment($commentid);
 }
 
 function comments($postId = null)

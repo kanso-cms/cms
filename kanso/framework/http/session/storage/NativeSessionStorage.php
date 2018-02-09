@@ -8,8 +8,6 @@
 namespace kanso\framework\http\session\storage;
 
 use kanso\framework\http\session\storage\StoreInterface;
-use kanso\framework\utility\UUID;
-use kanso\framework\security\Crypto;
 
 /**
  * Session encrypt/decrypt
@@ -19,23 +17,15 @@ use kanso\framework\security\Crypto;
 class NativeSessionStorage implements StoreInterface
 {
     /**
-     * Has the garbage been collected
-     *
-     * @var kanso\framework\security\Crypto
-     */
-    private $crypto;
-
-    /**
      * Constructor
      *
      * @access public
      * @param  \kanso\framework\security\Crypto $Crypto        Encryption service
      * @param  array                            $cookieParams  Assoc array of cookie configurations
+     * @param  string                           $path          Where to save the cookie files to
      */
-    public function __construct(Crypto $crypto, array $cookieParams = [], string $path = '')
+    public function __construct(array $cookieParams = [], string $path = '')
     {
-        $this->crypto = $crypto;
-
         if ($cookieParams)
         {
             $this->session_set_cookie_params($cookieParams);
@@ -65,13 +55,9 @@ class NativeSessionStorage implements StoreInterface
      */
     public function session_start()
     {
-        # Start a PHP session
-        if ( session_id() == '' || !isset($_SESSION))
+        if (session_status() == PHP_SESSION_NONE)
         {
-            if (!headers_sent())
-            { 
-                session_start();
-            }
+            session_start();
         }
     }
 
@@ -81,6 +67,8 @@ class NativeSessionStorage implements StoreInterface
     public function session_destroy()
     {
         session_destroy();
+
+        unset($_SESSION[$this->session_name()]);
     }
 
     /**
@@ -88,7 +76,12 @@ class NativeSessionStorage implements StoreInterface
      */
     public function session_id(string $id = null)
     {
-        return session_id($id);
+        if ($id)
+        {
+            return session_id($id);
+        }
+        
+        return session_id();
     }
 
     /**
@@ -144,7 +137,7 @@ class NativeSessionStorage implements StoreInterface
      */
     public function session_gc()
     {
-        session_gc();
+        return session_gc();
     }
 
     /**

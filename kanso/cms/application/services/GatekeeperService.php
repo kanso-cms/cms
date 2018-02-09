@@ -9,6 +9,7 @@ namespace kanso\cms\application\services;
 
 use kanso\framework\application\services\Service;
 use kanso\cms\auth\Gatekeeper;
+use kanso\cms\auth\adapters\EmailAdapter;
 
 /**
  * CMS Gatekeeper
@@ -30,10 +31,25 @@ class GatekeeperService extends Service
 				$container->Crypto,
 				$container->Cookie,
 				$container->Session,
-				$container->Config,
-				$container->Request->environment(),
-				$container->Email
+				$this->emailAdapter()
 			);
 		});
+	}
+
+	/**
+     * Loads the email adapter
+     *
+     * @access public
+     * @return \kanso\cms\auth\adapters\EmailAdapter
+     */
+	private function emailAdapter(): EmailAdapter
+	{
+		return new EmailAdapter(
+			$this->container->Email,
+			$this->container->Request->environment()->HTTP_HOST,
+			$this->container->Request->environment()->DOMAIN_NAME,
+			$this->container->Config->get('cms.site_title'),
+			$this->container->Config->get('email.urls')
+		);
 	}
 }
