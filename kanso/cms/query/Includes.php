@@ -133,7 +133,7 @@ function the_tag_url($tag_id)
     return $KANSO_QUERY->the_tag_url($tag_id);
 }
 
-function the_taxonomy() 
+function the_taxonomy()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_taxonomy();
@@ -145,10 +145,16 @@ function the_attachment()
     return $KANSO_QUERY->the_attachment();
 }
 
-function the_attachment_url() 
+function all_the_attachments() 
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->the_attachment_url();
+    return $KANSO_QUERY->all_the_attachments();
+}
+
+function the_attachment_url($id = null) 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->the_attachment_url($id);
 }
 
 function the_attachment_size() 
@@ -504,6 +510,12 @@ function all_static_pages($publihsed = true)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->all_static_pages($publihsed);
+}
+
+function all_custom_posts($type, $publihsed = true) 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->all_custom_posts($type, $publihsed);
 }
 
 function the_header()

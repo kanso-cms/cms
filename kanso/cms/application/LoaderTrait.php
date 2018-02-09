@@ -109,6 +109,9 @@ trait LoaderTrait
 		# Current theme dir
 		$template = $_this->container->Config->get('cms.themes_path').'/'.$_this->container->Config->get('cms.theme_name').'/sitemap.php';
 
+		# Filter posts basic
+		$_this->container->Query->filterPosts('sitemap');
+
 		if (file_exists($template))
 		{
 			$_this->container->Response->cache()->disable();
@@ -117,7 +120,15 @@ trait LoaderTrait
 		}
 		else
 		{
-			$sitemap = new SiteMap($request, $response, $next);
+			$sitemap = new SiteMap(
+				$request,
+				$response,
+				$_this->container->Config->get('cms.route_tags'),
+				$_this->container->Config->get('cms.route_categories'),
+				$_this->container->Config->get('cms.route_authors'),
+				$_this->container->Config->get('cms.route_attachments'),
+				$_this->container->Config->get('cms.custom_posts')
+			);
 
 			$sitemap->display();
 		}
