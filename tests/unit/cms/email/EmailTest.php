@@ -15,7 +15,7 @@ use kanso\cms\email\Email;
 /**
  * @group unit
  */
-class EventsTest extends TestCase
+class EmailTest extends TestCase
 {
 	/**
 	 *

@@ -379,6 +379,12 @@ function is_admin()
     return $KANSO_QUERY->is_admin();
 }
 
+function is_attachment()
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->is_attachment();
+}
+
 function is_not_found()
 {
     global $KANSO_QUERY;
@@ -500,6 +506,12 @@ function all_the_categories()
     return $KANSO_QUERY->all_the_categories();
 }
 
+function has_categories($postid = null)
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->has_categories($postid);
+}
+
 function all_the_authors()
 {
     global $KANSO_QUERY;
@@ -542,16 +554,34 @@ function include_template($template_name, $data = [])
     echo $KANSO_QUERY->include_template($template_name, $data);
 }
 
+function themes_directory() 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->themes_directory();
+}
+
 function theme_directory() 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->theme_directory();
 }
 
+function theme_name() 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->theme_name();
+}
+
 function theme_url() 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->theme_url();
+}
+
+function base_url() 
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->base_url();
 }
 
 function home_url() 
@@ -650,6 +680,12 @@ function comments_number($postId = null)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->comments_number($postId);
+}
+
+function comment($commentid)
+{
+    global $KANSO_QUERY;
+    return $KANSO_QUERY->get_comment($commentid);
 }
 
 function comments($postId = null)
