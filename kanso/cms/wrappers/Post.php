@@ -195,7 +195,7 @@ class Post extends Wrapper
 		}
 		else if ($key === 'thumbnail')
 		{
-			$this->getTheThumbnail();
+			return $this->getTheThumbnail();
 		}
 		else if (array_key_exists($key, $this->data))
 		{
@@ -383,7 +383,7 @@ class Post extends Wrapper
 	}
 
 	/**
-	 * Get the post thumbnail
+	 * Get the post comments
 	 *
 	 * @access private
 	 * @return array
@@ -599,6 +599,8 @@ class Post extends Wrapper
 			$this->SQL->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $this->data['id'])->QUERY();
 			
 			$this->SQL->DELETE_FROM('posts')->WHERE('id', '=', $this->data['id'])->QUERY();
+
+			$this->SQL->DELETE_FROM('post_meta')->WHERE('post_id', '=', $this->data['id'])->QUERY();
 
 			return true;
 		}
@@ -885,6 +887,7 @@ class Post extends Wrapper
 	    	}
 
 	    	$slugs = array_reverse($slugs);
+	    	
 	    	return trim(implode('/', $slugs), '/');
 	    }
 	    

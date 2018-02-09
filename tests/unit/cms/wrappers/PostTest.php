@@ -205,6 +205,134 @@ class PostTest extends TestCase
     /**
      *
      */
+    public function testGetContent()
+    {
+        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
+        $config           = Mockery::mock('\kanso\framework\config\Config');
+        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+
+        $tags = $this->getTheTags($sql, $tagProvider);
+
+        $cats = $this->getTheCategories($sql, $categoryProvider);
+
+        $author = $this->getTheAuthor($userProvider);
+
+        $post = new Post($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider, $this->getExistingPostData());
+
+        $this->getTheContent($sql);
+
+        $this->assertEquals('foobar', $post->content);
+    }
+
+    /**
+     *
+     */
+    public function testGetComments()
+    {
+        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
+        $config           = Mockery::mock('\kanso\framework\config\Config');
+        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+
+        $tags = $this->getTheTags($sql, $tagProvider);
+
+        $cats = $this->getTheCategories($sql, $categoryProvider);
+
+        $author = $this->getTheAuthor($userProvider);
+
+        $post = new Post($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider, $this->getExistingPostData());
+
+        $comments = $this->getTheComments($sql, $commentProvider);
+
+        $this->assertEquals(2, count($post->comments));
+    }
+
+    /**
+     *
+     */
+    public function testGetThumbnail()
+    {
+        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
+        $config           = Mockery::mock('\kanso\framework\config\Config');
+        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+
+        $tags = $this->getTheTags($sql, $tagProvider);
+
+        $cats = $this->getTheCategories($sql, $categoryProvider);
+
+        $author = $this->getTheAuthor($userProvider);
+
+        $post = new Post($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider, $this->getExistingPostData());
+
+        $thumbnail = $this->getThumbnail($mediaProvider);
+
+        $this->assertEquals(1, $post->thumbnail->id);
+    }
+
+    /**
+     *
+     */
+    public function testGetExcerpt()
+    {
+        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
+        $config           = Mockery::mock('\kanso\framework\config\Config');
+        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+
+        $tags = $this->getTheTags($sql, $tagProvider);
+
+        $cats = $this->getTheCategories($sql, $categoryProvider);
+
+        $author = $this->getTheAuthor($userProvider);
+
+        $post = new Post($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider, $this->getExistingPostData());
+
+        $this->assertEquals('Hello foo bar', $post->excerpt);
+    }
+
+    /**
+     *
+     */
+    public function testGetMeta()
+    {
+        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
+        $config           = Mockery::mock('\kanso\framework\config\Config');
+        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+
+        $tags = $this->getTheTags($sql, $tagProvider);
+
+        $cats = $this->getTheCategories($sql, $categoryProvider);
+
+        $author = $this->getTheAuthor($userProvider);
+
+        $post = new Post($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider, $this->getExistingPostData());
+
+        $this->getMeta($sql);
+
+        $this->assertEquals(['foo' => 'bar','bar' => 'baz'], $post->meta);
+    }
+
+    /**
+     *
+     */
     private function getExistingPostData()
     {
         return
@@ -221,6 +349,79 @@ class PostTest extends TestCase
             'thumbnail_id'     => 1,
             'comments_enabled' => 1,
         ];
+    }
+
+    /**
+     *
+     */
+    private function getTheContent($sql)
+    {
+        $sql->shouldReceive('SELECT')->with('content')->once()->andReturn($sql);
+
+        $sql->shouldReceive('FROM')->with('content_to_posts')->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('post_id', '=', 1)->once()->andReturn($sql);
+
+        $sql->shouldReceive('ROW')->andReturn(['content' => 'foobar'])->once();
+    }
+
+    /**
+     *
+     */
+    private function getMeta($sql)
+    {
+        $sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);
+
+        $sql->shouldReceive('FROM')->with('post_meta')->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('post_id', '=', 1)->once()->andReturn($sql);
+
+        $sql->shouldReceive('ROW')->andReturn(['id' => 1, 'post_id' => 1, 'content' => serialize(['foo' => 'bar','bar' => 'baz'])])->once();
+    }
+
+    /**
+     *
+     */
+    private function getThumbnail($mediaProvider)
+    {
+        $thumbnail = Mockery::mock('\kanso\cms\wrappers\Media');
+        
+        $thumbnail->id = 1;
+
+        $mediaProvider->shouldReceive('byId')->with(1)->once()->andReturn($thumbnail);
+
+        return $thumbnail;
+    }
+
+    /**
+     *
+     */
+    private function getTheComments($sql, $commentProvider)
+    {
+        $sql->shouldReceive('SELECT')->with('id')->once()->andReturn($sql);
+
+        $sql->shouldReceive('FROM')->with('comments')->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('post_id', '=', 1)->once()->andReturn($sql);
+
+        $sql->shouldReceive('AND_WHERE')->with('parent', '=', 0)->once()->andReturn($sql);
+
+        $sql->shouldReceive('AND_WHERE')->with('status', '=', 'approved')->once()->andReturn($sql);
+
+        $sql->shouldReceive('FIND_ALL')->andReturn([
+            ['id' => 1],
+            ['id' => 2]
+        ])->once();
+
+        $comment1 = Mockery::mock('\kanso\cms\wrappers\Comment');
+        $comment1->id   = 1;
+
+        $comment2 = Mockery::mock('\kanso\cms\wrappers\Comment');
+        $comment2->id   = 2;
+
+        $commentProvider->shouldReceive('byId')->andReturn($comment1)->once();
+
+        $commentProvider->shouldReceive('byId')->andReturn($comment2)->once();
     }
 
     /**
