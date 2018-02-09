@@ -333,6 +333,192 @@ class PostTest extends TestCase
     /**
      *
      */
+    public function testDelete()
+    {
+        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
+        $config           = Mockery::mock('\kanso\framework\config\Config');
+        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+
+        $tags = $this->getTheTags($sql, $tagProvider);
+
+        $cats = $this->getTheCategories($sql, $categoryProvider);
+
+        $author = $this->getTheAuthor($userProvider);
+
+        $post = new Post($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider, $this->getExistingPostData());
+
+        $sql->shouldReceive('DELETE_FROM')->with('comments')->once()->andReturn($sql);
+        $sql->shouldReceive('DELETE_FROM')->with('tags_to_posts')->once()->andReturn($sql);
+        $sql->shouldReceive('DELETE_FROM')->with('categories_to_posts')->once()->andReturn($sql);
+        $sql->shouldReceive('DELETE_FROM')->with('content_to_posts')->once()->andReturn($sql);
+        $sql->shouldReceive('DELETE_FROM')->with('posts')->once()->andReturn($sql);
+        $sql->shouldReceive('DELETE_FROM')->with('post_meta')->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('post_id', '=', 1)->andReturn($sql);
+        $sql->shouldReceive('WHERE')->with('id', '=', 1)->andReturn($sql);
+
+        $sql->shouldReceive('QUERY')->times(6)->andReturn($sql);
+
+        $this->assertTrue($post->delete());
+    }
+
+    /**
+     *
+     */
+    public function testSaveExisting()
+    {
+        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
+        $config           = Mockery::mock('\kanso\framework\config\Config');
+        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+
+        $tags = $this->getTheTags($sql, $tagProvider);
+
+        $cats = $this->getTheCategories($sql, $categoryProvider);
+
+        $author = $this->getTheAuthor($userProvider);
+
+        $post = new Post($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider, $this->getExistingPostData());
+
+        $content = $this->getTheContent($sql);
+
+        $meta = $this->getMeta($sql);
+
+        $config->shouldReceive('get')->with('cms.permalinks')->andReturn('year/month/postname/');
+
+        $sql->shouldReceive('UPDATE')->with('posts')->once()->andReturn($sql);
+        $sql->shouldReceive('SET')->with($this->getExistingPostData())->once()->andReturn($sql);
+        $sql->shouldReceive('WHERE')->with('id', '=', 1)->once()->andReturn($sql);
+
+        $sql->shouldReceive('DELETE_FROM')->with('tags_to_posts')->once()->andReturn($sql);
+        $sql->shouldReceive('WHERE')->with('post_id', '=', 1)->once()->andReturn($sql);
+
+        $sql->shouldReceive('DELETE_FROM')->with('categories_to_posts')->once()->andReturn($sql);
+        $sql->shouldReceive('WHERE')->with('post_id', '=', 1)->once()->andReturn($sql);
+
+        $sql->shouldReceive('DELETE_FROM')->with('content_to_posts')->once()->andReturn($sql);
+        $sql->shouldReceive('WHERE')->with('post_id', '=', 1)->once()->andReturn($sql);
+
+        $sql->shouldReceive('DELETE_FROM')->with('post_meta')->once()->andReturn($sql);
+        $sql->shouldReceive('WHERE')->with('post_id', '=', 1)->once()->andReturn($sql);
+
+        $sql->shouldReceive('QUERY')->times(5);
+
+        $sql->shouldReceive('INSERT_INTO')->with('tags_to_posts')->twice()->andReturn($sql);
+        $sql->shouldReceive('VALUES')->with(['post_id' => 1, 'tag_id' => 1])->once()->andReturn($sql);
+        $sql->shouldReceive('VALUES')->with(['post_id' => 1, 'tag_id' => 2])->once()->andReturn($sql);
+        $sql->shouldReceive('QUERY')->times(2);
+
+        $sql->shouldReceive('INSERT_INTO')->with('categories_to_posts')->twice()->andReturn($sql);
+        $sql->shouldReceive('VALUES')->with(['post_id' => 1, 'category_id' => 1])->once()->andReturn($sql);
+        $sql->shouldReceive('VALUES')->with(['post_id' => 1, 'category_id' => 2])->once()->andReturn($sql);
+        $sql->shouldReceive('QUERY')->times(2);
+
+        $sql->shouldReceive('INSERT_INTO')->with('content_to_posts')->once()->andReturn($sql);
+        $sql->shouldReceive('VALUES')->with(['post_id' => 1, 'content' => 'foobar'])->once()->andReturn($sql);
+        $sql->shouldReceive('QUERY')->once();
+
+        $sql->shouldReceive('INSERT_INTO')->with('post_meta')->once()->andReturn($sql);
+        $sql->shouldReceive('VALUES')->with(['post_id' => 1, 'content' => serialize($meta)])->once()->andReturn($sql);
+        $sql->shouldReceive('QUERY')->once();
+
+        $tagProvider->shouldReceive('byId')->with(1)->once();
+
+        $categoryProvider->shouldReceive('byId')->with(1)->once();
+
+        $this->assertTrue($post->save());
+    }
+
+    /**
+     *
+     */
+    public function testSaveNew()
+    {
+        $cHandler         = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
+        $config           = Mockery::mock('\kanso\framework\config\Config');
+        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+
+        $post = new Post($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider);
+
+        foreach ($this->getExistingPostData() as $key => $value)
+        {
+            if ($key === 'id')
+            {
+                continue;
+            }
+
+            $post->{$key} = $value;
+        }
+
+        $config->shouldReceive('get')->with('cms.permalinks')->andReturn('year/month/postname/');
+        
+        $tag = Mockery::mock('\kanso\cms\wrappers\Tag');
+        $tag->name = 'html';
+        $tag->slug = 'html';
+        $tag->id   = 1;
+        $tagProvider->shouldReceive('byId')->with(1)->once()->andReturn($tag);
+
+        $cat = Mockery::mock('\kanso\cms\wrappers\Category');
+        $cat->name = 'html';
+        $cat->slug = 'html';
+        $cat->id   = 1;
+        $categoryProvider->shouldReceive('byId')->with(1)->once()->andReturn($cat);
+
+        $user = Mockery::mock('\kanso\cms\wrappers\User');
+        $user->name = 'foo';
+        $user->slug = 'foo';
+        $user->id   = 1;
+        $userProvider->shouldReceive('byId')->with(1)->once()->andReturn($user);
+
+        $postData = $this->getExistingPostData();
+
+        unset($postData['id']);
+
+        $sql->shouldReceive('SELECT')->with('id')->once()->andReturn($sql);
+
+        $sql->shouldReceive('FROM')->with('posts')->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('title', '=', 'Foo Bar')->once()->andReturn($sql);
+
+        $sql->shouldReceive('ROW')->andReturn([])->once();
+
+        $sql->shouldReceive('INSERT_INTO')->with('posts')->once()->andReturn($sql);
+        $sql->shouldReceive('VALUES')->with($postData)->once()->andReturn($sql);
+        $sql->shouldReceive('QUERY')->once();
+
+        $sql->shouldReceive('connectionHandler')->once()->andReturn($cHandler);
+        $cHandler->shouldReceive('lastInsertId')->once()->andReturn(1);
+
+        $sql->shouldReceive('INSERT_INTO')->with('tags_to_posts')->once()->andReturn($sql);
+        $sql->shouldReceive('VALUES')->with(['post_id' => 1, 'tag_id' => 1])->once()->andReturn($sql);
+        $sql->shouldReceive('QUERY')->once();
+
+        $sql->shouldReceive('INSERT_INTO')->with('categories_to_posts')->once()->andReturn($sql);
+        $sql->shouldReceive('VALUES')->with(['post_id' => 1, 'category_id' => 1])->once()->andReturn($sql);
+        $sql->shouldReceive('QUERY')->once();
+
+        $sql->shouldReceive('INSERT_INTO')->with('content_to_posts')->once()->andReturn($sql);
+        $sql->shouldReceive('VALUES')->with(['post_id' => 1, 'content' => ''])->once()->andReturn($sql);
+        $sql->shouldReceive('QUERY')->once();
+
+        $this->assertTrue($post->save());
+    }
+
+    /**
+     *
+     */
     private function getExistingPostData()
     {
         return
@@ -342,12 +528,12 @@ class PostTest extends TestCase
             'modified'    => time(),
             'status'      => 'published',
             'type'        => 'post',
-            'slug'        => '/2018/01/foo-bar',
+            'slug'        =>  date('Y').'/'.date('m').'/foo-bar/',
             'title'       => 'Foo Bar',
             'excerpt'     => 'Hello foo bar',
             'author_id'   => 1,
             'thumbnail_id'     => 1,
-            'comments_enabled' => 1,
+            'comments_enabled' => true,
         ];
     }
 
@@ -377,6 +563,8 @@ class PostTest extends TestCase
         $sql->shouldReceive('WHERE')->with('post_id', '=', 1)->once()->andReturn($sql);
 
         $sql->shouldReceive('ROW')->andReturn(['id' => 1, 'post_id' => 1, 'content' => serialize(['foo' => 'bar','bar' => 'baz'])])->once();
+
+        return ['foo' => 'bar','bar' => 'baz'];
     }
 
     /**
@@ -450,7 +638,7 @@ class PostTest extends TestCase
         $tag2 = Mockery::mock('\kanso\cms\wrappers\Tag');
         $tag2->name = 'css';
         $tag2->slug = 'css';
-        $tag1->id   = 2;
+        $tag2->id   = 2;
 
         $tagProvider->shouldReceive('byId')->andReturn($tag1)->once();
 

@@ -677,6 +677,7 @@ class Post extends Wrapper
 	private function createTags($tags): array
 	{
 		$default = [$this->tagProvider->byId(1)];
+
 		$result  = [];
 
 	  	if (is_string($tags))
@@ -740,7 +741,7 @@ class Post extends Wrapper
     	$i = 1;
 
         # Loop and append number
-    	while(!empty($this->SQL->SELECT('*')->FROM('posts')->WHERE('title', '=', $title)->ROW()))
+    	while(!empty($this->SQL->SELECT('id')->FROM('posts')->WHERE('title', '=', $title)->ROW()))
     	{
     		$title = preg_replace("/(".$baseTitle.")(-\d+)/", "$1"."", $title).'-'.$i;
     		$i++;
