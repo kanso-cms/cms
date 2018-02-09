@@ -169,6 +169,10 @@ class Post extends Wrapper
 		{
 			return $this->getTheTags();
 		}
+		else if ($key === 'tag')
+		{
+			return $this->getTheTags()[0];
+		}
 		else if ($key === 'author')
 		{
 			return $this->getTheAuthor();
