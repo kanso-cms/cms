@@ -169,6 +169,6 @@ class NativeStorageTest extends TestCase
 
 		$gc = $storage->session_gc();
 
-		$this->assertEquals(0, $gc);
+		$this->assertTrue(is_int($gc));
 	}
 }

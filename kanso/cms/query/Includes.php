@@ -121,13 +121,13 @@ function the_tags_list($post_id = null, $glue = ', ')
     return $KANSO_QUERY->the_tags_list($post_id, $glue);
 }
 
-function the_tag_slug($tag_id) 
+function the_tag_slug($tag_id = null) 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_tag_slug($tag_id);
 }
 
-function the_tag_url($tag_id) 
+function the_tag_url($tag_id = null) 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_tag_url($tag_id);
@@ -658,7 +658,7 @@ function user_is_admin()
     return $KANSO_QUERY->user_is_admin();
 }
 
-function get_gravatar($email_or_md5 = null, $size = 160, $srcOnly = null) 
+function get_gravatar($email_or_md5 = null, $size = 160, $srcOnly = false) 
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->get_gravatar($email_or_md5, $size, $srcOnly);
