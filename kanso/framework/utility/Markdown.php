@@ -18,7 +18,7 @@ use kanso\framework\utility\Str;
  */
 class Markdown
 {
-	/**
+    /**
      * Convert markdown to HTML
      *
      * @access public
@@ -27,22 +27,22 @@ class Markdown
      * @param  bool   $extra Convert with markdown extra
      * @return string
      */
-	public static function convert(string $text, bool $extra = true): string
-	{
-		$parser = $extra ? new ParsedownExtra : new Parsedown;
+    public static function convert(string $text, bool $extra = true): string
+    {
+        $parser = $extra ? new ParsedownExtra : new Parsedown;
 
-		return $parser->text($text);
-	}
+        return $parser->text($text);
+    }
 
-     /**
-      * Converts markdown to plain text
-      *
-      * @access public
-      * @param  string $str The input string
-      * @return string
-      */
-     public static function plainText(string $str): string
-     {
-          return trim(strip_tags(self::convert(trim(preg_replace('/[\r\n]+/', ' ', $str)))));
-     }
+    /**
+     * Converts markdown to plain text
+     *
+     * @access public
+     * @param  string $str The input string
+     * @return string
+     */
+    public static function plainText(string $str): string
+    {
+        return trim(preg_replace('/[\r\n]+/', ' ', strip_tags(self::convert(trim($str)))));
+    }
 }
