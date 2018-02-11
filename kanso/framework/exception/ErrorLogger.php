@@ -72,9 +72,9 @@ class ErrorLogger
     {
         $msg = $this->logMsg();
 
-        $this->fileSystem->putContents($this->genericPath(), $msg, FILE_APPEND);
+        $this->fileSystem->appendContents($this->genericPath(), $msg);
         
-        $this->fileSystem->putContents($this->errnoPath(), $msg, FILE_APPEND);
+        $this->fileSystem->appendContents($this->errnoPath(), $msg);
     }
 
     /**

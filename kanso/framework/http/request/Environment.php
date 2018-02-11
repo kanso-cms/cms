@@ -130,6 +130,11 @@ class Environment
 
         # Save the browser user agent
         $env['HTTP_USER_AGENT'] = isset($server['HTTP_USER_AGENT']) ? $server['HTTP_USER_AGENT'] : 'UNKNOWN';
+
+        # Save request times
+        $env['REQUEST_TIME'] = isset($server['REQUEST_TIME']) ? $server['REQUEST_TIME'] : time();
+
+        $env['REQUEST_TIME_FLOAT'] = isset($server['REQUEST_TIME_FLOAT']) ? $server['REQUEST_TIME_FLOAT'] : microtime(true);
         
         return $env;
     }
