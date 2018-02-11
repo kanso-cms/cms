@@ -244,7 +244,7 @@ class HttpService extends Service
 	{
 		$this->container->singleton('Router', function ($container)
 		{
-			return new Router($container->Request, $container->Onion);
+			return new Router($container->Request, $container->Onion, $container->Config->get('application.send_response'));
 		});
 	}	
 }

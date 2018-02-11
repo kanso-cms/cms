@@ -66,6 +66,26 @@ return
 
 	/**
 	 * ---------------------------------------------------------
+	 * Send response
+	 * ---------------------------------------------------------
+	 *
+	 * This tells Kanso to automatically send the response body,
+	 * headers, cookie, session etc.. on all incoming requests.
+	 * This is the default behavior for both the framework and the cms. 
+	 * This means that if the the router matches a route, the 
+	 * route will change the response object - (e.g send a 200, 
+	 * throw a 500 etc..), and if a route is not matched a 404 
+	 * response is sent by default.
+	 * 
+	 * If you disable this, you will need to call 
+	 * $kanso->Response->send() on all requests even on 404s.
+	 * You should only disable this if you know what you're doing.
+	 * 
+	 */
+	'send_response' => true,
+
+	/**
+	 * ---------------------------------------------------------
 	 * Services
 	 * ---------------------------------------------------------
 	 *

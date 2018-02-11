@@ -78,7 +78,10 @@ class Application
 
         $response = $this->container->Onion->peel();
 
-        $this->container->Response->send();
+        if ($this->container->Config->get('application.send_response') === true)
+        {
+            $this->container->Response->send();
+        }
 
         $this->container->ErrorHandler->restore();
     }

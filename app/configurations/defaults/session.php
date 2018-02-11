@@ -70,7 +70,7 @@ return
 			 */
 			'storage' =>
 			[
-				'type' => 'file',
+				'type' => 'native',
 
 				'path' => APP_DIR.'/storage/session',
 			],

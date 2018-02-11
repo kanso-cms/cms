@@ -63,6 +63,13 @@ class Router
     private $request;
 
     /**
+     * Throw not found error if route not matched
+     *
+     * @var bool
+     */
+    private $throwNotFound;
+
+    /**
      * Array of available regex patterns
      *
      * @var array
@@ -86,14 +93,17 @@ class Router
      * Constructor
      *
      * @access public
-     * @param  \kanso\framework\http\request\Request $request Request instance
-     * @param  \kanso\framework\onion\Onion          $onion   Onion instance
+     * @param  \kanso\framework\http\request\Request $request       Request instance
+     * @param  \kanso\framework\onion\Onion          $onion         Onion instance
+     * @param  bool                                  $throwNotFound Throw not found error if route not matched (optional) (default true)
      */
-    public function __construct(Request $request, Onion $onion)
+    public function __construct(Request $request, Onion $onion, bool $throwNotFound = true)
     {
         $this->onion = $onion;
 
         $this->request = $request;
+
+        $this->throwNotFound = $throwNotFound;
     }
 
     /**
@@ -318,7 +328,10 @@ class Router
         # No routes matched so we'll throw a 404 exception
         else if (!$matched)
         {
-            throw new NotFoundException($requestMethod . ': ' . $requestPath);
+            if ($this->throwNotFound === true)
+            {
+                throw new NotFoundException($requestMethod . ': ' . $requestPath);
+            }
         }
 
         # Loop the callbacks and add layer to onion
