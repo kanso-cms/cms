@@ -317,6 +317,17 @@ class ConnectionHandler
 	}
 
 	/**
+	 * Returns the connection query log
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function getLog(): array
+	{
+		return $this->log;
+	}
+
+	/**
 	 * Prepares query for logging.
 	 *
 	 * @access protected
@@ -326,31 +337,18 @@ class ConnectionHandler
 	 */
 	protected function prepareQueryForLog(string $query, array $params): string
 	{
-		return preg_replace_callback('/\?/', function($matches) use (&$params)
+		foreach ($params as $key => $value)
 		{
-			$param = array_shift($params);
+			$_params = explode("\x7F", $value);
 
-			if(is_int($param) || is_float($param))
-			{
-				return $param;
-			}
-			elseif(is_bool(($param)))
-			{
-				return $param ? 'TRUE' : 'FALSE';
-			}
-			elseif(is_object($param))
-			{
-				return get_class($param);
-			}
-			elseif(is_null($param))
-			{
-				return 'NULL';
-			}
-			else
-			{
-				return $this->connection->pdo()->quote($param);
-			}
-		}, $query);
+			$k = $_params[0];
+
+			$v = $_params[1];
+
+			$query = preg_replace("/$k/", $v, $query);
+		}
+
+		return $query;
 	}
 
 	/**

@@ -129,11 +129,23 @@ class Database
 	/**
      * Get a database builder by connection name
      *
+     * @access public
      * @param  string $connectionName Name of the connection
      * @return \kanso\framework\database\query\Builder
      */
 	public function builder(string $connectionName): Builder
 	{
 		return $this->connect($connectionName)->builder();
+	}
+
+	/**
+     * Get all database connection
+     *
+     * @access public
+     * @return array
+     */
+	public function connections(): array
+	{
+		return $this->connections;
 	}
 }
