@@ -30,7 +30,7 @@ class ErrorLoggerTest extends TestCase
         $environment->shouldReceive('__get')->withArgs(['REQUEST_URL'])->andReturn('http:/foo.com/bar');
         $environment->shouldReceive('__get')->withArgs(['REMOTE_ADDR'])->andReturn('1.0.0.0');
         $environment->shouldReceive('__get')->withArgs(['HTTP_USER_AGENT'])->andReturn('mozilla');
-        $fileSystem->shouldReceive('putContents');
+        $fileSystem->shouldReceive('appendContents');
 
         $logger->write();
     }
