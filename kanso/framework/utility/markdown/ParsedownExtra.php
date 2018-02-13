@@ -15,6 +15,9 @@
 
 namespace kanso\framework\utility\markdown;
 
+use DOMDocument;
+use Exception;
+
 class ParsedownExtra extends Parsedown
 {
     # ~
