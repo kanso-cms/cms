@@ -2,16 +2,45 @@
 
 return
 [
-	/**
-	 * ---------------------------------------------------------
-	 * CMS email theme
-	 * ---------------------------------------------------------
-	 *
-	 * These settings setup the styling theme for emails sent by 
-	 * the CMS. They are pretty much self explanatory.
-	 */
-	'theme' => 
-	[
+    /**
+     * ---------------------------------------------------------
+     * SMTP Configurations
+     * ---------------------------------------------------------
+     *
+     * Configure SMTP settings
+     * 
+     * use_smtp      : Use STMP to send emails
+     * smtp_settings : Settings to use when sending via SMTP
+     * debug         : Enable/disable SMTP debugging (0 = off), (1 = client messages), (2 = client and server messages)
+     * host          : Set the hostname of the mail server
+     * port          : Set the SMTP port number - likely to be 25, 465 or 587
+     * auth          : Whether to use SMTP authentication
+     * secure        : Enable TLS encryption, `ssl` also accepted
+     * username      : Username to use for SMTP authentication
+     * password      : Encrypted password to use for SMTP authentication (using $kanso->Crypto->encrypt('foo'))
+     */
+    'use_smtp'      => false,
+    'smtp_settings' =>
+    [
+        'debug'       => 0,
+        'host'        => 'smtp.gmail.com',
+        'port'        => 587,
+        'auth'        => true,
+        'secure'      => 'tls',
+        'username'    => 'foobar@gmail.com',
+        'hashed_pass' => 'hashedpassword',
+    ],
+
+    /**
+     * ---------------------------------------------------------
+     * CMS email theme
+     * ---------------------------------------------------------
+     *
+     * These settings setup the styling theme for emails sent by 
+     * the CMS. They are pretty much self explanatory.
+     */
+    'theme' => 
+    [
         'body_bg'         => '#FFFFFF',
         'content_bg'      => '#FFFFFF',
         'content_border'  => '1px solid #DADADA',

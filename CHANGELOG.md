@@ -1,5 +1,24 @@
 --------------------------------------------------------
 
+### 1.3.0 <small> (26-02-2018)</small>
+
+Update using ```git fetch```.
+
+#### New
+* Added new SMTP email support:
+	- Added new SMTP library to CMS email under `kanso\cms\emai\phpmailer` namespace.
+	- Added new `use_smtp` key under the `email.php` configuration file.
+	- Added new `smtp_settings` with sub settings under the `email.php` configuration file.
+* Added unit testing for SMTP email.
+
+#### Changes
+* Updated CMS to support new SMTP library:
+	- Updated CMS `kanso\cms\application\services\EmailService` to support new SMTP configuration options and library.
+	- Updated CMS `kanso\cms\email` to support new SMTP configuration options and library.
+* Bumped `Kanso::VERSION` number.
+
+--------------------------------------------------------
+
 ### 1.2.1 <small> (14-02-2018)</small>
 
 Update using ```git fetch```.

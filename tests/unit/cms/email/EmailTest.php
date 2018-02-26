@@ -23,8 +23,9 @@ class EmailTest extends TestCase
 	public function testPresets()
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
+		$smtp = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
 
-		$email = new Email($filesystem);
+		$email = new Email($filesystem, $smtp);
 
 		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR.'/cms/email/templates/body.php', $email->theme())->once()->andReturn('foo');
 		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR.'/cms/email/templates/comment.php', $email->theme())->once()->andReturn('foo');
@@ -47,14 +48,15 @@ class EmailTest extends TestCase
 	public function testHtml()
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
+		$smtp = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
 
-		$email = new Email($filesystem);
+		$email = new Email($filesystem, $smtp);
 
 		$theme = $email->theme();
 
 		$vars = array_merge($theme, 
 		[
-			'subject'  => 'email subject', 
+			'subject' => 'email subject', 
             'content' => 'additional html',
             'logoSrc' => $theme['logo_url'],
 		]);
@@ -62,5 +64,63 @@ class EmailTest extends TestCase
 		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR.'/cms/email/templates/body.php', $vars)->once()->andReturn('foo');
 
 		$this->assertEquals('foo', $email->html('email subject', 'additional html'));
+	}
+
+	/**
+	 *
+	 */
+	public function testSendSmtp()
+	{
+		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
+		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
+		$smtpConfig = $this->getSmtpSettings();
+
+		$email = new Email($filesystem, $smtp, [], true, $smtpConfig);
+
+		$smtp->shouldReceive('isSMTP');
+		$smtp->shouldReceive('setFrom')->with('bar@foo.com', 'Foo Bar');
+		$smtp->shouldReceive('addAddress')->with('foo@bar.com');
+		$smtp->shouldReceive('isHTML')->with(true);
+		$smtp->shouldReceive('msgHTML')->with('html content');
+		$smtp->shouldReceive('send');
+		
+		$this->assertTrue($email->send('foo@bar.com', 'Foo Bar', 'bar@foo.com', 'Foo Subject', 'html content'));
+	}
+
+	/**
+	 *
+	 */
+	public function testSendSmtpPlainText()
+	{
+		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
+		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
+		$smtpConfig = $this->getSmtpSettings();
+
+		$email = new Email($filesystem, $smtp, [], true, $smtpConfig);
+
+		$smtp->shouldReceive('isSMTP');
+		$smtp->shouldReceive('setFrom')->with('bar@foo.com', 'Foo Bar');
+		$smtp->shouldReceive('addAddress')->with('foo@bar.com');
+		$smtp->shouldReceive('isHTML')->with(false);
+		$smtp->shouldReceive('send');
+		
+		$this->assertTrue($email->send('foo@bar.com', 'Foo Bar', 'bar@foo.com', 'Foo Subject', 'html content', false));
+	}
+
+	/**
+	 *
+	 */
+	private function getSmtpSettings()
+	{
+		return 
+	    [
+	        'debug'       => 0,
+	        'host'        => 'smtp.gmail.com',
+	        'port'        => 587,
+	        'auth'        => true,
+	        'secure'      => 'tls',
+	        'username'    => 'foobar@gmail.com',
+	        'password'    => 'password',
+	    ];
 	}
 }

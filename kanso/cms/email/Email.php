@@ -8,6 +8,7 @@
 namespace kanso\cms\email;
 
 use kanso\framework\file\Filesystem;
+use kanso\cms\email\phpmailer\PHPMailer;
 
 /**
  * CMS email utility
@@ -57,17 +58,47 @@ class Email
     private $filesystem;
 
     /**
+     * SMTP mail utility
+     *
+     * @var \kanso\cms\email\phpmailer\PHPMailer
+     */
+    private $smtpMailer;
+
+    /**
+     * Send mail via SMTP
+     *
+     * @var bool
+     */
+    private $useStmp;
+
+    /**
+     * SMTP mail configuration
+     *
+     * @var array
+     */
+    private $smtpSettings;
+
+    /**
      * Constructor
      *
      * @access public
-     * @param  \kanso\framework\file\Filesystem $filesystem Filesystem instance
-     * @param  array.                           $theme      Array of theme options (optional) (default [])
+     * @param  \kanso\framework\file\Filesystem     $filesystem Filesystem instance
+     * @param  \kanso\cms\email\phpmailer\PHPMailer $smtpMailer SMTP mail utility
+     * @param  array                                $theme      Array of theme options (optional) (default [])
+     * @param  bool                                 $useStmp    Use SMTP to send emails (optional) (default false)
+     * @param  array                                $stmp       SMTP setings
      */
-    public function __construct(Filesystem $filesystem, $theme = [])
+    public function __construct(Filesystem $filesystem, PHPMailer $smtpMailer, $theme = [], $useStmp = false, $smtpSettings = [])
     {
         $this->filesystem = $filesystem;
 
+        $this->smtpMailer = $smtpMailer;
+
         $this->theme = array_merge($this->theme, $theme);
+
+        $this->useStmp = $useStmp;
+
+        $this->smtpSettings = $smtpSettings;
     }
 
     /**
@@ -101,18 +132,53 @@ class Email
      */
     public function send(string $toEmail, string $senderName, string $senderEmail, string $subject, string $content, string $format = 'html'): bool
     {
-        if ($format === 'html')
+
+        if ($this->useStmp === true && !empty($this->smtpSettings))
         {
-            $headers   = 'MIME-Version: 1.0' . "\r\n";
-            $headers  .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-            $headers  .= 'From: '.$senderEmail.' <'.$senderName.'>' . "\r\n";
+            $mail = $this->smtpMailer;
+            $mail->isSMTP();
+            $mail->SMTPDebug  = $this->smtpSettings['debug'];
+            $mail->Host       = $this->smtpSettings['host'];
+            $mail->Port       = $this->smtpSettings['port'];
+            $mail->SMTPSecure = $this->smtpSettings['secure'];
+            $mail->SMTPAuth   = $this->smtpSettings['auth'];
+            $mail->Username   = $this->smtpSettings['username'];
+            $mail->Password   = $this->smtpSettings['password'];
+            $mail->Subject     = $subject;
+
+            $mail->setFrom($senderEmail, $senderName);
+            $mail->addAddress($toEmail);
+            
+            if ($format === 'html')
+            {
+                $mail->isHTML(true);
+                $mail->msgHTML($content);
+            }
+            else
+            {
+                $mail->isHTML(false);
+                $mail->Body = $content;
+            }
+
+            $mail->send();
+
+            return true;
         }
         else
         {
-            $headers = 'From: '.$senderEmail.' <'.$senderName.'>' . "\r\n";
+            if ($format === 'html')
+            {
+                $headers   = 'MIME-Version: 1.0' . "\r\n";
+                $headers  .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+                $headers  .= 'From: '.$senderEmail.' <'.$senderName.'>' . "\r\n";
+            }
+            else
+            {
+                $headers = 'From: '.$senderEmail.' <'.$senderName.'>' . "\r\n";
+            }
+
+            return mail($toEmail, $subject, $content, $headers);
         }
-        
-        return mail($toEmail, $subject, $content, $headers);
     }
 
     /**
