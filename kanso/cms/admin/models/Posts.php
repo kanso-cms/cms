@@ -88,9 +88,10 @@ class Posts extends BaseModel
             'queries'       => $this->getQueries(),
             'empty_queries' => $this->emptyQueries(),
             'postType'      => $this->postType,
-            'postSlug'      => Str::getAfterLastChar(trim(Str::getBeforeFirstChar($this->Request->environment()->REQUEST_URI, '?'), '/'), '/'),
+            'postSlug'      => Str::getAfterLastChar(Str::queryFilterUri($this->Request->environment()->REQUEST_URI), '/'),
             'postName'      => Humanizer::pluralize(ucfirst(Str::camel2case($this->postType))),
         ];
+
 
         # If the posts are empty,
         # There's no need to check for max pages

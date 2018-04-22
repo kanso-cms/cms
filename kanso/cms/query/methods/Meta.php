@@ -82,7 +82,7 @@ trait Meta
             $description = '';
         }
 
-        return Str::reduce($description, 180);
+        return Str::reduce($description, 300);
     }
 
     /**
@@ -93,7 +93,7 @@ trait Meta
      */
     public function the_meta_title(): string
     {
-        $uri        = explode("/", trim($this->Request->environment()->REQUEST_URI, '/'));
+        $uri        = explode("/", Str::queryFilterUri($this->Request->environment()->REQUEST_URI));
         $titleBase  = $this->website_title();
         $titlePage  = $this->pageIndex > 0 ? 'Page '.($this->pageIndex+1).' | ' : '';
         $titleTitle = '';
@@ -130,8 +130,7 @@ trait Meta
      */
     public function the_canonical_url(): string
     {
-        $env      = $this->Request->environment()->asArray();
-        $urlParts = array_filter(explode('/', trim($env['REQUEST_URI'], '/')));
+        $urlParts = array_filter(explode('/', Str::queryFilterUri($this->Request->environment()->REQUEST_URI)));
         $last     = isset($urlParts[0]) ? array_values(array_slice($urlParts, -1))[0] : false;
 
         if (!$last || is_home())
@@ -149,8 +148,7 @@ trait Meta
             array_pop($urlParts);
         }
 
-
-        return $env['HTTP_HOST'].'/'.implode('/', $urlParts).'/';
+        return $this->Request->environment()->HTTP_HOST.'/'.implode('/', $urlParts).'/';
     }
 
     /**
@@ -286,7 +284,8 @@ trait Meta
         if (!empty($posts))
         {
             $prevpage   = $this->pageIndex;
-            $uri        = explode("/", trim($this->Request->environment()->REQUEST_URI, '/'));
+            $uri        = explode("/", Str::queryFilterUri($this->Request->environment()->REQUEST_URI));
+
             $titleBase  = $this->website_title();
             $titlePage  = $prevpage > 1 ? 'Page '.$prevpage.' | ' : '';
             $titleTitle = '';
@@ -376,7 +375,7 @@ trait Meta
         if (!empty($posts))
         {
             $nextPage   = $this->pageIndex + 2;
-            $uri        = explode("/", trim($this->Request->environment()->REQUEST_URI, '/'));
+            $uri        = explode("/", Str::queryFilterUri($this->Request->environment()->REQUEST_URI));
             $titleBase  = $this->website_title();
             $titlePage  = $nextPage > 1 ? 'Page '.$nextPage.' | ' : '';
             $titleTitle = '';

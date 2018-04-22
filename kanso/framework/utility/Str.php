@@ -434,4 +434,16 @@ class Str
 
 		return boolval($mixedVar);
 	}
+
+	/**
+	 * Remove the query string and santize a uri
+	 *
+	 * @access public
+	 * @param  string $str REQUEST_URI
+	 * @return string
+	 */
+	public static function queryFilterUri(string $uri): string
+	{
+		return ltrim(rtrim(Str::getBeforeFirstChar($uri, '?'), '/'), '/');
+	}
 }

@@ -179,8 +179,7 @@ class Writer extends BaseModel
 
         if (empty($validated_data['excerpt']))
         {
-
-            $article->excerpt = $validated_data['content'];
+            $article->excerpt = $_POST['content'];
         }
         else
         {

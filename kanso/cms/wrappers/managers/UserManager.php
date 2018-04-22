@@ -214,9 +214,9 @@ class UserManager extends Manager
             ];
            
             # Email credentials
-            $senderName   = $this->config->get('cms.site_title');
+            $senderName   = trim(Str::getBeforeFirstChar($this->config->get('cms.site_title'), '-'));
             $senderEmail  = 'no-reply@'.$this->environment->DOMAIN_NAME;
-            $emailSubject = 'Welcome to '.$this->config->get('cms.site_title');
+            $emailSubject = 'Welcome to '.trim(Str::getBeforeFirstChar($this->config->get('cms.site_title'), '-'));
             $emailContent = $this->email->html($emailSubject, $this->email->preset('new-admin', $emailData));
             $emailTo      = $user->email;
 
@@ -241,7 +241,6 @@ class UserManager extends Manager
      */
     public function createUser(string $email, string $username = '', string $password = '', string $name = '', string $role = 'guest', bool $activate = false, bool $sendEamil = true)
     {
-
         # Create a unique username based on the email if one
         # wasnt provided
         if (empty($username))
@@ -274,9 +273,9 @@ class UserManager extends Manager
                 'websiteName' => $this->environment->DOMAIN_NAME,
                 'websiteUrl'  => $this->environment->HTTP_HOST,
             ];
-           
+
             # Email credentials
-            $senderName   = $this->config->get('cms.site_title');
+            $senderName   = trim(Str::getBeforeFirstChar($this->config->get('cms.site_title'), '-'));
             $senderEmail  = 'no-reply@'.$this->environment->DOMAIN_NAME;
             $emailSubject = 'Please verify your email address';
             $emailContent = $this->email->html($emailSubject, $this->email->preset('confirm-account', $emailData));
