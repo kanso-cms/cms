@@ -1,5 +1,19 @@
 --------------------------------------------------------
 
+### 1.4.0 <small> (22-03-2018)</small>
+
+Update using ```git fetch```.
+
+#### New
+* Added new `Str::queryFilterUri` function for sanitizing URLS.
+* CMS uses `Str::queryFilterUri` throughout the application internals.
+* Other minor bug fixes
+
+#### Changes
+* Bumped `Kanso::VERSION` number.
+
+--------------------------------------------------------
+
 ### 1.3.0 <small> (26-02-2018)</small>
 
 Update using ```git fetch```.
