@@ -78,7 +78,7 @@ trait LoaderTrait
 		# between now and when kanso sends a response.
 		if ($response->status()->get() !== 404)
 		{
-			$format = array_filter(explode('/', $_this->container->Request->environment()->REQUEST_URL));
+			$format = array_filter(explode('/', Str::queryFilterUri($_this->container->Request->environment()->REQUEST_URI)));
 
 			# Load the RSS module and render
 			$rss = new Feed($request, $response, array_pop($format));
@@ -142,7 +142,7 @@ trait LoaderTrait
 	protected function notFoundHandling()
 	{
 		# Disable logging 404s
-		$this->container->ErrorHandler->disableLoggingFor('kanso\framework\http\response\exceptions\NotFoundException');
+		# $this->container->ErrorHandler->disableLoggingFor('kanso\framework\http\response\exceptions\NotFoundException');
 
 		# 404 get displayed the theme 404 template
 		$this->container->ErrorHandler->handle('\kanso\framework\http\response\exceptions\NotFoundException', function($exception)
@@ -162,7 +162,7 @@ trait LoaderTrait
 				$this->container->Response->send();
 
 				# Stop handling this error
-				return false;
+				# return false;
 			}
 			
 		});
@@ -184,7 +184,7 @@ trait LoaderTrait
 		$templateBase = $this->container->Config->get('cms.themes_path').'/'.$this->container->Config->get('cms.theme_name');
 
 		# Explode request url
-		$urlParts = array_filter(explode('/', trim($this->container->Request->environment()->REQUEST_URI, '/')));
+		$urlParts = array_filter(explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI)));
 		
 		# 404s never get a template
 		if ($this->container->Response->status()->get() === 404)

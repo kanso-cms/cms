@@ -9,7 +9,6 @@ namespace kanso\cms\query\methods;
 
 use kanso\framework\utility\Str;
 
-
 /**
  * CMS Query validation methods
  *
@@ -132,7 +131,7 @@ trait Validation
     {
         if ($slug)
         {
-            $uri = strtolower(trim($this->Request->environment()->REQUEST_URI, '/'));
+            $uri = strtolower(Str::queryFilterUri($this->Request->environment()->REQUEST_URI));
 
             $slug = strtolower(trim($slug, '/'));
 
@@ -157,7 +156,7 @@ trait Validation
                 ':author'   => '[a-z0-9 -]+',
             ];
 
-            $requestPath = trim(Str::getBeforeFirstChar($this->Request->path(), '?'), '/');
+            $requestPath = $uri;
             $searches    = array_keys($patterns);
             $replaces    = array_values($patterns);
             $route       = $slug;

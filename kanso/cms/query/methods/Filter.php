@@ -200,15 +200,13 @@ trait Filter
     {
         $blogPrefix = $this->Config->get('cms.blog_location');
         $uri        = trim($this->container->Request->environment()->REQUEST_URI, '/');
-        $postType   = $requestType === 'single' ? 'post' : Str::getAfterFirstChar($requestType, '-'); 
+        $postType   = $requestType === 'single' ? 'post' : Str::getAfterFirstChar($requestType, '-');
 
         $this->requestType = $requestType;
 
         if ($this->Request->fetch('query') === 'draft' && $this->Gatekeeper->isAdmin())
         {
-            $uri       = Str::getBeforeLastChar($uri, '?');
-            $uri       = ltrim($uri, '/');
-            $uri       = rtrim($uri, '/');
+            $uri       = Str::queryFilterUri($uri);
             $uri       = !empty($blogPrefix) ? str_replace($blogPrefix.'/', '', $uri) : $uri;
             $this->queryStr  = 'post_status = draft : post_type = '.$postType.' : post_slug = '.$uri.'/';
             $this->posts     = $this->queryParser->parseQuery($this->queryStr);
@@ -216,9 +214,9 @@ trait Filter
         }
         else
         {
-            $uri       = Str::getBeforeLastWord($uri, '/feed');
-            $uri       = ltrim($uri, '/');
-            $uri       = !empty($blogPrefix) ? str_replace($blogPrefix.'/', '', $uri) : $uri;
+            $uri = Str::getBeforeLastWord(Str::queryFilterUri($uri), '/feed');
+            $uri = !empty($blogPrefix) ? str_replace($blogPrefix.'/', '', $uri) : $uri;
+
             $this->queryStr  = 'post_status = published : post_type = '.$postType.' : post_slug = '.$uri.'/';
             $this->posts     = $this->queryParser->parseQuery($this->queryStr);
             $this->postCount = count($this->posts);
@@ -247,16 +245,14 @@ trait Filter
 
         if ($this->Request->fetch('query') === 'draft' && $this->Gatekeeper->isAdmin())
         {
-            $uri             = ltrim(str_replace('?draft', '', $uri), '/');
+            $uri             = Str::queryFilterUri($uri);
             $this->queryStr  = 'post_status = draft : post_type = page : post_slug = '.$uri.'/';
             $this->posts     = $this->queryParser->parseQuery($this->queryStr);
             $this->postCount = count($this->posts);
         }
         else
         {
-            $uri = Str::getBeforeLastWord($uri, '/feed');
-            $uri = Str::getBeforeLastChar($uri, '?');
-            $uri = trim($uri, '/');
+            $uri = Str::getBeforeLastWord(Str::queryFilterUri($uri), '/feed');
             $this->queryStr   = 'post_status = published : post_type = page : post_slug = '.$uri.'/';
             $this->posts      = $this->queryParser->parseQuery($this->queryStr);
             $this->postCount  = count($this->posts);
@@ -283,7 +279,7 @@ trait Filter
         $blogPrefix   = $this->Config->get('cms.blog_location');
         $perPage      = $this->Config->get('cms.posts_per_page');
         $offset       = $this->pageIndex * $perPage;
-        $urlParts     = array_filter(explode('/', trim($this->container->Request->environment()->REQUEST_URI, '/')));
+        $urlParts     = array_filter(explode('/',  Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI)));
         $isPage       = in_array('page', $urlParts);
         $isFeed       = in_array('feed', $urlParts);
 
@@ -356,7 +352,7 @@ trait Filter
         $blogPrefix   = $this->Config->get('cms.blog_location');
         $perPage      = $this->Config->get('cms.posts_per_page');
         $offset       = $this->pageIndex * $perPage;
-        $urlParts     = array_filter(explode('/', trim($this->container->Request->environment()->REQUEST_URI, '/')));
+        $urlParts     = array_filter(explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI)));
 
         $this->requestType  = 'tag';
         $this->taxonomySlug = !empty($blogPrefix) ? $urlParts[2] : $urlParts[1];
@@ -388,7 +384,7 @@ trait Filter
         $blogPrefix   = $this->Config->get('cms.blog_location');
         $perPage      = $this->Config->get('cms.posts_per_page');
         $offset       = $this->pageIndex * $perPage;
-        $urlParts     = array_filter(explode('/', trim($this->container->Request->environment()->REQUEST_URI, '/')));
+        $urlParts     = array_filter(explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI)));
 
         $this->requestType  = 'author';
         $this->taxonomySlug = !empty($blogPrefix) ? $urlParts[2] : $urlParts[1];
@@ -473,7 +469,7 @@ trait Filter
     private function filterAttachment(): bool
     {
         $blogPrefix      = $this->Config->get('cms.blog_location');
-        $urlParts        = array_filter(explode('/', trim($this->container->Request->environment()->REQUEST_URI, '/')));
+        $urlParts        = array_filter(explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI)));
         
         $attachmentName  = !empty($blogPrefix) ? $urlParts[2] : $urlParts[1];
         $attachmentSlug  = Str::getBeforeLastChar($attachmentName, '.');

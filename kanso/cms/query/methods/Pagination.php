@@ -8,6 +8,7 @@
 namespace kanso\cms\query\methods;
 
 use kanso\framework\utility\Arr;
+use kanso\framework\utility\Str;
 
 /**
  * CMS Query pagination methods
@@ -43,7 +44,7 @@ trait Pagination
         ];
 
         # Segment the reuest URI
-        $uri = explode("/", trim($this->Request->environment()->REQUEST_URI, '/'));
+        $uri = explode("/", Str::queryFilterUri($this->Request->environment()->REQUEST_URI));
 
         # Declare the pagination string
         $pagination = '';

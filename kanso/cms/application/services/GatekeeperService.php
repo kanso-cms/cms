@@ -7,6 +7,7 @@
 
 namespace kanso\cms\application\services;
 
+use kanso\framework\utility\Str;
 use kanso\framework\application\services\Service;
 use kanso\cms\auth\Gatekeeper;
 use kanso\cms\auth\adapters\EmailAdapter;
@@ -48,7 +49,7 @@ class GatekeeperService extends Service
 			$this->container->Email,
 			$this->container->Request->environment()->HTTP_HOST,
 			$this->container->Request->environment()->DOMAIN_NAME,
-			$this->container->Config->get('cms.site_title'),
+			trim(Str::getBeforeFirstChar($this->container->Config->get('cms.site_title'), '-')),
 			$this->container->Config->get('email.urls')
 		);
 	}

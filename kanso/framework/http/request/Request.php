@@ -97,7 +97,14 @@ class Request
      */
     public function path(): string
     {
-        return parse_url(trim($this->environment->REQUEST_URI, '/'), PHP_URL_PATH);
+        $path = parse_url(trim($this->environment->REQUEST_URI, '/'), PHP_URL_PATH);
+
+        if (!$path)
+        {
+            return '';
+        }
+
+        return $path;
     }
 
     /**

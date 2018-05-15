@@ -258,8 +258,8 @@ class Router
     {
         $requestMethod = $this->request->getMethod();
 
-        $requestPath = ltrim(rtrim(Str::getBeforeFirstChar($this->request->path(), '?'), '/'), '/');
-        
+        $requestPath = Str::queryFilterUri($this->request->environment()->REQUEST_URI);
+
         $searches = array_keys($this->patterns);
         
         $replaces = array_values($this->patterns);

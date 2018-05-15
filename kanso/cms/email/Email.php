@@ -157,7 +157,8 @@ class Email
             else
             {
                 $mail->isHTML(false);
-                $mail->Body = $content;
+                $mail->Body    = $content;
+                $mail->AltBody = $content;
             }
 
             $mail->send();

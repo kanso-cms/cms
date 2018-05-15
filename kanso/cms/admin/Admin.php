@@ -50,7 +50,7 @@ class Admin
 
         # Is this page being requested in the admin panel ?
         # Is this page being requested ?
-        $requestSlug = Str::getAfterLastChar(trim(Str::getBeforeFirstChar($this->Request->environment()->REQUEST_URI, '?'), '/'), '/');
+        $requestSlug = Str::getAfterLastChar(Str::queryFilterUri($this->Request->environment()->REQUEST_URI), '/');
         $isPage      = $slug === $requestSlug;
 
         # Add the admin panel route
@@ -165,7 +165,7 @@ class Admin
         # If this is a child menu item is this page being requested ?
         if ($parent)
         {
-            $requestSlug = explode('/', trim(Str::getBeforeFirstChar($this->Request->environment()->REQUEST_URI, '?'), '/'));
+            $requestSlug = explode('/', Str::queryFilterUri($this->Request->environment()->REQUEST_URI));
             array_shift($requestSlug);
             $requestSlug = implode('/', $requestSlug);
             $isPage      = $slug === $requestSlug;
@@ -173,7 +173,7 @@ class Admin
         else
         {
             # Is this page being requested ?
-            $requestSlug = Str::getAfterLastChar(trim(Str::getBeforeFirstChar($this->Request->environment()->REQUEST_URI, '?'), '/'), '/');
+            $requestSlug = Str::getAfterLastChar(Str::queryFilterUri($this->Request->environment()->REQUEST_URI), '/');
             $isPage      = $slug === $requestSlug;
         }
 

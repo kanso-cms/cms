@@ -11,6 +11,8 @@
 
 namespace kanso\framework\utility;
 
+use Exception;
+
 class GUMP
 {
     // Validation rules for execution
@@ -427,6 +429,9 @@ class GUMP
                     break;
                 case 'validate_alpha_dash':
                     $resp[] = "The <span class=\"$field_class\">$field</span> field may only contain alpha characters &amp; dashes";
+                    break;
+                case 'validate_alpha_space':
+                    $resp[] = "The <span class=\"$field_class\">$field</span> field may only contain alpha characters &amp; spaces";
                     break;
                 case 'validate_numeric':
                     $resp[] = "The <span class=\"$field_class\">$field</span> field may only contain numeric characters";
@@ -1031,6 +1036,34 @@ class GUMP
         }
 
         if(!preg_match("/^([a-z0-9ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ_-])+$/i", $input[$field]) !== FALSE)
+        {
+            return array(
+                'field' => $field,
+                'value' => $input[$field],
+                'rule'  => __FUNCTION__,
+                'param' => $param
+            );
+        }
+    }
+
+    /**
+     * Determine if the provided value contains only alpha characters with spaces
+     *
+     * Usage: '<index>' => 'alpha_space'
+     *
+     * @access protected
+     * @param  string $field
+     * @param  array $input
+     * @return mixed
+     */
+    protected function validate_alpha_space($field, $input, $param = NULL)
+    {
+        if(!isset($input[$field]) || empty($input[$field]))
+        {
+            return;
+        }
+
+        if(!preg_match("/^([a-z0-9ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ ])+$/i", $input[$field]) !== FALSE)
         {
             return array(
                 'field' => $field,

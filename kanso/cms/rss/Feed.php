@@ -10,6 +10,7 @@ namespace kanso\cms\rss;
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
 use kanso\framework\utility\Mime;
+use kanso\Kanso;
 
 /**
  * RSS feeds
@@ -67,6 +68,9 @@ class Feed
 	{
 		# Set appropriate content type header
         $this->response->format()->set(Mime::fromExt($this->format).', application/xml');
+
+        # Filter posts for feed
+        Kanso::instance()->Filters->apply('RSS', $this);
 
         # Set the response body
         $this->response->body()->set($this->xml());
