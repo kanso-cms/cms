@@ -120,9 +120,9 @@
 								<label for="media_size">Attachment Size</label>
 								<select id="media_size" class="js-size-select">
 									<option value="origional">Original</option>
-									<option value="small">Small</option>
-									<option value="medium">Medium</option>
-									<option value="large">Large</option>
+									<?php foreach ($kanso->Config->get('cms.uploads.thumbnail_sizes') as $suffix => $size) : ?>
+									<option value="<?php echo $suffix;?>"><?php echo ucfirst($suffix);?> </option>
+									<?php endforeach; ?>
 								</select>
 							</div>
 

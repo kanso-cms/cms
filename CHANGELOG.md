@@ -1,5 +1,17 @@
 --------------------------------------------------------
 
+### 1.4.1 <small> (22-03-2018)</small>
+
+Update using ```git fetch```.
+
+#### New
+* Media library in the admin panel uses CMS thumbnail_sizes configuration to build dropdown menu for attachments.
+
+#### Changes
+* Bumped `Kanso::VERSION` number.
+
+--------------------------------------------------------
+
 ### 1.4.0 <small> (22-03-2018)</small>
 
 Update using ```git fetch```.
