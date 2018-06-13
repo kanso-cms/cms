@@ -159,18 +159,18 @@ function admin_header_scripts()
 	$stylesheets = [
 		'<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">',
 		'<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900">',
-		'<link rel="stylesheet" href="'.admin_assets_url().'/css/hubble.css?v='.admin_assets_version().'">',
-		'<link rel="stylesheet" href="'.admin_assets_url().'/css/theme.css?v='.admin_assets_version().'">',
-		'<link rel="stylesheet" href="'.admin_assets_url().'/css/vendor/dropzone.css?v='.admin_assets_version().'">',
+		'<link rel="stylesheet" href="'.admin_assets_url().'/css/hubble.min.css?v='.admin_assets_version().'">',
+		'<link rel="stylesheet" href="'.admin_assets_url().'/css/theme.min.css?v='.admin_assets_version().'">',
+		'<link rel="stylesheet" href="'.admin_assets_url().'/css/vendor/dropzone.min.css?v='.admin_assets_version().'">',
 	];
 
 	if (admin_page_name() === 'writer')
 	{
-		$stylesheets[] = '<link rel="stylesheet" href="'.admin_assets_url().'/css/vendor/codemirror.css?v='.admin_assets_version().'">';
-        $stylesheets[] = '<link rel="stylesheet" href="'.admin_assets_url().'/css/vendor/highlight.css?v='.admin_assets_version().'">';
-        $stylesheets[] = '<link rel="stylesheet" href="'.admin_assets_url().'/css/vendor/offline.css?v='.admin_assets_version().'">';
-        $stylesheets[] = '<link rel="stylesheet" href="'.admin_assets_url().'/css/markdown.css?v='.admin_assets_version().'">';
-        $stylesheets[] = '<link rel="stylesheet" href="'.admin_assets_url().'/css/writer.css?v='.admin_assets_version().'">';
+		$stylesheets[] = '<link rel="stylesheet" href="'.admin_assets_url().'/css/vendor/codemirror.min.css?v='.admin_assets_version().'">';
+        $stylesheets[] = '<link rel="stylesheet" href="'.admin_assets_url().'/css/vendor/highlight.min.css?v='.admin_assets_version().'">';
+        $stylesheets[] = '<link rel="stylesheet" href="'.admin_assets_url().'/css/vendor/offline.min.css?v='.admin_assets_version().'">';
+        $stylesheets[] = '<link rel="stylesheet" href="'.admin_assets_url().'/css/markdown.min.css?v='.admin_assets_version().'">';
+        $stylesheets[] = '<link rel="stylesheet" href="'.admin_assets_url().'/css/writer.min.css?v='.admin_assets_version().'">';
 	}
 
 	$stylesheets = Kanso::instance()->Filters->apply('adminHeaderScripts', $stylesheets);
@@ -188,38 +188,38 @@ function admin_footer_scripts()
 	$scripts = [];
 
 	# Hubble
-	$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/hubble.js?v='.admin_assets_version().'"></script>';
+	$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/hubble.min.js?v='.admin_assets_version().'"></script>';
 
 	# Sidebar
-	$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/sidebar.js?v='.admin_assets_version().'"></script>';
+	$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/sidebar.min.js?v='.admin_assets_version().'"></script>';
 
 	# Lists
-	$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/lists.js?v='.admin_assets_version().'"></script>';
+	$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/lists.min.js?v='.admin_assets_version().'"></script>';
 
 	# forms
-	$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/forms.js?v='.admin_assets_version().'"></script>';
+	$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/forms.min.js?v='.admin_assets_version().'"></script>';
 
 	# Dropzone
-	$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/dropzone.js?v='.admin_assets_version().'"></script>';
+	$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/dropzone.min.js?v='.admin_assets_version().'"></script>';
 
 	# Media library
-	$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/media-library.js?v='.admin_assets_version().'"></script>';
+	$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/media-library.min.js?v='.admin_assets_version().'"></script>';
 
 	# Author avatar
-	$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/author-avatar.js?v='.admin_assets_version().'"></script>';
+	$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/author-avatar.min.js?v='.admin_assets_version().'"></script>';
 
 	# Settings tools
-	$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/tools.js?v='.admin_assets_version().'"></script>';
+	$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/tools.min.js?v='.admin_assets_version().'"></script>';
 
 	if (admin_page_name() === 'writer')
 	{
-		$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/offline.js?v='.admin_assets_version().'"></script>';
+		$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/offline.min.js?v='.admin_assets_version().'"></script>';
 		$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/JavaScriptSpellCheck/include.js?v='.admin_assets_version().'"></script>';
-		$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/clipboard.js?v='.admin_assets_version().'"></script>';
-		$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/codemirror.js?v='.admin_assets_version().'"></script>';
-        $scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/highlight.js?v='.admin_assets_version().'"></script>';
-        $scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/markdownIt.js?v='.admin_assets_version().'"></script>';
-        $scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/writer.js?v='.admin_assets_version().'"></script>';
+		$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/clipboard.min.js?v='.admin_assets_version().'"></script>';
+		$scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/codemirror.min.js?v='.admin_assets_version().'"></script>';
+        $scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/highlight.min.js?v='.admin_assets_version().'"></script>';
+        $scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/vendor/markdownIt.min.js?v='.admin_assets_version().'"></script>';
+        $scripts[] = '<script type="text/javascript" src="'.admin_assets_url().'/js/writer.min.js?v='.admin_assets_version().'"></script>';
 	}
 	
 	$scripts = Kanso::instance()->Filters->apply('adminFooterScripts', $scripts);
@@ -380,7 +380,7 @@ function admin_is_dash()
  */
 function admin_assets_url()
 {
-	$env = \kanso\Kanso::instance()->Request->environment();
+	$env = Kanso::instance()->Request->environment();
 
 	return str_replace($env->DOCUMENT_ROOT, $env->HTTP_HOST, KANSO_DIR.'/cms/admin/assets');
 }
@@ -390,7 +390,31 @@ function admin_assets_url()
  * 
  * @return mixed
  */
-function admin_kanso_config(string $key)
+function admin_writer_categories(int $postId): string
 {
-	return \kanso\Kanso::instance()->Config->get($key);
+	$categories = Kanso::instance()->Query->the_post($postId)->categories;
+	$parents    = [];
+	$children   = [];
+
+	foreach ($categories as $category)
+	{
+		$parent = $category->parent();
+
+		if ($parent)
+		{
+		    $parents[] = $category->name;
+
+		    while ($parent)
+		    {
+		        $children[] = $parent->name;
+		        $parent     = $parent->parent();
+		    }
+		}
+		else
+		{
+			$parents[] = $category->name;
+		}
+	}
+
+	return implode(', ', array_unique(array_merge($parents, $children)));
 }

@@ -32,7 +32,7 @@
 			<div class="form-field row floor-xs">
 				<label for="category">Category</label>
 				<p class="color-gray">Enter a comma separated list of categoires.</p>
-				<input type="text" name="category" id="category" value="<?php echo $the_post ? the_categories_list($the_post->id) : null; ?>" autocomplete="off"/>
+				<input type="text" name="category" id="category" value="<?php echo $the_post ? admin_writer_categories($the_post->id) : null; ?>" autocomplete="off"/>
 			</div>
 
 			<div class="form-field row floor-xs">

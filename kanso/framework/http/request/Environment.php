@@ -128,6 +128,9 @@ class Environment
 
         $env['REMOTE_ADDR'] = $ipaddress;
 
+        # Save the referrer
+        $env['REFERER'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
+        
         # Save the browser user agent
         $env['HTTP_USER_AGENT'] = isset($server['HTTP_USER_AGENT']) ? $server['HTTP_USER_AGENT'] : 'UNKNOWN';
 

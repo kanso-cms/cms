@@ -141,7 +141,7 @@ class Admin
      */
     public function addPage(string $title, string $slug, string $icon, string $model, string $view, string $parent = null, bool $adminOnly = false, array $styles = null, array $scripts = null)
     {
-        if (! ($this->Gatekeeper->isAdmin() && $this->Gatekeeper->isLoggedIn()) )
+        if (!$this->Gatekeeper->isLoggedIn() || !$this->Gatekeeper->getUser())
         {
             return false;
         }

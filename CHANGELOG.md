@@ -1,5 +1,28 @@
 --------------------------------------------------------
 
+### 1.5.0 <small> (13-06-2018)</small>
+
+Update using ```git fetch```.
+
+#### New
+* Added a new ```strip_tags``` function to ```Str``` class.
+* ```Environment``` now has the ```REFERER``` key.
+
+#### Changes
+* Admin panel uses minified scripts and stylesheets.
+* Updated logic when adding a page to the admin panel.
+* The ```Email``` service is no longer a singleton and returns a new instance whenever called.
+* ```NotFoundException``` defaults to a generic message for error logging if not provided.
+* Bumped `Kanso::VERSION` number.
+
+#### Bugfixes
+* Fixed up category input field on admin panel for existing posts so that child categories are first in ascending order to parents.
+* Added a fallback ```Gatekeeper``` for when a user cannot be found from the database.
+* SMTP plain text emails keep line breaks.
+* ```Attachment``` returns default url for all sizes if it is not an image.
+
+--------------------------------------------------------
+
 ### 1.4.1 <small> (22-03-2018)</small>
 
 Update using ```git fetch```.

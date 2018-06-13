@@ -26,6 +26,8 @@ class NotFoundException extends RequestException
 	 */
 	public function __construct(string $message = null, Throwable $previous = null)
 	{
+		$message = empty($message) ? 'The requested URL was not found on this server.' : $message;
+
 		parent::__construct(404, $message, $previous);
 	}
 }

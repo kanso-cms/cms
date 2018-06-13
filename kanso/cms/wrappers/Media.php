@@ -218,7 +218,7 @@ class Media extends Wrapper
      */
     public function imgSize($size = 'original'): string
 	{
-        if ($size === 'original')
+        if ($size === 'original' || !$this->isImage())
         {
             return $this->data['url'];
         }
@@ -241,7 +241,7 @@ class Media extends Wrapper
      */
     public function imgSizePath($size = 'original'): string
     {
-        if ($size === 'original')
+        if ($size === 'original' || !$this->isImage())
         {
             return $this->data['path'];
         }

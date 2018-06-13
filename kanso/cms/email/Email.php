@@ -156,6 +156,7 @@ class Email
             }
             else
             {
+                $content = nl2br($content);
                 $mail->isHTML(false);
                 $mail->Body    = $content;
                 $mail->AltBody = $content;

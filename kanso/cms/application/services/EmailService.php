@@ -23,7 +23,7 @@ class EmailService extends Service
 	 */
 	public function register()
 	{
-		$this->container->singleton('Email', function ($container) 
+		$this->container->set('Email', function ($container) 
 		{
 			$useSmtp = $container->Config->get('email.use_smtp');
 			

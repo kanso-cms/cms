@@ -446,4 +446,17 @@ class Str
 	{
 		return ltrim(rtrim(Str::getBeforeFirstChar($uri, '?'), '/'), '/');
 	}
+
+	/**
+	 * Remove a specific HTML tag from a string
+	 *
+	 * @access public
+	 * @param  string $str String
+	 * @param  string $tag HTML tag name
+	 * @return string
+	 */
+	public static function strip_tags(string $str, string $tag): string
+	{
+		return trim(str_ireplace("<$tag>", '', str_ireplace("</$tag>", '', $str)));
+	}
 }

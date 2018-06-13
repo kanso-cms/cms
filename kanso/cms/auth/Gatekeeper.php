@@ -128,6 +128,12 @@ class Gatekeeper
             if ($id)
             {
                 $this->user = $this->provider->byId($id);
+
+                # Fallback user could not be found
+                if (!$this->user)
+                {
+                    $this->logout();
+                }
             }
         }
 

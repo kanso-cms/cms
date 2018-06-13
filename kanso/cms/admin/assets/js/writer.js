@@ -194,6 +194,13 @@
     var _autoSaveTimer;
 
     /**
+     * The last sent save form
+     * 
+     * @var object
+     */
+    var _lastSavedText;
+
+    /**
      * Get closest number from an array of numbers
      * 
      * @param  array e Numbers index
@@ -1438,10 +1445,18 @@ KansoWriter.prototype._startAutoSaver = function()
 
     _autoSaveTimer = setTimeout(function()
     {
-        if (_this.api.code_editor.getValue().trim() === '')
+        var text = _this.api.code_editor.getValue().trim();
+
+        if (text === '')
         {
             return;
         }
+        else if (_lastSavedText === text)
+        {
+            return;
+        }
+
+        _lastSavedText = text;
 
         _this._saveArticle(false);
 
