@@ -1,9 +1,9 @@
 <?php
-    $enable_robots  = admin_kanso_config('cms.security.enable_robots');
-    $robots_content = admin_kanso_config('cms.security.robots_text_content');
+    $enable_robots  = $kanso->Config->get('cms.security.enable_robots');
+    $robots_content = $kanso->Config->get('cms.security.robots_text_content');
 
-    $enable_ip_block = admin_kanso_config('cms.security.ip_blocked');
-    $ip_whitelist    = admin_kanso_config('cms.security.ip_whitelist');
+    $enable_ip_block = $kanso->Config->get('cms.security.ip_blocked');
+    $ip_whitelist    = $kanso->Config->get('cms.security.ip_whitelist');
 ?>
 
 <div class="col-12 col-md-8 roof-xs floor-xs">

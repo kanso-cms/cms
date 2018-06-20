@@ -1,5 +1,18 @@
 --------------------------------------------------------
 
+### 1.5.1 <small> (21-06-2018)</small>
+
+Update using ```git fetch```.
+
+#### Changes
+* Bumped `Kanso::VERSION` number.
+
+#### Bugfixes
+* Fixed category/tag filtering for incoming requests to paginated taxonomies.
+* Removed and replaced ```admin_kanso_config``` function in admin panel.
+
+--------------------------------------------------------
+
 ### 1.5.0 <small> (13-06-2018)</small>
 
 Update using ```git fetch```.

@@ -107,7 +107,7 @@ trait Filter
         }
         else if ($requestType === 'category')
         {
-            if (!$this->filterCategory($requestType))
+            if (!$this->filterCategory())
             {
                 return false;
             }            
@@ -274,12 +274,12 @@ trait Filter
      * @access private
      * @return bool 
      */
-    private function filterCategory(string $requestType): bool
+    private function filterCategory(): bool
     {
         $blogPrefix   = $this->Config->get('cms.blog_location');
         $perPage      = $this->Config->get('cms.posts_per_page');
         $offset       = $this->pageIndex * $perPage;
-        $urlParts     = array_filter(explode('/',  Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI)));
+        $urlParts     = explode('/',  Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI));
         $isPage       = in_array('page', $urlParts);
         $isFeed       = in_array('feed', $urlParts);
 
@@ -337,6 +337,16 @@ trait Filter
         $this->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = '.$this->taxonomySlug." : limit = $offset, $perPage";
         $this->posts        = $this->queryParser->parseQuery($this->queryStr);
         $this->postCount    = count($this->posts);
+
+        # If there are no posts and the page is more than 2 return false
+        if ($this->postCount === 0 && $this->pageIndex >= 1)
+        {
+            $this->reset();
+
+            $this->Response->status()->set(404);
+
+            return false;
+        }
                 
         return true;
     }
@@ -359,6 +369,16 @@ trait Filter
         $this->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC : tag_slug = '.$this->taxonomySlug." : limit = $offset, $perPage";
         $this->posts        = $this->queryParser->parseQuery($this->queryStr);
         $this->postCount    = count($this->posts);
+
+        # If there are no posts and the page is more than 2 return false
+        if ($this->postCount === 0 && $this->pageIndex >= 1)
+        {
+            $this->reset();
+
+            $this->Response->status()->set(404);
+
+            return false;
+        }
 
         if ($this->postCount === 0)
         {

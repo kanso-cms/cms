@@ -1,8 +1,8 @@
 <?php
 
-$kansoConfig   = admin_kanso_config('cms');
-$cache_enabled = admin_kanso_config('cache.http_cache_enabled');
-$cdn_enabbled  = admin_kanso_config('cdn.enabled');
+$kansoConfig   = $kanso->Config->get('cms');
+$cache_enabled = $kanso->Config->get('cache.http_cache_enabled');
+$cdn_enabbled  = $kanso->Config->get('cdn.enabled');
 
 ?>
 <div class="col-12 col-md-8 roof-sm floor-sm">
@@ -167,7 +167,7 @@ $cdn_enabbled  = admin_kanso_config('cdn.enabled');
                         How long should Kanso keep cached page versions before creating a new one. 
                         e.g 1 minute, 2 hours, 1 week, 3 months.
                     </p>
-                    <input type="text" name="cache_life" id="cache_life" value="<?php echo admin_kanso_config('cache.configurations.'.admin_kanso_config('cache.default').'.expire');?>">
+                    <input type="text" name="cache_life" id="cache_life" value="<?php echo $kanso->Config->get('cache.configurations.'.$kanso->Config->get('cache.default').'.expire');?>">
                 </div>
                 <div class="form-field row floor-sm">
                     <p class="color-gray">
@@ -202,7 +202,7 @@ $cdn_enabbled  = admin_kanso_config('cdn.enabled');
             <div class="gutter-lg gutter-l">
                 <div class="form-field row floor-sm">
                     <label for="cdn_url">CDN URL</label>
-                    <input type="text" name="cdn_url" id="cdn_url" value="<?php echo admin_kanso_config('cdn.host');?>">
+                    <input type="text" name="cdn_url" id="cdn_url" value="<?php echo $kanso->Config->get('cdn.host');?>">
                 </div>
             </div>
         </div>
