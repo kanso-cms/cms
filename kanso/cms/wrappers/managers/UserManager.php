@@ -18,6 +18,7 @@ use kanso\framework\security\Crypto;
 use kanso\framework\utility\Str;
 use kanso\framework\utility\UUID;
 use kanso\cms\email\Email;
+use Exception;
 
 /**
  * User manager
@@ -258,10 +259,18 @@ class UserManager extends Manager
         $user = $this->create($email, $username, $password, $role, $activate);
 
         # Validate the user was created
-        if ($user === self::USERNAME_EXISTS || $user === self::SLUG_EXISTS || $user === self::EMAIL_EXISTS || !$user)
+        if ($user === self::USERNAME_EXISTS || $user === self::SLUG_EXISTS || $user === self::EMAIL_EXISTS)
         {
             return $user;
         }
+        else if (!$user)
+        {
+            throw new Exception('Error creating user');
+        }
+
+        $user       = $this->byEmail($email);
+        $user->name = $name;
+        $user->save();
 
         # Send the email verification email
         if (!$activate && $sendEamil)
@@ -284,7 +293,7 @@ class UserManager extends Manager
             $this->email->send($emailTo, $senderName, $senderEmail, $emailSubject, $emailContent);
         }
 
-        return true;
+        return $user;
     }
 
     /**

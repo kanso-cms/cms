@@ -7,6 +7,8 @@
 
 namespace kanso\cms\query\methods;
 
+use kanso\framework\utility\Str;
+
 /**
  * CMS Query author methods
  *
@@ -224,7 +226,7 @@ trait Author
             
             if ($author)
             {
-                return $author->description;
+                return Str::nl2br($author->description);
             }
 
             return null;
@@ -236,7 +238,7 @@ trait Author
             
             if ($author)
             {
-                return $author->description;
+                return Str::nl2br($author->description);
             }
 
         }

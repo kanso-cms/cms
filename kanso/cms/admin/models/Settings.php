@@ -219,7 +219,7 @@ class Settings extends BaseModel
         $this->validation->validation_rules([
             'name'         => 'required|alpha_space|max_len,50|min_len,3',
             'slug'         => 'required|alpha_dash|max_len,50|min_len,3',
-            'description'  => 'max_len,255',
+            'description'  => 'required',
             'facebook'     => 'valid_url',
             'twitter'      => 'valid_url',
             'gplus'        => 'valid_url',

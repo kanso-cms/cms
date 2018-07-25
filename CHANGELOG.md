@@ -1,5 +1,20 @@
 --------------------------------------------------------
 
+### 1.5.2 <small> (25-07-2018)</small>
+
+Update using ```git fetch```.
+
+#### Changes
+* Bumped `Kanso::VERSION` number.
+* User/Author descriptions now use 'TEXT' in the database.
+* ```the_author_bio``` converts new lines to ```<br>```.
+* ```UserManager::create```, ```UserManager::createUser``` and ```UserProvider::create``` all return the new user instance when a new user is successfully created.
+
+#### Bugfixes
+* Fixup on ```Request::fetch``` query strings.
+
+--------------------------------------------------------
+
 ### 1.5.1 <small> (21-06-2018)</small>
 
 Update using ```git fetch```.

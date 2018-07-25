@@ -364,7 +364,7 @@ class Request
     {
         $result   = [];
 
-        $queryStr = $this->environment->QUERY_STRING;
+        $queryStr = trim($this->environment->QUERY_STRING, '/');
 
         if (!empty($queryStr))
         {
