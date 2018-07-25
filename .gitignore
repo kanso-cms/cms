@@ -1,8 +1,6 @@
 # Minified Scripts #
 ###################
-*.min.css
-*.min.js
-*.min.css.map
+
 
 # OS generated files #
 ######################
