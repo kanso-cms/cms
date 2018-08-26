@@ -31,16 +31,24 @@ return
         'hashed_pass' => 'hashedpassword',
     ],
 
-	/**
-	 * ---------------------------------------------------------
-	 * CMS email theme
-	 * ---------------------------------------------------------
-	 *
-	 * These settings setup the styling theme for emails sent by 
-	 * the CMS. They are pretty much self explanatory.
-	 */
-	'theme' => 
-	[
+    /**
+     * ---------------------------------------------------------
+     * Email logging path
+     * ---------------------------------------------------------
+     * 
+     */
+    'log_dir' => APP_DIR.'/storage/emails',
+
+    /**
+     * ---------------------------------------------------------
+     * CMS email theme
+     * ---------------------------------------------------------
+     *
+     * These settings setup the styling theme for emails sent by 
+     * the CMS. They are pretty much self explanatory.
+     */
+    'theme' => 
+    [
         'body_bg'         => '#FFFFFF',
         'content_bg'      => '#FFFFFF',
         'content_border'  => '1px solid #DADADA',
