@@ -25,7 +25,7 @@ class Kanso
 	 *
 	 * @var string
 	 */
-	const VERSION = '1.5.2';
+	const VERSION = '1.6.0';
 
 	/**
 	 * Singleton instance of self

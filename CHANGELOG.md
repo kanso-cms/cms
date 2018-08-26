@@ -1,5 +1,18 @@
 --------------------------------------------------------
 
+### 1.6.0 <small> (27-08-2018)</small>
+
+Update using ```git fetch```.
+
+#### Changes
+* Bumped `Kanso::VERSION` number.
+* Consolidated Admin Panel Sidebar
+
+#### Bugfixes
+* Fixed up error on empty search results
+
+--------------------------------------------------------
+
 ### 1.5.2 <small> (25-07-2018)</small>
 
 Update using ```git fetch```.
