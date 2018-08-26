@@ -247,29 +247,40 @@ function admin_sirebar_links()
 			'icon'     => 'font',
 			'children' => [],
 		],
-		'posts' => [
+		'content' => [
 			'link'     => '/admin/posts/',
-			'text'     => 'Posts',
+			'text'     => 'Content',
 			'icon'     => 'align-left',
-			'children' => [],
-		],
-		'pages' => [
-			'link'     => '/admin/pages/',
-			'text'     => 'Pages',
-			'icon'     => 'file',
-			'children' => [],
-		],
-		'tags' => [
-			'link'     => '/admin/tags/',
-			'text'     => 'Tags',
-			'icon'     => 'tags',
-			'children' => [],
-		],
-		'categories' => [
-			'link'     => '/admin/categories/',
-			'text'     => 'Categories',
-			'icon'     => 'bookmark',
-			'children' => [],
+			'children' =>
+			[
+				'posts' => [
+					'link'     => '/admin/posts/',
+					'text'     => 'Posts',
+					'icon'     => 'align-left',
+				],
+				'pages' => [
+					'link'     => '/admin/pages/',
+					'text'     => 'Pages',
+					'icon'     => 'file',
+				],
+				'tags' => [
+					'link'     => '/admin/tags/',
+					'text'     => 'Tags',
+					'icon'     => 'tags',
+				],
+				'categories' => [
+					'link'     => '/admin/categories/',
+					'text'     => 'Categories',
+					'icon'     => 'bookmark',
+					'children' => [],
+				],
+				'mediaLibrary' => [
+					'link'     => '/admin/media/',
+					'text'     => 'Media',
+					'icon'     => 'camera',
+					'children' => [],
+				],
+			],
 		],
 		'comments' => [
 			'link'     => '/admin/comments/',
@@ -283,12 +294,7 @@ function admin_sirebar_links()
 				],
 			],
 		],
-		'mediaLibrary' => [
-			'link'     => '/admin/media/',
-			'text'     => 'Media',
-			'icon'     => 'camera',
-			'children' => [],
-		],
+		
 		'settings' => [
 			'link'     => '/admin/settings/',
 			'text'     => 'Settings',

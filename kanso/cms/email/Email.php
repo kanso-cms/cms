@@ -9,6 +9,7 @@ namespace kanso\cms\email;
 
 use kanso\framework\file\Filesystem;
 use kanso\cms\email\phpmailer\PHPMailer;
+use kanso\cms\email\Log;
 
 /**
  * CMS email utility
@@ -79,20 +80,30 @@ class Email
     private $smtpSettings;
 
     /**
+     * Mail logger
+     *
+     * @var \kanso\cms\email\Log 
+     */
+    private $log;
+
+    /**
      * Constructor
      *
      * @access public
      * @param  \kanso\framework\file\Filesystem     $filesystem Filesystem instance
      * @param  \kanso\cms\email\phpmailer\PHPMailer $smtpMailer SMTP mail utility
+     * @param  \kanso\cms\email\Log                 $log        Mail logging utility
      * @param  array                                $theme      Array of theme options (optional) (default [])
      * @param  bool                                 $useStmp    Use SMTP to send emails (optional) (default false)
      * @param  array                                $stmp       SMTP setings
      */
-    public function __construct(Filesystem $filesystem, PHPMailer $smtpMailer, $theme = [], $useStmp = false, $smtpSettings = [])
+    public function __construct(Filesystem $filesystem, PHPMailer $smtpMailer, Log $log, $theme = [], $useStmp = false, $smtpSettings = [])
     {
         $this->filesystem = $filesystem;
 
         $this->smtpMailer = $smtpMailer;
+
+        $this->log = $log;
 
         $this->theme = array_merge($this->theme, $theme);
 
@@ -164,6 +175,8 @@ class Email
 
             $mail->send();
 
+            $this->log->save($toEmail, $senderName, $senderEmail, $subject, $content, $format);
+
             return true;
         }
         else
@@ -178,6 +191,8 @@ class Email
             {
                 $headers = 'From: '.$senderEmail.' <'.$senderName.'>' . "\r\n";
             }
+
+            $this->log->save($toEmail, $senderName, $senderEmail, $subject, $content, $format);
 
             return mail($toEmail, $subject, $content, $headers);
         }

@@ -449,25 +449,27 @@ trait Filter
 
         # Get the query
         $query = $this->Request->queries('q');
-        
-        # Validate the query exists
+
         if (!$query || empty(trim($query)))
         {
-            $this->Response->status()->set(404);
-
-            return false;
-        }
+            $query = '';
+        }   
 
         # Get the actual search query | sanitize
         $query = htmlspecialchars(trim(strtolower(urldecode(Str::getAfterLastChar($uri, '=')))));
         $query = Str::getBeforeFirstChar($query, '/');
 
-        # No need to query empty strings
-        if (empty($query))
+        # Validate the query exists
+        if (!$query || empty(trim($query)))
         {
-            $this->Response->status()->set(404);
+            # Empty search results
+            $this->queryStr    = '';
+            $this->posts       = [];
+            $this->postCount   = count($this->posts);
+            $this->searchQuery = '';
+            $this->requestType = 'search';
 
-            return false;
+            return true;
         }
 
         # Filter the posts

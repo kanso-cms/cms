@@ -9,6 +9,7 @@ namespace kanso\cms\application\services;
 
 use kanso\framework\application\services\Service;
 use kanso\cms\email\Email;
+use kanso\cms\email\Log;
 use kanso\cms\email\phpmailer\PHPMailer;
 
 /**
@@ -29,12 +30,14 @@ class EmailService extends Service
 			
 			$config = $container->Config->get('email.smtp_settings');
 
+			$logDir = $container->Config->get('email.log_dir');
+
 			if ($useSmtp && isset($config['hashed_pass']))
 			{
 				$config['password'] = $container->Crypto->decrypt($config['hashed_pass']);
 			}
 
-			return new Email($container->Filesystem, new PHPMailer, $container->Config->get('email.theme'), $useSmtp, $config);
+			return new Email($container->Filesystem, new PHPMailer, new Log($container->Filesystem, $logDir), $container->Config->get('email.theme'), $useSmtp, $config);
 		});
 	}
 }

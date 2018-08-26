@@ -84,6 +84,11 @@ trait Validation
      */
     public function is_custom_post(): bool
     {
+        if (empty($this->requestType))
+        {
+            return false;
+        }
+        
         return Str::getBeforeFirstChar($this->requestType, '-') === 'single' && !$this->is_single();
     }
 
