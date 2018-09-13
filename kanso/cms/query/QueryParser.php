@@ -86,11 +86,11 @@ class QueryParser
         'post_excerpt'   => 'excerpt',
         'post_thumbnail' => 'thumbnail',
 
-        'tag_id'         => 'tags_to_posts.id',
+        'tag_id'         => 'tags.id',
         'tag_name'       => 'tags.name',
         'tag_slug'       => 'tags.slug',
 
-        'category_id'    => 'categories_to_posts.id',
+        'category_id'    => 'categories.id',
         'category_name'  => 'categories.name',
         'category_slug'  => 'categories.slug',
 
