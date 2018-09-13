@@ -1,5 +1,17 @@
 --------------------------------------------------------
 
+### 1.6.1 <small> (13-09-2018)</small>
+
+Update using ```git fetch```.
+
+#### Changes
+* Bumped `Kanso::VERSION` number.
+
+#### Bugfixes
+* Fixed `Query` parser when getting posts by `tag_id` or `category_id` 
+
+--------------------------------------------------------
+
 ### 1.6.0 <small> (27-08-2018)</small>
 
 Update using ```git fetch```.
