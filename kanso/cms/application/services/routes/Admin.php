@@ -104,3 +104,7 @@ $router->post('/admin/writer/(:any)', '\kanso\cms\admin\controllers\Dashboard@wr
 # Admin media
 $router->get('/admin/media/',          '\kanso\cms\admin\controllers\Dashboard@mediaLibrary', '\kanso\cms\admin\models\MediaLibrary');
 $router->post('/admin/media-library/', '\kanso\cms\admin\controllers\Dashboard@mediaLibrary', '\kanso\cms\admin\models\MediaLibrary');
+
+# Admin error logs
+$router->get('/admin/error-logs/',  '\kanso\cms\admin\controllers\Dashboard@errorLogs', '\kanso\cms\admin\models\ErrorLogs');
+$router->post('/admin/error-logs/', '\kanso\cms\admin\controllers\Dashboard@errorLogs', '\kanso\cms\admin\models\ErrorLogs');

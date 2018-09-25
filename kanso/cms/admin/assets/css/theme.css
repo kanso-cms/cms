@@ -577,3 +577,48 @@
 {
   display: block;
 }
+
+/* Error logs */
+.error-logs-list pre, .error-logs-list code
+{
+  font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+  line-height: 1.8;
+  font-size: 1.2rem;
+  -webkit-font-smoothing: initial;
+  -moz-osx-font-smoothing: initial;
+}
+.error-logs-list code
+{
+  display: block;
+  font-size: 1.4rem;
+  color: #717171;
+}
+.error-logs-list pre
+{
+  white-space: normal;
+  max-height: 600px;
+    overflow: auto;
+  border: 1px solid #e0e0e0;
+    border-radius: 3px;
+    padding: 0;
+    margin: 0;
+}
+.error-logs-list .line
+{
+  position: relative;
+  padding-left: 55px;
+}
+.error-logs-list .lineno
+{
+  border-right: 1px dotted #dcdcdc;
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 0 10px 0 10px;
+    color: #c1c1c1;
+}
+.error-logs-list .linecode
+{
+  white-space: pre;
+  padding-right: 20px;
+}

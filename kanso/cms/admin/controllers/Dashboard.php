@@ -189,6 +189,18 @@ class Dashboard extends BaseController
 	}
 
 	/**
+	 * Dispatch settingsErrors request
+	 *
+	 * @access public
+	 */
+	public function settingsErrors()
+	{
+		$this->init('settingsErrors');
+
+		$this->dispatch();
+	}
+
+	/**
 	 * Dispatch settingsTools request
 	 *
 	 * @access public
@@ -196,6 +208,18 @@ class Dashboard extends BaseController
 	public function settingsTools()
 	{
 		$this->init('settingsTools');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch errorLogs request
+	 *
+	 * @access public
+	 */
+	public function errorLogs()
+	{
+		$this->init('errorLogs');
 
 		$this->dispatch();
 	}

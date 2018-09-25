@@ -336,6 +336,12 @@ function admin_sirebar_links()
 			'text'     => 'Tools',
 			'icon'     => 'wrench',
 		];
+		$links['errorLogs'] = [
+		'link'     => '/admin/error-logs/',
+		'text'     => 'Error Logs',
+		'icon'     => 'bug',
+		'children' => [],
+		];
 	}
 
 	$links = Kanso::instance()->Filters->apply('adminSidebar', $links);

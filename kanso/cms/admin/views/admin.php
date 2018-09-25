@@ -67,6 +67,10 @@ else if (
 {
 	require_once('dash-settings.php');
 }
+else if ($ADMIN_PAGE_TYPE === 'errorLogs')
+{
+	require_once('dash-error-logs.php');
+}
 else if ($ADMIN_PAGE_TYPE === 'customPage')
 {
 	require_once('dash-custom-page.php');
