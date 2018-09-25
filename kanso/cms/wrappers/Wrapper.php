@@ -27,13 +27,6 @@ abstract class Wrapper
     protected $SQL;
 
     /**
-     * Database row as array
-     * 
-     * @var array
-     */ 
-    protected $data;
-
-    /**
      * Constructor
      * 
      * @access public

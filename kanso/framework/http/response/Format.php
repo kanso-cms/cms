@@ -16,7 +16,6 @@ use \kanso\framework\utility\Mime;
  */
 class Format
 {
-
     /**
      * Mime type for response
      *

@@ -154,7 +154,7 @@ class Gatekeeper
     }
 
     /**
-     * Reload the current user's data from the database
+     * Returns the CSRF token
      *
      * @access public
      * @return string

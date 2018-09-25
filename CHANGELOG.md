@@ -1,5 +1,21 @@
 --------------------------------------------------------
 
+### 1.6.2 <small> (25-09-2018)</small>
+
+Update using ```git fetch```.
+
+#### Changes
+* `Response` object automatically sends `Cache-Control` headers to disable browser caching of PHP generated content.
+* `Response` object only sends body if request is not 'HEAD'.
+* Added request method `Response` object constructor.
+* Error log records `HTTP REFERRER`.
+* Bumped `Kanso::VERSION` number.
+
+#### Bugfixes
+* Removed on `Wrapper` abstract redeclaring protected `data` property from `MagicArrayAccessTrait`
+
+--------------------------------------------------------
+
 ### 1.6.1 <small> (13-09-2018)</small>
 
 Update using ```git fetch```.

@@ -231,7 +231,7 @@ class HttpService extends Service
 	{
 		$this->container->singleton('Response', function ()
 		{
-			return new Response($this->getProtocol(), new Format, new Body, new Status, new ResponseHeaders, $this->container->Cookie, $this->container->Session, $this->getCache(), $this->getCDN(), $this->container->View);
+			return new Response($this->getProtocol(), new Format, new Body, new Status, new ResponseHeaders, $this->container->Cookie, $this->container->Session, $this->getCache(), $this->getCDN(), $this->container->View, $this->container->Request->getMethod());
 		});
 	}
 

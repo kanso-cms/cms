@@ -153,6 +153,8 @@ class Router
      */
     public function get(string $uri, $callback, $args = null): Router
     {
+        $this->head($uri, $callback, $args);
+        
         return $this->map(Request::METHOD_GET, $uri, $callback, $args);
     }
 

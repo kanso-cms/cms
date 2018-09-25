@@ -98,6 +98,13 @@ class Response
      * @var bool
      */
     private $sent = false;
+
+    /**
+     * The HTTP request method
+     *
+     * @var string
+     */
+    private $requestMethod;
     
     /**
      * Constructor
@@ -112,8 +119,9 @@ class Response
      * @param  \kanso\framework\http\response\Cache    $cache
      * @param  \kanso\framework\http\response\CDN      $CDN
      * @param  \kanso\framework\mvc\view\View          $view
+     * @param  string                                  $requestMethod
      */
-    public function __construct(Protocol $protocol, Format $format, Body $body, Status $status, Headers $headers, Cookie $cookie, Session $session, Cache $cache, CDN $CDN, View $view)
+    public function __construct(Protocol $protocol, Format $format, Body $body, Status $status, Headers $headers, Cookie $cookie, Session $session, Cache $cache, CDN $CDN, View $view, string $requestMethod)
     {
         $this->format = $format;
 
@@ -134,6 +142,8 @@ class Response
         $this->CDN = $CDN;
 
         $this->view = $view;
+
+        $this->requestMethod = $requestMethod;
 
         $this->format->set('text/html');
         
@@ -264,6 +274,14 @@ class Response
         $this->headers->set('Content-length', $this->body->length());
 
         $this->headers->set('Content-Type', $this->format->get().';'.$this->format->getEncoding());
+    
+        $this->headers->set('Expires', gmdate('D, d M Y H:i:s') .' GMT');
+
+        $this->headers->set('Last-Modified', gmdate('D, d M Y H:i:s') .' GMT');
+
+        $this->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+
+        $this->headers->set('Pragma', 'no-cache');
 
         if ($this->status->isRedirect() || $this->status->isEmpty())
         {
@@ -322,7 +340,10 @@ class Response
 
             $this->cookie->send();
 
-            echo $this->body->get();
+            if ($this->requestMethod !== 'HEAD')
+            {
+                echo $this->body->get();
+            }
         }
         
         $this->sent = true;
