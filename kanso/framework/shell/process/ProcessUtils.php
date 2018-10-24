@@ -54,7 +54,7 @@ class ProcessUtils
                     $escapedArgument .= '\\"';
                 } elseif (self::isSurroundedBy($part, '%')) {
                     // Avoid environment variable expansion
-                    $escapedArgument .= '^%"'.substr($part, 1, -1).'"^%';
+                    $escapedArgument .= '^%"' . substr($part, 1, -1) . '"^%';
                 } else {
                     // escape trailing backslash
                     if ('\\' === substr($part, -1)) {
@@ -65,7 +65,7 @@ class ProcessUtils
                 }
             }
             if ($quote) {
-                $escapedArgument = '"'.$escapedArgument.'"';
+                $escapedArgument = '"' . $escapedArgument . '"';
             }
 
             return $escapedArgument;
@@ -80,9 +80,8 @@ class ProcessUtils
      * @param string $caller The name of method call that validates the input
      * @param mixed  $input  The input to validate
      *
-     * @return mixed The validated input
-     *
      * @throws InvalidArgumentException In case the input is not valid
+     * @return mixed                    The validated input
      */
     public static function validateInput($caller, $input)
     {

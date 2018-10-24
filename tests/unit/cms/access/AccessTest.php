@@ -7,9 +7,9 @@
 
 namespace tests\unit\cms\access;
 
+use kanso\cms\access\Access;
 use Mockery;
 use tests\TestCase;
-use kanso\cms\access\Access;
 
 /**
  * @group unit

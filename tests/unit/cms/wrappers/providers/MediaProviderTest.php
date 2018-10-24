@@ -7,9 +7,9 @@
 
 namespace tests\unit\cms\wrappers\providers;
 
+use kanso\cms\wrappers\providers\MediaProvider;
 use Mockery;
 use tests\TestCase;
-use kanso\cms\wrappers\providers\MediaProvider;
 
 /**
  * @group unit
@@ -54,7 +54,7 @@ class MediaProviderTest extends TestCase
     public function testById()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $provider = new MediaProvider($sql, []);
 
         $sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);
@@ -74,7 +74,7 @@ class MediaProviderTest extends TestCase
     public function testByKey()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $provider = new MediaProvider($sql, []);
 
         $sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);
@@ -94,7 +94,7 @@ class MediaProviderTest extends TestCase
     public function testByKeys()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $provider = new MediaProvider($sql, []);
 
         $sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);

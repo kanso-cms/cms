@@ -7,10 +7,10 @@
 
 namespace tests\unit\framework\mvc;
 
-use Mockery;
-use tests\TestCase;
 use kanso\framework\mvc\controller\Controller;
 use kanso\framework\mvc\model\Model;
+use Mockery;
+use tests\TestCase;
 
 class TestController extends Controller
 {

@@ -11,8 +11,8 @@
 
 namespace kanso\framework\shell\process\pipes;
 
-use kanso\framework\shell\process\Process;
 use kanso\framework\shell\process\exception\RuntimeException;
+use kanso\framework\shell\process\Process;
 
 /**
  * WindowsPipes implementation uses temporary files as handles.
@@ -27,14 +27,14 @@ use kanso\framework\shell\process\exception\RuntimeException;
 class WindowsPipes extends AbstractPipes
 {
     /** @var array */
-    private $files = array();
+    private $files = [];
     /** @var array */
-    private $fileHandles = array();
+    private $fileHandles = [];
     /** @var array */
-    private $readBytes = array(
+    private $readBytes = [
         Process::STDOUT => 0,
         Process::STDERR => 0,
-    );
+    ];
     /** @var bool */
     private $haveReadSupport;
 
@@ -47,10 +47,10 @@ class WindowsPipes extends AbstractPipes
             // Workaround for this problem is to use temporary files instead of pipes on Windows platform.
             //
             // @see https://bugs.php.net/bug.php?id=51800
-            $this->files = array(
+            $this->files = [
                 Process::STDOUT => tempnam(sys_get_temp_dir(), 'out_sf_proc'),
                 Process::STDERR => tempnam(sys_get_temp_dir(), 'err_sf_proc'),
-            );
+            ];
             foreach ($this->files as $offset => $file) {
                 if (false === $file || false === $this->fileHandles[$offset] = @fopen($file, 'rb')) {
                     throw new RuntimeException('A temporary file could not be opened to write the process output to, verify that your TEMP environment variable is writable');
@@ -75,21 +75,21 @@ class WindowsPipes extends AbstractPipes
         if (!$this->haveReadSupport) {
             $nullstream = fopen('NUL', 'c');
 
-            return array(
-                array('pipe', 'r'),
+            return [
+                ['pipe', 'r'],
                 $nullstream,
                 $nullstream,
-            );
+            ];
         }
 
         // We're not using pipe on Windows platform as it hangs (https://bugs.php.net/bug.php?id=51800)
         // We're not using file handles as it can produce corrupted output https://bugs.php.net/bug.php?id=65650
         // So we redirect output within the commandline and pass the nul device to the process
-        return array(
-            array('pipe', 'r'),
-            array('file', 'NUL', 'w'),
-            array('file', 'NUL', 'w'),
-        );
+        return [
+            ['pipe', 'r'],
+            ['file', 'NUL', 'w'],
+            ['file', 'NUL', 'w'],
+        ];
     }
 
     /**
@@ -107,7 +107,7 @@ class WindowsPipes extends AbstractPipes
     {
         $this->unblock();
         $w = $this->write();
-        $read = $r = $e = array();
+        $read = $r = $e = [];
 
         if ($blocking) {
             if ($w) {
@@ -157,7 +157,7 @@ class WindowsPipes extends AbstractPipes
         foreach ($this->fileHandles as $handle) {
             fclose($handle);
         }
-        $this->fileHandles = array();
+        $this->fileHandles = [];
     }
 
     /**
@@ -170,6 +170,6 @@ class WindowsPipes extends AbstractPipes
                 @unlink($filename);
             }
         }
-        $this->files = array();
+        $this->files = [];
     }
 }

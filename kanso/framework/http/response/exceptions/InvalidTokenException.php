@@ -8,10 +8,9 @@
 namespace kanso\framework\http\response\exceptions;
 
 use Throwable;
-use kanso\framework\http\response\exceptions\RequestException;
 
 /**
- * 498 Exception
+ * 498 Exception.
  *
  * @author Joe J. Howard
  */

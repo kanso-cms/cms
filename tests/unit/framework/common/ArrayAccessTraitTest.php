@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\common;
 
-use tests\TestCase;
 use kanso\framework\common\ArrayAccessTrait;
+use tests\TestCase;
 
 // --------------------------------------------------------------------------
 // START CLASSES
@@ -80,7 +80,7 @@ class ArrayAccessTraitTest extends TestCase
     {
         $arrayAccess = new TestArrayAccess;
 
-        $arrayAccess->setMultiple(['foo' => ['bar' => 'baz'] ]);
+        $arrayAccess->setMultiple(['foo' => ['bar' => 'baz']]);
 
         $this->assertEquals(['bar' => 'baz'], $arrayAccess->get('foo'));
 

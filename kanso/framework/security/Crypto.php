@@ -7,55 +7,53 @@
 
 namespace kanso\framework\security;
 
-use RuntimeException;
 use kanso\framework\security\crypto\Signer;
-use kanso\framework\security\password\encrypters\Encrypter as passwordEncrypter;
-use kanso\framework\security\crypto\encrypters\Encrypter as ctyptoEncrypter;
+use RuntimeException;
 
 /**
- * Encryption/Decryption and password hashing 
+ * Encryption/Decryption and password hashing.
  *
  * @author Joe J. Howard
  */
 class Crypto
 {
-    /**
-     * Encryption/Decryption library
-     *
-     * @var object
-     */
+	/**
+	 * Encryption/Decryption library.
+	 *
+	 * @var object
+	 */
 	private $encrytper;
 
     /**
-     * Encryption/Decryption signer
+     * Encryption/Decryption signer.
      *
      * @var \kanso\framework\security\crypto\Signer
      */
     private $signer;
 
     /**
-     * Password hashing library
+     * Password hashing library.
      *
      * @var object
      */
     private $password;
 
-    /**
-     * Default memory limit
-     *
-     * @var string
-     */
+	/**
+	 * Default memory limit.
+	 *
+	 * @var string
+	 */
 	private $defaultMemory;
 
-    /**
-     * Constructor
-     *
-     * @access public
-     * @param  \kanso\framework\security\crypto\Signer $signer     Encryption/Decryption signer
-     * @param  object                                  $encrytper  Encryption/Decryption library
-     * @param  object                                  $password   Password hashing library
-     * @throws RuntimeException If encrypter or password objects are not extensions
-     */
+	/**
+	 * Constructor.
+	 *
+	 * @access public
+	 * @param  \kanso\framework\security\crypto\Signer $signer    Encryption/Decryption signer
+	 * @param  object                                  $encrytper Encryption/Decryption library
+	 * @param  object                                  $password  Password hashing library
+	 * @throws RuntimeException                        If encrypter or password objects are not extensions
+	 */
 	public function __construct(Signer $signer, $encrytper, $password)
 	{
         $this->defaultMemory = $this->getDefaultMemory();
@@ -68,7 +66,7 @@ class Crypto
 	}
 
     /**
-     * Encrypt a string
+     * Encrypt a string.
      *
      * @access public
      * @param  string $str String to encrypt
@@ -77,52 +75,52 @@ class Crypto
     public function encrypt(string $str): string
     {
         $this->boostMemory();
-        
+
         $data = $this->signer->sign($this->encrytper->encrypt($str));
-        
+
         $this->restoreMemory();
-        
+
         return $data;
     }
-	
+
     /**
-     * Decrypt a string
+     * Decrypt a string.
      *
      * @access public
-     * @param  string $str Encrypted string to decrypt
+     * @param  string       $str Encrypted string to decrypt
      * @return string|false
      */
     public function decrypt(string $str)
     {
         $this->boostMemory();
-        
+
         $unsigned = $this->signer->validate($str);
-        
+
         if (!$unsigned)
         {
             return false;
         }
-        
+
         $decrypt = $this->encrytper->decrypt($unsigned);
-        
+
         $this->restoreMemory();
-        
+
         return $decrypt;
     }
 
-    /**
-     * Get the password hasher
-     *
-     * @access public
-     * @return object
-     */
+	/**
+	 * Get the password hasher.
+	 *
+	 * @access public
+	 * @return object
+	 */
 	public function password()
     {
         return $this->password;
     }
 
     /**
-     * Get the data signer
+     * Get the data signer.
      *
      * @access public
      * @return object
@@ -133,7 +131,7 @@ class Crypto
     }
 
     /**
-     * Get the default memory limit
+     * Get the default memory limit.
      *
      * @access private
      * @return string
@@ -144,7 +142,7 @@ class Crypto
     }
 
     /**
-     * Boost the memory to 1GB during encryption
+     * Boost the memory to 1GB during encryption.
      *
      * @access private
      */
@@ -154,7 +152,7 @@ class Crypto
     }
 
     /**
-     * Restore the memory after encryption
+     * Restore the memory after encryption.
      *
      * @access private
      */

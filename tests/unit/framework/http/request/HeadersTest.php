@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\http\request;
 
-use tests\TestCase;
 use kanso\framework\http\request\Headers;
+use tests\TestCase;
 
 /**
  * @group unit
@@ -35,10 +35,10 @@ class HeadersTest extends TestCase
 	public function testConstructor()
 	{
 		$headers = new Headers($this->getAcceptHeaders());
-		
+
 		$headers = new Headers;
-		
-		$this->assertTrue($headers instanceOf Headers);
+
+		$this->assertTrue($headers instanceof Headers);
 	}
 
 	/**
@@ -47,7 +47,7 @@ class HeadersTest extends TestCase
 	public function testCountSet()
 	{
 		$headers = new Headers(['FOO' => 'bar']);
-		
+
 		$this->assertSame(1, count($headers->asArray()));
 	}
 
@@ -57,9 +57,9 @@ class HeadersTest extends TestCase
 	public function testIterateSet()
 	{
 		$headers    = new Headers(['FOO' => 'bar']);
-		
+
 		$iterations = 0;
-		
+
 		foreach($headers->asArray() as $header)
 		{
 			$iterations++;
@@ -72,11 +72,11 @@ class HeadersTest extends TestCase
 	 *
 	 */
 	public function testReload()
-	{		
+	{
 		$headers = new Headers;
-		
+
 		$headers->reload($this->getAcceptHeaders());
-		
+
 		$this->assertEquals('UTF-8,FOO-1; q=0.1,UTF-16;q=0.9', $headers->HTTP_ACCEPT_CHARSET);
 	}
 
@@ -84,11 +84,11 @@ class HeadersTest extends TestCase
 	 *
 	 */
 	public function testSet()
-	{		
+	{
 		$headers = new Headers($this->getAcceptHeaders());
-		
+
 		$headers->REQUEST_METHOD = 'POST';
-		
+
 		$this->assertEquals('POST', $headers->REQUEST_METHOD);
 	}
 
@@ -96,9 +96,9 @@ class HeadersTest extends TestCase
 	 *
 	 */
 	public function testGet()
-	{		
+	{
 		$headers = new Headers(['foo' => 'bar']);
-		
+
 		$this->assertEquals('bar', $headers->asArray()['FOO']);
 	}
 
@@ -106,11 +106,11 @@ class HeadersTest extends TestCase
 	 *
 	 */
 	public function testUnset()
-	{		
+	{
 		$headers = new Headers(['foo' => 'bar']);
-		
+
 		unset($headers->foo);
-		
+
 		$this->assertEquals(null, $headers->FOO);
 
 		$this->assertSame(0, count($headers->asArray()));
@@ -144,7 +144,7 @@ class HeadersTest extends TestCase
 	public function testAcceptableContentTypes()
 	{
 		$headers = new Headers($this->getAcceptHeaders());
-		
+
 		$this->assertSame(['text/html', 'application/xhtml+xml', 'image/webp', 'application/xml', '*/*', 'foo/bar'], $headers->acceptableContentTypes());
 	}
 	/**
@@ -153,7 +153,7 @@ class HeadersTest extends TestCase
 	public function testAcceptableContentTypesWithNoHeaders()
 	{
 		$headers = new Headers;
-		
+
 		$this->assertSame(['default'], $headers->acceptableContentTypes('default'));
 	}
 	/**
@@ -162,7 +162,7 @@ class HeadersTest extends TestCase
 	public function testAcceptableLanguages()
 	{
 		$headers = new Headers($this->getAcceptHeaders());
-		
+
 		$this->assertSame(['en-US', 'en', 'da', 'fr', 'nb', 'sv', 'foo'], $headers->acceptableLanguages());
 	}
 	/**
@@ -171,7 +171,7 @@ class HeadersTest extends TestCase
 	public function testAcceptableLanguagesWithNoHeaders()
 	{
 		$headers = new Headers;
-		
+
 		$this->assertSame(['default'], $headers->acceptableLanguages('default'));
 	}
 	/**
@@ -180,7 +180,7 @@ class HeadersTest extends TestCase
 	public function testAcceptableCharsets()
 	{
 		$headers = new Headers($this->getAcceptHeaders());
-		
+
 		$this->assertSame(['UTF-8', 'UTF-16', 'FOO-1'], $headers->acceptableCharsets());
 	}
 	/**
@@ -189,7 +189,7 @@ class HeadersTest extends TestCase
 	public function acceptableCharsetsWithNoHeaders()
 	{
 		$headers = new Headers;
-		
+
 		$this->assertSame(['default'], $headers->acceptableCharsets('default'));
 	}
 	/**
@@ -198,7 +198,7 @@ class HeadersTest extends TestCase
 	public function testAcceptableEncodings()
 	{
 		$headers = new Headers($this->getAcceptHeaders());
-		
+
 		$this->assertSame(['gzip', 'deflate', 'sdch', 'foobar'], $headers->acceptableEncodings());
 	}
 	/**
@@ -207,7 +207,7 @@ class HeadersTest extends TestCase
 	public function testAcceptableEncodingsWithNoHeaders()
 	{
 		$headers = new Headers;
-		
+
 		$this->assertSame(['default'], $headers->acceptableEncodings('default'));
 	}
 }

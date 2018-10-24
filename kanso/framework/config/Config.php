@@ -7,21 +7,20 @@
 
 namespace kanso\framework\config;
 
-use kanso\framework\config\Loader;
 use kanso\framework\utility\Arr;
 
 /**
- * Kanso framework configuration manager
+ * Kanso framework configuration manager.
  *
  * @author Joe J. Howard
  */
 class Config
 {
-	/**
-	 * File loader
-	 *
-	 * @var \kanso\framework\config\Loader
-	 */
+	 /**
+	  * File loader.
+	  *
+	  * @var \kanso\framework\config\Loader
+	  */
 	 protected $loader;
 
 	/**
@@ -127,7 +126,7 @@ class Config
 	}
 
 	/**
-	 * Get a default setting - bypass the environment
+	 * Get a default setting - bypass the environment.
 	 *
 	 * @access public
 	 * @param  string     $key     Config key
@@ -175,7 +174,7 @@ class Config
 	}
 
 	/**
-	 * Save the configuration
+	 * Save the configuration.
 	 *
 	 * @access public
 	 * @return mixed

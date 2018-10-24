@@ -7,12 +7,12 @@
 
 namespace kanso\framework\config;
 
-use kanso\framework\file\Filesystem;
 use kanso\framework\file\CascadingFilesystem;
+use kanso\framework\file\Filesystem;
 use RuntimeException;
 
 /**
- * Cascading file loader
+ * Cascading file loader.
  *
  * @author Joe J. Howard
  */
@@ -20,7 +20,7 @@ class Loader
 {
     use CascadingFilesystem;
 
-    /**
+	/**
 	 * File system instance.
 	 *
 	 * @var \mako\file\Filesystem
@@ -53,7 +53,7 @@ class Loader
 	{
 		// Load configuration
 		foreach($this->getCascadingFilePaths($file) as $path)
-		{			
+		{
 			if($this->filesystem->exists($path))
 			{
 				$config = $this->filesystem->include($path);
@@ -65,7 +65,7 @@ class Loader
 		// Validate
 		if (!isset($config))
 		{
-			throw new RuntimeException(vsprintf("%s(): The [ %s ] config file does not exist.", [__METHOD__, $file]));
+			throw new RuntimeException(vsprintf('%s(): The [ %s ] config file does not exist.', [__METHOD__, $file]));
 		}
 
 		// Merge environment specific configuration
@@ -99,23 +99,23 @@ class Loader
 	 * @return bool
 	 */
 	public function save(array $data, string $environment = null): bool
-	{		
+	{
 		foreach ($data as $file => $fileData)
 		{
 			$path = $this->getFilePath($file, null, $environment);
 
-			$this->filesystem->putContents($path, "<?php\nreturn\n".$this->var_export($fileData).";\n?>\n");
+			$this->filesystem->putContents($path, "<?php\nreturn\n" . $this->var_export($fileData) . ";\n?>\n");
 		}
 
 		return true;
 	}
 
 	/**
-	 * Pretty Print "var_export"
+	 * Pretty Print "var_export".
 	 *
 	 * @access private
-	 * @param  mixed   $data Data to save
-	 * @param  array   $opts Print options (optional) (default [])
+	 * @param  mixed  $data Data to save
+	 * @param  array  $opts Print options (optional) (default [])
 	 * @return string
 	 */
 	private function var_export($data, array $opts = []): string
@@ -123,9 +123,9 @@ class Loader
 		$defaults = [
 			'indent'      => '',
 			'tab'         => '    ',
-			'array-align' => true
+			'array-align' => true,
 		];
-		
+
 		$opts = array_merge($defaults, $opts);
 
 	    switch (gettype($data))
@@ -134,28 +134,28 @@ class Loader
 	            $r         = [];
 	            $indexed   = array_keys($data) === range(0, count($data) - 1);
 	            $maxLength = $opts['array-align'] && !empty($data) ? max(array_map('strlen', array_map('trim', array_keys($data)))) + 2 : 0;
-	            
+
 	            foreach ($data as $key => $value)
 	            {
-	                $key = str_replace("'' . \"\\0\" . '*' . \"\\0\" . ", "", $this->var_export($key));
-	                
+	                $key = str_replace("'' . \"\\0\" . '*' . \"\\0\" . ", '', $this->var_export($key));
+
 	                $r[] = $opts['indent'] . $opts['tab']
 	                    . ($indexed ? '' : str_pad($key, $maxLength) . ' => ')
 	                    . $this->var_export($value, array_merge($opts, ['indent' => $opts['indent'] . $opts['tab']]));
 	            }
 
-	            return "\n".str_repeat(" ", strlen($opts['indent']))."[\n" . implode(",\n", $r) . "\n" . $opts['indent'] . "]";
+	            return "\n" . str_repeat(' ', strlen($opts['indent'])) . "[\n" . implode(",\n", $r) . "\n" . $opts['indent'] . ']';
 
 	        case 'boolean':
-	            
+
 	            return $data ? 'true' : 'false';
-	        
+
 	        case 'NULL':
-	            
+
 	            return 'null';
-	        
+
 	        default:
-	            
+
 	            return var_export($data, true);
 	    }
 	}

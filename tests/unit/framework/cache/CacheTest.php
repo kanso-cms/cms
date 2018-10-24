@@ -7,9 +7,9 @@
 
 namespace tests\unit\framework\cache;
 
+use kanso\framework\cache\Cache;
 use Mockery;
 use tests\TestCase;
-use kanso\framework\cache\Cache;
 
 /**
  * @group unit

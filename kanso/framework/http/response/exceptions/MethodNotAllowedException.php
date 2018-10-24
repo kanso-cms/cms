@@ -8,20 +8,19 @@
 namespace kanso\framework\http\response\exceptions;
 
 use Throwable;
-use kanso\framework\http\response\exceptions\RequestException;
 
 /**
- * 405 Exception
+ * 405 Exception.
  *
  * @author Joe J. Howard
  */
 class MethodNotAllowedException extends RequestException
 {
-	/**
-	 * Allowed methods.
-	 *
-	 * @var array
-	 */
+	 /**
+	  * Allowed methods.
+	  *
+	  * @var array
+	  */
 	 protected $allowedMethods;
 
 	/**

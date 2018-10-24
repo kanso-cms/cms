@@ -15,7 +15,7 @@ use tests\TestCase;
  */
 class QueryIncludesTest extends TestCase
 {
-	private $queryMethods = 
+	private $queryMethods =
 	[
 		'the_attachment',
 		'all_the_attachments',
@@ -144,7 +144,7 @@ class QueryIncludesTest extends TestCase
 		'is_not_found',
 	];
 
-	private $queryCalls = 
+	private $queryCalls =
 	[
 		'the_attachment' => [null, 'the_attachment'],
 		'all_the_attachments' => [null, 'all_the_attachments'],
@@ -284,7 +284,7 @@ class QueryIncludesTest extends TestCase
 
 		$kanso->Query = $query;
 
-		require_once KANSO_DIR.'/cms/query/Includes.php';
+		require_once KANSO_DIR . '/cms/query/Includes.php';
 
 		foreach ($this->queryMethods as $func)
 		{
@@ -306,7 +306,7 @@ class QueryIncludesTest extends TestCase
 
 		$kanso->Query = $query;
 
-		require_once KANSO_DIR.'/cms/query/Includes.php';
+		require_once KANSO_DIR . '/cms/query/Includes.php';
 
 		global $KANSO_QUERY;
 		$KANSO_QUERY = $query;
@@ -322,7 +322,7 @@ class QueryIncludesTest extends TestCase
 		}
 
 		unset($KANSO_QUERY);
-    	
+
     	$KANSO_QUERY = null;
 	}
 }

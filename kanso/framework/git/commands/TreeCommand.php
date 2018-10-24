@@ -5,12 +5,12 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\framework\git\commands; 
+namespace kanso\framework\git\commands;
 
 use kanso\framework\git\Command;
 
 /**
- * Git ls-tree command
+ * Git ls-tree command.
  *
  * @see  https://git-scm.com/docs/git-ls-tree
  * @author Joe J. Howard
@@ -18,17 +18,17 @@ use kanso\framework\git\Command;
 class TreeCommand extends Command
 {
     /**
-     * Magic method invoke
-     * 
-     * @param  array $options   Command options (optional) (default [])
-     * @param  array $params    Command params  (optional) (default [])
-     * @param  bool  $recursive Recursively iterate (optional) (default false)
-     * @param  bool  $asRaw     Return raw output   (optional) (default false)
+     * Magic method invoke.
+     *
+     * @param  array      $options   Command options (optional) (default [])
+     * @param  array      $params    Command params  (optional) (default [])
+     * @param  bool       $recursive Recursively iterate (optional) (default false)
+     * @param  bool       $asRaw     Return raw output   (optional) (default false)
      * @return bool|array
      */
     public function __invoke($options = [], $params = [], bool $recursive = false, bool $asRaw = false)
     {
-        # Default options
+        // Default options
         $defaults = false;
         if (empty($options))
         {
@@ -36,39 +36,39 @@ class TreeCommand extends Command
             $options  = ['full-name', 'full-tree', 'long'];
         }
 
-        # Is this recursive
+        // Is this recursive
         if ($recursive)
         {
             $options[] = 'r';
         }
 
-        # Run the command
+        // Run the command
         $output = $this->run('ls-tree', [$options, $params]);
 
-        # Validate the output
+        // Validate the output
         if (!$this->is_successful() || empty(trim($output)))
         {
             return false;
         }
 
-        # Return raw output
+        // Return raw output
         if ($asRaw || !$defaults)
         {
             return $output;
         }
 
-        # Default tree objects
+        // Default tree objects
         $objects = [];
 
-        # Process the output
+        // Process the output
         $lines  = preg_split('/\r?\n/', rtrim($output), -1, PREG_SPLIT_NO_EMPTY);
 
-        # Object types
-        $types = array(
+        // Object types
+        $types = [
             'submodule' => 0,
             'tree'      => 1,
-            'blob'      => 2
-        );
+            'blob'      => 2,
+        ];
 
         foreach ($lines as $line)
         {
@@ -96,10 +96,10 @@ class TreeCommand extends Command
 
         usort($objects, function($a, $b)
         {
-            return strnatcasecmp($a["sort"], $b["sort"]);
+            return strnatcasecmp($a['sort'], $b['sort']);
         });
 
         return $objects;
 
     }
-} 
+}

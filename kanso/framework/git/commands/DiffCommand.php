@@ -5,13 +5,13 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\framework\git\commands; 
+namespace kanso\framework\git\commands;
 
 use kanso\framework\git\Command;
 use kanso\framework\git\Command\utility\DiffParser;
 
 /**
- * Git diff command
+ * Git diff command.
  *
  * @see  https://git-scm.com/docs/git-diff
  * @author Joe J. Howard
@@ -19,18 +19,18 @@ use kanso\framework\git\Command\utility\DiffParser;
 class DiffCommand extends Command
 {
     /**
-     * Magic method invoke
-     * 
-     * @param  array $options Command options (optional) (default [])
-     * @param  array $params  Command params  (optional) (default [])
+     * Magic method invoke.
+     *
+     * @param  array       $options Command options (optional) (default [])
+     * @param  array       $params  Command params  (optional) (default [])
      * @return false|array
      */
     public function __invoke($options = [], $params = [], $limitDiff = true)
     {
-        # Resolve the options
-        $options = array_merge([ 'minimal', 'no-color', 'no-ext-diff', 'M', 'dst-prefix=DST/', 'src-prefix=SRC/'], $options);
-        
-        # Run the command
+        // Resolve the options
+        $options = array_merge(['minimal', 'no-color', 'no-ext-diff', 'M', 'dst-prefix=DST/', 'src-prefix=SRC/'], $options);
+
+        // Run the command
         $output = $this->run('diff', [$options, $params]);
 
         if (!$this->is_successful())
@@ -42,11 +42,11 @@ class DiffCommand extends Command
     }
 
     /**
-     * Get a diff summary
-     * 
-     * @param  string $left   Left branch
-     * @param  string $right  Right branch
-     * @param  string $path   Directory path (optional) (default null)
+     * Get a diff summary.
+     *
+     * @param  string      $left  Left branch
+     * @param  string      $right Right branch
+     * @param  string      $path  Directory path (optional) (default null)
      * @return false|array
      */
     public function summary(string $left, string $right = null, string $path = null)
@@ -56,11 +56,11 @@ class DiffCommand extends Command
 
         if (is_null($right))
         {
-            $params[] = $left.'^!';
-        } 
+            $params[] = $left . '^!';
+        }
         else
         {
-            $params[] = $left.'..'.$right;
+            $params[] = $left . '..' . $right;
         }
 
         if ($path)
@@ -69,7 +69,7 @@ class DiffCommand extends Command
             $params[] = $path;
         }
 
-        # Run the command
+        // Run the command
         $output = $this->run('diff', [$options, $params]);
 
         if (!$this->is_successful())
@@ -77,7 +77,7 @@ class DiffCommand extends Command
             return false;
         }
 
-        # Default return value
+        // Default return value
         $return =
         [
             'files'      => [],

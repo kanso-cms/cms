@@ -7,9 +7,9 @@
 
 namespace tests\unit\cms\wrappers;
 
+use kanso\cms\wrappers\Category;
 use Mockery;
 use tests\TestCase;
-use kanso\cms\wrappers\Category;
 
 /**
  * @group unit
@@ -22,7 +22,7 @@ class CategoryTest extends TestCase
     public function testInstantiate()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $category = new Category($sql, ['name' => 'foo']);
 
         $this->assertEquals('foo', $category->name);
@@ -34,7 +34,7 @@ class CategoryTest extends TestCase
     public function testSetGet()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $category = new Category($sql);
 
         $category->name = 'baz';
@@ -48,7 +48,7 @@ class CategoryTest extends TestCase
     public function testHas()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $category = new Category($sql);
 
         $category->name = 'baz';
@@ -64,7 +64,7 @@ class CategoryTest extends TestCase
     public function testRemove()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $category = new Category($sql);
 
         $category->name = 'baz';
@@ -80,7 +80,7 @@ class CategoryTest extends TestCase
     public function testAsArray()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $category = new Category($sql, ['name' => 'foo']);
 
         $this->assertEquals(['name' => 'foo'], $category->asArray());
@@ -92,7 +92,7 @@ class CategoryTest extends TestCase
     public function testDeleteEmpty()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $category = new Category($sql, ['name' => 'foo']);
 
         $this->assertFalse($category->delete());
@@ -104,7 +104,7 @@ class CategoryTest extends TestCase
     public function testDeleteTrue()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $category = new Category($sql, ['id' => 2, 'name' => 'foo', 'parent_id' => null]);
 
         $sql->shouldReceive('DELETE_FROM')->with('categories')->once()->andReturn($sql);
@@ -126,7 +126,7 @@ class CategoryTest extends TestCase
     public function testDeleteFalse()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $category = new Category($sql, ['name' => 'foo']);
 
         $this->assertFalse($category->delete());
@@ -138,7 +138,7 @@ class CategoryTest extends TestCase
     public function testDeleteAdmin()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $category = new Category($sql, ['id' => 1, 'name' => 'foo']);
 
         $category->delete();
@@ -152,7 +152,7 @@ class CategoryTest extends TestCase
         $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $category = new Category($sql, ['slug' => 'categorieslug']);
 
         $sql->shouldReceive('INSERT_INTO')->with('categories')->once()->andReturn($sql);
@@ -176,7 +176,7 @@ class CategoryTest extends TestCase
     public function testSaveExisting()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $category = new Category($sql, ['id' => 1, 'slug' => 'categorieslug']);
 
         $sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);
@@ -204,7 +204,7 @@ class CategoryTest extends TestCase
     public function testClear()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $category = new Category($sql, ['id' => 2, 'slug' => 'categorieslug']);
 
         $this->removeAllJoins($sql);
@@ -220,7 +220,7 @@ class CategoryTest extends TestCase
     public function testChildren()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $category = new Category($sql, ['id' => 2, 'slug' => 'categorieslug']);
 
         $sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);

@@ -7,11 +7,11 @@
 
 namespace tests\unit\framework\file;
 
-use tests\TestCase;
 use kanso\framework\file\CascadingFilesystem;
+use tests\TestCase;
 
 /**
- * Cascading file loader
+ * Cascading file loader.
  */
 class Loader
 {
@@ -42,8 +42,8 @@ class CascadingFilesystemTest extends TestCase
 
 		$file = substr(__FILE__, strrpos(__FILE__, '/') + 1);
 
-		$file = substr($file, 0,strrpos($file, '.'));
-		
+		$file = substr($file, 0, strrpos($file, '.'));
+
 		$this->assertEquals(__FILE__, $loader->getFilePath($file));
 	}
 }

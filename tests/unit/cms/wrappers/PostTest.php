@@ -7,9 +7,9 @@
 
 namespace tests\unit\cms\wrappers;
 
+use kanso\cms\wrappers\Post;
 use Mockery;
 use tests\TestCase;
-use kanso\cms\wrappers\Post;
 
 /**
  * @group unit
@@ -327,7 +327,7 @@ class PostTest extends TestCase
 
         $this->getMeta($sql);
 
-        $this->assertEquals(['foo' => 'bar','bar' => 'baz'], $post->meta);
+        $this->assertEquals(['foo' => 'bar', 'bar' => 'baz'], $post->meta);
     }
 
     /**
@@ -463,7 +463,7 @@ class PostTest extends TestCase
         }
 
         $config->shouldReceive('get')->with('cms.permalinks')->andReturn('year/month/postname/');
-        
+
         $tag = Mockery::mock('\kanso\cms\wrappers\Tag');
         $tag->name = 'html';
         $tag->slug = 'html';
@@ -528,7 +528,7 @@ class PostTest extends TestCase
             'modified'    => time(),
             'status'      => 'published',
             'type'        => 'post',
-            'slug'        =>  date('Y').'/'.date('m').'/foo-bar/',
+            'slug'        =>  date('Y') . '/' . date('m') . '/foo-bar/',
             'title'       => 'Foo Bar',
             'excerpt'     => 'Hello foo bar',
             'author_id'   => 1,
@@ -562,9 +562,9 @@ class PostTest extends TestCase
 
         $sql->shouldReceive('WHERE')->with('post_id', '=', 1)->once()->andReturn($sql);
 
-        $sql->shouldReceive('ROW')->andReturn(['id' => 1, 'post_id' => 1, 'content' => serialize(['foo' => 'bar','bar' => 'baz'])])->once();
+        $sql->shouldReceive('ROW')->andReturn(['id' => 1, 'post_id' => 1, 'content' => serialize(['foo' => 'bar', 'bar' => 'baz'])])->once();
 
-        return ['foo' => 'bar','bar' => 'baz'];
+        return ['foo' => 'bar', 'bar' => 'baz'];
     }
 
     /**
@@ -573,7 +573,7 @@ class PostTest extends TestCase
     private function getThumbnail($mediaProvider)
     {
         $thumbnail = Mockery::mock('\kanso\cms\wrappers\Media');
-        
+
         $thumbnail->id = 1;
 
         $mediaProvider->shouldReceive('byId')->with(1)->once()->andReturn($thumbnail);
@@ -598,7 +598,7 @@ class PostTest extends TestCase
 
         $sql->shouldReceive('FIND_ALL')->andReturn([
             ['id' => 1],
-            ['id' => 2]
+            ['id' => 2],
         ])->once();
 
         $comment1 = Mockery::mock('\kanso\cms\wrappers\Comment');
@@ -627,7 +627,7 @@ class PostTest extends TestCase
 
         $sql->shouldReceive('FIND_ALL')->andReturn([
             ['id' => 1, 'slug' => 'html', 'name' => 'html'],
-            ['id' => 2, 'slug' => 'css',  'name' => 'css']
+            ['id' => 2, 'slug' => 'css',  'name' => 'css'],
         ])->once();
 
         $tag1 = Mockery::mock('\kanso\cms\wrappers\Tag');
@@ -662,7 +662,7 @@ class PostTest extends TestCase
 
         $sql->shouldReceive('FIND_ALL')->andReturn([
             ['id' => 1, 'slug' => 'html', 'name' => 'html'],
-            ['id' => 2, 'slug' => 'css',  'name' => 'css']
+            ['id' => 2, 'slug' => 'css',  'name' => 'css'],
         ])->once();
 
         $cat1 = Mockery::mock('\kanso\cms\wrappers\Category');

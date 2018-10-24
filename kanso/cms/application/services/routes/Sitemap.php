@@ -6,10 +6,10 @@
  */
 
 /**
- * CMS Application sitemap route
+ * CMS Application sitemap route.
  *
  * @author Joe J. Howard
  */
 
-# Sitemap
-$router->get('/'.$config->get('cms.sitemap_route'), '\kanso\cms\application\Application::loadSiteMap');
+// Sitemap
+$router->get('/' . $config->get('cms.sitemap_route'), '\kanso\cms\application\Application::loadSiteMap');

@@ -5,12 +5,12 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\framework\git\commands; 
+namespace kanso\framework\git\commands;
 
 use kanso\framework\git\Command;
 
 /**
- * Git log command
+ * Git log command.
  *
  * @see  https://git-scm.com/docs/git-log
  * @author Joe J. Howard
@@ -18,15 +18,15 @@ use kanso\framework\git\Command;
 class LogCommand extends Command
 {
     /**
-     * Magic method invoke
-     * 
-     * @param  array $options Command options (optional) (default [])
-     * @param  array $params  Command params  (optional) (default [])
+     * Magic method invoke.
+     *
+     * @param  array      $options Command options (optional) (default [])
+     * @param  array      $params  Command params  (optional) (default [])
      * @return bool|array
      */
     public function __invoke(array $options = [], array $params = [])
     {
-        # Resolve the options
+        // Resolve the options
         if (isset($options['limit']))
         {
             $options['max-count'] = $options['limit'];
@@ -34,13 +34,13 @@ class LogCommand extends Command
         }
         $options = array_merge(['max-count' => 10, 'numstat', 'format' => 'START_OF_GIT_LOG%n%H%n|__GIT_SPLIT__|%P%n|__GIT_SPLIT__|%cN%n|__GIT_SPLIT__|%cE%n|__GIT_SPLIT__|%cD%n|__GIT_SPLIT__|%B%n|END_OF_CODECOMET_GIT_LOG%n'], $options);
 
-        # Run the command
+        // Run the command
         $output = $this->run('log', [$options, $params]);
 
-        # Check if successfull
+        // Check if successfull
         if (!$this->is_successful()) return false;
 
-        # Format the result
+        // Format the result
         $blocks  = array_filter(array_map('trim', explode('|END_OF_CODECOMET_GIT_LOG', $output)));
         $commits = [];
 
@@ -48,33 +48,33 @@ class LogCommand extends Command
         {
             $files = [];
 
-            # The file stats may be on the next block 
-            # instead of this one
+            // The file stats may be on the next block
+            // instead of this one
             if (isset($blocks[$i + 1]))
             {
                 $nextBlock = $blocks[$i + 1];
                 $nextLines = explode("\n", $nextBlock);
 
-                # The file list must be on this block
+                // The file list must be on this block
                 if (strpos($nextLines[0], 'START_OF_GIT_LOG') !== false)
                 {
                     $lines = explode("\n", $block);
-                    
+
                     foreach ($lines as $s => $line)
                     {
                         if (strpos($line, 'START_OF_GIT_LOG') !== false)
                         {
                             break;
                         }
-                        
+
                         $files[] = $line;
-                        
+
                         unset($lines[$s]);
                     }
-                    
+
                     $blocks[$i] = implode("\n", $lines);
                 }
-                # The file list on the next block
+                // The file list on the next block
                 else
                 {
                     foreach ($nextLines as $s => $nextLine)
@@ -85,7 +85,7 @@ class LogCommand extends Command
                         }
 
                         $files[] = $nextLine;
-                        
+
                         unset($nextLines[$s]);
                     }
 
@@ -98,15 +98,15 @@ class LogCommand extends Command
             {
                 continue;
             }
-            
-            $lineData = array_values(array_filter(array_map('trim', explode('|__GIT_SPLIT__|', ltrim($block, 'START_OF_GIT_LOG')))));        
-            
+
+            $lineData = array_values(array_filter(array_map('trim', explode('|__GIT_SPLIT__|', ltrim($block, 'START_OF_GIT_LOG')))));
+
             if (count($lineData) < 5)
             {
                 continue;
             }
-             
-            # Special case for a commit without a parent
+
+            // Special case for a commit without a parent
             if (count($lineData) === 5)
             {
                 array_splice($lineData, 1, 0, '');
@@ -150,7 +150,7 @@ class LogCommand extends Command
 
             $parents = explode(' ', $lineData[1]);
 
-            # Is this a merge commit ?
+            // Is this a merge commit ?
             if (count($parents) === 2)
             {
                 $last_parent = $parents[1];
@@ -179,25 +179,25 @@ class LogCommand extends Command
                 'additions'       => $additions,
                 'deletions'       => $deletions,
                 'files'           => $commit_files,
-            ];           
+            ];
         }
 
         return $commits;
     }
 
     /**
-     * Run log and get raw output
-     * 
-     * @param  array $options Command options (optional) (default [])
-     * @param  array $params  Command params  (optional) (default [])
+     * Run log and get raw output.
+     *
+     * @param  array        $options Command options (optional) (default [])
+     * @param  array        $params  Command params  (optional) (default [])
      * @return false|string
      */
     public function raw($options =[], $params = [])
     {
-        # Run the command
+        // Run the command
         $output = $this->run('log', [$options, $params]);
 
-        # Check if successfull
+        // Check if successfull
         if (!$this->is_successful())
         {
             return false;

@@ -7,11 +7,8 @@
 
 namespace kanso\framework\security\crypto\encrypters;
 
-use kanso\framework\security\crypto\encrypters\Encrypter;
-use kanso\framework\security\crypto\encrypters\EncrypterInterface;
-
 /**
- * Encryption/Decryption interface
+ * Encryption/Decryption interface.
  *
  * @author Joe J. Howard
  */
@@ -64,7 +61,7 @@ class OpenSSL extends Encrypter implements EncrypterInterface
 	}
 
 	/**
-	 * Load compatible ciphers
+	 * Load compatible ciphers.
 	 *
 	 * @access private
 	 */
@@ -72,7 +69,7 @@ class OpenSSL extends Encrypter implements EncrypterInterface
 	{
 		$this->ciphers = array_filter(openssl_get_cipher_methods(), function($cypher)
 		{
-			if (strpos(strtolower($cypher), 'gcm') !== false || strpos(strtolower($cypher), 'ccm') !== false || strpos(strtolower($cypher), 'des-') !== false )
+			if (strpos(strtolower($cypher), 'gcm') !== false || strpos(strtolower($cypher), 'ccm') !== false || strpos(strtolower($cypher), 'des-') !== false)
 			{
 			    return false;
 			}

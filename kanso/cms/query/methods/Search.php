@@ -8,17 +8,17 @@
 namespace kanso\cms\query\methods;
 
 /**
- * CMS Query search methods
+ * CMS Query search methods.
  *
  * @author Joe J. Howard
  */
 trait Search
 {
     /**
-     * Returns the searched query for search result requests
+     * Returns the searched query for search result requests.
      *
      * @access public
-     * @return  string|null
+     * @return string|null
      */
     public function search_query()
     {
@@ -30,25 +30,25 @@ trait Search
         return null;
     }
 
-	/**
-     * Return the HTML for the search form
+    /**
+     * Return the HTML for the search form.
      *
      * @access public
-     * @return  string
+     * @return string
      */
     public function get_search_form(): string
     {
-        # Load from template if it exists
-        $formTemplate = $this->theme_directory().DIRECTORY_SEPARATOR.'searchform.php';
-        
+        // Load from template if it exists
+        $formTemplate = $this->theme_directory() . DIRECTORY_SEPARATOR . 'searchform.php';
+
         if (file_exists($formTemplate))
         {
             return $this->include_template('searchform');
         }
-        
+
         return '
 
-            <form role="search" method="get" action="'.$this->home_url().'/search-results/">
+            <form role="search" method="get" action="' . $this->home_url() . '/search-results/">
 
                 <fieldset>
                         

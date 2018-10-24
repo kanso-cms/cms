@@ -7,14 +7,13 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\cms\admin\models\BaseModel;
-use kanso\framework\utility\Arr;
-use kanso\framework\utility\Str;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
+use kanso\framework\utility\Arr;
+use kanso\framework\utility\Str;
 
 /**
- * Categories model
+ * Categories model.
  *
  * @author Joe J. Howard
  */
@@ -54,7 +53,7 @@ class Categories extends BaseModel
         return false;
     }
 
-   /**
+    /**
      * Parse the $_GET request variables and filter the articles for the requested page.
      *
      * @access private
@@ -78,8 +77,8 @@ class Categories extends BaseModel
     }
 
     /**
-     * Parse and validate the POST request from any submitted forms
-     * 
+     * Parse and validate the POST request from any submitted forms.
+     *
      * @access private
      * @return array|false
      */
@@ -103,7 +102,7 @@ class Categories extends BaseModel
             if ($this->post['bulk_action'] === 'clear')
             {
                 $this->clear($catIds);
-                
+
                 return $this->postMessage('success', 'Your categories were successfully cleared!');
             }
             if ($this->post['bulk_action'] === 'update')
@@ -119,28 +118,28 @@ class Categories extends BaseModel
                 {
                     return $this->postMessage('warning', 'Could not update category. Another category with the same slug already exists.');
                 }
-                
+
                 return $this->postMessage('success', 'Category was successfully updated!');
             }
         }
 
-        return false;        
+        return false;
     }
 
-     /**
-     * Validates all POST variables are set
-     * 
+    /**
+     * Validates all POST variables are set.
+     *
      * @access private
      * @return bool
      */
     private function validatePost(): bool
     {
-        # Validation
+        // Validation
         if (!isset($this->post['access_token']) || !$this->Gatekeeper->verifyToken($this->post['access_token']))
         {
             throw new InvalidTokenException('Bad Admin Panel POST Request. The CSRF token was either not provided or was invalid.');
         }
-        
+
         if (!isset($this->post['bulk_action']) || empty($this->post['bulk_action']))
         {
             throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
@@ -160,15 +159,15 @@ class Categories extends BaseModel
     }
 
     /**
-     * Updates a category
+     * Updates a category.
      *
      * @access private
-     * @param  int     $id Single category id
+     * @param  int         $id Single category id
      * @return bool|string
      */
     private function update(int $id)
     {
-        if ( !isset($this->post['name']) || !isset($this->post['slug']) || !isset($this->post['description']) || !isset($this->post['parent']))
+        if (!isset($this->post['name']) || !isset($this->post['slug']) || !isset($this->post['description']) || !isset($this->post['parent']))
         {
             return false;
         }
@@ -184,7 +183,7 @@ class Categories extends BaseModel
             return false;
         }
 
-        # Validate category with same name does not already exist
+        // Validate category with same name does not already exist
         $existsName = $this->CategoryManager->byName($name);
 
         if ($existsName && $existsName->id !== $id)
@@ -192,7 +191,7 @@ class Categories extends BaseModel
             return 'name_exists';
         }
 
-        # Validate category with same slug does not already exist
+        // Validate category with same slug does not already exist
         $existsSlug = $this->CategoryManager->bySlug($slug);
 
         if ($existsSlug && $existsSlug->id !== $id)
@@ -211,10 +210,10 @@ class Categories extends BaseModel
     }
 
     /**
-     * Delete articles by id
+     * Delete articles by id.
      *
      * @access private
-     * @param  array   $ids List of post ids
+     * @param  array $ids List of post ids
      * @return bool
      */
     private function delete(array $ids)
@@ -233,10 +232,10 @@ class Categories extends BaseModel
     }
 
     /**
-     * Clear tags of articles
+     * Clear tags of articles.
      *
      * @access private
-     * @param  array   $ids List of post ids
+     * @param  array $ids List of post ids
      * @return bool
      */
     private function clear(array $ids)
@@ -255,7 +254,7 @@ class Categories extends BaseModel
     }
 
     /**
-     * Check if the GET URL queries are either empty or set to defaults
+     * Check if the GET URL queries are either empty or set to defaults.
      *
      * @access private
      * @return bool
@@ -263,26 +262,26 @@ class Categories extends BaseModel
     private function emptyQueries(): bool
     {
         $queries = $this->getQueries();
-        
+
         return (
-            $queries['search'] === false && 
-            $queries['page']   === 0 && 
+            $queries['search'] === false &&
+            $queries['page']   === 0 &&
             $queries['sort']   === 'name'
         );
     }
 
     /**
-     * Returns the requested GET queries with defaults
+     * Returns the requested GET queries with defaults.
      *
      * @access private
      * @return array
      */
     private function getQueries(): array
     {
-        # Get queries
+        // Get queries
         $queries = $this->Request->queries();
 
-        # Set defaults
+        // Set defaults
         if (!isset($queries['search'])) $queries['search'] = false;
         if (!isset($queries['page']))   $queries['page']   = 0;
         if (!isset($queries['sort']))   $queries['sort']   = 'name';
@@ -291,19 +290,19 @@ class Categories extends BaseModel
     }
 
     /**
-     * Returns the list of categories for display
+     * Returns the list of categories for display.
      *
      * @access private
-     * @param  bool $checkMaxPages Count the max pages
+     * @param  bool      $checkMaxPages Count the max pages
      * @return array|int
      */
     private function loadCategories(bool $checkMaxPages = false)
     {
-       # Get queries
+       // Get queries
         $queries = $this->getQueries();
 
-        # Default operation values
-        $page         = ((int)$queries['page']);
+        // Default operation values
+        $page         = ((int) $queries['page']);
         $page         = $page === 1 || $page === 0 ? 0 : $page-1;
         $sort         = 'ASC';
         $sortKey      = 'name';
@@ -312,19 +311,19 @@ class Categories extends BaseModel
         $limit        = $perPage;
         $search       = $queries['search'];
 
-        # Select the posts
+        // Select the posts
         $this->SQL->SELECT('categories.id')->FROM('categories');
-        
-        # Search the name
+
+        // Search the name
         if ($search)
         {
-            $this->SQL->AND_WHERE('name', 'like', '%'.$queries['search'].'%');
+            $this->SQL->AND_WHERE('name', 'like', '%' . $queries['search'] . '%');
         }
 
-        # Find the articles
+        // Find the articles
         $rows = $this->SQL->FIND_ALL();
 
-        # Add all the article count
+        // Add all the article count
         $result = [];
 
         foreach ($rows as $row)
@@ -335,14 +334,14 @@ class Categories extends BaseModel
             ->WHERE('categories.id', '=', $row['id']);
 
             $category = $this->CategoryManager->byId($row['id']);
-            
+
             $category->article_count = count($this->SQL->FIND_ALL());
 
             $result[] = $category;
         }
 
-        # If we're sorting by article count, we need to paginate
-        # all the results and return the requested page of categories
+        // If we're sorting by article count, we need to paginate
+        // all the results and return the requested page of categories
         if (!$checkMaxPages)
         {
             if ($queries['sort'] === 'name')
@@ -367,7 +366,7 @@ class Categories extends BaseModel
 
                         if ($children)
                         {
-                            $withChildren = array_merge($withChildren, $children); 
+                            $withChildren = array_merge($withChildren, $children);
                         }
                     }
 
@@ -378,10 +377,10 @@ class Categories extends BaseModel
             {
                 $result = Arr::sortMulti($result, 'article_count');
             }
-            
+
         }
 
-        # Are we checking the pages ?
+        // Are we checking the pages ?
         if ($checkMaxPages)
         {
             return ceil(count($result) / $perPage);
@@ -398,8 +397,8 @@ class Categories extends BaseModel
     }
 
     /**
-     * Recursively get category children
-     * 
+     * Recursively get category children.
+     *
      * @access private
      * @param  Category $parent Category parent object
      * @param  array    $parent Category parent children (optional) (default [])
@@ -412,19 +411,19 @@ class Categories extends BaseModel
             $children[] = $child;
             $children = array_merge($children, $this->recursiveChildren($child));
         }
-        
+
         return $children;
     }
 
     /**
-     * Update and reset post slugs when permalinks have changed
-     * 
+     * Update and reset post slugs when permalinks have changed.
+     *
      * @access private
-     * @return 
+     * @return
      */
     private function resetPostSlugs()
     {
-        # Select the posts
+        // Select the posts
         $posts = $this->SQL->SELECT('posts.id')->FROM('posts')->FIND_ALL();
 
         foreach ($posts as $row)

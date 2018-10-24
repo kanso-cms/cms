@@ -7,12 +7,12 @@
 
 namespace kanso\framework\http\response;
 
-use kanso\framework\utility\Str;
 use kanso\framework\common\ArrayAccessTrait;
 use kanso\framework\common\ArrayIterator;
+use kanso\framework\utility\Str;
 
 /**
- * Response headers
+ * Response headers.
  *
  * @author Joe J. Howard
  */
@@ -28,7 +28,7 @@ class Headers implements \IteratorAggregate
     private $sent = false;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
      */
@@ -45,7 +45,7 @@ class Headers implements \IteratorAggregate
     }
 
     /**
-     * Send the headers
+     * Send the headers.
      *
      * @access public
      */
@@ -59,12 +59,12 @@ class Headers implements \IteratorAggregate
 
                 if (Str::contains($name, 'http'))
                 {
-                    header($name.'/1.1 '.$value, true);
+                    header($name . '/1.1 ' . $value, true);
                 }
                 else
                 {
-                    header($name.':'.$value, true);
-                }                
+                    header($name . ':' . $value, true);
+                }
             }
 
             $this->sent = true;

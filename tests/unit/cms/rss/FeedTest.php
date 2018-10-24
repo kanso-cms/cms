@@ -7,9 +7,9 @@
 
 namespace tests\unit\cms\rss;
 
+use kanso\cms\rss\Feed;
 use Mockery;
 use tests\TestCase;
-use kanso\cms\rss\Feed;
 
 /**
  * @group unit
@@ -42,7 +42,7 @@ class FeedTest extends TestCase
 		$response->shouldReceive('view')->once()->andReturn($view)->times(3);
 
 		$format->shouldReceive('set')->once()->with('application/rss+xml, application/xml');
-		
+
 		$body->shouldReceive('set')->once();
 
 		$status->shouldReceive('set')->once()->with(200);
@@ -80,7 +80,7 @@ class FeedTest extends TestCase
 		$response->shouldReceive('view')->once()->andReturn($view)->times(3);
 
 		$format->shouldReceive('set')->once()->with('application/atom+xml, application/xml');
-		
+
 		$body->shouldReceive('set')->once();
 
 		$status->shouldReceive('set')->once()->with(200);
@@ -118,7 +118,7 @@ class FeedTest extends TestCase
 		$response->shouldReceive('view')->once()->andReturn($view)->times(3);
 
 		$format->shouldReceive('set')->once()->with('application/rdf+xml, application/xml');
-		
+
 		$body->shouldReceive('set')->once();
 
 		$status->shouldReceive('set')->once()->with(200);

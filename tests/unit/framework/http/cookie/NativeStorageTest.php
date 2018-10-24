@@ -7,9 +7,9 @@
 
 namespace tests\unit\framework\http\cookie;
 
+use kanso\framework\http\cookie\storage\NativeCookieStorage;
 use Mockery;
 use tests\TestCase;
-use kanso\framework\http\cookie\storage\NativeCookieStorage;
 
 /**
  * @group unit
@@ -18,7 +18,7 @@ class NativeStorageTest extends TestCase
 {
 	private function getCookieConfig()
 	{
-		return 
+		return
 		[
 			'name'         => 'kanso_cookie',
 			'expire'       => strtotime('+1 month'),
@@ -43,7 +43,7 @@ class NativeStorageTest extends TestCase
 		$store = new NativeCookieStorage($crypto, $this->getCookieConfig());
 
 		$crypto->shouldReceive('decrypt')->withArgs(['s:0{fdf[$@#$!sd23fs==}'])->andReturn(serialize(['foo' => 'bar']));
-		
+
 		$this->assertEquals(['foo' => 'bar'], $store->read('foobar_cookie'));
 	}
 
@@ -59,12 +59,12 @@ class NativeStorageTest extends TestCase
 		$store = new NativeCookieStorage($crypto, $this->getCookieConfig());
 
 		$crypto->shouldReceive('decrypt')->withArgs(['s:0{fdf[$@#$!sd23fs==}'])->andReturn(false);
-		
+
 		$this->assertEquals(false, $store->read('foobar_cookie'));
 	}
 
 	/**
-	 * @runInSeparateProcess 
+	 * @runInSeparateProcess
 	 */
 	public function testWrite()
 	{

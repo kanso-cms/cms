@@ -7,14 +7,14 @@
 
 namespace kanso\framework\application;
 
-use kanso\framework\ioc\Container;
-use kanso\framework\config\Config;
-use kanso\framework\file\Filesystem;
-use kanso\framework\config\Loader;
 use kanso\framework\autoload\AliasLoader;
+use kanso\framework\config\Config;
+use kanso\framework\config\Loader;
+use kanso\framework\file\Filesystem;
+use kanso\framework\ioc\Container;
 
 /**
- * Kanso framework main class file
+ * Kanso framework main class file.
  *
  * @author Joe J. Howard
  */
@@ -28,7 +28,7 @@ class Application
     private static $instance;
 
     /**
-     * IoC container instance
+     * IoC container instance.
      *
      * @var \kanso\framework\application\Container
      */
@@ -42,7 +42,7 @@ class Application
     protected $packages = [];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access protected
      */
@@ -59,7 +59,7 @@ class Application
      */
     public static function instance()
     {
-        if (is_null(static::$instance)) 
+        if (is_null(static::$instance))
         {
             static::$instance = new static;
         }
@@ -68,7 +68,7 @@ class Application
     }
 
     /**
-     * Run the application
+     * Run the application.
      *
      * @access public
      */
@@ -87,7 +87,7 @@ class Application
     }
 
     /**
-     * Boot the application dependencies
+     * Boot the application dependencies.
      *
      * @access protected
      */
@@ -111,12 +111,12 @@ class Application
     {
         $this->container = Container::instance();
 
-        $this->container->singleton('Filesystem', function ()
+        $this->container->singleton('Filesystem', function()
         {
             return new Filesystem;
         });
 
-        $this->container->singleton('Config', function ()
+        $this->container->singleton('Config', function()
         {
             return $this->configFactory();
         });
@@ -150,7 +150,7 @@ class Application
     }
 
     /**
-     * Configure application basics
+     * Configure application basics.
      *
      * @access protected
      */
@@ -175,11 +175,11 @@ class Application
      */
     protected function configFactory(): Config
     {
-        return new Config( new Loader($this->container->Filesystem, $this->configurationPath()), $this->environment());
+        return new Config(new Loader($this->container->Filesystem, $this->configurationPath()), $this->environment());
     }
 
     /**
-     * Returns the configuration path
+     * Returns the configuration path.
      *
      * @access protected
      * @return string
@@ -190,7 +190,7 @@ class Application
     }
 
     /**
-     * Register required services
+     * Register required services.
      *
      * @access protected
      */
@@ -198,7 +198,7 @@ class Application
     {
         foreach (array_keys($this->container->Config->get('application.services')) as $package)
         {
-            # Register the core services
+            // Register the core services
             $this->serviceRegistrar($package);
         }
     }
@@ -207,7 +207,7 @@ class Application
      * Registers services in the IoC container.
      *
      * @access protected
-     * @param  string    $type Service type
+     * @param string $type Service type
      */
     protected function serviceRegistrar(string $type)
     {

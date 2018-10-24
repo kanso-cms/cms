@@ -6,12 +6,12 @@
  */
 
 /**
- * CMS Application home routes
+ * CMS Application home routes.
  *
  * @author Joe J. Howard
  */
 
-# Homepage
+// Homepage
 $router->get('/', '\kanso\cms\application\Application::applyRoute', 'home');
 $router->get('/page/(:num)/', '\kanso\cms\application\Application::applyRoute', 'home');
 $router->get('/feed/', '\kanso\cms\application\Application::loadRssFeed', 'home');
@@ -19,7 +19,7 @@ $router->get('/feed/rss/', '\kanso\cms\application\Application::loadRssFeed', 'h
 $router->get('/feed/atom/', '\kanso\cms\application\Application::loadRssFeed', 'home');
 $router->get('/feed/rdf/', '\kanso\cms\application\Application::loadRssFeed', 'home');
 
-# Blog Homepage
+// Blog Homepage
 if (!empty($blogPrefix))
 {
 	$router->get("$blogPrefix/", '\kanso\cms\application\Application::applyRoute', 'home-page');

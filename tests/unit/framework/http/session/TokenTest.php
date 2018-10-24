@@ -7,9 +7,8 @@
 
 namespace tests\unit\framework\http\session;
 
-use Mockery;
-use tests\TestCase;
 use kanso\framework\http\session\Token;
+use tests\TestCase;
 
 /**
  * @group unit

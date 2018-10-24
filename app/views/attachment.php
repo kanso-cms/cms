@@ -1,12 +1,13 @@
-<?php 
+<?php
 use kanso\framework\utility\Humanizer;
 use kanso\framework\utility\Str;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo the_title();?></title>
+	<title><?php echo the_title(); ?></title>
 	<style>
 		/* RESET */
 		html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal}ol,ul{list-style:none}caption,th{text-align:left}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}q:before,q:after{content:''}abbr,acronym{border:0;font-variant:normal}sup{vertical-align:text-top}sub{vertical-align:text-bottom}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit;*font-size:100%}legend{color:#000}#yui3-css-stamp.cssreset{display:none}
@@ -188,61 +189,61 @@ use kanso\framework\utility\Str;
 	<body>
 		<div class="interstitial-wrapper">
 			<div class="content">
-				<h1><?php echo the_title();?></h1>
+				<h1><?php echo the_title(); ?></h1>
 				<?php if (the_attachment()->isImage() || the_attachment()->ext() === 'svg') : ?>
-				<img class="attachment" height="<?php echo the_attachment()->height(the_attachment_size());?>" width="<?php echo the_attachment()->width(the_attachment_size());?>" src="<?php echo the_post_thumbnail_src(null, the_attachment_size());?>" alt="<?php echo the_attachment()->alt;?>" title="<?php echo the_attachment()->title;?>" />
+				<img class="attachment" height="<?php echo the_attachment()->height(the_attachment_size()); ?>" width="<?php echo the_attachment()->width(the_attachment_size()); ?>" src="<?php echo the_post_thumbnail_src(null, the_attachment_size()); ?>" alt="<?php echo the_attachment()->alt; ?>" title="<?php echo the_attachment()->title; ?>" />
 				<?php else : ?>
-					<img class="attachment" height="300" width="300" src="<?php echo the_attachments_url();?>/no-preview-available.jpg" alt="No preivew available" title="<?php echo the_attachment()->title;?>" />
-				<?php endif;?>
+					<img class="attachment" height="300" width="300" src="<?php echo the_attachments_url(); ?>/no-preview-available.jpg" alt="No preivew available" title="<?php echo the_attachment()->title; ?>" />
+				<?php endif; ?>
 
 				<div class="body-copy row">
-					<p>By <?php echo $kanso->Config->get('cms.route_authors') ? '<a title="View All Posts By '.the_author_name().'" href="'.the_author_url().'">'.the_author_name().'</a>' : the_author_name();?> on <time datetime="<?php echo the_time('c'); ?>"><?php echo the_time('l, F d, Y \a\t h:ia'); ?></time></p>
+					<p>By <?php echo $kanso->Config->get('cms.route_authors') ? '<a title="View All Posts By ' . the_author_name() . '" href="' . the_author_url() . '">' . the_author_name() . '</a>' : the_author_name(); ?> on <time datetime="<?php echo the_time('c'); ?>"><?php echo the_time('l, F d, Y \a\t h:ia'); ?></time></p>
 					<p>
-						<?php echo the_excerpt();?>
+						<?php echo the_excerpt(); ?>
 					</p>
 					<dl class="dl-horizontal">
 						<dt>Title:</dt>
-					    <dd><?php echo the_title();?></dd>
+					    <dd><?php echo the_title(); ?></dd>
 						
 						<dt>File Name:</dt>
-					    <dd><?php echo Str::getAfterLastChar(trim($kanso->Request->environment()->REQUEST_URL, '/'), '/');?></dd>
+					    <dd><?php echo Str::getAfterLastChar(trim($kanso->Request->environment()->REQUEST_URL, '/'), '/'); ?></dd>
 					    
 					    <?php if (the_attachment()->isImage()) : ?>
 					    <dt>Full Size:</dt>
-					    <dd><a title="View This Image At Full Resolution" href="<?php echo the_attachment_url();?>"><?php echo the_attachment_url();?></a></dd>
-					    <?php endif;?>
+					    <dd><a title="View This Image At Full Resolution" href="<?php echo the_attachment_url(); ?>"><?php echo the_attachment_url(); ?></a></dd>
+					    <?php endif; ?>
 
 					    <dt>Uploaded:</dt>
 					    <dd><time datetime="<?php echo the_time('c'); ?>"><?php echo the_time('d/m/Y'); ?></time></dd>
 					    
 					    <dt>Uploaded By:</dt>
-					    <dd><?php echo the_author_name();?></dd>
+					    <dd><?php echo the_author_name(); ?></dd>
 					    
 					    <dt>Size:</dt>
-					    <dd><?php echo Humanizer::fileSize(the_attachment()->size);?></dd>
+					    <dd><?php echo Humanizer::fileSize(the_attachment()->size); ?></dd>
 
 					    <?php if (the_attachment()->isImage() || the_attachment()->ext() === 'svg') : ?>
 					    <dt>Dimensions:</dt>
-					    <dd><?php echo the_attachment()->height(the_attachment_size());?> x <?php echo the_attachment()->width(the_attachment_size());?></dd>
-						<?php endif;?>
+					    <dd><?php echo the_attachment()->height(the_attachment_size()); ?> x <?php echo the_attachment()->width(the_attachment_size()); ?></dd>
+						<?php endif; ?>
 
 						<?php if (the_attachment()->isImage()) : ?>
 					    <dt>Available Sizes:</dt>
 					    <dd>
-					    	<a href="<?php echo the_post_thumbnail_src();?>"><?php echo the_attachment()->height();?> x <?php echo the_attachment()->width();?></a>
+					    	<a href="<?php echo the_post_thumbnail_src(); ?>"><?php echo the_attachment()->height(); ?> x <?php echo the_attachment()->width(); ?></a>
 					    	&nbsp;•&nbsp;
-					    	<?php 
+					    	<?php
 					    	$sizes = array_reverse($kanso->Config->get('cms.uploads.thumbnail_sizes'));
 					    	foreach ($sizes as $name => $size) : ?>
-							<a href="<?php echo the_post_thumbnail_src(null, $name);?>"><?php echo is_array($size) ? $size[0].' x '.$size[1] : $size; ?></a>
-							<?php echo ($size === end($sizes)) ? '' : '&nbsp;•&nbsp;';?>
-							<?php endforeach;?>
+							<a href="<?php echo the_post_thumbnail_src(null, $name); ?>"><?php echo is_array($size) ? $size[0] . ' x ' . $size[1] : $size; ?></a>
+							<?php echo ($size === end($sizes)) ? '' : '&nbsp;•&nbsp;'; ?>
+							<?php endforeach; ?>
 					    </dd>
 						<?php endif; ?>
 					</dl>
 				</div>
 				<div class="row">
-					<a class="button" title="View This Image At Full Resolution" href="<?php echo the_attachment_url();?>"><?php echo (the_attachment()->isImage() || the_attachment()->ext() === 'svg') ? 'View Source' : 'Download File';?></a>
+					<a class="button" title="View This Image At Full Resolution" href="<?php echo the_attachment_url(); ?>"><?php echo (the_attachment()->isImage() || the_attachment()->ext() === 'svg') ? 'View Source' : 'Download File'; ?></a>
 				</div>
 			</div>
 		</div>

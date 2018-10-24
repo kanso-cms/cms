@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\security\spam;
 
-use tests\TestCase;
 use kanso\framework\security\spam\gibberish\Gibberish;
+use tests\TestCase;
 
 /**
  * @group unit
@@ -20,10 +20,10 @@ class GibberishTest extends TestCase
 	 */
 	public function testGibberish()
 	{
-		$gibberish = new Gibberish(dirname(__FILE__).'/Gibberish.txt');
+		$gibberish = new Gibberish(dirname(__FILE__) . '/Gibberish.txt');
 
 		$this->assertFalse($gibberish->test('Hello world this is real text.'));
 
 		$this->assertTrue($gibberish->test('worfsdfald fasdfreal.'));
-	}	
+	}
 }

@@ -7,13 +7,13 @@
 
 namespace kanso\cms\application\services;
 
-use kanso\framework\application\services\Service;
 use kanso\cms\email\Email;
 use kanso\cms\email\Log;
 use kanso\cms\email\phpmailer\PHPMailer;
+use kanso\framework\application\services\Service;
 
 /**
- * CMS Mailer
+ * CMS Mailer.
  *
  * @author Joe J. Howard
  */
@@ -24,10 +24,10 @@ class EmailService extends Service
 	 */
 	public function register()
 	{
-		$this->container->set('Email', function ($container) 
+		$this->container->set('Email', function($container)
 		{
 			$useSmtp = $container->Config->get('email.use_smtp');
-			
+
 			$config = $container->Config->get('email.smtp_settings');
 
 			$logDir = $container->Config->get('email.log_dir');

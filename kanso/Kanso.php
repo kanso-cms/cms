@@ -8,41 +8,40 @@
 namespace kanso;
 
 use kanso\framework\application\Application;
-use kanso\framework\ioc\Container;
 use kanso\framework\ioc\ContainerAwareTrait;
 
 /**
- * Kanso instantiation
+ * Kanso instantiation.
  *
  * @author Joe J. Howard
  */
-class Kanso 
+class Kanso
 {
 	use ContainerAwareTrait;
 
 	/**
-	 * Kanso application version
+	 * Kanso application version.
 	 *
 	 * @var string
 	 */
 	const VERSION = '1.6.1';
 
 	/**
-	 * Singleton instance of self
+	 * Singleton instance of self.
 	 *
 	 * @var \kanso\Kanso
 	 */
 	protected static $instance;
 
 	/**
-	 * Application instance
+	 * Application instance.
 	 *
 	 * @var \kanso\framework\application\Application
 	 */
 	protected $application;
-	
+
 	/**
-	 * Constructor. Boots application
+	 * Constructor. Boots application.
 	 *
 	 * @access public
 	 */
@@ -52,7 +51,7 @@ class Kanso
 	}
 
 	/**
-	 * Get the global Kanso instance
+	 * Get the global Kanso instance.
 	 *
 	 * @access public
 	 * @return \kanso\Kanso
@@ -68,7 +67,7 @@ class Kanso
 	}
 
 	/**
-	 * Application run
+	 * Application run.
 	 *
 	 * @access public
 	 */

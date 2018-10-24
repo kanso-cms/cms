@@ -7,10 +7,10 @@
 
 namespace tests\unit\framework\exception;
 
-use Mockery;
-use tests\TestCase;
 use ErrorException;
 use kanso\framework\exception\ErrorLogger;
+use Mockery;
+use tests\TestCase;
 
 /**
  * @group unit
@@ -18,7 +18,7 @@ use kanso\framework\exception\ErrorLogger;
 class ErrorLoggerTest extends TestCase
 {
     /**
-     * 
+     *
      */
     public function testWebHandler()
     {

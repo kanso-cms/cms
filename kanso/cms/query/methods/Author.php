@@ -10,25 +10,25 @@ namespace kanso\cms\query\methods;
 use kanso\framework\utility\Str;
 
 /**
- * CMS Query author methods
+ * CMS Query author methods.
  *
  * @author Joe J. Howard
  */
 trait Author
 {
     /**
-     * Get the author of the current post or a post by id
+     * Get the author of the current post or a post by id.
      *
      * @access public
-     * @param  int $post_id Post id (optional) (Default NULL)
+     * @param  int                           $post_id Post id (optional) (Default NULL)
      * @return \kanso\cms\wrappers\User|null
      */
-    public function the_author(int $post_id = null) 
+    public function the_author(int $post_id = null)
     {
         if ($post_id)
         {
             $post = $this->getPostByID($post_id);
-            
+
             if ($post)
             {
                 return $this->getAuthorById($post->author_id);
@@ -49,13 +49,13 @@ trait Author
      * Checks whether a given author exists by name or id.
      *
      * @access  public
-     * @param   string|int $author_name Author name or id
-     * @return  bool
+     * @param  string|int $author_name Author name or id
+     * @return bool
      */
     public function author_exists($author_name): bool
     {
         $index = is_numeric($author_name) ? 'id' : 'username';
-        
+
         $author_name = is_numeric($author_name) ? intval($author_name) : $author_name;
 
         $author = $this->UserManager->provider()->byKey($index, $tag_name);
@@ -67,20 +67,20 @@ trait Author
 
         return false;
     }
-    
+
     /**
-     * Does the author of the current post or an author by id have a thumbnail attachment
+     * Does the author of the current post or an author by id have a thumbnail attachment.
      *
      * @access  public
-     * @param   int    $author_id Author id or null for author of current post (optional) (Default NULL)
-     * @return  bool
+     * @param  int  $author_id Author id or null for author of current post (optional) (Default NULL)
+     * @return bool
      */
     public function has_author_thumbnail($author_id = null): bool
     {
         if ($author_id)
         {
             $author = $this->getAuthorById($author_id);
-            
+
             if ($author)
             {
                 return !empty($this->getMediaById($author_id->thumbnail_id));
@@ -92,7 +92,7 @@ trait Author
         if (!empty($this->post))
         {
             $author = $this->getAuthorById($this->post->author_id);
-            
+
             if ($author)
             {
                 return !empty($this->getMediaById($author->thumbnail_id));
@@ -103,18 +103,18 @@ trait Author
     }
 
     /**
-     * Get the author name of the current post or an author by id
+     * Get the author name of the current post or an author by id.
      *
      * @access  public
-     * @param   int    $author_id Author id or null for author of current post (optional) (default NULL)
-     * @return  string|null
+     * @param  int         $author_id Author id or null for author of current post (optional) (default NULL)
+     * @return string|null
      */
-    public function the_author_name(int $author_id = null) 
+    public function the_author_name(int $author_id = null)
     {
         if ($author_id)
         {
             $author = $this->getAuthorById($author_id);
-            
+
             if ($author)
             {
                 return $author->name;
@@ -126,7 +126,7 @@ trait Author
         if (!empty($this->post))
         {
             $author = $this->getAuthorById($this->post->author_id);
-            
+
             if ($author)
             {
                 return $author->name;
@@ -137,23 +137,23 @@ trait Author
     }
 
     /**
-     * Get the author's full URL of the current post or an author by id
+     * Get the author's full URL of the current post or an author by id.
      *
      * @access  public
-     * @param   int    $author_id Author id or null for author of current post (optional) (default NULL)
-     * @return  string|FALSE
+     * @param  int          $author_id Author id or null for author of current post (optional) (default NULL)
+     * @return string|false
      */
     public function the_author_url(int $author_id = null)
     {
         if ($author_id)
         {
             $author = $this->getAuthorById($author_id);
-            
+
             if ($author)
             {
-                $prefix = !empty($this->blog_location()) ? '/'.$this->blog_location().'/' : '/';
+                $prefix = !empty($this->blog_location()) ? '/' . $this->blog_location() . '/' : '/';
 
-                return $this->Request->environment()->HTTP_HOST.$prefix.'author/'.$author->slug;
+                return $this->Request->environment()->HTTP_HOST . $prefix . 'author/' . $author->slug;
             }
 
             return null;
@@ -165,9 +165,9 @@ trait Author
 
             if ($author)
             {
-                $prefix = !empty($this->blog_location()) ? '/'.$this->blog_location().'/' : '/';
+                $prefix = !empty($this->blog_location()) ? '/' . $this->blog_location() . '/' : '/';
 
-                return $this->Request->environment()->HTTP_HOST.$prefix.'author/'.$author->slug;
+                return $this->Request->environment()->HTTP_HOST . $prefix . 'author/' . $author->slug;
             }
         }
 
@@ -175,14 +175,14 @@ trait Author
     }
 
     /**
-     * Get the authors thumbnail attachment of the current post or an author by id
+     * Get the authors thumbnail attachment of the current post or an author by id.
      *
      * @access  public
-     * @param   int    $author_id Author id or null for author of current post (optional) (default NULL)
-     * @return  \kanso\cms\wrappers\Media|null
+     * @param  int                            $author_id Author id or null for author of current post (optional) (default NULL)
+     * @return \kanso\cms\wrappers\Media|null
      */
     public function the_author_thumbnail(int $author_id = null)
-    {        
+    {
         if ($author_id)
         {
             $author = $this->getAuthorById($author_id);
@@ -212,18 +212,18 @@ trait Author
     }
 
     /**
-     * Get the authors bio of the current post or an author by id
+     * Get the authors bio of the current post or an author by id.
      *
      * @access  public
-     * @param   int    $author_id Author id or null for author of current post (optional) (default NULL)
-     * @return  string|FALSE
+     * @param  int          $author_id Author id or null for author of current post (optional) (default NULL)
+     * @return string|false
      */
     public function the_author_bio(int $author_id = null)
     {
         if ($author_id)
         {
             $author = $this->getAuthorById($author_id);
-            
+
             if ($author)
             {
                 return Str::nl2br($author->description);
@@ -235,7 +235,7 @@ trait Author
         if (!empty($this->post))
         {
             $author = $this->getAuthorById($this->post->author_id);
-            
+
             if ($author)
             {
                 return Str::nl2br($author->description);
@@ -247,18 +247,18 @@ trait Author
     }
 
     /**
-     * Get the authors twitter URL of the current post or an author by id
+     * Get the authors twitter URL of the current post or an author by id.
      *
      * @access  public
-     * @param   int    $author_id Author id or null for author of current post (optional) (default NULL)
-     * @return  string|false
+     * @param  int          $author_id Author id or null for author of current post (optional) (default NULL)
+     * @return string|false
      */
     public function the_author_twitter(int $author_id = null)
     {
         if ($author_id)
         {
             $author = $this->getAuthorById($author_id);
-            
+
             if ($author)
             {
                 return $author->twitter;
@@ -270,7 +270,7 @@ trait Author
         if (!empty($this->post))
         {
             $author = $this->getAuthorById($this->post->author_id);
-            
+
             if ($author)
             {
                 return $author->twitter;
@@ -282,18 +282,18 @@ trait Author
     }
 
     /**
-     * Get the authors google URL of the current post or an author by id
+     * Get the authors google URL of the current post or an author by id.
      *
      * @access  public
-     * @param   int    $author_id Author id or null for author of current post (optional) (default NULL)
-     * @return  string|false
+     * @param  int          $author_id Author id or null for author of current post (optional) (default NULL)
+     * @return string|false
      */
     public function the_author_google(int $author_id = null)
     {
         if ($author_id)
         {
             $author = $this->getAuthorById($author_id);
-            
+
             if ($author)
             {
                 return $author->gplus;
@@ -305,7 +305,7 @@ trait Author
         if (!empty($this->post))
         {
             $author = $this->getAuthorById($this->post->author_id);
-            
+
             if ($author)
             {
                 return $author->gplus;
@@ -317,18 +317,18 @@ trait Author
     }
 
     /**
-     * Get the authors facebook URL of the current post or an author by id
+     * Get the authors facebook URL of the current post or an author by id.
      *
      * @access  public
-     * @param   int    $author_id Author id or null for author of current post (optional) (default NULL)
-     * @return  string|false
+     * @param  int          $author_id Author id or null for author of current post (optional) (default NULL)
+     * @return string|false
      */
     public function the_author_facebook(int $author_id = null)
     {
         if ($author_id)
         {
             $author = $this->getAuthorById($author_id);
-            
+
             if ($author)
             {
                 return $author->facebook;
@@ -340,7 +340,7 @@ trait Author
         if (!empty($this->post))
         {
             $author = $this->getAuthorById($this->post->author_id);
-            
+
             if ($author)
             {
                 return $author->facebook;
@@ -351,18 +351,18 @@ trait Author
     }
 
     /**
-     * Get the authors instagram URL of the current post or an author by id
+     * Get the authors instagram URL of the current post or an author by id.
      *
      * @access  public
-     * @param   int    $author_id Author id or null for author of current post (optional) (default NULL)
-     * @return  string|false
+     * @param  int          $author_id Author id or null for author of current post (optional) (default NULL)
+     * @return string|false
      */
     public function the_author_instagram(int $author_id = null)
     {
         if ($author_id)
         {
             $author = $this->getAuthorById($author_id);
-            
+
             if ($author)
             {
                 return $author->instagram;
@@ -383,7 +383,7 @@ trait Author
     }
 
     /**
-     * Get an array of user object of all authors
+     * Get an array of user object of all authors.
      *
      * @access public
      * @return array
@@ -391,14 +391,14 @@ trait Author
     public function all_the_authors(): array
     {
         $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
-        
+
         if ($this->cache->has($key))
         {
             return $this->cache->get($key);
         }
 
         $authors = [];
-        
+
         $rows = $this->SQL->SELECT('id, role')->FROM('users')->FIND_ALL();
 
         foreach ($rows as $row)
@@ -410,22 +410,22 @@ trait Author
 
             $authors[] = $this->UserManager->byId($row['id']);
         }
-       
+
         return $this->cache->set($key, $authors);
     }
 
     /**
-     * Ge an array of Post objects objects by author id
+     * Ge an array of Post objects objects by author id.
      *
      * @access public
-     * @param  int    $author_id The author id
-     * @param  bool   $published Get only published articles (optional) (Default TRUE)
+     * @param  int   $author_id The author id
+     * @param  bool  $published Get only published articles (optional) (Default TRUE)
      * @return array
      */
     public function the_author_posts(int $author_id, bool $published = true): array
     {
         $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
-        
+
         if ($this->cache->has($key))
         {
             return $this->cache->get($key);

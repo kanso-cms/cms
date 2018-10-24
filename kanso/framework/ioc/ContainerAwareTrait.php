@@ -7,10 +7,8 @@
 
 namespace kanso\framework\ioc;
 
-use kanso\framework\ioc\Container;
-
 /**
- * Container aware trait
+ * Container aware trait.
  *
  * @author Joe J. Howard
  */
@@ -24,7 +22,7 @@ trait ContainerAwareTrait
 	protected $container;
 
 	/**
-	 * Sets and or gets the container
+	 * Sets and or gets the container.
 	 *
 	 * @access public
 	 * @param \kanso\framework\ioc\Container $container IoC container instance

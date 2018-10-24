@@ -9,8 +9,8 @@
 	<channel rdf:about="<?php echo home_url(); ?>">
 		<title><?php echo website_title(); ?></title>
 		<link><?php echo home_url(); ?></link>
-		<description><?php echo website_description();?></description>
-		<dc:date><?php echo the_modified_time('c');?></dc:date>
+		<description><?php echo website_description(); ?></description>
+		<dc:date><?php echo the_modified_time('c'); ?></dc:date>
 		<sy:updatePeriod>hourly</sy:updatePeriod>
 		<sy:updateFrequency>1</sy:updateFrequency>
 		<sy:updateBase>2000-01-01T12:00+00:00</sy:updateBase>
@@ -18,7 +18,7 @@
 		<items>
 			<rdf:Seq>
 				<?php while (have_posts()) : the_post(); ?>
-					<rdf:li rdf:resource="<?php echo the_permalink();?>"/>
+					<rdf:li rdf:resource="<?php echo the_permalink(); ?>"/>
 				<?php endwhile; rewind_posts(); ?>
 			</rdf:Seq>
 		</items>

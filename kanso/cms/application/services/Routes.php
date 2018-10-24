@@ -6,16 +6,16 @@
  */
 
 /**
- * CMS Application routes
+ * CMS Application routes.
  *
  * @author Joe J. Howard
  */
 
-# Defined local variables
+// Defined local variables
 $router     = $this->container->Router;
 $config     = $this->container->Config;
 $SQL        = $this->container->Database->connection()->builder();
-$blogPrefix = !empty($config->get('cms.blog_location')) ? '/'.$config->get('cms.blog_location') : '';
+$blogPrefix = !empty($config->get('cms.blog_location')) ? '/' . $config->get('cms.blog_location') : '';
 
 require_once 'routes/Admin.php';
 

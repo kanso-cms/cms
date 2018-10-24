@@ -7,11 +7,10 @@
 
 namespace kanso\framework\application\services;
 
-use kanso\framework\application\services\Service;
 use kanso\framework\utility\GUMP;
 
 /**
- * Utility services
+ * Utility services.
  *
  * @author Joe J. Howard
  */
@@ -22,7 +21,7 @@ class UtilityService extends Service
 	 */
 	public function register()
 	{
-		$this->container->set('Validation', function ()
+		$this->container->set('Validation', function()
 		{
 			return new GUMP;
 		});

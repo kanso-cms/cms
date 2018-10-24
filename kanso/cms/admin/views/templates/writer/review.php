@@ -7,17 +7,17 @@
 			<div class="feature-img js-feature-img <?php echo $the_post && !empty($the_post->thumbnail_id) ? 'active' : null; ?>">
 				<div class="form-field row floor-xs">
 					<label>Feature Image</label>
-					<?php 
+					<?php
 					if ($the_post && !empty($the_post->thumbnail_id))
 					{
-						echo display_thumbnail(the_post_thumbnail($the_post->id), 'original', '', '', 'js-feature-img'); 
+						echo display_thumbnail(the_post_thumbnail($the_post->id), 'original', '', '', 'js-feature-img');
 					}
 					else
 					{
 						echo '<img src="" class="js-feature-img" >';
 					}
 					?>
-					<input  type="hidden" name="thumbnail_id" class="js-feature-id" value="<?php echo $the_post && !empty($the_post->thumbnail_id) ? $the_post->thumbnail_id : null ;?>" />
+					<input  type="hidden" name="thumbnail_id" class="js-feature-id" value="<?php echo $the_post && !empty($the_post->thumbnail_id) ? $the_post->thumbnail_id : null; ?>" />
 					<button type="button" class="btn select-img-trigger js-select-img-trigger js-show-media-lib">Select image</button>
 					<button type="button" class="btn remove-img-trigger js-remove-img-trigger">Remove image</button>
 				</div>
@@ -52,7 +52,7 @@
 				<p class="color-gray">Set the post type.</p>
 				<select name="type">
 					<?php foreach (admin_post_types() as $typeName => $nameVal) : ?>
-						<option value="<?php echo $nameVal; ?>" <?php echo (($the_post && $the_post->type === $nameVal) || !$the_post && $nameVal === 'post') ? 'selected' : '' ;?>>
+						<option value="<?php echo $nameVal; ?>" <?php echo (($the_post && $the_post->type === $nameVal) || !$the_post && $nameVal === 'post') ? 'selected' : ''; ?>>
 							<?php echo $typeName; ?>	
 						</option>
 					<?php endforeach; ?>
@@ -65,7 +65,7 @@
 				<p class="color-gray">Set the post author.</p>
 				<select name="author" id="author">
 					<?php foreach (all_the_authors() as $i => $author) : ?>
-						<option value="<?php echo $author->id; ?>" <?php echo $i === 0 ? 'selected' : '' ;?>>
+						<option value="<?php echo $author->id; ?>" <?php echo $i === 0 ? 'selected' : ''; ?>>
 							<?php echo $author->name; ?>	
 						</option>
 					<?php endforeach; ?>
@@ -75,7 +75,7 @@
 
 			<div class="form-field row floor-sm">
 	            <span class="checkbox checkbox-primary">
-	                <input type="checkbox" name="comments" id="comments" <?php echo $the_post && $the_post->comments_enabled == true ? 'checked' : '';?> >
+	                <input type="checkbox" name="comments" id="comments" <?php echo $the_post && $the_post->comments_enabled == true ? 'checked' : ''; ?> >
 	                <label for="comments">Enable comments</label>
 	            </span>
 	        </div>	        
@@ -89,7 +89,7 @@
 	            <button class="btn js-add-post-meta-btn" type="button">Add field +</button>
 	            
 	            <div class="row floor-sm js-post-meta-container">
-	            	<?php if ($the_post) : 
+	            	<?php if ($the_post) :
             		$post_meta = the_post_meta($the_post->id);
             		if (is_array($post_meta) && !empty($post_meta)) : foreach ($post_meta as $key => $value) : ?>
             			<div class="row roof-xs js-meta-row">
@@ -103,7 +103,7 @@
 
 							<div class="row clearfix"></div>
 						</div>
-	            	<?php endforeach; endif; endif;?>
+	            	<?php endforeach; endif; endif; ?>
 	            </div>
 	        </div>
 

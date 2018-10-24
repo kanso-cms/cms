@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\http\response;
 
-use tests\TestCase;
 use kanso\framework\http\request\Environment;
+use tests\TestCase;
 
 /**
  * @group unit
@@ -50,7 +50,7 @@ class EnvironmentTest extends TestCase
 		$server['SCRIPT_NAME'] = '/var/www/app.php';
 
 		$env->reload($server);
-			
+
 		$this->assertEquals('app.php', $env->SCRIPT_NAME);
 	}
 
@@ -82,7 +82,7 @@ class EnvironmentTest extends TestCase
 		$env = new Environment($this->getServerData());
 
 		$this->assertEquals('localhost', $env->SERVER_NAME);
-		
+
 	}
 
 	/**
@@ -93,7 +93,7 @@ class EnvironmentTest extends TestCase
 		$env = new Environment($this->getServerData());
 
 		$this->assertEquals('8888', $env->SERVER_PORT);
-		
+
 	}
 
 	/**

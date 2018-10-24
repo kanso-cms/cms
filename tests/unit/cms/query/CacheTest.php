@@ -7,9 +7,8 @@
 
 namespace tests\unit\cms\query;
 
-use Mockery;
-use tests\TestCase;
 use kanso\cms\query\Cache;
+use tests\TestCase;
 
 /**
  * @group unit
@@ -53,7 +52,7 @@ class CacheTest extends TestCase
     {
         $cache = new Cache;
 
-        $cache->setMultiple(['foo' => ['bar' => 'baz'] ]);
+        $cache->setMultiple(['foo' => ['bar' => 'baz']]);
 
         $this->assertEquals(['bar' => 'baz'], $cache->get('foo'));
 

@@ -7,9 +7,9 @@
 
 namespace tests\unit\framework\security\spam;
 
+use kanso\framework\security\spam\SpamProtector;
 use Mockery;
 use tests\TestCase;
-use kanso\framework\security\spam\SpamProtector;
 
 /**
  * @group unit
@@ -27,7 +27,7 @@ class SpamProtectorTest extends TestCase
 
 		$spam = new SpamProtector($gibberish, $config);
 
-		$config->shouldReceive('get')->withArgs(['spam.whitelist.ipaddresses'])->andReturn(['134.233.2443.1','134.233.2443.2']);
+		$config->shouldReceive('get')->withArgs(['spam.whitelist.ipaddresses'])->andReturn(['134.233.2443.1', '134.233.2443.2']);
 		$config->shouldReceive('set')->withArgs(['spam.whitelist.ipaddresses', ['134.233.2443.2']]);
 		$config->shouldReceive('save');
 
@@ -46,7 +46,7 @@ class SpamProtectorTest extends TestCase
 		$spam = new SpamProtector($gibberish, $config);
 
 		$config->shouldReceive('get')->withArgs(['spam.whitelist.ipaddresses'])->andReturn(['134.233.2443.2']);
-		$config->shouldReceive('set')->withArgs(['spam.whitelist.ipaddresses', ['134.233.2443.1','134.233.2443.2']]);
+		$config->shouldReceive('set')->withArgs(['spam.whitelist.ipaddresses', ['134.233.2443.1', '134.233.2443.2']]);
 		$config->shouldReceive('save');
 
 		$spam->whitelistIpAddress('134.233.2443.1');
@@ -63,7 +63,7 @@ class SpamProtectorTest extends TestCase
 
 		$spam = new SpamProtector($gibberish, $config);
 
-		$config->shouldReceive('get')->withArgs(['spam.blacklist.ipaddresses'])->andReturn(['134.233.2443.1','134.233.2443.2']);
+		$config->shouldReceive('get')->withArgs(['spam.blacklist.ipaddresses'])->andReturn(['134.233.2443.1', '134.233.2443.2']);
 		$config->shouldReceive('set')->withArgs(['spam.blacklist.ipaddresses', ['134.233.2443.2']]);
 		$config->shouldReceive('save');
 
@@ -82,7 +82,7 @@ class SpamProtectorTest extends TestCase
 		$spam = new SpamProtector($gibberish, $config);
 
 		$config->shouldReceive('get')->withArgs(['spam.blacklist.ipaddresses'])->andReturn(['134.233.2443.2']);
-		$config->shouldReceive('set')->withArgs(['spam.blacklist.ipaddresses', ['134.233.2443.1','134.233.2443.2']]);
+		$config->shouldReceive('set')->withArgs(['spam.blacklist.ipaddresses', ['134.233.2443.1', '134.233.2443.2']]);
 		$config->shouldReceive('save');
 
 		$spam->blacklistIpAddress('134.233.2443.1');
@@ -181,6 +181,6 @@ class SpamProtectorTest extends TestCase
 
 		$this->assertEquals(-1, $spam->rating('fuck fuck'));
 
-		$this->assertEquals(3, $spam->rating('fantastic fuck article xxx.com you (javascript:) should.'));		
+		$this->assertEquals(3, $spam->rating('fantastic fuck article xxx.com you (javascript:) should.'));
 	}
 }

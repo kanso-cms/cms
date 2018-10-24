@@ -7,18 +7,17 @@
 
 namespace tests\unit\framework\onion;
 
-use Mockery;
 use Closure;
-use tests\TestCase;
-use kanso\framework\onion\Middleware;
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
+use kanso\framework\onion\Middleware;
+use Mockery;
 
 class MiddleWareCallbackTest
 {
 	public function __construct(Request $request, Response $response, Closure $next, $arg1, $arg2)
-    { 
-    	$this->var = $arg1.$arg2;
+    {
+    	$this->var = $arg1 . $arg2;
     }
 
     public function normalMethod()
@@ -28,12 +27,12 @@ class MiddleWareCallbackTest
 
 	public static function staticFunc(Request $request, Response $response, Closure $next, $arg1, $arg2)
 	{
-		echo $arg1.$arg2;
+		echo $arg1 . $arg2;
 	}
 }
 
 /**
- * Callback tester
+ * Callback tester.
  */
 class MiddlewareTest
 {

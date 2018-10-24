@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\http\response;
 
-use tests\TestCase;
 use kanso\framework\http\response\Protocol;
+use tests\TestCase;
 
 /**
  * @group unit
@@ -37,7 +37,7 @@ class ProtocolTest extends TestCase
 		$this->assertFalse($protocol->isSecure());
 
 		$protocol->set('https');
-		
+
 		$this->assertTrue($protocol->isSecure());
 	}
 }

@@ -7,45 +7,45 @@
 
 namespace kanso\cms\install;
 
-use RuntimeException;
 use Closure;
+use kanso\cms\access\Access;
 use kanso\framework\config\Config;
 use kanso\framework\database\Database;
 use kanso\framework\http\request\Request;
-use kanso\framework\http\response\Response;
-use kanso\cms\access\Access;
 use kanso\framework\http\response\exceptions\NotFoundException;
+use kanso\framework\http\response\Response;
+use RuntimeException;
 
 /**
- * CMS installer
+ * CMS installer.
  *
  * @author Joe J. Howard
  */
-class Installer 
+class Installer
 {
     /**
-     * Database Connection
+     * Database Connection.
      *
      * @var \kanso\framework\database\Database
      */
     private $database;
 
     /**
-     * Database Connection
+     * Database Connection.
      *
      * @var \kanso\framework\config\Config
      */
     private $config;
 
     /**
-     * Access manager
+     * Access manager.
      *
-     * @var \kanso\cms\access\Access 
+     * @var \kanso\cms\access\Access
      */
     private $access;
 
     /**
-     * The path to "Install.php"
+     * The path to "Install.php".
      *
      * @var string
      */
@@ -58,13 +58,13 @@ class Installer
      */
     private $isInstalled;
 
-	/**
-     * Constructor
+    /**
+     * Constructor.
      *
      * @access public
-     * @param  \kanso\framework\config\Config     $config     Config manager
-     * @param  \kanso\framework\database\Database $Database   Database manager
-     * @param  \kanso\cms\access\Access           $access     Access module
+     * @param \kanso\framework\config\Config     $config   Config manager
+     * @param \kanso\framework\database\Database $Database Database manager
+     * @param \kanso\cms\access\Access           $access   Access module
      */
     public function __construct(Config $config, Database $database, Access $access, string $installPath)
     {
@@ -74,9 +74,9 @@ class Installer
 
         $this->access = $access;
 
-        $this->installPath = $installPath.DIRECTORY_SEPARATOR.'Install.php';
+        $this->installPath = $installPath . DIRECTORY_SEPARATOR . 'Install.php';
 
-        if (file_exists($installPath.DIRECTORY_SEPARATOR.'Install.sample.php'))
+        if (file_exists($installPath . DIRECTORY_SEPARATOR . 'Install.sample.php'))
         {
             throw new NotFoundException('Could not install Kanso. You need to rename the "Install.sample.php" to "Install.php".');
         }
@@ -85,7 +85,7 @@ class Installer
     }
 
     /**
-     * Returns TRUE if Kanso is installed or FALSE if it is not
+     * Returns TRUE if Kanso is installed or FALSE if it is not.
      *
      * @access public
      * @return bool
@@ -101,98 +101,98 @@ class Installer
     }
 
     /**
-     * Install the CMS
+     * Install the CMS.
      *
      * @access public
-     * @param  \kanso\framework\http\request\Request   $request  Framework Request instance
-     * @param  \kanso\framework\http\response\Response $response Framework Response instance
-     * @param  \Closure                                $next     Next middleware layer
-     * @param  string                                  $pageType The page type being loaded
+     * @param \kanso\framework\http\request\Request   $request  Framework Request instance
+     * @param \kanso\framework\http\response\Response $response Framework Response instance
+     * @param \Closure                                $next     Next middleware layer
+     * @param string                                  $pageType The page type being loaded
      */
     public function run(Request $request, Response $response, Closure $next)
     {
-        # Validate installation
+        // Validate installation
         if ($this->isInstalled)
         {
-            throw new RuntimeException("Could not install Kanso. Kanso is already installed. If you want to reinstall it, use the <code>reInstall()</code> method.");
+            throw new RuntimeException('Could not install Kanso. Kanso is already installed. If you want to reinstall it, use the <code>reInstall()</code> method.');
         }
 
-        # Install the Kanso database
+        // Install the Kanso database
         $this->installDB();
 
-        # Create robots.txt
+        // Create robots.txt
         $this->installRobots();
 
-        # Delete the install file
+        // Delete the install file
         unlink($this->installPath);
-        
+
         $next();
     }
 
     /**
-     * Show the install splash
+     * Show the install splash.
      *
      * @access public
-     * @param  \kanso\framework\http\request\Request   $request  Framework Request instance
-     * @param  \kanso\framework\http\response\Response $response Framework Response instance
-     * @param  \Closure                                $next     Next middleware layer
-     * @param  string                                  $pageType The page type being loaded
+     * @param \kanso\framework\http\request\Request   $request  Framework Request instance
+     * @param \kanso\framework\http\response\Response $response Framework Response instance
+     * @param \Closure                                $next     Next middleware layer
+     * @param string                                  $pageType The page type being loaded
      */
     public function display(Request $request, Response $response, Closure $next)
     {
-        # Set appropriate content type header
+        // Set appropriate content type header
         $response->format()->set('text/html');
 
-        # Set the response body
-        $response->body()->set($response->view()->display(dirname(__FILE__).'/views/installed.php'));
-        
-        # Set the status
+        // Set the response body
+        $response->body()->set($response->view()->display(dirname(__FILE__) . '/views/installed.php'));
+
+        // Set the status
         $response->status()->set(200);
 
-        # Disable the cache
+        // Disable the cache
         $response->cache()->disable();
 
-        # destroy the cookie
+        // destroy the cookie
         $response->cookie()->destroy();
 
-        # destroy the session
+        // destroy the session
         $response->session()->destroy();
     }
 
     /**
-     * Reinstall Kanso to defaults but keep database and admin panel login credentials
+     * Reinstall Kanso to defaults but keep database and admin panel login credentials.
      *
      * @access public
      */
     public function reInstall()
     {
-        # Restore default configuration
+        // Restore default configuration
         $this->config->set('cms', $this->config->getDefault('cms'));
 
-        # Install the Kanso database
+        // Install the Kanso database
         $this->installDB();
 
         return true;
     }
 
     /**
-     * Install the Kanso database
+     * Install the Kanso database.
      *
      * @access private
-     * @return NULL
+     * @return null
      */
     private function installDB()
     {
-    	# Save the database name
-        $dbname = $this->config->get('database.configurations.'.$this->config->get('database.default').'.name');
+    	// Save the database name
+        $dbname = $this->config->get('database.configurations.' . $this->config->get('database.default') . '.name');
 
-        # Create the default database
+        // Create the default database
         $SQL = $this->database->create()->builder();
 
-        # Include default Kanso Settings
+        // Include default Kanso Settings
         include 'databaseDefaults.php';
 
-        # Create new tables
+        // Create new tables
         $SQL->CREATE_TABLE('posts', $KANSO_DEFAULTS_POSTS_TABLE);
 
         $SQL->CREATE_TABLE('tags', $KANSO_DEFAULTS_TAGS_TABLE);
@@ -218,68 +218,68 @@ class Installer
 
         $SQL->ALTER_TABLE('categories_to_posts')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
         $SQL->ALTER_TABLE('categories_to_posts')->MODIFY_COLUMN('category_id')->ADD_FOREIGN_KEY('categories', 'id');
-        
+
         $SQL->ALTER_TABLE('posts')->MODIFY_COLUMN('author_id')->ADD_FOREIGN_KEY('users', 'id');
 
-        # No foreign keys here so that you can delete
-        # an attachment without having a constraint
+        // No foreign keys here so that you can delete
+        // an attachment without having a constraint
         $SQL->ALTER_TABLE('comments')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
         $SQL->ALTER_TABLE('content_to_posts')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
-        
-        # Populate tables
 
-        # Default Tags
+        // Populate tables
+
+        // Default Tags
         foreach ($KANSO_DEFAULT_TAGS as $i => $tag)
         {
             $SQL->INSERT_INTO('tags')->VALUES($tag)->QUERY();
         }
 
-        # Default categories
+        // Default categories
         foreach ($KANSO_DEFAULT_CATEGORIES as $i => $category)
         {
             $SQL->INSERT_INTO('categories')->VALUES($category)->QUERY();
         }
 
-        # Default media
+        // Default media
         foreach ($KANSO_DEFAULT_IMAGES as $image)
         {
             $SQL->INSERT_INTO('media_uploads')->VALUES($image)->QUERY();
         }
 
-        # Default user
+        // Default user
         $SQL->INSERT_INTO('users')->VALUES($KANSO_DEFAULT_USER)->QUERY();
 
-        # Default Articles
+        // Default Articles
         foreach ($KANSO_DEFAULT_ARTICLES as $i => $article)
         {
             $SQL->INSERT_INTO('posts')->VALUES($article)->QUERY();
-            
+
             foreach ($KANSO_DEFAULT_TAGS as $t => $tag)
             {
-                # skip untagged
+                // skip untagged
                 if ($t === 0)
                 {
                     continue;
                 }
-                
+
                 $SQL->INSERT_INTO('tags_to_posts')->VALUES(['post_id' => $i+1, 'tag_id' => $t+1])->QUERY();
             }
 
             foreach ($KANSO_DEFAULT_CATEGORIES as $j => $tag)
             {
-                # skip uncategorized
+                // skip uncategorized
                 if ($j === 0)
                 {
                     continue;
                 }
-                
+
                 $SQL->INSERT_INTO('categories_to_posts')->VALUES(['post_id' => $i+1, 'category_id' => $j+1])->QUERY();
             }
-            
+
             $SQL->INSERT_INTO('content_to_posts')->VALUES(['post_id' => $i+1, 'content' => $KANSO_DEFAULT_ARTICLE_CONTENT[$i]])->QUERY();
         }
-        
-        # Default comments
+
+        // Default comments
         foreach ($KANSO_DEFAULT_COMMENTS as $comment)
         {
             $SQL->INSERT_INTO('comments')->VALUES($comment)->QUERY();
@@ -287,7 +287,7 @@ class Installer
     }
 
     /**
-     * Create the robots.txt file
+     * Create the robots.txt file.
      *
      * @access private
      */
@@ -300,7 +300,7 @@ class Installer
         {
             $this->access->saveRobots($this->access->blockAllRobotsText());
         }
-        else if ($enabled && empty($content))
+        elseif ($enabled && empty($content))
         {
             $this->access->saveRobots($this->access->defaultRobotsText());
         }

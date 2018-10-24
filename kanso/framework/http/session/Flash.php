@@ -10,21 +10,21 @@ namespace kanso\framework\http\session;
 use kanso\framework\utility\Arr;
 
 /**
- * Session Manager
+ * Session Manager.
  *
  * @author Joe J. Howard
  */
 class Flash implements \Iterator
 {
     /**
-     * The session flash data
+     * The session flash data.
      *
      * @var array
      */
     private $data = [];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
      * @param  $configuration array Array of configuration options
@@ -40,7 +40,7 @@ class Flash implements \Iterator
     {
         reset($this->data);
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -48,37 +48,37 @@ class Flash implements \Iterator
     {
         return current($this->data)['key'];
     }
-    
+
     /**
      * {@inheritdoc}
      */
-    public function key() 
-    {        
+    public function key()
+    {
         return key($this->data);
     }
-    
+
     /**
      * {@inheritdoc}
      */
-    public function next() 
+    public function next()
     {
         return next($this->data)['key'];
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function valid()
     {
         $key = key($this->data);
-        
-        $data = ($key !== NULL && $key !== FALSE);
-        
+
+        $data = ($key !== null && $key !== false);
+
         return $data;
     }
 
     /**
-     * Get the raw data including the iterators
+     * Get the raw data including the iterators.
      *
      * @access public
      * @return array
@@ -89,7 +89,7 @@ class Flash implements \Iterator
     }
 
     /**
-     * Set the raw data including the iterators
+     * Set the raw data including the iterators.
      *
      * @access public
      */
@@ -113,18 +113,18 @@ class Flash implements \Iterator
     }
 
     /**
-     * Get a key from the flash data or the entire flash data
+     * Get a key from the flash data or the entire flash data.
      *
      * @access public
      * @param  string $key The key to use for the value (optional) (default null)
      * @return mixed
      */
-    public function get(string $key = null) 
+    public function get(string $key = null)
     {
         if (!$key) {
-            
+
             $data = [];
-            
+
             foreach ($this->data as $key => $value)
             {
                 $data[$key] = $value['key'];
@@ -135,14 +135,14 @@ class Flash implements \Iterator
 
         if ($this->has($key))
         {
-            return Arr::get($this->data, $key.'.key');
+            return Arr::get($this->data, $key . '.key');
         }
 
         return null;
     }
 
     /**
-     * Check if a key-value exists in the flash data
+     * Check if a key-value exists in the flash data.
      *
      * @access public
      * @param  string $key The key to use for the value
@@ -150,28 +150,28 @@ class Flash implements \Iterator
      */
     public function has(string $key): bool
     {
-        return Arr::has($this->data, $key.'.key');
+        return Arr::has($this->data, $key . '.key');
     }
 
     /**
-     * Save a key/value pair to the flash data
+     * Save a key/value pair to the flash data.
      *
      * @access public
-     * @param  string $key   The key to use for the value
-     * @param  mixed  $value The value to store
+     * @param string $key   The key to use for the value
+     * @param mixed  $value The value to store
      */
-    public function put(string $key, $value) 
+    public function put(string $key, $value)
     {
         Arr::set($this->data, $key, ['key' => $value, 'count' => 0]);
     }
 
     /**
-     * Save a key/value pair to the flash data
+     * Save a key/value pair to the flash data.
      *
      * @access public
-     * @param  array $data Array of data to save
+     * @param array $data Array of data to save
      */
-    public function putMultiple(array $data) 
+    public function putMultiple(array $data)
     {
         foreach ($data as $key => $value)
         {
@@ -180,10 +180,10 @@ class Flash implements \Iterator
     }
 
     /**
-     * Remove a key-value from the flash data
+     * Remove a key-value from the flash data.
      *
      * @access public
-     * @param  string $key They key to remove the value with
+     * @param string $key They key to remove the value with
      */
     public function remove(string $key)
     {
@@ -191,7 +191,7 @@ class Flash implements \Iterator
     }
 
     /**
-     * Clear the sessions flash data
+     * Clear the sessions flash data.
      *
      * @access public
      */
@@ -201,15 +201,15 @@ class Flash implements \Iterator
     }
 
     /**
-     * Loop over the flash data and remove old data
+     * Loop over the flash data and remove old data.
      *
      * @access public
      */
     public function iterate()
-    {            
+    {
         foreach ($this->data as $key => $value)
         {
-            if ($value['count'] + 1 > 1 )
+            if ($value['count'] + 1 > 1)
             {
                 unset($this->data[$key]);
             }

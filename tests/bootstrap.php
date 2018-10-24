@@ -12,21 +12,21 @@ mb_regex_encoding('UTF-8');
 
 mb_internal_encoding('UTF-8');
 
-/**
+/*
  * Path to the Kanso core directory.
  * This is REQUIRED for the application to function
  * properly.
  */
-define('KANSO_DIR', dirname(dirname(__FILE__)).'/kanso');
+define('KANSO_DIR', dirname(dirname(__FILE__)) . '/kanso');
 
-/**
+/*
  * Path to the Kanso app directory.
  * This is REQUIRED for the application to function
  * properly.
  */
-define('APP_DIR',  dirname(dirname(__FILE__)).'/app');
+define('APP_DIR', dirname(dirname(__FILE__)) . '/app');
 
-/**
+/*
  * Kanso env for testing
  */
 define('KANSO_ENV', 'tests');

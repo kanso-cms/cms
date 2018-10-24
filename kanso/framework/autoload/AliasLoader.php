@@ -8,7 +8,7 @@
 namespace kanso\framework\autoload;
 
 /**
- * Alias class loader
+ * Alias class loader.
  *
  * @author Joe J. Howard
  */

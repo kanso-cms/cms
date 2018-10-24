@@ -7,9 +7,8 @@
 
 namespace tests\unit\cms\event;
 
-use Mockery;
-use tests\TestCase;
 use kanso\cms\event\Events;
+use tests\TestCase;
 
 // --------------------------------------------------------------------------
 // START CLASSES

@@ -1,3 +1,3 @@
 <?php
-echo "No Command"
-?>
+
+echo 'No Command';

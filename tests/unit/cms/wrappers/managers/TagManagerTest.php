@@ -7,9 +7,9 @@
 
 namespace tests\unit\cms\wrappers\managers;
 
+use kanso\cms\wrappers\managers\TagManager;
 use Mockery;
 use tests\TestCase;
-use kanso\cms\wrappers\managers\TagManager;
 
 /**
  * @group unit
@@ -27,7 +27,7 @@ class TagManagerTest extends TestCase
         $manager  = new TagManager($sql, $provider);
 
         $provider->shouldReceive('byKey')->with('slug', 'bar', true)->once()->andReturn(null);
-        
+
         $provider->shouldReceive('create')->with(['name' => 'foo', 'slug' => 'bar'])->once()->andReturn($tag);
 
         $manager->create('foo', 'bar');

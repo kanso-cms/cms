@@ -7,7 +7,7 @@
 	</section>
 
 	<!-- POST MESSAGE -->
-	<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'post-message.php'); ?>
+	<?php require_once($_TEMPLATES_DIR . DIRECTORY_SEPARATOR . 'post-message.php'); ?>
 
 	<!-- CUSTOM PAGE CONTENT -->
 	<?php

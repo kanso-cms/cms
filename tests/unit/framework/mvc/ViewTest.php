@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\mvc;
 
-use tests\TestCase;
 use kanso\framework\mvc\view\View;
+use tests\TestCase;
 
 /**
  * @group unit
@@ -21,16 +21,16 @@ class ViewTest extends TestCase
     private function getInclude()
     {
         $handle = tmpfile();
-                
+
         $path = stream_get_meta_data($handle)['uri'];
 
         fclose($handle);
 
         file_put_contents($path, '<?php $foo = "bar"; ?>');
 
-        rename($path, $path.'.php');
+        rename($path, $path . '.php');
 
-        return $path.'.php';
+        return $path . '.php';
     }
 
     /**
@@ -39,16 +39,16 @@ class ViewTest extends TestCase
     private function getTemplate()
     {
         $handle = tmpfile();
-                
+
         $path = stream_get_meta_data($handle)['uri'];
 
         fclose($handle);
 
         file_put_contents($path, '<?php echo $foo; ?>');
 
-        rename($path, $path.'.php');
+        rename($path, $path . '.php');
 
-        return $path.'.php';
+        return $path . '.php';
     }
 
     /**

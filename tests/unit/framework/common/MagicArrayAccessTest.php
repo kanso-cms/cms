@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\common;
 
-use tests\TestCase;
 use kanso\framework\common\MagicArrayAccessTrait;
+use tests\TestCase;
 
 // --------------------------------------------------------------------------
 // START CLASSES

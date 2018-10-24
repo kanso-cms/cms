@@ -21,7 +21,7 @@
 				<!-- INPUTS -->
 			    <div class="form-field row floor-xs">
 			        <label for="username">Username</label>
-			        <input type="text" name="username" id="username" data-js-required="true" class="js-mask-alpha-space"  data-js-min-length="5" value="<?php if (isset($_POST['username'])) echo $_POST['username'];?>">
+			        <input type="text" name="username" id="username" data-js-required="true" class="js-mask-alpha-space"  data-js-min-length="5" value="<?php if (isset($_POST['username'])) echo $_POST['username']; ?>">
 			        <p class="help-danger">* Please enter a username.</p>
 			    </div>
 			    
@@ -32,7 +32,7 @@
 			    </div>
 
 			    <!-- ACCESS TOKEN -->
-			    <input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN;?>">
+			    <input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN; ?>">
 			    
 				<!-- SUBMIT -->
 			    <button type="submit" class="btn btn-primary btn-xl raised btn-block with-spinner">

@@ -8,23 +8,22 @@
 namespace kanso\cms\wrappers;
 
 use InvalidArgumentException;
-use kanso\cms\wrappers\Wrapper;
 use kanso\framework\utility\Str;
 use kanso\framework\utility\UUID;
 
 /**
- * User utility wrapper
+ * User utility wrapper.
  *
  * @author Joe J. Howard
  */
 class User extends Wrapper
 {
     /**
-     * Override the set method
+     * Override the set method.
      *
      * @access public
-     * @param  string $key   Key to set
-     * @param  mixed  $value Value to set
+     * @param string $key   Key to set
+     * @param mixed  $value Value to set
      */
     public function __set(string $key, $value)
     {
@@ -32,14 +31,14 @@ class User extends Wrapper
         {
             $this->data[$key] = Str::slug($value);
         }
-        else if ($key === 'username')
+        elseif ($key === 'username')
         {
             $this->data[$key] = Str::alphaNumDash($value);
         }
         else
         {
             $this->data[$key] = $value;
-        }        
+        }
     }
 
     /**
@@ -73,7 +72,7 @@ class User extends Wrapper
         return !$saved ? false : true;
 	}
 
-	/**
+    /**
      * {@inheritdoc}
      */
     public function delete(): bool
@@ -87,10 +86,10 @@ class User extends Wrapper
 
             if ($this->SQL->DELETE_FROM('users')->WHERE('id', '=', $this->data['id'])->QUERY())
             {
-                # Change all their posts
+                // Change all their posts
                 $this->SQL->UPDATE('posts')->SET(['author_id' => 1])->WHERE('author_id', '=', $this->data['id'])->QUERY();
 
-                # Change all their uploaded images
+                // Change all their uploaded images
                 $this->SQL->UPDATE('media_uploads')->SET(['uploader_id' => 1])->WHERE('uploader_id', '=', $this->data['id'])->QUERY();
 
                 return true;
@@ -101,7 +100,7 @@ class User extends Wrapper
 	}
 
     /**
-     * Generate an access token for this user
+     * Generate an access token for this user.
      *
      * @return \kanso\cms\wrappers\User
      */

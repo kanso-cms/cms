@@ -7,10 +7,10 @@
 
 namespace tests\unit\framework\database\query;
 
-use Mockery;
-use tests\TestCase;
 use kanso\framework\database\query\Builder;
 use kanso\framework\database\query\Query;
+use Mockery;
+use tests\TestCase;
 
 /**
  * @group unit
@@ -24,7 +24,7 @@ class AlterTest extends TestCase
     {
         $query = 'ALTER TABLE `prefixed_my_table_name` ADD `thumbnail_id` INTEGER | UNSIGNED';
 
-        $columns = 
+        $columns =
         [
             [
                 'Field'   => 'id',
@@ -32,8 +32,8 @@ class AlterTest extends TestCase
                 'Null'    => 'NO',
                 'Key'     => 'PRI',
                 'Default' => 'NULL',
-                'Extra'   => 'auto_increment'
-            ]
+                'Extra'   => 'auto_increment',
+            ],
         ];
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
@@ -61,7 +61,7 @@ class AlterTest extends TestCase
     {
         $query = 'ALTER TABLE `prefixed_my_table_name` DROP `id`';
 
-        $columns = 
+        $columns =
         [
             [
                 'Field'   => 'id',
@@ -69,8 +69,8 @@ class AlterTest extends TestCase
                 'Null'    => 'NO',
                 'Key'     => 'PRI',
                 'Default' => 'NULL',
-                'Extra'   => 'auto_increment'
-            ]
+                'Extra'   => 'auto_increment',
+            ],
         ];
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
@@ -98,7 +98,7 @@ class AlterTest extends TestCase
     {
         $query = 'ALTER TABLE `prefixed_my_table_name` MODIFY COLUMN `id` INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT';
 
-        $columns = 
+        $columns =
         [
             [
                 'Field'   => 'id',
@@ -106,8 +106,8 @@ class AlterTest extends TestCase
                 'Null'    => 'NO',
                 'Key'     => 'PRI',
                 'Default' => 'NULL',
-                'Extra'   => 'auto_increment'
-            ]
+                'Extra'   => 'auto_increment',
+            ],
         ];
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
@@ -133,7 +133,7 @@ class AlterTest extends TestCase
      */
     public function testAddPrimaryKey()
     {
-        $columns = 
+        $columns =
         [
             [
                 'Field'   => 'id',
@@ -141,8 +141,8 @@ class AlterTest extends TestCase
                 'Null'    => 'NO',
                 'Key'     => 'PRI',
                 'Default' => 'NULL',
-                'Extra'   => 'auto_increment'
-            ]
+                'Extra'   => 'auto_increment',
+            ],
         ];
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
@@ -172,7 +172,7 @@ class AlterTest extends TestCase
      */
     public function testDropPrimaryKey()
     {
-        $columns = 
+        $columns =
         [
             [
                 'Field'   => 'id',
@@ -180,8 +180,8 @@ class AlterTest extends TestCase
                 'Null'    => 'NO',
                 'Key'     => 'PRI',
                 'Default' => 'NULL',
-                'Extra'   => 'auto_increment'
-            ]
+                'Extra'   => 'auto_increment',
+            ],
         ];
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
@@ -209,7 +209,7 @@ class AlterTest extends TestCase
      */
     public function testAddNotNull()
     {
-        $columns = 
+        $columns =
         [
             [
                 'Field'   => 'id',
@@ -217,8 +217,8 @@ class AlterTest extends TestCase
                 'Null'    => '',
                 'Key'     => 'PRI',
                 'Default' => 'NULL',
-                'Extra'   => 'auto_increment'
-            ]
+                'Extra'   => 'auto_increment',
+            ],
         ];
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
@@ -248,7 +248,7 @@ class AlterTest extends TestCase
      */
     public function testDropNotNull()
     {
-        $columns = 
+        $columns =
         [
             [
                 'Field'   => 'id',
@@ -256,8 +256,8 @@ class AlterTest extends TestCase
                 'Null'    => 'NO',
                 'Key'     => 'PRI',
                 'Default' => 'NULL',
-                'Extra'   => 'auto_increment'
-            ]
+                'Extra'   => 'auto_increment',
+            ],
         ];
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
@@ -285,7 +285,7 @@ class AlterTest extends TestCase
      */
     public function testAddUnsigned()
     {
-        $columns = 
+        $columns =
         [
             [
                 'Field'   => 'id',
@@ -293,8 +293,8 @@ class AlterTest extends TestCase
                 'Null'    => 'NO',
                 'Key'     => 'PRI',
                 'Default' => 'NULL',
-                'Extra'   => 'auto_increment'
-            ]
+                'Extra'   => 'auto_increment',
+            ],
         ];
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
@@ -322,7 +322,7 @@ class AlterTest extends TestCase
      */
     public function testDropUnsigned()
     {
-        $columns = 
+        $columns =
         [
             [
                 'Field'   => 'id',
@@ -330,8 +330,8 @@ class AlterTest extends TestCase
                 'Null'    => 'NO',
                 'Key'     => 'PRI',
                 'Default' => 'NULL',
-                'Extra'   => 'auto_increment unsigned'
-            ]
+                'Extra'   => 'auto_increment unsigned',
+            ],
         ];
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
@@ -359,7 +359,7 @@ class AlterTest extends TestCase
      */
     public function testSetAutoIncrement()
     {
-        $columns = 
+        $columns =
         [
             [
                 'Field'   => 'id',
@@ -367,8 +367,8 @@ class AlterTest extends TestCase
                 'Null'    => 'NO',
                 'Key'     => '',
                 'Default' => 'NULL',
-                'Extra'   => 'unsigned'
-            ]
+                'Extra'   => 'unsigned',
+            ],
         ];
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
@@ -396,7 +396,7 @@ class AlterTest extends TestCase
      */
     public function testDropAutoIncrement()
     {
-        $columns = 
+        $columns =
         [
             [
                 'Field'   => 'id',
@@ -404,8 +404,8 @@ class AlterTest extends TestCase
                 'Null'    => 'NO',
                 'Key'     => 'PRI',
                 'Default' => 'NULL',
-                'Extra'   => 'auto_increment unsigned'
-            ]
+                'Extra'   => 'auto_increment unsigned',
+            ],
         ];
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
@@ -433,7 +433,7 @@ class AlterTest extends TestCase
      */
     public function testSetSetDefault()
     {
-        $columns = 
+        $columns =
         [
             [
                 'Field'   => 'id',
@@ -441,8 +441,8 @@ class AlterTest extends TestCase
                 'Null'    => 'NO',
                 'Key'     => 'PRI',
                 'Default' => 'foo',
-                'Extra'   => 'auto_increment unsigned'
-            ]
+                'Extra'   => 'auto_increment unsigned',
+            ],
         ];
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
@@ -468,7 +468,7 @@ class AlterTest extends TestCase
      */
     public function testDropSetDefault()
     {
-        $columns = 
+        $columns =
         [
             [
                 'Field'   => 'id',
@@ -476,8 +476,8 @@ class AlterTest extends TestCase
                 'Null'    => 'NO',
                 'Key'     => 'PRI',
                 'Default' => 'foo',
-                'Extra'   => 'auto_increment unsigned'
-            ]
+                'Extra'   => 'auto_increment unsigned',
+            ],
         ];
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
@@ -503,7 +503,7 @@ class AlterTest extends TestCase
      */
     public function testAddUnique()
     {
-         $columns = 
+         $columns =
         [
             [
                 'Field'   => 'id',
@@ -511,8 +511,8 @@ class AlterTest extends TestCase
                 'Null'    => 'NO',
                 'Key'     => 'UNI',
                 'Default' => 'foo',
-                'Extra'   => 'auto_increment unsigned'
-            ]
+                'Extra'   => 'auto_increment unsigned',
+            ],
         ];
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
@@ -538,7 +538,7 @@ class AlterTest extends TestCase
      */
     public function testAddFrogeinKey()
     {
-        $columns = 
+        $columns =
         [
             [
                 'Field'   => 'id',
@@ -546,8 +546,8 @@ class AlterTest extends TestCase
                 'Null'    => 'NO',
                 'Key'     => 'UNI',
                 'Default' => 'foo',
-                'Extra'   => 'auto_increment unsigned'
-            ]
+                'Extra'   => 'auto_increment unsigned',
+            ],
         ];
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
@@ -573,7 +573,7 @@ class AlterTest extends TestCase
      */
     public function testDropFrogeinKey()
     {
-        $columns = 
+        $columns =
         [
             [
                 'Field'   => 'id',
@@ -581,8 +581,8 @@ class AlterTest extends TestCase
                 'Null'    => 'NO',
                 'Key'     => 'UNI',
                 'Default' => 'foo',
-                'Extra'   => 'auto_increment unsigned'
-            ]
+                'Extra'   => 'auto_increment unsigned',
+            ],
         ];
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
@@ -608,7 +608,7 @@ class AlterTest extends TestCase
      */
     public function testChainable()
     {
-        $columns = 
+        $columns =
         [
             [
                 'Field'   => 'id',
@@ -616,8 +616,8 @@ class AlterTest extends TestCase
                 'Null'    => '',
                 'Key'     => 'PRI',
                 'Default' => 'foo',
-                'Extra'   => 'auto_increment'
-            ]
+                'Extra'   => 'auto_increment',
+            ],
         ];
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');

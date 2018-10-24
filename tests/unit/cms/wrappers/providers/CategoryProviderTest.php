@@ -7,9 +7,9 @@
 
 namespace tests\unit\cms\wrappers\providers;
 
+use kanso\cms\wrappers\providers\CategoryProvider;
 use Mockery;
 use tests\TestCase;
-use kanso\cms\wrappers\providers\CategoryProvider;
 
 /**
  * @group unit
@@ -46,7 +46,7 @@ class CategoryProviderTest extends TestCase
     public function testById()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $provider = new CategoryProvider($sql);
 
         $sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);
@@ -66,7 +66,7 @@ class CategoryProviderTest extends TestCase
     public function testByKey()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $provider = new CategoryProvider($sql);
 
         $sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);
@@ -86,7 +86,7 @@ class CategoryProviderTest extends TestCase
     public function testByKeys()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $provider = new CategoryProvider($sql);
 
         $sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);

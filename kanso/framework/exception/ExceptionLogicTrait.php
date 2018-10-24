@@ -2,33 +2,33 @@
 
 namespace kanso\framework\exception;
 
-use Throwable;
 use ErrorException;
-use \kanso\framework\utility\Str;
+use kanso\framework\utility\Str;
+use Throwable;
 
 /**
- * Exception helper functions
+ * Exception helper functions.
  *
  * @author Joe J. Howard
  */
 trait ExceptionLogicTrait
 {
 	/**
-	 * "Context" for error line
+	 * "Context" for error line.
 	 *
 	 * @var int
 	 */
 	protected $sourcePadding = 6;
 
 	/**
-	 * Exception object
+	 * Exception object.
 	 *
 	 * @var \Throwable
 	 */
 	protected $exception;
 
 	/**
-	 * Set the exception object
+	 * Set the exception object.
 	 *
 	 * @access protected
 	 * @param \Throwable $exception Throwable
@@ -39,7 +39,7 @@ trait ExceptionLogicTrait
 	}
 
 	/**
-	 * Get text version of PHP error constant
+	 * Get text version of PHP error constant.
 	 *
 	 * @access protected
 	 * @see    http://php.net/manual/en/errorfunc.constants.php
@@ -70,7 +70,7 @@ trait ExceptionLogicTrait
 
 			return in_array($code, array_keys($codes)) ? $codes[$code] : 'E_ERROR';
 		}
-		else if ($this->exception instanceof RequestException || $this->exceptionParentName() === 'RequestException')
+		elseif ($this->exception instanceof RequestException || $this->exceptionParentName() === 'RequestException')
 		{
 			return Str::camel2case($this->exceptionClassName());
 		}
@@ -79,7 +79,7 @@ trait ExceptionLogicTrait
 	}
 
 	/**
-	 * Get the current exception class without namespace
+	 * Get the current exception class without namespace.
 	 *
 	 * @access protected
 	 * @return string
@@ -92,7 +92,7 @@ trait ExceptionLogicTrait
 	}
 
 	/**
-	 * Get the current exception's parent class without namespace
+	 * Get the current exception's parent class without namespace.
 	 *
 	 * @access protected
 	 * @return string
@@ -105,7 +105,7 @@ trait ExceptionLogicTrait
 	}
 
 	/**
-	 * Convert PHP error code to pretty name
+	 * Convert PHP error code to pretty name.
 	 *
 	 * @access protected
 	 * @see    http://php.net/manual/en/errorfunc.constants.php
@@ -136,7 +136,7 @@ trait ExceptionLogicTrait
 
 			return in_array($code, array_keys($codes)) ? $codes[$code] : 'Error Exception';
 		}
-		else if ($this->exception instanceof RequestException || $this->exceptionParentName() === 'RequestException')
+		elseif ($this->exception instanceof RequestException || $this->exceptionParentName() === 'RequestException')
 		{
 			return Str::camel2case($this->exceptionClassName());
 		}
@@ -144,34 +144,34 @@ trait ExceptionLogicTrait
 		return Str::camel2case($this->exceptionClassName());
 	}
 
-	/**
-	 * Get the exception call trace
-	 *
-	 * @access protected
-	 * @return array
-	 */
+    /**
+     * Get the exception call trace.
+     *
+     * @access protected
+     * @return array
+     */
     protected function errTrace(): array
 	{
 	    $trace = array_reverse(explode("\n", $this->exception->getTraceAsString()));
-	    
+
 	    array_shift($trace);
 
 	    array_pop($trace);
-	    
+
 	    $length = count($trace);
-	    
+
 	    $result = [];
 
 	    foreach ($trace as $call)
 	    {
 	    	$result[] = substr($call, strpos($call, ' '));
 	    }
-	    
+
 	    return $result;
 	}
 
 	/**
-	 * Get source code of error line context
+	 * Get source code of error line context.
 	 *
 	 * @access protected
 	 * @return array
@@ -210,13 +210,13 @@ trait ExceptionLogicTrait
 	}
 
 	/**
-	 * Get the classname of the error file
+	 * Get the classname of the error file.
 	 *
 	 * @access protected
 	 * @return sting
 	 */
 	protected function errClass(): string
-	{		
+	{
 		if(!is_readable($this->exception->getFile()))
 		{
 			return '';
@@ -231,19 +231,19 @@ trait ExceptionLogicTrait
 	    {
 	        if ($token[0] === T_NAMESPACE)
 	        {
-	            foreach ($tokens as $j => $_token) 
+	            foreach ($tokens as $j => $_token)
 	            {
 	                if ($_token[0] === T_STRING)
 	                {
-	                    $namespace .= '\\'.$_token[1];
-	                } 
-	                else if ($_token === '{' || $_token === ';')
+	                    $namespace .= '\\' . $_token[1];
+	                }
+	                elseif ($_token === '{' || $_token === ';')
 	                {
 	                    break;
 	                }
 	            }
 	        }
-	        else if ($token[0] === T_CLASS)
+	        elseif ($token[0] === T_CLASS)
 	        {
 	            foreach ($tokens as $j => $_token)
 	            {
@@ -260,6 +260,6 @@ trait ExceptionLogicTrait
 	    	return '';
 	    }
 
-		return $namespace.'\\'.$class;
+		return $namespace . '\\' . $class;
 	}
 }

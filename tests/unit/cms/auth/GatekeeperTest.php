@@ -7,9 +7,9 @@
 
 namespace tests\unit\cms\auth;
 
+use kanso\cms\auth\Gatekeeper;
 use Mockery;
 use tests\TestCase;
-use kanso\cms\auth\Gatekeeper;
 
 /**
  * @group unit
@@ -21,13 +21,13 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testConstructor()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
 		$session      = Mockery::mock('\kanso\framework\http\session\Session');
 		$email        = Mockery::mock('\kanso\cms\auth\adapters\EmailAdapter');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);
@@ -40,7 +40,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testConstructorLoggedIn()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -50,7 +50,7 @@ class GatekeeperTest extends TestCase
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 
 		$user->access_token = 'foobar';
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(true);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(1);
@@ -69,7 +69,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testConstructorExpiredCSRF()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -79,7 +79,7 @@ class GatekeeperTest extends TestCase
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 
 		$user->access_token = 'foobar';
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(true);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(1);
@@ -102,7 +102,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testIsLoggedInTrue()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -112,7 +112,7 @@ class GatekeeperTest extends TestCase
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 
 		$user->access_token = 'foobar';
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(true);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(1);
@@ -133,13 +133,13 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testIsLoggedInFalse()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
 		$session      = Mockery::mock('\kanso\framework\http\session\Session');
 		$email        = Mockery::mock('\kanso\cms\auth\adapters\EmailAdapter');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);
@@ -154,7 +154,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testGetUserTrue()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -164,7 +164,7 @@ class GatekeeperTest extends TestCase
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 
 		$user->access_token = 'foobar';
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(true);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(1);
@@ -185,13 +185,13 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testGetUserFalse()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
 		$session      = Mockery::mock('\kanso\framework\http\session\Session');
 		$email        = Mockery::mock('\kanso\cms\auth\adapters\EmailAdapter');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);
@@ -206,7 +206,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testRefreshUser()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -218,7 +218,7 @@ class GatekeeperTest extends TestCase
 		$user->access_token = 'foobar';
 
 		$user->id = 1;
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(true);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(1);
@@ -270,7 +270,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testGetTokenLoggenIn()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -280,7 +280,7 @@ class GatekeeperTest extends TestCase
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 
 		$user->access_token = 'foobar';
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(true);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(1);
@@ -301,14 +301,14 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testGetTokenLoggenOut()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
 		$session      = Mockery::mock('\kanso\framework\http\session\Session');
 		$email        = Mockery::mock('\kanso\cms\auth\adapters\EmailAdapter');
 		$token        = Mockery::mock('\kanso\framework\http\session\Token');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);
@@ -327,13 +327,13 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testIsGuestTrue()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
 		$session      = Mockery::mock('\kanso\framework\http\session\Session');
 		$email        = Mockery::mock('\kanso\cms\auth\adapters\EmailAdapter');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);
@@ -348,7 +348,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testIsGuestFalse()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -360,7 +360,7 @@ class GatekeeperTest extends TestCase
 		$user->access_token = 'foobar';
 
 		$user->role = 'administrator';
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(true);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(1);
@@ -389,7 +389,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testIsAdmin()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -401,7 +401,7 @@ class GatekeeperTest extends TestCase
 		$user->access_token = 'foobar';
 
 		$user->role = 'administrator';
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(true);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(1);
@@ -430,7 +430,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testverifyTokenLoggedIn()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -440,7 +440,7 @@ class GatekeeperTest extends TestCase
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 
 		$user->access_token = 'foobar';
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(true);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(1);
@@ -462,14 +462,14 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testverifyTokenLoggedOut()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
 		$session      = Mockery::mock('\kanso\framework\http\session\Session');
 		$email        = Mockery::mock('\kanso\cms\auth\adapters\EmailAdapter');
 		$token        = Mockery::mock('\kanso\framework\http\session\Token');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);
@@ -490,7 +490,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testLogin()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -499,7 +499,7 @@ class GatekeeperTest extends TestCase
 		$token        = Mockery::mock('\kanso\framework\http\session\Token');
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 		$password     = Mockery::mock('\kanso\framework\security\password\encrypters\NativePHP');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);
@@ -553,7 +553,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testLoginIncorrectPass()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -562,7 +562,7 @@ class GatekeeperTest extends TestCase
 		$token        = Mockery::mock('\kanso\framework\http\session\Token');
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 		$password     = Mockery::mock('\kanso\framework\security\password\encrypters\NativePHP');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);
@@ -589,7 +589,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testLoginPending()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -598,7 +598,7 @@ class GatekeeperTest extends TestCase
 		$token        = Mockery::mock('\kanso\framework\http\session\Token');
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 		$password     = Mockery::mock('\kanso\framework\security\password\encrypters\NativePHP');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);
@@ -621,7 +621,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testLoginBanned()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -630,7 +630,7 @@ class GatekeeperTest extends TestCase
 		$token        = Mockery::mock('\kanso\framework\http\session\Token');
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 		$password     = Mockery::mock('\kanso\framework\security\password\encrypters\NativePHP');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);
@@ -653,7 +653,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testLoginLocked()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -662,7 +662,7 @@ class GatekeeperTest extends TestCase
 		$token        = Mockery::mock('\kanso\framework\http\session\Token');
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 		$password     = Mockery::mock('\kanso\framework\security\password\encrypters\NativePHP');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);
@@ -685,7 +685,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testLoginDoesntExist()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -694,7 +694,7 @@ class GatekeeperTest extends TestCase
 		$token        = Mockery::mock('\kanso\framework\http\session\Token');
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 		$password     = Mockery::mock('\kanso\framework\security\password\encrypters\NativePHP');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);
@@ -717,7 +717,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testLoginByUsername()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -726,7 +726,7 @@ class GatekeeperTest extends TestCase
 		$token        = Mockery::mock('\kanso\framework\http\session\Token');
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 		$password     = Mockery::mock('\kanso\framework\security\password\encrypters\NativePHP');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);
@@ -749,7 +749,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testLogout()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -759,7 +759,7 @@ class GatekeeperTest extends TestCase
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 
 		$user->access_token = 'foobar';
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(true)->once();
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(1);
@@ -786,7 +786,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testForgotPassowrd()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -795,7 +795,7 @@ class GatekeeperTest extends TestCase
 		$token        = Mockery::mock('\kanso\framework\http\session\Token');
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 		$password     = Mockery::mock('\kanso\framework\security\password\encrypters\NativePHP');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);
@@ -816,7 +816,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testForgotPassowrdByUsername()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -825,7 +825,7 @@ class GatekeeperTest extends TestCase
 		$token        = Mockery::mock('\kanso\framework\http\session\Token');
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 		$password     = Mockery::mock('\kanso\framework\security\password\encrypters\NativePHP');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);
@@ -846,7 +846,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testForgotPassowrdWithEmail()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -855,7 +855,7 @@ class GatekeeperTest extends TestCase
 		$token        = Mockery::mock('\kanso\framework\http\session\Token');
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 		$password     = Mockery::mock('\kanso\framework\security\password\encrypters\NativePHP');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);
@@ -878,7 +878,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testResetPassword()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -887,7 +887,7 @@ class GatekeeperTest extends TestCase
 		$token        = Mockery::mock('\kanso\framework\http\session\Token');
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 		$password     = Mockery::mock('\kanso\framework\security\password\encrypters\NativePHP');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);
@@ -912,7 +912,7 @@ class GatekeeperTest extends TestCase
 	 */
 	public function testForgotUsername()
 	{
-		$sql          = Mockery::mock('\kanso\framework\database\query\Builder'); 
+		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
 		$crypto       = Mockery::mock('\kanso\framework\security\Crypto');
 		$cookie       = Mockery::mock('\kanso\framework\http\cookie\Cookie');
@@ -921,7 +921,7 @@ class GatekeeperTest extends TestCase
 		$token        = Mockery::mock('\kanso\framework\http\session\Token');
 		$user         = Mockery::mock('\kanso\cms\wrappers\User');
 		$password     = Mockery::mock('\kanso\framework\security\password\encrypters\NativePHP');
-		
+
 		$cookie->shouldReceive('isLoggedIn')->andReturn(false);
 
 		$cookie->shouldReceive('get')->with('user_id')->andReturn(null);

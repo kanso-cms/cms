@@ -8,7 +8,7 @@
 namespace kanso\framework\git\commands\utility;
 
 /**
- * Parse diff parse
+ * Parse diff parse.
  *
  * @see  https://git-scm.com/docs/git-diff
  * @author Joe J. Howard
@@ -16,14 +16,14 @@ namespace kanso\framework\git\commands\utility;
 class DiffParser
 {
     /**
-     * Get HTML diff meta stats
+     * Get HTML diff meta stats.
      *
      * @param  array  $diff       Pre-parsed output from diff command
      * @param  string $tooltipdir Tooltip suffix direction (optional) (default 'e')
      * @param  string $classes    Classnames for meta elements (optional) (default '')
      * @return string
      */
-    public static function metaStat(array $diff, string $tooltipdir = 'e', string $classes = '') 
+    public static function metaStat(array $diff, string $tooltipdir = 'e', string $classes = '')
     {
         // Binary files
         if ($diff['is_binary'] === true)
@@ -37,7 +37,7 @@ class DiffParser
                 </span>
                 ";
             }
-            else if ($diff['file_removed'] === true)
+            elseif ($diff['file_removed'] === true)
             {
                 return "
                 <span class=\"diff-meta $classes tooltipped tooltipped-$tooltipdir\" data-tooltip=\"Binary file removed\">
@@ -59,7 +59,7 @@ class DiffParser
             }
         }
 
-        # Special case for adding a new empty file
+        // Special case for adding a new empty file
         if ($diff['file_added'] === true && empty($diff['chunks']))
         {
             return "
@@ -70,7 +70,7 @@ class DiffParser
             ";
         }
 
-        # Special case for deleting an empty file
+        // Special case for deleting an empty file
         if ($diff['file_removed'] === true && empty($diff['chunks']))
         {
             return "
@@ -80,7 +80,6 @@ class DiffParser
             </span>
             ";
         }
-
 
         $additions = $diff['additions'];
         $deletions = $diff['deletions'];
@@ -96,27 +95,27 @@ class DiffParser
             $delCnt = 0;
         }
         // Full additions
-        else if ($additions > 5 && $deletions === 0)
+        elseif ($additions > 5 && $deletions === 0)
         {
             $addCnt = 5;
             $delCnt = 0;
         }
 
         // Full deletions
-        else if ($deletions <= 5 && $additions === 0)
+        elseif ($deletions <= 5 && $additions === 0)
         {
             $addCnt = 0;
             $delCnt = $deletions;
         }
         // Full deletions
-        else if ($deletions > 5 && $additions === 0)
+        elseif ($deletions > 5 && $additions === 0)
         {
             $addCnt = 0;
             $delCnt = 5;
         }
 
         // 50-50
-        else if ($additions === $deletions)
+        elseif ($additions === $deletions)
         {
             if ($additions === 1)
             {
@@ -131,7 +130,7 @@ class DiffParser
         }
 
         // More Additions
-        else if ($additions > $deletions)
+        elseif ($additions > $deletions)
         {
             $diff = $additions - $deletions;
             if ($additions <= 3)
@@ -139,7 +138,7 @@ class DiffParser
                 $addCnt = $additions;
                 $delCnt = $deletions;
             }
-            else if ($additions > 50 && $diff > 20)
+            elseif ($additions > 50 && $diff > 20)
             {
                 $addCnt = 3;
                 $delCnt = 2;
@@ -152,7 +151,7 @@ class DiffParser
         }
 
         // More deletions
-        else if ($deletions > $additions)
+        elseif ($deletions > $additions)
         {
             $diff = $deletions - $additions;
             if ($deletions <= 3)
@@ -160,7 +159,7 @@ class DiffParser
                 $addCnt = $additions;
                 $delCnt = $deletions;
             }
-            else if ($deletions > 50 && $diff > 20)
+            elseif ($deletions > 50 && $diff > 20)
             {
                 $delCnt = 3;
                 $addCnt = 2;
@@ -198,12 +197,12 @@ class DiffParser
         ";
     }
 
-    public static function parse($output, $git, $sha = null, $limit = true) 
+    public static function parse($output, $git, $sha = null, $limit = true)
     {
-        # Split the files into files -> lines
+        // Split the files into files -> lines
         $files = self::splitFiles($output);
 
-        # Total diff array
+        // Total diff array
         $diffs = [
             'total_changes'   => 0,
             'total_additions' => 0,
@@ -212,7 +211,7 @@ class DiffParser
             'reached_max'     => false,
         ];
 
-        # Loop the files
+        // Loop the files
         foreach ($files as $i => $file)
         {
 
@@ -223,8 +222,8 @@ class DiffParser
                     $diffs['reached_max'] = true;
                 }
             }
-            
-            # Diff template
+
+            // Diff template
             $fileArray = [
                 'oldSha'       => null,
                 'is_binary'    => false,
@@ -238,27 +237,27 @@ class DiffParser
             ];
 
             // Check for binary files
-            $isBinary = ( isset($file[2]) && strpos($file[2], 'Binary files') !== false || ( isset($file[3]) && strpos($file[3], 'Binary files') !== false) );
+            $isBinary = (isset($file[2]) && strpos($file[2], 'Binary files') !== false || (isset($file[3]) && strpos($file[3], 'Binary files') !== false));
             if ($isBinary)
             {
                 $fileArray['is_binary']    = true;
                 $fileArray['file_added']   = strpos($file[1], 'new file mode') !== false;
                 $fileArray['file_removed'] = strpos($file[1], 'deleted file mode') !== false;
             }
-            
-            # Counters
-            $current_hunk = 0;       
+
+            // Counters
+            $current_hunk = 0;
             $b_line = 0;
             $a_line = 0;
-        
-            # Used to skip the headers in the git patches
+
+            // Used to skip the headers in the git patches
             $indiff = false;
 
-            # Loop the file lines
+            // Loop the file lines
             foreach ($file as $line)
             {
-                
-                # Diff header
+
+                // Diff header
                 if (preg_match("/^diff --git SRC\/([^.]+\.\w+) DST\/([^.]+\.\w+)$/", $line, $matches))
                 {
 
@@ -266,7 +265,7 @@ class DiffParser
                     $fileArray['file_removed'] = strpos($file[1], 'deleted file mode') !== false;
 
                     $fileArray['filename'] =  $matches[1];
-                    
+
                     // Reset file counter and maintain diff
                     $current_hunk = 0;
                     $indiff = true;
@@ -274,7 +273,6 @@ class DiffParser
                     $ext     = substr($matches[1], strrpos($matches[1], '.') + 1);
                     $isFont  = in_array($ext, ['eot', 'ttf', 'woff', 'ttf', 'woff2', 'otf']);
                     $isImage = in_array($ext, ['jpg', 'jpeg', 'gif', 'png']);
-
 
                     // Check for fonts
                     if ($fileArray['is_binary'] === false)
@@ -288,8 +286,8 @@ class DiffParser
                     }
                     // Binary files that are images need to the old image
                     // to compare - find the parent sha from the previous commit
-                    else if ($isImage && strpos($file[1], 'index') !== false)
-                    {                       
+                    elseif ($isImage && strpos($file[1], 'index') !== false)
+                    {
                         $commit = $git->log(['reverse' => true, 'limit' => 1], [$sha, '--', $matches[1]]);
                         if ($commit)
                         {
@@ -298,54 +296,53 @@ class DiffParser
                     }
                     continue;
                 }
-                
-                # If we havent picked up a file diff carry on calmly
+
+                // If we havent picked up a file diff carry on calmly
                 if (!$indiff)
                 {
                     continue;
                 }
 
-                # Diff starts
+                // Diff starts
                 if (preg_match('#^@@ -([0-9]+),?([0-9]+)? \+([0-9]+),?([0-9]+)? @@ ?(.*)#', $line, $matches))
                 {
-                    
 
-                    # Prepare for diffs
+                    // Prepare for diffs
                     $current_hunk++;
 
-                    # Prepare for diffs
+                    // Prepare for diffs
                     $fileArray['chunks'][$current_hunk-1][] = [
-                        'type'   => 'header', 
-                        'a_line' => null, 
-                        'b_line' => null, 
-                        'value'  => "@@ -$matches[1],$matches[2] +$matches[3],$matches[4] @@ ".htmlentities($matches[5]),
+                        'type'   => 'header',
+                        'a_line' => null,
+                        'b_line' => null,
+                        'value'  => "@@ -$matches[1],$matches[2] +$matches[3],$matches[4] @@ " . htmlentities($matches[5]),
                     ];
-                    
-                    # Take down the line numbers to use
+
+                    // Take down the line numbers to use
                     $b_line = (int) $matches[1];
                     $a_line = (int) $matches[3];
-                    
+
                     continue;
                 }
 
-                # Padding lines that we dont really care about
+                // Padding lines that we dont really care about
                 if (preg_match('#^[+-]{3,3}#', $line))
                 {
                     continue;
                 }
 
-                # Removed lines
+                // Removed lines
                 if (preg_match('#^-(.*)$#', $line, $matches))
                 {
                     $diffs['total_deletions'] += 1;
                     $diffs['total_changes']   += 1;
                     $fileArray['deletions']   += 1;
                     $fileArray['changes']     += 1;
-                    
+
                     $fileArray['chunks'][$current_hunk-1][] = [
-                        'type'   => 'deletion', 
-                        'a_line' => $b_line++, 
-                        'b_line' => null, 
+                        'type'   => 'deletion',
+                        'a_line' => $b_line++,
+                        'b_line' => null,
                         'value'  => $matches[1],
                     ];
                     continue;
@@ -359,9 +356,9 @@ class DiffParser
                     $fileArray['changes']     += 1;
 
                     $fileArray['chunks'][$current_hunk-1][] = [
-                        'type'   => 'addition', 
-                        'a_line' => null, 
-                        'b_line' => $a_line++, 
+                        'type'   => 'addition',
+                        'a_line' => null,
+                        'b_line' => $a_line++,
                         'value'  => $matches[1],
                     ];
                     continue;
@@ -369,11 +366,11 @@ class DiffParser
                 // Context lines
                 if (preg_match('#^\s(.*)$#', $line, $matches))
                 {
-                    
+
                     $fileArray['chunks'][$current_hunk-1][] = [
-                        'type'   => 'context', 
-                        'a_line' => $b_line++, 
-                        'b_line' => $a_line++, 
+                        'type'   => 'context',
+                        'a_line' => $b_line++,
+                        'b_line' => $a_line++,
                         'value'  => $line,
                     ];
                     continue;
@@ -381,8 +378,8 @@ class DiffParser
 
             }
 
-            # Blank new files
-            # Or blank deleted files
+            // Blank new files
+            // Or blank deleted files
             if ($fileArray['changes'] === 0)
             {
                 if ($fileArray['file_added'] === true)
@@ -392,7 +389,7 @@ class DiffParser
                     $diffs['total_additions'] += 1;
                     $diffs['total_changes']   += 1;
                 }
-                else if ($fileArray['file_removed'] === true)
+                elseif ($fileArray['file_removed'] === true)
                 {
                     $fileArray['deletions'] = 1;
                     $fileArray['changes']   = 1;
@@ -401,20 +398,19 @@ class DiffParser
                 }
             }
 
-
-            # Don't add lines that are not a file
+            // Don't add lines that are not a file
             if ($fileArray['filename'] !== '') $diffs['files'][] = $fileArray;
-            
+
         }
 
         return $diffs;
     }
 
-    private static function splitFiles($raw_diff) 
-    {        
+    private static function splitFiles($raw_diff)
+    {
         $files  = [];
         $buffer = [];
-    
+
         foreach(preg_split("/(\r?\n)/", $raw_diff) as $line)
         {
             if (stripos($line, 'diff --git') === 0)
@@ -427,10 +423,10 @@ class DiffParser
             }
             $buffer[] = $line;
         }
-    
+
         $files[] = $buffer;
 
-        return $files;    
+        return $files;
     }
 
     public static function renderImage($diff, $sha, $slug)
@@ -440,7 +436,7 @@ class DiffParser
 
         if ($diff['file_added'] === true)
         {
-            
+
             return "
             <div class=\"blob-image-wrapper\">
                 <div class=\"image\">
@@ -449,9 +445,8 @@ class DiffParser
             </div>
             ";
 
-
         }
-        else if ($diff['file_removed'] === true)
+        elseif ($diff['file_removed'] === true)
         {
            return '
             <div class="pad-20 text-center diff-message">
@@ -462,7 +457,7 @@ class DiffParser
             </div>
             ';
         }
-        
+
         if (!$diff['oldSha'])
         {
             return '
@@ -483,10 +478,10 @@ class DiffParser
             
             <div class="blob-image-wrapper two-up js-two-up active">
                 <div class="image">
-                    <span class="border-wrap danger"><img src="/raw/'."$slug/$oldSha/$filename".'"></span>
+                    <span class="border-wrap danger"><img src="/raw/' . "$slug/$oldSha/$filename" . '"></span>
                 </div>
                 <div class="image">
-                    <span class="border-wrap success"><img src="/raw/'."$slug/$sha/$filename".'"></span>
+                    <span class="border-wrap success"><img src="/raw/' . "$slug/$sha/$filename" . '"></span>
                 </div>
             </div>
 
@@ -494,7 +489,7 @@ class DiffParser
         ';
 
     }
-    
+
     public static function render($diff, $sha = null, $slug = null, $exapandable = true)
     {
 
@@ -517,7 +512,7 @@ class DiffParser
                 {
                     $msg = 'Binary file added not shown.';
                 }
-                else if ($diff['file_removed'] === true)
+                elseif ($diff['file_removed'] === true)
                 {
                     $msg = 'Binary file removed not shown.';
                 }
@@ -530,7 +525,7 @@ class DiffParser
                     <div class="row">
                         <span class="line-icon line-icon-file_code_programming_dev_binary color-grey icon-xl"></span>
                     </div>
-                    <span class="font-400 font-14">'.$msg.'</span>
+                    <span class="font-400 font-14">' . $msg . '</span>
                 </div>
                 ';
             }
@@ -539,7 +534,7 @@ class DiffParser
         $lines = 0;
         foreach($diff['chunks'] as $i => $blocks)
         {
-            
+
             foreach($blocks as $change)
             {
                 $length += strlen($change['value']);
@@ -561,7 +556,7 @@ class DiffParser
                     $html .= '<tr class="line header">';
                     $html .= '<td class="line-num empty-cell" data-line-number="..."></td>';
                     $html .= '<td class="line-num empty-cell" data-line-number="..."></td>';
-                    $html .= '<td class="line-content"><span class="line-code-inner">'.htmlentities($change['value']).'</span></td>';
+                    $html .= '<td class="line-content"><span class="line-code-inner">' . htmlentities($change['value']) . '</span></td>';
                     $html .= '</tr>';
                 }
 
@@ -569,27 +564,27 @@ class DiffParser
                 if($change['type'] == 'context')
                 {
                     $html .= '<tr class="line context">';
-                    $html .= '<td class="line-num" data-line-number="'.$change['a_line'].'"></td>';
-                    $html .= '<td class="line-num" data-line-number="'.$change['b_line'].'"></td>';
-                    $html .= '<td class="line-content"><span class="line-code-inner">'.htmlentities($change['value']).'</span></td>';
+                    $html .= '<td class="line-num" data-line-number="' . $change['a_line'] . '"></td>';
+                    $html .= '<td class="line-num" data-line-number="' . $change['b_line'] . '"></td>';
+                    $html .= '<td class="line-content"><span class="line-code-inner">' . htmlentities($change['value']) . '</span></td>';
                     $html .= '</tr>';
                 }
                 // Added lines only on the right side
-                else if($change['type'] == 'addition')
+                elseif($change['type'] == 'addition')
                 {
                     $html .= '<tr class="line addition">';
                     $html .= '<td class="line-num empty-cell">&nbsp;</td>';
-                    $html .= '<td class="line-num" data-line-number="'.$change['b_line'].'"></td>';
-                    $html .= '<td class="line-content"><span class="line-code-inner">'.htmlentities($change['value']).'</span></td>';
+                    $html .= '<td class="line-num" data-line-number="' . $change['b_line'] . '"></td>';
+                    $html .= '<td class="line-content"><span class="line-code-inner">' . htmlentities($change['value']) . '</span></td>';
                     $html .= '</tr>';
                 }
                 // deleted lines only on the left side
-                else if($change['type'] == 'deletion')
+                elseif($change['type'] == 'deletion')
                 {
                     $html .= '<tr class="line deletion">';
-                    $html .= '<td class="line-num" data-line-number="'.$change['a_line'].'"></td>';
+                    $html .= '<td class="line-num" data-line-number="' . $change['a_line'] . '"></td>';
                     $html .= '<td class="line-num empty-cell">&nbsp;</td>';
-                    $html .= '<td class="line-content deletion"><span class="line-code-inner">'.htmlentities($change['value']).'</span></td>';
+                    $html .= '<td class="line-content deletion"><span class="line-code-inner">' . htmlentities($change['value']) . '</span></td>';
                     $html .= '</tr>';
                 }
                 $lines++;
@@ -597,28 +592,28 @@ class DiffParser
         }
         $html .= '</tbody></table>';
 
-        # Should the diff be surpressed
+        // Should the diff be surpressed
         if (($length > 5000 || $lines > 100) && $exapandable)
         {
-            $id = preg_replace("/[^a-zA-Z]/", '', $diff['filename']);
+            $id = preg_replace('/[^a-zA-Z]/', '', $diff['filename']);
             return '
                 <div class="pad-20 text-center diff-message">
                     <div class="row">
                         <span class="line-icon line-icon-lightbulb color-grey icon-xl"></span>
                     </div>
-                    <span class="font-400 font-14">We\'ve hidden this diff because it\'s really big. <a href="#" class="js-show-diff" data-target="'.$id.'">Click to show</a>.</span>
+                    <span class="font-400 font-14">We\'ve hidden this diff because it\'s really big. <a href="#" class="js-show-diff" data-target="' . $id . '">Click to show</a>.</span>
                 </div>
-                <table class="diff-table inline hidden" id="diff-'.$id.'"><tbody>'.$html;
+                <table class="diff-table inline hidden" id="diff-' . $id . '"><tbody>' . $html;
         }
         else
         {
-            return '<table class="diff-table inline"><tbody>'.$html;
+            return '<table class="diff-table inline"><tbody>' . $html;
         }
 
         return $html;
     }
 
-    public static function noDiffMessage() 
+    public static function noDiffMessage()
     {
         return '
         <div class="pad-20 text-center diff-message">

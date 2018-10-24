@@ -7,9 +7,9 @@
 
 namespace tests\unit\framework\http\response;
 
+use kanso\framework\http\response\Response;
 use Mockery;
 use tests\TestCase;
-use kanso\framework\http\response\Response;
 
 /**
  * @group unit
@@ -31,7 +31,7 @@ class ResponseTest extends TestCase
 		$cache    = Mockery::mock('\kanso\framework\http\response\Cache');
 		$cdn      = Mockery::mock('\kanso\framework\http\response\CDN');
 		$view     = Mockery::mock('\kanso\framework\mvc\view\View');
-	
+
 		$format->shouldReceive('set')->withArgs(['text/html']);
 		$format->shouldReceive('setEncoding')->withArgs(['utf-8']);
 
@@ -61,10 +61,10 @@ class ResponseTest extends TestCase
 		$responseArr = $this->mockResponse();
 
 		extract($responseArr);
-		
+
 		$format->shouldReceive('set')->withArgs(['text/html']);
 		$format->shouldReceive('setEncoding')->withArgs(['utf-8']);
-		
+
 		$headers->shouldReceive('set')->withArgs(['Status', 200]);
 		$status->shouldReceive('get')->andReturn(200);
 

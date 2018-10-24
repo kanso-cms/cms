@@ -7,21 +7,20 @@
 
 namespace kanso\cms\wrappers\managers;
 
-use kanso\cms\wrappers\managers\Manager;
+use Exception;
+use kanso\cms\email\Email;
 use kanso\cms\wrappers\providers\UserProvider;
+use kanso\framework\config\Config;
 use kanso\framework\database\query\Builder;
 use kanso\framework\http\cookie\Cookie;
-use kanso\framework\http\session\Session;
 use kanso\framework\http\request\Environment;
-use kanso\framework\config\Config;
+use kanso\framework\http\session\Session;
 use kanso\framework\security\Crypto;
 use kanso\framework\utility\Str;
 use kanso\framework\utility\UUID;
-use kanso\cms\email\Email;
-use Exception;
 
 /**
- * User manager
+ * User manager.
  *
  * @author Joe J. Howard
  */
@@ -49,59 +48,59 @@ class UserManager extends Manager
     const SLUG_EXISTS = 106;
 
     /**
-     * Cookie manager
-     * 
+     * Cookie manager.
+     *
      * @var \kanso\framework\http\cookie\Cookie
-     */ 
+     */
     private $cookie;
 
     /**
-     * Session manager
-     * 
+     * Session manager.
+     *
      * @var \kanso\framework\http\session\Session
-     */ 
+     */
     private $session;
 
     /**
-     * Encryption manager
-     * 
+     * Encryption manager.
+     *
      * @var \kanso\framework\security\Crypto
      */
     private $crypto;
 
     /**
-     * Request environment
-     * 
+     * Request environment.
+     *
      * @var \kanso\framework\http\request\Environment
      */
     private $environment;
 
     /**
-     * Config 
-     * 
+     * Config.
+     *
      * @var \kanso\framework\config\Config
      */
     private $config;
 
     /**
-     * Mailer utility 
-     * 
+     * Mailer utility.
+     *
      * @var \kanso\cms\email\Email
      */
     private $email;
 
-	/**
-     * Override inherited constructor
+    /**
+     * Override inherited constructor.
      *
      * @access public
-     * @param  \kanso\framework\database\query\Builder   $SQL          Query builder instance
-     * @param  \kanso\cms\auth\UserProvider              $provider     User provider instance
-     * @param  \kanso\framework\security\Crypto          $crypto       Encryption manager
-     * @param  \kanso\framework\http\cookie\Cookie       $cookie       Cookie manager
-     * @param  \kanso\framework\http\session\Session     $session      Session manager
-     * @param  \kanso\framework\http\request\Environment $environment  Request environment
-     * @param  \kanso\framework\config\Config            $config       Config
-     * @param  \kanso\cms\email\Email                    $email        Mailer utility
+     * @param \kanso\framework\database\query\Builder   $SQL         Query builder instance
+     * @param \kanso\cms\auth\UserProvider              $provider    User provider instance
+     * @param \kanso\framework\security\Crypto          $crypto      Encryption manager
+     * @param \kanso\framework\http\cookie\Cookie       $cookie      Cookie manager
+     * @param \kanso\framework\http\session\Session     $session     Session manager
+     * @param \kanso\framework\http\request\Environment $environment Request environment
+     * @param \kanso\framework\config\Config            $config      Config
+     * @param \kanso\cms\email\Email                    $email       Mailer utility
      */
     public function __construct(Builder $SQL, UserProvider $provider, Crypto $crypto, Cookie $cookie, Session $session, Config $config, Environment $environment, Email $email)
     {
@@ -123,7 +122,7 @@ class UserManager extends Manager
     }
 
     /**
-     * Creates a new user
+     * Creates a new user.
      *
      * @access public
      * @param  string $email    User email address
@@ -138,7 +137,7 @@ class UserManager extends Manager
         $password = utf8_encode($this->crypto->password()->hash($password));
 
         $status = !$activate ? 'pending' : 'confirmed';
-        
+
         $email = filter_var($email, FILTER_SANITIZE_EMAIL);
 
         $username = Str::alphaNumDash($username);
@@ -149,20 +148,20 @@ class UserManager extends Manager
 
         $key = !$activate ? UUID::v4() : null;
 
-        # username, email and slug must be unique
+        // username, email and slug must be unique
         if ($this->SQL->SELECT('id')->FROM('users')->WHERE('username', '=', $username)->AND_WHERE('status', '=', 'confirmed')->ROW())
         {
             return self::USERNAME_EXISTS;
         }
-        else if ($this->SQL->SELECT('id')->FROM('users')->WHERE('slug', '=', $slug)->AND_WHERE('status', '=', 'confirmed')->ROW())
+        elseif ($this->SQL->SELECT('id')->FROM('users')->WHERE('slug', '=', $slug)->AND_WHERE('status', '=', 'confirmed')->ROW())
         {
             return self::SLUG_EXISTS;
         }
-        else if ($this->SQL->SELECT('id')->FROM('users')->WHERE('email', '=', $email)->AND_WHERE('status', '=', 'confirmed')->ROW())
+        elseif ($this->SQL->SELECT('id')->FROM('users')->WHERE('email', '=', $email)->AND_WHERE('status', '=', 'confirmed')->ROW())
         {
             return self::EMAIL_EXISTS;
         }
-        
+
         return $this->provider->create([
             'email'    => $email,
             'username' => $username,
@@ -172,7 +171,7 @@ class UserManager extends Manager
             'role'     => $role,
             'access_token' => $token,
             'kanso_register_key' => $key,
-        ]);      
+        ]);
     }
 
     /**
@@ -186,84 +185,84 @@ class UserManager extends Manager
      */
     public function createAdmin(string $email, string $role = 'administrator', bool $sendEamil = true)
     {
-        # Create a unique username based on their email
+        // Create a unique username based on their email
         $username = $this->uniqueUserName(Str::slug(Str::getBeforeFirstChar($email, '@')));
 
-        # Generate a random password
+        // Generate a random password
         $password = Str::random(10);
 
-        # Create the user
+        // Create the user
         $user = $this->create($email, $username, $password, $role, true);
 
-        # Validate the user was created
+        // Validate the user was created
         if ($user === self::USERNAME_EXISTS || $user === self::SLUG_EXISTS || $user === self::EMAIL_EXISTS || !$user)
         {
             return $user;
         }
 
-        # Should we send an email with their username and password
+        // Should we send an email with their username and password
         if ($sendEamil)
         {
-            # username and password for email
+            // username and password for email
             $emailData =
             [
-                'username'    => $user->username, 
+                'username'    => $user->username,
                 'password'    => $password,
                 'websiteName' => $this->environment->DOMAIN_NAME,
                 'websiteUrl'  => $this->environment->HTTP_HOST,
-                'loginURL'    => $this->environment->HTTP_HOST.'/admin/login/',
+                'loginURL'    => $this->environment->HTTP_HOST . '/admin/login/',
             ];
-           
-            # Email credentials
+
+            // Email credentials
             $senderName   = trim(Str::getBeforeFirstChar($this->config->get('cms.site_title'), '-'));
-            $senderEmail  = 'no-reply@'.$this->environment->DOMAIN_NAME;
-            $emailSubject = 'Welcome to '.trim(Str::getBeforeFirstChar($this->config->get('cms.site_title'), '-'));
+            $senderEmail  = 'no-reply@' . $this->environment->DOMAIN_NAME;
+            $emailSubject = 'Welcome to ' . trim(Str::getBeforeFirstChar($this->config->get('cms.site_title'), '-'));
             $emailContent = $this->email->html($emailSubject, $this->email->preset('new-admin', $emailData));
             $emailTo      = $user->email;
 
             $this->email->send($emailTo, $senderName, $senderEmail, $emailSubject, $emailContent);
         }
-       
+
         return true;
     }
 
     /**
-     * Create a new regular user
+     * Create a new regular user.
      *
      * @access public
-     * @param  string $email     Valid email address
-     * @param  string $username  Username (optional) (default '')
-     * @param  string $password  Password string (optional) (default '')
-     * @param  string $name      Users name  (optional) (default '')
-     * @param  string $role      User role  (optional) (default 'guest')
-     * @param  bool   $activate  Activate the user straight away (optional) (default false)
-     * @param  bool   $activate  Should we send the user an email with username and password ? (optional) (default true)
+     * @param  string $email    Valid email address
+     * @param  string $username Username (optional) (default '')
+     * @param  string $password Password string (optional) (default '')
+     * @param  string $name     Users name  (optional) (default '')
+     * @param  string $role     User role  (optional) (default 'guest')
+     * @param  bool   $activate Activate the user straight away (optional) (default false)
+     * @param  bool   $activate Should we send the user an email with username and password ? (optional) (default true)
      * @return mixed
      */
     public function createUser(string $email, string $username = '', string $password = '', string $name = '', string $role = 'guest', bool $activate = false, bool $sendEamil = true)
     {
-        # Create a unique username based on the email if one
-        # wasnt provided
+        // Create a unique username based on the email if one
+        // wasnt provided
         if (empty($username))
         {
             $username = $this->uniqueUserName(Str::slug(Str::getBeforeFirstChar($email, '@')));
         }
 
-        # Generate a random password if one wasn't provided
+        // Generate a random password if one wasn't provided
         if (empty($password))
         {
             $password = Str::random(10);
-        }       
+        }
 
-        # Create the user
+        // Create the user
         $user = $this->create($email, $username, $password, $role, $activate);
 
-        # Validate the user was created
+        // Validate the user was created
         if ($user === self::USERNAME_EXISTS || $user === self::SLUG_EXISTS || $user === self::EMAIL_EXISTS)
         {
             return $user;
         }
-        else if (!$user)
+        elseif (!$user)
         {
             throw new Exception('Error creating user');
         }
@@ -272,20 +271,20 @@ class UserManager extends Manager
         $user->name = $name;
         $user->save();
 
-        # Send the email verification email
+        // Send the email verification email
         if (!$activate && $sendEamil)
         {
             $emailData =
             [
-                'name'        => $user->name, 
-                'confirmURL'  => $this->environment->HTTP_HOST.'/'.$this->config->get('email.urls.confirm_account').'?token='.$user->kanso_register_key,
+                'name'        => $user->name,
+                'confirmURL'  => $this->environment->HTTP_HOST . '/' . $this->config->get('email.urls.confirm_account') . '?token=' . $user->kanso_register_key,
                 'websiteName' => $this->environment->DOMAIN_NAME,
                 'websiteUrl'  => $this->environment->HTTP_HOST,
             ];
 
-            # Email credentials
+            // Email credentials
             $senderName   = trim(Str::getBeforeFirstChar($this->config->get('cms.site_title'), '-'));
-            $senderEmail  = 'no-reply@'.$this->environment->DOMAIN_NAME;
+            $senderEmail  = 'no-reply@' . $this->environment->DOMAIN_NAME;
             $emailSubject = 'Please verify your email address';
             $emailContent = $this->email->html($emailSubject, $this->email->preset('confirm-account', $emailData));
             $emailTo      = $user->email;
@@ -297,7 +296,7 @@ class UserManager extends Manager
     }
 
     /**
-     * Activate an existing user
+     * Activate an existing user.
      *
      * @access public
      * @param  string $token Verification token from DB
@@ -305,15 +304,15 @@ class UserManager extends Manager
      */
     public function activate(string $token): bool
     {
-        # Validate the user exists
+        // Validate the user exists
         $user = $this->provider->byKey('kanso_register_key', $token, true);
 
         if ($user)
         {
             $user->kanso_register_key = null;
-            
+
             $user->status = 'confirmed';
-            
+
             if ($user->save())
             {
                 return true;
@@ -324,21 +323,21 @@ class UserManager extends Manager
     }
 
 	/**
-     * Deletes an existing user
-     * 
-     * @access public
-     * @param  mixed $usernameIdorEmail Username, id or email
-     * @return bool
-     */
+	 * Deletes an existing user.
+	 *
+	 * @access public
+	 * @param  mixed $usernameIdorEmail Username, id or email
+	 * @return bool
+	 */
 	public function delete($usernameIdorEmail): bool
 	{
 		$user = false;
 
-		if (is_integer($usernameIdorEmail))
+		if (is_int($usernameIdorEmail))
 		{
 			$user = $this->byId($usernameIdorEmail);
 		}
-		else if (filter_var($usernameIdorEmail, FILTER_VALIDATE_EMAIL))
+		elseif (filter_var($usernameIdorEmail, FILTER_VALIDATE_EMAIL))
 		{
 			$user = $this->byEmail($usernameIdorEmail);
 		}
@@ -351,8 +350,8 @@ class UserManager extends Manager
 		{
 			return $user->delete() ? true : false;
 		}
-		
-		return false;	
+
+		return false;
 	}
 
     /**
@@ -364,55 +363,55 @@ class UserManager extends Manager
 	}
 
 	/**
-     * Gets a user by id
-     * 
-     * @access public
-     * @param  int    $id Tag id
-     * @return mixed
-     */
+	 * Gets a user by id.
+	 *
+	 * @access public
+	 * @param  int   $id Tag id
+	 * @return mixed
+	 */
 	public function byId(int $id)
 	{
 		return $this->provider->byId($id);
 	}
 
 	/**
-     * Gets a user by email
-     * 
-     * @access public
-     * @param  string $email User email
-     * @return mixed
-     */
+	 * Gets a user by email.
+	 *
+	 * @access public
+	 * @param  string $email User email
+	 * @return mixed
+	 */
 	public function byEmail(string $email)
 	{
 		return $this->provider->byKey('email', $email, true);
 	}
 
 	/**
-     * Gets a user by username
-     * 
-     * @access public
-     * @param  string $username Username
-     * @return mixed
-     */
+	 * Gets a user by username.
+	 *
+	 * @access public
+	 * @param  string $username Username
+	 * @return mixed
+	 */
 	public function byUsername(string $username)
 	{
 		return $this->provider->byKey('username', $username, true);
 	}
 
 	/**
-     * Gets a user by access token
-     * 
-     * @access public
-     * @param  string $token User access token
-     * @return mixed
-     */
+	 * Gets a user by access token.
+	 *
+	 * @access public
+	 * @param  string $token User access token
+	 * @return mixed
+	 */
 	public function byToken(string $token)
 	{
 		return $this->provider->byKey('access_token', $token, true);
 	}
 
-	 /**
-     * Create a unique username
+    /**
+     * Create a unique username.
      *
      * @access private
      * @param  string $username The username
@@ -423,10 +422,10 @@ class UserManager extends Manager
         $baseName = $username;
         $count    = 1;
         $exists   = $this->byUsername($username);
-        
+
         while (!empty($exists))
         {
-            $username = $baseName.$count;
+            $username = $baseName . $count;
             $exists   = $this->byUsername($username);
             $count++;
         }

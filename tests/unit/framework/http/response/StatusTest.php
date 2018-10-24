@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\http\response;
 
-use tests\TestCase;
 use kanso\framework\http\response\Status;
+use tests\TestCase;
 
 /**
  * @group unit

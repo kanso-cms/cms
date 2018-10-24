@@ -7,9 +7,8 @@
 
 namespace tests\unit\cms\event;
 
-use Mockery;
-use tests\TestCase;
 use kanso\cms\event\Filters;
+use tests\TestCase;
 
 // --------------------------------------------------------------------------
 // START CLASSES
@@ -26,22 +25,22 @@ class FilterCallbackTester
 
 	public static function testStaticMethodFirst($var)
 	{
-		return 'foo'.$var;
+		return 'foo' . $var;
 	}
 
 	public static function testStaticMethodSecond($var)
 	{
-		return $var.'baz';
+		return $var . 'baz';
 	}
 
 	public function testMethodFirst()
 	{
-		return 'foo'.$this->var;
+		return 'foo' . $this->var;
 	}
 
 	public function testMethodSecond()
 	{
-		return $this->var.'baz';
+		return $this->var . 'baz';
 	}
 }
 
@@ -73,12 +72,12 @@ class FiltersTest extends TestCase
 
 		$filters->on('foo3', function($var)
 		{
-			return 'foo'.$var;
+			return 'foo' . $var;
 		});
 
 		$filters->on('foo3', function($var)
 		{
-			return $var.'baz';
+			return $var . 'baz';
 		});
 
 		$this->assertEquals('foobarbaz', $filters->apply('foo1', 'bar'));

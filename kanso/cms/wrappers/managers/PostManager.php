@@ -7,11 +7,10 @@
 
 namespace kanso\cms\wrappers\managers;
 
-use kanso\cms\wrappers\managers\Manager;
 use kanso\cms\wrappers\providers\PostProvider;
 
 /**
- * Post manager
+ * Post manager.
  *
  * @author Joe J. Howard
  */
@@ -26,8 +25,8 @@ class PostManager extends Manager
 	}
 
     /**
-     * Creates a new post
-     * 
+     * Creates a new post.
+     *
      * @access public
      * @param  array $row Entry row
      * @return mixed
@@ -38,20 +37,20 @@ class PostManager extends Manager
     }
 
 	/**
-     * Gets a post by id
-     * 
-     * @access public
-     * @param  int    $id Tag id
-     * @return mixed
-     */
+	 * Gets a post by id.
+	 *
+	 * @access public
+	 * @param  int   $id Tag id
+	 * @return mixed
+	 */
 	public function byId(int $id)
 	{
 		return $this->provider->byId($id);
 	}
 
     /**
-     * Deletes a post by id
-     * 
+     * Deletes a post by id.
+     *
      * @access public
      * @param  string $id Post name id or slug
      * @return bool
@@ -64,7 +63,7 @@ class PostManager extends Manager
         {
             return $post->delete() ? true : false;
         }
-        
-        return false;   
+
+        return false;
     }
 }

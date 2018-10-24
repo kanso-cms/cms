@@ -7,13 +7,13 @@
 
 namespace tests\unit\framework\http\response;
 
-use tests\TestCase;
-use kanso\framework\http\response\exceptions\RequestException;
-use kanso\framework\http\response\exceptions\InvalidTokenException;
-use kanso\framework\http\response\exceptions\NotFoundException;
-use kanso\framework\http\response\exceptions\MethodNotAllowedException;
 use kanso\framework\http\response\exceptions\ForbiddenException;
+use kanso\framework\http\response\exceptions\InvalidTokenException;
+use kanso\framework\http\response\exceptions\MethodNotAllowedException;
+use kanso\framework\http\response\exceptions\NotFoundException;
+use kanso\framework\http\response\exceptions\RequestException;
 use kanso\framework\http\response\exceptions\Stop;
+use tests\TestCase;
 
 /**
  * @group unit

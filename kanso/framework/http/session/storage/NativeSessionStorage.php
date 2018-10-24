@@ -7,22 +7,20 @@
 
 namespace kanso\framework\http\session\storage;
 
-use kanso\framework\http\session\storage\StoreInterface;
-
 /**
- * Session encrypt/decrypt
+ * Session encrypt/decrypt.
  *
  * @author Joe J. Howard
  */
 class NativeSessionStorage implements StoreInterface
 {
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
-     * @param  \kanso\framework\security\Crypto $Crypto        Encryption service
-     * @param  array                            $cookieParams  Assoc array of cookie configurations
-     * @param  string                           $path          Where to save the cookie files to
+     * @param \kanso\framework\security\Crypto $Crypto       Encryption service
+     * @param array                            $cookieParams Assoc array of cookie configurations
+     * @param string                           $path         Where to save the cookie files to
      */
     public function __construct(array $cookieParams = [], string $path = '')
     {
@@ -49,7 +47,7 @@ class NativeSessionStorage implements StoreInterface
 
         return session_save_path();
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -80,7 +78,7 @@ class NativeSessionStorage implements StoreInterface
         {
             return session_id($id);
         }
-        
+
         return session_id();
     }
 
@@ -93,7 +91,7 @@ class NativeSessionStorage implements StoreInterface
         {
             return session_name($name);
         }
-        
+
         return session_name();
     }
 
@@ -120,7 +118,7 @@ class NativeSessionStorage implements StoreInterface
     }
 
     /**
-     * Get the cookie parameters
+     * Get the cookie parameters.
      *
      * @access public
      * @return array
@@ -131,7 +129,7 @@ class NativeSessionStorage implements StoreInterface
     }
 
     /**
-     * Collect garbage (delete expired sessions)
+     * Collect garbage (delete expired sessions).
      *
      * @access public
      */
@@ -141,7 +139,7 @@ class NativeSessionStorage implements StoreInterface
     }
 
     /**
-     * Read and return the session data
+     * Read and return the session data.
      *
      * @access public
      * @return array|null
@@ -157,10 +155,10 @@ class NativeSessionStorage implements StoreInterface
     }
 
     /**
-     * Write the session data
+     * Write the session data.
      *
      * @access public
-     * @param  array $data Data to write to session
+     * @param array $data Data to write to session
      */
     public function write(array $data)
     {
@@ -168,7 +166,7 @@ class NativeSessionStorage implements StoreInterface
     }
 
     /**
-     * Send the session cookie
+     * Send the session cookie.
      *
      * @access public
      */

@@ -7,22 +7,22 @@
 
 namespace tests\unit\cms\wrappers;
 
+use kanso\cms\wrappers\Media;
 use Mockery;
 use tests\TestCase;
-use kanso\cms\wrappers\Media;
 
 /**
  * @group unit
  */
 class MediaTest extends TestCase
 {
-	/**
+    /**
      *
      */
     public function testInstantiate()
     {
     	$sql = Mockery::mock('\kanso\framework\database\query\Builder');
-		
+
 		$media = new Media($sql, [], ['name' => 'foo']);
 
         $this->assertEquals('foo', $media->name);
@@ -34,7 +34,7 @@ class MediaTest extends TestCase
     public function testSetGet()
     {
        	$sql = Mockery::mock('\kanso\framework\database\query\Builder');
-		
+
 		$media = new Media($sql);
 
         $media->name = 'baz';
@@ -48,7 +48,7 @@ class MediaTest extends TestCase
     public function testHas()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-		
+
 		$media = new Media($sql);
 
         $media->name = 'baz';
@@ -64,7 +64,7 @@ class MediaTest extends TestCase
     public function testRemove()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-		
+
 		$media = new Media($sql);
 
         $media->name = 'baz';
@@ -80,7 +80,7 @@ class MediaTest extends TestCase
     public function testAsArray()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-		
+
 		$media = new Media($sql, [], ['name' => 'foo']);
 
         $this->assertEquals(['name' => 'foo'], $media->asArray());
@@ -92,7 +92,7 @@ class MediaTest extends TestCase
     public function testDeleteEmpty()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-		
+
 		$media = new Media($sql, [], ['name' => 'foo']);
 
         $this->assertFalse($media->delete());
@@ -104,7 +104,7 @@ class MediaTest extends TestCase
     public function testDeleteTrue()
     {
         $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $media = new Media($sql, [], ['id' => 2, 'path' => '/foo/bar/foo.jpg']);
 
         $sql->shouldReceive('DELETE_FROM')->with('media_uploads')->once()->andReturn($sql);
@@ -124,7 +124,7 @@ class MediaTest extends TestCase
         $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $media = new Media($sql, [], ['id' => 2, 'path' => '/foo/bar/foo.jpg']);
 
         $sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);
@@ -158,7 +158,7 @@ class MediaTest extends TestCase
         $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $media = new Media($sql, [], ['id' => 2, 'path' => '/foo/bar/foo.jpg']);
 
         $sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);
@@ -186,7 +186,7 @@ class MediaTest extends TestCase
     public function testIsImage()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $media = new Media($sql, [], ['id' => 2, 'url' => '/foo/bar/foo.jpg']);
 
         $this->assertTrue($media->isImage());
@@ -206,7 +206,7 @@ class MediaTest extends TestCase
     public function testImgSize()
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-        
+
         $media = new Media($sql, [], ['id' => 2, 'url' => '/foo/bar/foo.jpg']);
 
         $this->assertEquals('/foo/bar/foo_small.jpg', $media->imgSize('small'));

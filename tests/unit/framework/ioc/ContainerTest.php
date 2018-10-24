@@ -7,15 +7,15 @@
 
 namespace tests\unit\framework\ioc;
 
-use tests\TestCase;
 use kanso\framework\ioc\Container;
+use tests\TestCase;
 
 class ContainerCallbackTest
 {
 	private $var;
 
 	public function __construct()
-    { 
+    {
     }
 
     public function setVar($var)
@@ -173,7 +173,7 @@ class ContainerTest extends TestCase
 			{
 				$this->assertEquals('bar', $k);
 			}
-			
+
 			$i++;
 		}
 
@@ -189,7 +189,7 @@ class ContainerTest extends TestCase
 
 		$container->set('foo', new ContainerCallbackTest);
 
-		$this->assertTrue($container['foo'] instanceOf ContainerCallbackTest);
+		$this->assertTrue($container['foo'] instanceof ContainerCallbackTest);
 
 		$container->clear();
 	}

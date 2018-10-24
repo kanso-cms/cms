@@ -8,69 +8,69 @@
 namespace kanso\framework\http\route;
 
 use kanso\framework\http\request\Request;
-use kanso\framework\onion\Onion;
 use kanso\framework\http\response\exceptions\MethodNotAllowedException;
 use kanso\framework\http\response\exceptions\NotFoundException;
+use kanso\framework\onion\Onion;
 use kanso\framework\utility\Str;
 
 /**
- * Application router
+ * Application router.
  *
  * @author Joe J. Howard
  */
 class Router
 {
     /**
-     * Array of route strings
+     * Array of route strings.
      *
      * @var array
      */
     private $routes = [];
 
     /**
-     * Array of route request methods
+     * Array of route request methods.
      *
      * @var array
      */
     private $methods = [];
 
     /**
-     * Array of route callbacks
+     * Array of route callbacks.
      *
      * @var array
      */
     private $callbacks = [];
 
     /**
-     * Array of route callback args
+     * Array of route callback args.
      *
      * @var array
      */
     private $callbackArgs = [];
 
     /**
-     * Kanso Onion instance
+     * Kanso Onion instance.
      *
      * @var \kanso\framework\onion\Onion
      */
     private $onion;
 
     /**
-     * Kanso Request instance
+     * Kanso Request instance.
      *
      * @var \kanso\framework\http\request\Request
      */
     private $request;
 
     /**
-     * Throw not found error if route not matched
+     * Throw not found error if route not matched.
      *
      * @var bool
      */
     private $throwNotFound;
 
     /**
-     * Array of available regex patterns
+     * Array of available regex patterns.
      *
      * @var array
      */
@@ -90,12 +90,12 @@ class Router
     ];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
-     * @param  \kanso\framework\http\request\Request $request       Request instance
-     * @param  \kanso\framework\onion\Onion          $onion         Onion instance
-     * @param  bool                                  $throwNotFound Throw not found error if route not matched (optional) (default true)
+     * @param \kanso\framework\http\request\Request $request       Request instance
+     * @param \kanso\framework\onion\Onion          $onion         Onion instance
+     * @param bool                                  $throwNotFound Throw not found error if route not matched (optional) (default true)
      */
     public function __construct(Request $request, Onion $onion, bool $throwNotFound = true)
     {
@@ -107,8 +107,7 @@ class Router
     }
 
     /**
-     * Get current routes
-     *
+     * Get current routes.
      */
     public function getRoutes(): array
     {
@@ -129,12 +128,12 @@ class Router
     }
 
     /**
-     * Add a http POST route
+     * Add a http POST route.
      *
      * @access public
-     * @param  string $uri      URI to apply
-     * @param  mixed  $callback Callback to apply
-     * @param  mixed  $args     Args to add (optional) (default null)
+     * @param  string                             $uri      URI to apply
+     * @param  mixed                              $callback Callback to apply
+     * @param  mixed                              $args     Args to add (optional) (default null)
      * @return \kanso\framework\http\route\Router
      */
     public function post(string $uri, $callback, $args = null): Router
@@ -143,28 +142,28 @@ class Router
     }
 
     /**
-     * Add a http GET route
+     * Add a http GET route.
      *
      * @access public
-     * @param  string $uri      URI to apply
-     * @param  mixed  $callback Callback to apply
-     * @param  mixed  $args     Args to add (optional) (default null)
+     * @param  string                             $uri      URI to apply
+     * @param  mixed                              $callback Callback to apply
+     * @param  mixed                              $args     Args to add (optional) (default null)
      * @return \kanso\framework\http\route\Router
      */
     public function get(string $uri, $callback, $args = null): Router
     {
         $this->head($uri, $callback, $args);
-        
+
         return $this->map(Request::METHOD_GET, $uri, $callback, $args);
     }
 
     /**
-     * Add a http HEAD route
+     * Add a http HEAD route.
      *
      * @access public
-     * @param  string $uri      URI to apply
-     * @param  mixed  $callback Callback to apply
-     * @param  mixed  $args     Args to add (optional) (default null)
+     * @param  string                             $uri      URI to apply
+     * @param  mixed                              $callback Callback to apply
+     * @param  mixed                              $args     Args to add (optional) (default null)
      * @return \kanso\framework\http\route\Router
      */
     public function head(string $uri, $callback, $args = null): Router
@@ -173,12 +172,12 @@ class Router
     }
 
     /**
-     * Add a http PUT route
+     * Add a http PUT route.
      *
      * @access public
-     * @param  string $uri      URI to apply
-     * @param  mixed  $callback Callback to apply
-     * @param  mixed  $args     Args to add (optional) (default null)
+     * @param  string                             $uri      URI to apply
+     * @param  mixed                              $callback Callback to apply
+     * @param  mixed                              $args     Args to add (optional) (default null)
      * @return \kanso\framework\http\route\Router
      */
     public function put(string $uri, $callback, $args = null): Router
@@ -187,12 +186,12 @@ class Router
     }
 
     /**
-     * Add a http PATCH route
+     * Add a http PATCH route.
      *
      * @access public
-     * @param  string $uri      URI to apply
-     * @param  mixed  $callback Callback to apply
-     * @param  mixed  $args     Args to add (optional) (default null)
+     * @param  string                             $uri      URI to apply
+     * @param  mixed                              $callback Callback to apply
+     * @param  mixed                              $args     Args to add (optional) (default null)
      * @return \kanso\framework\http\route\Router
      */
     public function patch(string $uri, $callback, $args = null): Router
@@ -201,12 +200,12 @@ class Router
     }
 
     /**
-     * Add a http DELETE route
+     * Add a http DELETE route.
      *
      * @access public
-     * @param  string $uri      URI to apply
-     * @param  mixed  $callback Callback to apply
-     * @param  mixed  $args     Args to add (optional) (default null)
+     * @param  string                             $uri      URI to apply
+     * @param  mixed                              $callback Callback to apply
+     * @param  mixed                              $args     Args to add (optional) (default null)
      * @return \kanso\framework\http\route\Router
      */
     public function delete(string $uri, $callback, $args = null): Router
@@ -215,12 +214,12 @@ class Router
     }
 
     /**
-     * Add a http OPTIONS route
+     * Add a http OPTIONS route.
      *
      * @access public
-     * @param  string $uri      URI to apply
-     * @param  mixed  $callback Callback to apply
-     * @param  mixed  $args     Args to add (optional) (default null)
+     * @param  string                             $uri      URI to apply
+     * @param  mixed                              $callback Callback to apply
+     * @param  mixed                              $args     Args to add (optional) (default null)
      * @return \kanso\framework\http\route\Router
      */
     public function options(string $uri, $callback, $args = null): Router
@@ -229,30 +228,30 @@ class Router
     }
 
     /**
-     * Map the route to internal arrays
+     * Map the route to internal arrays.
      *
      * @access private
-     * @param  string $method   http request method
-     * @param  string $uri      URI to apply
-     * @param  mixed  $callback Callback to apply
-     * @param  mixed  $args     Args to add (optional) (default null)
+     * @param  string                             $method   http request method
+     * @param  string                             $uri      URI to apply
+     * @param  mixed                              $callback Callback to apply
+     * @param  mixed                              $args     Args to add (optional) (default null)
      * @return \kanso\framework\http\route\Router
      */
-    private function map(string $method, string $uri, $callback, $args = null): Router 
+    private function map(string $method, string $uri, $callback, $args = null): Router
     {
         array_push($this->routes, trim($uri, '/'));
-        
+
         array_push($this->methods, $method);
-        
+
         array_push($this->callbacks, $callback);
-        
+
         array_push($this->callbackArgs, $args);
 
         return $this;
     }
 
     /**
-     * Loop the routes/methods to match request
+     * Loop the routes/methods to match request.
      *
      * @access public
      */
@@ -263,7 +262,7 @@ class Router
         $requestPath = Str::queryFilterUri($this->request->environment()->REQUEST_URI);
 
         $searches = array_keys($this->patterns);
-        
+
         $replaces = array_values($this->patterns);
 
         $matched = false;
@@ -272,28 +271,28 @@ class Router
 
         $allowedMethod = '';
 
-        # check if route is defined without regex
+        // check if route is defined without regex
         if (in_array($requestPath, $this->routes))
         {
             $route_pos = array_keys($this->routes, $requestPath);
-            
+
             foreach ($route_pos as $route)
             {
-                # Found route
+                // Found route
                 $matched = true;
 
                 $allowedMethod = $this->methods[$route];
 
                 if ($this->methods[$route] == $requestMethod)
                 {
-                    # Push the callback into the stack
+                    // Push the callback into the stack
                     $callbacks[] = [$this->callbacks[$route], $this->callbackArgs[$route]];
                 }
             }
-        } 
+        }
         else {
-            
-            # check if defined with regex
+
+            // check if defined with regex
             $pos = 0;
 
             foreach ($this->routes as $route)
@@ -305,30 +304,30 @@ class Router
 
                 if (preg_match('#^' . $route . '$#', $requestPath, $matches))
                 {
-                    # Found route
+                    // Found route
                     $matched = true;
 
                     $allowedMethod = $this->methods[$pos];
-                    
+
                     if ($this->methods[$pos] == $requestMethod)
                     {
-                        # Push the callback into the stack
+                        // Push the callback into the stack
                         $callbacks[] = [$this->callbacks[$pos], $this->callbackArgs[$pos]];
                     }
                 }
-                
+
                 $pos++;
             }
         }
 
-        # We found a matching route but it does not allow the request method so we'll throw a 405 exception
+        // We found a matching route but it does not allow the request method so we'll throw a 405 exception
         if ($matched && empty($callbacks))
         {
-            throw new MethodNotAllowedException([$allowedMethod], 'Page requested over "'.$requestMethod.'". Only "'.$allowedMethod.'" is accepted.');
+            throw new MethodNotAllowedException([$allowedMethod], 'Page requested over "' . $requestMethod . '". Only "' . $allowedMethod . '" is accepted.');
         }
 
-        # No routes matched so we'll throw a 404 exception
-        else if (!$matched)
+        // No routes matched so we'll throw a 404 exception
+        elseif (!$matched)
         {
             if ($this->throwNotFound === true)
             {
@@ -336,8 +335,8 @@ class Router
             }
         }
 
-        # Loop the callbacks and add layer to onion
-        else 
+        // Loop the callbacks and add layer to onion
+        else
         {
             foreach ($callbacks as $callback)
             {

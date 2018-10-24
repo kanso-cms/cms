@@ -10,36 +10,36 @@ namespace kanso\cms\query\methods;
 use kanso\framework\utility\Str;
 
 /**
- * CMS Query validation methods
+ * CMS Query validation methods.
  *
  * @author Joe J. Howard
  */
 trait Validation
 {
-	/**
-     * Get the currently logged in Kanso user (if any)
+    /**
+     * Get the currently logged in Kanso user (if any).
      *
      * @access public
-     * @return \kanso\cms\wrappers\User|FALSE
+     * @return \kanso\cms\wrappers\User|false
      */
-    public function user() 
+    public function user()
     {
         return $this->Gatekeeper->getUser();
     }
 
-	/**
-     * Is the current user (if any) logged in
+    /**
+     * Is the current user (if any) logged in.
      *
      * @access public
      * @return bool
      */
-    public function is_loggedIn(): bool 
+    public function is_loggedIn(): bool
     {
         return $this->Gatekeeper->isLoggedIn();
     }
 
     /**
-     * Is the current user (if any) allowed to access the admin panel
+     * Is the current user (if any) allowed to access the admin panel.
      *
      * @access public
      * @return bool
@@ -50,10 +50,10 @@ trait Validation
     }
 
     /**
-     * Get the current page type
+     * Get the current page type.
      *
      * @access public
-     * @return  string
+     * @return string
      */
     public function the_page_type(): string
     {
@@ -66,7 +66,7 @@ trait Validation
     }
 
     /**
-     * Is this a single request
+     * Is this a single request.
      *
      * @access public
      * @return bool
@@ -77,7 +77,7 @@ trait Validation
     }
 
     /**
-     * Is this a custom post request
+     * Is this a custom post request.
      *
      * @access public
      * @return bool
@@ -88,12 +88,12 @@ trait Validation
         {
             return false;
         }
-        
+
         return Str::getBeforeFirstChar($this->requestType, '-') === 'single' && !$this->is_single();
     }
 
     /**
-     * Is this a request for the homepage
+     * Is this a request for the homepage.
      *
      * @access public
      * @return bool
@@ -129,7 +129,7 @@ trait Validation
      * Is this a static page request ?
      *
      * @access public
-     * @param  string  $slug Requested page slug (optional) (default null)
+     * @param  string $slug Requested page slug (optional) (default null)
      * @return bool
      */
     public function is_page($slug = null): bool
@@ -145,7 +145,7 @@ trait Validation
                 return true;
             }
 
-            $patterns = 
+            $patterns =
             [
                 ':any'      => '[^/]+',
                 ':num'      => '[0-9]+',
@@ -193,7 +193,7 @@ trait Validation
         return $this->requestType === 'search';
     }
 
-   /**
+    /**
      * Is this a tag request ?
      *
      * @access public

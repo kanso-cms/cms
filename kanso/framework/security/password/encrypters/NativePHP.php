@@ -8,14 +8,14 @@
 namespace kanso\framework\security\password\encrypters;
 
 /**
- * Native PHP hashing with polyfill fallback
+ * Native PHP hashing with polyfill fallback.
  *
  * @author Joe J. Howard
  */
 class NativePHP extends Encrypter implements EncrypterInterface
 {
 	/**
-	 * PHP password hashing constant
+	 * PHP password hashing constant.
 	 *
 	 * @see http://php.net/manual/en/password.constants.php
 	 * @var int
@@ -23,7 +23,7 @@ class NativePHP extends Encrypter implements EncrypterInterface
 	private $algo;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @param int $algo PHP password hashing constant
 	 * @see   http://php.net/manual/en/password.constants.php
@@ -40,9 +40,9 @@ class NativePHP extends Encrypter implements EncrypterInterface
 	{
 		if (!function_exists('password_hash'))
 		{
-			require_once __DIR__.DIRECTORY_SEPARATOR.'_polyfill.php';
+			require_once __DIR__ . DIRECTORY_SEPARATOR . '_polyfill.php';
 		}
-		
+
 		return password_hash($string, $this->algo, ['cost' => 8]);
 	}
 
@@ -53,9 +53,9 @@ class NativePHP extends Encrypter implements EncrypterInterface
 	{
 		if (!function_exists('password_verify'))
 		{
-			require_once __DIR__.DIRECTORY_SEPARATOR.'_polyfill.php';
+			require_once __DIR__ . DIRECTORY_SEPARATOR . '_polyfill.php';
 		}
-		
+
 		return password_verify($string, $hashed);
 	}
 }

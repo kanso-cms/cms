@@ -7,18 +7,18 @@
 
 namespace tests\unit\framework\onion;
 
-use Mockery;
 use Closure;
-use tests\TestCase;
-use kanso\framework\onion\Onion;
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
+use kanso\framework\onion\Onion;
+use Mockery;
+use tests\TestCase;
 
 class OnionCallbackTest
 {
 	public function __construct(Request $request, Response $response, Closure $next, $arg1, $arg2)
-    { 
-    	$this->var = $arg1.$arg2;
+    {
+    	$this->var = $arg1 . $arg2;
     }
 
     public function normalMethod()
@@ -28,7 +28,7 @@ class OnionCallbackTest
 
 	public static function staticFunc(Request $request, Response $response, Closure $next, $arg1, $arg2)
 	{
-		echo $arg1.$arg2;
+		echo $arg1 . $arg2;
 	}
 }
 

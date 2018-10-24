@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\http\response;
 
-use tests\TestCase;
 use kanso\framework\http\response\Headers;
+use tests\TestCase;
 
 /**
  * @group unit
@@ -95,7 +95,6 @@ class HeadersTest extends TestCase
 
 	/**
 	 * @runInSeparateProcess
-	 * 
 	 */
 	public function testSend()
 	{

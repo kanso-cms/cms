@@ -7,14 +7,12 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\cms\admin\models\BaseModel;
-use kanso\framework\utility\Arr;
-use kanso\framework\utility\Str;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
+use kanso\framework\utility\Str;
 
 /**
- * Settings model
+ * Settings model.
  *
  * @author Joe J. Howard
  */
@@ -67,10 +65,10 @@ class Settings extends BaseModel
      */
     private function parseGet(): array
     {
-        $_themes = array_filter(glob($this->Config->get('cms.themes_path').'/*'), 'is_dir');
-        
+        $_themes = array_filter(glob($this->Config->get('cms.themes_path') . '/*'), 'is_dir');
+
         $themes  = [];
-        
+
         foreach ($_themes as $i => $_theme)
         {
             $themes[] = substr($_theme, strrpos($_theme, '/') + 1);
@@ -85,8 +83,8 @@ class Settings extends BaseModel
     }
 
     /**
-     * Parse and validate the POST request from any submitted forms
-     * 
+     * Parse and validate the POST request from any submitted forms.
+     *
      * @access private
      * @return array|false
      */
@@ -100,31 +98,31 @@ class Settings extends BaseModel
             {
                 return $this->submitAccountSettings();
             }
-            else if ($formName === 'author_settings')
+            elseif ($formName === 'author_settings')
             {
                 return $this->submitAuthorSettings();
             }
-            else if ($formName === 'kanso_settings')
+            elseif ($formName === 'kanso_settings')
             {
                 return $this->submitKansoSettings();
             }
-            else if ($formName === 'access_settings')
+            elseif ($formName === 'access_settings')
             {
                 return $this->submitAccessSettings();
             }
-            else if ($formName === 'restore_kanso')
+            elseif ($formName === 'restore_kanso')
             {
                 return $this->submitRestoreKanso();
             }
-            else if ($formName === 'invite_user')
+            elseif ($formName === 'invite_user')
             {
                 return $this->submitInviteUser();
             }
-            else if ($formName === 'change_user_role')
+            elseif ($formName === 'change_user_role')
             {
                 return $this->submitChangeUserRole();
             }
-            else if ($formName === 'delete_user')
+            elseif ($formName === 'delete_user')
             {
                 return $this->submitDeleteUser();
             }
@@ -132,8 +130,8 @@ class Settings extends BaseModel
     }
 
     /**
-     * Parse, validate and process the account settings form
-     * 
+     * Parse, validate and process the account settings form.
+     *
      * @access private
      * @return array|false
      */
@@ -167,11 +165,11 @@ class Settings extends BaseModel
         $password = $validated_data['password'];
         $emailNotifications = isset($validated_data['email_notifications']) ? true : false;
 
-        # Grab the user's object
+        // Grab the user's object
         $user = $this->Gatekeeper->getUser();
 
-        # Validate that the username/ email doesn't exist already
-        # only if the user has changed either value
+        // Validate that the username/ email doesn't exist already
+        // only if the user has changed either value
         if ($email !== $user->email)
         {
             if ($this->UserManager->byEmail($email))
@@ -187,12 +185,12 @@ class Settings extends BaseModel
             }
         }
 
-        # Update the user
+        // Update the user
         $user->username = $username;
         $user->email    = $email;
         $user->email_notifications = $emailNotifications;
 
-        # If they changed their password lets update it
+        // If they changed their password lets update it
         if ($password !== '' && !empty($password))
         {
             $user->hashed_pass = utf8_encode($this->Crypto->password()->hash($password));
@@ -201,19 +199,19 @@ class Settings extends BaseModel
         $user->save();
 
         $this->Gatekeeper->refreshUser();
-      
+
         return $this->postMessage('success', 'Your account settings were successfully updated!');
     }
 
     /**
-     * Parse, validate and process the author settings form
+     * Parse, validate and process the author settings form.
      *
      * @access private
      * @return array|false
      */
     private function submitAuthorSettings()
     {
-        # Sanitize and validate the POST
+        // Sanitize and validate the POST
         $post = $this->validation->sanitize($this->post);
 
         $this->validation->validation_rules([
@@ -237,18 +235,18 @@ class Settings extends BaseModel
             'thumbnail_id' => 'trim|sanitize_numbers',
         ]);
 
-        # Validate POST
+        // Validate POST
         $validated_data = $this->validation->run($post);
-        
+
         if (!$validated_data)
         {
             return false;
         }
 
-        # Grab the Row and update settings
+        // Grab the Row and update settings
         $user = $this->Gatekeeper->getUser();
 
-        # Change authors details
+        // Change authors details
         $user->name         = $validated_data['name'];
         $user->slug         = $validated_data['slug'];
         $user->facebook     = $validated_data['facebook'];
@@ -265,19 +263,19 @@ class Settings extends BaseModel
     }
 
     /**
-     * Parse and validate the Kanso settings from the POST request
-     * 
+     * Parse and validate the Kanso settings from the POST request.
+     *
      * @return array|false
      */
     private function submitKansoSettings()
     {
-        # Validate the user is an admin
+        // Validate the user is an admin
         if ($this->Gatekeeper->getUser()->role !== 'administrator')
         {
             return false;
         }
 
-        # Validate post variables
+        // Validate post variables
         $post = $this->validation->sanitize($this->post);
 
         $this->validation->validation_rules([
@@ -323,7 +321,7 @@ class Settings extends BaseModel
 
         if ($validated_data)
         {
-            # Filter basic booleans
+            // Filter basic booleans
             $validated_data['enable_authors']     = !isset($validated_data['enable_authors'])     ? false : Str::bool($validated_data['enable_authors']);
             $validated_data['enable_cats']        = !isset($validated_data['enable_cats'])        ? false : Str::bool($validated_data['enable_cats']);
             $validated_data['enable_tags']        = !isset($validated_data['enable_tags'])        ? false : Str::bool($validated_data['enable_tags']);
@@ -333,63 +331,62 @@ class Settings extends BaseModel
             $validated_data['enable_attachments'] = !isset($validated_data['enable_attachments']) ? false : Str::bool($validated_data['enable_attachments']);
             $validated_data['thumbnail_quality']  = intval($validated_data['thumbnail_quality']);
 
-
-            # Validate the permalinks
+            // Validate the permalinks
             if (!$this->validatePermalinks($validated_data['permalinks']))
             {
                 return $this->postMessage('warning', 'The permalinks value you entered is invalid. Please ensure you enter a valid permalink structure - e.g. "year/month/postname/".');
             }
 
-            # Validate cache life
+            // Validate cache life
             if ($validated_data['enable_cache'] && !$this->validateCacheLife($validated_data['cache_life']))
             {
                 return $this->postMessage('warning', 'The cache life value you entered is invalid. Please ensure you enter a cache lifetime - e.g. "1 month" or "3 days".');
             }
 
-            # Validate thumbnail quality
+            // Validate thumbnail quality
             if ($validated_data['thumbnail_quality'] > 100 || $validated_data['thumbnail_quality'] < 1)
             {
                 return $this->postMessage('warning', 'The image quality value you entered is invalid. Please enter a number between 0 and 100.');
             }
 
-            # Validate the CDN URL
+            // Validate the CDN URL
             if ($validated_data['enable_cdn'] && !filter_var($validated_data['cdn_url'], FILTER_VALIDATE_URL))
             {
                 return $this->postMessage('warning', 'The CDN URL you entered is invalid. Please provide a valid URL.');
             }
 
-            # Filter the cache life
+            // Filter the cache life
             $validated_data['cache_life'] = $this->filterCacheLife($validated_data['cache_life']);
 
-            # Filter the permalinks
+            // Filter the permalinks
             $permalinks = $this->filterPermalinks($validated_data['permalinks']);
 
-            # Previous permalinks value
+            // Previous permalinks value
             $oldPermalinks = $this->Config->get('cms.permalinks');
 
-            # Sanitize the blog location
+            // Sanitize the blog location
             $validated_data['blog_location'] = !empty($validated_data['blog_location']) ? rtrim(ltrim($validated_data['blog_location'], '/'), '/') : false;
 
             $cms =
             [
-                "theme_name"        => $validated_data['theme'],
-                "site_title"        => $validated_data['site_title'],
-                "site_description"  => $validated_data['site_description'],
-                "blog_location"     => $validated_data['blog_location'],
-                "sitemap_route"     => $validated_data['sitemap_url'],
-                "permalinks"        => $permalinks['permalinks'],
-                "permalinks_route"  => $permalinks['permalinks_route'],
-                "posts_per_page"    => $validated_data['posts_per_page'] < 1 ? 10 : intval($validated_data['posts_per_page']),
-                "route_tags"        => Str::bool($validated_data['enable_tags']),
-                "route_categories"  => Str::bool($validated_data['enable_cats']),
-                "route_attachments" => Str::bool($validated_data['enable_attachments']),
-                "route_authors"     => Str::bool($validated_data['enable_authors']),
-                "enable_comments"   => Str::bool($validated_data['enable_comments']),
+                'theme_name'        => $validated_data['theme'],
+                'site_title'        => $validated_data['site_title'],
+                'site_description'  => $validated_data['site_description'],
+                'blog_location'     => $validated_data['blog_location'],
+                'sitemap_route'     => $validated_data['sitemap_url'],
+                'permalinks'        => $permalinks['permalinks'],
+                'permalinks_route'  => $permalinks['permalinks_route'],
+                'posts_per_page'    => $validated_data['posts_per_page'] < 1 ? 10 : intval($validated_data['posts_per_page']),
+                'route_tags'        => Str::bool($validated_data['enable_tags']),
+                'route_categories'  => Str::bool($validated_data['enable_cats']),
+                'route_attachments' => Str::bool($validated_data['enable_attachments']),
+                'route_authors'     => Str::bool($validated_data['enable_authors']),
+                'enable_comments'   => Str::bool($validated_data['enable_comments']),
             ];
 
             foreach ($cms as $key => $val)
             {
-                $this->Config->set('cms.'.$key, $val);
+                $this->Config->set('cms.' . $key, $val);
             }
 
             $this->Config->set('cms.uploads.thumbnail_quality', $validated_data['thumbnail_quality']);
@@ -398,11 +395,11 @@ class Settings extends BaseModel
             $this->Config->set('cdn.host', $validated_data['cdn_url']);
 
             $this->Config->set('cache.http_cache_enabled', $validated_data['enable_cache']);
-            $this->Config->set('cache.configurations.'.$this->Config->get('cache.default').'.expire', $validated_data['cache_life']);
+            $this->Config->set('cache.configurations.' . $this->Config->get('cache.default') . '.expire', $validated_data['cache_life']);
 
             $this->Config->save();
 
-            # If permalinks were changed - reset all post slugs
+            // If permalinks were changed - reset all post slugs
             if ($oldPermalinks !== $permalinks['permalinks'])
             {
                 $this->resetPostSlugs();
@@ -415,8 +412,8 @@ class Settings extends BaseModel
     }
 
     /**
-     * Parse and validate the access settings
-     * 
+     * Parse and validate the access settings.
+     *
      * @return array|false
      */
     private function submitAccessSettings()
@@ -427,13 +424,13 @@ class Settings extends BaseModel
         $robotsContent = !isset($this->post['robots_content']) ? '' : trim($this->post['robots_content']);
         $ipWhitelist   = !isset($this->post['ip_whitelist']) ? [] : array_filter(array_map('trim', explode(',', $this->post['ip_whitelist'])));
 
-        # Save robots
+        // Save robots
         if ($blockRobots)
         {
             $this->Access->saveRobots($this->Access->blockAllRobotsText());
             $robotsContent = $this->Access->blockAllRobotsText();
         }
-        else if (empty($robotsContent))
+        elseif (empty($robotsContent))
         {
             $this->Access->saveRobots($this->Access->defaultRobotsText());
             $robotsContent = $this->Access->defaultRobotsText();
@@ -443,7 +440,7 @@ class Settings extends BaseModel
             $this->Access->saveRobots($robotsContent);
         }
 
-        # Enable ip blocking
+        // Enable ip blocking
         $this->Config->set('cms.security.enable_robots', !$blockRobots);
         $this->Config->set('cms.security.ip_blocked', $enableIpBlock);
         $this->Config->set('cms.security.ip_whitelist', $ipWhitelist);
@@ -455,10 +452,10 @@ class Settings extends BaseModel
     }
 
     /**
-     * Validate cache lifetime
+     * Validate cache lifetime.
      *
      * @access private
-     * @param  string  $cacheLife  A cache life - e.g '3 hours'
+     * @param  string $cacheLife A cache life - e.g '3 hours'
      * @return bool
      */
     private function validateCacheLife(string $cacheLife): bool
@@ -467,15 +464,15 @@ class Settings extends BaseModel
         {
             return false;
         }
-        else if (is_numeric($cacheLife))
+        elseif (is_numeric($cacheLife))
         {
             return true;
         }
-        else if (strtotime($cacheLife))
+        elseif (strtotime($cacheLife))
         {
             return true;
         }
-        
+
         $times = [
             'second' => true,
             'minute' => true,
@@ -483,29 +480,29 @@ class Settings extends BaseModel
             'week'   => true,
             'day'    => true,
             'month'  => true,
-            'year'   => true
+            'year'   => true,
         ];
-        
+
         $life = array_map('trim', explode(' ', $cacheLife));
-        
+
         if (count($life) !== 2)
         {
             return false;
         }
-        else if (!is_numeric($life[0]))
+        elseif (!is_numeric($life[0]))
         {
             return false;
         }
-        
+
         $time = intval($life[0]);
-        
-        $life = rtrim($life[1], 's'); 
+
+        $life = rtrim($life[1], 's');
 
         if ($time == 0)
         {
             return false;
         }
-        
+
         if (!isset($times[$life]))
         {
             return false;
@@ -515,17 +512,17 @@ class Settings extends BaseModel
     }
 
     /**
-     * Filter the cache life to a valid timestamp
+     * Filter the cache life to a valid timestamp.
      *
      * @access private
-     * @param  mixed   $cacheLife The url to be converted
+     * @param  mixed  $cacheLife The url to be converted
      * @return string
      */
     private function filterCacheLife($cacheLife): string
     {
         $default = '+1 day';
 
-        $times = 
+        $times =
         [
             'second' => true,
             'minute' => true,
@@ -533,7 +530,7 @@ class Settings extends BaseModel
             'week'   => true,
             'day'    => true,
             'month'  => true,
-            'year'   => true
+            'year'   => true,
         ];
 
         if ($cacheLife[0] === '+')
@@ -542,15 +539,15 @@ class Settings extends BaseModel
         }
 
         $life = array_map('trim', explode(' ', $cacheLife));
-        
+
         if (count($life) !== 2)
         {
             return $default;
         }
-        
+
         $time = intval($life[0]);
-        
-        $life = rtrim($life[1], 's'); 
+
+        $life = rtrim($life[1], 's');
 
         if ($time == 0)
         {
@@ -562,13 +559,13 @@ class Settings extends BaseModel
             return $default;
         }
 
-        $life = $time > 1 ? $life.'s' : $life;
+        $life = $time > 1 ? $life . 's' : $life;
 
-        return '+'.$time.' '.$life;
+        return '+' . $time . ' ' . $life;
     }
 
     /**
-     * Validate a permalink value
+     * Validate a permalink value.
      *
      * @access private
      * @param  string $url The url to be converted
@@ -579,7 +576,7 @@ class Settings extends BaseModel
         $permaLink = '';
         $route     = '';
         $urlPieces = explode('/', $url);
-        $map = 
+        $map =
         [
             'year'     => '(:year)',
             'month'    => '(:month)',
@@ -596,8 +593,8 @@ class Settings extends BaseModel
         {
             if (isset($map[$key]))
             {
-                $permaLink .= $key.DIRECTORY_SEPARATOR;
-                $route     .= $map[$key].DIRECTORY_SEPARATOR;
+                $permaLink .= $key . DIRECTORY_SEPARATOR;
+                $route     .= $map[$key] . DIRECTORY_SEPARATOR;
             }
         }
 
@@ -610,12 +607,12 @@ class Settings extends BaseModel
     }
 
     /**
-     * Filter the permalinks
+     * Filter the permalinks.
      *
      * @param  string $url The url to be converted
      * @return array  Array with the the actual link and the route
      */
-    private function filterPermalinks($url) 
+    private function filterPermalinks($url)
     {
         $permaLink = '';
         $route     = '';
@@ -631,24 +628,24 @@ class Settings extends BaseModel
             'category' => '(:category)',
             'author'   => '(:author)',
         ];
-        
+
         foreach ($urlPieces as $key)
         {
             if (isset($map[$key]))
             {
-                $permaLink .= $key.DIRECTORY_SEPARATOR;
-                $route     .= $map[$key].DIRECTORY_SEPARATOR;
+                $permaLink .= $key . DIRECTORY_SEPARATOR;
+                $route     .= $map[$key] . DIRECTORY_SEPARATOR;
             }
             else
             {
-                $permaLink .= Str::slug($key).DIRECTORY_SEPARATOR;
-                $route     .= Str::slug($key).DIRECTORY_SEPARATOR;
+                $permaLink .= Str::slug($key) . DIRECTORY_SEPARATOR;
+                $route     .= Str::slug($key) . DIRECTORY_SEPARATOR;
             }
         }
 
-        $permaLink = trim($permaLink, '/').'/';
-        $route     = trim($route, '/').'/';
-        
+        $permaLink = trim($permaLink, '/') . '/';
+        $route     = trim($route, '/') . '/';
+
         return [
             'permalinks' => $permaLink,
             'permalinks_route' => $route,
@@ -656,14 +653,14 @@ class Settings extends BaseModel
     }
 
     /**
-     * Parse, validate and process the add new user form
-     * 
+     * Parse, validate and process the add new user form.
+     *
      * @access private
      * @return array||false
      */
     private function submitInviteUser()
     {
-        # Validate the user is an admin
+        // Validate the user is an admin
         if (!$this->Gatekeeper->getUser()->role === 'administrator')
         {
             return false;
@@ -700,33 +697,33 @@ class Settings extends BaseModel
             return $this->postMessage('warning', 'Another user is already registered with that email address.');
         }
 
-        # If theyre deleted or pending re-invite them
+        // If theyre deleted or pending re-invite them
         if (!$user || ($user && $user->status !== 'confirmed'))
         {
             if ($this->UserManager->createAdmin($validated_data['email'], $validated_data['role']))
             {
                 return $this->postMessage('success', 'The user was successfully sent a registration invite.');
             }
-            
+
         }
 
         return false;
     }
 
     /**
-     * Parse, validate and process the delete user form
-     * 
+     * Parse, validate and process the delete user form.
+     *
      * @access private
      * @return array||false
      */
     private function submitDeleteUser()
     {
-        # Validate the user is an admin
+        // Validate the user is an admin
         if (!$this->Gatekeeper->getUser()->role === 'administrator')
         {
             return false;
         }
-       
+
         $post = $this->validation->sanitize($this->post);
 
         $this->validation->validation_rules([
@@ -764,14 +761,14 @@ class Settings extends BaseModel
     }
 
     /**
-     * Parse, validate and process the change user role form
-     * 
+     * Parse, validate and process the change user role form.
+     *
      * @access private
      * @return array||false
      */
     private function submitChangeUserRole()
     {
-        # Validate the user is an admin
+        // Validate the user is an admin
         if (!$this->Gatekeeper->getUser()->role === 'administrator')
         {
             return false;
@@ -818,14 +815,14 @@ class Settings extends BaseModel
     }
 
     /**
-     * Update and reset post slugs when permalinks have changed
-     * 
+     * Update and reset post slugs when permalinks have changed.
+     *
      * @access private
-     * @return 
+     * @return
      */
     private function resetPostSlugs()
     {
-        # Select the posts
+        // Select the posts
         $posts = $this->SQL->SELECT('posts.id')->FROM('posts')->FIND_ALL();
 
         foreach ($posts as $row)
@@ -837,14 +834,14 @@ class Settings extends BaseModel
     }
 
     /**
-     * Parse, validate and process the restore kanso form
-     * 
+     * Parse, validate and process the restore kanso form.
+     *
      * @access private
      * @return array||null
      */
     private function submitRestoreKanso()
     {
-        # Validate the user is an admin
+        // Validate the user is an admin
         if ($this->Gatekeeper->getUser()->role === 'administrator')
         {
             if ($this->Installer->reInstall())
@@ -853,10 +850,10 @@ class Settings extends BaseModel
 
                 $this->Response->cookie()->destroy();
 
-                $this->Response->redirect($this->Request->environment()->HTTP_HOST.'/admin/login/');
+                $this->Response->redirect($this->Request->environment()->HTTP_HOST . '/admin/login/');
 
                 return;
-            }  
+            }
         }
 
         return $this->postMessage('danger', 'There was an error processing your request.');

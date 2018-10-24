@@ -7,31 +7,30 @@
 
 namespace kanso\framework\application\services;
 
-use kanso\framework\application\services\Service;
-use kanso\framework\utility\Str;
-use kanso\framework\http\request\Environment;
-use kanso\framework\http\request\Headers as RequestHeaders;
-use kanso\framework\http\request\Request;
-use kanso\framework\http\request\Files;
-use kanso\framework\http\response\Protocol;
-use kanso\framework\http\response\Format;
-use kanso\framework\http\response\Body;
-use kanso\framework\http\response\Status;
-use kanso\framework\http\response\Headers as ResponseHeaders;
-use kanso\framework\http\response\CDN;
-use kanso\framework\http\response\Cache;
-use kanso\framework\http\response\Response;
-use kanso\framework\http\route\Router;
 use kanso\framework\http\cookie\Cookie;
 use kanso\framework\http\cookie\storage\NativeCookieStorage;
-use kanso\framework\http\session\Session;
-use kanso\framework\http\session\storage\NativeSessionStorage;
-use kanso\framework\http\session\storage\FileSessionStorage;
+use kanso\framework\http\request\Environment;
+use kanso\framework\http\request\Files;
+use kanso\framework\http\request\Headers as RequestHeaders;
+use kanso\framework\http\request\Request;
+use kanso\framework\http\response\Body;
+use kanso\framework\http\response\Cache;
+use kanso\framework\http\response\CDN;
+use kanso\framework\http\response\Format;
+use kanso\framework\http\response\Headers as ResponseHeaders;
+use kanso\framework\http\response\Protocol;
+use kanso\framework\http\response\Response;
+use kanso\framework\http\response\Status;
+use kanso\framework\http\route\Router;
 use kanso\framework\http\session\Flash;
+use kanso\framework\http\session\Session;
+use kanso\framework\http\session\storage\FileSessionStorage;
+use kanso\framework\http\session\storage\NativeSessionStorage;
 use kanso\framework\http\session\Token;
+use kanso\framework\utility\Str;
 
 /**
- * HTTP services
+ * HTTP services.
  *
  * @author Joe J. Howard
  */
@@ -45,7 +44,7 @@ class HttpService extends Service
 		$this->registerRequest();
 
 		$this->registerCookie();
-		
+
 		$this->registerSession();
 
 		$this->registerResponse();
@@ -54,28 +53,28 @@ class HttpService extends Service
 	}
 
 	/**
-     * Registers the Request object
-     *
-     * @access private
-     */
+	 * Registers the Request object.
+	 *
+	 * @access private
+	 */
 	private function registerRequest()
 	{
-		$this->container->singleton('Request', function ()
+		$this->container->singleton('Request', function()
 		{
 			return new Request(new Environment, new RequestHeaders, new Files);
 		});
 	}
 
 	/**
-     * Registers the cookie object
-     *
-     * @access private
-     */
+	 * Registers the cookie object.
+	 *
+	 * @access private
+	 */
 	private function registerCookie()
 	{
-		$this->container->singleton('Cookie', function ()
+		$this->container->singleton('Cookie', function()
 		{
-			$cookieConfiguration = $this->container->Config->get('cookie.configurations.'.$this->container->Config->get('cookie.configuration'));
+			$cookieConfiguration = $this->container->Config->get('cookie.configurations.' . $this->container->Config->get('cookie.configuration'));
 
 			if (!is_numeric($cookieConfiguration['expire']))
 			{
@@ -89,12 +88,12 @@ class HttpService extends Service
 	}
 
 	/**
-     * Loads the cookie storage implementation
-     *
-     * @access private
-     * @param  array   $cookieConfiguration Cookie configuration to use
-     * @return mixed
-     */
+	 * Loads the cookie storage implementation.
+	 *
+	 * @access private
+	 * @param  array $cookieConfiguration Cookie configuration to use
+	 * @return mixed
+	 */
 	private function loadCookieStore(array $cookieConfiguration)
 	{
 		$storeConfig = $cookieConfiguration['storage'];
@@ -106,28 +105,28 @@ class HttpService extends Service
 	}
 
 	/**
-     * Loads the cookie storage implementation
-     *
-     * @access private
-     * @param  array   $storeConfig         Configuration for the storage
-     * @param  array   $cookieConfiguration Configuration for cookie sending/reading
-     * @return \kanso\framework\http\cookie\storage\NativeCookieStorage
-     */
+	 * Loads the cookie storage implementation.
+	 *
+	 * @access private
+	 * @param  array                                                    $storeConfig         Configuration for the storage
+	 * @param  array                                                    $cookieConfiguration Configuration for cookie sending/reading
+	 * @return \kanso\framework\http\cookie\storage\NativeCookieStorage
+	 */
 	private function nativeCookieStore(array $storeConfig, array $cookieConfiguration): NativeCookieStorage
 	{
 		return new NativeCookieStorage($this->container->Crypto, $cookieConfiguration);
 	}
 
 	/**
-     * Registers the session object
-     *
-     * @access private
-     */
+	 * Registers the session object.
+	 *
+	 * @access private
+	 */
 	private function registerSession()
 	{
-		$this->container->singleton('Session', function ()
+		$this->container->singleton('Session', function()
 		{
-			$sessionConfiguration = $this->container->Config->get('session.configurations.'.$this->container->Config->get('session.default'));
+			$sessionConfiguration = $this->container->Config->get('session.configurations.' . $this->container->Config->get('session.default'));
 
 			if (!is_numeric($sessionConfiguration['expire']))
 			{
@@ -136,17 +135,17 @@ class HttpService extends Service
 
 			$store = $this->loadSessionStore($sessionConfiguration);
 
-			return new Session(New Token, new Flash, $store, $sessionConfiguration);
+			return new Session(new Token, new Flash, $store, $sessionConfiguration);
 		});
 	}
 
 	/**
-     * Loads the session storage implementation
-     *
-     * @access private
-     * @param  array   $cookieConfiguration Cookie configuration to use
-     * @return mixed
-     */
+	 * Loads the session storage implementation.
+	 *
+	 * @access private
+	 * @param  array $cookieConfiguration Cookie configuration to use
+	 * @return mixed
+	 */
 	private function loadSessionStore(array $cookieConfiguration)
 	{
 		$storeConfig = $cookieConfiguration['storage'];
@@ -155,44 +154,44 @@ class HttpService extends Service
 		{
 			return $this->nativeSessionStore($storeConfig, $cookieConfiguration);
 		}
-		else if ($storeConfig['type'] === 'file')
+		elseif ($storeConfig['type'] === 'file')
 		{
 			return $this->fileSessionStore($storeConfig, $cookieConfiguration);
 		}
 	}
 
 	/**
-     * Loads the native session storage implementation
-     *
-     * @access private
-     * @param  array   $storeConfig         Configuration for the storage
-     * @param  array   $cookieConfiguration Configuration for session sending/reading
-     * @return \kanso\framework\http\session\storage\NativeSessionStorage
-     */
+	 * Loads the native session storage implementation.
+	 *
+	 * @access private
+	 * @param  array                                                      $storeConfig         Configuration for the storage
+	 * @param  array                                                      $cookieConfiguration Configuration for session sending/reading
+	 * @return \kanso\framework\http\session\storage\NativeSessionStorage
+	 */
 	private function nativeSessionStore(array $storeConfig, array $cookieConfiguration): NativeSessionStorage
 	{
 		return new NativeSessionStorage($cookieConfiguration, $cookieConfiguration['storage']['path']);
 	}
 
 	/**
-     * Loads the file session storage implementation
-     *
-     * @access private
-     * @param  array   $storeConfig         Configuration for the storage
-     * @param  array   $cookieConfiguration Configuration for session sending/reading
-     * @return \kanso\framework\http\session\storage\FileSessionStorage
-     */
+	 * Loads the file session storage implementation.
+	 *
+	 * @access private
+	 * @param  array                                                    $storeConfig         Configuration for the storage
+	 * @param  array                                                    $cookieConfiguration Configuration for session sending/reading
+	 * @return \kanso\framework\http\session\storage\FileSessionStorage
+	 */
 	private function fileSessionStore(array $storeConfig, array $cookieConfiguration): FileSessionStorage
 	{
 		return new FileSessionStorage($this->container->Crypto, $this->container->Filesystem, $cookieConfiguration, $cookieConfiguration['storage']['path']);
 	}
 
 	/**
-     * Get the HTTP Response cache
-     *
-     * @access private
-     * @return \kanso\framework\http\response\Cache
-     */
+	 * Get the HTTP Response cache.
+	 *
+	 * @access private
+	 * @return \kanso\framework\http\response\Cache
+	 */
 	private function getCache(): Cache
 	{
 		$key = Str::alphaDash($this->container->Request->path());
@@ -201,50 +200,50 @@ class HttpService extends Service
 	}
 
 	/**
-     * Get the HTTP response CDN
-     *
-     * @access private
-     * @return \kanso\framework\http\response\CDN
-     */
+	 * Get the HTTP response CDN.
+	 *
+	 * @access private
+	 * @return \kanso\framework\http\response\CDN
+	 */
 	private function getCDN(): CDN
 	{
 		return new CDN($this->container->Request->environment()->HTTP_HOST, $this->container->Config->get('cdn.host'), $this->container->Config->get('cdn.enabled'));
 	}
 
 	/**
-     * Get the HTTP response protocol
-     *
-     * @access private
-     * @return \kanso\framework\http\response\Protocol
-     */
+	 * Get the HTTP response protocol.
+	 *
+	 * @access private
+	 * @return \kanso\framework\http\response\Protocol
+	 */
 	private function getProtocol(): Protocol
 	{
 		return new Protocol($this->container->Request->environment()->HTTP_PROTOCOL);
 	}
 
 	/**
-     * Registers the response object
-     *
-     * @access private
-     */
+	 * Registers the response object.
+	 *
+	 * @access private
+	 */
 	private function registerResponse()
 	{
-		$this->container->singleton('Response', function ()
+		$this->container->singleton('Response', function()
 		{
 			return new Response($this->getProtocol(), new Format, new Body, new Status, new ResponseHeaders, $this->container->Cookie, $this->container->Session, $this->getCache(), $this->getCDN(), $this->container->View, $this->container->Request->getMethod());
 		});
 	}
 
 	/**
-     * Registers the router object
-     *
-     * @access private
-     */
+	 * Registers the router object.
+	 *
+	 * @access private
+	 */
 	private function registerRouter()
 	{
-		$this->container->singleton('Router', function ($container)
+		$this->container->singleton('Router', function($container)
 		{
 			return new Router($container->Request, $container->Onion, $container->Config->get('application.send_response'));
 		});
-	}	
+	}
 }

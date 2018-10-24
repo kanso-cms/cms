@@ -8,7 +8,7 @@
 namespace kanso\framework\http\cookie\storage;
 
 /**
- * Cookie encrypt write / read decrypt 
+ * Cookie encrypt write / read decrypt.
  *
  * @author Joe J. Howard
  */
@@ -27,8 +27,8 @@ interface StoreInterface
 	 * Encypts and writes a cookie by name.
 	 *
 	 * @access public
-	 * @param  string $key   key to read from
-	 * @param  mixed  $value Value to save
+	 * @param string $key   key to read from
+	 * @param mixed  $value Value to save
 	 */
 	public function write(string $key, $value);
 }

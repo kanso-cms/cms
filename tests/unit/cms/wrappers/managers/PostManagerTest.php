@@ -7,9 +7,9 @@
 
 namespace tests\unit\cms\wrappers\managers;
 
+use kanso\cms\wrappers\managers\PostManager;
 use Mockery;
 use tests\TestCase;
-use kanso\cms\wrappers\managers\PostManager;
 
 /**
  * @group unit

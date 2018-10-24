@@ -7,10 +7,8 @@
 
 namespace kanso\cms\wrappers;
 
-use kanso\cms\wrappers\Wrapper;
-
 /**
- * Comment utility wrapper
+ * Comment utility wrapper.
  *
  * @author Joe J. Howard
  */
@@ -42,7 +40,7 @@ class Comment extends Wrapper
         return !$saved ? false : true;
 	}
 
-	/**
+    /**
      * {@inheritdoc}
      */
     public function delete(): bool
@@ -59,7 +57,7 @@ class Comment extends Wrapper
 	}
 
     /**
-     * Creates and returns a nested array of comment children
+     * Creates and returns a nested array of comment children.
      *
      * @access public
      * @return array
@@ -75,7 +73,7 @@ class Comment extends Wrapper
     }
 
     /**
-     * Recursively delete comment tree
+     * Recursively delete comment tree.
      *
      * @access private
      * @param  kanso\cms\wrappers\Comment $comment Comment
@@ -94,7 +92,7 @@ class Comment extends Wrapper
     }
 
     /**
-     * Recursively build comment tree
+     * Recursively build comment tree.
      *
      * @access private
      * @param  kanso\cms\wrappers\Comment $comment Comment

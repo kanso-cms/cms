@@ -1,7 +1,7 @@
 <?php
 
-use \kanso\framework\utility\Str;
-use \kanso\framework\utility\Pluralize;
+use kanso\framework\utility\Pluralize;
+use kanso\framework\utility\Str;
 
 $userSlug  =  Str::slug($commenter['email']);
 $rep_text  = 'Average';
@@ -12,13 +12,13 @@ if ($commenter['reputation'] < 0)
     $rep_color = 'danger';
 
 }
-else if ($commenter['reputation'] > 0 && $commenter['reputation'] < 2)
+elseif ($commenter['reputation'] > 0 && $commenter['reputation'] < 2)
 {
     $rep_text  = 'Average';
     $rep_color = 'info';
 
 }
-else if ($commenter['reputation'] > 2)
+elseif ($commenter['reputation'] > 2)
 {
     $rep_text  = 'Good';
     $rep_color = 'success';
@@ -56,12 +56,12 @@ else if ($commenter['reputation'] > 2)
 				<?php echo $commenter['ip_address']; ?>
 	        </div>
 	        <div class="color-gray">
-	        	<span class="label label-<?php echo $rep_color;?> tooltipped tooltipped-n" data-tooltip="Reputation">
-	        		<?php echo strtoupper($rep_text);?>
+	        	<span class="label label-<?php echo $rep_color; ?> tooltipped tooltipped-n" data-tooltip="Reputation">
+	        		<?php echo strtoupper($rep_text); ?>
 	        	</span>
 	        	
 	        	<span class="p6 color-gray-light">&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-	        	with <?php echo $commenter['posted_count']; ?> <?php echo Pluralize::convert('comment', $commenter['posted_count']);?>
+	        	with <?php echo $commenter['posted_count']; ?> <?php echo Pluralize::convert('comment', $commenter['posted_count']); ?>
 	        	<span class="p6 color-gray-light">&nbsp;&nbsp;•&nbsp;&nbsp;</span>
 	        	<?php echo $commenter['spam_count']; ?> spam
 			</div>
@@ -77,9 +77,9 @@ else if ($commenter['reputation'] > 2)
 				        <div class="drop">
 				            <ul>
 				            	<li class="drop-header">Add IP to:</li>
-				                <li><a href="#" onclick="document.getElementById('blacklist-<?php echo $userSlug; ?>').submit()" <?php if ($commenter['blacklisted']) echo 'class="selected"';?>>Blacklist</a></li>
-				                <li><a href="#" onclick="document.getElementById('whitelist-<?php echo $userSlug; ?>').submit()" <?php if ($commenter['whitelisted']) echo 'class="selected"';?>>Whitelist</a></li>
-				                <li><a href="#" onclick="document.getElementById('nolist-<?php echo $userSlug; ?>').submit()" <?php if (!$commenter['blacklisted'] && !$commenter['whitelisted']) echo 'class="selected"';?>>No list</a></li>
+				                <li><a href="#" onclick="document.getElementById('blacklist-<?php echo $userSlug; ?>').submit()" <?php if ($commenter['blacklisted']) echo 'class="selected"'; ?>>Blacklist</a></li>
+				                <li><a href="#" onclick="document.getElementById('whitelist-<?php echo $userSlug; ?>').submit()" <?php if ($commenter['whitelisted']) echo 'class="selected"'; ?>>Whitelist</a></li>
+				                <li><a href="#" onclick="document.getElementById('nolist-<?php echo $userSlug; ?>').submit()" <?php if (!$commenter['blacklisted'] && !$commenter['whitelisted']) echo 'class="selected"'; ?>>No list</a></li>
 				        	</ul>
 				        </div>
 				    </div>
@@ -93,28 +93,28 @@ else if ($commenter['reputation'] > 2)
 				        <div class="drop">
 				            <ul>
 				            	<li class="drop-header">All comments from:</li>
-				                <li><a href="/admin/comments/?search=name:<?php echo urlencode($commenter['name']); ?>"><?php echo $commenter['name'];?></a></li>
-				                <li><a href="/admin/comments/?search=email:<?php echo urlencode($commenter['email']); ?>"><?php echo $commenter['email'];?></a></li>
-				                <li><a href="/admin/comments/?search=ip_address:<?php echo urlencode($commenter['ip_address']); ?>"><?php echo $commenter['ip_address'];?></a></li>
+				                <li><a href="/admin/comments/?search=name:<?php echo urlencode($commenter['name']); ?>"><?php echo $commenter['name']; ?></a></li>
+				                <li><a href="/admin/comments/?search=email:<?php echo urlencode($commenter['email']); ?>"><?php echo $commenter['email']; ?></a></li>
+				                <li><a href="/admin/comments/?search=ip_address:<?php echo urlencode($commenter['ip_address']); ?>"><?php echo $commenter['ip_address']; ?></a></li>
 				        	</ul>
 				        </div>
 				    </div>
 				</div>
 			</div>
-			<form method="post" id="blacklist-<?php echo $userSlug;?>" style="display: none;">
+			<form method="post" id="blacklist-<?php echo $userSlug; ?>" style="display: none;">
 				<input type="hidden" name="bulk_action"   value="blacklist">
-				<input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN;?>">
-				<input type="hidden" name="users[]"   value="<?php echo $commenter['ip_address'];?>">
+				<input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN; ?>">
+				<input type="hidden" name="users[]"   value="<?php echo $commenter['ip_address']; ?>">
 			</form>
-			<form method="post" id="whitelist-<?php echo $userSlug;?>" style="display: none;">
+			<form method="post" id="whitelist-<?php echo $userSlug; ?>" style="display: none;">
 				<input type="hidden" name="bulk_action"   value="whitelist">
-				<input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN;?>">
-				<input type="hidden" name="users[]"   value="<?php echo $commenter['ip_address'];?>">
+				<input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN; ?>">
+				<input type="hidden" name="users[]"   value="<?php echo $commenter['ip_address']; ?>">
 			</form>
-			<form method="post" id="nolist-<?php echo $userSlug;?>" style="display: none;">
+			<form method="post" id="nolist-<?php echo $userSlug; ?>" style="display: none;">
 				<input type="hidden" name="bulk_action"   value="nolist">
-				<input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN;?>">
-				<input type="hidden" name="users[]"   value="<?php echo $commenter['ip_address'];?>">
+				<input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN; ?>">
+				<input type="hidden" name="users[]"   value="<?php echo $commenter['ip_address']; ?>">
 			</form>
 			
 		</div>

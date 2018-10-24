@@ -10,24 +10,24 @@ namespace kanso\framework\application\services;
 use kanso\framework\ioc\Container;
 
 /**
- * Service provider base class
+ * Service provider base class.
  *
  * @author Joe J. Howard
  */
 abstract class Service
 {
 	/**
-	 * IoC container instance
+	 * IoC container instance.
 	 *
 	 * @var \kanso\framework\ioc\Container
 	 */
 	protected $container;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
 	 * @access public
-	 * @param  \kanso\framework\ioc\Container $container IoC container instance
+	 * @param \kanso\framework\ioc\Container $container IoC container instance
 	 */
 	public function __construct(Container $container)
 	{

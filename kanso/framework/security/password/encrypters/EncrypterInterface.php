@@ -8,7 +8,7 @@
 namespace kanso\framework\security\password\encrypters;
 
 /**
- * Password hashing interface
+ * Password hashing interface.
  *
  * @author Joe J. Howard
  */

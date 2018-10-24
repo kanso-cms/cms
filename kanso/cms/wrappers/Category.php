@@ -8,11 +8,10 @@
 namespace kanso\cms\wrappers;
 
 use InvalidArgumentException;
-use kanso\cms\wrappers\Wrapper;
 use kanso\framework\utility\Str;
 
 /**
- * Category utility wrapper
+ * Category utility wrapper.
  *
  * @author Joe J. Howard
  */
@@ -61,7 +60,7 @@ class Category extends Wrapper
             {
                 $this->data['id'] = intval($this->SQL->connectionHandler()->lastInsertId());
             }
-            
+
         }
 
         return !$saved ? false : true;
@@ -89,11 +88,11 @@ class Category extends Wrapper
     }
 
     /**
-     * Clears all posts from the category
+     * Clears all posts from the category.
      *
      * @access public
-     * @return bool
      * @throws \InvalidArgumentException If this is category id 1
+     * @return bool
      */
     public function clear(): bool
     {
@@ -111,7 +110,7 @@ class Category extends Wrapper
     }
 
     /**
-     * Get the parent category if it is set
+     * Get the parent category if it is set.
      *
      * @access public
      * @return Category|false
@@ -135,7 +134,7 @@ class Category extends Wrapper
     }
 
     /**
-     * Get children categories
+     * Get children categories.
      *
      * @access public
      * @return array
@@ -149,7 +148,7 @@ class Category extends Wrapper
             $cats = $this->SQL->SELECT('*')->FROM('categories')->WHERE('parent_id', '=', $this->data['id'])->FIND_ALL();
 
             foreach ($cats as $cat)
-            {                
+            {
                 $children[] = $this->categoryFromRow($cat);
             }
         }
@@ -158,10 +157,10 @@ class Category extends Wrapper
     }
 
     /**
-     * Create a category from a databse row
+     * Create a category from a databse row.
      *
      * @access private
-     * @param  array   $data Category database row
+     * @param  array    $data Category database row
      * @return Category
      */
     private function categoryFromRow(array $data): Category
@@ -170,7 +169,7 @@ class Category extends Wrapper
     }
 
     /**
-     * Unjoin all posts and reset to uncategorized if no categories left
+     * Unjoin all posts and reset to uncategorized if no categories left.
      *
      * @access private
      * @return bool
@@ -179,22 +178,22 @@ class Category extends Wrapper
     {
         if (isset($this->data['id']))
         {
-            # Remove post joins
+            // Remove post joins
             $posts = $this->SQL->SELECT('posts.*')->FROM('categories_to_posts')->LEFT_JOIN_ON('posts', 'categories_to_posts.post_id = posts.id')->WHERE('categories_to_posts.category_id', '=', $this->data['id'])->FIND_ALL();
-            
+
             foreach ($posts as $post)
             {
                 $postCats = $this->SQL->SELECT('*')->FROM('categories_to_posts')->WHERE('post_id', '=', $post['id'])->FIND_ALL();
-                
+
                 if (count($postCats) === 1)
                 {
                     $this->SQL->INSERT_INTO('categories_to_posts')->VALUES(['post_id' => $post['id'], 'category_id' => 1])->QUERY();
                 }
             }
 
-            $this->SQL->DELETE_FROM('categories_to_posts')->WHERE('category_id', '=',  $this->data['id'])->QUERY();
+            $this->SQL->DELETE_FROM('categories_to_posts')->WHERE('category_id', '=', $this->data['id'])->QUERY();
 
-            # Children now have no parent
+            // Children now have no parent
             foreach ($this->children() as $child)
             {
                 $child->parent_id = 0;

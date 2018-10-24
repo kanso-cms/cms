@@ -7,9 +7,9 @@
 
 namespace tests\unit\framework\ioc;
 
-use tests\TestCase;
 use kanso\framework\ioc\Container;
 use kanso\framework\ioc\ContainerAwareTrait;
+use tests\TestCase;
 
 class ContainerAwareCallback
 {
@@ -20,7 +20,7 @@ class ContainerAwareCallback
 	public $foobarz = 'foobarz';
 
 	public function __construct()
-    { 
+    {
     }
 
     public function getPrivate()

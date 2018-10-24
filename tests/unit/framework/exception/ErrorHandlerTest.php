@@ -7,12 +7,12 @@
 
 namespace tests\unit\framework\exception;
 
-use Mockery;
-use tests\TestCase;
-use Throwable;
 use ErrorException;
 use InvalidArgumentException;
 use kanso\framework\exception\ErrorHandler;
+use Mockery;
+use tests\TestCase;
+use Throwable;
 
 /**
  * @group unit
@@ -30,10 +30,10 @@ class ErrorHandlerTest extends TestCase
 
         $handler->handle(ErrorException::class, function($exception) use ($handler, $logger, $webHandler)
         {
-            # Logger
+            // Logger
             $handler->setLogger($logger);
 
-            # Handle
+            // Handle
             return $webHandler->handle($handler->display_errors());
         });
 
@@ -55,10 +55,10 @@ class ErrorHandlerTest extends TestCase
 
         $handler->handle(Throwable::class, function($exception) use ($handler, $logger, $webHandler)
         {
-            # Logger
+            // Logger
             $handler->setLogger($logger);
 
-            # Handle
+            // Handle
             return $webHandler->handle($handler->display_errors());
         });
 
@@ -77,14 +77,14 @@ class ErrorHandlerTest extends TestCase
         $handler    = new ErrorHandler(true, E_ALL | E_STRICT);
         $logger     = Mockery::mock('\kanso\framework\exception\ErrorLogger');
         $webHandler = Mockery::mock('\kanso\framework\exception\handlers\WebHandler');
-        
+
         $handler->handle(Throwable::class, function($exception) use ($handler, $logger, $webHandler)
         {
             return $webHandler->handle($handler->display_errors());
         });
 
         $handler->setLogger($logger);
-        
+
         $handler->disableLoggingFor(ErrorException::class);
 
         $webHandler->shouldReceive('handle')->withArgs([true])->andReturn(true);
@@ -100,14 +100,14 @@ class ErrorHandlerTest extends TestCase
         $handler    = new ErrorHandler(false, E_ALL | E_STRICT);
         $logger     = Mockery::mock('\kanso\framework\exception\ErrorLogger');
         $webHandler = Mockery::mock('\kanso\framework\exception\handlers\WebHandler');
-        
+
         $handler->handle(Throwable::class, function($exception) use ($handler, $logger, $webHandler)
         {
             return $webHandler->handle($handler->display_errors());
         });
 
         $handler->setLogger($logger);
-        
+
         $handler->disableLoggingFor(ErrorException::class);
 
         $webHandler->shouldReceive('handle')->withArgs([false])->andReturn(true);

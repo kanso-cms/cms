@@ -5,13 +5,13 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\framework\git\commands; 
+namespace kanso\framework\git\commands;
 
 use kanso\framework\git\Command;
 use kanso\framework\git\Command\utility\DiffParser;
 
 /**
- * Git show command
+ * Git show command.
  *
  * @see  https://git-scm.com/docs/git-show
  * @author Joe J. Howard
@@ -19,15 +19,15 @@ use kanso\framework\git\Command\utility\DiffParser;
 class ShowCommand extends Command
 {
     /**
-     * Magic method invoke
-     * 
-     * @param  array $options Command options (optional) (default [])
-     * @param  array $params  Command params  (optional) (default [])
+     * Magic method invoke.
+     *
+     * @param  array        $options Command options (optional) (default [])
+     * @param  array        $params  Command params  (optional) (default [])
      * @return false|string
      */
     public function __invoke(array $options = [], array $params = [])
     {
-        # Run the command
+        // Run the command
         $output = $this->run('show', [$options, $params]);
 
         if (!$this->is_successful())
@@ -39,17 +39,17 @@ class ShowCommand extends Command
     }
 
     /**
-     * Show diffs
-     * 
-     * @param  array $options Command options (optional) (default [])
-     * @param  array $params  Command params  (optional) (default [])
+     * Show diffs.
+     *
+     * @param  array      $options Command options (optional) (default [])
+     * @param  array      $params  Command params  (optional) (default [])
      * @return bool|array
      */
-    public function diff($options = [], $params = [], $limitDiff = true) 
+    public function diff($options = [], $params = [], $limitDiff = true)
     {
-    	$options = array_merge([ 'minimal', 'no-color', 'no-ext-diff', 'M', 'dst-prefix' => 'DST/', 'src-prefix'=> 'SRC/'], $options);
+    	$options = array_merge(['minimal', 'no-color', 'no-ext-diff', 'M', 'dst-prefix' => 'DST/', 'src-prefix'=> 'SRC/'], $options);
 
-    	# Run the command
+    	// Run the command
         $output = $this->run('show', [$options, $params]);
 
         if (!$this->is_successful())
@@ -61,23 +61,23 @@ class ShowCommand extends Command
     }
 
     /**
-     * Commit from blob
-     * 
-     * @param  string $branch Branch of blob
-     * @param  string $hash   Blob hash
-     * @param  string $path   Blob file path
+     * Commit from blob.
+     *
+     * @param  string     $branch Branch of blob
+     * @param  string     $hash   Blob hash
+     * @param  string     $path   Blob file path
      * @return bool|array
      */
-    public function blobCommit(string $branch = 'HEAD', string $hash, string $path) 
+    public function blobCommit(string $branch = 'HEAD', string $hash, string $path)
     {
-    	# Optiops and params
+    	// Optiops and params
     	$options = [
     		'n' 	 => 1,
     		'format' => '%H||%P||%cN||%cE||%cD||%B',
     	];
-    	$params = [ $branch, $hash, '--', $path];
+    	$params = [$branch, $hash, '--', $path];
 
-    	# Run the command
+    	// Run the command
         $output = $this->run('log', [$options, $params]);
 
         if (!$this->is_successful() || empty(trim($output)))
@@ -90,7 +90,7 @@ class ShowCommand extends Command
         $title  = $body[0];
         array_shift($body);
         $description = !empty($body) ? trim(implode("\n", $body)) : '';
-        
+
         return [
             'hash'   => $lines[0],
             'parent' => $lines[1],
@@ -99,6 +99,6 @@ class ShowCommand extends Command
             'date'   => $lines[4],
             'title'  => $title,
             'description' => $description,
-        ];  
+        ];
     }
 }

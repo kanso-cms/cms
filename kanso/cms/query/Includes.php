@@ -109,25 +109,25 @@ function the_categories_list($post_id = null, $glue = ', ')
     return $KANSO_QUERY->the_categories_list($post_id, $glue);
 }
 
-function the_tags($post_id = null) 
+function the_tags($post_id = null)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_tags($post_id);
 }
 
-function the_tags_list($post_id = null, $glue = ', ') 
+function the_tags_list($post_id = null, $glue = ', ')
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_tags_list($post_id, $glue);
 }
 
-function the_tag_slug($tag_id = null) 
+function the_tag_slug($tag_id = null)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_tag_slug($tag_id);
 }
 
-function the_tag_url($tag_id = null) 
+function the_tag_url($tag_id = null)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_tag_url($tag_id);
@@ -139,43 +139,43 @@ function the_taxonomy()
     return $KANSO_QUERY->the_taxonomy();
 }
 
-function the_attachment() 
+function the_attachment()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_attachment();
 }
 
-function all_the_attachments() 
+function all_the_attachments()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->all_the_attachments();
 }
 
-function the_attachment_url($id = null) 
+function the_attachment_url($id = null)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_attachment_url($id);
 }
 
-function the_attachment_size() 
+function the_attachment_size()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_attachment_size();
 }
 
-function the_attachments_url() 
+function the_attachments_url()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_attachments_url();
 }
 
-function the_content($post_id = null, $raw = false) 
+function the_content($post_id = null, $raw = false)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_content($post_id, $raw);
 }
 
-function the_post_thumbnail($post_id = null, $size = 'original') 
+function the_post_thumbnail($post_id = null, $size = 'original')
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_post_thumbnail($post_id, $size);
@@ -193,13 +193,13 @@ function display_thumbnail($thumbnail, $size = 'original', $width = '', $height 
     return $KANSO_QUERY->display_thumbnail($thumbnail, $size, $width, $height, $classes, $id);
 }
 
-function the_author($post_id = null) 
+function the_author($post_id = null)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_author($post_id);
 }
 
-function the_author_name($post_id = null) 
+function the_author_name($post_id = null)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_author_name($post_id);
@@ -253,16 +253,16 @@ function the_author_instagram($author_id = null)
     return $KANSO_QUERY->the_author_instagram($author_id);
 }
 
-function the_post_id() 
+function the_post_id()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_post_id();
 }
 
-function the_post_status($post_id = null) 
+function the_post_status($post_id = null)
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->the_post_status($post_id) ;
+    return $KANSO_QUERY->the_post_status($post_id);
 }
 
 function the_post_type($post_id = null)
@@ -451,7 +451,6 @@ function the_previous_page_url()
     return $KANSO_QUERY->the_previous_page_url();
 }
 
-
 function search_query()
 {
     global $KANSO_QUERY;
@@ -518,13 +517,13 @@ function all_the_authors()
     return $KANSO_QUERY->all_the_authors();
 }
 
-function all_static_pages($publihsed = true) 
+function all_static_pages($publihsed = true)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->all_static_pages($publihsed);
 }
 
-function all_custom_posts($type, $publihsed = true) 
+function all_custom_posts($type, $publihsed = true)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->all_custom_posts($type, $publihsed);
@@ -554,61 +553,61 @@ function include_template($template_name, $data = [])
     echo $KANSO_QUERY->include_template($template_name, $data);
 }
 
-function themes_directory() 
+function themes_directory()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->themes_directory();
 }
 
-function theme_directory() 
+function theme_directory()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->theme_directory();
 }
 
-function theme_name() 
+function theme_name()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->theme_name();
 }
 
-function theme_url() 
+function theme_url()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->theme_url();
 }
 
-function base_url() 
+function base_url()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->base_url();
 }
 
-function home_url() 
+function home_url()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->home_url();
 }
 
-function blog_url() 
+function blog_url()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->blog_url();
 }
 
-function domain_name() 
+function domain_name()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->domain_name();
 }
 
-function website_title() 
+function website_title()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->website_title();
 }
 
-function website_description() 
+function website_description()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->website_description();
@@ -626,39 +625,37 @@ function the_canonical_url()
     return $KANSO_QUERY->the_canonical_url();
 }
 
-
 function the_meta_description()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->the_meta_description();
 }
 
-
-function current_userinfo() 
+function current_userinfo()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->get_current_userinfo();
 }
 
-function user() 
+function user()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->user();
 }
 
-function is_loggedin() 
+function is_loggedin()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->is_loggedin();
 }
 
-function user_is_admin() 
+function user_is_admin()
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->user_is_admin();
 }
 
-function get_gravatar($email_or_md5 = null, $size = 160, $srcOnly = false) 
+function get_gravatar($email_or_md5 = null, $size = 160, $srcOnly = false)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->get_gravatar($email_or_md5, $size, $srcOnly);
@@ -706,7 +703,7 @@ function comment_form($args = null, $postId = null)
     return $KANSO_QUERY->comment_form($args, $postId);
 }
 
-function pagination_links($args = null) 
+function pagination_links($args = null)
 {
     global $KANSO_QUERY;
     return $KANSO_QUERY->pagination_links($args);

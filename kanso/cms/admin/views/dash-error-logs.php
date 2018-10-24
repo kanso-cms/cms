@@ -6,7 +6,7 @@
 		<h1>Error Logs</h1>
 	</section>
 
-	<?php require_once($_TEMPLATES_DIR.DIRECTORY_SEPARATOR.'post-message.php'); ?>
+	<?php require_once($_TEMPLATES_DIR . DIRECTORY_SEPARATOR . 'post-message.php'); ?>
 
 	<!-- LIST -->
 	<section class="items-list">

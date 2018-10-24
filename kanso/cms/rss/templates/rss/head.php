@@ -8,11 +8,11 @@
 	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
 >
 <channel>
-	<title><?php echo website_title();?></title>
-	<atom:link href="<?php echo trim(the_canonical_url(), '/');?>/feed/" rel="self" type="application/rss+xml" />
-	<link><?php echo the_canonical_url();?></link>
-	<description><?php echo website_description();?></description>
-	<lastBuildDate><?php echo the_modified_time('D, d M Y H:i:s');?></lastBuildDate>
+	<title><?php echo website_title(); ?></title>
+	<atom:link href="<?php echo trim(the_canonical_url(), '/'); ?>/feed/" rel="self" type="application/rss+xml" />
+	<link><?php echo the_canonical_url(); ?></link>
+	<description><?php echo website_description(); ?></description>
+	<lastBuildDate><?php echo the_modified_time('D, d M Y H:i:s'); ?></lastBuildDate>
 	<language>en-US</language>
 	<sy:updatePeriod>hourly</sy:updatePeriod>
 	<sy:updateFrequency>1</sy:updateFrequency>

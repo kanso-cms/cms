@@ -8,7 +8,7 @@
 namespace kanso\framework\security\crypto\encrypters;
 
 /**
- * Encryption/Decryption interface
+ * Encryption/Decryption interface.
  *
  * @author Joe J. Howard
  */

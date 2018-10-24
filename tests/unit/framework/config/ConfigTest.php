@@ -7,9 +7,9 @@
 
 namespace tests\unit\framework\config;
 
+use kanso\framework\config\Config;
 use Mockery;
 use tests\TestCase;
-use kanso\framework\config\Config;
 
 /**
  * @group unit

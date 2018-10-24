@@ -7,10 +7,9 @@
 
 namespace tests\unit\cms\email;
 
+use kanso\cms\email\Email;
 use Mockery;
 use tests\TestCase;
-use kanso\cms\email\Email;
-
 
 /**
  * @group unit
@@ -27,12 +26,12 @@ class EmailTest extends TestCase
 
 		$email = new Email($filesystem, $smtp);
 
-		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR.'/cms/email/templates/body.php', $email->theme())->once()->andReturn('foo');
-		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR.'/cms/email/templates/comment.php', $email->theme())->once()->andReturn('foo');
-		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR.'/cms/email/templates/confirm-account.php', $email->theme())->once()->andReturn('foo');
-		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR.'/cms/email/templates/forgot-password.php', $email->theme())->once()->andReturn('foo');
-		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR.'/cms/email/templates/new-admin.php', $email->theme())->once()->andReturn('foo');
-		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR.'/cms/email/templates/reset-password.php', $email->theme())->once()->andReturn('foo');
+		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR . '/cms/email/templates/body.php', $email->theme())->once()->andReturn('foo');
+		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR . '/cms/email/templates/comment.php', $email->theme())->once()->andReturn('foo');
+		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR . '/cms/email/templates/confirm-account.php', $email->theme())->once()->andReturn('foo');
+		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR . '/cms/email/templates/forgot-password.php', $email->theme())->once()->andReturn('foo');
+		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR . '/cms/email/templates/new-admin.php', $email->theme())->once()->andReturn('foo');
+		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR . '/cms/email/templates/reset-password.php', $email->theme())->once()->andReturn('foo');
 
 		$this->assertEquals('foo', $email->preset('body'));
 		$this->assertEquals('foo', $email->preset('comment'));
@@ -54,14 +53,14 @@ class EmailTest extends TestCase
 
 		$theme = $email->theme();
 
-		$vars = array_merge($theme, 
+		$vars = array_merge($theme,
 		[
-			'subject' => 'email subject', 
+			'subject' => 'email subject',
             'content' => 'additional html',
             'logoSrc' => $theme['logo_url'],
 		]);
 
-		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR.'/cms/email/templates/body.php', $vars)->once()->andReturn('foo');
+		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR . '/cms/email/templates/body.php', $vars)->once()->andReturn('foo');
 
 		$this->assertEquals('foo', $email->html('email subject', 'additional html'));
 	}
@@ -83,7 +82,7 @@ class EmailTest extends TestCase
 		$smtp->shouldReceive('isHTML')->with(true);
 		$smtp->shouldReceive('msgHTML')->with('html content');
 		$smtp->shouldReceive('send');
-		
+
 		$this->assertTrue($email->send('foo@bar.com', 'Foo Bar', 'bar@foo.com', 'Foo Subject', 'html content'));
 	}
 
@@ -103,7 +102,7 @@ class EmailTest extends TestCase
 		$smtp->shouldReceive('addAddress')->with('foo@bar.com');
 		$smtp->shouldReceive('isHTML')->with(false);
 		$smtp->shouldReceive('send');
-		
+
 		$this->assertTrue($email->send('foo@bar.com', 'Foo Bar', 'bar@foo.com', 'Foo Subject', 'html content', false));
 	}
 
@@ -112,7 +111,7 @@ class EmailTest extends TestCase
 	 */
 	private function getSmtpSettings()
 	{
-		return 
+		return
 	    [
 	        'debug'       => 0,
 	        'host'        => 'smtp.gmail.com',

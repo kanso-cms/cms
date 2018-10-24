@@ -7,9 +7,9 @@
 
 namespace tests\unit\framework\security\crypto;
 
+use kanso\framework\security\Crypto;
 use Mockery;
 use tests\TestCase;
-use kanso\framework\security\Crypto;
 
 /**
  * @group unit

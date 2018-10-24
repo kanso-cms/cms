@@ -7,16 +7,16 @@
 
 namespace kanso\framework\exception\handlers;
 
-use Throwable;
 use kanso\framework\exception\ExceptionLogicTrait;
+use kanso\framework\http\exceptions\MethodNotAllowedException;
+use kanso\framework\http\exceptions\RequestException;
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
 use kanso\framework\mvc\view\View;
-use kanso\framework\http\exceptions\RequestException;
-use kanso\framework\http\exceptions\MethodNotAllowedException;
+use Throwable;
 
 /**
- * Error web handler
+ * Error web handler.
  *
  * @author Joe J. Howard
  */
@@ -49,10 +49,10 @@ class WebHandler
 	 * Constructor.
 	 *
 	 * @access public
-	 * @param \Throwable          	 		  $exception Throwable
-	 * @param \kanso\framework\http\Request   $request   Request instance
-	 * @param \kanso\framework\http\Response  $response  Response instance
-	 * @param \kanso\framework\mvc\view\View  $view      View instance
+	 * @param \Throwable                     $exception Throwable
+	 * @param \kanso\framework\http\Request  $request   Request instance
+	 * @param \kanso\framework\http\Response $response  Response instance
+	 * @param \kanso\framework\mvc\view\View $view      View instance
 	 */
 	public function __construct(Throwable $exception, Request $request, Response $response, View $view)
 	{
@@ -87,13 +87,13 @@ class WebHandler
 	 * Returns a detailed error page.
 	 *
 	 * @access protected
-	 * @param  bool      $returnAsJson Should we return JSON?
-	 * @param  bool      $isBot        Is the user-agent a bot?
+	 * @param  bool   $returnAsJson Should we return JSON?
+	 * @param  bool   $isBot        Is the user-agent a bot?
 	 * @return string
 	 */
 	protected function getDetailedError(bool $returnAsJson, bool $isBot): string
 	{
-		$vars = 
+		$vars =
 		[
     		'errcode'      => $this->exception->getCode(),
     		'errName'      => $this->errName(),
@@ -110,7 +110,7 @@ class WebHandler
     		'errFileLines' => $this->errSource(),
     	];
 
-    	# Bots get a plain error message
+    	// Bots get a plain error message
     	if ($isBot)
     	{
     		return $vars['errmsg'];
@@ -123,7 +123,7 @@ class WebHandler
 		else
 		{
 			// Return detailed error view
-			return $this->view->display(dirname(__FILE__).'/views/debug.php', $vars);
+			return $this->view->display(dirname(__FILE__) . '/views/debug.php', $vars);
 		}
 	}
 
@@ -131,8 +131,8 @@ class WebHandler
 	 * Returns a generic error page.
 	 *
 	 * @access protected
-	 * @param  bool      $returnAsJson Should we return JSON?
-	 * @param  bool      $isBot        Is the user-agent a bot?
+	 * @param  bool   $returnAsJson Should we return JSON?
+	 * @param  bool   $isBot        Is the user-agent a bot?
 	 * @return string
 	 */
 	protected function getGenericError(bool $returnAsJson, bool $isBot): string
@@ -158,7 +158,7 @@ class WebHandler
 
 			return $message;
 		}
-		else if ($returnAsJson)
+		elseif ($returnAsJson)
 		{
 			switch($code)
 			{
@@ -179,15 +179,15 @@ class WebHandler
 		}
 		else
 		{
-			$dir = dirname(__FILE__).'/views';
+			$dir = dirname(__FILE__) . '/views';
 
-			$view = $dir.'/500.php';
+			$view = $dir . '/500.php';
 
 			if($this->exception instanceof RequestException || $this->exceptionParentName() === 'RequestException')
 			{
-				if (file_exists($dir.'/'.$code.'.php'))
+				if (file_exists($dir . '/' . $code . '.php'))
 				{
-					$view = $dir.'/'.$code.'.php';
+					$view = $dir . '/' . $code . '.php';
 				}
 			}
 
@@ -196,15 +196,15 @@ class WebHandler
 	}
 
 	/**
-	 * Display an error page to end user
+	 * Display an error page to end user.
 	 *
 	 * @access protected
-	 * @param  bool      $showDetails Should we show a detailed error page 
+	 * @param  bool  $showDetails Should we show a detailed error page
 	 * @return false
 	 */
 	public function handle(bool $showDetails = true): bool
 	{
-		# Set appropriate content type header
+		// Set appropriate content type header
 		if (($returnAsJson = $this->returnAsJson()) === true)
 		{
 			$this->response->format()->set('application/json');
@@ -214,7 +214,7 @@ class WebHandler
 			$this->response->format()->set('text/html');
 		}
 
-		# Set the response body
+		// Set the response body
 		if ($showDetails)
 		{
 			$this->response->body()->set($this->getDetailedError($returnAsJson, $this->request->isBot()));
@@ -224,7 +224,7 @@ class WebHandler
 			$this->response->body()->set($this->getGenericError($returnAsJson, $this->request->isBot()));
 		}
 
-		# Send the response along with appropriate headers
+		// Send the response along with appropriate headers
 		if ($this->exception instanceof RequestException || $this->exceptionClassName() === 'RequestException' || $this->exceptionParentName() === 'RequestException')
 		{
 			$status = $this->exception->getCode();
@@ -245,7 +245,7 @@ class WebHandler
 
 		$this->response->send();
 
-		# Return false to stop further error handling
+		// Return false to stop further error handling
 		return false;
 	}
 }

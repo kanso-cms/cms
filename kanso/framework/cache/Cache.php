@@ -8,32 +8,32 @@
 namespace kanso\framework\cache;
 
 /**
- * Cache storage
+ * Cache storage.
  *
  * @author Joe J. Howard
  */
-Class Cache 
+class Cache
 {
     /**
-     * Unix timestamp of max cache lifetime
+     * Unix timestamp of max cache lifetime.
      *
-     * @var int       
+     * @var int
      */
     private $lifetime;
 
     /**
-     * Storage implementation
+     * Storage implementation.
      *
-     * @var int       
+     * @var int
      */
     private $store;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
-     * @param  int    $lifetime Date the cache will expire (unix timestamp)
-     * @param  mixed  $store    Storage impementation
+     * @param int   $lifetime Date the cache will expire (unix timestamp)
+     * @param mixed $store    Storage impementation
      */
     public function __construct($lifetime, $store)
     {
@@ -43,10 +43,10 @@ Class Cache
     }
 
     /**
-     * Load a key value
+     * Load a key value.
      *
      * @access public
-     * @param  string $key Key to load
+     * @param string $key Key to load
      */
     public function get(string $key): string
     {
@@ -54,11 +54,11 @@ Class Cache
     }
 
     /**
-     * Save a key value
+     * Save a key value.
      *
      * @access public
-     * @param  string $key   Key to save the output
-     * @param  string $data  Data to store
+     * @param string $key  Key to save the output
+     * @param string $data Data to store
      */
     public function put(string $key, string $data)
     {
@@ -66,10 +66,10 @@ Class Cache
     }
 
     /**
-     * Check if a key is stored
+     * Check if a key is stored.
      *
      * @access public
-     * @param  string $key Key to check
+     * @param string $key Key to check
      */
     public function has(string $key): bool
     {
@@ -77,10 +77,10 @@ Class Cache
     }
 
     /**
-     * Remove a key value
+     * Remove a key value.
      *
      * @access public
-     * @param  string $key Key to delete
+     * @param string $key Key to delete
      */
     public function delete(string $key)
     {
@@ -88,10 +88,10 @@ Class Cache
     }
 
     /**
-     * Checks is key value is expired
+     * Checks is key value is expired.
      *
      * @access public
-     * @param  string $key Key to check
+     * @param string $key Key to check
      */
     public function expired(string $key): bool
     {
@@ -99,7 +99,7 @@ Class Cache
     }
 
     /**
-     * Clear the entire cache
+     * Clear the entire cache.
      *
      * @access public
      */

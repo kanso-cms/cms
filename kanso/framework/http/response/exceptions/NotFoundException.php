@@ -8,10 +8,9 @@
 namespace kanso\framework\http\response\exceptions;
 
 use Throwable;
-use kanso\framework\http\response\exceptions\RequestException;
 
 /**
- * 404 Exception
+ * 404 Exception.
  *
  * @author Joe J. Howard
  */

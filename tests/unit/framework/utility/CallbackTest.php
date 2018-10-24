@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\utility;
 
-use tests\TestCase;
 use kanso\framework\utility\Callback;
+use tests\TestCase;
 
 // --------------------------------------------------------------------------
 // START CLASSES
@@ -35,7 +35,7 @@ class CallbackTester
 
 	public static function testStaticMethods($foo, $bar)
 	{
-		return $foo.$bar;
+		return $foo . $bar;
 	}
 }
 
@@ -54,7 +54,7 @@ class CallbackTesters
 
 	public function testMethods()
 	{
-		return $this->foo.$this->bar;
+		return $this->foo . $this->bar;
 	}
 }
 
@@ -82,7 +82,7 @@ class CallbackTest extends TestCase
 
 		$this->assertEquals('foobar', Callback::apply(function($foo, $bar)
 		{
-			return $foo.$bar;
+			return $foo . $bar;
 
 		}, ['foo', 'bar']));
 	}

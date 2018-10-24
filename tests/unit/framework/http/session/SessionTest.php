@@ -7,9 +7,9 @@
 
 namespace tests\unit\framework\http\session;
 
+use kanso\framework\http\session\Session;
 use Mockery;
 use tests\TestCase;
-use kanso\framework\http\session\Session;
 
 /**
  * @group unit
@@ -103,7 +103,7 @@ class SessionTest extends TestCase
 
 		$session->setMultiple([
 		    'foo' => 'bar',
-		    'bar' => 'foo'
+		    'bar' => 'foo',
 		]);
 
 		$this->assertEquals('bar', $session->get('foo'));

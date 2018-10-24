@@ -7,26 +7,25 @@
 
 namespace kanso\cms\wrappers;
 
-use kanso\cms\wrappers\Wrapper;
 use kanso\framework\database\query\Builder;
 use kanso\framework\utility\Str;
 
 /**
- * Media utility wrapper
+ * Media utility wrapper.
  *
  * @author Joe J. Howard
  */
 class Media extends Wrapper
 {
     /**
-     * Assoc array of thumbnail sizes
-     * 
+     * Assoc array of thumbnail sizes.
+     *
      * @var array
-     */ 
+     */
     private $thumbnailSizes;
 
     /**
-     * Array of image fle extensions
+     * Array of image fle extensions.
      *
      * @var array
      */
@@ -39,15 +38,14 @@ class Media extends Wrapper
     ];
 
     /**
-     * Override inherited constructor
-     * 
+     * Override inherited constructor.
+     *
      * @access public
-     * @param  \kanso\framework\database\query\Builder $SQL            SQL query builder
-     * @param  array                                   $thumbnailSizes Assoc array of thumbnail sizes
-     * @param  array                                   $data           Array row from Database
-
+     * @param \kanso\framework\database\query\Builder $SQL            SQL query builder
+     * @param array                                   $thumbnailSizes Assoc array of thumbnail sizes
+     * @param array                                   $data           Array row from Database
      */
-    public function __construct(Builder $SQL, array $thumbnailSizes = ['small'  => 400,'medium' => 800,'large' => 1200] , array $data = [])
+    public function __construct(Builder $SQL, array $thumbnailSizes = ['small'  => 400, 'medium' => 800, 'large' => 1200], array $data = [])
     {
         $this->SQL = $SQL;
 
@@ -98,7 +96,7 @@ class Media extends Wrapper
                     unlink($path);
                 }
             }
-            
+
             if (file_exists($this->data['path']))
             {
                 unlink($this->data['path']);
@@ -111,7 +109,7 @@ class Media extends Wrapper
     }
 
     /**
-     * Checks if this is an image
+     * Checks if this is an image.
      *
      * @access public
      * @return bool
@@ -122,7 +120,7 @@ class Media extends Wrapper
     }
 
     /**
-     * Returns the img width in px if this is an image
+     * Returns the img width in px if this is an image.
      *
      * @access public
      * @param  string $size Image size suffix (optional) (default 'original')
@@ -146,10 +144,10 @@ class Media extends Wrapper
                 }
             }
         }
-        else if ($this->isImage())
+        elseif ($this->isImage())
         {
             $path = $this->imgSizePath($size);
-            
+
             if (file_exists($path))
             {
                 list($width, $height) = getimagesize($path);
@@ -160,7 +158,7 @@ class Media extends Wrapper
     }
 
     /**
-     * Returns the img height in px if this is an image
+     * Returns the img height in px if this is an image.
      *
      * @access public
      * @param  string $size Image size suffix (optional) (default 'original')
@@ -177,7 +175,7 @@ class Media extends Wrapper
                 $xml = file_get_contents($this->imgSizePath());
 
                 preg_match('/(height\=\")(.*?)(\")/', $xml, $_height);
-                            
+
                 if ($_height && isset($_height[2]))
                 {
                     $height = intval(str_replace('px', '', $_height[2]));
@@ -199,7 +197,7 @@ class Media extends Wrapper
     }
 
     /**
-     * Returns the img width if this is an image
+     * Returns the img width if this is an image.
      *
      * @access public
      * @return int
@@ -209,8 +207,8 @@ class Media extends Wrapper
         return Str::getAfterLastChar($this->data['url'], '.');
     }
 
-	/**
-     * If the current file is an image, return the image url of a different size
+    /**
+     * If the current file is an image, return the image url of a different size.
      *
      * @access public
      * @param  string $size Image size suffix (optional) (default 'original')
@@ -223,17 +221,17 @@ class Media extends Wrapper
             return $this->data['url'];
         }
 
-		# Get the file extension from the mime type
+		// Get the file extension from the mime type
 		$ext = Str::getAfterLastChar($this->data['url'], '.');
 
-		# Sanitize the file name
+		// Sanitize the file name
 		$name = Str::getBeforeLastChar($this->data['url'], '.');
 
-		return $name.'_'.$size.'.'.$ext;
+		return $name . '_' . $size . '.' . $ext;
 	}
 
     /**
-     * If the current file is an image, return the image path of a different size
+     * If the current file is an image, return the image path of a different size.
      *
      * @access public
      * @param  string $size Image size suffix (optional) (default 'original')
@@ -246,12 +244,12 @@ class Media extends Wrapper
             return $this->data['path'];
         }
 
-        # Get the file extension from the mime type
+        // Get the file extension from the mime type
         $ext = Str::getAfterLastChar($this->data['path'], '.');
 
-        # Sanitize the file name
+        // Sanitize the file name
         $name = Str::getBeforeLastChar($this->data['path'], '.');
 
-        return $name.'_'.$size.'.'.$ext;
+        return $name . '_' . $size . '.' . $ext;
     }
 }

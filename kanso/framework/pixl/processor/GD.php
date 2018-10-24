@@ -8,104 +8,103 @@
 namespace kanso\framework\pixl\processor;
 
 use RuntimeException;
-use kanso\framework\pixl\processor\ProcessorInterface;
 
 /**
- * GD image manager
+ * GD image manager.
  *
  * @author Joe J. Howard
  */
 class GD implements ProcessorInterface
 {
     /**
-     * Default jpg quality
+     * Default jpg quality.
      *
      * @var int
      */
     private $quality_jpg = 75;
 
     /**
-     * Default jpg quality
+     * Default jpg quality.
      *
      * @var int
      */
     private $quality_png = 0;
 
     /**
-     * Image source type
+     * Image source type.
      *
      * @var int
      */
     private $source_type;
 
     /**
-     * Image resource
+     * Image resource.
      *
      * @var array
      */
     private $source_image;
 
     /**
-     * Original width in px
+     * Original width in px.
      *
      * @var int
      */
     private $source_w;
 
     /**
-     * Original height in px
+     * Original height in px.
      *
      * @var int
      */
     private $source_h;
 
     /**
-     * Source x-axis crop position in px
+     * Source x-axis crop position in px.
      *
      * @var int
      */
     private $source_x;
 
     /**
-     * Source y-axis crop position in px
+     * Source y-axis crop position in px.
      *
      * @var int
      */
     private $source_y;
 
     /**
-     * Destination x-axis crop position in px
+     * Destination x-axis crop position in px.
      *
      * @var int
      */
     private $dest_x = 0;
 
     /**
-     * Destination y-axis crop position in px
+     * Destination y-axis crop position in px.
      *
      * @var int
      */
     private $dest_y = 0;
 
     /**
-     * Destination width in px
+     * Destination width in px.
      *
      * @var int
      */
     private $dest_w;
 
     /**
-     * Destination height in px
+     * Destination height in px.
      *
      * @var int
      */
     private $dest_h;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
-     * @param string  $filename Absolute path to file
+     * @param string $filename Absolute path to file
      */
     public function __construct(string $filename = null)
     {
@@ -116,8 +115,8 @@ class GD implements ProcessorInterface
     }
 
     /**
-	 * {@inheritdoc}
-	 */
+     * {@inheritdoc}
+     */
     public function load(string $filename)
     {
         $image_info = getimagesize($filename);
@@ -154,8 +153,8 @@ class GD implements ProcessorInterface
     }
 
     /**
-	 * {@inheritdoc}
-	 */
+     * {@inheritdoc}
+     */
     public function width(): int
     {
         if ($this->dest_w > 0)
@@ -167,8 +166,8 @@ class GD implements ProcessorInterface
     }
 
     /**
-	 * {@inheritdoc}
-	 */
+     * {@inheritdoc}
+     */
     public function height(): int
     {
         if ($this->dest_h > 0)
@@ -180,8 +179,8 @@ class GD implements ProcessorInterface
     }
 
     /**
-	 * {@inheritdoc}
-	 */
+     * {@inheritdoc}
+     */
     public function save(string $filename, int $image_type = null, int $quality = null, int $permissions = null)
     {
         $image_type = $image_type ?: $this->source_type;
@@ -193,7 +192,7 @@ class GD implements ProcessorInterface
             case IMAGETYPE_GIF:
                 $background = imagecolorallocatealpha($dest_image, 255, 255, 255, 1);
                 imagecolortransparent($dest_image, $background);
-                imagefill($dest_image, 0, 0 , $background);
+                imagefill($dest_image, 0, 0, $background);
                 imagesavealpha($dest_image, true);
             break;
 
@@ -253,12 +252,12 @@ class GD implements ProcessorInterface
     }
 
     /**
-	 * {@inheritdoc}
-	 */
+     * {@inheritdoc}
+     */
     public function resizeToHeight(int $height, bool $allow_enlarge = false)
     {
         $ratio = $height / $this->source_h;
-        
+
         $width = $this->source_w * $ratio;
 
         $this->resize($width, $height, $allow_enlarge);
@@ -267,12 +266,12 @@ class GD implements ProcessorInterface
     }
 
     /**
-	 * {@inheritdoc}
-	 */
+     * {@inheritdoc}
+     */
     public function resizeToWidth(int $width, bool $allow_enlarge = false)
     {
         $ratio  = $width / $this->source_w;
-        
+
         $height = $this->source_h * $ratio;
 
         $this->resize($width, $height, $allow_enlarge);
@@ -281,12 +280,12 @@ class GD implements ProcessorInterface
     }
 
     /**
-	 * {@inheritdoc}
-	 */
+     * {@inheritdoc}
+     */
     public function scale(int $scale)
     {
         $width  = $this->source_w * $scale / 100;
-        
+
         $height = $this->source_h * $scale / 100;
 
         $this->resize($width, $height, true);
@@ -295,8 +294,8 @@ class GD implements ProcessorInterface
     }
 
     /**
-	 * {@inheritdoc}
-	 */
+     * {@inheritdoc}
+     */
     public function resize(int $width, int $height, bool $allow_enlarge = false)
     {
         if (!$allow_enlarge) {
@@ -323,9 +322,9 @@ class GD implements ProcessorInterface
         return $this;
     }
 
-   	/**
-	 * {@inheritdoc}
-	 */
+    /**
+     * {@inheritdoc}
+     */
     public function crop(int $width, int $height, bool $allow_enlarge = false)
     {
         if (!$allow_enlarge) {

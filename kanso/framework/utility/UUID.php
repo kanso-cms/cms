@@ -69,7 +69,7 @@ class UUID
 	{
 		if(!static::validate($namespace))
 		{
-			throw new InvalidArgumentException(vsprintf("%s(): Provided namespace is not a valid UUID.", [__METHOD__]));
+			throw new InvalidArgumentException(vsprintf('%s(): Provided namespace is not a valid UUID.', [__METHOD__]));
 		}
 
 		// Get hexadecimal components of namespace
@@ -86,7 +86,7 @@ class UUID
 
 		for($i = 0; $i < $nhexLength; $i+=2)
 		{
-			$nstr .= chr(hexdec($nhex[$i].$nhex[$i+1]));
+			$nstr .= chr(hexdec($nhex[$i] . $nhex[$i+1]));
 		}
 
 		return $nstr;

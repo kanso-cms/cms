@@ -5,22 +5,22 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\framework\git; 
+namespace kanso\framework\git;
 
-use kanso\framework\shell\Shell;
-use kanso\framework\git\commands\InitCommand;
-use InvalidArgumentException;
 use Exception;
+use InvalidArgumentException;
+use kanso\framework\git\commands\InitCommand;
+use kanso\framework\shell\Shell;
 
 /**
- * Git Utility class
+ * Git Utility class.
  *
  * @author Joe J. Howard
  */
 class Git
 {
     /**
-     * Available git commands
+     * Available git commands.
      *
      * @var array
      */
@@ -57,26 +57,26 @@ class Git
         'tree'     => null,
         'tag'      => null,
     ];
-    
+
     /**
-     * Path to repo directory
+     * Path to repo directory.
      *
      * @var string
      */
     public $directory;
 
     /**
-     * Shell utility
+     * Shell utility.
      *
      * @var string
      */
     public $shell;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
-     * @param string  $directory Directory path (optional) (default null)
+     * @param string $directory Directory path (optional) (default null)
      */
     public function __construct(string $directory = null)
     {
@@ -87,10 +87,10 @@ class Git
     }
 
     /**
-     * Open an existing repository
+     * Open an existing repository.
      *
      * @access public
-     * @param  string  $directory Repo directory path
+     * @param string $directory Repo directory path
      */
     public function open(string $directory)
     {
@@ -98,7 +98,7 @@ class Git
     }
 
     /**
-     * Get the working directory
+     * Get the working directory.
      *
      * @access public
      * @return string|null
@@ -109,58 +109,58 @@ class Git
     }
 
     /**
-     * Set the working directory
+     * Set the working directory.
      *
      * @access public
-     * @param  string $directory Directory path
+     * @param string $directory Directory path
      */
     public function setDirectory(string $directory)
     {
         $this->directory = $directory;
 
-        # Create a new shell wrapper
+        // Create a new shell wrapper
         $this->shell = new Shell($directory);
     }
-    
+
     /**
-     * Initialize a repository and set the working directory
+     * Initialize a repository and set the working directory.
      *
      * @access public
-     * @param  string  $directory Directory path
-     * @param  array   $options   Options for repo init
+     * @param string $directory Directory path
+     * @param array  $options   Options for repo init
      */
     public function init(string $directory, array $options = [])
     {
-        # Set the local directory
+        // Set the local directory
         $this->setDirectory($directory);
 
-        # Create the init command
+        // Create the init command
         $init = new InitCommand;
 
-        # Invoke
+        // Invoke
         $init($directory, $options);
     }
 
     /**
-     * Magic methods for git commands  e.g $command = $git->CommandName;
+     * Magic methods for git commands  e.g $command = $git->CommandName;.
      *
      * @access public
-     * @param  string  $name git command name in lower case
-     * @return mixed 
+     * @param  string                   $name git command name in lower case
      * @throws InvalidArgumentException if command does not exist
+     * @return mixed
      */
     public function __get($name)
     {
-        $className = ucfirst($name).'Command';
+        $className = ucfirst($name) . 'Command';
 
         if (array_key_exists($name, $this->commands))
         {
             if (is_null($this->commands[$name]))
             {
                 $class = __NAMESPACE__ . '\\command\\' . $className;
-                
+
                 $this->commands[$name] = new $class($this);
-                
+
                 return $this->commands[$name];
             }
             else
@@ -169,75 +169,75 @@ class Git
             }
         }
 
-        throw new InvalidArgumentException('Call to undefined command "'. __NAMESPACE__ . '\\command\\' . $className .'"');
+        throw new InvalidArgumentException('Call to undefined command "' . __NAMESPACE__ . '\\command\\' . $className . '"');
     }
 
     /**
-     * Calls sub-commands e.g $git->CommandName();
+     * Calls sub-commands e.g $git->CommandName();.
      *
      * @access public
-     * @param  string $name      The name of a property
-     * @param  array  $arguments An array of arguments
+     * @param  string                    $name      The name of a property
+     * @param  array                     $arguments An array of arguments
      * @throws \InvalidArgumentException if command does not exist
      * @return mixed
      */
     public function __call(string $name, array $arguments)
     {
-        $className = ucfirst($name).'Command';
+        $className = ucfirst($name) . 'Command';
 
         if (array_key_exists($name, $this->commands))
         {
             if (is_null($this->commands[$name]))
             {
                 $class = __NAMESPACE__ . '\\commands\\' . $className;
-                
+
                 $this->commands[$name] = new $class($this);
             }
 
             return call_user_func_array($this->commands[$name], $arguments);
         }
 
-        throw new InvalidArgumentException('Call to undefined command "'. __NAMESPACE__ . '\\commands\\' . $className.'"');
+        throw new InvalidArgumentException('Call to undefined command "' . __NAMESPACE__ . '\\commands\\' . $className . '"');
     }
 
     /**
-     * Execute the current git command
+     * Execute the current git command.
      *
      * @access public
-     * @param  string $name      The name of the git command to run
-     * @param  array  $args      An array of arguments to pass to command
-     * @return mixed
+     * @param  string    $name The name of the git command to run
+     * @param  array     $args An array of arguments to pass to command
      * @throws Exception if directory is not set
+     * @return mixed
      */
-    public function execute($method, $args = []) 
+    public function execute($method, $args = [])
     {
         if (!$this->directory)
         {
             throw new Exception('Cannot run git without setting a directory.');
         }
 
-        # Options
+        // Options
         $options = isset($args[0]) ? $args[0] : [];
 
-        # Params
+        // Params
         $params = isset($args[1]) ? $args[1] : [];
 
-        # Make sure the method is lowercase
+        // Make sure the method is lowercase
         $method = strtolower($method);
-        
-        # Set the method to call
+
+        // Set the method to call
         $this->shell->cmd('git', $method);
 
-        # Add the options
+        // Add the options
         $this->shell->options($options);
-        
-        # Add the params
+
+        // Add the params
         $this->shell->params($params);
 
-        # Run the command
+        // Run the command
         $result = $this->shell->run();
 
-        # Reset the shell args
+        // Reset the shell args
         $this->shell->reset(false);
 
         return $result;
@@ -247,7 +247,7 @@ class Git
      * Was the last executed command successful ?
      *
      * @access public
-     * @return bool  
+     * @return bool
      */
     public function is_successful(): bool
     {

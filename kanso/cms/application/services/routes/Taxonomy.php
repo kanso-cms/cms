@@ -6,15 +6,15 @@
  */
 
 /**
- * CMS Application taxonomy routes
+ * CMS Application taxonomy routes.
  *
  * @author Joe J. Howard
  */
 
-# Category
+// Category
 if ($config->get('cms.route_categories') === true)
 {
-	
+
 	$router->get("$blogPrefix/category/(:all)/feed/rss/", '\kanso\cms\application\Application::loadRssFeed', 'category');
 	$router->get("$blogPrefix/category/(:all)/feed/atom/", '\kanso\cms\application\Application::loadRssFeed', 'category');
 	$router->get("$blogPrefix/category/(:all)/feed/rdf/", '\kanso\cms\application\Application::loadRssFeed', 'category');
@@ -23,7 +23,7 @@ if ($config->get('cms.route_categories') === true)
 	$router->get("$blogPrefix/category/(:all)/", '\kanso\cms\application\Application::applyRoute', 'category');
 }
 
-# Tag
+// Tag
 if ($config->get('cms.route_tags') === true)
 {
 	$router->get("$blogPrefix/tag/(:any)/", '\kanso\cms\application\Application::applyRoute', 'tag');
@@ -34,11 +34,11 @@ if ($config->get('cms.route_tags') === true)
 	$router->get("$blogPrefix/tag/(:any)/feed/rdf/", '\kanso\cms\application\Application::loadRssFeed', 'tag');
 }
 
-# Author
+// Author
 if ($config->get('cms.route_authors') === true)
 {
 	$authorSlugs = $SQL->SELECT('slug')->FROM('users')->WHERE('role', '=', 'administrator')->OR_WHERE('role', '=', 'writer')->FIND_ALL();
-	
+
 	foreach ($authorSlugs as $slug)
 	{
 		$slug = $slug['slug'];

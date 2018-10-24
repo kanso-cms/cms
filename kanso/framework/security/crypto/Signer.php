@@ -8,7 +8,7 @@
 namespace kanso\framework\security\crypto;
 
 /**
- * Encryption/Decryption signer
+ * Encryption/Decryption signer.
  *
  * @author Joe J. Howard
  */
@@ -32,7 +32,7 @@ class Signer
 	 * Constructor.
 	 *
 	 * @access  public
-	 * @param   string  $secret  Secret used to sign and validate strings
+	 * @param string $secret Secret used to sign and validate strings
 	 */
 	public function __construct(string $secret)
 	{
@@ -43,8 +43,8 @@ class Signer
 	 * Returns the signature.
 	 *
 	 * @access  protected
-	 * @param   string     $string  The string you want to sign
-	 * @return  string
+	 * @param  string $string The string you want to sign
+	 * @return string
 	 */
 	protected function getSignature(string $string): string
 	{
@@ -55,10 +55,10 @@ class Signer
 	 * Returns a signed string.
 	 *
 	 * @access  public
-	 * @param   string  $string  The string you want to sign
-	 * @return  string
+	 * @param  string $string The string you want to sign
+	 * @return string
 	 */
-	public function sign(string $string): string 
+	public function sign(string $string): string
 	{
 		return $this->getSignature($string) . $string;
 	}
@@ -67,8 +67,8 @@ class Signer
 	 * Returns the original string if the signature is valid or FALSE if not.
 	 *
 	 * @access  public
-	 * @param   string          $string  The string you want to validate
-	 * @return  string|boolean
+	 * @param  string      $string The string you want to validate
+	 * @return string|bool
 	 */
 	public function validate(string $string)
 	{
@@ -83,11 +83,11 @@ class Signer
 	}
 
 	/**
-	 * Compares to strings properly
+	 * Compares to strings properly.
 	 *
 	 * @access public
-	 * @param  string $string1  The first string
-	 * @param  string $string2  The second string
+	 * @param  string $string1 The first string
+	 * @param  string $string2 The second string
 	 * @return bool
 	 */
 	private static function compare(string $string1, string $string2): bool

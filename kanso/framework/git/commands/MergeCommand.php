@@ -5,12 +5,12 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\framework\git\commands; 
+namespace kanso\framework\git\commands;
 
 use kanso\framework\git\Command;
 
 /**
- * Git merge command
+ * Git merge command.
  *
  * @see  https://git-scm.com/docs/git-merge
  * @author Joe J. Howard
@@ -18,15 +18,15 @@ use kanso\framework\git\Command;
 class MergeCommand extends Command
 {
     /**
-     * Magic method invoke
-     * 
-     * @param  array $options Command options (optional) (default [])
-     * @param  array $params  Command params  (optional) (default [])
+     * Magic method invoke.
+     *
+     * @param  array      $options Command options (optional) (default [])
+     * @param  array      $params  Command params  (optional) (default [])
      * @return bool|array
      */
     public function __invoke(array $options = [], array $params = [])
     {
-        # Run the command
+        // Run the command
         $output = $this->run('merge', [$options, $params]);
 
         $result = $this->is_successful();
@@ -38,7 +38,7 @@ class MergeCommand extends Command
 
         $conflicts = [];
      	$lines 	   = array_map('trim', explode("\n", $output));
-     	
+
      	foreach ($lines as $line)
         {
      		if (preg_match("/^CONFLICT \([^\)]+\)/", $line))
@@ -64,6 +64,6 @@ class MergeCommand extends Command
             return true;
         }
 
-     	return $conflicts;       
+     	return $conflicts;
     }
 }

@@ -8,7 +8,7 @@
 namespace kanso\framework\utility;
 
 /**
- * String helper
+ * String helper.
  *
  * @author Joe J. Howard
  */
@@ -83,7 +83,7 @@ class Str
 	 */
 	public static function camel2underscored(string $string): string
 	{
-		return mb_strtolower(preg_replace('/([a-z])([A-Z])/u', "$1_$2", $string));
+		return mb_strtolower(preg_replace('/([a-z])([A-Z])/u', '$1_$2', $string));
 	}
 
 	/**
@@ -131,11 +131,11 @@ class Str
 	 */
 	public static function underscored2camel(string $string, bool $upper = false): string
 	{
-		return preg_replace_callback(($upper ? '/(?:^|_)(.?)/u' : '/_(.?)/u'), function($matches){ return mb_strtoupper($matches[1]); }, $string);
+		return preg_replace_callback(($upper ? '/(?:^|_)(.?)/u' : '/_(.?)/u'), function($matches) { return mb_strtoupper($matches[1]); }, $string);
 	}
 
 	/**
-	 * Reduce a string to n characters or words
+	 * Reduce a string to n characters or words.
 	 *
 	 * @access public
 	 * @param  string $string The target string
@@ -146,21 +146,21 @@ class Str
 	 */
 	public static function reduce(string $string, int $length, string $suffix = '', bool $toChar = true): string
 	{
-		if ($toChar) return (strlen($string) > $length ) ? substr($string, 0, $length).$suffix : $string;
+		if ($toChar) return (strlen($string) > $length) ? substr($string, 0, $length) . $suffix : $string;
 
-		$words = explode(' ',$string);
+		$words = explode(' ', $string);
 
-		if(count($words) > $length) return implode(' ',array_slice($words, 0, $length)).$suffix;
+		if(count($words) > $length) return implode(' ', array_slice($words, 0, $length)) . $suffix;
 
 		return $string;
 	}
 
 	/**
-	 * Check if a string contains another string
+	 * Check if a string contains another string.
 	 *
 	 * @access public
 	 * @param  string $string The target string
-	 * @param  string $query  The query to check for   
+	 * @param  string $query  The query to check for
 	 * @return bool
 	 */
 	public static function contains(string $string, string $query): bool
@@ -169,71 +169,71 @@ class Str
 	}
 
 	/**
-	 * Get characters after last occurrence of string in a target string
+	 * Get characters after last occurrence of string in a target string.
 	 *
 	 * @access public
 	 * @param  string $string The target string
-	 * @param  string $query  The query to check for   
+	 * @param  string $query  The query to check for
 	 * @return bool
 	 */
 	public static function getAfterLastChar(string $string, string $query): string
 	{
 		if (!self::contains($string, $query)) return $string;
-		
+
 		return substr($string, strrpos($string, $query) + 1);
 	}
 
 	/**
-	 * Get characters before last occurrence of character 
+	 * Get characters before last occurrence of character.
 	 *
 	 * @access public
 	 * @param  string $string The target string
-	 * @param  string $query  The query to check for   
+	 * @param  string $query  The query to check for
 	 * @return bool
 	 */
 	public static function getBeforeLastChar(string $string, string $query): string
 	{
 		if (!self::contains($string, $query)) return $string;
-		
-		return substr($string, 0,strrpos($string, $query));
+
+		return substr($string, 0, strrpos($string, $query));
 	}
 
 	/**
-	 * Get characters after first occurrence of character 
+	 * Get characters after first occurrence of character.
 	 *
 	 * @access public
 	 * @param  string $string The target string
-	 * @param  string $query  The query to check for   
+	 * @param  string $query  The query to check for
 	 * @return bool
 	 */
 	public static function getAfterFirstChar(string $string, string $query): string
 	{
 		if (!self::contains($string, $query)) return $string;
-		
+
 		return substr($string, strpos($string, $query) + 1);
 	}
 
 	/**
-	 * Get characters before first occurrence of character 
+	 * Get characters before first occurrence of character.
 	 *
 	 * @access public
 	 * @param  string $string The target string
-	 * @param  string $query  The query to check for   
+	 * @param  string $query  The query to check for
 	 * @return bool
 	 */
 	public static function getBeforeFirstChar(string $string, string $query): string
 	{
 		if (!self::contains($string, $query)) return $string;
-		
+
 		return substr($string, 0, strpos($string, $query));
 	}
 
 	/**
-	 * Get characters after last occurrence of word 
+	 * Get characters after last occurrence of word.
 	 *
 	 * @access public
 	 * @param  string $string The target string
-	 * @param  string $query  The query to check for   
+	 * @param  string $query  The query to check for
 	 * @return bool
 	 */
 	public static function getAfterLastWord(string $string, string $query): string
@@ -249,11 +249,11 @@ class Str
 	}
 
 	/**
-	 * Get characters before last occurance of word 
+	 * Get characters before last occurance of word.
 	 *
 	 * @access public
 	 * @param  string $string The target string
-	 * @param  string $query  The query to check for   
+	 * @param  string $query  The query to check for
 	 * @return bool
 	 */
 	public static function getBeforeLastWord(string $string, string $query): string
@@ -273,7 +273,7 @@ class Str
 	/**
 	 * Returns a random string of the selected type and length.
 	 *
-     * @access public
+	 * @access public
 	 * @param  int    $length Desired string length
 	 * @param  string $pool   Character pool to use
 	 * @return string
@@ -293,14 +293,14 @@ class Str
 	}
 
 	/**
-	 * Compare two numerical strings
+	 * Compare two numerical strings.
 	 *
-     * @access public
+	 * @access public
 	 * @param  string $a
-	 * @param  string $b  
-	 * @return boolean     
+	 * @param  string $b
+	 * @return bool
 	 */
-	public static function compareNumeric(string $a, string $b): bool 
+	public static function compareNumeric(string $a, string $b): bool
 	{
 		if (self::contains($a, '.') || self::contains($b, '.'))
 		{
@@ -316,13 +316,13 @@ class Str
 	 * @param  string $string The input string
 	 * @return string
 	 */
-	public static function slug(string $str): string 
+	public static function slug(string $str): string
 	{
     	return preg_replace('/-+/', '-', urlencode(ltrim(rtrim(preg_replace('/[^a-z0-9_-]/', '', preg_replace('/[\s-]+/', '-', strtolower($str))), '-'), '-')));
 	}
 
 	/**
-	 * Filters a a string to alpha characters
+	 * Filters a a string to alpha characters.
 	 *
 	 * @access public
 	 * @param  string $string The input string
@@ -330,11 +330,11 @@ class Str
 	 */
 	public static function alpha(string $str): string
 	{
-		return trim(preg_replace("/[^a-zA-Z]/", '', $str));
+		return trim(preg_replace('/[^a-zA-Z]/', '', $str));
 	}
 
 	/**
-	 * Filters a a string to alpha characters with dashes
+	 * Filters a a string to alpha characters with dashes.
 	 *
 	 * @access public
 	 * @param  string $string The input string
@@ -346,7 +346,7 @@ class Str
 	}
 
 	/**
-	 * Filters a a string to alpha-numeric characters
+	 * Filters a a string to alpha-numeric characters.
 	 *
 	 * @access public
 	 * @param  string $string The input string
@@ -354,11 +354,11 @@ class Str
 	 */
 	public static function alphaNum(string $str): string
 	{
-		return preg_replace('/-+/', '-',  ltrim(rtrim(trim(preg_replace("/[^a-zA-Z0-9]/", '', $str)), '-'), '-'));
+		return preg_replace('/-+/', '-', ltrim(rtrim(trim(preg_replace('/[^a-zA-Z0-9]/', '', $str)), '-'), '-'));
 	}
 
 	/**
-	 * Filters a a string to alpha-numeric characters with dashes
+	 * Filters a a string to alpha-numeric characters with dashes.
 	 *
 	 * @access public
 	 * @param  string $string The input string
@@ -370,7 +370,7 @@ class Str
 	}
 
 	/**
-	 * Escapes text for entry into mySQL
+	 * Escapes text for entry into mySQL.
 	 *
 	 * @access public
 	 * @param  string $str The input string
@@ -382,7 +382,7 @@ class Str
 	}
 
 	/**
-	 * Un-escapes text from entry into mySQL
+	 * Un-escapes text from entry into mySQL.
 	 *
 	 * @access public
 	 * @param  string $str The input string
@@ -394,7 +394,7 @@ class Str
 	}
 
 	/**
-	 * Create a boolean value from a mixed variable
+	 * Create a boolean value from a mixed variable.
 	 *
 	 * @access public
 	 * @param  mixed $mixedVar Mixed variable to convert
@@ -402,31 +402,31 @@ class Str
 	 */
 	public static function bool($mixedVar): bool
 	{
-		if (is_bool($mixedVar)) 
+		if (is_bool($mixedVar))
 		{
 			return boolval($mixedVar);
 		}
-		else if (is_integer($mixedVar))
+		elseif (is_int($mixedVar))
 		{
 			return boolval($mixedVar);
 		}
-		else if (is_float($mixedVar))
+		elseif (is_float($mixedVar))
 		{
 			return floatval($mixedVar) > 0;
 		}
-		else if (is_numeric($mixedVar))
+		elseif (is_numeric($mixedVar))
 		{
 			return intval($mixedVar) > 0;
 		}
-		else if (is_string($mixedVar))
+		elseif (is_string($mixedVar))
 		{
 			$mixedVar = trim(strtolower($mixedVar));
-			
+
 			if ($mixedVar === 'yes' || $mixedVar === 'on' || $mixedVar === 'true')
 			{
 				return true;
 			}
-			else if ($mixedVar === 'no' || $mixedVar === 'off' || $mixedVar === 'false')
+			elseif ($mixedVar === 'no' || $mixedVar === 'off' || $mixedVar === 'false')
 			{
 				return false;
 			}
@@ -436,7 +436,7 @@ class Str
 	}
 
 	/**
-	 * Remove the query string and santize a uri
+	 * Remove the query string and santize a uri.
 	 *
 	 * @access public
 	 * @param  string $str REQUEST_URI
@@ -448,7 +448,7 @@ class Str
 	}
 
 	/**
-	 * Remove a specific HTML tag from a string
+	 * Remove a specific HTML tag from a string.
 	 *
 	 * @access public
 	 * @param  string $str String

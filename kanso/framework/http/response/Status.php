@@ -2,22 +2,21 @@
 
 namespace kanso\framework\http\response;
 
-
 class Status {
 
     /**
-     * HTTP response code messages
+     * HTTP response code messages.
      *
      * @var array
      */
-    protected $messages = 
+    protected $messages =
     [
-        # Informational responses
+        // Informational responses
         100 => 'Continue',
         101 => 'Switching Protocols',
         102 => 'Processing',
 
-        # Success
+        // Success
         200 => 'OK',
         201 => 'Created',
         202 => 'Accepted',
@@ -29,7 +28,7 @@ class Status {
         208 => 'Already Reported',
         226 => 'IM Used',
 
-        # Redirection
+        // Redirection
         300 => 'Multiple Choices',
         301 => 'Moved Permanently',
         302 => 'Found',
@@ -40,7 +39,7 @@ class Status {
         307 => 'Temporary Redirect',
         308 => 'Permanent Redirect',
 
-        # Client errors
+        // Client errors
         404 => 'error on Wikipedia',
         400 => 'Bad Request',
         401 => 'Unauthorized',
@@ -71,7 +70,7 @@ class Status {
         431 => 'Request Header Fields Too Large',
         451 => 'Unavailable For Legal Reasons',
 
-        # Server errors
+        // Server errors
         500 => 'Internal Server Error',
         501 => 'Not Implemented',
         502 => 'Bad Gateway',
@@ -84,7 +83,7 @@ class Status {
         510 => 'Not Extended',
         511 => 'Network Authentication Required',
 
-        # Unofficial codes
+        // Unofficial codes
         103 => 'Checkpoint',
         103 => 'Early Hints',
         420 => 'Method Failure',
@@ -113,16 +112,16 @@ class Status {
         526 => 'Invalid SSL Certificate',
         527 => 'Railgun Error',
     ];
-    
+
     /**
-     * The HTTP response code
+     * The HTTP response code.
      *
      * @var int
      */
     protected $code = 200;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
      */
@@ -130,12 +129,12 @@ class Status {
     {
         $this->code = $code;
     }
-    
+
     /**
-     * Set the code
+     * Set the code.
      *
      * @access public
-     * @param  int    $code The response code to set
+     * @param int $code The response code to set
      */
     public function set(int $code)
     {
@@ -143,7 +142,7 @@ class Status {
     }
 
     /**
-     * Get the code
+     * Get the code.
      *
      * @access public
      * @return int
@@ -154,7 +153,7 @@ class Status {
     }
 
     /**
-     * Get the message for the current code
+     * Get the message for the current code.
      *
      * @access public
      * @return string|null
@@ -170,7 +169,7 @@ class Status {
     }
 
     /**
-     * Is the response empty
+     * Is the response empty.
      *
      * @access public
      * @return bool
@@ -181,7 +180,7 @@ class Status {
     }
 
     /**
-     * Is this an informational response
+     * Is this an informational response.
      *
      * @access public
      * @return bool
@@ -190,7 +189,7 @@ class Status {
     {
         return $this->code >= 100 && $this->code < 200;
     }
-    
+
     /**
      * Is the response ok 200?
      *
@@ -204,7 +203,7 @@ class Status {
 
     /**
      * Is the response successful ?
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -212,7 +211,7 @@ class Status {
     {
         return $this->code >= 200 && $this->code < 300;
     }
-    
+
     /**
      * Is the response a redirect ?
      *
@@ -221,7 +220,7 @@ class Status {
      */
     public function isRedirect(): bool
     {
-        return in_array($this->code, array(301, 302, 303, 307));
+        return in_array($this->code, [301, 302, 303, 307]);
     }
 
     /**
@@ -256,7 +255,7 @@ class Status {
     {
         return $this->code >= 400 && $this->code < 500;
     }
-    
+
     /**
      * Is this a server error ?
      *

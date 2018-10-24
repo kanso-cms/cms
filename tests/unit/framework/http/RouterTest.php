@@ -7,9 +7,9 @@
 
 namespace tests\unit\framework\http;
 
+use kanso\framework\http\route\Router;
 use Mockery;
 use tests\TestCase;
-use kanso\framework\http\route\Router;
 
 /**
  * @group unit
@@ -52,7 +52,7 @@ class RouterTest extends TestCase
 		$request = Mockery::mock('\kanso\framework\http\request\Request');
 		$onion   = Mockery::mock('\kanso\framework\onion\Onion');
 		$router  = new Router($request, $onion);
-		
+
 		$router->get('/foobar/', '\directory\ClassName@exampleMethod', 'foobar');
 
 		$request->shouldReceive('getMethod')->andReturn('GET');
@@ -82,7 +82,7 @@ class RouterTest extends TestCase
 			'(:second)'   => '34',
 			'(:postname)' => 'fdfso-fsdfs-fsf423/',
 			'(:category)' => 'fdfso-fsdfs-f43sf/',
-			'(:author)'   => 'fdfso-fsdfs-fs432f/'
+			'(:author)'   => 'fdfso-fsdfs-fs432f/',
 		];
 
 		foreach ($regex as $regex => $url)
@@ -91,11 +91,11 @@ class RouterTest extends TestCase
 			$onion   = Mockery::mock('\kanso\framework\onion\Onion');
 			$router  = new Router($request, $onion);
 
-			$router->get('/foobar/'.$regex.'/', '\directory\ClassName@exampleMethod', 'foobar');
+			$router->get('/foobar/' . $regex . '/', '\directory\ClassName@exampleMethod', 'foobar');
 
 			$request->shouldReceive('getMethod')->andReturn('GET');
 
-			$request->shouldReceive('path')->andReturn('foobar/'.$url);
+			$request->shouldReceive('path')->andReturn('foobar/' . $url);
 
 			$onion->shouldReceive('addLayer')->withArgs(['\directory\ClassName@exampleMethod', 'foobar']);
 
@@ -111,7 +111,7 @@ class RouterTest extends TestCase
 		$request = Mockery::mock('\kanso\framework\http\request\Request');
 		$onion   = Mockery::mock('\kanso\framework\onion\Onion');
 		$router  = new Router($request, $onion);
-		
+
 		$router->get('/foobar/', '\directory\ClassName@exampleMethod', 'foobar');
 
 		$request->shouldReceive('getMethod')->andReturn('GET');
@@ -129,7 +129,7 @@ class RouterTest extends TestCase
 		$request = Mockery::mock('\kanso\framework\http\request\Request');
 		$onion   = Mockery::mock('\kanso\framework\onion\Onion');
 		$router  = new Router($request, $onion);
-		
+
 		$router->get('/foobar/', '\directory\ClassName@exampleMethod', 'foobar');
 
 		$request->shouldReceive('getMethod')->andReturn('POST');

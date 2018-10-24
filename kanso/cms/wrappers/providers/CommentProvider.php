@@ -8,10 +8,9 @@
 namespace kanso\cms\wrappers\providers;
 
 use kanso\cms\wrappers\Comment;
-use kanso\cms\wrappers\providers\Provider;
 
 /**
- * Comment provider
+ * Comment provider.
  *
  * @author Joe J. Howard
  */

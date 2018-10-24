@@ -7,14 +7,12 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\cms\admin\models\BaseModel;
-use kanso\framework\utility\Arr;
-use kanso\framework\utility\Str;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
+use kanso\framework\utility\Str;
 
 /**
- * Comments model
+ * Comments model.
  *
  * @author Joe J. Howard
  */
@@ -54,7 +52,7 @@ class Comments extends BaseModel
         return false;
     }
 
-   /**
+    /**
      * Parse the $_GET request variables and filter the articles for the requested page.
      *
      * @access private
@@ -78,8 +76,8 @@ class Comments extends BaseModel
     }
 
     /**
-     * Parse and validate the POST request from any submitted forms
-     * 
+     * Parse and validate the POST request from any submitted forms.
+     *
      * @access private
      * @return array|false
      */
@@ -100,31 +98,31 @@ class Comments extends BaseModel
 
                 return $this->postMessage('success', 'Your comments were successfully deleted!');
             }
-            else if (in_array($this->post['bulk_action'], ['spam', 'pending', 'approved']))
+            elseif (in_array($this->post['bulk_action'], ['spam', 'pending', 'approved']))
             {
                 $this->changeStatus($commentIds, $this->post['bulk_action']);
-                
+
                 return $this->postMessage('success', 'Your comments were successfully updated!');
             }
         }
 
-        return false;        
+        return false;
     }
 
-     /**
-     * Validates all POST variables are set
-     * 
+    /**
+     * Validates all POST variables are set.
+     *
      * @access private
      * @return bool
      */
     private function validatePost(): bool
     {
-        # Validation
+        // Validation
         if (!isset($this->post['access_token']) || !$this->Gatekeeper->verifyToken($this->post['access_token']))
         {
             throw new InvalidTokenException('Bad Admin Panel POST Request. The CSRF token was either not provided or was invalid.');
         }
-        
+
         if (!isset($this->post['bulk_action']) || empty($this->post['bulk_action']))
         {
             throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
@@ -144,10 +142,10 @@ class Comments extends BaseModel
     }
 
     /**
-     * Delete comments by id
+     * Delete comments by id.
      *
      * @access private
-     * @param  array   $ids List of post ids
+     * @param  array $ids List of post ids
      * @return bool
      */
     private function delete(array $ids)
@@ -164,10 +162,10 @@ class Comments extends BaseModel
     }
 
     /**
-     * Change a list of comment statuses
+     * Change a list of comment statuses.
      *
      * @access private
-     * @param  array   $ids List of post ids
+     * @param  array $ids List of post ids
      * @return bool
      */
     private function changeStatus(array $ids, string $status)
@@ -185,7 +183,7 @@ class Comments extends BaseModel
     }
 
     /**
-     * Check if the GET URL queries are either empty or set to defaults
+     * Check if the GET URL queries are either empty or set to defaults.
      *
      * @access private
      * @return bool
@@ -193,27 +191,27 @@ class Comments extends BaseModel
     private function emptyQueries(): bool
     {
         $queries = $this->getQueries();
-        
+
        return (
-            $queries['search'] === false && 
-            $queries['page']   === 0 && 
-            $queries['sort']   === 'newest' && 
+            $queries['search'] === false &&
+            $queries['page']   === 0 &&
+            $queries['sort']   === 'newest' &&
             $queries['status'] === false
         );
     }
 
     /**
-     * Returns the requested GET queries with defaults
+     * Returns the requested GET queries with defaults.
      *
      * @access private
      * @return array
      */
     private function getQueries(): array
     {
-        # Get queries
+        // Get queries
         $queries = $this->Request->queries();
 
-        # Set defaults
+        // Set defaults
         if (!isset($queries['search']))   $queries['search']   = false;
         if (!isset($queries['page']))     $queries['page']     = 0;
         if (!isset($queries['sort']))     $queries['sort']     = 'newest';
@@ -223,35 +221,35 @@ class Comments extends BaseModel
     }
 
     /**
-     * Returns the list of comments for display
+     * Returns the list of comments for display.
      *
      * @access private
-     * @param  bool $checkMaxPages Count the max pages
+     * @param  bool      $checkMaxPages Count the max pages
      * @return array|int
      */
     private function loadComments(bool $checkMaxPages = false)
     {
-       # Get queries
+       // Get queries
         $queries = $this->getQueries();
 
-        # Default operation values
+        // Default operation values
         $page         = intval($queries['page']);
         $page         = $page === 1 || $page === 0 ? 0 : $page-1;
-        $sort         = $queries['sort'] === 'newest' ? 'DESC' : 'ASC' ;
+        $sort         = $queries['sort'] === 'newest' ? 'DESC' : 'ASC';
         $sortKey      = 'date';
         $perPage      = 10;
         $offset       = $page * $perPage;
         $limit        = $perPage;
         $search       = $queries['search'];
         $filter       = $queries['status'];
-        
-        # Filter and sanitize the sort order
+
+        // Filter and sanitize the sort order
         if ($queries['sort'] === 'name')  $sortKey   = 'name';
         if ($queries['sort'] === 'email') $sortKey   = 'email';
 
         $this->SQL->SELECT('id')->FROM('comments');
-        
-        # Filter by status
+
+        // Filter by status
         if ($filter === 'approved')
         {
             $this->SQL->WHERE('status', '=', 'approved');
@@ -269,7 +267,7 @@ class Comments extends BaseModel
             $this->SQL->WHERE('status', '=', 'pending');
         }
 
-        # Is this a search
+        // Is this a search
         if ($search)
         {
             if (Str::contains($search, ':'))
@@ -285,28 +283,28 @@ class Comments extends BaseModel
                 $this->SQL->AND_WHERE('content', 'LIKE', "%$search%");
             }
         }
-       
-        # Set the order
+
+        // Set the order
         $this->SQL->ORDER_BY($sortKey, $sort);
 
-        # Set the limit - Only if we're returning the actual articles
+        // Set the limit - Only if we're returning the actual articles
         if (!$checkMaxPages)
         {
             $this->SQL->LIMIT($offset, $limit);
         }
 
-        # Find comments
+        // Find comments
         $rows = $this->SQL->FIND_ALL();
 
-        # Are we checking the pages ?
+        // Are we checking the pages ?
         if ($checkMaxPages)
         {
             return ceil(count($rows) / $perPage);
         }
 
-        # Append custom keys
+        // Append custom keys
         $comments = [];
-        
+
         foreach ($rows as $row)
         {
             $comments[] = $this->CommentManager->byId($row['id']);

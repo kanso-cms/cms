@@ -21,7 +21,7 @@ use kanso\framework\shell\process\exception\InvalidArgumentException;
 abstract class AbstractPipes implements PipesInterface
 {
     /** @var array */
-    public $pipes = array();
+    public $pipes = [];
 
     /** @var string */
     private $inputBuffer = '';
@@ -49,7 +49,7 @@ abstract class AbstractPipes implements PipesInterface
         foreach ($this->pipes as $pipe) {
             fclose($pipe);
         }
-        $this->pipes = array();
+        $this->pipes = [];
     }
 
     /**
@@ -116,8 +116,8 @@ abstract class AbstractPipes implements PipesInterface
             }
         }
 
-        $r = $e = array();
-        $w = array($this->pipes[0]);
+        $r = $e = [];
+        $w = [$this->pipes[0]];
 
         // let's have a look if something changed in streams
         if (false === $n = @stream_select($r, $w, $e, 0, 0)) {
@@ -129,12 +129,12 @@ abstract class AbstractPipes implements PipesInterface
                 $written = fwrite($stdin, $this->inputBuffer);
                 $this->inputBuffer = substr($this->inputBuffer, $written);
                 if (isset($this->inputBuffer[0])) {
-                    return array($this->pipes[0]);
+                    return [$this->pipes[0]];
                 }
             }
 
             if ($input) {
-                for (;;) {
+                for (; ;) {
                     $data = fread($input, self::CHUNK_SIZE);
                     if (!isset($data[0])) {
                         break;
@@ -144,7 +144,7 @@ abstract class AbstractPipes implements PipesInterface
                     if (isset($data[0])) {
                         $this->inputBuffer = $data;
 
-                        return array($this->pipes[0]);
+                        return [$this->pipes[0]];
                     }
                 }
                 if (feof($input)) {
@@ -165,7 +165,7 @@ abstract class AbstractPipes implements PipesInterface
         }
 
         if (!$w) {
-            return array($this->pipes[0]);
+            return [$this->pipes[0]];
         }
     }
 }

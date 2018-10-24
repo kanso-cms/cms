@@ -1,9 +1,9 @@
 <?php
 
-# Hashed default admin password
+// Hashed default admin password
 $hashed = \kanso\Kanso::instance()->Crypto->password()->hash($this->config->get('cms.default_password'));
 
-# Default articles table
+// Default articles table
 $KANSO_DEFAULTS_POSTS_TABLE = [
 	'id'          => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'created'     => 'INTEGER | UNSIGNED',
@@ -18,14 +18,14 @@ $KANSO_DEFAULTS_POSTS_TABLE = [
 	'comments_enabled' => 'BOOLEAN DEFAULT FALSE',
 ];
 
-# Default post meta table
+// Default post meta table
 $KANSO_DEFAULTS_POST_META_TABLE = [
 	'id' 	   => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'content'  => 'TEXT',
 	'post_id'  => 'INTEGER | UNSIGNED',
 ];
 
-# Default tags table
+// Default tags table
 $KANSO_DEFAULTS_TAGS_TABLE = [
 	'id'          => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'name'        => 'VARCHAR(255)',
@@ -33,7 +33,7 @@ $KANSO_DEFAULTS_TAGS_TABLE = [
 	'description' => 'TEXT',
 ];
 
-# Default categories table
+// Default categories table
 $KANSO_DEFAULTS_CATEGORIES_TABLE = [
 	'id'          => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'name'        => 'VARCHAR(255)',
@@ -42,7 +42,7 @@ $KANSO_DEFAULTS_CATEGORIES_TABLE = [
 	'parent_id'   => 'INTEGER | UNSIGNED',
 ];
 
-# Default authors table
+// Default authors table
 $KANSO_DEFAULTS_USERS_TABLE = [
 	'id'           => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'username'     => 'VARCHAR(255)',
@@ -65,7 +65,7 @@ $KANSO_DEFAULTS_USERS_TABLE = [
 	'kanso_password_key'  => 'VARCHAR(255)',
 ];
 
-# Default comments table
+// Default comments table
 $KANSO_DEFAULTS_COMMENTS_TABLE = [
 	'id'           => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'parent'  	   => 'INTEGER | UNSIGNED',
@@ -83,30 +83,30 @@ $KANSO_DEFAULTS_COMMENTS_TABLE = [
 	'rating'       => 'INTEGER | UNSIGNED',
 ];
 
-# Default tags to posts table
+// Default tags to posts table
 $KANSO_DEFAULTS_TAGS_TO_POSTS_TABLE = [
 	'id' 	  => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'tag_id'  => 'INTEGER | UNSIGNED',
 	'post_id' => 'INTEGER | UNSIGNED',
 ];
 
-# Default tags to posts table
+// Default tags to posts table
 $KANSO_DEFAULTS_CATEGORIES_TO_POSTS_TABLE = [
 	'id' 	      => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'category_id' => 'INTEGER | UNSIGNED',
 	'post_id'     => 'INTEGER | UNSIGNED',
 ];
 
-# Default content to articles table
-# Note article content is stored seperately from the 
-# article entry to improve database performance
+// Default content to articles table
+// Note article content is stored seperately from the
+// article entry to improve database performance
 $KANSO_DEFAULTS_CONTENT_TO_POSTS_TABLE = [
 	'id' 	   => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'content'  => 'TEXT',
 	'post_id'  => 'INTEGER | UNSIGNED',
 ];
 
-# Default media table
+// Default media table
 $KANSO_DEFAULTS_MEDIA_TABLE = [
 	'id'           => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'url'  	       => 'VARCHAR(255)',
@@ -119,25 +119,25 @@ $KANSO_DEFAULTS_MEDIA_TABLE = [
 	'uploader_id'  => 'INTEGER | UNSIGNED',
 ];
 
-# The default user entry
+// The default user entry
 $KANSO_DEFAULT_USER = [
-	"username"    		 => $this->config->get('cms.default_username'),
-	"email"       		 => $this->config->get('cms.default_email'),
-	"hashed_pass" 		 => utf8_encode($hashed),
-	"name"        		 => $this->config->get('cms.default_name'),
-	"slug"        		 => 'john-appleseed',
-	"facebook"    		 => 'https://www.facebook.com/example',
-	"twitter"     		 => 'https://www.twitter.com/example',
-	"gplus"       		 => 'https://www.plus.google.com/example',
-	"instagram"       	 => 'https://www.instagram.com/example',
-	"thumbnail_id"       => 1,
-	"status"      		 => 'confirmed',
-	"role"       		 => 'administrator',
-	"description" 		 => 'This is where your author bio goes. You can put a small description about yourself here, or just leave it blank if you like.',
-	"access_token"       => 'XGrcqMWdk62rjMKag6HZkueZn3K7d6PuqMramQ==',
+	'username'    		 => $this->config->get('cms.default_username'),
+	'email'       		 => $this->config->get('cms.default_email'),
+	'hashed_pass' 		 => utf8_encode($hashed),
+	'name'        		 => $this->config->get('cms.default_name'),
+	'slug'        		 => 'john-appleseed',
+	'facebook'    		 => 'https://www.facebook.com/example',
+	'twitter'     		 => 'https://www.twitter.com/example',
+	'gplus'       		 => 'https://www.plus.google.com/example',
+	'instagram'       	 => 'https://www.instagram.com/example',
+	'thumbnail_id'       => 1,
+	'status'      		 => 'confirmed',
+	'role'       		 => 'administrator',
+	'description' 		 => 'This is where your author bio goes. You can put a small description about yourself here, or just leave it blank if you like.',
+	'access_token'       => 'XGrcqMWdk62rjMKag6HZkueZn3K7d6PuqMramQ==',
 ];
 
-# The default tags entries
+// The default tags entries
 $KANSO_DEFAULT_TAGS = [
 	[
 		'name'        => 'Untagged',
@@ -162,7 +162,7 @@ $KANSO_DEFAULT_TAGS = [
 	],
 ];
 
-# The default categories entries
+// The default categories entries
 $KANSO_DEFAULT_CATEGORIES = [
 	[
 		'name'        => 'Uncategorized',
@@ -186,14 +186,14 @@ $KANSO_DEFAULT_CATEGORIES = [
 	],
 ];
 
-# The default articles entries
+// The default articles entries
 $KANSO_DEFAULT_ARTICLES = [
 	[
 		'created'     => strtotime('-1 hour'),
 		'modified'    => time(),
 		'status'      => 'published',
 		'type'        => 'post',
-		'slug'        => date('Y/m/').'hello-world/',
+		'slug'        => date('Y/m/') . 'hello-world/',
 		'title'       => 'Hello World!',
 		'excerpt'     => 'Welcome to Kanso. This is your first post. Edit or delete it, then start blogging!',
 		'author_id'   => 1,
@@ -205,7 +205,7 @@ $KANSO_DEFAULT_ARTICLES = [
 		'modified'    => time(),
 		'status'      => 'published',
 		'type'        => 'post',
-		'slug'        => date('Y/m/').'markdown-basics/',
+		'slug'        => date('Y/m/') . 'markdown-basics/',
 		'title'       => 'Markdown Basics',
 		'excerpt'     => 'This is intended as a quick reference and showcase.Kanso uses Markdown Extra to parse article content. Content written within the Kanso Writer application is stored in the database as raw text. When the article content is loaded, it is parsed using ParseDown Extra.',
 		'author_id'   => 1,
@@ -217,7 +217,7 @@ $KANSO_DEFAULT_ARTICLES = [
 		'modified'    => time(),
 		'status'      => 'published',
 		'type'        => 'post',
-		'slug'        => date('Y/m/').'elements/',
+		'slug'        => date('Y/m/') . 'elements/',
 		'title'       => 'Elements',
 		'excerpt'     => 'The purpose of this HTML is to help determine what default settings are with CSS and to make sure that all possible HTML Elements are included in this HTML so as to not miss any possible Elements when designing a site.',
 		'author_id'   => 1,
@@ -226,14 +226,14 @@ $KANSO_DEFAULT_ARTICLES = [
 	],
 ];
 
-# The default article content entries
+// The default article content entries
 $KANSO_DEFAULT_ARTICLE_CONTENT = [
-	file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'HelloWorld.md'),
-	file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'MarkdownBasics.md'),
-	file_get_contents(__DIR__.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.'Elements.md'),
+	file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'HelloWorld.md'),
+	file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'MarkdownBasics.md'),
+	file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'Elements.md'),
 ];
 
-# The default comments entries
+// The default comments entries
 $KANSO_DEFAULT_COMMENTS = [
 	[
 		'post_id'      => 1,
@@ -282,20 +282,20 @@ $KANSO_DEFAULT_COMMENTS = [
 	],
 ];
 
-# The default media library entries
+// The default media library entries
 $_imgesDir   = $this->config->get('cms.uploads.path');
 $_imagesUrl  = str_replace($_SERVER['DOCUMENT_ROOT'], $_SERVER['HTTP_HOST'], $_imgesDir);
 
-# localhost bugfix
+// localhost bugfix
 if (!strpos($_imagesUrl, 'http://') !== false)
 {
-    $_imagesUrl = 'http://'.$_imagesUrl;
+    $_imagesUrl = 'http://' . $_imagesUrl;
 }
 
 $KANSO_DEFAULT_IMAGES = [
 	[
-		'url'  	       => $_imagesUrl.DIRECTORY_SEPARATOR.'author_img.png',
-		'path'  	   => $_imgesDir.DIRECTORY_SEPARATOR.'author_img.png',
+		'url'  	       => $_imagesUrl . DIRECTORY_SEPARATOR . 'author_img.png',
+		'path'  	   => $_imgesDir . DIRECTORY_SEPARATOR . 'author_img.png',
 		'title'	       => 'Default Author Image',
 		'alt'	       => 'Author\'s profile photo',
 		'size'         => 443576,
@@ -304,8 +304,8 @@ $KANSO_DEFAULT_IMAGES = [
 		'uploader_id'  => 1,
 	],
 	[
-		'url'  	       => $_imagesUrl.DIRECTORY_SEPARATOR.'hero1.jpg',
-		'path'  	   => $_imgesDir.DIRECTORY_SEPARATOR.'hero1.jpg',
+		'url'  	       => $_imagesUrl . DIRECTORY_SEPARATOR . 'hero1.jpg',
+		'path'  	   => $_imgesDir . DIRECTORY_SEPARATOR . 'hero1.jpg',
 		'title'	       => 'New York City',
 		'alt'	       => 'Photo of New York City',
 		'size'         => 222994,
@@ -314,8 +314,8 @@ $KANSO_DEFAULT_IMAGES = [
 		'uploader_id'  => 1,
 	],
 	[
-		'url'  	       => $_imagesUrl.DIRECTORY_SEPARATOR.'hero2.jpg',
-		'path'  	   => $_imgesDir.DIRECTORY_SEPARATOR.'hero2.jpg',
+		'url'  	       => $_imagesUrl . DIRECTORY_SEPARATOR . 'hero2.jpg',
+		'path'  	   => $_imgesDir . DIRECTORY_SEPARATOR . 'hero2.jpg',
 		'title'	       => 'Beautiful Landscape with Lake',
 		'alt'	       => 'Landscape photo of lake and mountains',
 		'size'         =>  140531,
@@ -324,8 +324,8 @@ $KANSO_DEFAULT_IMAGES = [
 		'uploader_id'  => 1,
 	],
 	[
-		'url'  	       => $_imagesUrl.DIRECTORY_SEPARATOR.'hero3.jpg',
-		'path'  	   => $_imgesDir.DIRECTORY_SEPARATOR.'hero3.jpg',
+		'url'  	       => $_imagesUrl . DIRECTORY_SEPARATOR . 'hero3.jpg',
+		'path'  	   => $_imgesDir . DIRECTORY_SEPARATOR . 'hero3.jpg',
 		'title'	       => 'Beautiful Autumn Leaves',
 		'alt'	       => 'Photo of track with autumn leaves',
 		'size'         => 222897,

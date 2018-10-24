@@ -6,12 +6,12 @@
  */
 
 /**
- * CMS Application attachment routes
+ * CMS Application attachment routes.
  *
  * @author Joe J. Howard
  */
 
-# Attachments
+// Attachments
 if ($config->get('cms.route_attachments') === true)
 {
 	$router->get("$blogPrefix/attachment/(:any)/", '\kanso\cms\application\Application::applyRoute', 'attachment');

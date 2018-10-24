@@ -7,11 +7,11 @@
 
 namespace kanso\framework\http\response\exceptions;
 
-use Throwable;
 use RuntimeException;
+use Throwable;
 
 /**
- * Request exception
+ * Request exception.
  *
  * @author Joe J. Howard
  */

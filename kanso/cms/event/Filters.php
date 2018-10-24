@@ -10,28 +10,28 @@ namespace kanso\cms\event;
 use kanso\framework\utility\Callback;
 
 /**
- * Filters manager
+ * Filters manager.
  *
  * @author Joe J. Howard
  */
-class Filters 
-{   
+class Filters
+{
     /**
-     * Instance of self
+     * Instance of self.
      *
      * @var \kanso\cms\events\Events
      */
     private static $instance;
 
     /**
-     * List of callbacks
+     * List of callbacks.
      *
      * @var mixed Array of callbacks
      */
     protected static $callbacks = [];
 
     /**
-     * Private constructor
+     * Private constructor.
      *
      * @access private
      */
@@ -40,7 +40,7 @@ class Filters
     }
 
     /**
-     * Get Filters instance (singleton)
+     * Get Filters instance (singleton).
      *
      * This creates and/or returns an Filters instance (singleton)
      *
@@ -58,32 +58,32 @@ class Filters
     }
 
     /**
-     * Hook into an filter
+     * Hook into an filter.
      *
      * @access public
-     * @param  string $eventName The name of the filter
-     * @param  mixed  $callback  Callback to apply
-     * @param  mixed  $args      Args to add (optional) (default null)
+     * @param string $eventName The name of the filter
+     * @param mixed  $callback  Callback to apply
+     * @param mixed  $args      Args to add (optional) (default null)
      */
     public function on(string $eventName, $callback)
-    {    
+    {
         self::$callbacks[$eventName][] = $callback;
     }
 
     /**
-     * Apply a filter
+     * Apply a filter.
      *
      * @param string $eventName The name of the filter being fired
      * @param mixed  $args      The arguments to be sent to filter callback (optional) (default [])
      */
-    public function apply(string $eventName, $args) 
+    public function apply(string $eventName, $args)
     {
         $result = $args;
 
-        # Is there a custom callback for the filter?   
+        // Is there a custom callback for the filter?
         if (isset(self::$callbacks[$eventName]))
         {
-            # Loop the filter callbacks
+            // Loop the filter callbacks
             foreach (self::$callbacks[$eventName] as $callback)
             {
                 $result = Callback::apply($callback, [$result]);

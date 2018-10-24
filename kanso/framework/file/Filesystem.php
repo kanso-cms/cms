@@ -10,7 +10,7 @@ namespace kanso\framework\file;
 use kanso\framework\utility\Mime;
 
 /**
- * Filesystem helper
+ * Filesystem helper.
  *
  * @author Joe J. Howard
  */
@@ -20,8 +20,8 @@ class Filesystem
 	 * Returns TRUE if a file exists and FALSE if not.
 	 *
 	 * @access  public
-	 * @param   string   $file  Path to file
-	 * @return  bool
+	 * @param  string $file Path to file
+	 * @return bool
 	 */
 	public static function exists(string $file): bool
 	{
@@ -32,8 +32,8 @@ class Filesystem
 	 * Returns TRUE if the provided path is a file and FALSE if not.
 	 *
 	 * @access  public
-	 * @param   string   $file  Path to file
-	 * @return  bool
+	 * @param  string $file Path to file
+	 * @return bool
 	 */
 	public static function isFile(string $file): bool
 	{
@@ -44,8 +44,8 @@ class Filesystem
 	 * Returns TRUE if the provided path is a directory and FALSE if not.
 	 *
 	 * @access  public
-	 * @param   string   $directory  Path to directory
-	 * @return  bool
+	 * @param  string $directory Path to directory
+	 * @return bool
 	 */
 	public static function isDirectory(string $directory): bool
 	{
@@ -56,8 +56,8 @@ class Filesystem
 	 * Returns TRUE if a directory is empty and FALSE if not.
 	 *
 	 * @access  public
-	 * @param   string   $path  Path to directory
-	 * @return  bool
+	 * @param  string $path Path to directory
+	 * @return bool
 	 */
 	public static function isDirectoryEmpty(string $path): bool
 	{
@@ -78,8 +78,8 @@ class Filesystem
 	 * Returns TRUE if the file is readable and FALSE if not.
 	 *
 	 * @access  public
-	 * @param   string   $file  Path to file
-	 * @return  bool
+	 * @param  string $file Path to file
+	 * @return bool
 	 */
 	public static function isReadable(string $file): bool
 	{
@@ -90,8 +90,8 @@ class Filesystem
 	 * Returns TRUE if the file or directory is writable and FALSE if not.
 	 *
 	 * @access  public
-	 * @param   string   $file  Path to file
-	 * @return  bool
+	 * @param  string $file Path to file
+	 * @return bool
 	 */
 	public static function isWritable(string $file): bool
 	{
@@ -102,8 +102,8 @@ class Filesystem
 	 * Returns the time (unix timestamp) the file was last modified.
 	 *
 	 * @access  public
-	 * @param   string  $file  Path to file
-	 * @return  int
+	 * @param  string $file Path to file
+	 * @return int
 	 */
 	public static function lastModified(string $file): int
 	{
@@ -114,10 +114,10 @@ class Filesystem
 	 * Returns the fize of the file in bytes.
 	 *
 	 * @access  public
-	 * @param   string  $file  Path to file
-	 * @return  int
+	 * @param  string $file Path to file
+	 * @return int
 	 */
-	public static function size(string $file) : int
+	public static function size(string $file): int
 	{
 		return filesize($file);
 	}
@@ -126,8 +126,8 @@ class Filesystem
 	 * Returns the extention of the file.
 	 *
 	 * @access  public
-	 * @param   string  $file  Path to file
-	 * @return  string
+	 * @param  string $file Path to file
+	 * @return string
 	 */
 	public static function extension(string $file): string
 	{
@@ -138,9 +138,9 @@ class Filesystem
 	 * Returns the mime type of the file.
 	 *
 	 * @access  public
-	 * @param   string   $file  Path to file
-	 * @param   boolean  $guess Guess mime type if finfo_open doesn't exist? (optional) (default TRUE)
-	 * @return  string|bool
+	 * @param  string      $file  Path to file
+	 * @param  bool        $guess Guess mime type if finfo_open doesn't exist? (optional) (default TRUE)
+	 * @return string|bool
 	 */
 	public static function mime(string $file, bool $guess = true)
 	{
@@ -174,8 +174,8 @@ class Filesystem
 	 * Deletes the file from disk.
 	 *
 	 * @access  public
-	 * @param   string   $file  Path to file
-	 * @return  bool
+	 * @param  string $file Path to file
+	 * @return bool
 	 */
 	public static function delete(string $file): bool
 	{
@@ -183,12 +183,12 @@ class Filesystem
 	}
 
 	/**
-	 * Renames a file
+	 * Renames a file.
 	 *
 	 * @access  public
-	 * @param   string $src Path to old file
-	 * @param   string $dst Path to new file
-	 * @return  bool
+	 * @param  string $src Path to old file
+	 * @param  string $dst Path to new file
+	 * @return bool
 	 */
 	public static function rename(string $src, string $dst): bool
 	{
@@ -196,11 +196,11 @@ class Filesystem
 	}
 
 	/**
-	 * Creates a new empty file
+	 * Creates a new empty file.
 	 *
 	 * @access  public
-	 * @param   string $path Path to old file
-	 * @return  bool
+	 * @param  string $path Path to old file
+	 * @return bool
 	 */
 	public static function touch(string $path): bool
 	{
@@ -211,8 +211,8 @@ class Filesystem
 	 * Deletes a directory and its contents from disk.
 	 *
 	 * @access  public
-	 * @param   string   $path  Path to directory
-	 * @return  bool
+	 * @param  string $path Path to directory
+	 * @return bool
 	 */
 	public static function deleteDirectory(string $path): bool
 	{
@@ -237,8 +237,8 @@ class Filesystem
 	 * Deletes a directory contents from disk.
 	 *
 	 * @access  public
-	 * @param   string   $path  Path to directory
-	 * @return  NULL
+	 * @param  string $path Path to directory
+	 * @return null
 	 */
 	public static function emptyDirectory(string $path)
 	{
@@ -254,16 +254,16 @@ class Filesystem
 			{
 				self::delete($item->getPathname());
 			}
-		}		
+		}
 	}
 
 	/**
 	 * Returns an array of pathnames matching the provided pattern.
 	 *
 	 * @access  public
-	 * @param   string       $pattern  Patern
-	 * @param   int          $flags    Flags
-	 * @return  array|false
+	 * @param  string      $pattern Patern
+	 * @param  int         $flags   Flags
+	 * @return array|false
 	 */
 	public static function glob(string $pattern, int $flags = 0)
 	{
@@ -271,12 +271,12 @@ class Filesystem
 	}
 
 	/**
-	 * Returns an array of pathnames from a directory
+	 * Returns an array of pathnames from a directory.
 	 *
 	 * @access  public
-	 * @param   string  $dir      Directory to list
-	 * @param   array   $excludes File names to exclude
-	 * @return  array
+	 * @param  string $dir      Directory to list
+	 * @param  array  $excludes File names to exclude
+	 * @return array
 	 */
 	public static function list(string $dir, array $excludes = ['..', '.', '.ds_store']): array
 	{
@@ -299,10 +299,10 @@ class Filesystem
 	 * Writes the supplied data to a file.
 	 *
 	 * @access  public
-	 * @param   string   $file  File path
-	 * @param   mixed    $data  File data
-	 * @param   boolean  $lock  Acquire an exclusive write lock? (optional) (default FALSE)
-	 * @return  int|bool
+	 * @param  string   $file File path
+	 * @param  mixed    $data File data
+	 * @param  bool     $lock Acquire an exclusive write lock? (optional) (default FALSE)
+	 * @return int|bool
 	 */
 	public static function putContents(string $file, string $data, bool $lock = false)
 	{
@@ -313,10 +313,10 @@ class Filesystem
 	 * Prepends the supplied data to a file.
 	 *
 	 * @access  public
-	 * @param   string   $file  File path
-	 * @param   mixed    $data  File data
-	 * @param   boolean  $lock  Acquire an exclusive write lock? (optional) (default FALSE)
-	 * @return  int|bool
+	 * @param  string   $file File path
+	 * @param  mixed    $data File data
+	 * @param  bool     $lock Acquire an exclusive write lock? (optional) (default FALSE)
+	 * @return int|bool
 	 */
 	public static function prependContents(string $file, string $data, bool $lock = false)
 	{
@@ -327,24 +327,24 @@ class Filesystem
 	 * Appends the supplied data to a file.
 	 *
 	 * @access  public
-	 * @param   string   $file  File path
-	 * @param   mixed    $data  File data
-	 * @param   boolean  $lock  Acquire an exclusive write lock? (optional) (default FALSE)
-	 * @return  int|bool
+	 * @param  string   $file File path
+	 * @param  mixed    $data File data
+	 * @param  bool     $lock Acquire an exclusive write lock? (optional) (default FALSE)
+	 * @return int|bool
 	 */
 	public static function appendContents(string $file, string $data, bool $lock = false)
 	{
-		return file_put_contents($file, $data,  $lock ? FILE_APPEND | LOCK_EX : FILE_APPEND);
+		return file_put_contents($file, $data, $lock ? FILE_APPEND | LOCK_EX : FILE_APPEND);
 	}
 
 	/**
 	 * Truncates a file.
 	 *
-	* @access  public
-	 * @param   string   $file  File path
-	 * @param   mixed    $data  File data
-	 * @param   boolean  $lock  Acquire an exclusive write lock? (optional) (default FALSE)
-	 * @return  int|bool
+	 * @access  public
+	 * @param  string   $file File path
+	 * @param  mixed    $data File data
+	 * @param  bool     $lock Acquire an exclusive write lock? (optional) (default FALSE)
+	 * @return int|bool
 	 */
 	public static function truncateContents(string $file, bool $lock = false)
 	{
@@ -357,7 +357,7 @@ class Filesystem
 	 *  @access  public
 	 *  @param   string   $path       Path to directory
 	 *  @param   int      $mode       Mode (optional) (default 0777)
-	 *  @param   boolean  $recursive  Recursive (optional) (default FALSE)
+	 *  @param   bool  $recursive  Recursive (optional) (default FALSE)
 	 *  @return  bool
 	 */
 	public static function createDirectory(string $path, int $mode = 0777, bool $recursive = false)
@@ -369,8 +369,8 @@ class Filesystem
 	 * Includes a file.
 	 *
 	 * @access  public
-	 * @param   string  $file  Path to file
-	 * @return  mixed
+	 * @param  string $file Path to file
+	 * @return mixed
 	 */
 	public static function include(string $file)
 	{
@@ -381,8 +381,8 @@ class Filesystem
 	 * Includes a file it hasn't already been included.
 	 *
 	 * @access  public
-	 * @param   string  $file  Path to file
-	 * @return  mixed
+	 * @param  string $file Path to file
+	 * @return mixed
 	 */
 	public static function includeOnce(string $file)
 	{
@@ -393,8 +393,8 @@ class Filesystem
 	 * Requires a file.
 	 *
 	 * @access  public
-	 * @param   string  $file  Path to file
-	 * @return  mixed
+	 * @param  string $file Path to file
+	 * @return mixed
 	 */
 	public static function require(string $file)
 	{
@@ -405,8 +405,8 @@ class Filesystem
 	 * Requires a file if it hasn't already been required.
 	 *
 	 * @access  public
-	 * @param   string  $file  Path to file
-	 * @return  mixed
+	 * @param  string $file Path to file
+	 * @return mixed
 	 */
 	public static function requireOnce(string $file)
 	{
@@ -417,10 +417,10 @@ class Filesystem
 	 * Returns a SplFileObject.
 	 *
 	 * @access  public
-	 * @param   string          $file            Path to file
-	 * @param   string          $openMode        Open mode
-	 * @param   boolean         $useIncludePath  Use include path? (optional) (default FALSE)
-	 * @return  \SplFileObject
+	 * @param  string         $file           Path to file
+	 * @param  string         $openMode       Open mode
+	 * @param  bool           $useIncludePath Use include path? (optional) (default FALSE)
+	 * @return \SplFileObject
 	 */
 	public static function file(string $file, string $openMode = 'r', bool $useIncludePath = false)
 	{
@@ -428,10 +428,10 @@ class Filesystem
 	}
 
 	/**
-	 * Creates a temporary file and returns the handle
+	 * Creates a temporary file and returns the handle.
 	 *
 	 * @access  public
-	 * @return  handle
+	 * @return handle
 	 */
 	public static function tmpfile()
 	{
@@ -439,12 +439,12 @@ class Filesystem
 	}
 
 	/**
-	 * Read and return the contents of a php file
+	 * Read and return the contents of a php file.
 	 *
 	 * @access  public
-	 * @param   string  $file  Path to file
-	 * @param   array   $data  Array of variables to extract
-	 * @return  mixed
+	 * @param  string $file Path to file
+	 * @param  array  $data Array of variables to extract
+	 * @return mixed
 	 */
 	public static function ob_read(string $file, array $vars = [])
 	{
@@ -455,7 +455,7 @@ class Filesystem
         	include $file;
         	return ob_get_clean();
 		}
-		
-		return null;	
+
+		return null;
 	}
 }

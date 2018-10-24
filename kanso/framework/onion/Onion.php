@@ -5,13 +5,12 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\framework\onion; 
+namespace kanso\framework\onion;
 
-use RuntimeException;
 use Closure;
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
-use kanso\framework\onion\Middleware;
+use RuntimeException;
 
 /**
  * Array access trait.
@@ -21,12 +20,12 @@ use kanso\framework\onion\Middleware;
 class Onion
 {
     /**
-     * Onion layers of middleware
+     * Onion layers of middleware.
      *
      * @var array
      */
     private $layers = [];
-    
+
     /**
      * Are we peeling a layer ?
      *
@@ -35,41 +34,41 @@ class Onion
     private $locked = false;
 
     /**
-     * Request object
+     * Request object.
      *
      * @var \kanso\framework\http\request\Request
      */
     private $request;
 
     /**
-     * Response object
+     * Response object.
      *
      * @var \kanso\framework\http\response\Response
      */
     private $response;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
-     * @param  \kanso\framework\http\request\Request   $request Request object
-     * @param  \kanso\framework\http\response\Response $response Response object
+     * @param \kanso\framework\http\request\Request   $request  Request object
+     * @param \kanso\framework\http\response\Response $response Response object
      */
     public function __construct(Request $request, Response $response)
-    {        
+    {
         $this->request = $request;
 
         $this->response = $response;
     }
 
     /**
-     * Add a layer to the onion
+     * Add a layer to the onion.
      *
      * @access public
-     * @param  mixed $callback   Callback when layer is peeled
-     * @param  mixed $parameters Arguments to apply to callback
-     * @param  bool  $inner      Add layer to the inner most layer (optional) (default false)\
-     * @throws RuntimeException  If the onion is currently being peeled
+     * @param  mixed            $callback   Callback when layer is peeled
+     * @param  mixed            $parameters Arguments to apply to callback
+     * @param  bool             $inner      Add layer to the inner most layer (optional) (default false)\
+     * @throws RuntimeException If the onion is currently being peeled
      */
     public function addLayer($callback, $parameters = null, bool $inner = false)
     {
@@ -84,7 +83,7 @@ class Onion
     }
 
     /**
-     * Peel the onion
+     * Peel the onion.
      *
      * @access public
      */
@@ -94,7 +93,7 @@ class Onion
     }
 
     /**
-     * Peel The next layer
+     * Peel The next layer.
      *
      * @access private
      */
@@ -111,15 +110,15 @@ class Onion
             $layer->execute($this->request, $this->response, $next);
 
             $this->locked = false;
-        }        
+        }
     }
 
     /**
-     * Return a closure for executing the next middleware layer
+     * Return a closure for executing the next middleware layer.
      *
      * @access private
-     * @return \Closure
      * @throws \kanso\framework\http\response\exceptions\ForbiddenException If the onion is finished peeling and the response is a 404
+     * @return \Closure
      */
     private function getNextLayer(): Closure
     {
@@ -143,7 +142,7 @@ class Onion
     }
 
     /**
-     * When the onion is completely peeled return the response
+     * When the onion is completely peeled return the response.
      *
      * @access private
      * @throws \kanso\framework\http\response\exceptions\ForbiddenException
@@ -154,7 +153,7 @@ class Onion
     }
 
     /**
-     * Get middleware layers
+     * Get middleware layers.
      *
      * @access public
      */

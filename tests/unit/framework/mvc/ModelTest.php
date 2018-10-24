@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\mvc;
 
-use tests\TestCase;
 use kanso\framework\mvc\model\Model;
+use tests\TestCase;
 
 class TestModelCase extends Model
 {

@@ -7,9 +7,9 @@
 
 namespace tests\unit\cms\wrappers\providers;
 
+use kanso\cms\wrappers\providers\PostProvider;
 use Mockery;
 use tests\TestCase;
-use kanso\cms\wrappers\providers\PostProvider;
 
 /**
  * @group unit
@@ -29,11 +29,11 @@ class PostProviderTest extends TestCase
         $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
         $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
         $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
-        
+
         $provider = new PostProvider($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider);
 
         $config->shouldReceive('get')->with('cms.permalinks')->andReturn('year/month/postname/');
-        
+
         $tag = Mockery::mock('\kanso\cms\wrappers\Tag');
         $tag->name = 'html';
         $tag->slug = 'html';
@@ -103,7 +103,7 @@ class PostProviderTest extends TestCase
             'modified'    => time(),
             'status'      => 'published',
             'type'        => 'post',
-            'slug'        =>  date('Y').'/'.date('m').'/foo-bar/',
+            'slug'        =>  date('Y') . '/' . date('m') . '/foo-bar/',
             'title'       => 'Foo Bar',
             'excerpt'     => 'Hello foo bar',
             'author_id'   => 1,
@@ -124,7 +124,7 @@ class PostProviderTest extends TestCase
         $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
         $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
         $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
-        
+
         $provider = new PostProvider($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider);
 
         $sql->shouldReceive('SELECT')->with('posts.*')->once()->andReturn($sql);
@@ -160,7 +160,7 @@ class PostProviderTest extends TestCase
         $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
         $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
         $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
-        
+
         $provider = new PostProvider($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider);
 
         $sql->shouldReceive('SELECT')->with('posts.*')->once()->andReturn($sql);
@@ -196,7 +196,7 @@ class PostProviderTest extends TestCase
         $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
         $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
         $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
-        
+
         $provider = new PostProvider($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider);
 
         $sql->shouldReceive('SELECT')->with('posts.*')->once()->andReturn($sql);
@@ -232,7 +232,7 @@ class PostProviderTest extends TestCase
         $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
         $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
         $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
-        
+
         $provider = new PostProvider($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider);
 
         $sql->shouldReceive('SELECT')->with('posts.*')->once()->andReturn($sql);
@@ -273,7 +273,7 @@ class PostProviderTest extends TestCase
 
         $sql->shouldReceive('FIND_ALL')->andReturn([
             ['id' => 1, 'slug' => 'html', 'name' => 'html'],
-            ['id' => 2, 'slug' => 'css',  'name' => 'css']
+            ['id' => 2, 'slug' => 'css',  'name' => 'css'],
         ])->once();
 
         $tag1 = Mockery::mock('\kanso\cms\wrappers\Tag');
@@ -308,7 +308,7 @@ class PostProviderTest extends TestCase
 
         $sql->shouldReceive('FIND_ALL')->andReturn([
             ['id' => 1, 'slug' => 'html', 'name' => 'html'],
-            ['id' => 2, 'slug' => 'css',  'name' => 'css']
+            ['id' => 2, 'slug' => 'css',  'name' => 'css'],
         ])->once();
 
         $cat1 = Mockery::mock('\kanso\cms\wrappers\Category');
@@ -343,5 +343,4 @@ class PostProviderTest extends TestCase
         return $author;
     }
 
-   
 }

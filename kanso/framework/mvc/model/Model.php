@@ -7,11 +7,11 @@
 
 namespace kanso\framework\mvc\model;
 
-use kanso\Kanso;
 use kanso\framework\ioc\ContainerAwareTrait;
+use kanso\Kanso;
 
 /**
- * Base Model
+ * Base Model.
  *
  * @author Joe J. Howard
  */
@@ -19,8 +19,8 @@ abstract class Model
 {
 	use ContainerAwareTrait;
 
-	/**
-     * Constructor
+    /**
+     * Constructor.
      *
      * @access public
      */

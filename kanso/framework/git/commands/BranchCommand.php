@@ -5,12 +5,12 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\framework\git\commands; 
+namespace kanso\framework\git\commands;
 
 use kanso\framework\git\Command;
 
 /**
- * Git archive command
+ * Git archive command.
  *
  * @see  https://git-scm.com/docs/git-branch
  * @author Joe J. Howard
@@ -18,26 +18,26 @@ use kanso\framework\git\Command;
 class BranchCommand extends Command
 {
     /**
-     * Magic method invoke
-     * 
-     * @param  array $options Command options (optional) (default [])
-     * @param  array $params  Command params  (optional) (default [])
-     * @return string|array|false 
+     * Magic method invoke.
+     *
+     * @param  array              $options Command options (optional) (default [])
+     * @param  array              $params  Command params  (optional) (default [])
+     * @return string|array|false
      */
     public function __invoke(array $options = [], array $params = [])
     {
         $show_list = false;
-        
-        # If no options were provided, we're returning a list
-        # of branches
+
+        // If no options were provided, we're returning a list
+        // of branches
         if (empty($options) && empty($params))
         {
             $options = ['v', 'abbrev' => 7];
-            
+
             $show_list = true;
         }
 
-        # Run the command
+        // Run the command
         $output = $this->run('branch', [$options, $params]);
 
         if (!$this->is_successful())
@@ -45,21 +45,21 @@ class BranchCommand extends Command
             return false;
         }
 
-        # if we're not bulding a list return if the 
-        # command was successful or not
+        // if we're not bulding a list return if the
+        // command was successful or not
         if (!$show_list)
         {
             return $output;
         }
 
         $branches = [];
-        
-        # Buld the list of branches
+
+        // Buld the list of branches
         $lines = preg_split('/\r?\n/', rtrim($output), -1, PREG_SPLIT_NO_EMPTY);
 
         foreach ($lines as $line)
         {
-            $branch = array();
+            $branch = [];
             preg_match('/(?<current>\*| ) (?<name>[^\s]+) +((?:->) (?<alias>[^\s]+)|(?<hash>[0-9a-z]{7}) (?<title>.*))/', $line, $matches);
 
             $branch['current'] = ($matches['current'] == '*');
@@ -69,7 +69,7 @@ class BranchCommand extends Command
             {
                 $branch['hash']  = $matches['hash'];
                 $branch['title'] = $matches['title'];
-            } 
+            }
             else {
                 $branch['alias'] = $matches['alias'];
             }
@@ -78,7 +78,7 @@ class BranchCommand extends Command
         }
 
         usort($branches, function($a, $b) {
-            return strnatcasecmp($a["name"], $b["name"]);
+            return strnatcasecmp($a['name'], $b['name']);
         });
 
         return $branches;

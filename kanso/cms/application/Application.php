@@ -8,44 +8,43 @@
 namespace kanso\cms\application;
 
 use kanso\framework\ioc\Container;
-use kanso\cms\application\LoaderTrait;
 
 /**
- * CMS main class
+ * CMS main class.
  *
  * @author Joe J. Howard
  */
-class Application 
+class Application
 {
 	use LoaderTrait;
 
 	/**
-	 * IoC container instance
+	 * IoC container instance.
 	 *
 	 * @var \kanso\framework\application\Container
 	 */
 	private $container;
 
 	/**
-	 * Instance of self
+	 * Instance of self.
 	 *
 	 * @var \kanso\framework\application\Container
 	 */
 	private static $instance;
 
-	/**
-     * Constructor
+    /**
+     * Constructor.
      *
      * @access private
-     * @param  \kanso\framework\application\Container $container IoC container
+     * @param \kanso\framework\application\Container $container IoC container
      */
     private function __construct(Container $container)
     {
     	$this->container = $container;
     }
 
-    /**
-	 * Starts and/or returns the instance of the application
+	/**
+	 * Starts and/or returns the instance of the application.
 	 *
 	 * @access public
 	 * @param  \kanso\framework\application\Container $container IoC container (optional) (default null)
@@ -62,7 +61,7 @@ class Application
 	}
 
     /**
-     * Boot the CMS
+     * Boot the CMS.
      *
      * @access public
      */
@@ -82,8 +81,8 @@ class Application
 		}
     }
 
-    /**
-	 * Validate the incoming request with the access conditions
+	/**
+	 * Validate the incoming request with the access conditions.
 	 *
 	 * @access private
 	 */
@@ -95,8 +94,8 @@ class Application
 		}
 	}
 
-    /**
-	 * Apply the CMS routes
+	/**
+	 * Apply the CMS routes.
 	 *
 	 * @access private
 	 */
@@ -106,7 +105,7 @@ class Application
 	}
 
     /**
-     * Registers includes on all view renders
+     * Registers includes on all view renders.
      *
      * @access private
      */
@@ -114,20 +113,20 @@ class Application
     {
     	$this->container->View->includes(
     		[
-    			$this->container->Config->get('cms.themes_path').'/'.$this->container->Config->get('cms.theme_name').'/functions.php',
-    			KANSO_DIR.'/cms/query/Includes.php'
+    			$this->container->Config->get('cms.themes_path') . '/' . $this->container->Config->get('cms.theme_name') . '/functions.php',
+    			KANSO_DIR . '/cms/query/Includes.php',
     		]
     	);
     }
 
     /**
-     * Boot the installer
+     * Boot the installer.
      *
      * @access private
      */
     private function bootInstaller()
     {
-    	# Make sure Kanso is installed
+    	// Make sure Kanso is installed
 		if (!$this->container->Installer->isInstalled())
 		{
 			$this->container->Router->get('/', [&$this->container->Installer, 'run']);

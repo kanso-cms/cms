@@ -347,7 +347,7 @@ class PHPMailer
      * * `html` Output escaped, line breaks converted to `<br>`, appropriate for browser output
      * * `error_log` Output to error log as configured in php.ini
      * By default PHPMailer will use `echo` if run from a `cli` or `cli-server` SAPI, `html` otherwise.
-     * Alternatively, you can provide a callable expecting two params: a message string and the debug level:
+     * Alternatively, you can provide a callable expecting two params: a message string and the debug level:.
      *
      * ```php
      * $mail->Debugoutput = function($str, $level) {echo "debug level $level; message: $str";};
@@ -1178,7 +1178,7 @@ class PHPMailer
      * * `php` Use PHP built-in FILTER_VALIDATE_EMAIL;
      * * `html5` Use the pattern given by the HTML5 spec for 'email' type form input elements.
      * * `noregex` Don't use a regex: super fast, really dumb.
-     * Alternatively you may pass in a callable to inject your own validator, for example:
+     * Alternatively you may pass in a callable to inject your own validator, for example:.
      *
      * ```php
      * PHPMailer::validateAddress('user@example.com', function($address) {
@@ -3425,7 +3425,7 @@ class PHPMailer
     {
         $this->RecipientsQueue = array_filter(
             $this->RecipientsQueue,
-            function ($params) use ($kind) {
+            function($params) use ($kind) {
                 return $params[0] != $kind;
             }
         );
@@ -3777,7 +3777,7 @@ class PHPMailer
      * This is used by msgHTML().
      * Note - older versions of this function used a bundled advanced converter
      * which was removed for license reasons in #232.
-     * Example usage:
+     * Example usage:.
      *
      * ```php
      * // Use default conversion

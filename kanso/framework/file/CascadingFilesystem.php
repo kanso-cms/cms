@@ -41,7 +41,7 @@ trait CascadingFilesystem
      * Sets the default path.
      *
      * @access public
-     * @param  string $path Path
+     * @param string $path Path
      */
     public function __construct(string $path = null)
     {
@@ -107,7 +107,7 @@ trait CascadingFilesystem
 
             if(!isset($this->namespaces[$namespace]))
             {
-                throw new RuntimeException(vsprintf("%s(): The [ %s ] namespace does not exist.", [__METHOD__, $namespace]));
+                throw new RuntimeException(vsprintf('%s(): The [ %s ] namespace does not exist.', [__METHOD__, $namespace]));
             }
 
             $path = $this->namespaces[$namespace];

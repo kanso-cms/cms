@@ -8,17 +8,17 @@
 namespace kanso\framework\common;
 
 /**
- * Array iterator for object implementation
+ * Array iterator for object implementation.
  *
  * @author Joe J. Howard
  */
 class ArrayIterator implements \Iterator
 {
-	/**
-     * Constructor
+    /**
+     * Constructor.
      *
      * @access public
-     * @param  array  $data Array to iterate (optional) (default [])
+     * @param array $data Array to iterate (optional) (default [])
      */
     public function __construct(array $data = [])
     {
@@ -26,46 +26,46 @@ class ArrayIterator implements \Iterator
     }
 
     /**
-	 * {@inheritdoc}
-	 */
+     * {@inheritdoc}
+     */
     public function rewind()
     {
         reset($this->data);
     }
-  	
-  	/**
-	 * {@inheritdoc}
-	 */
+
+    /**
+     * {@inheritdoc}
+     */
     public function current()
     {
         return current($this->data);
     }
-  	
-  	/**
-	 * {@inheritdoc}
-	 */
-    public function key() 
-    {        
-        return key($this->data);
-    }
-    
+
     /**
      * {@inheritdoc}
      */
-    public function next() 
+    public function key()
+    {
+        return key($this->data);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function next()
     {
         return next($this->data);
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function valid()
     {
         $key = key($this->data);
-        
-        $data = ($key !== NULL && $key !== FALSE);
-        
+
+        $data = ($key !== null && $key !== false);
+
         return $data;
     }
 }

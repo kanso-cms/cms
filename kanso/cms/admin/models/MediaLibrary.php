@@ -7,27 +7,25 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\cms\admin\models\BaseModel;
-use kanso\framework\utility\Arr;
-use kanso\framework\utility\Str;
-use kanso\framework\utility\Humanizer;
-use kanso\framework\utility\Mime;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
+use kanso\framework\utility\Humanizer;
+use kanso\framework\utility\Mime;
+use kanso\framework\utility\Str;
 
 /**
- * Comments model
+ * Comments model.
  *
  * @author Joe J. Howard
  */
 class MediaLibrary extends BaseModel
 {
     /**
-     * Default image types
-     * 
+     * Default image types.
+     *
      * @var array
      */
-    private $imageTypes = 
+    private $imageTypes =
     [
         'image/png',
         'image/jpg',
@@ -36,7 +34,7 @@ class MediaLibrary extends BaseModel
     ];
 
     /**
-     * SVG Mime Type
+     * SVG Mime Type.
      *
      * @var string
      */
@@ -77,7 +75,7 @@ class MediaLibrary extends BaseModel
         {
             throw new InvalidTokenException('Bad Admin Panel POST Request. The CSRF token was either not provided or was invalid.');
         }
-        
+
         if (isset($this->post['ajax_request']))
         {
             $request = $this->post['ajax_request'];
@@ -86,15 +84,15 @@ class MediaLibrary extends BaseModel
             {
                 return $this->loadMedia();
             }
-            else if ($request === 'delete_media')
+            elseif ($request === 'delete_media')
             {
                 return $this->deleteMedia();
-            } 
-            else if ($request === 'update_media_info')
+            }
+            elseif ($request === 'update_media_info')
             {
                 return $this->updateMediaInfo();
             }
-            else if ($request=== 'file_upload')
+            elseif ($request=== 'file_upload')
             {
                 return $this->uploadMedia();
             }
@@ -104,26 +102,26 @@ class MediaLibrary extends BaseModel
     }
 
     /**
-     * Load images for the media library
+     * Load images for the media library.
      *
      * @access private
      * @return array|false
      */
     private function loadMedia()
     {
-        # Page must be set
+        // Page must be set
         if (!isset($this->post['page']))
         {
             return false;
         }
 
-        # Query vars
+        // Query vars
         $page     = intval($this->post['page']);
         $perPage  = 30;
         $offset   = $page * $perPage;
         $limit    = $perPage;
 
-        # Select the images
+        // Select the images
         $response      = [];
         $rows          = $this->SQL->SELECT('*')->FROM('media_uploads')->ORDER_BY('date', 'DESC')->LIMIT($offset, $limit)->FIND_ALL();
         $imagesBaseURL = str_replace($this->Request->environment()->DOCUMENT_ROOT, $this->Request->environment()->HTTP_HOST, $this->Config->get('cms.uploads.path'));
@@ -131,17 +129,17 @@ class MediaLibrary extends BaseModel
         foreach ($rows as $image)
         {
             if (!file_exists($image['path'])) continue;
-            $image['date']    = Humanizer::timeAgo($image['date']).' ago';
+            $image['date']    = Humanizer::timeAgo($image['date']) . ' ago';
             $image['size']    = Humanizer::fileSize($image['size']);
             $image['user']    = $this->SQL->SELECT('name')->FROM('users')->WHERE('id', '=', $image['uploader_id'])->ROW()['name'];
             $image['type']    = Mime::fromExt(Str::getAfterLastChar($image['path'], '.'));
             $image['preview'] = $image['url'];
             $image['name']    = Str::getAfterLastChar($image['url'], '/');
 
-            # If this is not an image put no preview on it
+            // If this is not an image put no preview on it
             if (!in_array($image['type'], $this->imageTypes) && $image['type'] !== $this->svgMime)
             {
-                $image['preview'] = $imagesBaseURL.'/no-preview-available.jpg';
+                $image['preview'] = $imagesBaseURL . '/no-preview-available.jpg';
             }
 
             $response[] = $image;
@@ -151,19 +149,19 @@ class MediaLibrary extends BaseModel
     }
 
     /**
-     * Delete images by ids
+     * Delete images by ids.
      *
      * @access private
      * @return array|false
      */
     private function deleteMedia()
     {
-        # Validate and sanitize the ids
+        // Validate and sanitize the ids
         if (!isset($this->post['ids']))
         {
             return false;
         }
-        
+
         $ids = array_filter(array_map('intval', explode(',', $this->post['ids'])));
 
         if (empty($ids))
@@ -174,7 +172,7 @@ class MediaLibrary extends BaseModel
         foreach ($ids as $id)
         {
             $attachment = $this->MediaManager->byId($id);
-            
+
             $attachment->delete();
         }
 
@@ -182,14 +180,14 @@ class MediaLibrary extends BaseModel
     }
 
     /**
-     * Update an attachment info
+     * Update an attachment info.
      *
      * @access private
      * @return array|false
      */
     private function updateMediaInfo()
     {
-        # Validate and sanitize the id
+        // Validate and sanitize the id
         if (!isset($this->post['id']))
         {
             return false;
@@ -202,13 +200,13 @@ class MediaLibrary extends BaseModel
             return false;
         }
 
-        # Validate the post vars
+        // Validate the post vars
         if (!array_key_exists('title', $this->post) || !array_key_exists('alt', $this->post))
         {
             return false;
         }
 
-        # Get the attachment
+        // Get the attachment
         $attachment = $this->MediaManager->byId($id);
 
         if (!$attachment)
@@ -224,14 +222,14 @@ class MediaLibrary extends BaseModel
     }
 
     /**
-     * Upload file or files
+     * Upload file or files.
      *
      * @access private
      * @return array|false
      */
     private function uploadMedia()
     {
-        # Validate files
+        // Validate files
         if (empty($_FILES) || !isset($_FILES['file']))
         {
             return false;
@@ -242,7 +240,7 @@ class MediaLibrary extends BaseModel
             return false;
         }
 
-        # Loop keys and separate into individual file arrays
+        // Loop keys and separate into individual file arrays
         $files = [];
         foreach ($_FILES['file'] as $key => $values)
         {
@@ -257,10 +255,10 @@ class MediaLibrary extends BaseModel
             {
                 $files[0][$key] = $values;
             }
-            
+
         }
 
-        # Upload and prepare the repsonse
+        // Upload and prepare the repsonse
         $uploaded      = [];
         $imagesBaseURL = str_replace($this->Request->environment()->DOCUMENT_ROOT, $this->Request->environment()->HTTP_HOST, $this->Config->get('cms.uploads.path'));
 
@@ -271,17 +269,17 @@ class MediaLibrary extends BaseModel
             if ($media)
             {
                 $image = $media->asArray();
-                $image['date']    = Humanizer::timeAgo($image['date']).' ago';
+                $image['date']    = Humanizer::timeAgo($image['date']) . ' ago';
                 $image['size']    = Humanizer::fileSize($image['size']);
                 $image['user']    = $this->SQL->SELECT('name')->FROM('users')->WHERE('id', '=', $image['uploader_id'])->ROW()['name'];
                 $image['type']    = Mime::fromExt(Str::getAfterLastChar($image['path'], '.'));
                 $image['preview'] = $image['url'];
                 $image['name']    = Str::getAfterLastChar($image['url'], '/');
 
-                # If this is not an image put no preview on it
+                // If this is not an image put no preview on it
                 if (!in_array($image['type'], $this->imageTypes) && $image['type'] !== $this->svgMime)
                 {
-                    $image['preview'] = $imagesBaseURL.'/no-preview-available.jpg';
+                    $image['preview'] = $imagesBaseURL . '/no-preview-available.jpg';
                 }
 
                 $uploaded[] = $image;

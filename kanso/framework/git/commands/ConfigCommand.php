@@ -5,12 +5,12 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\framework\git\commands; 
+namespace kanso\framework\git\commands;
 
 use kanso\framework\git\Command;
 
 /**
- * Git config command
+ * Git config command.
  *
  * @see  https://git-scm.com/docs/git-config
  * @author Joe J. Howard
@@ -18,22 +18,22 @@ use kanso\framework\git\Command;
 class ConfigCommand extends Command
 {
     /**
-     * Magic method invoke
-     * 
-     * @param  array $options Command options (optional) (default [])
-     * @param  array $params  Command params  (optional) (default [])
+     * Magic method invoke.
+     *
+     * @param  array      $options Command options (optional) (default [])
+     * @param  array      $params  Command params  (optional) (default [])
      * @return bool|array
      */
     public function __invoke(array $options = [], array $params = [])
     {
-        # Are we not doing some sort of other 
-        # operation we will list the the config
+        // Are we not doing some sort of other
+        // operation we will list the the config
         if (empty($options) && empty($params))
         {
             $options = ['list', 'null'];
         }
 
-        # Run the command
+        // Run the command
         $output = $this->run('config', [$options, $params]);
 
         if (!$this->is_successful())
@@ -41,14 +41,14 @@ class ConfigCommand extends Command
             return false;
         }
 
-        # If we're not getting the config just return
-        # whether the command was successfull or not
+        // If we're not getting the config just return
+        // whether the command was successfull or not
         if (!in_array('list', $options))
         {
             return $this->is_successful();
         }
 
-        # Parse the result
+        // Parse the result
         $config = [];
         $lines  = preg_split('/\0/', rtrim($output), -1, PREG_SPLIT_NO_EMPTY);
 
@@ -59,7 +59,7 @@ class ConfigCommand extends Command
             if (isset($config[$name]))
             {
                 $config[$name] .= "\n" . $value;
-            } 
+            }
             else
             {
                 $config[$name] = $value;

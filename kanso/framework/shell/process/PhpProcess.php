@@ -33,7 +33,7 @@ class PhpProcess extends Process
      * @param int         $timeout The timeout in seconds
      * @param array       $options An array of options for proc_open
      */
-    public function __construct($script, $cwd = null, array $env = null, $timeout = 60, array $options = array())
+    public function __construct($script, $cwd = null, array $env = null, $timeout = 60, array $options = [])
     {
         $executableFinder = new PhpExecutableFinder();
         if (false === $php = $executableFinder->find()) {
@@ -43,14 +43,14 @@ class PhpProcess extends Process
             $file = tempnam(sys_get_temp_dir(), 'dbg');
             file_put_contents($file, $script);
             register_shutdown_function('unlink', $file);
-            $php .= ' '.ProcessUtils::escapeArgument($file);
+            $php .= ' ' . ProcessUtils::escapeArgument($file);
             $script = null;
         }
         if ('\\' !== DIRECTORY_SEPARATOR && null !== $php) {
             // exec is mandatory to deal with sending a signal to the process
             // see https://github.com/symfony/symfony/issues/5030 about prepending
             // command with exec
-            $php = 'exec '.$php;
+            $php = 'exec ' . $php;
         }
 
         parent::__construct($php, $cwd, $env, $script, $timeout, $options);

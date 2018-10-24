@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\framework\onion; 
+namespace kanso\framework\onion;
 
 use Closure;
 use kanso\framework\http\request\Request;
@@ -13,32 +13,32 @@ use kanso\framework\http\response\Response;
 use kanso\framework\utility\Callback;
 
 /**
- * Middleware object
+ * Middleware object.
  *
  * @author Joe J. Howard
  */
 class Middleware
-{   
+{
     /**
-     * Callback
+     * Callback.
      *
      * @var mixed
      */
     private $callback;
 
     /**
-     * Callback args
+     * Callback args.
      *
      * @var mixed
      */
     private $args;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
-     * @param  mixed  $callback    Callback to use
-     * @param  mixed  $args        Arguments to apply to callback (optional) (default null)
+     * @param mixed $callback Callback to use
+     * @param mixed $args     Arguments to apply to callback (optional) (default null)
      */
     public function __construct($callback, $args = null)
 	{
@@ -48,22 +48,22 @@ class Middleware
 	}
 
     /**
-     * Execute the callback
+     * Execute the callback.
      *
      * @access public
-     * @param  \kanso\framework\http\request\Request   $request  
-     * @param  \kanso\framework\http\response\Response $response
-     * @param  \Closure                                $next
+     * @param \kanso\framework\http\request\Request   $request
+     * @param \kanso\framework\http\response\Response $response
+     * @param \Closure                                $next
      */
     public function execute(Request $request, Response $response, Closure $next)
-    {        
+    {
         $args = array_merge([$request, $response, $next], $this->args);
-        
+
         return Callback::apply($this->callback, $args);
     }
 
     /**
-     * Returns the callback
+     * Returns the callback.
      *
      * @access public
      * @return \closure|string
@@ -74,7 +74,7 @@ class Middleware
     }
 
     /**
-     * Returns the callback
+     * Returns the callback.
      *
      * @access public
      * @return mixed

@@ -7,33 +7,33 @@
 
 namespace kanso\framework\security\spam;
 
-use kanso\framework\security\spam\gibberish\Gibberish;
 use kanso\framework\config\Config;
+use kanso\framework\security\spam\gibberish\Gibberish;
 use kanso\framework\utility\Str;
 
 /**
- * SPAM manager
+ * SPAM manager.
  *
  * @author Joe J. Howard
  */
 class SpamProtector
 {
     /**
-     * Gibberish detector
+     * Gibberish detector.
      *
      * @var \kanso\framework\security\spam\Gibberish
      */
     private $gibberish;
 
     /**
-     * Config loader
+     * Config loader.
      *
      * @var \kanso\framework\config\Config
      */
     private $config;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
      * @param \kanso\framework\security\spam\Gibberish $gibberish Gibberish detector
@@ -47,7 +47,7 @@ class SpamProtector
     }
 
     /**
-     * Checks if text is SPAM
+     * Checks if text is SPAM.
      *
      * @access public
      * @param  string $text Text to check
@@ -59,19 +59,19 @@ class SpamProtector
         {
             return true;
         }
-        else if ($this->listContains($this->config->get('spam.blacklist.urls'), $text))
+        elseif ($this->listContains($this->config->get('spam.blacklist.urls'), $text))
         {
             return true;
         }
-        else if ($this->listContains($this->config->get('spam.blacklist.words'), $text))
+        elseif ($this->listContains($this->config->get('spam.blacklist.words'), $text))
         {
             return true;
         }
-        else if ($this->listContains($this->config->get('spam.blacklist.html'), $text))
+        elseif ($this->listContains($this->config->get('spam.blacklist.html'), $text))
         {
             return true;
         }
-        else if ($this->gibberish->test($text))
+        elseif ($this->gibberish->test($text))
         {
             return true;
         }
@@ -80,7 +80,7 @@ class SpamProtector
     }
 
     /**
-     * Gets a SPAM rating
+     * Gets a SPAM rating.
      *
      * @access public
      * @param  string $text Text to check
@@ -90,25 +90,25 @@ class SpamProtector
     {
         $rating = 0;
 
-        # Get statistics
+        // Get statistics
         $linkCount      = $this->countLinks($text);
         $bodyCount      = strlen(trim($text));
         $keyWords       = $this->countGraylisted($text);
-       
-        # Rate links
+
+        // Rate links
         $linkCount > 2 ? $rating += -1 : $rating += 2;
 
-        # Rate Length
+        // Rate Length
         $bodyCount > 20 ? $rating += 2 : $rating += -1;
 
-        # Keyword matches        
-        $keyWords > 0 ? $rating += '-'.$keyWords : $rating;
+        // Keyword matches
+        $keyWords > 0 ? $rating += '-' . $keyWords : $rating;
 
         return $rating;
     }
 
     /**
-     * Checks if an IP address is whitelisted
+     * Checks if an IP address is whitelisted.
      *
      * @access public
      * @param  string $ipAddresses The IP address to check
@@ -120,7 +120,7 @@ class SpamProtector
     }
 
     /**
-     * Checks if an IP address is blacklisted
+     * Checks if an IP address is blacklisted.
      *
      * @access public
      * @param  string $ipAddresses The IP address to check
@@ -132,10 +132,10 @@ class SpamProtector
     }
 
     /**
-     * Blacklists an ip address
+     * Blacklists an ip address.
      *
      * @access public
-     * @param  string $ipAddresses The IP to blacklist
+     * @param string $ipAddresses The IP to blacklist
      */
     public function blacklistIpAddress(string $ipAddresses)
     {
@@ -145,10 +145,10 @@ class SpamProtector
     }
 
     /**
-     * Remove an ip address from the blacklist
+     * Remove an ip address from the blacklist.
      *
      * @access public
-     * @param  string $ipAddresses The IP to remove
+     * @param string $ipAddresses The IP to remove
      */
     public function unBlacklistIpAddress(string $ipAddresses)
     {
@@ -158,10 +158,10 @@ class SpamProtector
     }
 
     /**
-     * whitelists an ip address
+     * whitelists an ip address.
      *
      * @access public
-     * @param  string $ipAddresses The IP to whitelist
+     * @param string $ipAddresses The IP to whitelist
      */
     public function whitelistIpAddress(string $ipAddresses)
     {
@@ -171,10 +171,10 @@ class SpamProtector
     }
 
     /**
-     * Remove an ip address from the whitelist
+     * Remove an ip address from the whitelist.
      *
      * @access public
-     * @param  string $ipAddresses The IP to remove
+     * @param string $ipAddresses The IP to remove
      */
     public function unWhitelistIpAddress(string $ipAddresses)
     {
@@ -184,11 +184,11 @@ class SpamProtector
     }
 
     /**
-     * Check if a list contains a word
+     * Check if a list contains a word.
      *
      * @access private
-     * @param  array   $list The array to check in
-     * @param  string  $term The term to check for
+     * @param  array  $list The array to check in
+     * @param  string $term The term to check for
      * @return bool
      */
     private function listContains(array $list, string $term): bool
@@ -209,11 +209,11 @@ class SpamProtector
     }
 
     /**
-     * Add an item to a list
+     * Add an item to a list.
      *
      * @access private
-     * @param  string  $item The item to add to the list
-     * @param  array   $list The array to alter
+     * @param  string $item The item to add to the list
+     * @param  array  $list The array to alter
      * @return array
      */
     private function addToList(string $item, array $list): array
@@ -228,11 +228,11 @@ class SpamProtector
     }
 
     /**
-     * Remove an item from a list
+     * Remove an item from a list.
      *
      * @access private
-     * @param  string  $item The item to add to the list
-     * @param  array   $list The array to alter
+     * @param  string $item The item to add to the list
+     * @param  array  $list The array to alter
      * @return array
      */
     private function removeFromList(string $item, array $list): array
@@ -253,12 +253,12 @@ class SpamProtector
 
         return $list;
     }
-    
+
     /**
-     * Counts how many links are in text
+     * Counts how many links are in text.
      *
      * @access private
-     * @param  string  $text Text to check
+     * @param  string $text Text to check
      * @return int
      */
     private function countLinks(string $text): int
@@ -283,10 +283,10 @@ class SpamProtector
     }
 
     /**
-     * Count how many graylisted words are in a string of text
+     * Count how many graylisted words are in a string of text.
      *
      * @access private
-     * @param  string  $text Text to check
+     * @param  string $text Text to check
      * @return int
      */
     private function countGraylisted(string $text): int
@@ -306,7 +306,7 @@ class SpamProtector
         foreach ($words as $word)
         {
             $word = trim(preg_replace("/([\.\,\;\:\"\'!])/", '', $word));
-            
+
             if (!empty($word) && !in_array($word, ['!', '.', ',', '-', '&', ';', ':', '"', "'"]))
             {
                 if ($this->listContains($constructs, $word) || $this->listContains($urls, $word) || $this->listContains($terms, $word) || $this->listContains($html, $word))
@@ -315,7 +315,7 @@ class SpamProtector
                 }
             }
         }
-        
+
         return $count;
     }
 }

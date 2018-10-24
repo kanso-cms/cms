@@ -8,141 +8,141 @@
 namespace kanso\framework\utility;
 
 /**
- * Word pluralizer
+ * Word pluralizer.
  *
  * @author Joe J. Howard
  */
 class Pluralize
 {
-    /**
-     * The word to convert
-     *
-     * @var string
-     */
+	/**
+	 * The word to convert.
+	 *
+	 * @var string
+	 */
 	private static $word;
 
-    /**
-     * Lowercase version of word
-     *
-     * @var string
-     */
+	/**
+	 * Lowercase version of word.
+	 *
+	 * @var string
+	 */
 	private static $lowercase;
 
-    /**
-     * Uppercase version of word
-     *
-     * @var string
-     */
+	/**
+	 * Uppercase version of word.
+	 *
+	 * @var string
+	 */
 	private static $upperCase;
 
-    /**
-     * Sentence-case version of word
-     *
-     * @var string
-     */
+	/**
+	 * Sentence-case version of word.
+	 *
+	 * @var string
+	 */
 	private static $sentenceCase;
 
-    /**
-     * Casing pattern of the provided word
-     *
-     * @var string
-     */
+	/**
+	 * Casing pattern of the provided word.
+	 *
+	 * @var string
+	 */
 	private static $casing;
 
-    /**
-     * Sibilants
-     *
-     * @var array
-     */
+	/**
+	 * Sibilants.
+	 *
+	 * @var array
+	 */
 	private static $sibilants 	= ['x', 's', 'z', 's'];
 
     /**
-     * Vowels
+     * Vowels.
      *
      * @var array
      */
     private static $vowels 		= ['a', 'e', 'i', 'o', 'u'];
 
     /**
-     * Consonants
+     * Consonants.
      *
      * @var array
      */
     private static $consonants 	= ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'];
 
-    /**
-     * Pluralize a word
-     *
-     * @access public
-     * @param  string $word  The input word
-     * @param  int    $count The amount of items (optional) (default 2)
-     * @return string
-     */
+ 	/**
+ 	 * Pluralize a word.
+ 	 *
+ 	 * @access public
+ 	 * @param  string $word  The input word
+ 	 * @param  int    $count The amount of items (optional) (default 2)
+ 	 * @return string
+ 	 */
  	public static function convert(string $word, int $count = 2): string
     {
-        # Return the word if we don't need to pluralize
+        // Return the word if we don't need to pluralize
         if ($count === 1)
         {
             return $word;
         }
 
-        # Set class variables for use
+        // Set class variables for use
         self::$word 	 	= $word;
         self::$lowercase 	= strtolower($word);
         self::$upperCase 	= strtoupper($word);
         self::$sentenceCase = ucfirst($word);
         self::$casing 		= self::getCasing();
-        
-        # save some time in the case that singular and plural are the same
+
+        // save some time in the case that singular and plural are the same
         if (self::isUncountable())
         {
             return $word;
         }
 
-        # check for irregular forms
+        // check for irregular forms
         $irregular = self::isIrregular();
         if ($irregular)
         {
             return self::toCasing($irregular, self::$casing);
         }
 
-        # nouns that end in -ch, x, s, z or s-like sounds require an es for the plural:
+        // nouns that end in -ch, x, s, z or s-like sounds require an es for the plural:
         if (in_array(self::suffix(self::$lowercase, 1), self::$sibilants) || (self::suffix(self::$lowercase, 2) === 'ch'))
         {
             return self::toCasing($word . 'es', self::$casing);
         }
 
-        # Nouns that end in a vowel + y take the letter s:
+        // Nouns that end in a vowel + y take the letter s:
         if (in_array(self::nthLast(self::$lowercase, 1), self::$vowels) && self::suffix(self::$lowercase, 1) === 'y')
         {
             return self::toCasing($word . 's', self::$casing);
         }
 
-        # Nouns that end in a consonant + y drop the y and take ies:
+        // Nouns that end in a consonant + y drop the y and take ies:
         if (in_array(self::nthLast(self::$lowercase, 1), self::$consonants) && self::suffix(self::$lowercase, 1) === 'y')
         {
             return self::toCasing(sliceFromEnd($word, 1) . 'ies', self::$casing);
         }
 
-        # Nouns that end in a consonant + o add s:
+        // Nouns that end in a consonant + o add s:
         if (in_array(self::nthLast(self::$lowercase, 1), self::$consonants) && self::suffix(self::$lowercase, 1) === 'o')
         {
             return self::toCasing($word . 's', self::$casing);
         }
 
-        # Nouns that end in a vowel + o take the letter s:
+        // Nouns that end in a vowel + o take the letter s:
         if (in_array(self::nthLast(self::$lowercase, 1), self::$vowels) && self::suffix(self::$lowercase, 1) === 'o')
         {
             return self::toCasing($word . 's', self::$casing);
         }
 
-        # irregular suffixes that cant be pluralized
+        // irregular suffixes that cant be pluralized
         if (self::suffix(self::$lowercase, 4) === 'ness' || self::suffix(self::$lowercase, 3) === 'ess')
         {
             return $word;
         }
 
-        # Lastly, change the word based on suffix rules
+        // Lastly, change the word based on suffix rules
         $pluralized = self::autoSuffix(self::$lowercase);
 
         if ($pluralized)
@@ -150,11 +150,11 @@ class Pluralize
             return self::toCasing(self::sliceFromEnd($word, $pluralized[0]) . $pluralized[1], self::$casing);
         }
 
-        return self::$word.'s';
+        return self::$word . 's';
     }
 
     /**
-     * Is the word irregular and uncountable (e.g fish)
+     * Is the word irregular and uncountable (e.g fish).
      *
      * @access private
      * @return bool
@@ -202,12 +202,12 @@ class Pluralize
     }
 
     /**
-     * Returns plural version of iregular words or FALSE if it is not irregular
+     * Returns plural version of iregular words or FALSE if it is not irregular.
      *
      * @access private
      * @return string|bool
      */
-    private static function isIrregular() 
+    private static function isIrregular()
     {
         $irregular = [
             'addendum'=> 'addenda',
@@ -338,12 +338,12 @@ class Pluralize
     }
 
     /**
-     * Return an array with an index of where to cut off the ending and a suffix or FALSE 
+     * Return an array with an index of where to cut off the ending and a suffix or FALSE.
      *
      * @access private
      * @return array|false
      */
-    private static function autoSuffix() 
+    private static function autoSuffix()
     {
 
         $suffix1 = self::suffix(self::$lowercase, 1);
@@ -381,7 +381,7 @@ class Pluralize
     }
 
     /**
-     * Get provided casing of word
+     * Get provided casing of word.
      *
      * @access private
      * @return string
@@ -396,10 +396,10 @@ class Pluralize
     }
 
     /**
-     * Convert word to a casing
+     * Convert word to a casing.
      *
      * @access private
-     * @param  string $word    The word to convert
+     * @param  string $word   The word to convert
      * @param  string $casing The casing format to convert to
      * @return string
      */
@@ -409,11 +409,11 @@ class Pluralize
         {
             return strtolower($word);
         }
-        else if ($casing === 'upper')
+        elseif ($casing === 'upper')
         {
             return strtoupper($word);
         }
-        else if ($casing === 'sentence')
+        elseif ($casing === 'sentence')
         {
             return ucfirst($word);
         }
@@ -421,11 +421,11 @@ class Pluralize
     }
 
     /**
-     * Strip end off a word at a given char index and return the end part
+     * Strip end off a word at a given char index and return the end part.
      *
      * @access private
-     * @param  string $word    The word to convert
-     * @param  int    $count   The index to split at
+     * @param  string $word  The word to convert
+     * @param  int    $count The index to split at
      * @return string
      */
     private static function suffix(string $word, int $count)
@@ -434,11 +434,11 @@ class Pluralize
     }
 
     /**
-     * Strip end off a word at a given char index and return the start part
+     * Strip end off a word at a given char index and return the start part.
      *
      * @access private
-     * @param  string $word    The word to convert
-     * @param  int    $count   The index to split at
+     * @param  string $word  The word to convert
+     * @param  int    $count The index to split at
      * @return string
      */
     private static function sliceFromEnd($word, $count)
@@ -447,11 +447,11 @@ class Pluralize
     }
 
     /**
-     * Get the nth last character of a string
+     * Get the nth last character of a string.
      *
      * @access private
-     * @param  string $word    The word to convert
-     * @param  int    $count   The index to get
+     * @param  string  $word  The word to convert
+     * @param  int     $count The index to get
      * @return string|
      */
     private static function nthLast(string $word, int $count)

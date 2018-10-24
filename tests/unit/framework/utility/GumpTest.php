@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\utility;
 
-use tests\TestCase;
 use kanso\framework\utility\Gump;
+use tests\TestCase;
 
 /**
  * @group unit
@@ -22,7 +22,7 @@ class GumpTest extends TestCase
 	{
 		$validator = new GUMP;
 
-		$rules = array(
+		$rules = [
 			'missing'   	=> 'required',
 			'email'     	=> 'valid_email',
 			'max_len'   	=> 'max_len,1',
@@ -41,32 +41,32 @@ class GumpTest extends TestCase
 			'valid_ipv4'	=> 'valid_ipv4',
 			'valid_ipv6'	=> 'valid_ipv6',
 			'valid_name'    => 'valid_name',
-			'contains'		=> 'contains,free pro basic'
-		);
+			'contains'		=> 'contains,free pro basic',
+		];
 
-		$invalid_data = array(
+		$invalid_data = [
 			'missing'   	=> '',
 			'email'     	=> "not a valid email\r\n",
-			'max_len'   	=> "1234567890",
-			'min_len'   	=> "1",
-			'exact_len' 	=> "123456",
-			'alpha'	       	=> "*(^*^*&",
+			'max_len'   	=> '1234567890',
+			'min_len'   	=> '1',
+			'exact_len' 	=> '123456',
+			'alpha'	       	=> '*(^*^*&',
 			'alpha_numeric' => "abcdefg12345+\r\n\r\n\r\n",
-			'alpha_dash'	=> "ab<script>alert(1);</script>cdefg12345-_+",
+			'alpha_dash'	=> 'ab<script>alert(1);</script>cdefg12345-_+',
 			'numeric'		=> "one, two\r\n",
 			'integer'		=> "1,003\r\n\r\n\r\n\r\n",
 			'boolean'		=> "this is not a boolean\r\n\r\n\r\n\r\n",
 			'float'			=> "not a float\r\n",
 			'valid_url'		=> "\r\n\r\nhttp://add",
-			'url_exists'	=> "http://asdasdasd354.gov",
-			'valid_ip'		=> "google.com",
-			'valid_ipv4'    => "google.com",
-			'valid_ipv6'    => "google.com",
+			'url_exists'	=> 'http://asdasdasd354.gov',
+			'valid_ip'		=> 'google.com',
+			'valid_ipv4'    => 'google.com',
+			'valid_ipv6'    => 'google.com',
 			'valid_name' 	=> '*&((*S))(*09890uiadaiusyd)',
-			'contains'		=> 'premium'
-		);
+			'contains'		=> 'premium',
+		];
 
-		$valid_data = array(
+		$valid_data = [
 			'missing'   	=> 'This is not missing',
 			'email'     	=> 'sean@wixel.net',
 			'max_len'   	=> '1',
@@ -77,20 +77,20 @@ class GumpTest extends TestCase
 			'alpha_dash'	=> 'abcdefg12345-_',
 			'numeric'		=> 2.00,
 			'integer'		=> 3,
-			'boolean'		=> FALSE,
+			'boolean'		=> false,
 			'float'			=> 10.10,
 			'valid_url'		=> 'http://wixel.net',
 			'url_exists'	=> 'http://wixel.net',
 			'valid_ip'		=> '69.163.138.23',
-			'valid_ipv4'    => "255.255.255.255",
-			'valid_ipv6'    => "2001:0db8:85a3:08d3:1319:8a2e:0370:7334",
+			'valid_ipv4'    => '255.255.255.255',
+			'valid_ipv6'    => '2001:0db8:85a3:08d3:1319:8a2e:0370:7334',
 			'valid_name' 	=> 'Sean Nieuwoudt',
-			'contains'		=> 'free'
-		);
+			'contains'		=> 'free',
+		];
 
 		$validator->sanitize($invalid_data);
 		$validator->validate($invalid_data, $rules);
-		
+
 		$this->assertEquals(18, count($validator->get_readable_errors()));
 		$this->assertEquals(19, count($valid_data));
 	}

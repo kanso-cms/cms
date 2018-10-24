@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\utility;
 
-use tests\TestCase;
 use kanso\framework\utility\Markdown;
+use tests\TestCase;
 
 /**
  * @group unit

@@ -7,12 +7,11 @@
 
 namespace kanso\framework\pixl;
 
-use RuntimeException;
 use kanso\framework\pixl\processor\ProcessorInterface;
-use kanso\framework\pixl\processor\GD;
+use RuntimeException;
 
 /**
- * Image manager
+ * Image manager.
  *
  * @author Joe J. Howard
  */
@@ -33,7 +32,7 @@ class Image
     private $processor;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
      * @param string $image Absolute path to file
@@ -50,10 +49,10 @@ class Image
         }
 
         $this->processor->load($this->image);
-    }   
+    }
 
     /**
-     * Get the image width in px
+     * Get the image width in px.
      *
      * @access public
      * @return int
@@ -64,7 +63,7 @@ class Image
     }
 
     /**
-     * Get the image height in px
+     * Get the image height in px.
      *
      * @access public
      * @return int
@@ -75,13 +74,13 @@ class Image
     }
 
     /**
-     * Save the new file to disk
+     * Save the new file to disk.
      *
      * @access public
-     * @param  string $image     Absolute path to file (optional) (default NULL)
-     * @param  mixed  $image_type   PHP image type constant (optional) (default NULL)
-     * @param  int    $quality      Quality of image to save (optional)
-     * @param  int    $permissions  File permissions to save with (optional)
+     * @param  string                         $image       Absolute path to file (optional) (default NULL)
+     * @param  mixed                          $image_type  PHP image type constant (optional) (default NULL)
+     * @param  int                            $quality     Quality of image to save (optional)
+     * @param  int                            $permissions File permissions to save with (optional)
      * @return \kanso\framework\utility\Image
      */
     public function save(string $image = null, int $image_type = null, int $quality = null, int $permissions = null)
@@ -98,7 +97,7 @@ class Image
         else
         {
             $pathInfo = pathinfo($image);
-            
+
             if(!is_writable($pathInfo['dirname']))
             {
                 throw new RuntimeException(vsprintf('The directory [ %s ] isn\'t writable.', [$pathInfo['dirname']]));
@@ -109,11 +108,11 @@ class Image
     }
 
     /**
-     * Resize to height
+     * Resize to height.
      *
      * @access public
-     * @param  int  $height        Height in px
-     * @param  bool $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
+     * @param  int                            $height        Height in px
+     * @param  bool                           $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
      * @return \kanso\framework\utility\Image
      */
     public function resizeToHeight(int $height, bool $allow_enlarge = false): Image
@@ -124,11 +123,11 @@ class Image
     }
 
     /**
-     * Resize to width
+     * Resize to width.
      *
      * @access public
-     * @param  int                  $width         Width in px
-     * @param  bool                 $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
+     * @param  int                            $width         Width in px
+     * @param  bool                           $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
      * @return \kanso\framework\utility\Image
      */
     public function resizeToWidth(int $width, bool $allow_enlarge = false): Image
@@ -139,10 +138,10 @@ class Image
     }
 
     /**
-     * Scale image by a percentage
+     * Scale image by a percentage.
      *
-     * @param  int                  $scale         Scale percentage
-     * @param  bool                 $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
+     * @param  int                            $scale         Scale percentage
+     * @param  bool                           $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
      * @return \kanso\framework\utility\Image
      */
     public function scale(int $scale): Image
@@ -153,11 +152,11 @@ class Image
     }
 
     /**
-     * Resize image to height and width
+     * Resize image to height and width.
      *
-     * @param  int                  $width         Width in px
-     * @param  int                  $height        Height in px
-     * @param  bool                 $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
+     * @param  int                            $width         Width in px
+     * @param  int                            $height        Height in px
+     * @param  bool                           $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
      * @return \kanso\framework\utility\Image
      */
     public function resize(int $width, int $height, bool $allow_enlarge = false): Image
@@ -168,11 +167,11 @@ class Image
     }
 
     /**
-     * Crop to width and height
+     * Crop to width and height.
      *
-     * @param  int                  $width         Width in px
-     * @param  int                  $height        Height in px
-     * @param  bool                 $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
+     * @param  int                            $width         Width in px
+     * @param  int                            $height        Height in px
+     * @param  bool                           $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
      * @return \kanso\framework\utility\Image
      */
     public function crop(int $width, int $height, bool $allow_enlarge = false): Image
@@ -180,5 +179,5 @@ class Image
         $this->processor->crop($width, $height, $allow_enlarge);
 
         return $this;
-    }   
+    }
 }

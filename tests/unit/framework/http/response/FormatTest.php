@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\http\response;
 
-use tests\TestCase;
 use kanso\framework\http\response\Format;
+use tests\TestCase;
 
 /**
  * @group unit
@@ -57,5 +57,5 @@ class FormatTest extends TestCase
 		$format->setEncoding('UTF-8');
 
 		$this->assertEquals('UTF-8', $format->getEncoding());
-	}	
+	}
 }

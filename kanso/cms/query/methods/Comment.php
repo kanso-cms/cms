@@ -8,17 +8,17 @@
 namespace kanso\cms\query\methods;
 
 /**
- * CMS Query comment methods
+ * CMS Query comment methods.
  *
  * @author Joe J. Howard
  */
 trait Comment
 {
     /**
-     * Are comments (if enabled globally) enabled on the current post or a post by id
+     * Are comments (if enabled globally) enabled on the current post or a post by id.
      *
      * @access public
-     * @param  int    $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int  $post_id Post id or null for current post (optional) (Default NULL)
      * @return bool
      */
     public function comments_open(int $post_id = null): bool
@@ -27,7 +27,7 @@ trait Comment
         {
             return false;
         }
-        
+
         if ($post_id)
         {
             $post = $this->getPostByID($post_id);
@@ -52,19 +52,19 @@ trait Comment
      * Does the current post or a post by id have any comments ?
      *
      * @access public
-     * @param  int    $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int  $post_id Post id or null for current post (optional) (Default NULL)
      * @return bool
      */
     public function has_comments(int $post_id = null): bool
-    {        
+    {
         return !empty($this->get_comments($post_id));
     }
 
     /**
-     * How many approved comments does the current post or a post by id have
+     * How many approved comments does the current post or a post by id have.
      *
      * @access public
-     * @param  int    $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int $post_id Post id or null for current post (optional) (Default NULL)
      * @return int
      */
     public function comments_number(int $post_id = null): int
@@ -73,10 +73,10 @@ trait Comment
     }
 
     /**
-     * Get a single comment row from the databse by id
+     * Get a single comment row from the databse by id.
      *
      * @access public
-     * @param  int   $comment_id Comment id
+     * @param  int                              $comment_id Comment id
      * @return \kanso\cms\wrappers\Comment|null
      */
     public function get_comment(int $comment_id)
@@ -85,10 +85,10 @@ trait Comment
     }
 
     /**
-     * Get all of the current post or a post by id's comments
+     * Get all of the current post or a post by id's comments.
      *
      * @access public
-     * @param  int    $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int   $post_id Post id or null for current post (optional) (Default NULL)
      * @return array
      */
     public function get_comments(int $post_id = null): array
@@ -114,7 +114,7 @@ trait Comment
     }
 
     /**
-     * Get the HTML that displays the comments of the current post or a post by id
+     * Get the HTML that displays the comments of the current post or a post by id.
      *
      * @access public
      * @param  array  $args    (optional) (default NULL)
@@ -123,25 +123,25 @@ trait Comment
      */
     public function display_comments(array $args = null, int $post_id = null): string
     {
-        # If there no comments return empty string
+        // If there no comments return empty string
         if ($this->comments_number($post_id) === 0)
         {
             return '';
         }
 
-        # HTML string
+        // HTML string
         $HTML = '';
 
-        # Save the article row locally
+        // Save the article row locally
         $post  = !$post_id ? $this->post : $this->getPostByID($post_id);
 
-        # Fallback incase nothing is present
+        // Fallback incase nothing is present
         if (!$post || empty($post)) return '';
 
-        # Save the article permalink locally
+        // Save the article permalink locally
         $permalink = $this->the_permalink($post->id);
 
-        # Default comment format
+        // Default comment format
         $defaultFormat = '
             <div (:classes_wrap) data-comment-id="(:id)" id="comment-(:id)">
                 
@@ -173,7 +173,7 @@ trait Comment
             </div>
         ';
 
-        # Default options
+        // Default options
         $options = [
             'format'             => null,
             'avatar_size'        => 160,
@@ -197,34 +197,34 @@ trait Comment
                 ],
         ];
 
-        # If options were set, overwrite the dafaults
+        // If options were set, overwrite the dafaults
         if ($args && is_array($args)) $options = array_merge($options, $args);
 
-        # Set the default format if not provided
+        // Set the default format if not provided
         if (!$options['format']) $options['format'] = $defaultFormat;
-        
-        # Get the comments as multi-dimensional array
+
+        // Get the comments as multi-dimensional array
         $comments = $post->comments;
 
-        # If there was an error retrieving the comments return empty string
+        // If there was an error retrieving the comments return empty string
         if (empty($comments)) return $HTML;
 
-        # Load from template if it exists
-        $formTemplate = $this->theme_directory().DIRECTORY_SEPARATOR.'comments.php';
-        
+        // Load from template if it exists
+        $formTemplate = $this->theme_directory() . DIRECTORY_SEPARATOR . 'comments.php';
+
         if (file_exists($formTemplate))
         {
-            return $this->include_template('comments', ['comments' => $comments] );
+            return $this->include_template('comments', ['comments' => $comments]);
         }
 
-        # Start looping comments
-        $HTML = $this->commentToString($comments, $options, $permalink, false); 
+        // Start looping comments
+        $HTML = $this->commentToString($comments, $options, $permalink, false);
 
         return $HTML;
     }
 
     /**
-     * Get the HTML that displays the comment form of the current post or a post by id
+     * Get the HTML that displays the comment form of the current post or a post by id.
      *
      * @access public
      * @param  array  $args    (optional) (default NULL)
@@ -233,23 +233,23 @@ trait Comment
      */
     public function comment_form(array $args = null, int $post_id = null): string
     {
-        # Load from template if it exists
-        $formTemplate = $this->theme_directory().DIRECTORY_SEPARATOR.'commentform.php';
+        // Load from template if it exists
+        $formTemplate = $this->theme_directory() . DIRECTORY_SEPARATOR . 'commentform.php';
         if (file_exists($formTemplate)) return $this->include_template('commentform');
-      
-        # HTML string
+
+        // HTML string
         $HTML = '';
 
-        # Save the article row locally
+        // Save the article row locally
         $post  = !$post_id ? $this->post : $this->getPostByID($post_id);
 
-        # Fallback incase nothing is present
+        // Fallback incase nothing is present
         if (!$post || empty($post)) return '';
 
-        # Save the article id locally
+        // Save the article id locally
         $postID = $post->id;
 
-        # Save the article permalink locally
+        // Save the article permalink locally
         $permalink   = $this->the_permalink($postID);
 
         $options = [
@@ -298,32 +298,32 @@ trait Comment
             ',
         ];
 
-        # If options were set, overwrite the dafaults
+        // If options were set, overwrite the dafaults
         if ($args && is_array($args)) $options = array_merge($options, $args);
 
-        # Replace POSTID and REPLY ID
-        $patterns     = ['/\(:postID\)/','/\(:replyID\)/'];
+        // Replace POSTID and REPLY ID
+        $patterns     = ['/\(:postID\)/', '/\(:replyID\)/'];
         $replacements = [$postID, $options['reply_id']];
 
-        # No replies when comments are disabled
+        // No replies when comments are disabled
         if (!$this->comments_open($post_id))
         {
             $options['reply_id_field'] = '';
         }
 
-        # Default form format
-        return preg_replace($patterns, $replacements,'
-           <form class="'.$options['form_class'].'">
+        // Default form format
+        return preg_replace($patterns, $replacements, '
+           <form class="' . $options['form_class'] . '">
                 <fieldset>
-                    '.$options['legend'].'
-                    '.$options['name_field'].'
-                    '.$options['email_field'].'
-                    '.$options['comment_field'].'
-                    '.$options['email_replies_field'].'
-                    '.$options['email_thread_field'].'
-                    '.$options['post_id_field'].'
-                    '.$options['reply_id_field'].'
-                    '.$options['submit_field'].'
+                    ' . $options['legend'] . '
+                    ' . $options['name_field'] . '
+                    ' . $options['email_field'] . '
+                    ' . $options['comment_field'] . '
+                    ' . $options['email_replies_field'] . '
+                    ' . $options['email_thread_field'] . '
+                    ' . $options['post_id_field'] . '
+                    ' . $options['reply_id_field'] . '
+                    ' . $options['submit_field'] . '
                 </fieldset>
             </form>
         ');
@@ -333,59 +333,59 @@ trait Comment
      * Retrieve the gravatar 'img' tag or src from an email address or md5 hash.
      *
      * @access public
-     * @param  string  $email_address The email address or md5 of the current user (optional)
-     * @param  int     $size          Image size in px
-     * @param  bool    $srcOnly       Should we return only the img src (rather than the actual HTML tag)
+     * @param  string $email_address The email address or md5 of the current user (optional)
+     * @param  int    $size          Image size in px
+     * @param  bool   $srcOnly       Should we return only the img src (rather than the actual HTML tag)
      * @return string
      */
-    public function get_gravatar(string $email_or_md5, int $size = 160, bool $srcOnly = false) 
+    public function get_gravatar(string $email_or_md5, int $size = 160, bool $srcOnly = false)
     {
         $isMd5   = $this->isValidMd5($email_or_md5);
-        
+
         $isEmail = !filter_var($email_or_md5, FILTER_VALIDATE_EMAIL) === false;
 
         $domain = $this->Request->isSecure() ? 'https://secure.gravatar.com' : 'http://www.gravatar.com';
 
-        # If there is an error with the emaill or md5 default to fallback 
-        # force a mystery man
+        // If there is an error with the emaill or md5 default to fallback
+        // force a mystery man
         if (!$isMd5 && !$isEmail)
         {
             if ($srcOnly)
             {
-                return $domain.'/avatar/0?s='.$size.'&d=mm';
+                return $domain . '/avatar/0?s=' . $size . '&d=mm';
             }
 
-            return '<img src="'.$domain.'/avatar/0?s='.$size.'&d=mm"/>';
+            return '<img src="' . $domain . '/avatar/0?s=' . $size . '&d=mm"/>';
         }
-        
+
         if ($isEmail)
         {
-            $md5 = md5( strtolower( trim( $email_or_md5 ) ) );
+            $md5 = md5(strtolower(trim($email_or_md5)));
         }
         if ($isMd5)
         {
             $md5 = $email_or_md5;
         }
-       
+
         if ($srcOnly)
         {
-            return $domain.'/avatar/'.$md5.'?s='.$size.'&d=mm';
+            return $domain . '/avatar/' . $md5 . '?s=' . $size . '&d=mm';
         }
-        return '<img src="'.$domain.'/avatar/'.$md5.'?s='.$size.'&d=mm"/>';
+        return '<img src="' . $domain . '/avatar/' . $md5 . '?s=' . $size . '&d=mm"/>';
     }
 
     /**
-     * Recursively build HTML comments (used internally)
+     * Recursively build HTML comments (used internally).
      *
      * @access private
-     * @param  array   $comments  Recursive array of comment objects
-     * @param  array   $options   Comment display options
-     * @param  string  $permalink URL to current post being displayed
-     * @param  bool    $isChild   Is the current comment a child
+     * @param  array  $comments  Recursive array of comment objects
+     * @param  array  $options   Comment display options
+     * @param  string $permalink URL to current post being displayed
+     * @param  bool   $isChild   Is the current comment a child
      * @return string
      */
     private function commentToString(array $comments, array $options, string $permalink, bool $isChild = false): string
-    {        
+    {
         $HTML = '';
 
         foreach ($comments as $comment)
@@ -395,84 +395,84 @@ trait Comment
 
             $commentStr = $options['format'];
 
-            # Replace classnames
+            // Replace classnames
             foreach ($options['classes'] as $suffix => $classname)
             {
-                $patterns[]     = '/\(:classes_'.$suffix.'\)/';
-                $class          = 'class="'.$classname;
+                $patterns[]     = '/\(:classes_' . $suffix . '\)/';
+                $class          = 'class="' . $classname;
                 if ($suffix === 'wrap' && $isChild)
                 {
-                    $class .= ' '.$options['classes']['child_wrap'];
+                    $class .= ' ' . $options['classes']['child_wrap'];
                 }
 
                 if ($suffix === 'children_wrap' && empty($comment->children()))
                 {
-                    $class .= ' '.$options['classes']['no_children'];
+                    $class .= ' ' . $options['classes']['no_children'];
                 }
 
-                $replacements[] = $class.'"';
+                $replacements[] = $class . '"';
             }
 
-            # Replace ID
+            // Replace ID
             $patterns[]     = '/\(:id\)/';
             $replacements[] = $comment->id;
 
-            # Replace avatar src
+            // Replace avatar src
             $patterns[]     = '/\(:avatar_src\)/';
             $replacements[] = $this->get_gravatar($comment->email, $options['avatar_size'], true);
 
-            # Replace avatar size
+            // Replace avatar size
             $patterns[]     = '/\(:avatar_size\)/';
             $replacements[] =  $options['avatar_size'];
 
-            # Replace comment author name
+            // Replace comment author name
             $patterns[]     = '/\(:comment_name\)/';
             $replacements[] = $comment->name;
 
-            # Replace Link text
+            // Replace Link text
             $patterns[]     = '/\(:link_text\)/';
             $replacements[] = $options['link_text'];
 
-            # Replace time text
+            // Replace time text
             $patterns[]     = '/\(:comment_time_GMT\)/';
-            $replacements[] = date("c", $comment->date);
+            $replacements[] = date('c', $comment->date);
 
             $patterns[]     = '/\(:comment_time_format\)/';
             $replacements[] = date($options['time_format'], $comment->date);
 
-            # Replace content
+            // Replace content
             $patterns[]     = '/\(:comment_content\)/';
             $replacements[] = $comment->html_content;
 
-            # Replace permalinks
+            // Replace permalinks
             $patterns[]     = '/\(:permalink\)/';
             $replacements[] = $permalink;
-            
+
             $commentStr = preg_replace($patterns, $replacements, $commentStr);
 
             if (!empty($comment->children()))
             {
-                
-                $commentStr = preg_replace( '/\(:children\)/', $this->commentToString($comment->children(), $options, $permalink, true), $commentStr);
+
+                $commentStr = preg_replace('/\(:children\)/', $this->commentToString($comment->children(), $options, $permalink, true), $commentStr);
             }
             else
             {
-                $commentStr = preg_replace( '/\(:children\)/', '', $commentStr);
+                $commentStr = preg_replace('/\(:children\)/', '', $commentStr);
             }
-            
+
             $HTML .= $commentStr;
         }
-       
+
        return $HTML;
 
     }
-    
+
     /**
      * is string a valid md5 hash ?
      *
      * @access private
-     * @param  string  $md5  md5 hash
-     * @return bool   
+     * @param  string $md5 md5 hash
+     * @return bool
      */
     private function isValidMd5(string $md5 =''): bool
     {

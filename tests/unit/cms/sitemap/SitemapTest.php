@@ -7,9 +7,9 @@
 
 namespace tests\unit\cms\sitemap;
 
+use kanso\cms\sitemap\SiteMap;
 use Mockery;
 use tests\TestCase;
-use kanso\cms\sitemap\SiteMap;
 
 /**
  * @group unit
@@ -42,7 +42,7 @@ class SitemapTest extends TestCase
 		$response->shouldReceive('view')->once()->andReturn($view)->times(9);
 
 		$format->shouldReceive('set')->once()->with('xml');
-		
+
 		$body->shouldReceive('set')->once();
 
 		$status->shouldReceive('set')->once()->with(200);

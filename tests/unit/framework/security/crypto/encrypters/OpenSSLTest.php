@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\security\crypto\encrypters;
 
-use tests\TestCase;
 use kanso\framework\security\crypto\encrypters\OpenSSL;
+use tests\TestCase;
 
 /**
  * @group unit

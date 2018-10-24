@@ -39,8 +39,8 @@ $cdn_enabbled  = $kanso->Config->get('cdn.enabled');
             <?php foreach ($themes as $i => $theme) : ?>
             <?php $checked = ($theme === $kansoConfig['theme_name'] ? 'checked' : ''); ?>
             <span class="radio radio-primary">
-                <input type="radio" name="theme" id="theme_radio_<?php echo $i;?>"  value="<?php echo $theme;?>" <?php echo $checked; ?> />
-                <label for="theme_radio_<?php echo $i; ?>"><?php echo $theme;?></label>
+                <input type="radio" name="theme" id="theme_radio_<?php echo $i; ?>"  value="<?php echo $theme; ?>" <?php echo $checked; ?> />
+                <label for="theme_radio_<?php echo $i; ?>"><?php echo $theme; ?></label>
             </span>
             <?php endforeach; ?>
         </div>
@@ -51,7 +51,7 @@ $cdn_enabbled  = $kanso->Config->get('cdn.enabled');
                 You can prefix your blog routes with a path (e.g. "blog"). This will add a fixed value prefix to all your post, category, tag and author 
                 pages. Leave this blank if you are unsure.
             </p>
-            <input type="text" name="blog_location" id="blog_location" value="<?php echo $kansoConfig['blog_location'];?>" autocomplete="off"/>
+            <input type="text" name="blog_location" id="blog_location" value="<?php echo $kansoConfig['blog_location']; ?>" autocomplete="off"/>
         </div>
 
         <div class="form-field row floor-sm">
@@ -60,7 +60,7 @@ $cdn_enabbled  = $kanso->Config->get('cdn.enabled');
                 Permalinks are used to structure URLs. The postname is mandatory. 
                 Full options are / postname / category / author / year / month / day / hour / minute / second.
             </p>
-            <input type="text" name="permalinks" id="permalinks" data-js-required="true" value="<?php echo $kansoConfig['permalinks'];?>" autocomplete="off"/>
+            <input type="text" name="permalinks" id="permalinks" data-js-required="true" value="<?php echo $kansoConfig['permalinks']; ?>" autocomplete="off"/>
             <p class="help-danger">* Please enter a valid permalinks structure.</p>
         </div>
 
@@ -69,7 +69,7 @@ $cdn_enabbled  = $kanso->Config->get('cdn.enabled');
             <p class="color-gray">
                 How many posts to display per page. Default is 10.
             </p>
-            <input type="text" name="posts_per_page" id="posts_per_page" class="js-mask-numeric" data-js-required="true" data-js-validation="numeric" value="<?php echo $kansoConfig['posts_per_page'];?>" autocomplete="off"/>
+            <input type="text" name="posts_per_page" id="posts_per_page" class="js-mask-numeric" data-js-required="true" data-js-validation="numeric" value="<?php echo $kansoConfig['posts_per_page']; ?>" autocomplete="off"/>
             <p class="help-danger">* Please enter the posts per page.</p>
         </div>
 
@@ -78,7 +78,7 @@ $cdn_enabbled  = $kanso->Config->get('cdn.enabled');
             <p class="color-gray">
                 What image quality should Kanso use for resizing. 0 is bad, 100 is great.
             </p>
-            <input type="text" name="thumbnail_quality" id="thumbnail_quality" class="js-mask-numeric" data-js-required="true" data-js-validation="numeric" value="<?php echo $kansoConfig['uploads']['thumbnail_quality'];?>" autocomplete="off"/>
+            <input type="text" name="thumbnail_quality" id="thumbnail_quality" class="js-mask-numeric" data-js-required="true" data-js-validation="numeric" value="<?php echo $kansoConfig['uploads']['thumbnail_quality']; ?>" autocomplete="off"/>
             <p class="help-danger">* Please enter a thumbnail quality.</p>
         </div>
 
@@ -87,7 +87,7 @@ $cdn_enabbled  = $kanso->Config->get('cdn.enabled');
             <p class="color-gray">
                 Where should Kanso route your XML sitemap for search engines. Default is "sitemap.xml".
             </p>
-            <input type="text" name="sitemap_url" id="sitemap_url" data-js-required="true" value="<?php echo $kansoConfig['sitemap_route'];?>" autocomplete="off"/>
+            <input type="text" name="sitemap_url" id="sitemap_url" data-js-required="true" value="<?php echo $kansoConfig['sitemap_route']; ?>" autocomplete="off"/>
             <p class="help-danger">* Please enter a valid sitemap URL path.</p>
         </div>
 
@@ -97,7 +97,7 @@ $cdn_enabbled  = $kanso->Config->get('cdn.enabled');
                 Do you want tags to have publicly accessible article listings.
             </p>
             <span class="checkbox checkbox-primary">
-                <input type="checkbox" name="enable_tags" id="enable_tags" <?php echo ($kansoConfig['route_tags'] === true ? 'checked' : '');?> />
+                <input type="checkbox" name="enable_tags" id="enable_tags" <?php echo ($kansoConfig['route_tags'] === true ? 'checked' : ''); ?> />
                 <label for="enable_tags">Enable tag listings</label>
             </span>
         </div>
@@ -108,7 +108,7 @@ $cdn_enabbled  = $kanso->Config->get('cdn.enabled');
                 Do you want categories to have publicly accessible article listings.
             </p>
             <span class="checkbox checkbox-primary">
-                <input type="checkbox" name="enable_cats" id="enable_cats" <?php echo ($kansoConfig['route_categories'] === true ? 'checked' : '');?> />
+                <input type="checkbox" name="enable_cats" id="enable_cats" <?php echo ($kansoConfig['route_categories'] === true ? 'checked' : ''); ?> />
                 <label for="enable_cats">Enable category listings</label>
             </span>
         </div>
@@ -119,7 +119,7 @@ $cdn_enabbled  = $kanso->Config->get('cdn.enabled');
                 Do you want authors to have publicly accessible article listings.
             </p>
             <span class="checkbox checkbox-primary">
-                <input type="checkbox" name="enable_authors" id="enable_authors" <?php echo ($kansoConfig['route_authors'] === true ? 'checked' : '');?>  />
+                <input type="checkbox" name="enable_authors" id="enable_authors" <?php echo ($kansoConfig['route_authors'] === true ? 'checked' : ''); ?>  />
                 <label for="enable_authors">Enable author listings</label>
             </span>
         </div>
@@ -130,7 +130,7 @@ $cdn_enabbled  = $kanso->Config->get('cdn.enabled');
                 Do you want media uploads to have publicly accessible attachment pages.
             </p>
             <span class="checkbox checkbox-primary">
-                <input type="checkbox" name="enable_attachments" id="enable_attachments" <?php echo ($kansoConfig['route_attachments'] === true ? 'checked' : '');?>  />
+                <input type="checkbox" name="enable_attachments" id="enable_attachments" <?php echo ($kansoConfig['route_attachments'] === true ? 'checked' : ''); ?>  />
                 <label for="enable_attachments">Enable attachment pages</label>
             </span>
         </div>
@@ -141,7 +141,7 @@ $cdn_enabbled  = $kanso->Config->get('cdn.enabled');
                 Enable comments globally on posts and page.
             </p>
             <span class="checkbox checkbox-primary">
-                <input type="checkbox" name="enable_comments" id="enable_comments" <?php echo ($kansoConfig['enable_comments'] === true ? 'checked' : '');?>  />
+                <input type="checkbox" name="enable_comments" id="enable_comments" <?php echo ($kansoConfig['enable_comments'] === true ? 'checked' : ''); ?>  />
                 <label for="enable_comments">Enable comments</label>
             </span>
         </div>
@@ -154,12 +154,12 @@ $cdn_enabbled  = $kanso->Config->get('cdn.enabled');
                 This greatly improves Kanso's performance and load times.
             </p>
             <span class="checkbox checkbox-primary js-collapse" data-collapse-target="cache-details">
-                <input type="checkbox" name="enable_cache" id="enable_cache" <?php echo ($cache_enabled ? 'checked' : '');?>  />
+                <input type="checkbox" name="enable_cache" id="enable_cache" <?php echo ($cache_enabled ? 'checked' : ''); ?>  />
                 <label for="enable_cache">Enable Cache</label>
             </span>
         </div>
 
-        <div class="<?php echo $cache_enabled ? 'hide-overflow' : 'hide-overflow collapsed';?> " id="cache-details" >
+        <div class="<?php echo $cache_enabled ? 'hide-overflow' : 'hide-overflow collapsed'; ?> " id="cache-details" >
             <div class="gutter-lg gutter-l">
                 <div class="form-field row floor-sm">
                     <label for="cache_life">Cache lifetime</label>
@@ -167,7 +167,7 @@ $cdn_enabbled  = $kanso->Config->get('cdn.enabled');
                         How long should Kanso keep cached page versions before creating a new one. 
                         e.g 1 minute, 2 hours, 1 week, 3 months.
                     </p>
-                    <input type="text" name="cache_life" id="cache_life" value="<?php echo $kanso->Config->get('cache.configurations.'.$kanso->Config->get('cache.default').'.expire');?>">
+                    <input type="text" name="cache_life" id="cache_life" value="<?php echo $kanso->Config->get('cache.configurations.' . $kanso->Config->get('cache.default') . '.expire'); ?>">
                 </div>
                 <div class="form-field row floor-sm">
                     <p class="color-gray">
@@ -193,16 +193,16 @@ $cdn_enabbled  = $kanso->Config->get('cdn.enabled');
                 with your CDN url.
             </p>
             <span class="checkbox checkbox-primary js-collapse" data-collapse-target="cdn-url">
-                <input type="checkbox" name="enable_cdn" id="enable_cdn" <?php echo $cdn_enabbled === true ? 'checked' : '';?> />
+                <input type="checkbox" name="enable_cdn" id="enable_cdn" <?php echo $cdn_enabbled === true ? 'checked' : ''; ?> />
                 <label for="enable_cdn">Enable CDN</label>
             </span>
         </div>
 
-        <div class="<?php echo ($cdn_enabbled ? 'hide-overflow' : 'hide-overflow collapsed');?> " id="cdn-url">
+        <div class="<?php echo ($cdn_enabbled ? 'hide-overflow' : 'hide-overflow collapsed'); ?> " id="cdn-url">
             <div class="gutter-lg gutter-l">
                 <div class="form-field row floor-sm">
                     <label for="cdn_url">CDN URL</label>
-                    <input type="text" name="cdn_url" id="cdn_url" value="<?php echo $kanso->Config->get('cdn.host');?>">
+                    <input type="text" name="cdn_url" id="cdn_url" value="<?php echo $kanso->Config->get('cdn.host'); ?>">
                 </div>
             </div>
         </div>

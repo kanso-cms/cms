@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\security\password;
 
-use tests\TestCase;
 use kanso\framework\security\password\encrypters\NativePHP;
+use tests\TestCase;
 
 /**
  * @group unit
@@ -32,10 +32,10 @@ class RouterTest extends TestCase
 	 */
 	public function testAlgos()
 	{
-		$algos = 
+		$algos =
 		[
 			PASSWORD_BCRYPT,
-			PASSWORD_DEFAULT
+			PASSWORD_DEFAULT,
 		];
 
 		foreach ($algos as $algo)

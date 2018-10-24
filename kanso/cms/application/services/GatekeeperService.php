@@ -7,13 +7,13 @@
 
 namespace kanso\cms\application\services;
 
-use kanso\framework\utility\Str;
-use kanso\framework\application\services\Service;
-use kanso\cms\auth\Gatekeeper;
 use kanso\cms\auth\adapters\EmailAdapter;
+use kanso\cms\auth\Gatekeeper;
+use kanso\framework\application\services\Service;
+use kanso\framework\utility\Str;
 
 /**
- * CMS Gatekeeper
+ * CMS Gatekeeper.
  *
  * @author Joe J. Howard
  */
@@ -24,7 +24,7 @@ class GatekeeperService extends Service
 	 */
 	public function register()
 	{
-		$this->container->singleton('Gatekeeper', function ($container) 
+		$this->container->singleton('Gatekeeper', function($container)
 		{
 			return new Gatekeeper(
 				$container->Database->connection()->builder(),
@@ -38,11 +38,11 @@ class GatekeeperService extends Service
 	}
 
 	/**
-     * Loads the email adapter
-     *
-     * @access public
-     * @return \kanso\cms\auth\adapters\EmailAdapter
-     */
+	 * Loads the email adapter.
+	 *
+	 * @access public
+	 * @return \kanso\cms\auth\adapters\EmailAdapter
+	 */
 	private function emailAdapter(): EmailAdapter
 	{
 		return new EmailAdapter(

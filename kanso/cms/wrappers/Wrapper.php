@@ -7,11 +7,11 @@
 
 namespace kanso\cms\wrappers;
 
-use kanso\framework\database\query\Builder;
 use kanso\framework\common\MagicArrayAccessTrait;
+use kanso\framework\database\query\Builder;
 
 /**
- * Database wrapper base class
+ * Database wrapper base class.
  *
  * @author Joe J. Howard
  */
@@ -20,18 +20,18 @@ abstract class Wrapper
 	use MagicArrayAccessTrait;
 
     /**
-     * SQL query builder
-     * 
+     * SQL query builder.
+     *
      * @var \kanso\framework\database\query\Builder
-     */ 
+     */
     protected $SQL;
 
     /**
-     * Constructor
-     * 
+     * Constructor.
+     *
      * @access public
      * @param \kanso\framework\database\query\Builder $SQL  SQL query builder
-     * @param  array                                  $data Array row from Database
+     * @param array                                   $data Array row from Database
      */
     public function __construct(Builder $SQL, array $data = [])
     {
@@ -41,18 +41,18 @@ abstract class Wrapper
     }
 
 	/**
-	 * Saves the row item
+	 * Saves the row item.
 	 *
 	 * @access public
-     * @return bool
+	 * @return bool
 	 */
 	abstract public function save(): bool;
 
 	/**
-	 * Deletes the row item
+	 * Deletes the row item.
 	 *
 	 * @access public
-     * @return bool
+	 * @return bool
 	 */
 	abstract public function delete(): bool;
 }

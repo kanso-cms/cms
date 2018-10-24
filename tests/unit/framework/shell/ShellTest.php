@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\utility;
 
-use tests\TestCase;
 use kanso\framework\shell\Shell;
+use tests\TestCase;
 
 /**
  * @group unit
@@ -22,7 +22,7 @@ class ShellTest extends TestCase
 	{
 		$cli = new Shell;
 
-		$cli->cmd('cd '.dirname(__FILE__))->run();
+		$cli->cmd('cd ' . dirname(__FILE__))->run();
 
 		$this->assertTrue($cli->is_successful());
 	}
@@ -34,11 +34,11 @@ class ShellTest extends TestCase
 	{
 		$cli = new Shell;
 
-		$cli->cmd('cd '.dirname(__FILE__))->run();
+		$cli->cmd('cd ' . dirname(__FILE__))->run();
 
 		$this->assertTrue($cli->is_successful());
 
-		$cli->cmd('cfddfdsf '.dirname(__FILE__))->run();
+		$cli->cmd('cfddfdsf ' . dirname(__FILE__))->run();
 
 		$this->assertFalse($cli->is_successful());
 	}
@@ -74,9 +74,9 @@ class ShellTest extends TestCase
 	{
 		$cli = new Shell;
 
-		$input = dirname(__FILE__).'/input.scss';
+		$input = dirname(__FILE__) . '/input.scss';
 
-		$output = dirname(__FILE__).'/output.css';
+		$output = dirname(__FILE__) . '/output.css';
 
 		$sass = "\$blue: #3bbfce;\n\nbody{\n\tcolor: \$blue\n}";
 

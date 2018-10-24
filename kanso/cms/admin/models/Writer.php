@@ -7,14 +7,12 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\cms\admin\models\BaseModel;
-use kanso\framework\utility\Str;
-use kanso\framework\utility\Markdown;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
+use kanso\framework\utility\Str;
 
 /**
- * Comments model
+ * Comments model.
  *
  * @author Joe J. Howard
  */
@@ -50,7 +48,7 @@ class Writer extends BaseModel
         {
             throw new InvalidTokenException('Bad Admin Panel POST Request. The CSRF token was either not provided or was invalid.');
         }
-        
+
         if (isset($this->post['ajax_request']))
         {
             $request = $this->post['ajax_request'];
@@ -58,12 +56,12 @@ class Writer extends BaseModel
             if ($request === 'writer_publish_article')
             {
                 return $this->publishArticle();
-            } 
-            else if ($request === 'writer_save_existing_article')
+            }
+            elseif ($request === 'writer_save_existing_article')
             {
                 return $this->saveExistingArticle();
             }
-            else if ($request === 'writer_save_new_article')
+            elseif ($request === 'writer_save_new_article')
             {
                 return $this->saveNewArticle();
             }
@@ -82,17 +80,17 @@ class Writer extends BaseModel
     {
         $queries   = $this->Request->queries();
         $post      = false;
-        
+
         if (isset($queries['id']))
         {
             $post = $this->PostManager->byId(intval($queries['id']));
         }
 
-        return [ 'the_post' => $post ];
+        return ['the_post' => $post];
     }
 
     /**
-     * Publish an existing or new article
+     * Publish an existing or new article.
      *
      * @access private
      * @return array
@@ -112,14 +110,14 @@ class Writer extends BaseModel
     }
 
     /**
-     * Save an existing article
+     * Save an existing article.
      *
      * @access private
      * @return array|false
      */
-    private function saveExistingArticle() 
+    private function saveExistingArticle()
     {
-        # Sanitize and validate the POST variables
+        // Sanitize and validate the POST variables
         $post = $this->validation->sanitize($this->post);
 
         $this->validation->validation_rules([
@@ -140,7 +138,7 @@ class Writer extends BaseModel
         ]);
 
         $validated_data = $this->validation->run($post);
-        
+
         if (!$validated_data)
         {
             return false;
@@ -148,11 +146,11 @@ class Writer extends BaseModel
 
         $validated_data['id'] = intval($validated_data['id']);
         $validated_data['author'] = intval($validated_data['author']);
-        
+
         $article = $this->PostManager->byId($validated_data['id']);
 
         $postMeta = $this->getPostMeta();
-        
+
         if (!$article)
         {
             return false;
@@ -204,39 +202,39 @@ class Writer extends BaseModel
 
         if ($article->save())
         {
-            # Clear from cache
+            // Clear from cache
             if ($this->Config->get('cache.http_cache_enabled') === true)
             {
-                $key = $this->Config->get('cms.blog_location').'/'.$this->Query->the_slug($article->id);
+                $key = $this->Config->get('cms.blog_location') . '/' . $this->Query->the_slug($article->id);
                 $key = Str::alphaDash($key);
                 $this->Cache->delete($key);
             }
 
-            # Return slug/id
+            // Return slug/id
             $suffix = $article->status === 'published' ? '' : '?draft';
 
             if ($validated_data['type'] === 'post')
             {
                 $blogPrefix = $this->Config->get('cms.blog_location');
 
-                return ['id' => $article->id, 'slug' => !$blogPrefix ? $article->slug.$suffix : $blogPrefix.'/'.$article->slug.$suffix];
+                return ['id' => $article->id, 'slug' => !$blogPrefix ? $article->slug . $suffix : $blogPrefix . '/' . $article->slug . $suffix];
             }
 
-            return ['id' => $article->id, 'slug' => $article->slug.$suffix];
+            return ['id' => $article->id, 'slug' => $article->slug . $suffix];
         }
 
         return false;
     }
 
     /**
-     * Save a new article
+     * Save a new article.
      *
      * @access private
      * @return array|false
      */
-    private function saveNewArticle() 
+    private function saveNewArticle()
     {
-        # Sanitize and validate the POST variables
+        // Sanitize and validate the POST variables
         $post = $this->validation->sanitize($this->post);
 
         $this->validation->validation_rules([
@@ -261,14 +259,14 @@ class Writer extends BaseModel
             return false;
         }
 
-        # Get the article content directly from the _POST global
-        # so it is not filtered in any way
+        // Get the article content directly from the _POST global
+        // so it is not filtered in any way
         if (isset($_POST['content']))
         {
             $validated_data['content'] = $_POST['content'];
         }
 
-        # Default is to save as draft
+        // Default is to save as draft
         if (!isset($validated_data['status']))
         {
             $validated_data['status'] = 'draft';
@@ -311,17 +309,17 @@ class Writer extends BaseModel
             {
                 $blogPrefix = $this->Config->get('cms.blog_location');
 
-                return ['id' => $post->id, 'slug' => !$blogPrefix ? $post->slug.$suffix : $blogPrefix.'/'.$post->slug.$suffix];
+                return ['id' => $post->id, 'slug' => !$blogPrefix ? $post->slug . $suffix : $blogPrefix . '/' . $post->slug . $suffix];
             }
 
-            return ['id' => $post->id, 'slug' => $post->slug.$suffix];
+            return ['id' => $post->id, 'slug' => $post->slug . $suffix];
         }
 
         return false;
     }
 
     /**
-     * Sorts and organises the post meta
+     * Sorts and organises the post meta.
      *
      * @access private
      * @return array|false
@@ -338,11 +336,11 @@ class Writer extends BaseModel
         }
         if (isset($_POST['post-meta-values'][0]))
         {
-            # Bugfix if a value contains a comma
+            // Bugfix if a value contains a comma
             $delimiter = ',';
             $quote     = "'";
             $regex = "(?:[^$delimiter$quote]|[$quote][^$quote]*[$quote])+";
-            preg_match_all('/'.str_replace('/', '\\/', $regex).'/', $_POST['post-meta-values'][0], $matches);
+            preg_match_all('/' . str_replace('/', '\\/', $regex) . '/', $_POST['post-meta-values'][0], $matches);
             $values = $matches[0];
         }
         if (count($values) !== count($keys))
@@ -351,7 +349,7 @@ class Writer extends BaseModel
         }
 
         foreach ($keys as $i => $key)
-        {            
+        {
             $response[trim($key, "'")] = trim($values[$i], "'");
         }
 

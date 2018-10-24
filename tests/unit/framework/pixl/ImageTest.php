@@ -7,9 +7,9 @@
 
 namespace tests\unit\framework\pixl;
 
+use kanso\framework\pixl\Image;
 use Mockery;
 use tests\TestCase;
-use kanso\framework\pixl\Image;
 
 /**
  * @group unit

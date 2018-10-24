@@ -7,11 +7,11 @@
 
 namespace kanso\cms\application\services;
 
-use kanso\framework\application\services\Service;
 use kanso\cms\access\Access;
+use kanso\framework\application\services\Service;
 
 /**
- * Access service
+ * Access service.
  *
  * @author Joe J. Howard
  */
@@ -22,7 +22,7 @@ class AccessService extends Service
 	 */
 	public function register()
 	{
-		$this->container->singleton('Access', function ($container)
+		$this->container->singleton('Access', function($container)
 		{
 			return new Access($container->Request, $container->Response, $container->Filesystem, $container->Config->get('cms.security.ip_blocked'), $container->Config->get('cms.security.ip_whitelist'));
 		});

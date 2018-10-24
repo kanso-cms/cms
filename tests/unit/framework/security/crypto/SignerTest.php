@@ -7,8 +7,8 @@
 
 namespace tests\unit\framework\security\crypto;
 
-use tests\TestCase;
 use kanso\framework\security\crypto\Signer;
+use tests\TestCase;
 
 /**
  * @group unit

@@ -7,9 +7,9 @@
 
 namespace tests\unit\framework\common;
 
-use tests\TestCase;
 use IteratorAggregate;
 use kanso\framework\common\ArrayIterator;
+use tests\TestCase;
 
 // --------------------------------------------------------------------------
 // START CLASSES

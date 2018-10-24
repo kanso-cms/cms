@@ -7,10 +7,10 @@
 
 namespace tests\unit\framework\database\query;
 
-use Mockery;
-use tests\TestCase;
 use kanso\framework\database\query\Builder;
 use kanso\framework\database\query\Query;
+use Mockery;
+use tests\TestCase;
 
 /**
  * @group unit
@@ -22,7 +22,7 @@ class BuilderTest extends TestCase
      */
     public function testCreateTable()
     {
-        $tableConfig = 
+        $tableConfig =
         [
             'id'            => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
             'description'   => 'VARCHAR(255)',
@@ -140,7 +140,7 @@ class BuilderTest extends TestCase
         $sql->UPDATE('my_table_name')->SET(['column' => 'value'])->WHERE('foo', '=', 'bar')->QUERY();
     }
 
-     /**
+    /**
      *
      */
     public function testInsertInto()
@@ -188,7 +188,7 @@ class BuilderTest extends TestCase
         $sql->SELECT('*')->FROM('my_table_name')->FIND_ALL();
     }
 
-     /**
+    /**
      *
      */
     public function testSelectColumns()
@@ -449,7 +449,7 @@ class BuilderTest extends TestCase
         $sql->SELECT('*')->FROM('my_table_name')->RIGHT_JOIN_ON('foo_table', 'table1.column_name = table2.column_name')->FIND_ALL();
     }
 
-     /**
+    /**
      *
      */
     public function testOutJoinOn()
@@ -541,7 +541,7 @@ class BuilderTest extends TestCase
         $sql->SELECT('*')->FROM('my_table_name')->GROUP_BY('foo')->FIND_ALL();
     }
 
-     /**
+    /**
      *
      */
     public function testGroupConcat()
@@ -562,7 +562,7 @@ class BuilderTest extends TestCase
         $sql = new Builder($connectionHandler, new Query($connectionHandler));
 
         $sql->SELECT('*')->FROM('my_table_name')->GROUP_CONCAT('foo', 'bar')->FIND_ALL();
-    }    
+    }
 
     /**
      *

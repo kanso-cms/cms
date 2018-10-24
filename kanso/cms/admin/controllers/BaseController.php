@@ -10,52 +10,52 @@ namespace kanso\cms\admin\controllers;
 use kanso\framework\mvc\controller\Controller;
 
 /**
- * Admin panel base controller
+ * Admin panel base controller.
  *
  * @author Joe J. Howard
  */
 abstract class BaseController extends Controller
 {
 	/**
-	 * The name of the request
+	 * The name of the request.
 	 *
 	 * @var string
 	 */
 	protected $requestName;
 
 	/**
-	 * Variables to be passed to the view
+	 * Variables to be passed to the view.
 	 *
 	 * @var array
 	 */
 	protected $viewVars = [];
 
 	/**
-	 * Initialize the admin panel
+	 * Initialize the admin panel.
 	 *
 	 * @access protected
-	 * @param  string $name Identifying name of the requested page
+	 * @param string $name Identifying name of the requested page
 	 */
 	protected function init(string $name)
 	{
-		# Save the request name
+		// Save the request name
 		$this->requestName = $name;
 
-		# Add to query
+		// Add to query
 		$this->Query->requestType = 'admin';
 
-		# Initialize the model
+		// Initialize the model
 		$this->model->init($this->requestName);
 
-		# Admin panel has been initialized
+		// Admin panel has been initialized
 		$this->Events->fire('adminInit', $this->requestName);
 	}
 
 	/**
-	 * Check if the client is logged in
+	 * Check if the client is logged in.
 	 *
 	 * @access protected
-	 * @return bool 
+	 * @return bool
 	 */
 	protected function isLoggedIn(): bool
 	{
@@ -63,19 +63,19 @@ abstract class BaseController extends Controller
 	}
 
 	/**
-	 * Dispatch the request
+	 * Dispatch the request.
 	 *
 	 * @access protected
 	 */
 	protected function dispatch()
 	{
-		# Disabled HTTP caching
+		// Disabled HTTP caching
 		$this->Response->cache()->disable();
 
-		# Disabled the CDN
+		// Disabled the CDN
 		$this->Response->CDN()->disable();
-		
-		# Make sure this is a valid Ajax request
+
+		// Make sure this is a valid Ajax request
 		if ($this->Request->isAjax())
 		{
 			$this->Response->format()->set('application/json');
@@ -101,8 +101,8 @@ abstract class BaseController extends Controller
 			return $this->Response->notFound();
 		}
 
-		# Regular POST requests
-		else if ($this->Request->isPost())
+		// Regular POST requests
+		elseif ($this->Request->isPost())
 		{
 			$onPOST = [$this->model, 'onPOST'];
 
@@ -138,8 +138,8 @@ abstract class BaseController extends Controller
 		return $this->Response->notFound();
 	}
 
-	/**
-     * Render the admin panel
+    /**
+     * Render the admin panel.
      *
      * @access protected
      */
@@ -153,7 +153,7 @@ abstract class BaseController extends Controller
 
     	$vars['ACCESS_TOKEN'] = $this->Response->session()->token()->get();
 
-        $template = KANSO_DIR.DIRECTORY_SEPARATOR.'cms'.DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR.'admin.php';
+        $template = KANSO_DIR . DIRECTORY_SEPARATOR . 'cms' . DIRECTORY_SEPARATOR . 'admin' . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR . 'admin.php';
 
         $this->Response->body()->set($this->Response->view()->display($template, $vars));
     }
