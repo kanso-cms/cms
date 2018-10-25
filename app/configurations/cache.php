@@ -28,7 +28,7 @@ return
 	 *
 	 * You can define as many caching configurations as you want.
 	 *
-	 * The supported session types are: "file".
+	 * The supported caching types are: "file".
 	 *
 	 * type   : The storage implementation to use.
 	 * expire : A valid unix timestamp of the max age of any item from now.
