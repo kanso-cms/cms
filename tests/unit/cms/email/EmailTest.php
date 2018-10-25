@@ -22,9 +22,9 @@ class EmailTest extends TestCase
 	public function testPresets()
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$smtp = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
-
-		$email = new Email($filesystem, $smtp);
+		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
+		$log        = Mockery::mock('\kanso\cms\email\Log');
+		$email      = new Email($filesystem, $smtp, $log);
 
 		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR . '/cms/email/templates/body.php', $email->theme())->once()->andReturn('foo');
 		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR . '/cms/email/templates/comment.php', $email->theme())->once()->andReturn('foo');
@@ -47,9 +47,9 @@ class EmailTest extends TestCase
 	public function testHtml()
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$smtp = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
-
-		$email = new Email($filesystem, $smtp);
+		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
+		$log        = Mockery::mock('\kanso\cms\email\Log');
+		$email      = new Email($filesystem, $smtp, $log);
 
 		$theme = $email->theme();
 
@@ -72,9 +72,9 @@ class EmailTest extends TestCase
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
+		$log        = Mockery::mock('\kanso\cms\email\Log');
 		$smtpConfig = $this->getSmtpSettings();
-
-		$email = new Email($filesystem, $smtp, [], true, $smtpConfig);
+		$email      = new Email($filesystem, $smtp, $log, [], true, $smtpConfig);
 
 		$smtp->shouldReceive('isSMTP');
 		$smtp->shouldReceive('setFrom')->with('bar@foo.com', 'Foo Bar');
@@ -82,6 +82,7 @@ class EmailTest extends TestCase
 		$smtp->shouldReceive('isHTML')->with(true);
 		$smtp->shouldReceive('msgHTML')->with('html content');
 		$smtp->shouldReceive('send');
+		$log->shouldReceive('save');
 
 		$this->assertTrue($email->send('foo@bar.com', 'Foo Bar', 'bar@foo.com', 'Foo Subject', 'html content'));
 	}
@@ -93,15 +94,16 @@ class EmailTest extends TestCase
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
+		$log        = Mockery::mock('\kanso\cms\email\Log');
 		$smtpConfig = $this->getSmtpSettings();
-
-		$email = new Email($filesystem, $smtp, [], true, $smtpConfig);
+		$email      = new Email($filesystem, $smtp, $log, [], true, $smtpConfig);
 
 		$smtp->shouldReceive('isSMTP');
 		$smtp->shouldReceive('setFrom')->with('bar@foo.com', 'Foo Bar');
 		$smtp->shouldReceive('addAddress')->with('foo@bar.com');
 		$smtp->shouldReceive('isHTML')->with(false);
 		$smtp->shouldReceive('send');
+		$log->shouldReceive('save');
 
 		$this->assertTrue($email->send('foo@bar.com', 'Foo Bar', 'bar@foo.com', 'Foo Subject', 'html content', false));
 	}

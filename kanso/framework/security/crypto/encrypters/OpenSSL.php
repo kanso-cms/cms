@@ -43,6 +43,23 @@ class OpenSSL extends Encrypter implements EncrypterInterface
 	protected $ciphers;
 
 	/**
+	 * Cyphers we don't use.
+	 *
+	 * @var string
+	 */
+	protected $nonCyphers =
+	[
+		'aes-',
+		'bf-',
+		'camellia-',
+		'cast5-',
+		'ccm-',
+		'des-',
+		'gcm-',
+		'id-',
+	];
+
+	/**
 	 * Constructor.
 	 *
 	 * @access public
@@ -69,9 +86,12 @@ class OpenSSL extends Encrypter implements EncrypterInterface
 	{
 		$this->ciphers = array_filter(openssl_get_cipher_methods(), function($cypher)
 		{
-			if (strpos(strtolower($cypher), 'gcm') !== false || strpos(strtolower($cypher), 'ccm') !== false || strpos(strtolower($cypher), 'des-') !== false)
+			foreach ($this->nonCyphers as $nonCypher)
 			{
-			    return false;
+				if (strpos(strtolower($cypher), $nonCypher) !== false)
+				{
+			    	return false;
+				}
 			}
 
 			return true;

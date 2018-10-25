@@ -70,7 +70,7 @@ class Feed
         $this->response->format()->set(Mime::fromExt($this->format) . ', application/xml');
 
         // Filter posts for feed
-        Kanso::instance()->Filters->apply('RSS', $this);
+        //Kanso::instance()->Filters->apply('RSS', $this);
 
         // Set the response body
         $this->response->body()->set($this->xml());
