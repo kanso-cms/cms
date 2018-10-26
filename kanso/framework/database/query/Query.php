@@ -599,7 +599,7 @@ class Query
 		$results = $this->connectionHandler->query(trim($this->SQL), $this->SQL_bindings);
 
 		// If this was a row query - flatten and return only the first result
-		if (!empty($results) && count($this->pending['limit']) === 1 && $this->pending['limit'] === 1 && $this->operation === 'QUERY')
+		if (!empty($results) && !is_array($this->pending['limit']) && $this->pending['limit'] === 1 && $this->operation === 'QUERY')
 		{
 			return $results[0];
 		}

@@ -8,6 +8,7 @@
 namespace kanso\framework\database\connection;
 
 use PDO;
+use PDOException;
 
 /**
  * Database connection handler.
@@ -81,9 +82,9 @@ class ConnectionHandler
 	 *
 	 * @access private
 	 * @param string $query      SQL query statement
-	 * @param array  $parameters Array of parameters to bind (optional) (default [])
+	 * @param array  $params     Array of parameters to bind (optional) (default [])
 	 */
-	private function parseQuery(string $query, array $_params = [])
+	private function parseQuery(string $query, array $params = [])
 	{
 		// Start time
 		$start = microtime(true);
@@ -92,16 +93,14 @@ class ConnectionHandler
 		$this->pdoStatement = $this->connection->pdo()->prepare($query);
 
 		// Add parameters to the parameter array
-		$this->bindMore($_params);
+		$this->bindMore($params);
 
 		// Bind parameters
 		if (!empty($this->parameters))
 		{
-			foreach($this->parameters as $param)
+			foreach($this->parameters as $_params)
 			{
-				$params = explode("\x7F", $param);
-
-				$this->pdoStatement->bindParam($params[0], $params[1]);
+				$this->pdoStatement->bindParam(':' . $_params[0], $_params[1]);
 			}
 		}
 
@@ -124,7 +123,9 @@ class ConnectionHandler
 	 */
 	public function bind(string $column, $value)
 	{
-		$this->parameters[count($this->parameters)] = ':' . $column . "\x7F" . utf8_encode($value);
+		$this->parameters[] = [$column, $this->sanitizeValue($value)];
+
+		//$this->parameters[count($this->parameters)] = ':' . $column . 'foo___BAR' . utf8_encode($value);
 	}
 
 	/**
@@ -326,6 +327,18 @@ class ConnectionHandler
 	}
 
 	/**
+     * Safely format the query consistently.
+     *
+     * @access  public
+     * @param  string $sql SQL query statement
+     * @return string
+     */
+    public function cleanQuery(string $sql): string
+    {
+       return trim(preg_replace('/\s+/', ' ', $sql));
+    }
+
+	/**
 	 * Prepares query for logging.
 	 *
 	 * @access protected
@@ -335,15 +348,13 @@ class ConnectionHandler
 	 */
 	protected function prepareQueryForLog(string $query, array $params): string
 	{
-		foreach ($params as $key => $value)
+		foreach ($params as $_params)
 		{
-			$_params = explode("\x7F", $value);
-
 			$k = $_params[0];
 
 			$v = $_params[1];
 
-			$query = preg_replace("/$k/", $v, $query);
+			$query = preg_replace("/:$k/", "'$v'", $query);
 		}
 
 		return $query;
@@ -378,15 +389,32 @@ class ConnectionHandler
 		return strtolower(explode(' ', trim($query))[0]);
 	}
 
-    /**
-     * Safely format the query consistently.
-     *
-     * @access  public
-     * @param  string $sql SQL query statement
-     * @return string
-     */
-    public function cleanQuery(string $sql): string
-    {
-       return trim(preg_replace('/\s+/', ' ', $sql));
-    }
+	/**
+	 * Gets the query type from the query string.
+	 *
+	 * @access protected
+	 * @param  mixed $value A query value to sanitize
+	 * @return mixed
+	 */
+	protected function sanitizeValue($value)
+	{
+		if (is_int($value))
+		{
+			return $value;
+		}
+		else if (is_bool($value))
+		{
+			return !$value ? 0 : 1;
+		}
+		else if (is_string($value) && trim($value) === '' || is_null($value))
+		{
+			return NULL;
+		}
+		else if (is_string($value))
+		{
+			return utf8_encode($value);
+		}
+
+		return $value;
+	}   
 }

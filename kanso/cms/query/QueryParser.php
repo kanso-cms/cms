@@ -580,7 +580,7 @@ class QueryParser
     {
         $children = $this->SQL->SELECT('*')->FROM('categories')->WHERE('parent_id', '=', $parent_id)->FIND_ALL();
 
-        if (count($children) > 0 && is_array($children))
+        if (is_array($children) && count($children) > 0)
         {
             $categories = array_merge($categories, $children);
         }

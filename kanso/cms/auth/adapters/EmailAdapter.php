@@ -18,6 +18,13 @@ use kanso\cms\wrappers\User;
 class EmailAdapter
 {
     /**
+     * Email utility
+     *
+     * @var \kanso\cms\email\Email
+     */
+    private $email;
+
+    /**
      * httpHost.
      *
      * @var string
@@ -52,6 +59,16 @@ class EmailAdapter
         'confirm_account' => 'confirm-account/',
     ];
 
+    /**
+     * Constructor.
+     *
+     * @access public
+     * @param \kanso\cms\email\Email $Email      Email utility
+     * @param string                 $httpHost   HTTP_HOST
+     * @param string                 $domainName Current domain name (e.g 'example.com')
+     * @param string                 $siteTitle  Website base title (e.g 'Kanso CMS')
+     * @param array                  $urls       Assoc array of CMS urls for user access (otional defaul [])
+     */
     public function __construct(Email $email, string $httpHost, string $domainName, string $siteTitle, array $urls = [])
     {
         $this->email = $email;

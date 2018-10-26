@@ -14,71 +14,71 @@ namespace kanso\framework\utility;
  */
 class Pluralize
 {
-	/**
-	 * The word to convert.
-	 *
-	 * @var string
-	 */
-	private static $word;
+    /**
+     * The word to convert.
+     *
+     * @var string
+     */
+    private static $word;
 
-	/**
-	 * Lowercase version of word.
-	 *
-	 * @var string
-	 */
-	private static $lowercase;
+    /**
+     * Lowercase version of word.
+     *
+     * @var string
+     */
+    private static $lowercase;
 
-	/**
-	 * Uppercase version of word.
-	 *
-	 * @var string
-	 */
-	private static $upperCase;
+    /**
+     * Uppercase version of word.
+     *
+     * @var string
+     */
+    private static $upperCase;
 
-	/**
-	 * Sentence-case version of word.
-	 *
-	 * @var string
-	 */
-	private static $sentenceCase;
+    /**
+     * Sentence-case version of word.
+     *
+     * @var string
+     */
+    private static $sentenceCase;
 
-	/**
-	 * Casing pattern of the provided word.
-	 *
-	 * @var string
-	 */
-	private static $casing;
+    /**
+     * Casing pattern of the provided word.
+     *
+     * @var string
+     */
+    private static $casing;
 
-	/**
-	 * Sibilants.
-	 *
-	 * @var array
-	 */
-	private static $sibilants 	= ['x', 's', 'z', 's'];
+    /**
+     * Sibilants.
+     *
+     * @var array
+     */
+    private static $sibilants   = ['x', 's', 'z', 's'];
 
     /**
      * Vowels.
      *
      * @var array
      */
-    private static $vowels 		= ['a', 'e', 'i', 'o', 'u'];
+    private static $vowels      = ['a', 'e', 'i', 'o', 'u'];
 
     /**
      * Consonants.
      *
      * @var array
      */
-    private static $consonants 	= ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'];
+    private static $consonants  = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'];
 
- 	/**
- 	 * Pluralize a word.
- 	 *
- 	 * @access public
- 	 * @param  string $word  The input word
- 	 * @param  int    $count The amount of items (optional) (default 2)
- 	 * @return string
- 	 */
- 	public static function convert(string $word, int $count = 2): string
+    /**
+     * Pluralize a word.
+     *
+     * @access public
+     * @param  string $word  The input word
+     * @param  int    $count The amount of items (optional) (default 2)
+     * @return string
+     */
+    public static function convert(string $word, int $count = 2): string
     {
         // Return the word if we don't need to pluralize
         if ($count === 1)
@@ -87,11 +87,11 @@ class Pluralize
         }
 
         // Set class variables for use
-        self::$word 	 	= $word;
-        self::$lowercase 	= strtolower($word);
-        self::$upperCase 	= strtoupper($word);
+        self::$word         = $word;
+        self::$lowercase    = strtolower($word);
+        self::$upperCase    = strtoupper($word);
         self::$sentenceCase = ucfirst($word);
-        self::$casing 		= self::getCasing();
+        self::$casing       = self::getCasing();
 
         // save some time in the case that singular and plural are the same
         if (self::isUncountable())
@@ -161,7 +161,7 @@ class Pluralize
      */
     private static function isUncountable(): bool
     {
-       	$uncountable = [
+        $uncountable = [
             'gold',
             'audio',
             'police',
@@ -327,7 +327,7 @@ class Pluralize
             'she'=> 'they',
             'i'=> 'we',
             'zero'=> 'zeroes',
-      	];
+        ];
 
         if (isset($irregular[self::$lowercase]))
         {
@@ -430,7 +430,7 @@ class Pluralize
      */
     private static function suffix(string $word, int $count)
     {
-    	return substr($word, count($word)-1 - $count);
+        return substr($word, strlen($word) - $count);
     }
 
     /**
@@ -443,7 +443,7 @@ class Pluralize
      */
     private static function sliceFromEnd($word, $count)
     {
-        return substr($word, 0, count($word)-1 - $count);
+        return substr($word, 0, strlen($word) - $count);
     }
 
     /**
@@ -456,6 +456,6 @@ class Pluralize
      */
     private static function nthLast(string $word, int $count)
     {
-    	implode('', array_reverse(str_split($word)))[$count];
+        implode('', array_reverse(str_split($word)))[$count];
     }
 }

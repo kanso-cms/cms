@@ -49,7 +49,21 @@ class Gatekeeper
      * @var int
      */
     const LOGIN_LOCKED = 103;
+    
+    /**
+     * SQL Query Builder.
+     *
+     * @var \kanso\framework\database\query\Builder
+     */
+    private $SQL;
 
+    /**
+     * CMS User Provider.
+     *
+     * @var \kanso\cms\auth\UserProvider 
+     */
+    private $provider;
+    
     /**
      * The HTTP current user if one exists.
      *

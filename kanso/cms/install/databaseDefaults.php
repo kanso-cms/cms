@@ -80,7 +80,7 @@ $KANSO_DEFAULTS_COMMENTS_TABLE = [
 	'ip_address'   => 'VARCHAR(255)',
 	'email_reply'  => 'BOOLEAN',
 	'email_thread' => 'BOOLEAN',
-	'rating'       => 'INTEGER | UNSIGNED',
+	'rating'       => 'INTEGER',
 ];
 
 // Default tags to posts table

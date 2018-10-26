@@ -34,6 +34,13 @@ class Access
 	private $response;
 
 	/**
+	 * Filesystem object
+	 *
+	 * @var \kanso\framework\file\Filesystem
+	 */
+	private $filesystem;
+
+	/**
 	 * Path to robots.txt.
 	 *
 	 * @var string

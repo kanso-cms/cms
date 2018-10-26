@@ -88,7 +88,7 @@ class Builder
         }
 
         // Set default table configuration
-        $SQL[] = "PRIMARY KEY (id)\n) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;";
+        $SQL[] = "PRIMARY KEY (id)\n) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;";
 
         // Execute the query
         $this->connectionHandler->query($this->connectionHandler->cleanQuery(implode(' ', $SQL)));

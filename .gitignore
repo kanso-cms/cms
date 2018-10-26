@@ -23,3 +23,5 @@ composer.lock
 # Kanso #
 ######################
 robots.txt
+analysis.txt
+.phan/config.php
