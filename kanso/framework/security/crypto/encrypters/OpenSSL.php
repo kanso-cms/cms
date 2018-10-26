@@ -72,7 +72,7 @@ class OpenSSL extends Encrypter implements EncrypterInterface
 
 		$this->key = $key;
 
-		$this->cipher = !$cipher || !in_array($cipher, $this->ciphers) ? 'AES-256-CTR' : $cipher;
+		$this->cipher = !$cipher || !in_array($cipher, $this->ciphers) ? 'AES-256-ECB' : $cipher;
 
 		$this->ivSize = openssl_cipher_iv_length($this->cipher);
 	}
