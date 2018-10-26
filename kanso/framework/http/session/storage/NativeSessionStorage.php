@@ -135,7 +135,12 @@ class NativeSessionStorage implements StoreInterface
      */
     public function session_gc()
     {
-        return session_gc();
+        if (function_exists('session_gc'))
+        {
+            return session_gc();
+        }
+
+        return false;
     }
 
     /**
