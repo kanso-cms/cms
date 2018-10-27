@@ -229,7 +229,7 @@ trait Post
             return false;
         }
 
-        if (!empty($this->post) && !empty($post->thumbnail_id))
+        if (!empty($this->post) && !empty($this->post->thumbnail_id))
         {
             return !empty($this->getMediaById($this->post->thumbnail_id));
         }

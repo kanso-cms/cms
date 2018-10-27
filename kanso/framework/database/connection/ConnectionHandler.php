@@ -8,7 +8,6 @@
 namespace kanso\framework\database\connection;
 
 use PDO;
-use PDOException;
 
 /**
  * Database connection handler.
@@ -81,8 +80,8 @@ class ConnectionHandler
 	 * All SQL queries pass through this method.
 	 *
 	 * @access private
-	 * @param string $query      SQL query statement
-	 * @param array  $params     Array of parameters to bind (optional) (default [])
+	 * @param string $query  SQL query statement
+	 * @param array  $params Array of parameters to bind (optional) (default [])
 	 */
 	private function parseQuery(string $query, array $params = [])
 	{
@@ -124,8 +123,6 @@ class ConnectionHandler
 	public function bind(string $column, $value)
 	{
 		$this->parameters[] = [$column, $this->sanitizeValue($value)];
-
-		//$this->parameters[count($this->parameters)] = ':' . $column . 'foo___BAR' . utf8_encode($value);
 	}
 
 	/**
@@ -326,7 +323,7 @@ class ConnectionHandler
 		return $this->log;
 	}
 
-	/**
+    /**
      * Safely format the query consistently.
      *
      * @access  public
@@ -348,13 +345,18 @@ class ConnectionHandler
 	 */
 	protected function prepareQueryForLog(string $query, array $params): string
 	{
-		foreach ($params as $_params)
+		foreach (array_reverse($params) as $_params)
 		{
 			$k = $_params[0];
 
 			$v = $_params[1];
 
-			$query = preg_replace("/:$k/", "'$v'", $query);
+			if ($v === null)
+			{
+				$v = 'NULL';
+			}
+
+			$query = str_replace(":$k", "'$v'", $query);
 		}
 
 		return $query;
@@ -402,19 +404,19 @@ class ConnectionHandler
 		{
 			return $value;
 		}
-		else if (is_bool($value))
+		elseif (is_bool($value))
 		{
 			return !$value ? 0 : 1;
 		}
-		else if (is_string($value) && trim($value) === '' || is_null($value))
+		elseif (is_string($value) && trim($value) === '' || is_null($value))
 		{
-			return NULL;
+			return null;
 		}
-		else if (is_string($value))
+		elseif (is_string($value))
 		{
 			return utf8_encode($value);
 		}
 
 		return $value;
-	}   
+	}
 }

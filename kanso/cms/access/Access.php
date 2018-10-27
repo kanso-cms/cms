@@ -34,7 +34,7 @@ class Access
 	private $response;
 
 	/**
-	 * Filesystem object
+	 * Filesystem object.
 	 *
 	 * @var \kanso\framework\file\Filesystem
 	 */

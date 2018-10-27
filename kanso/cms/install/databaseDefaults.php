@@ -39,7 +39,7 @@ $KANSO_DEFAULTS_CATEGORIES_TABLE = [
 	'name'        => 'VARCHAR(255)',
 	'slug'        => 'VARCHAR(255)',
 	'description' => 'TEXT',
-	'parent_id'   => 'INTEGER | UNSIGNED',
+	'parent_id'   => 'INTEGER | UNSIGNED | DEFAULT 0',
 ];
 
 // Default authors table
@@ -68,7 +68,7 @@ $KANSO_DEFAULTS_USERS_TABLE = [
 // Default comments table
 $KANSO_DEFAULTS_COMMENTS_TABLE = [
 	'id'           => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
-	'parent'  	   => 'INTEGER | UNSIGNED',
+	'parent'  	   => 'INTEGER | UNSIGNED | DEFAULT 0',
 	'post_id'      => 'INTEGER | UNSIGNED',
 	'date'         => 'INTEGER | UNSIGNED',
 	'type'         => 'VARCHAR(255)',
@@ -237,7 +237,6 @@ $KANSO_DEFAULT_ARTICLE_CONTENT = [
 $KANSO_DEFAULT_COMMENTS = [
 	[
 		'post_id'      => 1,
-		'parent'  	   => null,
 		'date'         => strtotime('-1 hour'),
 		'type'         => 'comment',
 		'status'       => 'approved',

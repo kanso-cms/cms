@@ -109,6 +109,7 @@ return
 			'\kanso\framework\application\services\DatabaseService',
 			'\kanso\framework\application\services\MVCService',
             '\kanso\framework\application\services\UtilityService',
+            '\kanso\framework\application\services\DeploymentService',
 			'\kanso\framework\application\services\ErrorHandlerService',
 		],
 
@@ -149,5 +150,33 @@ return
 	'class_aliases' =>
 	[
 
+	],
+
+	/*
+	 * ---------------------------------------------------------
+	 * Application Deployment
+	 * ---------------------------------------------------------
+	 *
+	 * Application deployment and webhook configurations
+	 */
+	'deployment' =>
+	[
+		/*
+		 * Implementation to use for udating your application.
+		 * Default is 'github' which uses weebhooks to update the 
+		 * repo via git.
+		 *
+		 * @see https://developer.github.com/webhooks/
+		 * @see https://help.github.com/articles/about-webhooks/
+		 */
+		'implementation' => 'github'.
+
+		/*
+		 * This token should be provided to you when you setup
+		 * your repo weebhooks.
+		 *
+		 * @see https://developer.github.com/v3/repos/hooks/
+		 */
+		'token' => 'YOUR_GITHUB_PROVIDED_WEBHOOK_TOKEN',
 	],
 ];

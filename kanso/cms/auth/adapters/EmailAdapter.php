@@ -18,7 +18,7 @@ use kanso\cms\wrappers\User;
 class EmailAdapter
 {
     /**
-     * Email utility
+     * Email utility.
      *
      * @var \kanso\cms\email\Email
      */

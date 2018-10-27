@@ -694,7 +694,7 @@ function comments($postId = null)
 function display_comments($args = null, $postId = null)
 {
     global $KANSO_QUERY;
-    return $KANSO_QUERY->display_comments($args, $postId);
+    echo $KANSO_QUERY->display_comments($args, $postId);
 }
 
 function comment_form($args = null, $postId = null)

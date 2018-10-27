@@ -58,7 +58,8 @@ trait Pagination
         {
             // pages here are used as for an array so +1
             $options['current'] = $this->pageIndex === 0 ? 1 : $this->pageIndex+1;
-            $options['total']   = count($pages);
+
+            $options['total'] = is_array($pages) ? count($pages) : 1;
         }
 
         // If options were set, overwrite the dafaults
