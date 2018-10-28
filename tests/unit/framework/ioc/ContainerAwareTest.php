@@ -5,11 +5,11 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\ioc;
+namespace kanso\tests\unit\framework\ioc;
 
 use kanso\framework\ioc\Container;
 use kanso\framework\ioc\ContainerAwareTrait;
-use tests\TestCase;
+use kanso\tests\TestCase;
 
 class ContainerAwareCallback
 {
@@ -31,6 +31,7 @@ class ContainerAwareCallback
 
 /**
  * @group unit
+ * @group framework
  */
 class ContainerAwareTest extends TestCase
 {

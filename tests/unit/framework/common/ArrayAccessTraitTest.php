@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\common;
+namespace kanso\tests\unit\framework\common;
 
 use kanso\framework\common\ArrayAccessTrait;
-use tests\TestCase;
+use kanso\tests\TestCase;
 
 // --------------------------------------------------------------------------
 // START CLASSES
@@ -30,6 +30,7 @@ class TestArrayAccess
 
 /**
  * @group unit
+ * @group framework
  */
 class ArrayAccessTraitTest extends TestCase
 {

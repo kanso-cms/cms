@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\email;
+namespace kanso\tests\unit\cms\email;
 
 use kanso\cms\email\Email;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group cms
  */
 class EmailTest extends TestCase
 {

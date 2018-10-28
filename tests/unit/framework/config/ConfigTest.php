@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\config;
+namespace kanso\tests\unit\framework\config;
 
 use kanso\framework\config\Config;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class ConfigTest extends TestCase
 {

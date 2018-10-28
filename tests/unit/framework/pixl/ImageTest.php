@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\pixl;
+namespace kanso\tests\unit\framework\pixl;
 
 use kanso\framework\pixl\Image;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class ImageTest extends TestCase
 {

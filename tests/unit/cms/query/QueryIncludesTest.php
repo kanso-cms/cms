@@ -5,13 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\query;
+namespace kanso\tests\unit\cms\query;
 
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group cms
  */
 class QueryIncludesTest extends TestCase
 {

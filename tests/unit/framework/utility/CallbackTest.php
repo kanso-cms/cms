@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\utility;
+namespace kanso\tests\unit\framework\utility;
 
 use kanso\framework\utility\Callback;
-use tests\TestCase;
+use kanso\tests\TestCase;
 
 // --------------------------------------------------------------------------
 // START CLASSES
@@ -64,6 +64,7 @@ class CallbackTesters
 
 /**
  * @group unit
+ * @group framework
  */
 class CallbackTest extends TestCase
 {
@@ -72,13 +73,13 @@ class CallbackTest extends TestCase
 	 */
 	public function testCallbacks()
 	{
-		$this->assertEquals('foo', Callback::apply('tests\unit\framework\utility\CallbackTester@testMethod', 'foo'));
+		$this->assertEquals('foo', Callback::apply('\kanso\tests\unit\framework\utility\CallbackTester@testMethod', 'foo'));
 
-		$this->assertEquals('foo', Callback::apply('tests\unit\framework\utility\CallbackTester::testStaticMethod', 'foo'));
+		$this->assertEquals('foo', Callback::apply('\kanso\tests\unit\framework\utility\CallbackTester::testStaticMethod', 'foo'));
 
-		$this->assertEquals('foobar', Callback::apply('tests\unit\framework\utility\CallbackTester::testStaticMethods', ['foo', 'bar']));
+		$this->assertEquals('foobar', Callback::apply('\kanso\tests\unit\framework\utility\CallbackTester::testStaticMethods', ['foo', 'bar']));
 
-		$this->assertEquals('foobar', Callback::apply('tests\unit\framework\utility\CallbackTesters@testMethods', ['foo', 'bar']));
+		$this->assertEquals('foobar', Callback::apply('\kanso\tests\unit\framework\utility\CallbackTesters@testMethods', ['foo', 'bar']));
 
 		$this->assertEquals('foobar', Callback::apply(function($foo, $bar)
 		{

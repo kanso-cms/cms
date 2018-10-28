@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\rss;
+namespace kanso\tests\unit\cms\rss;
 
 use kanso\cms\rss\Feed;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group cms
  */
 class FeedTest extends TestCase
 {

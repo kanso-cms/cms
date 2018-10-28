@@ -5,13 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\http\session\storage;
+namespace kanso\tests\unit\http\session\storage;
 
 use kanso\framework\http\session\storage\NativeSessionStorage;
-use tests\TestCase;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class NativeStorageTest extends TestCase
 {

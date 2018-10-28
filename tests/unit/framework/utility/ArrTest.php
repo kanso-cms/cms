@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\utility;
+namespace kanso\tests\unit\framework\utility;
 
 use kanso\framework\utility\Arr;
-use tests\TestCase;
+use kanso\tests\TestCase;
 
 // --------------------------------------------------------------------------
 // START CLASSES
@@ -30,6 +30,7 @@ class fooArrayAccess
 
 /**
  * @group unit
+ * @group framework
  */
 class ArrTest extends TestCase
 {

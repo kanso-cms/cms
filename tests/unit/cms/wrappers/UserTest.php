@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\wrappers;
+namespace kanso\tests\unit\cms\wrappers;
 
 use kanso\cms\wrappers\User;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group cms
  */
 class UserTest extends TestCase
 {

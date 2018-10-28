@@ -5,13 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\http\request;
+namespace kanso\tests\unit\framework\http\request;
 
 use kanso\framework\http\request\Headers;
-use tests\TestCase;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class HeadersTest extends TestCase
 {

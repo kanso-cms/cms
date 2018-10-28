@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\access;
+namespace kanso\tests\unit\cms\access;
 
 use kanso\cms\access\Access;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group cms
  */
 class AccessTest extends TestCase
 {

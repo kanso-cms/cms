@@ -5,15 +5,16 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\http\session\storage;
+namespace kanso\tests\unit\framework\http\session\storage;
 
 use kanso\framework\http\session\storage\FileSessionStorage;
 use kanso\framework\utility\UUID;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class FileStorageTest extends TestCase
 {

@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\onion;
+namespace kanso\tests\unit\framework\onion;
 
 use Closure;
 use kanso\framework\http\request\Request;

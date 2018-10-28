@@ -5,12 +5,12 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\mvc;
+namespace kanso\tests\unit\framework\mvc;
 
 use kanso\framework\mvc\controller\Controller;
 use kanso\framework\mvc\model\Model;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 class TestController extends Controller
 {
@@ -26,6 +26,7 @@ class TestControllerModel extends Model
 
 /**
  * @group unit
+ * @group framework
  */
 class ControllerTest extends TestCase
 {
@@ -43,7 +44,7 @@ class ControllerTest extends TestCase
 
         };
 
-        $controller = new TestController($request, $response, $next, '\tests\unit\framework\mvc\TestControllerModel');
+        $controller = new TestController($request, $response, $next, 'kanso\tests\unit\framework\mvc\TestControllerModel');
 
         $this->assertEquals('foobar', $controller->foobar());
     }

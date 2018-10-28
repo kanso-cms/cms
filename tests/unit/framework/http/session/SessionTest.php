@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\http\session;
+namespace kanso\tests\unit\framework\http\session;
 
 use kanso\framework\http\session\Session;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class SessionTest extends TestCase
 {

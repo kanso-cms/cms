@@ -5,15 +5,16 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\exception;
+namespace kanso\tests\unit\framework\exception;
 
 use ErrorException;
 use kanso\framework\exception\ErrorLogger;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class ErrorLoggerTest extends TestCase
 {

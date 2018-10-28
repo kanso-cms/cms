@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\sitemap;
+namespace kanso\tests\unit\cms\sitemap;
 
 use kanso\cms\sitemap\SiteMap;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group cms
  */
 class SitemapTest extends TestCase
 {

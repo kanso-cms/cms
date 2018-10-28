@@ -5,17 +5,18 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\deployment\Github;
+namespace kanso\tests\unit\framework\deployment\Github;
 
 use Exception;
 use kanso\framework\deployment\webhooks\Github;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class DeploymentTest extends TestCase
 {

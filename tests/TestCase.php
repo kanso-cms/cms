@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests;
+namespace kanso\tests;
 
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 

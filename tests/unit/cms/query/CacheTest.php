@@ -5,13 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\query;
+namespace kanso\tests\unit\cms\query;
 
 use kanso\cms\query\Cache;
-use tests\TestCase;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group cms
  */
 class CacheTest extends TestCase
 {

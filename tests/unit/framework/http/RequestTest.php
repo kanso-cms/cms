@@ -5,17 +5,18 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\http\response;
+namespace kanso\tests\unit\framework\http\response;
 
 use kanso\framework\http\request\Environment;
 use kanso\framework\http\request\Files;
 use kanso\framework\http\request\Headers;
 use kanso\framework\http\request\Request;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class RequestTest extends TestCase
 {

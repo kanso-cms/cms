@@ -5,15 +5,16 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\database\connection;
+namespace kanso\tests\unit\framework\database\connection;
 
 use kanso\framework\database\connection\Cache;
 use kanso\framework\database\connection\ConnectionHandler;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class ConnectionHandlerTest extends TestCase
 {

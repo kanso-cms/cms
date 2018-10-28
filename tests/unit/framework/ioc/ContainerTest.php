@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\ioc;
+namespace kanso\tests\unit\framework\ioc;
 
 use kanso\framework\ioc\Container;
-use tests\TestCase;
+use kanso\tests\TestCase;
 
 class ContainerCallbackTest
 {
@@ -31,6 +31,7 @@ class ContainerCallbackTest
 
 /**
  * @group unit
+ * @group framework
  */
 class ContainerTest extends TestCase
 {

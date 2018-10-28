@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\security\spam;
+namespace kanso\tests\unit\framework\security\spam;
 
 use kanso\framework\security\spam\SpamProtector;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class SpamProtectorTest extends TestCase
 {

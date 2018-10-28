@@ -5,14 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\onion;
+namespace kanso\tests\unit\framework\onion;
 
 use Closure;
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
 use kanso\framework\onion\Onion;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 class OnionCallbackTest
 {
@@ -34,6 +34,7 @@ class OnionCallbackTest
 
 /**
  * @group unit
+ * @group framework
  */
 class OnionTest extends TestCase
 {
@@ -86,7 +87,7 @@ class OnionTest extends TestCase
 	{
 		ob_start();
 
-		$callback = '\tests\unit\framework\onion\OnionCallbackTest@normalMethod';
+		$callback = '\kanso\tests\unit\framework\onion\OnionCallbackTest@normalMethod';
 
 		$request = Mockery::mock('\kanso\framework\http\request\Request');
 
@@ -108,7 +109,7 @@ class OnionTest extends TestCase
 	{
 		ob_start();
 
-		$callback = '\tests\unit\framework\onion\OnionCallbackTest::staticFunc';
+		$callback = '\kanso\tests\unit\framework\onion\OnionCallbackTest::staticFunc';
 
 		$request = Mockery::mock('\kanso\framework\http\request\Request');
 

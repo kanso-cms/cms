@@ -5,15 +5,16 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\database\query;
+namespace kanso\tests\unit\framework\database\query;
 
 use kanso\framework\database\query\Builder;
 use kanso\framework\database\query\Query;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class AlterTest extends TestCase
 {

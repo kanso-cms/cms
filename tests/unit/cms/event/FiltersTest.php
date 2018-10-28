@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\event;
+namespace kanso\tests\unit\cms\event;
 
 use kanso\cms\event\Filters;
-use tests\TestCase;
+use kanso\tests\TestCase;
 
 // --------------------------------------------------------------------------
 // START CLASSES
@@ -50,6 +50,7 @@ class FilterCallbackTester
 
 /**
  * @group unit
+ * @group cms
  */
 class FiltersTest extends TestCase
 {
@@ -62,13 +63,13 @@ class FiltersTest extends TestCase
 
 		$filters = Filters::instance();
 
-		$filters->on('foo1', 'tests\unit\cms\event\FilterCallbackTester::testStaticMethodFirst');
+		$filters->on('foo1', '\kanso\tests\unit\cms\event\FilterCallbackTester::testStaticMethodFirst');
 
-		$filters->on('foo1', 'tests\unit\cms\event\FilterCallbackTester::testStaticMethodSecond');
+		$filters->on('foo1', '\kanso\tests\unit\cms\event\FilterCallbackTester::testStaticMethodSecond');
 
-		$filters->on('foo2', 'tests\unit\cms\event\FilterCallbackTester@testMethodFirst');
+		$filters->on('foo2', '\kanso\tests\unit\cms\event\FilterCallbackTester@testMethodFirst');
 
-		$filters->on('foo2', 'tests\unit\cms\event\FilterCallbackTester@testMethodSecond');
+		$filters->on('foo2', '\kanso\tests\unit\cms\event\FilterCallbackTester@testMethodSecond');
 
 		$filters->on('foo3', function($var)
 		{

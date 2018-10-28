@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\auth;
+namespace kanso\tests\unit\cms\auth;
 
 use kanso\cms\auth\Gatekeeper;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group cms
  */
 class GatekeeperTest extends TestCase
 {

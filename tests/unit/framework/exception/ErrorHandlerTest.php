@@ -5,17 +5,18 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\exception;
+namespace kanso\tests\unit\framework\exception;
 
 use ErrorException;
 use InvalidArgumentException;
 use kanso\framework\exception\ErrorHandler;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 use Throwable;
 
 /**
  * @group unit
+ * @group framework
  */
 class ErrorHandlerTest extends TestCase
 {

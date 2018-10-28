@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\file;
+namespace kanso\tests\unit\framework\file;
 
 use kanso\framework\file\CascadingFilesystem;
-use tests\TestCase;
+use kanso\tests\TestCase;
 
 /**
  * Cascading file loader.
@@ -30,6 +30,7 @@ class Loader
 
 /**
  * @group unit
+ * @group framework
  */
 class CascadingFilesystemTest extends TestCase
 {

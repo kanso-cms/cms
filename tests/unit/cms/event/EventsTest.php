@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\event;
+namespace kanso\tests\unit\cms\event;
 
 use kanso\cms\event\Events;
-use tests\TestCase;
+use kanso\tests\TestCase;
 
 // --------------------------------------------------------------------------
 // START CLASSES
@@ -44,6 +44,7 @@ class EventsCallbackTester
 
 /**
  * @group unit
+ * @group cms
  */
 class EventsTest extends TestCase
 {
@@ -56,9 +57,9 @@ class EventsTest extends TestCase
 
 		$events = Events::instance();
 
-		$events->on('foo1', 'tests\unit\cms\event\EventsCallbackTester@testMethod');
+		$events->on('foo1', '\kanso\tests\unit\cms\event\EventsCallbackTester@testMethod');
 
-		$events->on('foo2', 'tests\unit\cms\event\EventsCallbackTester::testStaticMethod');
+		$events->on('foo2', '\kanso\tests\unit\cms\event\EventsCallbackTester::testStaticMethod');
 
 		$events->on('foo3', function($_this, $foo)
 		{

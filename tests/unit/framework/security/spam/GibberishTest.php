@@ -5,13 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\security\spam;
+namespace kanso\tests\unit\framework\security\spam;
 
 use kanso\framework\security\spam\gibberish\Gibberish;
-use tests\TestCase;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class GibberishTest extends TestCase
 {

@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\wrappers\managers;
+namespace kanso\tests\unit\cms\wrappers\managers;
 
 use kanso\cms\wrappers\managers\CategoryManager;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group cms
  */
 class CategoryManagerTest extends TestCase
 {

@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\http\response;
+namespace kanso\tests\unit\framework\http\response;
 
 use kanso\framework\http\response\Cache;
+use kanso\tests\TestCase;
 use Mockery;
-use tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class CacheTest extends TestCase
 {
