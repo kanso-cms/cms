@@ -102,6 +102,11 @@ $output = [];
 
 foreach ($files as $file)
 {
+    if (strpos($file, 'vendor/') !== false)
+    {
+        continue;
+    }
+
     echo 'fixing ' . $file . '....';
     
     ob_start();
@@ -112,4 +117,3 @@ foreach ($files as $file)
 
     echo $fixed."\n";
 }
-

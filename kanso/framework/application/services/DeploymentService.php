@@ -10,13 +10,14 @@ namespace kanso\framework\application\services;
 use kanso\framework\deployment\Deployment;
 use kanso\framework\deployment\webhooks\Github;
 use kanso\framework\deployment\webhooks\WebhookInterface;
+use kanso\framework\shell\Shell;
 
 /**
  * Framework deployment service.
  *
  * @author Joe J. Howard
  */
-class DatabaseService extends Service
+class DeploymentService extends Service
 {
 	/**
 	 * {@inheritdoc}
@@ -39,7 +40,7 @@ class DatabaseService extends Service
 	{
 		if ($this->container->Config->get('application.deployment.implementation') === 'github')
 		{
-			return new Github($this->container->Request, $this->container->Response, $this->container->Config->get('application.deployment.token'));
+			return new Github($this->container->Request, $this->container->Response, new Shell; $this->container->Config->get('application.deployment.token'));
 		}
 	}
 }

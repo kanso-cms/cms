@@ -14,28 +14,28 @@ use kanso\framework\deployment\webhooks\WebhookInterface;
  *
  * @author Joe J. Howard
  */
-Class Deployment
+class Deployment
 {
     /**
-     * Deployment interface implementation
+     * Deployment interface implementation.
      *
      * @var string
      */
     private $webhook;
 
     /**
-     * Constructor
-     * 
+     * Constructor.
+     *
      * @param kanso\framework\deployment\methods\WebhookInterface $method Webhook deployment impelementation
      */
     public function __construct(WebhookInterface $webhook)
     {
-        $this->webhook = $webhook
+        $this->webhook = $webhook;
     }
 
     /**
-     * Update the framework
-     * 
+     * Update the framework.
+     *
      * @return mixed
      */
     public function webhook(): WebhookInterface
@@ -44,8 +44,8 @@ Class Deployment
     }
 
     /**
-     * Update the framework
-     * 
+     * Update the framework.
+     *
      * @return mixed
      */
     public function update()
