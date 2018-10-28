@@ -22,7 +22,10 @@ class EmailPreview extends BaseModel
      */
     public function onGET()
     {
-        return $this->parseGet();
+        if ($this->isLoggedIn)
+        {
+            return $this->parseGet();
+        }
     }
 
     /**
