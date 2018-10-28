@@ -40,7 +40,7 @@ class DeploymentService extends Service
 	{
 		if ($this->container->Config->get('application.deployment.implementation') === 'github')
 		{
-			return new Github($this->container->Request, $this->container->Response, new Shell; $this->container->Config->get('application.deployment.token'));
+			return new Github($this->container->Request, $this->container->Response, new Shell, $this->container->Config->get('application.deployment.token'));
 		}
 	}
 }

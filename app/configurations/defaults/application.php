@@ -169,7 +169,7 @@ return
 		 * @see https://developer.github.com/webhooks/
 		 * @see https://help.github.com/articles/about-webhooks/
 		 */
-		'implementation' => 'github'.
+		'implementation' => 'github',
 
 		/*
 		 * This token should be provided to you when you setup
