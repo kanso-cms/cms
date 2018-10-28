@@ -1,5 +1,13 @@
 <?php
 
+// Special case for email previews
+if ($ADMIN_PAGE_TYPE === 'emailPreview')
+{
+	require_once('dash-email-preview.php');
+
+	return;
+}
+
 $_TEMPLATES_DIR = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates';
 
 require_once('functions.php');
@@ -70,6 +78,10 @@ elseif (
 elseif ($ADMIN_PAGE_TYPE === 'errorLogs')
 {
 	require_once('dash-error-logs.php');
+}
+elseif ($ADMIN_PAGE_TYPE === 'emailLogs')
+{
+	require_once('dash-email-logs.php');
 }
 elseif ($ADMIN_PAGE_TYPE === 'customPage')
 {

@@ -15,14 +15,16 @@
 	<section class="items-list roof-xs">
 
 		<!-- LIST POWERS -->
-		<?php require 'templates' . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . 'errors' . DIRECTORY_SEPARATOR . 'list-powers.php'; ?>
+		<?php require 'templates'.DIRECTORY_SEPARATOR.'logs'.DIRECTORY_SEPARATOR.'emails'.DIRECTORY_SEPARATOR.'list-powers.php'; ?>
 
 		<!-- LIST BODY -->
-		<?php require 'templates' . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . 'errors' . DIRECTORY_SEPARATOR . 'list-body.php'; ?>
+		<?php require 'templates'.DIRECTORY_SEPARATOR.'logs'.DIRECTORY_SEPARATOR.'emails'.DIRECTORY_SEPARATOR.'list-body.php'; ?>
 
 		<!-- LIST FOOTER -->
-		<?php require 'templates' . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . 'errors' . DIRECTORY_SEPARATOR . 'list-pagination.php'; ?>
+		<?php require 'templates'.DIRECTORY_SEPARATOR.'logs'.DIRECTORY_SEPARATOR.'emails'.DIRECTORY_SEPARATOR.'list-pagination.php'; ?>
 
 	</section>
-	
+
 </div>
+
+

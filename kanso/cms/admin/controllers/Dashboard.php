@@ -223,6 +223,30 @@ class Dashboard extends BaseController
 	}
 
 	/**
+	 * Dispatch emailLogs request.
+	 *
+	 * @access public
+	 */
+	public function emailLogs()
+	{
+		$this->init('emailLogs');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch emailPreview request.
+	 *
+	 * @access public
+	 */
+	public function emailPreview()
+	{
+		$this->init('emailPreview');
+
+		$this->dispatch();
+	}
+
+	/**
 	 * Dispatch custom page.
 	 *
 	 * @access public

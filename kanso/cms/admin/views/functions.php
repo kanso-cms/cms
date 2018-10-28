@@ -105,6 +105,12 @@ function admin_the_title()
 	elseif ($requestName === 'settingsTools') {
 		$title = 'Tools | Kanso';
 	}
+	elseif ($requestName === 'errorLogs') {
+		$title = 'Error Logs | Kanso';
+	}
+	elseif ($requestName === 'emailLogs') {
+		$title = 'Email Logs | Kanso';
+	}
 
 	// Account pages
 	elseif ($requestName === 'login') {
@@ -336,11 +342,24 @@ function admin_sirebar_links()
 			'text'     => 'Tools',
 			'icon'     => 'wrench',
 		];
-		$links['errorLogs'] = [
-		'link'     => '/admin/error-logs/',
-		'text'     => 'Error Logs',
-		'icon'     => 'bug',
-		'children' => [],
+		$links['logs'] = [
+			'link'     => '/admin/logs/error-logs/',
+			'text'     => 'Logs',
+			'icon'     => 'terminal',
+			'children' =>
+			[	
+				'errorLogs' => [
+					'link'     => '/admin/logs/error-logs/',
+					'text'     => 'Error Logs',
+					'icon'     => 'bug',
+				],
+				'emailLogs' => [
+					'link'     => '/admin/logs/email-logs/',
+					'text'     => 'Email Logs',
+					'icon'     => 'envelope',
+				],
+
+			],
 		];
 	}
 

@@ -106,5 +106,12 @@ $router->get('/admin/media/', '\kanso\cms\admin\controllers\Dashboard@mediaLibra
 $router->post('/admin/media-library/', '\kanso\cms\admin\controllers\Dashboard@mediaLibrary', '\kanso\cms\admin\models\MediaLibrary');
 
 // Admin error logs
-$router->get('/admin/error-logs/', '\kanso\cms\admin\controllers\Dashboard@errorLogs', '\kanso\cms\admin\models\ErrorLogs');
-$router->post('/admin/error-logs/', '\kanso\cms\admin\controllers\Dashboard@errorLogs', '\kanso\cms\admin\models\ErrorLogs');
+$router->get('/admin/logs/error-logs/', '\kanso\cms\admin\controllers\Dashboard@errorLogs', '\kanso\cms\admin\models\ErrorLogs');
+$router->post('/admin/logs/error-logs/', '\kanso\cms\admin\controllers\Dashboard@errorLogs', '\kanso\cms\admin\models\ErrorLogs');
+
+// Admin email logs
+$router->get('/admin/logs/email-logs/', '\kanso\cms\admin\controllers\Dashboard@emailLogs', '\kanso\cms\admin\models\EmailLogs');
+$router->post('/admin/logs/email-logs/', '\kanso\cms\admin\controllers\Dashboard@emailLogs', '\kanso\cms\admin\models\EmailLogs');
+
+// Admin email preview
+$router->get('/admin/email-preview/(:any)/', 'kanso\cms\admin\controllers\Dashboard@emailPreview', '\kanso\cms\admin\models\EmailPreview');
