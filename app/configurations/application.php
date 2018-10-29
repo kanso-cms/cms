@@ -109,6 +109,7 @@ return
 			'\kanso\framework\application\services\DatabaseService',
 			'\kanso\framework\application\services\MVCService',
             '\kanso\framework\application\services\UtilityService',
+            '\kanso\framework\application\services\CrawlerService',
             '\kanso\framework\application\services\DeploymentService',
 			'\kanso\framework\application\services\ErrorHandlerService',
 		],
@@ -163,7 +164,7 @@ return
 	[
 		/*
 		 * Implementation to use for udating your application.
-		 * Default is 'github' which uses weebhooks to update the 
+		 * Default is 'github' which uses weebhooks to update the
 		 * repo via git.
 		 *
 		 * @see https://developer.github.com/webhooks/
