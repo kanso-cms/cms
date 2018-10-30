@@ -46,6 +46,7 @@ $KANSO_DEFAULTS_CATEGORIES_TABLE = [
 $KANSO_DEFAULTS_USERS_TABLE = [
 	'id'           => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'username'     => 'VARCHAR(255)',
+	'visitor_id'   => 'VARCHAR(255)',
 	'email'        => 'VARCHAR(255)',
 	'hashed_pass'  => 'VARCHAR(255)',
 	'name'         => 'VARCHAR(255)',
@@ -63,6 +64,30 @@ $KANSO_DEFAULTS_USERS_TABLE = [
 	'access_token'        => 'VARCHAR(255)',
 	'kanso_register_key'  => 'VARCHAR(255)',
 	'kanso_password_key'  => 'VARCHAR(255)',
+];
+
+// Default CRM visitors table
+$KANSO_DEFAULTS_VISITORS_TABLE = [
+	'id'           => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'visitor_id'   => 'VARCHAR(255)',
+	'ip_address'   => 'VARCHAR(255)',
+	'name'         => 'VARCHAR(255)',
+	'email'        => 'VARCHAR(255)',
+	'last_active'  => 'INTEGER | UNSIGNED | DEFAULT 0',
+];
+
+// Default CRM visits table
+$KANSO_DEFAULTS_VISITS_TABLE = [
+	'id'           => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'visitor_id'   => 'VARCHAR(255)',
+	'ip_address'   => 'VARCHAR(255)',
+	'page'         => 'VARCHAR(255)',
+	'date'         => 'INTEGER | UNSIGNED | DEFAULT 0',
+	'medium'       => 'VARCHAR(255)',
+	'channel'      => 'VARCHAR(255)',
+	'campaign'     => 'VARCHAR(255)',
+	'keyword'      => 'VARCHAR(255)',
+	'creative'     => 'VARCHAR(255)',
 ];
 
 // Default comments table

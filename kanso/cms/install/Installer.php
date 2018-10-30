@@ -213,6 +213,10 @@ class Installer
 
         $SQL->CREATE_TABLE('post_meta', $KANSO_DEFAULTS_POST_META_TABLE);
 
+        $SQL->CREATE_TABLE('crm_visitors', $KANSO_DEFAULTS_VISITORS_TABLE);
+
+        $SQL->CREATE_TABLE('crm_visits', $KANSO_DEFAULTS_VISITS_TABLE);
+
         $SQL->ALTER_TABLE('tags_to_posts')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
         $SQL->ALTER_TABLE('tags_to_posts')->MODIFY_COLUMN('tag_id')->ADD_FOREIGN_KEY('tags', 'id');
 

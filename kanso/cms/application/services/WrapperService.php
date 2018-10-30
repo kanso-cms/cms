@@ -9,12 +9,14 @@ namespace kanso\cms\application\services;
 
 use kanso\cms\wrappers\managers\CategoryManager;
 use kanso\cms\wrappers\managers\CommentManager;
+use kanso\cms\wrappers\managers\LeadManager;
 use kanso\cms\wrappers\managers\MediaManager;
 use kanso\cms\wrappers\managers\PostManager;
 use kanso\cms\wrappers\managers\TagManager;
 use kanso\cms\wrappers\managers\UserManager;
 use kanso\cms\wrappers\providers\CategoryProvider;
 use kanso\cms\wrappers\providers\CommentProvider;
+use kanso\cms\wrappers\providers\LeadProvider;
 use kanso\cms\wrappers\providers\MediaProvider;
 use kanso\cms\wrappers\providers\PostProvider;
 use kanso\cms\wrappers\providers\TagProvider;
@@ -99,6 +101,20 @@ class WrapperService extends Service
 				$container->Request->environment()
 			);
 		});
+
+		$this->container->singleton('LeadManager', function($container)
+		{
+			return new LeadManager(
+				$container->Database->connection()->builder(),
+				$container->LeadProvider,
+				$container->Crypto,
+				$container->Cookie,
+				$container->Session,
+				$container->Config,
+				$container->Request->environment(),
+				$container->Email
+			);
+		});
 	}
 
 	/**
@@ -121,6 +137,11 @@ class WrapperService extends Service
 		$this->container->singleton('UserProvider', function($container)
 		{
 			return new UserProvider($this->container->Database->connection()->builder());
+		});
+
+		$this->container->singleton('LeadProvider', function($container)
+		{
+			return new LeadProvider($this->container->Database->connection()->builder());
 		});
 
 		$this->container->singleton('TagProvider', function($container)
