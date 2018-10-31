@@ -1,4 +1,5 @@
 #### Framework
+- [ ] Add CLI component.
 
 #### CMS
 
@@ -7,6 +8,7 @@
 #### Docs
 - [ ] Comb over all documentation.
 - [ ] CRM component
+- [ ] Add API to docs.
 
 #### Unit Tests
 
