@@ -7,14 +7,13 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\framework\utility\Str;
-use kanso\framework\utility\Arr;
-use kanso\framework\utility\Humanizer;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
+use kanso\framework\utility\Arr;
+use kanso\framework\utility\Str;
 
 /**
- * Admin email logs
+ * Admin email logs.
  *
  * @author Joe J. Howard
  */
@@ -47,12 +46,12 @@ class EmailLogs extends BaseModel
      */
     public function onAJAX()
     {
-        # Process any AJAX requests here
-        # 
-        # Returning an associative array will
-        # send a JSON response to the client
-        
-        # Returning false sends a 404 
+        // Process any AJAX requests here
+        //
+        // Returning an associative array will
+        // send a JSON response to the client
+
+        // Returning false sends a 404
         return false;
     }
 
@@ -64,7 +63,7 @@ class EmailLogs extends BaseModel
      */
     private function parseGet(): array
     {
-        # Prep the response
+        // Prep the response
         $response =
         [
             'emails'        => $this->loadEmails(),
@@ -74,8 +73,8 @@ class EmailLogs extends BaseModel
             'active_tab'    => 'email-log',
         ];
 
-        # If the leads are empty,
-        # There's no need to check for max pages
+        // If the leads are empty,
+        // There's no need to check for max pages
         if (!empty($response['emails']))
         {
             $response['max_page'] = $this->loadEmails(true);
@@ -84,7 +83,7 @@ class EmailLogs extends BaseModel
         return $response;
     }
 
-     /**
+    /**
      * Parse the $_GET request variables and filter the leads for the requested page.
      *
      * @access private
@@ -93,7 +92,7 @@ class EmailLogs extends BaseModel
     private function parsePost(): array
     {
         $validate = $this->validatePost();
-        
+
         if (!$validate)
         {
             return false;
@@ -101,8 +100,8 @@ class EmailLogs extends BaseModel
 
         $id           = $this->post['id'];
         $path         = $this->Config->get('email.log_dir');
-        $file         = $path.'/'.$id;
-        $contentFile  = $path.'/'.$id.'_content';
+        $file         = $path . '/' . $id;
+        $contentFile  = $path . '/' . $id . '_content';
 
         if ($this->Filesystem->exists($file) && $this->Filesystem->exists($contentFile))
         {
@@ -113,13 +112,13 @@ class EmailLogs extends BaseModel
 
             return $this->postMessage('success', 'Email was successfully re-sent');
         }
-        
+
         return $this->postMessage('danger', 'The requested email could not be found.');
     }
 
     /**
-     * Validates all POST variables are set
-     * 
+     * Validates all POST variables are set.
+     *
      * @access private
      * @return bool
      */
@@ -129,8 +128,8 @@ class EmailLogs extends BaseModel
         {
             throw new InvalidTokenException('Bad Admin Panel POST Request. The CSRF token was either not provided or was invalid.');
         }
-        
-        # Validation
+
+        // Validation
         if (!isset($this->post['id']))
         {
             throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
@@ -140,7 +139,7 @@ class EmailLogs extends BaseModel
     }
 
     /**
-     * Check if the GET URL queries are either empty or set to defaults
+     * Check if the GET URL queries are either empty or set to defaults.
      *
      * @access private
      * @return bool
@@ -150,25 +149,25 @@ class EmailLogs extends BaseModel
         $queries = $this->getQueries();
 
         return (
-            $queries['search'] === false && 
-            $queries['page']   === 0 && 
-            $queries['sort']   === 'date' && 
+            $queries['search'] === false &&
+            $queries['page']   === 0 &&
+            $queries['sort']   === 'date' &&
             $queries['filter'] === 'all'
         );
     }
 
     /**
-     * Returns the requested GET queries with defaults
+     * Returns the requested GET queries with defaults.
      *
      * @access private
      * @return array
      */
     private function getQueries(): array
     {
-        # Get queries
+        // Get queries
         $queries = $this->Request->queries();
 
-        # Set defaults
+        // Set defaults
         if (!isset($queries['search']))   $queries['search']   = false;
         if (!isset($queries['page']))     $queries['page']     = 0;
         if (!isset($queries['sort']))     $queries['sort']     = 'date';
@@ -178,16 +177,16 @@ class EmailLogs extends BaseModel
     }
 
     /**
-     * Returns the list of leads for display
+     * Returns the list of leads for display.
      *
      * @access private
-     * @param  bool $checkMaxPages Count the max pages
+     * @param  bool      $checkMaxPages Count the max pages
      * @return array|int
      */
     private function loadEmails(bool $checkMaxPages = false)
     {
         $queries      = $this->getQueries();
-        $page         = ((int)$queries['page']);
+        $page         = ((int) $queries['page']);
         $sort         = $queries['sort'];
         $perPage      = 10;
         $offset       = $page * $perPage;
@@ -195,9 +194,9 @@ class EmailLogs extends BaseModel
         $filter       = $queries['filter'];
         $search       = $queries['search'];
         $path         = $this->Config->get('email.log_dir');
-        $files        = $this->Filesystem->list($path, ['..', '.', '.ds_store', '.DS_Store', '.gitignore' ]);
+        $files        = $this->Filesystem->list($path, ['..', '.', '.ds_store', '.DS_Store', '.gitignore']);
 
-        # Remove contents files
+        // Remove contents files
         foreach ($files as $i => $file)
         {
             if (Str::contains($file, '_content'))
@@ -208,26 +207,26 @@ class EmailLogs extends BaseModel
 
         $files = array_values($files);
 
-        # Sort the emails
+        // Sort the emails
         usort($files, function($a, $b) use ($path, $sort)
         {
-            $a = unserialize($this->Filesystem->getContents($path.'/'.$a));
-            $b = unserialize($this->Filesystem->getContents($path.'/'.$b));
+            $a = unserialize($this->Filesystem->getContents($path . '/' . $a));
+            $b = unserialize($this->Filesystem->getContents($path . '/' . $b));
 
             if ($sort === 'date')
             {
                 return $a['date'] < $b['date'];
             }
 
-            return strcmp($a[$sort], $b[$sort]); 
+            return strcmp($a[$sort], $b[$sort]);
         });
 
-        # Filter the email type
+        // Filter the email type
         if ($filter !== 'all')
         {
             foreach ($files as $i => $file)
             {
-                $contents = unserialize($this->Filesystem->getContents($path.'/'.$file));
+                $contents = unserialize($this->Filesystem->getContents($path . '/' . $file));
 
                 if ($filter === 'html')
                 {
@@ -236,7 +235,7 @@ class EmailLogs extends BaseModel
                         unset($files[$i]);
                     }
                 }
-                else if ($contents['format'] === 'html')
+                elseif ($contents['format'] === 'html')
                 {
                     unset($files[$i]);
                 }
@@ -245,16 +244,16 @@ class EmailLogs extends BaseModel
             $files = array_values($files);
         }
 
-        # Search
+        // Search
         if ($search)
         {
             foreach ($files as $i => $file)
             {
-                $contents = unserialize($this->Filesystem->getContents($path.'/'.$file));
+                $contents = unserialize($this->Filesystem->getContents($path . '/' . $file));
 
-                if ( Str::contains($contents['to_email'], $search) || 
-                     Str::contains($contents['from_email'], $search) || 
-                     Str::contains($contents['from_name'], $search) || 
+                if (Str::contains($contents['to_email'], $search) ||
+                     Str::contains($contents['from_email'], $search) ||
+                     Str::contains($contents['from_name'], $search) ||
                      Str::contains($contents['subject'], $search))
                 {
                     continue;
@@ -267,8 +266,8 @@ class EmailLogs extends BaseModel
 
             $files = array_values($files);
         }
-        
-        # Are we checking the pages ?
+
+        // Are we checking the pages ?
         if ($checkMaxPages)
         {
             return ceil(count($files) / $perPage);
@@ -278,12 +277,12 @@ class EmailLogs extends BaseModel
 
         foreach ($files as $i => $file)
         {
-            $contents       = unserialize($this->Filesystem->getContents($path.'/'.$file));
+            $contents       = unserialize($this->Filesystem->getContents($path . '/' . $file));
             $contents['id'] = $file;
             $results[]      = $contents;
         }
 
-        # Return the paginated results
+        // Return the paginated results
         $paged = Arr::paginate($results, $page, $perPage);
         $page  = $page === 1 || $page === 0 ? 0 : $page-1;
 

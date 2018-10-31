@@ -115,3 +115,6 @@ $router->post('/admin/logs/email-logs/', '\kanso\cms\admin\controllers\Dashboard
 
 // Admin email preview
 $router->get('/admin/email-preview/(:any)/', 'kanso\cms\admin\controllers\Dashboard@emailPreview', '\kanso\cms\admin\models\EmailPreview');
+
+// Admin leads
+$router->get('/admin/leads/', 'kanso\cms\admin\controllers\Dashboard@leads', '\kanso\cms\admin\models\Leads');

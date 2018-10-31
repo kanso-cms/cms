@@ -288,14 +288,24 @@ function admin_sirebar_links()
 				],
 			],
 		],
-		'comments' => [
-			'link'     => '/admin/comments/',
-			'text'     => 'Comments',
-			'icon'     => 'comments',
+		'crm' => [
+			'link'     => '/admin/visitors/',
+			'text'     => 'CRM',
+			'icon'     => 'users',
 			'children' => [
+				'leads' => [
+					'link'     => '/admin/leads/',
+					'text'     => 'Leads',
+					'icon'     => 'users',
+				],
+				'comments' => [
+					'link'     => '/admin/comments/',
+					'text'     => 'Comments',
+					'icon'     => 'users',
+				],
 				'commentUsers' => [
 					'link'     => '/admin/comment-users/',
-					'text'     => 'Users',
+					'text'     => 'Commenters',
 					'icon'     => 'users',
 				],
 			],
@@ -347,7 +357,7 @@ function admin_sirebar_links()
 			'text'     => 'Logs',
 			'icon'     => 'terminal',
 			'children' =>
-			[	
+			[
 				'errorLogs' => [
 					'link'     => '/admin/logs/error-logs/',
 					'text'     => 'Error Logs',

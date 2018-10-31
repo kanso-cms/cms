@@ -9,7 +9,7 @@
 	<?php require_once($_TEMPLATES_DIR . DIRECTORY_SEPARATOR . 'post-message.php'); ?>
 
 	<!-- TAB NAV -->
-	<?php require 'templates'.DIRECTORY_SEPARATOR. 'logs'.DIRECTORY_SEPARATOR.'tab-nav.php'; ?>
+	<?php require 'templates' . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . 'tab-nav.php'; ?>
 
 	<!-- LIST -->
 	<section class="items-list roof-xs">

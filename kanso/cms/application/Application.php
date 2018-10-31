@@ -77,6 +77,8 @@ class Application
 
 		if ($this->container->Installer->isInstalled())
 		{
+			$this->container->Crm;
+
 			$this->applyRoutes();
 		}
     }

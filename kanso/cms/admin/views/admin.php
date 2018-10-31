@@ -64,6 +64,10 @@ elseif ($ADMIN_PAGE_TYPE === 'mediaLibrary')
 {
 	require_once('dash-media.php');
 }
+elseif ($ADMIN_PAGE_TYPE === 'leads')
+{
+	require_once('dash-leads.php');
+}
 elseif (
 	$ADMIN_PAGE_TYPE === 'settings' ||
 	$ADMIN_PAGE_TYPE === 'settingsAccount' ||

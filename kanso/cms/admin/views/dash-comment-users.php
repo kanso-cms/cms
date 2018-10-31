@@ -11,6 +11,7 @@
 	<!-- TABS -->
 	<div class="floor-sm">
 		<ul class="tab-nav tab-border">
+			<li><a href="/admin/leads/">Leads</a></li>
 			<li><a href="/admin/comments/">Comments</a></li>
 		    <li><a href="/admin/comment-users/" class="active">Users</a></li>
 		</ul>
