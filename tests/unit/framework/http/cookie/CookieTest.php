@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\http\cookie;
+namespace kanso\tests\unit\framework\http\cookie;
 
-use Mockery;
-use tests\TestCase;
 use kanso\framework\http\cookie\Cookie;
+use kanso\tests\TestCase;
+use Mockery;
 
 /**
  * @group unit
+ * @group framework
  */
 class CookieTest extends TestCase
 {
@@ -24,7 +25,7 @@ class CookieTest extends TestCase
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(['foo' => 'bar']);
-		
+
 		$store->shouldReceive('read')->withArgs(['cookie_name_login'])->andReturn(false);
 
 		$cookie = new Cookie($store, 'cookie_name', strtotime('+1 month'));
@@ -38,7 +39,7 @@ class CookieTest extends TestCase
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(['foo' => 'bar']);
-		
+
 		$store->shouldReceive('read')->withArgs(['cookie_name_login'])->andReturn(false);
 
 		$cookie = new Cookie($store, 'cookie_name', strtotime('+1 month'));
@@ -54,7 +55,7 @@ class CookieTest extends TestCase
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(['foo' => 'bar']);
-		
+
 		$store->shouldReceive('read')->withArgs(['cookie_name_login'])->andReturn('yes');
 
 		$cookie = new Cookie($store, 'cookie_name', strtotime('+1 month'));
@@ -72,7 +73,7 @@ class CookieTest extends TestCase
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(['foo' => 'bar']);
-		
+
 		$store->shouldReceive('read')->withArgs(['cookie_name_login'])->andReturn('yes');
 
 		$cookie = new Cookie($store, 'cookie_name', strtotime('+1 month'));

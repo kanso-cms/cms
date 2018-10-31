@@ -5,13 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\mvc;
+namespace kanso\tests\unit\framework\mvc;
 
-use tests\TestCase;
 use kanso\framework\mvc\view\View;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class ViewTest extends TestCase
 {
@@ -21,16 +22,16 @@ class ViewTest extends TestCase
     private function getInclude()
     {
         $handle = tmpfile();
-                
+
         $path = stream_get_meta_data($handle)['uri'];
 
         fclose($handle);
 
         file_put_contents($path, '<?php $foo = "bar"; ?>');
 
-        rename($path, $path.'.php');
+        rename($path, $path . '.php');
 
-        return $path.'.php';
+        return $path . '.php';
     }
 
     /**
@@ -39,16 +40,16 @@ class ViewTest extends TestCase
     private function getTemplate()
     {
         $handle = tmpfile();
-                
+
         $path = stream_get_meta_data($handle)['uri'];
 
         fclose($handle);
 
         file_put_contents($path, '<?php echo $foo; ?>');
 
-        rename($path, $path.'.php');
+        rename($path, $path . '.php');
 
-        return $path.'.php';
+        return $path . '.php';
     }
 
     /**

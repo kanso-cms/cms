@@ -11,36 +11,43 @@ use kanso\cms\email\Email;
 use kanso\cms\wrappers\User;
 
 /**
- * CMS gatekeeper email adapter
+ * CMS gatekeeper email adapter.
  *
  * @author Joe J. Howard
  */
 class EmailAdapter
 {
     /**
-     * httpHost
-     * 
+     * Email utility.
+     *
+     * @var \kanso\cms\email\Email
+     */
+    private $email;
+
+    /**
+     * httpHost.
+     *
      * @var string
      */
     private $httpHost;
 
     /**
-     * domainName
-     * 
+     * domainName.
+     *
      * @var string
      */
     private $domainName;
 
     /**
-     * Name of website
-     * 
+     * Name of website.
+     *
      * @var string
      */
     private $siteTitle;
-    
+
     /**
-     * Default urls
-     * 
+     * Default urls.
+     *
      * @var array
      */
     private $urls =
@@ -49,9 +56,19 @@ class EmailAdapter
         'register'        => 'register/',
         'forgot_password' => 'forgot-password/',
         'reset_password'  => 'reset-password/',
-        'confirm_account' => 'confirm-account/'
+        'confirm_account' => 'confirm-account/',
     ];
 
+    /**
+     * Constructor.
+     *
+     * @access public
+     * @param \kanso\cms\email\Email $Email      Email utility
+     * @param string                 $httpHost   HTTP_HOST
+     * @param string                 $domainName Current domain name (e.g 'example.com')
+     * @param string                 $siteTitle  Website base title (e.g 'Kanso CMS')
+     * @param array                  $urls       Assoc array of CMS urls for user access (otional defaul [])
+     */
     public function __construct(Email $email, string $httpHost, string $domainName, string $siteTitle, array $urls = [])
     {
         $this->email = $email;
@@ -66,7 +83,7 @@ class EmailAdapter
     }
 
     /**
-     * Forgot password
+     * Forgot password.
      *
      * @access public
      * @param  kanso\cms\wrappers\User $user User to run request on
@@ -74,11 +91,11 @@ class EmailAdapter
      */
     public function forgotPassword(User $user): bool
     {
-        $resetUrl = $this->httpHost.'/'.$this->urls['reset_password'].'?token='.$user->kanso_password_key;
+        $resetUrl = $this->httpHost . '/' . $this->urls['reset_password'] . '?token=' . $user->kanso_password_key;
 
         $emailData =
         [
-            'name'        => $user->name, 
+            'name'        => $user->name,
             'resetUrl'    => $resetUrl,
             'websiteName' => $this->domainName,
             'websiteUrl'  => $this->httpHost,
@@ -86,12 +103,12 @@ class EmailAdapter
 
         if ($user->role === 'administrator' || $user->role === 'writer')
         {
-            $emailData['resetUrl'] = $this->httpHost.'/admin/reset-password/?token='.$user->kanso_password_key;
+            $emailData['resetUrl'] = $this->httpHost . '/admin/reset-password/?token=' . $user->kanso_password_key;
         }
 
-        # Email credentials
+        // Email credentials
         $senderName   = $this->siteTitle;
-        $senderEmail  = 'no-reply@'.$this->domainName;
+        $senderEmail  = 'no-reply@' . $this->domainName;
         $emailSubject = 'Request to reset your password';
         $emailContent = $this->email->html($emailSubject, $this->email->preset('forgot-password', $emailData));
         $emailTo      = $user->email;
@@ -102,7 +119,7 @@ class EmailAdapter
     }
 
     /**
-     * Reset password
+     * Reset password.
      *
      * @access public
      * @param  kanso\cms\wrappers\User $user User to run request on
@@ -112,23 +129,23 @@ class EmailAdapter
     {
         $emailData =
         [
-            'name'        => $user->name, 
+            'name'        => $user->name,
             'websiteName' => $this->domainName,
             'websiteUrl'  => $this->httpHost,
-            'resetUrl'    => $this->httpHost.'/'.$this->urls['forgot_password'],
-            'loginUrl'    => $this->httpHost.'/'.$this->urls['login'],
+            'resetUrl'    => $this->httpHost . '/' . $this->urls['forgot_password'],
+            'loginUrl'    => $this->httpHost . '/' . $this->urls['login'],
         ];
 
         if ($user->role === 'administrator' || $user->role === 'writer')
         {
-            $emailData['resetUrl']  = $this->httpHost.'/admin/forgot-password/';
-            $emailData['loginUrl']  = $this->httpHost.'/admin/login/';
+            $emailData['resetUrl']  = $this->httpHost . '/admin/forgot-password/';
+            $emailData['loginUrl']  = $this->httpHost . '/admin/login/';
         }
 
-        # Email credentials
+        // Email credentials
         $senderName   = $this->siteTitle;
-        $senderEmail  = 'no-reply@'.$this->domainName;
-        $emailSubject = 'Your password was reset at '.$this->domainName;
+        $senderEmail  = 'no-reply@' . $this->domainName;
+        $emailSubject = 'Your password was reset at ' . $this->domainName;
         $emailContent = $this->email->html($emailSubject, $this->email->preset('reset-password', $emailData));
         $emailTo      = $user->email;
 
@@ -138,7 +155,7 @@ class EmailAdapter
     }
 
     /**
-     * Forgot username
+     * Forgot username.
      *
      * @access public
      * @param  kanso\cms\wrappers\User $user User to run request on
@@ -146,19 +163,19 @@ class EmailAdapter
      */
     public function forgotUsername(User $user): bool
     {
-        # email variables
+        // email variables
         $emailData =
         [
-            'name'        => $user->name, 
+            'name'        => $user->name,
             'username'    => $user->username,
             'websiteName' => $this->domainName,
             'websiteUrl'  => $this->httpHost,
         ];
 
-        # Email credentials
+        // Email credentials
         $senderName   = $this->siteTitle;
-        $senderEmail  = 'no-reply@'.$this->domainName;
-        $emailSubject = 'Username reminder at '.$this->domainName;
+        $senderEmail  = 'no-reply@' . $this->domainName;
+        $emailSubject = 'Username reminder at ' . $this->domainName;
         $emailContent = $this->email->html($emailSubject, $this->email->preset('forgot-username', $emailData));
         $emailTo      = $user->email;
 

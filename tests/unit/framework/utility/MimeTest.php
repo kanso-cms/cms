@@ -5,13 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\utility;
+namespace kanso\tests\unit\framework\utility;
 
-use tests\TestCase;
 use kanso\framework\utility\Mime;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class MimeTest extends TestCase
 {

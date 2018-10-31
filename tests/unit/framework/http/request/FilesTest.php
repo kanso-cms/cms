@@ -5,13 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\http\response;
+namespace kanso\tests\unit\framework\http\response;
 
-use tests\TestCase;
 use kanso\framework\http\request\Files;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class FilesTest extends TestCase
 {
@@ -55,11 +56,11 @@ class FilesTest extends TestCase
 	public function testCountSet()
 	{
 		$files = new Files($this->getSingleUpload());
-		
+
 		$this->assertSame(1, count($files->asArray()));
-		
+
 		$files = new Files($this->getMultiUpload());
-		
+
 		$this->assertSame(1, count($files->asArray()));
 	}
 	/**
@@ -68,9 +69,9 @@ class FilesTest extends TestCase
 	public function testAdd()
 	{
 		$files = new Files;
-		
+
 		$files->put('upload', $this->getSingleUpload()['upload']);
-		
+
 		$this->assertTrue(is_array($files->get('upload')) && !empty($files->get('upload')));
 	}
 	/**
@@ -79,13 +80,13 @@ class FilesTest extends TestCase
 	public function testGet()
 	{
 		$files = new Files($this->getSingleUpload());
-		
+
 		$this->assertTrue(is_array($files->get('upload')) && !empty($files->get('upload')));
-		
+
 		$files = new Files($this->getMultiUpload());
-		
+
 		$this->assertTrue(is_array($files->get('upload.0')) && !empty($files->get('upload.0')));
-		
+
 		$this->assertTrue(is_array($files->get('upload.1')) && !empty($files->get('upload.1')));
 	}
 

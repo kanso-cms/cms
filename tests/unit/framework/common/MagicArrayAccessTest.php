@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\common;
+namespace kanso\tests\unit\framework\common;
 
-use tests\TestCase;
 use kanso\framework\common\MagicArrayAccessTrait;
+use kanso\tests\TestCase;
 
 // --------------------------------------------------------------------------
 // START CLASSES
@@ -30,6 +30,7 @@ class TestMagicArrayAccess
 
 /**
  * @group unit
+ * @group framework
  */
 class MagicArrayAccessTest extends TestCase
 {

@@ -5,14 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\http\session;
+namespace kanso\tests\unit\framework\http\session;
 
-use Mockery;
-use tests\TestCase;
 use kanso\framework\http\session\Token;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class TokenTest extends TestCase
 {

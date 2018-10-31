@@ -4,7 +4,6 @@
  * @package PHPMailer
  * @author VINADES.,JSC <contact@vinades.vn>
  */
-
 $PHPMAILER_LANG['authenticate']         = 'Lỗi SMTP: Không thể xác thực.';
 $PHPMAILER_LANG['connect_host']         = 'Lỗi SMTP: Không thể kết nối máy chủ SMTP.';
 $PHPMAILER_LANG['data_not_accepted']    = 'Lỗi SMTP: Dữ liệu không được chấp nhận.';

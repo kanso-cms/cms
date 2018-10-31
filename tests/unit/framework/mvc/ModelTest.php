@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\mvc;
+namespace kanso\tests\unit\framework\mvc;
 
-use tests\TestCase;
 use kanso\framework\mvc\model\Model;
+use kanso\tests\TestCase;
 
 class TestModelCase extends Model
 {
@@ -20,6 +20,7 @@ class TestModelCase extends Model
 
 /**
  * @group unit
+ * @group framework
  */
 class ModelTest extends TestCase
 {

@@ -7,12 +7,11 @@
 
 namespace kanso\framework\application\services;
 
-use kanso\framework\application\services\Service;
-use kanso\framework\cache\stores\FileStore;
 use kanso\framework\cache\Cache;
+use kanso\framework\cache\stores\FileStore;
 
 /**
- * Cache service
+ * Cache service.
  *
  * @author Joe J. Howard
  */
@@ -23,9 +22,9 @@ class CacheService extends Service
 	 */
 	public function register()
 	{
-		$this->container->singleton('Cache', function ()
+		$this->container->singleton('Cache', function()
 		{
-			$cacheConfiguration = $this->container->Config->get('cache.configurations.'.$this->container->Config->get('cache.default'));
+			$cacheConfiguration = $this->container->Config->get('cache.configurations.' . $this->container->Config->get('cache.default'));
 
 			if (!is_numeric($cacheConfiguration['expire']))
 			{
@@ -37,12 +36,12 @@ class CacheService extends Service
 	}
 
 	/**
-     * Get the cache store
-     *
-     * @access private
-     * @param  array   $cacheConfiguration Configuration options for the cache
-     * @return mixed
-     */
+	 * Get the cache store.
+	 *
+	 * @access private
+	 * @param  array $cacheConfiguration Configuration options for the cache
+	 * @return mixed
+	 */
 	private function loadCacheStore(array $cacheConfiguration)
 	{
 		$type = $cacheConfiguration['type'];
@@ -54,14 +53,14 @@ class CacheService extends Service
 	}
 
 	/**
-     * Returns the file storage implementation
-     *
-     * @access private
-     * @param  string  $path Directory to store cached files
-     * @return \kanso\framework\cache\stores\FileStore
-     */
+	 * Returns the file storage implementation.
+	 *
+	 * @access private
+	 * @param  string                                  $path Directory to store cached files
+	 * @return \kanso\framework\cache\stores\FileStore
+	 */
 	private function fileStore(string $path): FileStore
 	{
-		return new FileStore($this->container->Filesystem, $path);	
+		return new FileStore($this->container->Filesystem, $path);
 	}
 }

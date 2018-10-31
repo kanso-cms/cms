@@ -1,4 +1,6 @@
-<?php use \kanso\Kanso; ?>
+<?php use kanso\Kanso;
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +13,7 @@
     <!--[if mso]>
         <style>
             * {
-                font-family: <?php echo $font_family;?> !important;
+                font-family: <?php echo $font_family; ?> !important;
             }
         </style>
     <![endif]-->
@@ -124,8 +126,8 @@
         }
         .button-td:hover,
         .button-a:hover {
-            background: <?php echo $btn_hover_bg;?> !important;
-            border-color: <?php echo $btn_hover_bg;?> !important;
+            background: <?php echo $btn_hover_bg; ?> !important;
+            border-color: <?php echo $btn_hover_bg; ?> !important;
         }
          /* Media Queries */
         @media screen and (max-width: 600px) {
@@ -188,8 +190,8 @@
     </style>
 
 </head>
-<body width="100%" bgcolor="<?php echo $body_bg;?>" style="margin: 0; mso-line-height-rule: exactly;">
-    <center style="width: 100%; background: <?php echo $body_bg;?>; text-align: left;">
+<body width="100%" bgcolor="<?php echo $body_bg; ?>" style="margin: 0; mso-line-height-rule: exactly;">
+    <center style="width: 100%; background: <?php echo $body_bg; ?>; text-align: left;">
 
         <!--
             Set the email width. Defined in two places:
@@ -204,7 +206,7 @@
             <![endif]-->
 
             <!-- Email Header : BEGIN -->
-            <table bgcolor="<?php echo $body_bg;?>" role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
+            <table bgcolor="<?php echo $body_bg; ?>" role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
                 <tr>
                     <td style="padding: 20px 0; text-align: center">&nbsp;</td>
                 </tr>
@@ -212,16 +214,16 @@
             <!-- Email Header : END -->
 
             <!-- Email Body : BEGIN -->
-            <table class="content-wrapper" role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px; border: <?php echo $content_border;?>; border-radius: <?php echo $border_radius;?>">
+            <table class="content-wrapper" role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px; border: <?php echo $content_border; ?>; border-radius: <?php echo $border_radius; ?>">
 
                 <!-- LOGO COLUM : BEGIN -->
                 <tr>
-                    <td bgcolor="<?php echo $content_bg;?>" style="padding: 40px 0 0 0;">
+                    <td bgcolor="<?php echo $content_bg; ?>" style="padding: 40px 0 0 0;">
                         <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
                                 <td style="text-align: center">
-                                    <a href="<?php echo $logo_link;?>" style="display: inline-block;">
-                                        <img src="<?php echo $logo_url; ?>?v=<?php echo time();?>" title="<?php echo Kanso::instance()->Request->environment()->DOMAIN_NAME;?>" alt="<?php echo Kanso::instance()->Request->environment()->DOMAIN_NAME;?> Logo" width="60" height="60" style="display: block; width: 60px; height: 60px;">
+                                    <a href="<?php echo $logo_link; ?>" style="display: inline-block;">
+                                        <img src="<?php echo $logo_url; ?>?v=<?php echo time(); ?>" title="<?php echo Kanso::instance()->Request->environment()->DOMAIN_NAME; ?>" alt="<?php echo Kanso::instance()->Request->environment()->DOMAIN_NAME; ?> Logo" width="60" height="60" style="display: block; width: 60px; height: 60px;">
                                     </a>
                                 </td>
                             </tr>
@@ -232,10 +234,10 @@
 
                 <!-- 1 Column Text : BEGIN -->
                 <tr>
-                    <td class="content-inner" bgcolor="<?php echo $content_bg;?>" style="padding: 20px">
+                    <td class="content-inner" bgcolor="<?php echo $content_bg; ?>" style="padding: 20px">
                         <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" width="100%">
                             <tr>
-                                <td style="font-size: <?php echo $font_size;?>; line-height: <?php echo $line_height;?>; color: <?php echo $body_color?>;">
+                                <td style="font-size: <?php echo $font_size; ?>; line-height: <?php echo $line_height; ?>; color: <?php echo $body_color?>;">
                                     <?php echo $content; ?>
                                 </td>
                             </tr>
@@ -248,7 +250,7 @@
             <!-- Email Body : END -->
 
             <!-- Email Header : BEGIN -->
-            <table bgcolor="<?php echo $body_bg;?>" role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
+            <table bgcolor="<?php echo $body_bg; ?>" role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 600px;">
                 <tr>
                     <td style="padding: 20px 0; text-align: center">&nbsp;</td>
                 </tr>
@@ -258,9 +260,9 @@
             <!-- Email Footer : BEGIN -->
             <table role="presentation" aria-hidden="true" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 680px;">
                 <tr>
-                    <td style="padding: 40px 10px;width: 100%;font-size: 11px; line-height:<?php echo $line_height;?>; text-align: center; color: <?php echo $color_gray;?>;" class="x-gmail-data-detectors">
+                    <td style="padding: 40px 10px;width: 100%;font-size: 11px; line-height:<?php echo $line_height; ?>; text-align: center; color: <?php echo $color_gray; ?>;" class="x-gmail-data-detectors">
                         Message sent via 
-                        <a href="http://kanso-cms.github.io/" style="color: <?php echo $color_gray_dark;?>; margin: 0; padding: 0;">Kanso CMS</a>
+                        <a href="http://kanso-cms.github.io/" style="color: <?php echo $color_gray_dark; ?>; margin: 0; padding: 0;">Kanso CMS</a>
                     </td>
                 </tr>
             </table>

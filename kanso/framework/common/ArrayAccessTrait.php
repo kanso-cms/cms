@@ -17,18 +17,18 @@ use kanso\framework\utility\Arr;
 trait ArrayAccessTrait
 {
 	/**
-	 * Array access
+	 * Array access.
 	 *
 	 * @var string
 	 */
 	protected $data = [];
 
 	/**
-	 * Save a key to the array using dot notation
+	 * Save a key to the array using dot notation.
 	 *
 	 * @access public
-	 * @param  string $key   Key to use
-	 * @param  mixed  $value Value to save
+	 * @param string $key   Key to use
+	 * @param mixed  $value Value to save
 	 */
 	public function set(string $key, $value)
 	{
@@ -38,11 +38,11 @@ trait ArrayAccessTrait
 	}
 
 	/**
-	 * Alias for set
+	 * Alias for set.
 	 *
 	 * @access public
-	 * @param  string $key   Key to use
-	 * @param  mixed  $value Value to save
+	 * @param string $key   Key to use
+	 * @param mixed  $value Value to save
 	 */
 	public function put(string $key, $value)
 	{
@@ -50,10 +50,10 @@ trait ArrayAccessTrait
 	}
 
 	/**
-	 * Save an array of key values using dot notation
+	 * Save an array of key values using dot notation.
 	 *
 	 * @access public
-	 * @param  array $data Associative array to add
+	 * @param array $data Associative array to add
 	 */
 	public function setMultiple(array $data)
 	{
@@ -63,7 +63,7 @@ trait ArrayAccessTrait
 			{
 				Arr::set($this->data, $key, $value);
 			}
-			else 
+			else
 			{
 				$this->data[$key] = $value;
 			}
@@ -71,11 +71,11 @@ trait ArrayAccessTrait
 	}
 
 	/**
-	 * Check if the internal array has a value using dot notation
+	 * Check if the internal array has a value using dot notation.
 	 *
 	 * @access public
 	 * @param  string $key Key to use
-	 * @return bool 
+	 * @return bool
 	 */
 	public function has(string $key): bool
 	{
@@ -83,11 +83,11 @@ trait ArrayAccessTrait
 	}
 
 	/**
-	 * Get a key/value from the internal array using dot notation
+	 * Get a key/value from the internal array using dot notation.
 	 *
 	 * @access public
 	 * @param  string $key Key to use
-	 * @return mixed 
+	 * @return mixed
 	 */
 	public function get(string $key = null)
 	{
@@ -100,10 +100,10 @@ trait ArrayAccessTrait
 	}
 
 	/**
-	 * Remove a key/value from the internal array using dot notation
+	 * Remove a key/value from the internal array using dot notation.
 	 *
 	 * @access public
-	 * @param  string $key Key to use
+	 * @param string $key Key to use
 	 */
 	public function remove(string $key)
 	{
@@ -111,7 +111,7 @@ trait ArrayAccessTrait
 	}
 
 	/**
-	 * Empty the internal array
+	 * Empty the internal array.
 	 *
 	 * @access public
 	 */
@@ -121,10 +121,10 @@ trait ArrayAccessTrait
 	}
 
 	/**
-	 * Overwrite the internal array with a new one
+	 * Overwrite the internal array with a new one.
 	 *
 	 * @access public
-	 * @param  array $data Array to overwrite the internal array with
+	 * @param array $data Array to overwrite the internal array with
 	 */
 	public function overwrite(array $data)
 	{
@@ -134,7 +134,7 @@ trait ArrayAccessTrait
 	}
 
 	/**
-	 * Alias for get
+	 * Alias for get.
 	 *
 	 * @access public
 	 * @return array

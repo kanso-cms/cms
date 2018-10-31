@@ -5,20 +5,20 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\onion;
+namespace kanso\tests\unit\framework\onion;
 
-use Mockery;
 use Closure;
-use tests\TestCase;
-use kanso\framework\onion\Onion;
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
+use kanso\framework\onion\Onion;
+use kanso\tests\TestCase;
+use Mockery;
 
 class OnionCallbackTest
 {
 	public function __construct(Request $request, Response $response, Closure $next, $arg1, $arg2)
-    { 
-    	$this->var = $arg1.$arg2;
+    {
+    	$this->var = $arg1 . $arg2;
     }
 
     public function normalMethod()
@@ -28,12 +28,13 @@ class OnionCallbackTest
 
 	public static function staticFunc(Request $request, Response $response, Closure $next, $arg1, $arg2)
 	{
-		echo $arg1.$arg2;
+		echo $arg1 . $arg2;
 	}
 }
 
 /**
  * @group unit
+ * @group framework
  */
 class OnionTest extends TestCase
 {
@@ -86,7 +87,7 @@ class OnionTest extends TestCase
 	{
 		ob_start();
 
-		$callback = '\tests\unit\framework\onion\OnionCallbackTest@normalMethod';
+		$callback = '\kanso\tests\unit\framework\onion\OnionCallbackTest@normalMethod';
 
 		$request = Mockery::mock('\kanso\framework\http\request\Request');
 
@@ -108,7 +109,7 @@ class OnionTest extends TestCase
 	{
 		ob_start();
 
-		$callback = '\tests\unit\framework\onion\OnionCallbackTest::staticFunc';
+		$callback = '\kanso\tests\unit\framework\onion\OnionCallbackTest::staticFunc';
 
 		$request = Mockery::mock('\kanso\framework\http\request\Request');
 

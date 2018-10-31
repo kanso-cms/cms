@@ -15,14 +15,14 @@ namespace kanso\framework\common;
 trait MagicArrayAccessTrait
 {
 	/**
-	 * Array access
+	 * Array access.
 	 *
 	 * @var string
 	 */
 	protected $data = [];
 
-	/**
-     * Return all properties
+    /**
+     * Return all properties.
      *
      * @access public
      * @return array
@@ -33,7 +33,7 @@ trait MagicArrayAccessTrait
     }
 
     /**
-     * Get a property by key
+     * Get a property by key.
      *
      * @access public
      * @return string|null
@@ -49,7 +49,7 @@ trait MagicArrayAccessTrait
     }
 
     /**
-     * Set a property by key
+     * Set a property by key.
      *
      * @access public
      */
@@ -59,7 +59,7 @@ trait MagicArrayAccessTrait
     }
 
     /**
-     * Check if a property by key exists
+     * Check if a property by key exists.
      *
      * @access public
      * @return bool
@@ -70,7 +70,7 @@ trait MagicArrayAccessTrait
     }
 
     /**
-     * Unset a property by key
+     * Unset a property by key.
      *
      * @access public
      */
@@ -79,6 +79,6 @@ trait MagicArrayAccessTrait
         if (isset($this->data[$key]))
         {
             unset($this->data[$key]);
-        } 
+        }
     }
 }

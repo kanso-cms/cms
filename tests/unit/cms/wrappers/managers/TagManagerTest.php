@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\wrappers\managers;
+namespace kanso\tests\unit\cms\wrappers\managers;
 
-use Mockery;
-use tests\TestCase;
 use kanso\cms\wrappers\managers\TagManager;
+use kanso\tests\TestCase;
+use Mockery;
 
 /**
  * @group unit
+ * @group cms
  */
 class TagManagerTest extends TestCase
 {
@@ -27,7 +28,7 @@ class TagManagerTest extends TestCase
         $manager  = new TagManager($sql, $provider);
 
         $provider->shouldReceive('byKey')->with('slug', 'bar', true)->once()->andReturn(null);
-        
+
         $provider->shouldReceive('create')->with(['name' => 'foo', 'slug' => 'bar'])->once()->andReturn($tag);
 
         $manager->create('foo', 'bar');

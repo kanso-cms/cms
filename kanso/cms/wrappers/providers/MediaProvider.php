@@ -9,28 +9,27 @@ namespace kanso\cms\wrappers\providers;
 
 use kanso\cms\wrappers\Media;
 use kanso\framework\database\query\Builder;
-use kanso\cms\wrappers\providers\Provider;
 
 /**
- * Media provider
+ * Media provider.
  *
  * @author Joe J. Howard
  */
 class MediaProvider extends Provider
 {
     /**
-     * Assoc array of thumbnail sizes
-     * 
+     * Assoc array of thumbnail sizes.
+     *
      * @var array
-     */ 
+     */
     private $thumbnailSizes;
 
     /**
-     * Override inherited constructor
-     * 
+     * Override inherited constructor.
+     *
      * @access public
-     * @param  \kanso\framework\database\query\Builder $SQL            SQL query builder
-     * @param  array                                   $thumbnailSizes Assoc array of thumbnail sizes
+     * @param \kanso\framework\database\query\Builder $SQL            SQL query builder
+     * @param array                                   $thumbnailSizes Assoc array of thumbnail sizes
      */
     public function __construct(Builder $SQL, array $thumbnailSizes)
     {
@@ -94,8 +93,8 @@ class MediaProvider extends Provider
     }
 
     /**
-     * Get all media objects
-     * 
+     * Get all media objects.
+     *
      * @access public
      * @return array
      */

@@ -5,13 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\utility;
+namespace kanso\tests\unit\framework\utility;
 
-use tests\TestCase;
 use kanso\framework\utility\Humanizer;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class HumanizerTest extends TestCase
 {
@@ -20,19 +21,19 @@ class HumanizerTest extends TestCase
 	 */
 	public function testFileSize()
 	{
-		# Bytes
+		// Bytes
 		$this->assertEquals('1 byte', Humanizer::fileSize(1));
 		$this->assertEquals('100 bytes', Humanizer::fileSize(100));
-		
-		# kilobytes
+
+		// kilobytes
 		$this->assertEquals('1 KB', Humanizer::fileSize(1000));
 		$this->assertEquals('1.3 KB', Humanizer::fileSize(1300));
 
-		# Megabytes
+		// Megabytes
 		$this->assertEquals('1 MB', Humanizer::fileSize(1000000));
 		$this->assertEquals('1.3 MB', Humanizer::fileSize(1300000));
 
-		# Gigabytes
+		// Gigabytes
 		$this->assertEquals('1 GB', Humanizer::fileSize(1000000000));
 		$this->assertEquals('1.3 GB', Humanizer::fileSize(1300000000));
 	}

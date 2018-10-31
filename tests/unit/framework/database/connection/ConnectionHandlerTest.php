@@ -5,19 +5,20 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\database\connection;
+namespace kanso\tests\unit\framework\database\connection;
 
-use Mockery;
-use tests\TestCase;
-use kanso\framework\database\connection\ConnectionHandler;
 use kanso\framework\database\connection\Cache;
+use kanso\framework\database\connection\ConnectionHandler;
+use kanso\tests\TestCase;
+use Mockery;
 
 /**
  * @group unit
+ * @group framework
  */
 class ConnectionHandlerTest extends TestCase
 {
-	/**
+    /**
      *
      */
     public function testBind()
@@ -114,7 +115,7 @@ class ConnectionHandlerTest extends TestCase
 
         $pdoStatement->shouldReceive('fetchAll');
 
-        $handler->bindMore(['column1_key' => 'value1', 'column2_key' => 'value2'] );
+        $handler->bindMore(['column1_key' => 'value1', 'column2_key' => 'value2']);
 
         $handler->query($query);
     }
@@ -291,7 +292,6 @@ class ConnectionHandlerTest extends TestCase
         $handler->query($selectQuery, ['column_key' => 'value']);
     }
 
-
     /**
      *
      */
@@ -388,7 +388,7 @@ class ConnectionHandlerTest extends TestCase
         $this->assertEquals(['foo' => 'baz'], $result);
     }
 
-     /**
+    /**
      *
      */
     public function testLastInsertedId()

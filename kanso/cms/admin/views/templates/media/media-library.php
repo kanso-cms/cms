@@ -1,5 +1,5 @@
 <!-- MEDIA LIBRARY WRAPPER -->
-<div class="media-library js-media-library loading" data-blog-location="<?php echo blog_location();?>">
+<div class="media-library js-media-library loading" data-blog-location="<?php echo blog_location(); ?>">
 
 	<!-- POWERS -->
 	<div class="list-powers media-powers js-media-powers">
@@ -121,7 +121,7 @@
 								<select id="media_size" class="js-size-select">
 									<option value="origional">Original</option>
 									<?php foreach ($kanso->Config->get('cms.uploads.thumbnail_sizes') as $suffix => $size) : ?>
-									<option value="<?php echo $suffix;?>"><?php echo ucfirst($suffix);?> </option>
+									<option value="<?php echo $suffix; ?>"><?php echo ucfirst($suffix); ?> </option>
 									<?php endforeach; ?>
 								</select>
 							</div>
@@ -186,7 +186,7 @@
 		</svg>
 	</div>
 
-	<input type="hidden" class="hidden js-access-token" name="access_token" value="<?php echo $ACCESS_TOKEN;?>">
+	<input type="hidden" class="hidden js-access-token" name="access_token" value="<?php echo $ACCESS_TOKEN; ?>">
 
 </div>
 

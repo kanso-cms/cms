@@ -1,5 +1,32 @@
 --------------------------------------------------------
 
+### 2.0.0 <small> (01-10-2018)</small>
+
+Update using ```git fetch```.
+
+#### New
+* Added Social Media Tag Configs.
+* New Git webhooks deployment integration.
+* Added Email Logs To Admin Panel.
+* Added Email Logs To Admin Panel.
+* Added User Agent Bot Detection To Framework.
+* Added Basic CRM Component to CMS.
+* New leads page in Admin Panel.
+
+#### Changes
+* Added `PHP CS Fixer` And Bin Directory.
+* Ran All Code Through `PHP CS Fixer`.
+* Updated Unit Tests.
+* PHP 7.2 Support.
+* Bumped `Kanso::VERSION` number.
+
+#### Bugfixes
+* Fix Default OpenSSL Cyphers on PHP 7.2.
+* Native Session Storage `session_gc` PHP < 7 || > 7.1.0 Fixup
+* Other minor bug fixes throughout the application.
+
+--------------------------------------------------------
+
 ### 1.6.2 <small> (25-09-2018)</small>
 
 Update using ```git fetch```.

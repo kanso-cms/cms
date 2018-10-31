@@ -7,11 +7,10 @@
 
 namespace kanso\framework\application\services;
 
-use kanso\framework\application\services\Service;
 use kanso\framework\mvc\view\View;
 
 /**
- * MVC Service
+ * MVC Service.
  *
  * @author Joe J. Howard
  */
@@ -22,7 +21,7 @@ class MVCService extends Service
 	 */
 	public function register()
 	{
-		$this->container->singleton('View', function ()
+		$this->container->singleton('View', function()
 		{
 			return new View;
 		});

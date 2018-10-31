@@ -5,14 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\query;
+namespace kanso\tests\unit\cms\query;
 
-use Mockery;
-use tests\TestCase;
 use kanso\cms\query\Cache;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group cms
  */
 class CacheTest extends TestCase
 {
@@ -53,7 +53,7 @@ class CacheTest extends TestCase
     {
         $cache = new Cache;
 
-        $cache->setMultiple(['foo' => ['bar' => 'baz'] ]);
+        $cache->setMultiple(['foo' => ['bar' => 'baz']]);
 
         $this->assertEquals(['bar' => 'baz'], $cache->get('foo'));
 

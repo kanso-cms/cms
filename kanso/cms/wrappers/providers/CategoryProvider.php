@@ -8,10 +8,9 @@
 namespace kanso\cms\wrappers\providers;
 
 use kanso\cms\wrappers\Category;
-use kanso\cms\wrappers\providers\Provider;
 
 /**
- * Category provider
+ * Category provider.
  *
  * @author Joe J. Howard
  */
@@ -25,7 +24,7 @@ class CategoryProvider extends Provider
         $category = new Category($this->SQL, $row);
 
         if ($category->save())
-        {            
+        {
             return $category;
         }
 

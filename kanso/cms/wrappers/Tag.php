@@ -8,11 +8,10 @@
 namespace kanso\cms\wrappers;
 
 use InvalidArgumentException;
-use kanso\cms\wrappers\Wrapper;
 use kanso\framework\utility\Str;
 
 /**
- * Tag utility wrapper
+ * Tag utility wrapper.
  *
  * @author Joe J. Howard
  */
@@ -61,13 +60,13 @@ class Tag extends Wrapper
             {
                 $this->data['id'] = intval($this->SQL->connectionHandler()->lastInsertId());
             }
-            
+
         }
 
         return !$saved ? false : true;
 	}
 
-	/**
+    /**
      * {@inheritdoc}
      */
     public function delete(): bool
@@ -89,11 +88,11 @@ class Tag extends Wrapper
 	}
 
     /**
-     * Clears all posts from the tag
+     * Clears all posts from the tag.
      *
      * @access public
-     * @return bool
      * @throws \InvalidArgumentException If this is tag id 1
+     * @return bool
      */
     public function clear(): bool
     {
@@ -111,7 +110,7 @@ class Tag extends Wrapper
     }
 
     /**
-     * Unjoin all posts and reset to untagged if no tags left
+     * Unjoin all posts and reset to untagged if no tags left.
      *
      * @access private
      * @return bool
@@ -121,18 +120,18 @@ class Tag extends Wrapper
         if (isset($this->data['id']))
         {
             $posts = $this->SQL->SELECT('posts.*')->FROM('tags_to_posts')->LEFT_JOIN_ON('posts', 'tags_to_posts.post_id = posts.id')->WHERE('tags_to_posts.tag_id', '=', $this->data['id'])->FIND_ALL();
-            
+
             foreach ($posts as $post)
             {
                 $postTags = $this->SQL->SELECT('*')->FROM('tags_to_posts')->WHERE('post_id', '=', $post['id'])->FIND_ALL();
-                
+
                 if (count($postTags) === 1)
                 {
                     $this->SQL->INSERT_INTO('tags_to_posts')->VALUES(['post_id' => $post['id'], 'tag_id' => 1])->QUERY();
                 }
             }
 
-            $this->SQL->DELETE_FROM('tags_to_posts')->WHERE('tag_id', '=',  $this->data['id'])->QUERY();
+            $this->SQL->DELETE_FROM('tags_to_posts')->WHERE('tag_id', '=', $this->data['id'])->QUERY();
 
             return true;
         }

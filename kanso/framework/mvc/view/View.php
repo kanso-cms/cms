@@ -8,11 +8,9 @@
 namespace kanso\framework\mvc\view;
 
 use kanso\Kanso;
-use kanso\framework\mvc\view\ViewBase;
-use kanso\framework\mvc\view\ViewInterface;
 
 /**
- * Default view implementation
+ * Default view implementation.
  *
  * @author Joe J. Howard
  */
@@ -35,7 +33,7 @@ class View extends ViewBase implements ViewInterface
         $this->includeKanso = $toggle;
     }
 
-    /**
+	/**
 	 * {@inheritdoc}
 	 */
 	public function include(string $file)
@@ -54,7 +52,7 @@ class View extends ViewBase implements ViewInterface
 		}
 	}
 
-    /**
+	/**
 	 * {@inheritdoc}
 	 */
 	public function display(string $file, array $data = []): string
@@ -63,11 +61,11 @@ class View extends ViewBase implements ViewInterface
 	}
 
     /**
-     * Sandbox and output a template
+     * Sandbox and output a template.
      *
      * @param  string $file Absolute path to template file
      * @param  array  $data Assoc array of variables (optional) (default [])
-     * @return string 
+     * @return string
      */
     private function sandbox(string $file, array $data): string
     {
@@ -77,7 +75,7 @@ class View extends ViewBase implements ViewInterface
         {
             $kanso = Kanso::instance();
         }
-        
+
         foreach ($this->includes as $include)
         {
             if (file_exists($include))
@@ -85,14 +83,13 @@ class View extends ViewBase implements ViewInterface
                 require_once $include;
             }
         }
-        
+
         extract($data);
-        
+
         ob_start();
-        
+
         require $file;
-        
+
         return ob_get_clean();
     }
 }
-

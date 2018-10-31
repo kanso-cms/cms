@@ -12,39 +12,39 @@ use kanso\framework\database\query\Builder;
 use RuntimeException;
 
 /**
- * Database manager
+ * Database manager.
  *
  * @author Joe J. Howard
  */
 class Database
 {
 	/**
-	 * Name of the default configuration to use
-	 * 
-     * @var string
-     */
+	 * Name of the default configuration to use.
+	 *
+	 * @var string
+	 */
 	private $default;
 
 	/**
-	 * Array of configurations settings
-	 * 
-     * @var array
-     */ 
+	 * Array of configurations settings.
+	 *
+	 * @var array
+	 */
 	private $configurations;
 
 	/**
-	 * Array of database connections
-	 * 
-     * @var array
-     */ 
+	 * Array of database connections.
+	 *
+	 * @var array
+	 */
 	private $connections = [];
-		
-   	/**
-     * Constructor
-     *
-     * @access public
-     * @param  array $settings 
-     */
+
+	/**
+	 * Constructor.
+	 *
+	 * @access public
+	 * @param array $settings
+	 */
 	public function __construct(array $configurations)
 	{
 		$this->configurations = $configurations['configurations'];
@@ -53,20 +53,20 @@ class Database
 	}
 
 	/**
-     * Create a new database from the config
-     *
-     * @access public
-     * @param  string $connectionName Name of the connection (optional) (default null)
-	 * @return \kanso\framework\database\connection\Connection|false
+	 * Create a new database from the config.
+	 *
+	 * @access public
+	 * @param  string                                                $connectionName Name of the connection (optional) (default null)
 	 * @throws \RuntimeException
-     */
+	 * @return \kanso\framework\database\connection\Connection|false
+	 */
 	public function create(string $connectionName = null)
 	{
 		$connectionName = !$connectionName ? $this->default : $connectionName;
 
 		if (!isset($this->configurations[$connectionName]['name']))
 		{
-			throw new RuntimeException(vsprintf("%s(): [ %s ] has not been defined in the database configuration.", [__METHOD__, $connectionName]));
+			throw new RuntimeException(vsprintf('%s(): [ %s ] has not been defined in the database configuration.', [__METHOD__, $connectionName]));
 		}
 
 		$config = $this->configurations[$connectionName];
@@ -88,12 +88,12 @@ class Database
 	}
 
 	/**
-     * Get a database connection by name
-     *
-     * @access public
-     * @param  string $connectionName Name of the connection (optional) (default null)
-     * @return \kanso\framework\database\connection\Connection
-     */
+	 * Get a database connection by name.
+	 *
+	 * @access public
+	 * @param  string                                          $connectionName Name of the connection (optional) (default null)
+	 * @return \kanso\framework\database\connection\Connection
+	 */
 	public function connection(string $connectionName = null): Connection
 	{
 		$connectionName = !$connectionName ? $this->default : $connectionName;
@@ -102,18 +102,18 @@ class Database
 	}
 
 	/**
-     * Connect to a database by name
-     *
-     * @access private
-     * @param  string $connectionName Name of the connection
-     * @return \kanso\framework\database\connection\Connection
-     * @throws \RuntimeException
-     */
+	 * Connect to a database by name.
+	 *
+	 * @access private
+	 * @param  string                                          $connectionName Name of the connection
+	 * @throws \RuntimeException
+	 * @return \kanso\framework\database\connection\Connection
+	 */
 	private function connect(string $connectionName): Connection
 	{
 		if(!isset($this->configurations[$connectionName]))
 		{
-			throw new RuntimeException(vsprintf("%s(): [ %s ] has not been defined in the database configuration.", [__METHOD__, $connectionName]));
+			throw new RuntimeException(vsprintf('%s(): [ %s ] has not been defined in the database configuration.', [__METHOD__, $connectionName]));
 		}
 
 		if (isset($this->connections[$connectionName]))
@@ -127,23 +127,23 @@ class Database
 	}
 
 	/**
-     * Get a database builder by connection name
-     *
-     * @access public
-     * @param  string $connectionName Name of the connection
-     * @return \kanso\framework\database\query\Builder
-     */
+	 * Get a database builder by connection name.
+	 *
+	 * @access public
+	 * @param  string                                  $connectionName Name of the connection
+	 * @return \kanso\framework\database\query\Builder
+	 */
 	public function builder(string $connectionName): Builder
 	{
 		return $this->connect($connectionName)->builder();
 	}
 
 	/**
-     * Get all database connection
-     *
-     * @access public
-     * @return array
-     */
+	 * Get all database connection.
+	 *
+	 * @access public
+	 * @return array
+	 */
 	public function connections(): array
 	{
 		return $this->connections;

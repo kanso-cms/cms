@@ -8,10 +8,9 @@
 namespace kanso\cms\wrappers\providers;
 
 use kanso\cms\wrappers\Tag;
-use kanso\cms\wrappers\providers\Provider;
 
 /**
- * Tag provider
+ * Tag provider.
  *
  * @author Joe J. Howard
  */

@@ -5,11 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\event;
+namespace kanso\tests\unit\cms\event;
 
-use Mockery;
-use tests\TestCase;
 use kanso\cms\event\Filters;
+use kanso\tests\TestCase;
 
 // --------------------------------------------------------------------------
 // START CLASSES
@@ -26,22 +25,22 @@ class FilterCallbackTester
 
 	public static function testStaticMethodFirst($var)
 	{
-		return 'foo'.$var;
+		return 'foo' . $var;
 	}
 
 	public static function testStaticMethodSecond($var)
 	{
-		return $var.'baz';
+		return $var . 'baz';
 	}
 
 	public function testMethodFirst()
 	{
-		return 'foo'.$this->var;
+		return 'foo' . $this->var;
 	}
 
 	public function testMethodSecond()
 	{
-		return $this->var.'baz';
+		return $this->var . 'baz';
 	}
 }
 
@@ -51,6 +50,7 @@ class FilterCallbackTester
 
 /**
  * @group unit
+ * @group cms
  */
 class FiltersTest extends TestCase
 {
@@ -63,22 +63,22 @@ class FiltersTest extends TestCase
 
 		$filters = Filters::instance();
 
-		$filters->on('foo1', 'tests\unit\cms\event\FilterCallbackTester::testStaticMethodFirst');
+		$filters->on('foo1', '\kanso\tests\unit\cms\event\FilterCallbackTester::testStaticMethodFirst');
 
-		$filters->on('foo1', 'tests\unit\cms\event\FilterCallbackTester::testStaticMethodSecond');
+		$filters->on('foo1', '\kanso\tests\unit\cms\event\FilterCallbackTester::testStaticMethodSecond');
 
-		$filters->on('foo2', 'tests\unit\cms\event\FilterCallbackTester@testMethodFirst');
+		$filters->on('foo2', '\kanso\tests\unit\cms\event\FilterCallbackTester@testMethodFirst');
 
-		$filters->on('foo2', 'tests\unit\cms\event\FilterCallbackTester@testMethodSecond');
+		$filters->on('foo2', '\kanso\tests\unit\cms\event\FilterCallbackTester@testMethodSecond');
 
 		$filters->on('foo3', function($var)
 		{
-			return 'foo'.$var;
+			return 'foo' . $var;
 		});
 
 		$filters->on('foo3', function($var)
 		{
-			return $var.'baz';
+			return $var . 'baz';
 		});
 
 		$this->assertEquals('foobarbaz', $filters->apply('foo1', 'bar'));

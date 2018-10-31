@@ -7,11 +7,8 @@
 
 namespace kanso\framework\security\crypto\encrypters;
 
-use kanso\framework\security\crypto\encrypters\Encrypter;
-use kanso\framework\security\crypto\encrypters\EncrypterInterface;
-
 /**
- * Encryption/Decryption interface
+ * Encryption/Decryption interface.
  *
  * @author Joe J. Howard
  */
@@ -46,6 +43,23 @@ class OpenSSL extends Encrypter implements EncrypterInterface
 	protected $ciphers;
 
 	/**
+	 * Cyphers we don't use.
+	 *
+	 * @var string
+	 */
+	protected $nonCyphers =
+	[
+		'aes-',
+		'bf-',
+		'camellia-',
+		'cast5-',
+		'ccm-',
+		'des-',
+		'gcm-',
+		'id-',
+	];
+
+	/**
 	 * Constructor.
 	 *
 	 * @access public
@@ -58,13 +72,13 @@ class OpenSSL extends Encrypter implements EncrypterInterface
 
 		$this->key = $key;
 
-		$this->cipher = !$cipher || !in_array($cipher, $this->ciphers) ? 'AES-256-CTR' : $cipher;
+		$this->cipher = !$cipher || !in_array($cipher, $this->ciphers) ? 'AES-256-ECB' : $cipher;
 
 		$this->ivSize = openssl_cipher_iv_length($this->cipher);
 	}
 
 	/**
-	 * Load compatible ciphers
+	 * Load compatible ciphers.
 	 *
 	 * @access private
 	 */
@@ -72,9 +86,12 @@ class OpenSSL extends Encrypter implements EncrypterInterface
 	{
 		$this->ciphers = array_filter(openssl_get_cipher_methods(), function($cypher)
 		{
-			if (strpos(strtolower($cypher), 'gcm') !== false || strpos(strtolower($cypher), 'ccm') !== false || strpos(strtolower($cypher), 'des-') !== false )
+			foreach ($this->nonCyphers as $nonCypher)
 			{
-			    return false;
+				if (strpos(strtolower($cypher), $nonCypher) !== false)
+				{
+			    	return false;
+				}
 			}
 
 			return true;

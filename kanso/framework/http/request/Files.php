@@ -10,7 +10,7 @@ namespace kanso\framework\http\request;
 use kanso\framework\common\ArrayAccessTrait;
 
 /**
- * Files manager
+ * Files manager.
  *
  * @author Joe J. Howard
  */
@@ -19,11 +19,11 @@ class Files
 	use ArrayAccessTrait;
 
 	/**
-     * Constructor
-     *
-     * @access public
-     * @param  array  $parameters $_FILES upload (optional) (default [])
-     */
+	 * Constructor.
+	 *
+	 * @access public
+	 * @param array $parameters $_FILES upload (optional) (default [])
+	 */
 	public function __construct(array $parameters = [])
 	{
 		$parameters = empty($parameters) ? $_FILES : $parameters;
@@ -76,7 +76,7 @@ class Files
 	}
 
 	/**
-	 * Converts the $_FILES array to an array of consistent arrays
+	 * Converts the $_FILES array to an array of consistent arrays.
 	 *
 	 * @param  array $files File upload array
 	 * @return array

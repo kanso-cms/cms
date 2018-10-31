@@ -20,14 +20,14 @@ class Autoloader
      *
      * @var array
      */
-    protected $class_files = array();
+    protected $class_files = [];
 
     /**
      * Debug information populated by loadClass().
      *
      * @var array
      */
-    protected $debug = array();
+    protected $debug = [];
 
     /**
      * Classes, interfaces, and traits loaded by the autoloader; the key is
@@ -35,14 +35,14 @@ class Autoloader
      *
      * @var array
      */
-    protected $loaded_classes = array();
+    protected $loaded_classes = [];
 
     /**
      * A map of namespace prefixes to base directories.
      *
      * @var array
      */
-    protected $prefixes = array();
+    protected $prefixes = [];
 
     /**
      * Registers this autoloader with SPL.
@@ -54,7 +54,7 @@ class Autoloader
     public function register($prepend = false)
     {
         spl_autoload_register(
-            array($this, 'loadClass'),
+            [$this, 'loadClass'],
             true,
             (bool) $prepend
         );
@@ -67,7 +67,7 @@ class Autoloader
      */
     public function unregister()
     {
-        spl_autoload_unregister(array($this, 'loadClass'));
+        spl_autoload_unregister([$this, 'loadClass']);
     }
 
     /**
@@ -87,11 +87,11 @@ class Autoloader
      * @param string $prefix The namespace prefix.
      *
      * @param string|array $base_dirs One or more base directories for the
-     * namespace prefix.
+     *                                namespace prefix.
      *
      * @param bool $prepend If true, prepend the base directories to the
-     * prefix instead of appending them; this causes them to be searched
-     * first rather than last.
+     *                      prefix instead of appending them; this causes them to be searched
+     *                      first rather than last.
      *
      * @return null
      */
@@ -102,7 +102,7 @@ class Autoloader
 
         // initialize the namespace prefix array if needed
         if (! isset($this->prefixes[$prefix])) {
-            $this->prefixes[$prefix] = array();
+            $this->prefixes[$prefix] = [];
         }
 
         // normalize each base dir with a trailing separator
@@ -125,13 +125,13 @@ class Autoloader
      * the existing prefixes.
      *
      * @param array $prefixes An associative array of namespace prefixes and
-     * their base directories.
+     *                        their base directories.
      *
      * @return null
      */
     public function setPrefixes(array $prefixes)
     {
-        $this->prefixes = array();
+        $this->prefixes = [];
         foreach ($prefixes as $key => $val) {
             $this->addPrefix($key, $val);
         }
@@ -166,7 +166,7 @@ class Autoloader
      * explicit mappings.
      *
      * @param array $class_files An array of class-to-file mappings where the
-     * key is the class name and the value is the file path.
+     *                           key is the class name and the value is the file path.
      *
      * @return null
      */
@@ -179,7 +179,7 @@ class Autoloader
      * Adds file paths for class names to the existing explicit mappings.
      *
      * @param array $class_files An array of class-to-file mappings where the
-     * key is the class name and the value is the file path.
+     *                           key is the class name and the value is the file path.
      *
      * @return null
      */
@@ -203,7 +203,7 @@ class Autoloader
      * autoloader.
      *
      * @return array An array of key-value pairs where the key is the class
-     * or interface name and the value is the file name.
+     *               or interface name and the value is the file name.
      */
     public function getLoadedClasses()
     {
@@ -216,12 +216,12 @@ class Autoloader
      * @param string $class The fully-qualified class name.
      *
      * @return mixed The mapped file name on success, or boolean false on
-     * failure.
+     *               failure.
      */
     public function loadClass($class)
     {
         // reset debug info
-        $this->debug = array("Loading $class");
+        $this->debug = ["Loading $class"];
 
         // is an explicit class file noted?
         if (isset($this->class_files[$class])) {
@@ -235,7 +235,7 @@ class Autoloader
         }
 
         // no explicit class file
-        $this->debug[] = "No explicit class file";
+        $this->debug[] = 'No explicit class file';
 
         // the current namespace prefix
         $prefix = $class;
@@ -276,7 +276,7 @@ class Autoloader
      * @param string $relative_class The relative class name.
      *
      * @return mixed Boolean false if no mapped file can be loaded, or the
-     * name of the mapped file that was loaded.
+     *               name of the mapped file that was loaded.
      */
     protected function loadFile($prefix, $relative_class)
     {

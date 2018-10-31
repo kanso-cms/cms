@@ -7,10 +7,8 @@
 
 namespace kanso\framework\utility;
 
-use kanso\framework\utility\Pluralize;
-
 /**
- * Humanizer class
+ * Humanizer class.
  *
  * @author Joe J. Howard
  */
@@ -20,8 +18,8 @@ class Humanizer
 	 * Returns a human friendly file size.
 	 *
 	 * @access public
-	 * @param  int  $size   File size in bytes
-	 * @param  bool $binary True to use binary suffixes and false to use decimal suffixes (optional) (default FALSE)
+	 * @param  int    $size   File size in bytes
+	 * @param  bool   $binary True to use binary suffixes and false to use decimal suffixes (optional) (default FALSE)
 	 * @return string
 	 */
 	public static function fileSize(int $size, bool $binary = false): string
@@ -52,19 +50,19 @@ class Humanizer
 	}
 
 	/**
-	 * Returns a time ago from a timestamp or strtotime string
+	 * Returns a time ago from a timestamp or strtotime string.
 	 *
 	 * @access public
-	 * @param  mixed $time    A valid UNIX timestamp or PHP valid "strtotime" parameter
-	 * @param  string|NULL
+	 * @param mixed $time A valid UNIX timestamp or PHP valid "strtotime" parameter
+	 * @param  string|null
 	 */
 	public static function timeAgo($time)
 	{
 		$timeStamp = self::isTimestamp($time) ? $time : strtotime($time);
 
 		$time = time() - $timeStamp;
-	    
-	    $time = ($time < 1 ) ? 1 : $time;
+
+	    $time = ($time < 1) ? 1 : $time;
 
 	    $tokens = [
 	        31536000 => 'year',
@@ -73,26 +71,26 @@ class Humanizer
 	        86400 => 'day',
 	        3600 => 'hour',
 	        60 => 'minute',
-	        1 => 'second'
+	        1 => 'second',
 	    ];
 
 	    foreach ($tokens as $unit => $text)
 	    {
 	        if ($time < $unit) continue;
-	        
+
 	        $numberOfUnits = floor($time / $unit);
-	        
-	        return $numberOfUnits.' '.$text.(($numberOfUnits>1)?'s':'');
+
+	        return $numberOfUnits . ' ' . $text . (($numberOfUnits>1)?'s':'');
 	    }
 	}
 
 	/**
-	 * Pluralize a word
+	 * Pluralize a word.
 	 *
 	 * @access  public
-	 * @param   string $word  The input word
-	 * @param   int    $count The amount of items (optional) (default 2)
-	 * @return  string
+	 * @param  string $word  The input word
+	 * @param  int    $count The amount of items (optional) (default 2)
+	 * @return string
 	 */
 	public static function pluralize(string $word, int $count = 2)
 	{
@@ -100,14 +98,14 @@ class Humanizer
 	}
 
 	/**
-	 * Validate that a variable is a valid UNIX timestamp
+	 * Validate that a variable is a valid UNIX timestamp.
 	 *
 	 * @access  private
-	 * @param   mixed      $timestamp
-	 * @param   boolean
+	 * @param mixed $timestamp
+	 * @param   bool
 	 */
 	private static function isTimestamp($timestamp)
 	{
-	    return ( is_numeric($timestamp) && intval($timestamp) == $timestamp );
+	    return (is_numeric($timestamp) && intval($timestamp) == $timestamp);
 	}
 }

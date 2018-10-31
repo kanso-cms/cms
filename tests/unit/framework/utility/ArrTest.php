@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\utility;
+namespace kanso\tests\unit\framework\utility;
 
-use tests\TestCase;
 use kanso\framework\utility\Arr;
+use kanso\tests\TestCase;
 
 // --------------------------------------------------------------------------
 // START CLASSES
@@ -30,6 +30,7 @@ class fooArrayAccess
 
 /**
  * @group unit
+ * @group framework
  */
 class ArrTest extends TestCase
 {
@@ -203,19 +204,19 @@ class ArrTest extends TestCase
 	 */
 	public function testSortMulti()
 	{
-		$this->assertEquals([ ['test_key' => 'a'], ['test_key' => 'b'], ['test_key' => 'c'] ], Arr::sortMulti([ ['test_key' => 'a'], ['test_key' => 'b'], ['test_key' => 'c'] ], 'test_key'));
+		$this->assertEquals([['test_key' => 'a'], ['test_key' => 'b'], ['test_key' => 'c']], Arr::sortMulti([['test_key' => 'a'], ['test_key' => 'b'], ['test_key' => 'c']], 'test_key'));
 
-		$this->assertEquals([ ['test_key' => 'c'], ['test_key' => 'b'], ['test_key' => 'a'] ], Arr::sortMulti([ ['test_key' => 'a'], ['test_key' => 'b'], ['test_key' => 'c'] ], 'test_key', 'DESC'));
+		$this->assertEquals([['test_key' => 'c'], ['test_key' => 'b'], ['test_key' => 'a']], Arr::sortMulti([['test_key' => 'a'], ['test_key' => 'b'], ['test_key' => 'c']], 'test_key', 'DESC'));
 
-		$this->assertEquals([ ['test_key' => 1], ['test_key' => 2], ['test_key' => 3] ], Arr::sortMulti([ ['test_key' => 3], ['test_key' => 1], ['test_key' => 2] ], 'test_key'));
+		$this->assertEquals([['test_key' => 1], ['test_key' => 2], ['test_key' => 3]], Arr::sortMulti([['test_key' => 3], ['test_key' => 1], ['test_key' => 2]], 'test_key'));
 
-		$this->assertEquals([ ['test_key' => 3], ['test_key' => 2], ['test_key' => 1] ], Arr::sortMulti([ ['test_key' => 3], ['test_key' => 1], ['test_key' => 2] ], 'test_key', 'DESC'));
+		$this->assertEquals([['test_key' => 3], ['test_key' => 2], ['test_key' => 1]], Arr::sortMulti([['test_key' => 3], ['test_key' => 1], ['test_key' => 2]], 'test_key', 'DESC'));
 
-		$this->assertEquals([ 'key2' => ['test_key' => 1], 'key3' => ['test_key' => 2], 'key1' => ['test_key' => 3] ], Arr::sortMulti([ 'key1' => ['test_key' => 3], 'key2' => ['test_key' => 1], 'key3' => ['test_key' => 2] ], 'test_key'));
+		$this->assertEquals(['key2' => ['test_key' => 1], 'key3' => ['test_key' => 2], 'key1' => ['test_key' => 3]], Arr::sortMulti(['key1' => ['test_key' => 3], 'key2' => ['test_key' => 1], 'key3' => ['test_key' => 2]], 'test_key'));
 
-		$this->assertEquals([ 'key1' => ['test_key' => 3], 'key3' => ['test_key' => 2], 'key2' => ['test_key' => 1] ], Arr::sortMulti([ 'key1' => ['test_key' => 3], 'key2' => ['test_key' => 1], 'key3' => ['test_key' => 2] ], 'test_key', 'DESC'));
+		$this->assertEquals(['key1' => ['test_key' => 3], 'key3' => ['test_key' => 2], 'key2' => ['test_key' => 1]], Arr::sortMulti(['key1' => ['test_key' => 3], 'key2' => ['test_key' => 1], 'key3' => ['test_key' => 2]], 'test_key', 'DESC'));
 
-		$this->assertEquals([ new fooArrayAccess(1), new fooArrayAccess(2), new fooArrayAccess(3) ], Arr::sortMulti([new fooArrayAccess(1), new fooArrayAccess(3), new fooArrayAccess(2)], 'test_key'));
+		$this->assertEquals([new fooArrayAccess(1), new fooArrayAccess(2), new fooArrayAccess(3)], Arr::sortMulti([new fooArrayAccess(1), new fooArrayAccess(3), new fooArrayAccess(2)], 'test_key'));
 	}
 
 	/**
@@ -254,11 +255,11 @@ class ArrTest extends TestCase
 	public function testPaginate()
 	{
 		$input = ['test1', 'test2', 'test3', 'test4', 'test5', 'test6'];
-		$result = 
+		$result =
 		[
 			['test1', 'test2'],
 			['test3', 'test4'],
-			['test5', 'test6']
+			['test5', 'test6'],
 		];
 
 		$this->assertEquals($result, Arr::paginate($input, 1, 2));

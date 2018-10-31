@@ -13,7 +13,7 @@
 			</div>
 
 			<!-- FORM -->
-			<form class="js-validation-form <?php if ( isset($POST_RESPONSE) && isset($POST_RESPONSE['class'])) echo $POST_RESPONSE['class']; ?>" method="post">
+			<form class="js-validation-form <?php if (isset($POST_RESPONSE) && isset($POST_RESPONSE['class'])) echo $POST_RESPONSE['class']; ?>" method="post">
 			    
 				<!-- INPUTS -->
 			    <div class="form-field row floor-xs">
@@ -29,7 +29,7 @@
 			    </div>
 
 			    <!-- ACCESS TOKEN -->
-			    <input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN;?>">
+			    <input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN; ?>">
 
 			    <!-- SUBMIT -->
 			    <button type="submit" class="btn btn-primary btn-xl raised btn-block with-spinner">
@@ -40,12 +40,12 @@
 			    <!-- FORM RESULT -->
 			    <?php if (isset($POST_RESPONSE) && !empty($POST_RESPONSE)) : ?>
 			    <div class="form-result">
-			        <div class="msg msg-<?php echo $POST_RESPONSE['class'];?>" aria-hidden="true">
+			        <div class="msg msg-<?php echo $POST_RESPONSE['class']; ?>" aria-hidden="true">
 			            <div class="msg-icon">
-			                <span class="glyph-icon glyph-icon-<?php echo $POST_RESPONSE['icon'];?>"></span>
+			                <span class="glyph-icon glyph-icon-<?php echo $POST_RESPONSE['icon']; ?>"></span>
 			            </div>
 			            <div class="msg-body">
-			                <p><?php echo $POST_RESPONSE['msg'];?></p>
+			                <p><?php echo $POST_RESPONSE['msg']; ?></p>
 			            </div>
 			        </div>
 			    </div>

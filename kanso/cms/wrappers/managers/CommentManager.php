@@ -7,78 +7,76 @@
 
 namespace kanso\cms\wrappers\managers;
 
-use kanso\cms\wrappers\managers\Manager;
-use kanso\cms\wrappers\Comment;
 use kanso\cms\email\Email;
+use kanso\cms\wrappers\Comment;
 use kanso\cms\wrappers\providers\CommentProvider;
-use kanso\framework\database\query\Builder;
-use kanso\framework\security\spam\SpamProtector;
-use kanso\framework\http\request\Environment;
-use kanso\framework\utility\Markdown;
 use kanso\framework\config\Config;
+use kanso\framework\database\query\Builder;
+use kanso\framework\http\request\Environment;
+use kanso\framework\security\spam\SpamProtector;
+use kanso\framework\utility\Markdown;
 use kanso\framework\utility\Str;
 
 /**
- * Comment manager
+ * Comment manager.
  *
  * @author Joe J. Howard
  */
 class CommentManager extends Manager
 {
     /**
-     * Comment marked as SPAM
+     * Comment marked as SPAM.
      *
      * @var int
      */
     const STATUS_SPAM = 100;
 
     /**
-     * Comment marked as pending
+     * Comment marked as pending.
      *
      * @var int
      */
     const STATUS_PENDING = 200;
 
     /**
-     * SPAM protector
+     * SPAM protector.
      *
      * @var \kanso\framework\security\spam\SpamProtector
      */
     private $spamProtector;
 
     /**
-     * HTTP request env
+     * HTTP request env.
      *
      * @var \kanso\framework\http\request\Environment
      */
     private $environment;
 
     /**
-     * Framework config
+     * Framework config.
      *
      * @var \kanso\framework\config\Config
      */
     private $config;
 
     /**
-     * CMS Email utility
+     * CMS Email utility.
      *
      * @var \kanso\cms\email\Email
      */
     private $email;
 
     /**
-     * Override inherited constructor
-     * 
+     * Override inherited constructor.
+     *
      * @access public
-     * @param  \kanso\framework\database\query\Builder       $SQL           SQL query builder
-     * @param  \kanso\cms\wrappers\providers\CommentProvider $provider      Comment provider
-     * @param  \kanso\framework\security\spam\SpamProtector  $spamProtector SPAM protector
-     * @param  \kanso\cms\email\Email                        $email         CMS Email utility
-     * @param  \kanso\framework\config\Config                $config        Framework config
-     * @param  \kanso\framework\http\request\Environment     $environment   HTTP request env
-
-     */ 
+     * @param \kanso\framework\database\query\Builder       $SQL           SQL query builder
+     * @param \kanso\cms\wrappers\providers\CommentProvider $provider      Comment provider
+     * @param \kanso\framework\security\spam\SpamProtector  $spamProtector SPAM protector
+     * @param \kanso\cms\email\Email                        $email         CMS Email utility
+     * @param \kanso\framework\config\Config                $config        Framework config
+     * @param \kanso\framework\http\request\Environment     $environment   HTTP request env
+     */
     public function __construct(Builder $SQL, CommentProvider $provider, SpamProtector $spamProtector, Email $email, Config $config, Environment $environment)
     {
         $this->SQL = $SQL;
@@ -103,8 +101,8 @@ class CommentManager extends Manager
     }
 
     /**
-     * Creates a new category
-     * 
+     * Creates a new category.
+     *
      * @access public
      * @param  string $name Comment name
      * @param  string $slug Comment slug (optional) (default null)
@@ -112,13 +110,13 @@ class CommentManager extends Manager
      */
     public function create(string $content, string $name, string $email, int $postId, int $parentId = null, bool $validate = true, bool $subscribeThread = true, bool $subscribeReplies = true, bool $sendEmails = true)
     {
-        # Validate the post exists
+        // Validate the post exists
         if (!$this->SQL->SELECT('id')->FROM('posts')->WHERE('id', '=', $postId)->ROW())
         {
             return false;
         }
 
-        # Validate the parent comment exists
+        // Validate the parent comment exists
         if ($parentId)
         {
             if (!$this->byId($parentId))
@@ -128,7 +126,7 @@ class CommentManager extends Manager
         }
 
         $rating = $this->rateComment($content, $validate);
-        
+
         $status = $this->commentStatus($rating);
 
         $content = htmlentities(trim($content));
@@ -148,7 +146,7 @@ class CommentManager extends Manager
             'email_thread' => $subscribeThread,
             'rating'       => $rating,
         ]);
-        
+
         if ($comment && $sendEmails)
         {
             $this->sendCommentEmails($comment);
@@ -158,10 +156,10 @@ class CommentManager extends Manager
     }
 
     /**
-     * Deletes a comment by id
-     * 
+     * Deletes a comment by id.
+     *
      * @access public
-     * @param  int    $id Comment id
+     * @param  int  $id Comment id
      * @return bool
      */
     public function delete(int $id): bool
@@ -177,10 +175,10 @@ class CommentManager extends Manager
     }
 
     /**
-     * Gets a comment by id
-     * 
+     * Gets a comment by id.
+     *
      * @access public
-     * @param  int    $id Comment id
+     * @param  int   $id Comment id
      * @return mixed
      */
     public function byId(int $id)
@@ -189,8 +187,8 @@ class CommentManager extends Manager
     }
 
     /**
-     * Returns a comment rating
-     * 
+     * Returns a comment rating.
+     *
      * @access private
      * @param  string $content Comment content
      * @param  bool   $check   Skip the spam protector
@@ -206,7 +204,7 @@ class CommentManager extends Manager
             {
                 $rating = 1;
             }
-            else if ($this->spamProtector->isSpam($content) || $this->spamProtector->isIpBlacklisted($this->environment->REMOTE_ADDR))
+            elseif ($this->spamProtector->isSpam($content) || $this->spamProtector->isIpBlacklisted($this->environment->REMOTE_ADDR))
             {
                 $rating = -10;
             }
@@ -220,30 +218,30 @@ class CommentManager extends Manager
     }
 
     /**
-     * Returns a comment status based on rating
-     * 
+     * Returns a comment status based on rating.
+     *
      * @access private
-     * @param  int     $rating Comment rating
+     * @param  int    $rating Comment rating
      * @return string
      */
     private function commentStatus(int $rating): string
     {
-        # Create the status
+        // Create the status
         if ($rating < 0)
         {
             return 'spam';
         }
-        else if ($rating === 0)
+        elseif ($rating === 0)
         {
             return 'pending';
         }
-        
+
         return 'approved';
     }
 
     private function sendCommentEmails(Comment $comment)
     {
-        $sent   = [];   
+        $sent   = [];
         $emails = $this->adminEmails();
         $emails = array_merge($emails, $this->getCommentThreadEmails($comment->post_id));
 
@@ -266,17 +264,17 @@ class CommentManager extends Manager
                 'name'          => $name,
                 'comment_id'    => $comment->id,
                 'comment_email' => $email,
-                'the_pemalink'  => $this->environment->HTTP_HOST.'/'.trim($post['slug'], '/').'/',
+                'the_pemalink'  => $this->environment->HTTP_HOST . '/' . trim($post['slug'], '/') . '/',
                 'the_title'     => $post['title'],
                 'the_excerpt'   => Str::reduce($post['excerpt'], 150, '...'),
                 'the_thumbnail' => '',
                 'websiteName'   => $this->environment->DOMAIN_NAME,
                 'websiteUrl'    => $this->environment->HTTP_HOST,
             ];
-            
+
             $senderName   = $this->config->get('cms.site_title');
-            $senderEmail  = 'no-reply@'.$this->environment->DOMAIN_NAME;
-            $emailSubject = 'New Comment on '.$this->config->get('cms.site_title');
+            $senderEmail  = 'no-reply@' . $this->environment->DOMAIN_NAME;
+            $emailSubject = 'New Comment on ' . $this->config->get('cms.site_title');
             $emailContent = $this->email->html($emailSubject, $this->email->preset('comment', $emailData));
             $emailTo      = $email;
 
@@ -287,7 +285,7 @@ class CommentManager extends Manager
     }
 
     /**
-     * Get all the administrator email addresses
+     * Get all the administrator email addresses.
      *
      * @access private
      * @return array
@@ -297,7 +295,7 @@ class CommentManager extends Manager
         $emails = [];
 
         $admins = $this->SQL->SELECT('*')->FROM('users')->WHERE('status', '=', 'confirmed')->AND_WHERE('role', '=', 'administrator')->AND_WHERE('email_notifications', '=', true)->FIND_ALL();
-        
+
         foreach ($admins as $admin)
         {
             $emails[$admin['email']] = $admin['name'];
@@ -307,21 +305,21 @@ class CommentManager extends Manager
     }
 
     /**
-     * Get all email addresses that are subscribed to receive emails
+     * Get all email addresses that are subscribed to receive emails.
      *
      * @access private
-     * @param  int     $postId Post id
+     * @param  int   $postId Post id
      * @return array
      */
     private function getCommentThreadEmails(int $postId): array
     {
         $comments = $this->SQL->SELECT('*')->FROM('comments')->WHERE('post_id', '=', $postId)->FIND_ALL();
-        
+
         $emails = [];
 
         foreach($comments as $comment)
         {
-            if ($comment['email_thread'] > 0 )
+            if ($comment['email_thread'] > 0)
             {
                 $emails[$comment['email']] = $comment['name'];
             }
@@ -331,17 +329,17 @@ class CommentManager extends Manager
     }
 
     /**
-     * Get all email addresses that are subscribed to receive reply emails
+     * Get all email addresses that are subscribed to receive reply emails.
      *
      * @access private
-     * @param  int     $postId    Post id
-     * @param  int     $commentId The current comment to skip
+     * @param  int   $postId    Post id
+     * @param  int   $commentId The current comment to skip
      * @return array
      */
     private function getCommentReplyEmails(int $parentId, int $commentId): array
     {
         $comments = $this->SQL->SELECT('*')->FROM('comments')->WHERE('parent', '=', $parentId)->FIND_ALL();
-        
+
         $emails = [];
 
         foreach($comments as $comment)

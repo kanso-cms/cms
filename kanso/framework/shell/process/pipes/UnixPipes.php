@@ -51,34 +51,34 @@ class UnixPipes extends AbstractPipes
         if (!$this->haveReadSupport) {
             $nullstream = fopen('/dev/null', 'c');
 
-            return array(
-                array('pipe', 'r'),
+            return [
+                ['pipe', 'r'],
                 $nullstream,
                 $nullstream,
-            );
+            ];
         }
 
         if ($this->ttyMode) {
-            return array(
-                array('file', '/dev/tty', 'r'),
-                array('file', '/dev/tty', 'w'),
-                array('file', '/dev/tty', 'w'),
-            );
+            return [
+                ['file', '/dev/tty', 'r'],
+                ['file', '/dev/tty', 'w'],
+                ['file', '/dev/tty', 'w'],
+            ];
         }
 
         if ($this->ptyMode && Process::isPtySupported()) {
-            return array(
-                array('pty'),
-                array('pty'),
-                array('pty'),
-            );
+            return [
+                ['pty'],
+                ['pty'],
+                ['pty'],
+            ];
         }
 
-        return array(
-            array('pipe', 'r'),
-            array('pipe', 'w'), // stdout
-            array('pipe', 'w'), // stderr
-        );
+        return [
+            ['pipe', 'r'],
+            ['pipe', 'w'], // stdout
+            ['pipe', 'w'], // stderr
+        ];
     }
 
     /**
@@ -86,7 +86,7 @@ class UnixPipes extends AbstractPipes
      */
     public function getFiles()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -97,7 +97,7 @@ class UnixPipes extends AbstractPipes
         $this->unblock();
         $w = $this->write();
 
-        $read = $e = array();
+        $read = $e = [];
         $r = $this->pipes;
         unset($r[0]);
 
@@ -106,7 +106,7 @@ class UnixPipes extends AbstractPipes
             // if a system call has been interrupted, forget about it, let's try again
             // otherwise, an error occurred, let's reset pipes
             if (!$this->hasSystemCallBeenInterrupted()) {
-                $this->pipes = array();
+                $this->pipes = [];
             }
 
             return $read;

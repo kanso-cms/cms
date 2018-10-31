@@ -6,12 +6,12 @@
  */
 
 /**
- * CMS Application pages routes
+ * CMS Application pages routes.
  *
  * @author Joe J. Howard
  */
 
-# Static pages
+// Static pages
 $staticPages = $SQL->SELECT('slug')->FROM('posts')->WHERE('type', '=', 'page')->FIND_ALL();
 
 foreach ($staticPages as $page)

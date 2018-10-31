@@ -10,21 +10,21 @@ namespace kanso\framework\http\response;
 use kanso\framework\cache\Cache as FrameworkCache;
 
 /**
- * Cache storage
+ * Cache storage.
  *
  * @author Joe J. Howard
  */
-Class Cache 
+class Cache
 {
     /**
-     * Cache manager
+     * Cache manager.
      *
-     * @var kanso\framework\cache\Cache       
+     * @var kanso\framework\cache\Cache
      */
     private $cache;
 
     /**
-     * The current request key
+     * The current request key.
      *
      * @var string
      */
@@ -38,12 +38,12 @@ Class Cache
     private $enabled;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
-     * @param  kanso\framework\cache\Cache $cahce   Framework caching utility
-     * @param  string                      $key     The key to cache the current request under
-     * @param  bool                        $enabled Enable of disable the cache (optional) (default false)
+     * @param kanso\framework\cache\Cache $cahce   Framework caching utility
+     * @param string                      $key     The key to cache the current request under
+     * @param bool                        $enabled Enable of disable the cache (optional) (default false)
      */
     public function __construct(FrameworkCache $cache, string $key, bool $enabled = false)
     {
@@ -55,7 +55,7 @@ Class Cache
     }
 
     /**
-     * Disable caching
+     * Disable caching.
      *
      * @access public
      */
@@ -65,7 +65,7 @@ Class Cache
     }
 
     /**
-     * Enable caching
+     * Enable caching.
      *
      * @access public
      */
@@ -85,7 +85,7 @@ Class Cache
     }
 
     /**
-     * Load the response body
+     * Load the response body.
      *
      * @access public
      */
@@ -98,10 +98,10 @@ Class Cache
     }
 
     /**
-     * Save the response body
+     * Save the response body.
      *
      * @access public
-     * @param  string $data  Data to store
+     * @param string $data Data to store
      */
     public function put(string $data)
     {
@@ -109,10 +109,10 @@ Class Cache
     }
 
     /**
-     * Check if the response body exists
+     * Check if the response body exists.
      *
      * @access public
-     * @param  string $key Key to check
+     * @param string $key Key to check
      */
     public function has()
     {
@@ -127,10 +127,10 @@ Class Cache
     }
 
     /**
-     * Remove the response body
+     * Remove the response body.
      *
      * @access public
-     * @param  string $key Key to delete
+     * @param string $key Key to delete
      */
     public function delete()
     {
@@ -138,10 +138,10 @@ Class Cache
     }
 
     /**
-     * Checks if the response body expired
+     * Checks if the response body expired.
      *
      * @access public
-     * @param  string $key Key to check
+     * @param string $key Key to check
      */
     public function expired()
     {

@@ -8,27 +8,26 @@
 namespace kanso\cms\wrappers\providers;
 
 use kanso\framework\database\query\Builder;
-use kanso\framework\config\Config;
 
 /**
- * Provider base class
+ * Provider base class.
  *
  * @author Joe J. Howard
  */
 abstract class Provider
 {
     /**
-     * SQL query builder
-     * 
+     * SQL query builder.
+     *
      * @var \kanso\framework\database\query\Builder
-     */ 
+     */
     protected $SQL;
 
     /**
-     * Constructor
-     * 
+     * Constructor.
+     *
      * @access public
-     * @param \kanso\framework\database\query\Builder $SQL    SQL query builder
+     * @param \kanso\framework\database\query\Builder $SQL SQL query builder
      */
     public function __construct(Builder $SQL)
     {
@@ -36,7 +35,7 @@ abstract class Provider
     }
 
     /**
-     * Create an item
+     * Create an item.
      *
      * @access public
      * @return mixed
@@ -44,21 +43,21 @@ abstract class Provider
     abstract public function create(array $row);
 
 	/**
-	 * Return an item by id
+	 * Return an item by id.
 	 *
 	 * @access public
-     * @param  int $id Row id
-     * @return mixed
+	 * @param  int   $id Row id
+	 * @return mixed
 	 */
 	abstract public function byId(int $id);
 
 	/**
-	 * Deletes the row item
+	 * Deletes the row item.
 	 *
 	 * @access public
-     * @param  string $key   Column name
-     * @param  mixed  $value Column value
-     * @return mixed
+	 * @param  string $key   Column name
+	 * @param  mixed  $value Column value
+	 * @return mixed
 	 */
 	abstract public function byKey(string $key, $value, bool $single = false);
 }

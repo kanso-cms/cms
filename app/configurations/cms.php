@@ -2,7 +2,7 @@
 
 return
 [
-    /**
+    /*
      * ---------------------------------------------------------
      * Admin panel default access
      * ---------------------------------------------------------
@@ -20,7 +20,7 @@ return
     'default_password' => 'password1',
     'default_name'     => 'John Appleseed',
 
-    /**
+    /*
      * ---------------------------------------------------------
      * Theme options
      * ---------------------------------------------------------
@@ -28,10 +28,10 @@ return
      * themes_path : Directory to where themes are stored.
      * theme_name  : The active theme name (must be the same as its folder).
      */
-    'themes_path' => APP_DIR.'/public/themes',
-    'theme_name'  => 'default',
+    'themes_path' => APP_DIR . '/public/themes',
+    'theme_name'  => 'demo',
 
-    /**
+    /*
      * ---------------------------------------------------------
      * Site Meta
      * ---------------------------------------------------------
@@ -42,13 +42,13 @@ return
     'site_title'       => 'Kanso',
     'site_description' => 'Kanso is a lightweight CMS written in PHP with a focus on simplicity, usability and writing.',
 
-    /**
+    /*
      * ---------------------------------------------------------
      * Routing
      * ---------------------------------------------------------
      *
      * sitemap_route     : Route to the XML sitemap.
-     * posts_per_page    : Posts per page for pagination. 
+     * posts_per_page    : Posts per page for pagination.
      * permalinks        : Permalinks structure
      * permalinks_route  : The permalinks route for the router
      * route_tags        : Should Kanso route tags e.g example.com/tag/tag-slug/
@@ -68,16 +68,16 @@ return
     'route_attachments' => true,
     'enable_comments'   => true,
 
-    /**
+    /*
      * ---------------------------------------------------------
      * Custom post
      * ---------------------------------------------------------
      *
-     * Custom post types for the admin panel 
+     * Custom post types for the admin panel
      */
     'custom_posts' => [],
 
-    /**
+    /*
      * ---------------------------------------------------------
      * Security
      * ---------------------------------------------------------
@@ -86,7 +86,7 @@ return
      */
     'security' =>
     [
-        /**
+        /*
          * ---------------------------------------------------------
          * Robots.txt search engine/bot indexing
          * ---------------------------------------------------------
@@ -97,7 +97,7 @@ return
         'enable_robots'       => true,
         'robots_text_content' => "User-agent: *\nDisallow: /",
 
-        /**
+        /*
          * ---------------------------------------------------------
          * Ip address blocking
          * ---------------------------------------------------------
@@ -108,23 +108,23 @@ return
         'ip_blocked'   => false,
         'ip_whitelist' => [],
     ],
-    
-    /**
+
+    /*
      * ---------------------------------------------------------
      * Uploads
      * ---------------------------------------------------------
      *
      * Uploading configurations
      */
-    'uploads' => 
+    'uploads' =>
     [
-        /**
+        /*
          * ---------------------------------------------------------
          * Image thumbnail sizing
          * ---------------------------------------------------------
          *
          * Thumbnail sizes for image uploading via the admin panel.
-         * Defining a single number will resize to width. Defining 2 numbers as an 
+         * Defining a single number will resize to width. Defining 2 numbers as an
          * array - e.g 'small' => [300, 600] will crop to 300 x 600
          */
         'thumbnail_sizes' =>
@@ -134,7 +134,7 @@ return
             'large'  => 1200,
         ],
 
-        /**
+        /*
          * ---------------------------------------------------------
          * Image thumbnail quality
          * ---------------------------------------------------------
@@ -144,16 +144,16 @@ return
          */
         'thumbnail_quality' => 95,
 
-        /**
+        /*
          * ---------------------------------------------------------
          * Uploads path
          * ---------------------------------------------------------
          *
          * Path to media library assets uploaded via the admin panel.
          */
-        'path' => APP_DIR.'/public/uploads',
+        'path' => APP_DIR . '/public/uploads',
 
-        /**
+        /*
          * ---------------------------------------------------------
          * Accepted files
          * ---------------------------------------------------------
@@ -162,7 +162,7 @@ return
          */
         'accepted_mime' =>
         [
-            # Images
+            // Images
             'image/jpg',
             'image/jpeg',
             'image/png',
@@ -173,7 +173,7 @@ return
             'image/webp',
             'image/svg+xml',
 
-            # Microsoft office
+            // Microsoft office
             'application/pdf',
             'application/msword',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
@@ -194,7 +194,7 @@ return
             'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
             'application/vnd.ms-powerpoint.presentation.macroEnabled.12',
 
-            # Audio
+            // Audio
             'audio/aac',
             'application/atom+xml',
             'audio/mpeg',
@@ -207,7 +207,7 @@ return
             'audio/x-ms-wma',
             'audio/ogg',
 
-            # Video
+            // Video
             'video/avi',
             'video/x-flv',
             'video/x-matroska',
@@ -215,8 +215,8 @@ return
             'video/mpeg',
             'video/3gpp',
             'video/3gpp2',
-          
-            # Text
+
+            // Text
             'text/plain',
             'text/xml',
         ],

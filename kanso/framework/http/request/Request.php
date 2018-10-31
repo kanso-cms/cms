@@ -7,23 +7,20 @@
 
 namespace kanso\framework\http\request;
 
-use kanso\framework\http\request\Environment;
-use kanso\framework\http\request\Headers;
-use kanso\framework\http\request\Files;
 use kanso\framework\utility\Mime;
 use kanso\framework\utility\Str;
 
 /**
- * Request manager class
+ * Request manager class.
  *
  * @author Joe J. Howard
  */
 class Request
 {
     /**
-     * Request method constants
+     * Request method constants.
      *
-     * @var string 
+     * @var string
      */
     const METHOD_HEAD     = 'HEAD';
     const METHOD_GET      = 'GET';
@@ -35,28 +32,28 @@ class Request
     const METHOD_OVERRIDE = '_METHOD';
 
     /**
-     * Request headers
+     * Request headers.
      *
      * @var \kanso\framework\http\request\Headers
      */
     private $headers;
 
     /**
-     * Http Environment 
+     * Http Environment.
      *
      * @var \kanso\framework\http\request\Environment
      */
     private $environment;
 
     /**
-     * Http files  
+     * Http files.
      *
      * @var \kanso\framework\http\request\Files
      */
     private $files;
 
     /**
-     * List of bot user agnets
+     * List of bot user agnets.
      *
      * @var array
      */
@@ -73,12 +70,12 @@ class Request
     ];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
-     * @param  \kanso\framework\http\request\Environment $environment Environment wrapper
-     * @param  \kanso\framework\http\request\Headers     $headers     Headers wrapper
-     * @param  \kanso\framework\http\request\Files       $files       Files wrapper
+     * @param \kanso\framework\http\request\Environment $environment Environment wrapper
+     * @param \kanso\framework\http\request\Headers     $headers     Headers wrapper
+     * @param \kanso\framework\http\request\Files       $files       Files wrapper
      */
     public function __construct(Environment $environment, Headers $headers, Files $files)
     {
@@ -90,7 +87,7 @@ class Request
     }
 
     /**
-     * Trimmed request path
+     * Trimmed request path.
      *
      * @access public
      * @return string
@@ -108,7 +105,7 @@ class Request
     }
 
     /**
-     * Environment access
+     * Environment access.
      *
      * @access public
      * @return \kanso\framework\http\request\Environment
@@ -119,7 +116,7 @@ class Request
     }
 
     /**
-     * Headers access
+     * Headers access.
      *
      * @access public
      * @return \kanso\framework\http\request\Headers
@@ -130,7 +127,7 @@ class Request
     }
 
     /**
-     * Returns uploaded files wrapper
+     * Returns uploaded files wrapper.
      *
      * @access public
      * @return \kanso\framework\http\request\Files
@@ -141,7 +138,7 @@ class Request
     }
 
     /**
-     * Returns the HTTP request method
+     * Returns the HTTP request method.
      *
      * @return string
      */
@@ -256,16 +253,16 @@ class Request
         if (isset($headers['REQUESTED_WITH']) && $headers['REQUESTED_WITH'] === 'XMLHttpRequest')
         {
             return true;
-        } 
-        else if (isset($headers['HTTP_REQUESTED_WITH']) &&  $headers['HTTP_REQUESTED_WITH'] === 'XMLHttpRequest')
+        }
+        elseif (isset($headers['HTTP_REQUESTED_WITH']) &&  $headers['HTTP_REQUESTED_WITH'] === 'XMLHttpRequest')
         {
             return true;
         }
-        else if (isset($headers['HTTP_X_REQUESTED_WITH']) &&  $headers['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest')
+        elseif (isset($headers['HTTP_X_REQUESTED_WITH']) &&  $headers['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest')
         {
             return true;
         }
-        else if (isset($headers['X_REQUESTED_WITH']) &&  $headers['X_REQUESTED_WITH'] === 'XMLHttpRequest')
+        elseif (isset($headers['X_REQUESTED_WITH']) &&  $headers['X_REQUESTED_WITH'] === 'XMLHttpRequest')
         {
             return true;
         }
@@ -293,7 +290,7 @@ class Request
     }
 
     /**
-     * Fetch GET and POST request data
+     * Fetch GET and POST request data.
      *
      * This method returns a union of GET and POST data as a key-value array, or the value
      * of the array key if requested; if the array key does not exist, false is returned.
@@ -306,7 +303,7 @@ class Request
     {
         $env = $this->environment->asArray();
 
-        $data = parse_url(rtrim($env['HTTP_HOST'].$env['REQUEST_URI'], '/'));
+        $data = parse_url(rtrim($env['HTTP_HOST'] . $env['REQUEST_URI'], '/'));
 
         $data['page'] = 0;
 
@@ -316,7 +313,7 @@ class Request
         {
             $data['page'] = intval($page[1][0]);
         }
-        
+
         if ($data['page'] === 1)
         {
             $data['page'] = 0;
@@ -343,15 +340,15 @@ class Request
             {
                 return $data[$key];
             }
-            
+
             return false;
         }
-        
+
         return $data;
     }
 
     /**
-     * Fetch and parse url queries
+     * Fetch and parse url queries.
      *
      * This method fetches and parses url queries
      * eg example.com?foo=bar -> ['foo' => 'bar'];
@@ -369,7 +366,7 @@ class Request
         if (!empty($queryStr))
         {
             $querySets = explode('&', $queryStr);
-            
+
             if (!empty($querySets))
             {
                 foreach ($querySets as $querySet)
@@ -379,13 +376,13 @@ class Request
                         $querySet = explode('=', $querySet);
                         $key      = urldecode($querySet[0]);
                         $value    = urldecode($querySet[1]);
-                        
+
                         if (empty($value))
                         {
                             $value = null;
                         }
-                        
-                        $result[$key] = $value;   
+
+                        $result[$key] = $value;
                     }
                 }
             }
@@ -396,7 +393,7 @@ class Request
             {
                 return $result[$_key];
             }
-            
+
             return null;
         }
 
@@ -404,7 +401,7 @@ class Request
     }
 
     /**
-     * Get MIME Type (type/subtype within Content Type header)
+     * Get MIME Type (type/subtype within Content Type header).
      *
      * @access public
      * @return string|false
@@ -412,7 +409,7 @@ class Request
     public function mimeType()
     {
         $pathinfo = $this->fetch();
-            
+
         if (isset($pathinfo['path']))
         {
             return Mime::fromExt(Str::getAfterLastChar($pathinfo['path'], '.'));

@@ -7,14 +7,13 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\cms\admin\models\BaseModel;
-use kanso\framework\utility\Arr;
-use kanso\framework\utility\Str;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
+use kanso\framework\utility\Arr;
+use kanso\framework\utility\Str;
 
 /**
- * Comment users model
+ * Comment users model.
  *
  * @author Joe J. Howard
  */
@@ -54,7 +53,7 @@ class CommentUsers extends BaseModel
         return false;
     }
 
-   /**
+    /**
      * Parse the $_GET request variables and filter the articles for the requested page.
      *
      * @access private
@@ -78,8 +77,8 @@ class CommentUsers extends BaseModel
     }
 
     /**
-     * Parse and validate the POST request from any submitted forms
-     * 
+     * Parse and validate the POST request from any submitted forms.
+     *
      * @access private
      * @return array|false
      */
@@ -97,16 +96,16 @@ class CommentUsers extends BaseModel
             if (in_array($this->post['bulk_action'], ['whitelist', 'blacklist', 'nolist']))
             {
                 $this->moderateIps($userIps, $this->post['bulk_action']);
-                
+
                 return $this->postMessage('success', 'IP Addresses were successfully moderated!');
             }
         }
 
-        return false;        
+        return false;
     }
 
     /**
-     * Moderate a list of ip addresses
+     * Moderate a list of ip addresses.
      *
      * @access private
      * @param  array   Array of ip addresses to moderate
@@ -120,12 +119,12 @@ class CommentUsers extends BaseModel
                 $this->SpamProtector->unWhitelistIpAddress($ip);
                 $this->SpamProtector->blacklistIpAddress($ip);
             }
-            else if ($list === 'whitelist')
+            elseif ($list === 'whitelist')
             {
                 $this->SpamProtector->whitelistIpAddress($ip);
                 $this->SpamProtector->unBlacklistIpAddress($ip);
             }
-            else if ($list === 'nolist')
+            elseif ($list === 'nolist')
             {
                 $this->SpamProtector->unWhitelistIpAddress($ip);
                 $this->SpamProtector->unBlacklistIpAddress($ip);
@@ -133,20 +132,20 @@ class CommentUsers extends BaseModel
         }
     }
 
-     /**
-     * Validates all POST variables are set
-     * 
+    /**
+     * Validates all POST variables are set.
+     *
      * @access private
      * @return bool
      */
     private function validatePost(): bool
     {
-        # Validation
+        // Validation
         if (!isset($this->post['access_token']) || !$this->Gatekeeper->verifyToken($this->post['access_token']))
         {
             throw new InvalidTokenException('Bad Admin Panel POST Request. The CSRF token was either not provided or was invalid.');
         }
-        
+
         if (!isset($this->post['bulk_action']) || empty($this->post['bulk_action']))
         {
             throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
@@ -166,7 +165,7 @@ class CommentUsers extends BaseModel
     }
 
     /**
-     * Check if the GET URL queries are either empty or set to defaults
+     * Check if the GET URL queries are either empty or set to defaults.
      *
      * @access private
      * @return bool
@@ -174,27 +173,27 @@ class CommentUsers extends BaseModel
     private function emptyQueries(): bool
     {
         $queries = $this->getQueries();
-        
+
         return (
-            $queries['search'] === false && 
-            $queries['page']   === 0 && 
-            $queries['sort']   === 'newest' && 
+            $queries['search'] === false &&
+            $queries['page']   === 0 &&
+            $queries['sort']   === 'newest' &&
             $queries['status'] === false
         );
     }
 
     /**
-     * Returns the requested GET queries with defaults
+     * Returns the requested GET queries with defaults.
      *
      * @access private
      * @return array
      */
     private function getQueries(): array
     {
-        # Get queries
+        // Get queries
         $queries = $this->Request->queries();
 
-        # Set defaults
+        // Set defaults
         if (!isset($queries['search']))   $queries['search']   = false;
         if (!isset($queries['page']))     $queries['page']     = 0;
         if (!isset($queries['sort']))     $queries['sort']     = 'newest';
@@ -204,35 +203,35 @@ class CommentUsers extends BaseModel
     }
 
     /**
-     * Returns the list of users for display
+     * Returns the list of users for display.
      *
      * @access private
-     * @param  bool $checkMaxPages Count the max pages
+     * @param  bool      $checkMaxPages Count the max pages
      * @return array|int
      */
     private function loadUsers(bool $checkMaxPages = false)
     {
-       # Get queries
+       // Get queries
         $queries = $this->getQueries();
 
-        # Default operation values
-        $page         = ((int)$queries['page']);
+        // Default operation values
+        $page         = ((int) $queries['page']);
         $page         = $page === 1 || $page === 0 ? 0 : $page-1;
-        $sort         = $queries['sort'] === 'newest' ? 'DESC' : 'ASC' ;
+        $sort         = $queries['sort'] === 'newest' ? 'DESC' : 'ASC';
         $sortKey      = 'date';
         $perPage      = 10;
         $offset       = $page * $perPage;
         $limit        = $perPage;
         $search       = $queries['search'];
         $filter       = $queries['status'];
-        
-        # Filter and sanitize the sort order
+
+        // Filter and sanitize the sort order
         if ($queries['sort'] === 'name')  $sortKey   = 'name';
         if ($queries['sort'] === 'email') $sortKey   = 'email';
 
         $this->SQL->SELECT('*')->FROM('comments');
 
-        # Is this a search
+        // Is this a search
         if ($search)
         {
             if (Str::contains($search, ':'))
@@ -245,14 +244,14 @@ class CommentUsers extends BaseModel
                 }
             }
         }
-       
-        # Set the order
+
+        // Set the order
         $this->SQL->ORDER_BY($sortKey, $sort);
 
-        # Find comments
+        // Find comments
         $comments = $this->SQL->FIND_ALL();
 
-        # Create a list of users
+        // Create a list of users
         $users = [];
         foreach ($comments as $comment)
         {
@@ -263,7 +262,7 @@ class CommentUsers extends BaseModel
             {
                 continue;
             }
-            else if ($filter === 'blacklist' && !$blacklisted)
+            elseif ($filter === 'blacklist' && !$blacklisted)
             {
                 continue;
             }
@@ -291,17 +290,17 @@ class CommentUsers extends BaseModel
             }
         }
 
-        # Are we checking the pages ?
+        // Are we checking the pages ?
         if ($checkMaxPages) return ceil(count($users) / $perPage);
 
-        # Append custom keys
+        // Append custom keys
         $paged = Arr::paginate($users, $page, $perPage);
 
         if (isset($paged[$page]))
         {
             return $paged[$page];
         }
-        
+
         return [];
     }
 }

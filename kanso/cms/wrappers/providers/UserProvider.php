@@ -8,10 +8,9 @@
 namespace kanso\cms\wrappers\providers;
 
 use kanso\cms\wrappers\User;
-use kanso\cms\wrappers\providers\Provider;
 
 /**
- * User provider
+ * User provider.
  *
  * @author Joe J. Howard
  */

@@ -6,14 +6,14 @@
  */
 
 /**
- * CMS Application posts routes
+ * CMS Application posts routes.
  *
  * @author Joe J. Howard
  */
 
-# Posts
-$router->get($blogPrefix.'/'.$config->get('cms.permalinks_route').'feed/rss/',  '\kanso\cms\application\Application::loadRssFeed', 'single');
-$router->get($blogPrefix.'/'.$config->get('cms.permalinks_route').'feed/atom/', '\kanso\cms\application\Application::loadRssFeed', 'single');
-$router->get($blogPrefix.'/'.$config->get('cms.permalinks_route').'feed/rdf/',  '\kanso\cms\application\Application::loadRssFeed', 'single');
-$router->get($blogPrefix.'/'.$config->get('cms.permalinks_route').'feed/',      '\kanso\cms\application\Application::loadRssFeed', 'single');
-$router->get($blogPrefix.'/'.$config->get('cms.permalinks_route'),              '\kanso\cms\application\Application::applyRoute', 'single');
+// Posts
+$router->get($blogPrefix . '/' . $config->get('cms.permalinks_route') . 'feed/rss/', '\kanso\cms\application\Application::loadRssFeed', 'single');
+$router->get($blogPrefix . '/' . $config->get('cms.permalinks_route') . 'feed/atom/', '\kanso\cms\application\Application::loadRssFeed', 'single');
+$router->get($blogPrefix . '/' . $config->get('cms.permalinks_route') . 'feed/rdf/', '\kanso\cms\application\Application::loadRssFeed', 'single');
+$router->get($blogPrefix . '/' . $config->get('cms.permalinks_route') . 'feed/', '\kanso\cms\application\Application::loadRssFeed', 'single');
+$router->get($blogPrefix . '/' . $config->get('cms.permalinks_route'), '\kanso\cms\application\Application::applyRoute', 'single');

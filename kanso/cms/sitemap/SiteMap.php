@@ -11,67 +11,67 @@ use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
 
 /**
- * Sitemap builder
+ * Sitemap builder.
  *
  * @author Joe J. Howard
  */
 class SiteMap
 {
 	/**
-     * Request object
-     *
-     * @var \kanso\framework\http\request\Request
-     */
+	 * Request object.
+	 *
+	 * @var \kanso\framework\http\request\Request
+	 */
 	private $request;
 
 	/**
-     * Response object
-     *
-     * @var \kanso\framework\http\response\Response
-     */
+	 * Response object.
+	 *
+	 * @var \kanso\framework\http\response\Response
+	 */
 	private $response;
 
 	/**
-     * Route tags
-     *
-     * @var bool
-     */
+	 * Route tags.
+	 *
+	 * @var bool
+	 */
 	private $routeTags;
 
 	/**
-     * Route categories
-     *
-     * @var bool
-     */
+	 * Route categories.
+	 *
+	 * @var bool
+	 */
 	private $routeCategories;
 
 	/**
-     * Route authors
-     *
-     * @var bool
-     */
+	 * Route authors.
+	 *
+	 * @var bool
+	 */
 	private $routeAuthors;
 
 	/**
-     * Route authors
-     *
-     * @var bool
-     */
+	 * Route authors.
+	 *
+	 * @var bool
+	 */
 	private $routeAttachements;
 
 	/**
-     * Array of custom post type routes
-     *
-     * @var array
-     */
+	 * Array of custom post type routes.
+	 *
+	 * @var array
+	 */
 	private $customPostTypes;
 
-	/**
-     * Constructor
+    /**
+     * Constructor.
      *
      * @access public
-     * @param  \kanso\framework\http\request\Request   $request  Request object
-     * @param  \kanso\framework\http\response\Response $response Response object
+     * @param \kanso\framework\http\request\Request   $request  Request object
+     * @param \kanso\framework\http\response\Response $response Response object
      */
     public function __construct(Request $request, Response $response, bool $routeTags, bool $routeCategories, bool $routeAuthors, bool $routeAttachements, array $customPostTypes = [])
     {
@@ -90,28 +90,28 @@ class SiteMap
         $this->customPostTypes = $customPostTypes;
     }
 
-	/**
-     * Outputs the sitemap to the response
+    /**
+     * Outputs the sitemap to the response.
      *
      * @access public
      */
     public function display()
     {
-		# Set appropriate content type header
+		// Set appropriate content type header
         $this->response->format()->set('xml');
 
-        # Set the response body
+        // Set the response body
         $this->response->body()->set($this->build());
-        
-        # Set the status
+
+        // Set the status
         $this->response->status()->set(200);
 
-        # Disable the cache
+        // Disable the cache
         $this->response->cache()->disable();
     }
 
-    /**
-	 * Returns the sitemap XML
+	/**
+	 * Returns the sitemap XML.
 	 *
 	 * @access private
 	 * @return string
@@ -155,13 +155,13 @@ class SiteMap
 	}
 
 	/**
-	 * Load an RSS template file
-	 * 
+	 * Load an RSS template file.
+	 *
 	 * @param  string $name The name of the template to load
 	 * @return string
 	 */
 	private function template(string $name): string
 	{
-		return dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$name.'.php';
+		return dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $name . '.php';
 	}
 }

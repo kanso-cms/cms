@@ -1,5 +1,10 @@
 # BEGIN Kanso
 
+# This is a sample htaccess file to start using kanso on your server
+# If you are using kanso via Composer or if Kanso lives in a subdirectory
+# You should move this htaccess file to your server's root directory
+# And add ".htaccess" to your .gitignore file
+
 # ------------------------------------------------------------------------------
 # | 404 error prevention for non-existing redirected folders                   |
 # ------------------------------------------------------------------------------

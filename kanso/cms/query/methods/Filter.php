@@ -10,14 +10,14 @@ namespace kanso\cms\query\methods;
 use kanso\framework\utility\Str;
 
 /**
- * CMS Query filter methods
+ * CMS Query filter methods.
  *
  * @author Joe J. Howard
  */
 trait Filter
 {
     /**
-     * Reset the internal properties to default
+     * Reset the internal properties to default.
      *
      * @access public
      */
@@ -27,30 +27,30 @@ trait Filter
         $this->postIndex    = -1;
         $this->postCount    = 0;
         $this->posts        = [];
-        $this->requestType  = NULL;
-        $this->queryStr     = NULL;
-        $this->post         = NULL;
-        $this->taxonomySlug = NULL;
-        $this->searchQuery  = NULL;
+        $this->requestType  = null;
+        $this->queryStr     = null;
+        $this->post         = null;
+        $this->taxonomySlug = null;
+        $this->searchQuery  = null;
     }
 
     /**
-     * Fetch and set the currently requested page
+     * Fetch and set the currently requested page.
      *
      * @access private
      */
     private function fetchPageIndex()
     {
         $this->pageIndex = $this->Request->fetch('page');
-        
+
         $this->pageIndex = $this->pageIndex === 1 || $this->pageIndex === 0 ? 0 : $this->pageIndex-1;
     }
 
     /**
-     * Apply a query for a custom string
+     * Apply a query for a custom string.
      *
      * @access public
-     * @param  string  $queryStr Query string to parse
+     * @param string $queryStr Query string to parse
      */
     private function applyQuery(string $queryStr)
     {
@@ -71,26 +71,26 @@ trait Filter
     }
 
     /**
-     * Filter the posts by the request type
+     * Filter the posts by the request type.
      *
      * Note this method is used from the router/CMS core to filter posts based
      * on the matched route.
      *
      * @access public
-     * @param  string $requestType The requested page type
+     * @param string $requestType The requested page type
      */
     public function filterPosts(string $requestType)
-    {        
-        # Reset the internal properties
+    {
+        // Reset the internal properties
         $this->reset();
 
-        # Reset the response to 200
+        // Reset the response to 200
         $this->Response->status()->set(200);
 
-        # Reset the page index
+        // Reset the page index
         $this->fetchPageIndex();
-    
-        # Filter and paginate the posts based on the request type
+
+        // Filter and paginate the posts based on the request type
         if ($requestType === 'home' || $requestType === 'home-page')
         {
             if (!$this->filterHome($requestType))
@@ -98,64 +98,64 @@ trait Filter
                 return false;
             }
         }
-        else if ($requestType === 'tag')
+        elseif ($requestType === 'tag')
         {
             if (!$this->filterTag())
             {
                 return false;
             }
         }
-        else if ($requestType === 'category')
+        elseif ($requestType === 'category')
         {
             if (!$this->filterCategory())
             {
                 return false;
-            }            
-        } 
-        else if ($requestType === 'author')
+            }
+        }
+        elseif ($requestType === 'author')
         {
             if (!$this->filterAuthor())
             {
                 return false;
-            }            
+            }
         }
-        else if ($requestType === 'single' || Str::getBeforeFirstChar($requestType, '-') === 'single')
+        elseif ($requestType === 'single' || Str::getBeforeFirstChar($requestType, '-') === 'single')
         {
             if (!$this->filterSingle($requestType))
             {
                 return false;
             }
         }
-        else if ($requestType === 'page')
+        elseif ($requestType === 'page')
         {
             if (!$this->filterPage())
             {
                 return false;
             }
         }
-        else if ($requestType === 'search')
+        elseif ($requestType === 'search')
         {
             if (!$this->filterSearch())
             {
                 return false;
             }
         }
-        else if ($requestType === 'attachment')
+        elseif ($requestType === 'attachment')
         {
             if (!$this->filterAttachment())
             {
                 return false;
             }
         }
-        else if ($requestType === 'sitemap')
+        elseif ($requestType === 'sitemap')
         {
             if (!$this->filterSitemap())
             {
                 return false;
             }
-        } 
+        }
 
-        # Set the_post so we're looking at the first item
+        // Set the_post so we're looking at the first item
         if (isset($this->posts[0]))
         {
             $this->post = $this->posts[0];
@@ -163,11 +163,11 @@ trait Filter
     }
 
     /**
-     * Filter the posts based on a category request
+     * Filter the posts based on a category request.
      *
      * @access private
-     * @param  string  $requestType The incoming request type ('home'|'home-blog')
-     * @return bool 
+     * @param  string $requestType The incoming request type ('home'|'home-blog')
+     * @return bool
      */
     private function filterHome(string $requestType): bool
     {
@@ -190,11 +190,11 @@ trait Filter
     }
 
     /**
-     * Filter the posts based on a single request
+     * Filter the posts based on a single request.
      *
      * @access private
-     * @param  string  $requestType The incoming request type ('single'|'$custom-single')
-     * @return bool 
+     * @param  string $requestType The incoming request type ('single'|'$custom-single')
+     * @return bool
      */
     private function filterSingle(string $requestType): bool
     {
@@ -207,17 +207,17 @@ trait Filter
         if ($this->Request->fetch('query') === 'draft' && $this->Gatekeeper->isAdmin())
         {
             $uri       = Str::queryFilterUri($uri);
-            $uri       = !empty($blogPrefix) ? str_replace($blogPrefix.'/', '', $uri) : $uri;
-            $this->queryStr  = 'post_status = draft : post_type = '.$postType.' : post_slug = '.$uri.'/';
+            $uri       = !empty($blogPrefix) ? str_replace($blogPrefix . '/', '', $uri) : $uri;
+            $this->queryStr  = 'post_status = draft : post_type = ' . $postType . ' : post_slug = ' . $uri . '/';
             $this->posts     = $this->queryParser->parseQuery($this->queryStr);
             $this->postCount = count($this->posts);
         }
         else
         {
             $uri = Str::getBeforeLastWord(Str::queryFilterUri($uri), '/feed');
-            $uri = !empty($blogPrefix) ? str_replace($blogPrefix.'/', '', $uri) : $uri;
+            $uri = !empty($blogPrefix) ? str_replace($blogPrefix . '/', '', $uri) : $uri;
 
-            $this->queryStr  = 'post_status = published : post_type = '.$postType.' : post_slug = '.$uri.'/';
+            $this->queryStr  = 'post_status = published : post_type = ' . $postType . ' : post_slug = ' . $uri . '/';
             $this->posts     = $this->queryParser->parseQuery($this->queryStr);
             $this->postCount = count($this->posts);
         }
@@ -233,10 +233,10 @@ trait Filter
     }
 
     /**
-     * Filter the posts based on a page request
+     * Filter the posts based on a page request.
      *
      * @access private
-     * @return bool 
+     * @return bool
      */
     private function filterPage(): bool
     {
@@ -246,14 +246,14 @@ trait Filter
         if ($this->Request->fetch('query') === 'draft' && $this->Gatekeeper->isAdmin())
         {
             $uri             = Str::queryFilterUri($uri);
-            $this->queryStr  = 'post_status = draft : post_type = page : post_slug = '.$uri.'/';
+            $this->queryStr  = 'post_status = draft : post_type = page : post_slug = ' . $uri . '/';
             $this->posts     = $this->queryParser->parseQuery($this->queryStr);
             $this->postCount = count($this->posts);
         }
         else
         {
             $uri = Str::getBeforeLastWord(Str::queryFilterUri($uri), '/feed');
-            $this->queryStr   = 'post_status = published : post_type = page : post_slug = '.$uri.'/';
+            $this->queryStr   = 'post_status = published : post_type = page : post_slug = ' . $uri . '/';
             $this->posts      = $this->queryParser->parseQuery($this->queryStr);
             $this->postCount  = count($this->posts);
         }
@@ -269,17 +269,17 @@ trait Filter
     }
 
     /**
-     * Filter the posts based on an category request
+     * Filter the posts based on an category request.
      *
      * @access private
-     * @return bool 
+     * @return bool
      */
     private function filterCategory(): bool
     {
         $blogPrefix   = $this->Config->get('cms.blog_location');
         $perPage      = $this->Config->get('cms.posts_per_page');
         $offset       = $this->pageIndex * $perPage;
-        $urlParts     = explode('/',  Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI));
+        $urlParts     = explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI));
         $isPage       = in_array('page', $urlParts);
         $isFeed       = in_array('feed', $urlParts);
 
@@ -290,14 +290,14 @@ trait Filter
 
         array_shift($urlParts);
 
-        # Remove /page/number/
+        // Remove /page/number/
         if ($isPage)
         {
             array_pop($urlParts);
             array_pop($urlParts);
         }
 
-        # Remove /feed/rss 
+        // Remove /feed/rss
         if ($isFeed)
         {
             $last = array_values(array_slice($urlParts, -1))[0];
@@ -313,18 +313,18 @@ trait Filter
             }
         }
 
-        # Get the last category slug
+        // Get the last category slug
         $lastCat = $this->CategoryManager->provider()->byKey('slug', array_values(array_slice($urlParts, -1))[0], true);
 
-        # Make sure the category exists
+        // Make sure the category exists
         if (!$lastCat)
         {
             $this->Response->status()->set(404);
-            
+
             return false;
         }
 
-        # Make sure the path to a nested category is correct
+        // Make sure the path to a nested category is correct
         if (!$this->the_category_slug($lastCat->id) === implode('/', $urlParts))
         {
             $this->Response->status()->set(404);
@@ -334,11 +334,11 @@ trait Filter
 
         $this->requestType  = 'category';
         $this->taxonomySlug = array_pop($urlParts);
-        $this->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = '.$this->taxonomySlug." : limit = $offset, $perPage";
+        $this->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = ' . $this->taxonomySlug . " : limit = $offset, $perPage";
         $this->posts        = $this->queryParser->parseQuery($this->queryStr);
         $this->postCount    = count($this->posts);
 
-        # If there are no posts and the page is more than 2 return false
+        // If there are no posts and the page is more than 2 return false
         if ($this->postCount === 0 && $this->pageIndex >= 1)
         {
             $this->reset();
@@ -347,15 +347,15 @@ trait Filter
 
             return false;
         }
-                
+
         return true;
     }
 
     /**
-     * Filter the posts based on a tag request
+     * Filter the posts based on a tag request.
      *
      * @access private
-     * @return bool 
+     * @return bool
      */
     private function filterTag(): bool
     {
@@ -366,11 +366,11 @@ trait Filter
 
         $this->requestType  = 'tag';
         $this->taxonomySlug = !empty($blogPrefix) ? $urlParts[2] : $urlParts[1];
-        $this->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC : tag_slug = '.$this->taxonomySlug." : limit = $offset, $perPage";
+        $this->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC : tag_slug = ' . $this->taxonomySlug . " : limit = $offset, $perPage";
         $this->posts        = $this->queryParser->parseQuery($this->queryStr);
         $this->postCount    = count($this->posts);
 
-        # If there are no posts and the page is more than 2 return false
+        // If there are no posts and the page is more than 2 return false
         if ($this->postCount === 0 && $this->pageIndex >= 1)
         {
             $this->reset();
@@ -394,10 +394,10 @@ trait Filter
     }
 
     /**
-     * Filter the posts based on an author request
+     * Filter the posts based on an author request.
      *
      * @access private
-     * @return bool 
+     * @return bool
      */
     private function filterAuthor(): bool
     {
@@ -408,12 +408,12 @@ trait Filter
 
         $this->requestType  = 'author';
         $this->taxonomySlug = !empty($blogPrefix) ? $urlParts[2] : $urlParts[1];
-        $this->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC: author_slug = '.$this->taxonomySlug.": limit = $offset, $perPage";
+        $this->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC: author_slug = ' . $this->taxonomySlug . ": limit = $offset, $perPage";
         $this->posts        = $this->queryParser->parseQuery($this->queryStr);
         $this->postCount    = count($this->posts);
 
-        # Double check if the author exists
-        # and that they are an admin or writer
+        // Double check if the author exists
+        // and that they are an admin or writer
         $role = $this->SQL->SELECT('role')->FROM('users')->WHERE('slug', '=', $this->taxonomySlug)->ROW();
 
         if ($role)
@@ -436,10 +436,10 @@ trait Filter
     }
 
     /**
-     * Filter the posts based on search request
+     * Filter the posts based on search request.
      *
      * @access private
-     * @return bool 
+     * @return bool
      */
     private function filterSearch(): bool
     {
@@ -447,22 +447,22 @@ trait Filter
         $perPage = $this->Config->get('cms.posts_per_page');
         $offset  = $this->pageIndex * $perPage;
 
-        # Get the query
+        // Get the query
         $query = $this->Request->queries('q');
 
         if (!$query || empty(trim($query)))
         {
             $query = '';
-        }   
+        }
 
-        # Get the actual search query | sanitize
+        // Get the actual search query | sanitize
         $query = htmlspecialchars(trim(strtolower(urldecode(Str::getAfterLastChar($uri, '=')))));
         $query = Str::getBeforeFirstChar($query, '/');
 
-        # Validate the query exists
+        // Validate the query exists
         if (!$query || empty(trim($query)))
         {
-            # Empty search results
+            // Empty search results
             $this->queryStr    = '';
             $this->posts       = [];
             $this->postCount   = count($this->posts);
@@ -472,7 +472,7 @@ trait Filter
             return true;
         }
 
-        # Filter the posts
+        // Filter the posts
         $this->queryStr    = "post_status = published : post_type != page : orderBy = post_created, DESC : post_title LIKE $query : limit = $offset, $perPage";
         $this->posts       = $this->queryParser->parseQuery($this->queryStr);
         $this->postCount   = count($this->posts);
@@ -483,34 +483,34 @@ trait Filter
     }
 
     /**
-     * Filter the posts based on an attachment request
+     * Filter the posts based on an attachment request.
      *
      * @access private
-     * @return bool 
+     * @return bool
      */
     private function filterAttachment(): bool
     {
         $blogPrefix      = $this->Config->get('cms.blog_location');
         $urlParts        = array_filter(explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI)));
-        
+
         $attachmentName  = !empty($blogPrefix) ? $urlParts[2] : $urlParts[1];
         $attachmentSlug  = Str::getBeforeLastChar($attachmentName, '.');
         $attachemmentExt = Str::getAfterLastChar($attachmentName, '.');
         $uploadsUrl      = str_replace($this->Request->environment()->DOCUMENT_ROOT, $this->Request->environment()->HTTP_HOST, $this->Config->get('cms.uploads.path'));
         $isImage         = in_array($attachemmentExt, ['jpg', 'jpeg', 'png', 'gif']);
         $thumbnailSizes  = array_keys($this->Config->get('cms.uploads.thumbnail_sizes'));
-        $attachmentURL   = $uploadsUrl.'/'.$attachmentSlug.'.'.$attachemmentExt;
+        $attachmentURL   = $uploadsUrl . '/' . $attachmentSlug . '.' . $attachemmentExt;
         $attachment      = $this->MediaManager->provider()->byKey('url', $attachmentURL, true);
         $attachmentSize  = 'original';
 
-        # We may need to check if the attachment exists but we are requesting a sized version
+        // We may need to check if the attachment exists but we are requesting a sized version
         if ($isImage && !$attachment)
         {
             foreach ($thumbnailSizes as $suffix)
             {
-                if (Str::contains($attachmentSlug, '_'.$suffix))
-                { 
-                    $attachmentURL = $uploadsUrl.'/'.Str::getBeforeLastWord($attachmentSlug, '_'.$suffix).'.'.$attachemmentExt;
+                if (Str::contains($attachmentSlug, '_' . $suffix))
+                {
+                    $attachmentURL = $uploadsUrl . '/' . Str::getBeforeLastWord($attachmentSlug, '_' . $suffix) . '.' . $attachemmentExt;
                     $attachment    = $this->MediaManager->provider()->byKey('url', $attachmentURL, true);
                     if ($attachment)
                     {
@@ -520,7 +520,7 @@ trait Filter
             }
         }
 
-        # 404 If the attachment does not exist
+        // 404 If the attachment does not exist
         if (!$attachment)
         {
             $this->Response->status()->set(404);
@@ -553,16 +553,16 @@ trait Filter
     }
 
     /**
-     * Filter the posts for sitemap
+     * Filter the posts for sitemap.
      *
      * @access private
-     * @param  string  $requestType The incoming request type ('home'|'home-blog')
-     * @return bool 
+     * @param  string $requestType The incoming request type ('home'|'home-blog')
+     * @return bool
      */
     private function filterSitemap(): bool
     {
         $this->requestType = 'sitemap';
-        $this->queryStr    = "post_status = published : post_type = post : orderBy = post_created";
+        $this->queryStr    = 'post_status = published : post_type = post : orderBy = post_created';
         $this->posts       = $this->queryParser->parseQuery($this->queryStr);
         $this->postCount   = count($this->posts);
 
@@ -570,17 +570,17 @@ trait Filter
     }
 
     /**
-     * Filter the posts based on an attachment request
+     * Filter the posts based on an attachment request.
      *
      * @access private
-     * @param  int     $parentId Parent category id
-     * @param  array   $slugs    Array of category slugs
-     * @return array 
+     * @param  int   $parentId Parent category id
+     * @param  array $slugs    Array of category slugs
+     * @return array
      */
     private function childrenCategories(int $parentId, array $slugs = [])
     {
         $children = $this->SQL->SELECT('*')->FROM('categories')->WHERE('parent_id', '=', $parentId)->FIND_ALL();
-        
+
         foreach ($children as $child)
         {
             $slugs[] = $child['slug'];

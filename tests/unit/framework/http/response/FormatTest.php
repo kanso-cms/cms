@@ -5,13 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\http\response;
+namespace kanso\tests\unit\framework\http\response;
 
-use tests\TestCase;
 use kanso\framework\http\response\Format;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class FormatTest extends TestCase
 {
@@ -57,5 +58,5 @@ class FormatTest extends TestCase
 		$format->setEncoding('UTF-8');
 
 		$this->assertEquals('UTF-8', $format->getEncoding());
-	}	
+	}
 }

@@ -7,89 +7,83 @@
 
 namespace kanso\framework\http\response;
 
-use kanso\framework\http\response\Format;
-use kanso\framework\http\response\Body;
-use kanso\framework\http\response\Status;
-use kanso\framework\http\response\Headers;
-use kanso\framework\http\response\Cache;
 use kanso\framework\http\cookie\Cookie;
-use kanso\framework\http\session\Session;
-use kanso\framework\http\response\Protocol;
-use kanso\framework\mvc\view\View;
-use kanso\framework\http\response\exceptions\NotFoundException;
 use kanso\framework\http\response\exceptions\ForbiddenException;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\MethodNotAllowedException;
+use kanso\framework\http\response\exceptions\NotFoundException;
 use kanso\framework\http\response\exceptions\Stop;
+use kanso\framework\http\session\Session;
+use kanso\framework\mvc\view\View;
 
 /**
- * HTTP Response manager
+ * HTTP Response manager.
  *
  * @author Joe J. Howard
  */
 class Response
 {
     /**
-     * The HTTP protocol
+     * The HTTP protocol.
      *
      * @var \kanso\framework\http\response\Protocol
      */
     private $protocol;
 
     /**
-     * The HTTP format
+     * The HTTP format.
      *
      * @var \kanso\framework\http\response\Format
      */
     private $format;
 
     /**
-     * The HTTP headers
+     * The HTTP headers.
      *
      * @var \kanso\framework\http\response\Headers
      */
     private $headers;
 
     /**
-     * Cookie manager
+     * Cookie manager.
      *
      * @var \kanso\framework\http\cookie\Cookie
      */
     private $cookie;
 
     /**
-     * Response body
+     * Response body.
      *
      * @var \kanso\framework\http\response\Body
      */
     private $body;
 
     /**
-     * Response status
+     * Response status.
      *
      * @var \kanso\framework\http\response\Status
      */
     private $status;
 
     /**
-     * Response cache
+     * Response cache.
      *
      * @var \kanso\framework\http\response\Cache
      */
     private $cache;
 
-    /**
-     * CDN manager
-     *
-     * @var \kanso\framework\http\response\CDN
-     */
+     /**
+      * CDN manager.
+      *
+      * @var \kanso\framework\http\response\CDN
+      */
      private $CDN;
 
-    /**
-     * View renderer
-     *
-     * @var \kanso\framework\mvc\view\View
-     */
+     /**
+      * View renderer.
+      *
+      * @var \kanso\framework\mvc\view\View
+      */
      private $view;
 
     /**
@@ -100,26 +94,26 @@ class Response
     private $sent = false;
 
     /**
-     * The HTTP request method
+     * The HTTP request method.
      *
      * @var string
      */
     private $requestMethod;
-    
+
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
-     * @param  \kanso\framework\http\response\Protocol $protocol 
-     * @param  \kanso\framework\http\response\Format   $format
-     * @param  \kanso\framework\http\response\Body     $body
-     * @param  \kanso\framework\http\response\Status   $status     
-     * @param  \kanso\framework\http\response\Headers  $headers
-     * @param  \kanso\framework\http\session\Session   $session
-     * @param  \kanso\framework\http\response\Cache    $cache
-     * @param  \kanso\framework\http\response\CDN      $CDN
-     * @param  \kanso\framework\mvc\view\View          $view
-     * @param  string                                  $requestMethod
+     * @param \kanso\framework\http\response\Protocol $protocol
+     * @param \kanso\framework\http\response\Format   $format
+     * @param \kanso\framework\http\response\Body     $body
+     * @param \kanso\framework\http\response\Status   $status
+     * @param \kanso\framework\http\response\Headers  $headers
+     * @param \kanso\framework\http\session\Session   $session
+     * @param \kanso\framework\http\response\Cache    $cache
+     * @param \kanso\framework\http\response\CDN      $CDN
+     * @param \kanso\framework\mvc\view\View          $view
+     * @param string                                  $requestMethod
      */
     public function __construct(Protocol $protocol, Format $format, Body $body, Status $status, Headers $headers, Cookie $cookie, Session $session, Cache $cache, CDN $CDN, View $view, string $requestMethod)
     {
@@ -146,12 +140,12 @@ class Response
         $this->requestMethod = $requestMethod;
 
         $this->format->set('text/html');
-        
+
         $this->format->setEncoding('utf-8');
     }
 
     /**
-     * Get the protocol object
+     * Get the protocol object.
      *
      * @access public
      * @return \kanso\framework\http\response\Protocol
@@ -162,7 +156,7 @@ class Response
     }
 
     /**
-     * Get the body object
+     * Get the body object.
      *
      * @access public
      * @return \kanso\framework\http\response\Body
@@ -173,7 +167,7 @@ class Response
     }
 
     /**
-     * Get the format object
+     * Get the format object.
      *
      * @access public
      * @return \kanso\framework\http\response\Format
@@ -184,7 +178,7 @@ class Response
     }
 
     /**
-     * Get the status object
+     * Get the status object.
      *
      * @access public
      * @return \kanso\framework\http\response\Status
@@ -195,7 +189,7 @@ class Response
     }
 
     /**
-     * Get the headers object
+     * Get the headers object.
      *
      * @access public
      * @return \kanso\framework\http\response\Headers
@@ -206,7 +200,7 @@ class Response
     }
 
     /**
-     * Get the cache object
+     * Get the cache object.
      *
      * @access public
      * @return \kanso\framework\http\response\Cache
@@ -217,7 +211,7 @@ class Response
     }
 
     /**
-     * Get the cookie manager
+     * Get the cookie manager.
      *
      * @access public
      * @return \kanso\framework\http\cookie\Cookie
@@ -228,7 +222,7 @@ class Response
     }
 
     /**
-     * Get the session manager
+     * Get the session manager.
      *
      * @access public
      * @return \kanso\framework\http\session\Session
@@ -239,7 +233,7 @@ class Response
     }
 
     /**
-     * Get the CDN object
+     * Get the CDN object.
      *
      * @access public
      * @return \kanso\framework\http\response\Cache
@@ -250,7 +244,7 @@ class Response
     }
 
     /**
-     * Get the view object
+     * Get the view object.
      *
      * @access public
      * @return \kanso\framework\mvc\view\View
@@ -261,7 +255,7 @@ class Response
     }
 
     /**
-     * Finalize all objects before sending the response
+     * Finalize all objects before sending the response.
      *
      * @access public
      */
@@ -269,15 +263,15 @@ class Response
     {
         $this->headers->set('Status', $this->status->get());
 
-        $this->headers->set('HTTP', $this->status->get().' '.$this->status->message());
+        $this->headers->set('HTTP', $this->status->get() . ' ' . $this->status->message());
 
         $this->headers->set('Content-length', $this->body->length());
 
-        $this->headers->set('Content-Type', $this->format->get().';'.$this->format->getEncoding());
-    
-        $this->headers->set('Expires', gmdate('D, d M Y H:i:s') .' GMT');
+        $this->headers->set('Content-Type', $this->format->get() . ';' . $this->format->getEncoding());
 
-        $this->headers->set('Last-Modified', gmdate('D, d M Y H:i:s') .' GMT');
+        $this->headers->set('Expires', gmdate('D, d M Y H:i:s') . ' GMT');
+
+        $this->headers->set('Last-Modified', gmdate('D, d M Y H:i:s') . ' GMT');
 
         $this->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
 
@@ -291,17 +285,17 @@ class Response
 
             $this->body->clear();
         }
-        
+
         $this->finalizeBody();
     }
 
     /**
-     * Finalize the body from the cache and CDN
+     * Finalize the body from the cache and CDN.
      *
      * @access private
      */
     private function finalizeBody()
-    {        
+    {
         if ($this->cache->enabled())
         {
             if ($this->cache->has())
@@ -324,7 +318,7 @@ class Response
     }
 
     /**
-     * Send the HTTP response
+     * Send the HTTP response.
      *
      * @access public
      */
@@ -345,16 +339,16 @@ class Response
                 echo $this->body->get();
             }
         }
-        
+
         $this->sent = true;
     }
 
     /**
-     * Immediately send a redirect response
+     * Immediately send a redirect response.
      *
      * @access public
-     * @param  string $url    The absolute URL to redirect to
-     * @param  int    $status The redirect status (optional) (default 302)
+     * @param  string                                         $url    The absolute URL to redirect to
+     * @param  int                                            $status The redirect status (optional) (default 302)
      * @throws \kanso\framework\http\response\exceptions\Stop
      */
     public function redirect(string $url, int $status = 302)
@@ -373,7 +367,7 @@ class Response
     }
 
     /**
-     * Send a not found response
+     * Send a not found response.
      *
      * @access public
      * @throws \kanso\framework\http\response\exceptions\NotFoundException
@@ -384,7 +378,7 @@ class Response
     }
 
     /**
-     * Send a forbidden response
+     * Send a forbidden response.
      *
      * @access public
      * @throws \kanso\framework\http\response\exceptions\ForbiddenException
@@ -395,7 +389,7 @@ class Response
     }
 
     /**
-     * Send a invalid token response
+     * Send a invalid token response.
      *
      * @access public
      * @throws \kanso\framework\http\response\exceptions\InvalidTokenException
@@ -406,7 +400,7 @@ class Response
     }
 
     /**
-     * Send a invalid token response
+     * Send a invalid token response.
      *
      * @access public
      * @throws \kanso\framework\http\response\exceptions\MethodNotAllowedException

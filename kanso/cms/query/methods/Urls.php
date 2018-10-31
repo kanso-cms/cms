@@ -8,14 +8,14 @@
 namespace kanso\cms\query\methods;
 
 /**
- * CMS Query URL methods
+ * CMS Query URL methods.
  *
  * @author Joe J. Howard
  */
 trait Urls
 {
     /**
-     * Get the path to the theme directory that holds all the themes
+     * Get the path to the theme directory that holds all the themes.
      *
      * @access public
      * @return string
@@ -26,7 +26,7 @@ trait Urls
     }
 
     /**
-     * Get the path to the theme directory that holds all the theme folders
+     * Get the path to the theme directory that holds all the theme folders.
      *
      * @access public
      * @return string
@@ -36,15 +36,15 @@ trait Urls
         return $this->Config->get('cms.theme_name');
     }
 
-	/**
+    /**
      * Get the path to the theme directory that holds the currently active theme.
      *
      * @access public
-     * @return  string
+     * @return string
      */
     public function theme_directory(): string
     {
-        return $this->themes_directory().'/'.$this->theme_name();
+        return $this->themes_directory() . '/' . $this->theme_name();
     }
 
     /**
@@ -59,7 +59,7 @@ trait Urls
     }
 
     /**
-     * Get the homepage URL
+     * Get the homepage URL.
      *
      * @access public
      * @return string
@@ -70,18 +70,18 @@ trait Urls
     }
 
     /**
-     * Get the homepage URL for the blog
+     * Get the homepage URL for the blog.
      *
      * @access public
      * @return string
      */
     public function blog_url(): string
     {
-        return !empty($this->blog_location()) ? $this->Request->environment()->HTTP_HOST.'/'.$this->blog_location().'/' : $this->Request->environment()->HTTP_HOST;
+        return !empty($this->blog_location()) ? $this->Request->environment()->HTTP_HOST . '/' . $this->blog_location() . '/' : $this->Request->environment()->HTTP_HOST;
     }
 
     /**
-     * Returns the "blog_location" value
+     * Returns the "blog_location" value.
      *
      * @access public
      * @return string|null
@@ -92,7 +92,7 @@ trait Urls
     }
 
     /**
-     * Returns the configured attachments upload directory
+     * Returns the configured attachments upload directory.
      *
      * @access public
      * @return string
@@ -103,7 +103,7 @@ trait Urls
     }
 
     /**
-     * Returns the base url 
+     * Returns the base url.
      *
      * @access public
      * @return string
@@ -119,15 +119,15 @@ trait Urls
 
         if ($this->is_search())
         {
-            $base = DIRECTORY_SEPARATOR.'search-results'.DIRECTORY_SEPARATOR.'?q='.$this->searchQuery;
+            $base = DIRECTORY_SEPARATOR . 'search-results' . DIRECTORY_SEPARATOR . '?q=' . $this->searchQuery;
         }
-        else if ($this->is_tag() || $this->is_category() || $this->is_author())
+        elseif ($this->is_tag() || $this->is_category() || $this->is_author())
         {
             $taxonomy = $this->is_tag() ? 'tag' : 'author';
             $taxonomy = $this->is_category() ? 'category' : $taxonomy;
-            $base     = $base.DIRECTORY_SEPARATOR.$taxonomy.DIRECTORY_SEPARATOR.$this->taxonomySlug;
+            $base     = $base . DIRECTORY_SEPARATOR . $taxonomy . DIRECTORY_SEPARATOR . $this->taxonomySlug;
         }
 
-        return $this->Request->environment()->HTTP_HOST.DIRECTORY_SEPARATOR.$base;
+        return $this->Request->environment()->HTTP_HOST . DIRECTORY_SEPARATOR . $base;
     }
 }

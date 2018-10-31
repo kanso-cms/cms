@@ -7,14 +7,13 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\cms\admin\models\BaseModel;
-use kanso\framework\utility\Arr;
-use kanso\framework\utility\Str;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
+use kanso\framework\utility\Arr;
+use kanso\framework\utility\Str;
 
 /**
- * Tags model
+ * Tags model.
  *
  * @author Joe J. Howard
  */
@@ -54,7 +53,7 @@ class Tags extends BaseModel
         return false;
     }
 
-   /**
+    /**
      * Parse the $_GET request variables and filter the articles for the requested page.
      *
      * @access private
@@ -78,8 +77,8 @@ class Tags extends BaseModel
     }
 
     /**
-     * Parse and validate the POST request from any submitted forms
-     * 
+     * Parse and validate the POST request from any submitted forms.
+     *
      * @access private
      * @return array|false
      */
@@ -103,7 +102,7 @@ class Tags extends BaseModel
             if ($this->post['bulk_action'] === 'clear')
             {
                 $this->clear($tagIds);
-                
+
                 return $this->postMessage('success', 'Your tags were successfully cleared!');
             }
             if ($this->post['bulk_action'] === 'update')
@@ -119,28 +118,28 @@ class Tags extends BaseModel
                 {
                     return $this->postMessage('warning', 'Could not update tag. Another tag with the same slug already exists.');
                 }
-                
+
                 return $this->postMessage('success', 'Tag was successfully updated!');
             }
         }
 
-        return false;        
+        return false;
     }
 
-     /**
-     * Validates all POST variables are set
-     * 
+    /**
+     * Validates all POST variables are set.
+     *
      * @access private
      * @return bool
      */
     private function validatePost(): bool
     {
-        # Validation
+        // Validation
         if (!isset($this->post['access_token']) || !$this->Gatekeeper->verifyToken($this->post['access_token']))
         {
             throw new InvalidTokenException('Bad Admin Panel POST Request. The CSRF token was either not provided or was invalid.');
         }
-        
+
         if (!isset($this->post['bulk_action']) || empty($this->post['bulk_action']))
         {
             throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
@@ -160,15 +159,15 @@ class Tags extends BaseModel
     }
 
     /**
-     * Updates a tag
+     * Updates a tag.
      *
      * @access private
-     * @param  int     $id Single tag id
+     * @param  int         $id Single tag id
      * @return bool|string
      */
     private function update(int $id)
     {
-        if ( !isset($this->post['name']) || !isset($this->post['slug']) || !isset($this->post['description']))
+        if (!isset($this->post['name']) || !isset($this->post['slug']) || !isset($this->post['description']))
         {
             return false;
         }
@@ -183,7 +182,7 @@ class Tags extends BaseModel
             return false;
         }
 
-        # Validate tag with same name does not already exist
+        // Validate tag with same name does not already exist
         $existsName = $this->TagManager->byName($name);
 
         if ($existsName && $existsName->id !== $id)
@@ -191,7 +190,7 @@ class Tags extends BaseModel
             return 'name_exists';
         }
 
-        # Validate tag with same slug does not already exist
+        // Validate tag with same slug does not already exist
         $existsSlug = $this->TagManager->bySlug($slug);
 
         if ($existsSlug && $existsSlug->id !== $id)
@@ -208,10 +207,10 @@ class Tags extends BaseModel
     }
 
     /**
-     * Delete articles by id
+     * Delete articles by id.
      *
      * @access private
-     * @param  array   $ids List of post ids
+     * @param  array $ids List of post ids
      * @return bool
      */
     private function delete(array $ids)
@@ -228,10 +227,10 @@ class Tags extends BaseModel
     }
 
     /**
-     * Clear tags of articles
+     * Clear tags of articles.
      *
      * @access private
-     * @param  array   $ids List of post ids
+     * @param  array $ids List of post ids
      * @return bool
      */
     private function clear(array $ids)
@@ -248,7 +247,7 @@ class Tags extends BaseModel
     }
 
     /**
-     * Check if the GET URL queries are either empty or set to defaults
+     * Check if the GET URL queries are either empty or set to defaults.
      *
      * @access private
      * @return bool
@@ -256,26 +255,26 @@ class Tags extends BaseModel
     private function emptyQueries(): bool
     {
         $queries = $this->getQueries();
-        
+
         return (
-            $queries['search'] === false && 
-            $queries['page']   === 0 && 
+            $queries['search'] === false &&
+            $queries['page']   === 0 &&
             $queries['sort']   === 'name'
         );
     }
 
     /**
-     * Returns the requested GET queries with defaults
+     * Returns the requested GET queries with defaults.
      *
      * @access private
      * @return array
      */
     private function getQueries(): array
     {
-        # Get queries
+        // Get queries
         $queries = $this->Request->queries();
 
-        # Set defaults
+        // Set defaults
         if (!isset($queries['search'])) $queries['search'] = false;
         if (!isset($queries['page']))   $queries['page']   = 0;
         if (!isset($queries['sort']))   $queries['sort']   = 'name';
@@ -284,19 +283,19 @@ class Tags extends BaseModel
     }
 
     /**
-     * Returns the list of tags for display
+     * Returns the list of tags for display.
      *
      * @access private
-     * @param  bool $checkMaxPages Count the max pages
+     * @param  bool      $checkMaxPages Count the max pages
      * @return array|int
      */
     private function loadTags(bool $checkMaxPages = false)
     {
-       # Get queries
+       // Get queries
         $queries = $this->getQueries();
 
-        # Default operation values
-        $page         = ((int)$queries['page']);
+        // Default operation values
+        $page         = ((int) $queries['page']);
         $page         = $page === 1 || $page === 0 ? 0 : $page-1;
         $sort         = 'ASC';
         $sortKey      = 'name';
@@ -305,34 +304,34 @@ class Tags extends BaseModel
         $limit        = $perPage;
         $search       = $queries['search'];
 
-        # Select the posts
+        // Select the posts
         $this->SQL->SELECT('tags.id')->FROM('tags');
 
-        # Set the limit - Only if we're returning the actual tag list
-        # and not sorting by article count
+        // Set the limit - Only if we're returning the actual tag list
+        // and not sorting by article count
         if (!$checkMaxPages && $queries['sort'] === 'name')
         {
             $this->SQL->LIMIT($offset, $limit);
-            
+
             $this->SQL->ORDER_BY($sortKey, $sort);
         }
-        
-        # Search the name
+
+        // Search the name
         if ($search)
         {
-            $this->SQL->AND_WHERE('name', 'like', '%'.$queries['search'].'%');
+            $this->SQL->AND_WHERE('name', 'like', '%' . $queries['search'] . '%');
         }
 
-        # Find the articles
+        // Find the articles
         $rows = $this->SQL->FIND_ALL();
 
-        # Are we checking the pages ?
+        // Are we checking the pages ?
         if ($checkMaxPages)
         {
             return ceil(count($rows) / $perPage);
         }
 
-        # Add all the article count
+        // Add all the article count
         $result = [];
         foreach ($rows as $row)
         {
@@ -342,25 +341,25 @@ class Tags extends BaseModel
             ->WHERE('tags.id', '=', $row['id']);
 
             $tag = $this->TagManager->byId($row['id']);
-            
+
             $tag->article_count = count($this->SQL->FIND_ALL());
 
             $result[] = $tag;
         }
 
-        # If we're sorting by article count, we need to paginate
-        # all the results and return the requested page of tags
+        // If we're sorting by article count, we need to paginate
+        // all the results and return the requested page of tags
         if ($queries['sort'] !== 'name' && !$checkMaxPages)
         {
             $result = Arr::sortMulti($result, 'article_count');
-            
+
             $result = Arr::paginate($result, $page, $perPage);
 
             if (isset($result[0]))
             {
                 return $result[0];
             }
-            
+
             return [];
         }
 

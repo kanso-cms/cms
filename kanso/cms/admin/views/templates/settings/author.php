@@ -9,15 +9,15 @@
         <div class="author-avatar-img js-author-avatar-img <?php if (!empty($USER->thumbnail_id)) echo 'active'; ?>">
             <div class="form-field row floor-xs">
                 <label>Avatar</label>
-                <?php 
+                <?php
                 if (!empty($USER->thumbnail_id)) {
-                    echo display_thumbnail(the_author_thumbnail($USER->id), 'original', '', '', ''); 
+                    echo display_thumbnail(the_author_thumbnail($USER->id), 'original', '', '', '');
                 }
                 else {
                     echo '<img src="" >';
                 }
                 ?>
-                <input  type="hidden" name="thumbnail_id" class="js-avatar-id" value="<?php echo $USER->thumbnail_id;?>" />
+                <input  type="hidden" name="thumbnail_id" class="js-avatar-id" value="<?php echo $USER->thumbnail_id; ?>" />
                 <button type="button" class="btn select-img-trigger js-select-img-trigger js-show-media-lib">Select image</button>
                 <button type="button" class="btn remove-img-trigger js-remove-img-trigger">Remove image</button>
             </div>

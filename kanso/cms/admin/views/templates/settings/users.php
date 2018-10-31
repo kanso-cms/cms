@@ -36,7 +36,7 @@ $all_authors = all_the_authors();
 		    </div>
 		</div>
 		
-		<input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN;?>">
+		<input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN; ?>">
 		<input type="hidden" name="form_name" value="invite_user">
 	    <button type="submit" class="btn btn-success raised">Invite</button>
 
@@ -59,33 +59,33 @@ $all_authors = all_the_authors();
 			<?php foreach ($all_authors as $author) : ?>
 				<?php if ($author->id !== $USER->id && intval($author->id) !== 1) : ?>
 					<tr>
-						<td><?php echo $author->name === null ? '?': $author->name;?></a></td>
-						<td><?php echo $author->email;?></td>
-						<td><?php echo $author->status;?></a></td>
+						<td><?php echo $author->name === null ? '?': $author->name; ?></a></td>
+						<td><?php echo $author->email; ?></td>
+						<td><?php echo $author->status; ?></a></td>
 						<td>
 							<span class="form-field">
-								<select onchange="document.getElementById('status-form-<?php echo $author->id;?>').submit()">
-									<option value="administrator" <?php echo $author->role === 'administrator' ? 'selected' : '';?>>Administrator</option>
+								<select onchange="document.getElementById('status-form-<?php echo $author->id; ?>').submit()">
+									<option value="administrator" <?php echo $author->role === 'administrator' ? 'selected' : ''; ?>>Administrator</option>
 									<option value="writer" <?php echo $author->role === 'administrator' ? '' : 'selected'; ?>>Writer</option>
 								</select>
 							<span>
 						</td>
 						<td style="text-align: center;">
-							<a href="#" class="btn btn-pure btn-danger btn-xs tooltipped tooltipped-n" data-tooltip="Delete user" onclick="document.getElementById('delete-form-<?php echo $author->id;?>').submit()">
+							<a href="#" class="btn btn-pure btn-danger btn-xs tooltipped tooltipped-n" data-tooltip="Delete user" onclick="document.getElementById('delete-form-<?php echo $author->id; ?>').submit()">
 								<span class="glyph-icon glyph-icon-trash-o icon-md"></span>
 							</a>
 						</td>
 					</tr>
-					<form method="post" id="status-form-<?php echo $author->id;?>" style="display: none">
-						<input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN;?>">
+					<form method="post" id="status-form-<?php echo $author->id; ?>" style="display: none">
+						<input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN; ?>">
 						<input type="hidden" name="form_name"    value="change_user_role">
-						<input type="hidden" name="user_id"      value="<?php echo $author->id;?>">
-						<input type="hidden" name="role"         value="<?php echo $author->role === 'administrator' ? 'writer' : 'administrator';?>">
+						<input type="hidden" name="user_id"      value="<?php echo $author->id; ?>">
+						<input type="hidden" name="role"         value="<?php echo $author->role === 'administrator' ? 'writer' : 'administrator'; ?>">
 					</form>
-					<form method="post" id="delete-form-<?php echo $author->id;?>" style="display: none">
-						<input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN;?>">
+					<form method="post" id="delete-form-<?php echo $author->id; ?>" style="display: none">
+						<input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN; ?>">
 						<input type="hidden" name="form_name" value="delete_user">
-						<input type="hidden" name="user_id"   value="<?php echo $author->id;?>">
+						<input type="hidden" name="user_id"   value="<?php echo $author->id; ?>">
 					</form>
 				<?php endif; ?>
 			<?php endforeach; ?>
@@ -99,6 +99,6 @@ $all_authors = all_the_authors();
                 <p>You are currently the only author. When other authors are added you'll be able to manage them here.</p>
             </div>
         </div>
-	<?php endif;?>
+	<?php endif; ?>
 
 </div>

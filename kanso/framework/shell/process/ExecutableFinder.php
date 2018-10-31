@@ -19,7 +19,7 @@ namespace kanso\framework\shell\process;
  */
 class ExecutableFinder
 {
-    private $suffixes = array('.exe', '.bat', '.cmd', '.com');
+    private $suffixes = ['.exe', '.bat', '.cmd', '.com'];
 
     /**
      * Replaces default suffixes of executable.
@@ -50,11 +50,11 @@ class ExecutableFinder
      *
      * @return string The executable path or default value
      */
-    public function find($name, $default = null, array $extraDirs = array())
+    public function find($name, $default = null, array $extraDirs = [])
     {
         if (ini_get('open_basedir')) {
             $searchPath = explode(PATH_SEPARATOR, ini_get('open_basedir'));
-            $dirs = array();
+            $dirs = [];
             foreach ($searchPath as $path) {
                 // Silencing against https://bugs.php.net/69240
                 if (@is_dir($path)) {
@@ -72,14 +72,14 @@ class ExecutableFinder
             );
         }
 
-        $suffixes = array('');
+        $suffixes = [''];
         if ('\\' === DIRECTORY_SEPARATOR) {
             $pathExt = getenv('PATHEXT');
             $suffixes = $pathExt ? explode(PATH_SEPARATOR, $pathExt) : $this->suffixes;
         }
         foreach ($suffixes as $suffix) {
             foreach ($dirs as $dir) {
-                if (is_file($file = $dir.DIRECTORY_SEPARATOR.$name.$suffix) && ('\\' === DIRECTORY_SEPARATOR || is_executable($file))) {
+                if (is_file($file = $dir . DIRECTORY_SEPARATOR . $name . $suffix) && ('\\' === DIRECTORY_SEPARATOR || is_executable($file))) {
                     return $file;
                 }
             }

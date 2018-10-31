@@ -7,31 +7,30 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\cms\admin\models\BaseModel;
-use kanso\framework\utility\Str;
-use kanso\framework\utility\Humanizer;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
+use kanso\framework\utility\Humanizer;
+use kanso\framework\utility\Str;
 
 /**
- * Posts
+ * Posts.
  *
  * @author Joe J. Howard
  */
 class Posts extends BaseModel
 {
     /**
-     * the post type to filter
+     * the post type to filter.
      *
      * @var string
      */
     protected $postType;
 
     /**
-     * Set the post type to filter
+     * Set the post type to filter.
      *
      * @access public
-     * @param  array   $ids List of post ids
+     * @param array $ids List of post ids
      */
     public function setPostType(string $postType)
     {
@@ -80,7 +79,7 @@ class Posts extends BaseModel
      */
     private function parseGet(): array
     {
-        # Prep the response
+        // Prep the response
         $response =
         [
             'posts'         => $this->loadPosts(),
@@ -92,9 +91,8 @@ class Posts extends BaseModel
             'postName'      => Humanizer::pluralize(ucfirst(Str::camel2case($this->postType))),
         ];
 
-
-        # If the posts are empty,
-        # There's no need to check for max pages
+        // If the posts are empty,
+        // There's no need to check for max pages
         if (!empty($response['posts']))
         {
             $response['max_page'] = $this->loadPosts(true);
@@ -104,8 +102,8 @@ class Posts extends BaseModel
     }
 
     /**
-     * Parse and validate the POST request from any submitted forms
-     * 
+     * Parse and validate the POST request from any submitted forms.
+     *
      * @access private
      * @return array|false
      */
@@ -132,20 +130,20 @@ class Posts extends BaseModel
 
                 if ($update === 'name_exists')
                 {
-                    return $this->postMessage('warning', 'Could not update '.$this->postType.'. Another '.$this->postType.' with the same name already exists.');
+                    return $this->postMessage('warning', 'Could not update ' . $this->postType . '. Another ' . $this->postType . ' with the same name already exists.');
                 }
 
                 if ($update === 'slug_exists')
                 {
-                    return $this->postMessage('warning', 'Could not update '.$this->postType.'. Another '.$this->postType.' with the same slug already exists.');
+                    return $this->postMessage('warning', 'Could not update ' . $this->postType . '. Another ' . $this->postType . ' with the same slug already exists.');
                 }
-                
-                return $this->postMessage('success', ucfirst($this->postType).' was successfully updated!');
+
+                return $this->postMessage('success', ucfirst($this->postType) . ' was successfully updated!');
             }
             if ($this->post['bulk_action'] === 'published' || $this->post['bulk_action'] === 'draft')
             {
                 $this->changeStatus($postIds, $this->post['bulk_action']);
-                
+
                 return $this->postMessage('success', 'Your posts were successfully updated!');
             }
         }
@@ -154,19 +152,19 @@ class Posts extends BaseModel
     }
 
     /**
-     * Validates all POST variables are set
-     * 
+     * Validates all POST variables are set.
+     *
      * @access private
      * @return bool
      */
     private function validatePost(): bool
     {
-        # Validation
+        // Validation
         if (!isset($this->post['access_token']) || !$this->Gatekeeper->verifyToken($this->post['access_token']))
         {
             throw new InvalidTokenException('Bad Admin Panel POST Request. The CSRF token was either not provided or was invalid.');
         }
-        
+
         if (!isset($this->post['bulk_action']) || empty($this->post['bulk_action']))
         {
             throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
@@ -186,15 +184,15 @@ class Posts extends BaseModel
     }
 
     /**
-     * Updates a post
+     * Updates a post.
      *
      * @access private
-     * @param  int     $id Single post id
+     * @param  int         $id Single post id
      * @return bool|string
      */
     private function update(int $id)
     {
-        if ( !isset($this->post['title']) || !isset($this->post['slug']) || !isset($this->post['excerpt']))
+        if (!isset($this->post['title']) || !isset($this->post['slug']) || !isset($this->post['excerpt']))
         {
             return false;
         }
@@ -209,7 +207,7 @@ class Posts extends BaseModel
             return false;
         }
 
-        # Validate post with same title does not already exist
+        // Validate post with same title does not already exist
         $existsName = $this->PostManager->provider()->byKey('title', $title, true);
 
         if ($existsName && $existsName->id !== $id)
@@ -217,7 +215,7 @@ class Posts extends BaseModel
             return 'name_exists';
         }
 
-        # Validate post with same slug does not already exist
+        // Validate post with same slug does not already exist
         $existsSlug = $this->PostManager->provider()->byKey('slug', $slug, true);
 
         if ($existsSlug && $existsSlug->id !== $id)
@@ -235,10 +233,10 @@ class Posts extends BaseModel
     }
 
     /**
-     * Delete articles by id
+     * Delete articles by id.
      *
      * @access private
-     * @param  array   $ids List of post ids
+     * @param array $ids List of post ids
      */
     private function delete(array $ids)
     {
@@ -255,11 +253,11 @@ class Posts extends BaseModel
     }
 
     /**
-     * Change articles status
+     * Change articles status.
      *
      * @access private
-     * @param  array   $ids    List of post ids
-     * @param  string  $status Post status to change to
+     * @param array  $ids    List of post ids
+     * @param string $status Post status to change to
      */
     private function changeStatus(array $ids, string $status)
     {
@@ -279,7 +277,7 @@ class Posts extends BaseModel
     }
 
     /**
-     * Check if the GET URL queries are either empty or set to defaults
+     * Check if the GET URL queries are either empty or set to defaults.
      *
      * @access private
      * @return bool
@@ -289,28 +287,28 @@ class Posts extends BaseModel
         $queries = $this->getQueries();
 
         return (
-            $queries['search'] === false && 
-            $queries['page']   === 0 && 
-            $queries['sort']   === 'newest' && 
-            $queries['status'] === false && 
-            $queries['author'] === false && 
-            $queries['tag'] === false && 
+            $queries['search'] === false &&
+            $queries['page']   === 0 &&
+            $queries['sort']   === 'newest' &&
+            $queries['status'] === false &&
+            $queries['author'] === false &&
+            $queries['tag'] === false &&
             $queries['category'] === false
         );
     }
 
     /**
-     * Returns the requested GET queries with defaults
+     * Returns the requested GET queries with defaults.
      *
      * @access private
      * @return array
      */
     private function getQueries(): array
     {
-        # Get queries
+        // Get queries
         $queries = $this->Request->queries();
 
-        # Set defaults
+        // Set defaults
         if (!isset($queries['search']))   $queries['search']   = false;
         if (!isset($queries['page']))     $queries['page']     = 0;
         if (!isset($queries['sort']))     $queries['sort']     = 'newest';
@@ -323,19 +321,19 @@ class Posts extends BaseModel
     }
 
     /**
-     * Returns the list of articles for display
+     * Returns the list of articles for display.
      *
      * @access private
-     * @param  bool $checkMaxPages Count the max pages
+     * @param  bool      $checkMaxPages Count the max pages
      * @return array|int
      */
     private function loadPosts(bool $checkMaxPages = false)
     {
-        # Get queries
+        // Get queries
         $queries = $this->getQueries();
 
-        # Default operation values
-        $page         = ((int)$queries['page']);
+        // Default operation values
+        $page         = ((int) $queries['page']);
         $page         = $page === 1 || $page === 0 ? 0 : $page-1;
         $sort         = 'ASC';
         $sortKey      = 'posts.created';
@@ -348,7 +346,7 @@ class Posts extends BaseModel
         $tag          = $queries['tag'];
         $category     = $queries['category'];
 
-        # Filter and sanitize the sort order
+        // Filter and sanitize the sort order
         if ($queries['sort'] === 'newest' || $queries['sort'] === 'published') $sort = 'DESC';
         if ($queries['sort'] === 'oldest' || $queries['sort'] === 'drafts') $sort = 'ASC';
 
@@ -359,13 +357,13 @@ class Posts extends BaseModel
         if ($queries['sort'] === 'type')      $sortKey   = 'posts.type';
         if ($queries['sort'] === 'title')     $sortKey   = 'posts.title';
 
-        # Select the posts
+        // Select the posts
         $this->SQL->SELECT('posts.id')->FROM('posts')->WHERE('posts.type', '=', $this->postType);
-        
-        # Set the order
+
+        // Set the order
         $this->SQL->ORDER_BY($sortKey, $sort);
 
-        # Apply basic joins for queries
+        // Apply basic joins for queries
         $this->SQL->LEFT_JOIN_ON('users', 'users.id = posts.author_id');
         $this->SQL->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id');
         $this->SQL->LEFT_JOIN_ON('categories_to_posts', 'posts.id = categories_to_posts.post_id');
@@ -374,57 +372,57 @@ class Posts extends BaseModel
         $this->SQL->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id');
         $this->SQL->GROUP_BY('posts.id');
 
-        # Filter status/published
+        // Filter status/published
         if ($status === 'published')
         {
             $this->SQL->AND_WHERE('posts.status', '=', 'published');
         }
-        else if ($status === 'drafts')
+        elseif ($status === 'drafts')
         {
             $this->SQL->AND_WHERE('posts.status', '=', 'draft');
         }
 
-        # Search the title
+        // Search the title
         if ($search)
         {
-            $this->SQL->AND_WHERE('posts.title', 'like', '%'.$queries['search'].'%');
+            $this->SQL->AND_WHERE('posts.title', 'like', '%' . $queries['search'] . '%');
         }
 
-        # Filter by author
+        // Filter by author
         if ($author)
         {
             $this->SQL->AND_WHERE('posts.author_id', '=', intval($author));
         }
 
-        # Filter by tag
+        // Filter by tag
         if ($tag)
         {
             $this->SQL->AND_WHERE('tags.id', '=', intval($tag));
         }
 
-        # Filter by category
+        // Filter by category
         if ($category)
         {
             $this->SQL->AND_WHERE('categories.id', '=', intval($category));
         }
 
-        # Set the limit - Only if we're returning the actual articles
+        // Set the limit - Only if we're returning the actual articles
         if (!$checkMaxPages)
         {
             $this->SQL->LIMIT($offset, $limit);
         }
 
-        # Find the articles
+        // Find the articles
         $rows = $this->SQL->FIND_ALL();
 
-        # Are we checking the pages ?
+        // Are we checking the pages ?
         if ($checkMaxPages)
         {
             return ceil(count($rows) / $perPage);
         }
 
         $articles = [];
-        
+
         foreach ($rows as $row)
         {
            $articles[] = $this->PostManager->byId($row['id']);
@@ -434,16 +432,16 @@ class Posts extends BaseModel
     }
 
     /**
-     * Clears a post from the cache
+     * Clears a post from the cache.
      *
      * @access private
-     * @param  int $postId Post id to clear
+     * @param int $postId Post id to clear
      */
     private function clearPostFromCache(int $postId)
     {
         if ($this->Config->get('cache.http_cache_enabled') === true)
         {
-            $this->Cache->delete(Str::alphaDash($this->Config->get('cms.blog_location').'/'.$this->Query->the_slug($postId)));
+            $this->Cache->delete(Str::alphaDash($this->Config->get('cms.blog_location') . '/' . $this->Query->the_slug($postId)));
         }
     }
 }

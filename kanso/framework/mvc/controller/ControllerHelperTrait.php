@@ -10,7 +10,7 @@ namespace kanso\framework\mvc\controller;
 use kanso\framework\ioc\ContainerAwareTrait;
 
 /**
- * Controller helper methods
+ * Controller helper methods.
  *
  * @author Joe J. Howard
  */
@@ -19,7 +19,7 @@ trait ControllerHelperTrait
 	use ContainerAwareTrait;
 
 	/**
-	 *  Loads the next middleware layer
+	 *  Loads the next middleware layer.
 	 *
 	 * @access protected
 	 * @return mixed
@@ -32,15 +32,15 @@ trait ControllerHelperTrait
 	}
 
 	/**
-	 * Sets a file content response
+	 * Sets a file content response.
 	 *
 	 * @access public
-	 * @param  string $file     Absolute path to file
-     * @param  array  $data     Data to send to view (optional) (default [])
-     * @param  string $format   Format to send the response in (optional) (default 'text/html')
-     * @param  string $encoding Encoding for response (optional) (default 'utf-8')
+	 * @param string $file     Absolute path to file
+	 * @param array  $data     Data to send to view (optional) (default [])
+	 * @param string $format   Format to send the response in (optional) (default 'text/html')
+	 * @param string $encoding Encoding for response (optional) (default 'utf-8')
 	 */
-	protected function fileResponse(string $file, array $data = [], string $format = 'text/html', string $encoding = 'utf-8') 
+	protected function fileResponse(string $file, array $data = [], string $format = 'text/html', string $encoding = 'utf-8')
 	{
 		$this->Response->format()->set($format);
 
@@ -50,10 +50,10 @@ trait ControllerHelperTrait
 	}
 
 	/**
-	 *  Sets a JSON content response
+	 *  Sets a JSON content response.
 	 *
 	 * @access protected
-	 * @param  array     $data Data to send as json
+	 * @param array $data Data to send as json
 	 */
 	protected function jsonResponse(array $data)
 	{
@@ -63,18 +63,18 @@ trait ControllerHelperTrait
 	}
 
 	/**
-	 * Sends a temporary redirect response immediately
+	 * Sends a temporary redirect response immediately.
 	 *
 	 * @access protected
-	 * @param  string $location Relative location to redirect to
+	 * @param string $location Relative location to redirect to
 	 */
 	protected function redirectResponse(string $location)
 	{
-		$this->Response->redirect($this->Request->environment()->HTTP_HOST.'/'.ltrim($location, '/'));
+		$this->Response->redirect($this->Request->environment()->HTTP_HOST . '/' . ltrim($location, '/'));
 	}
 
 	/**
-	 * Sends a 404 response immediately
+	 * Sends a 404 response immediately.
 	 *
 	 * @access protected
 	 */

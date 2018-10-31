@@ -8,11 +8,9 @@
 namespace kanso\framework\database\connection;
 
 use PDO;
-use kanso\framework\database\connection\Connection;
-use kanso\framework\database\connection\Cache;
 
 /**
- * Database connection handler
+ * Database connection handler.
  *
  * @author Joe J. Howard
  */
@@ -26,39 +24,39 @@ class ConnectionHandler
 	protected $log = [];
 
 	/**
-	 * Parameters for currently executing query statement
+	 * Parameters for currently executing query statement.
 	 *
 	 * @var array
 	 */
 	protected $parameters = [];
 
 	/**
-     * @var PDO statement object returned from \PDO::prepare()
-     *
-     * \PDOStatement
-     */ 
+	 * @var PDO statement object returned from \PDO::prepare()
+	 *
+	 * \PDOStatement
+	 */
 	private $pdoStatement;
 
 	/**
-     *  Database query cache
-     *
-     * @var \kanso\framework\database\connection\Cache
-     */
+	 *  Database query cache.
+	 *
+	 * @var \kanso\framework\database\connection\Cache
+	 */
 	private $cache;
 
 	/**
-     *  Database connection
-     *
-     * @var \kanso\framework\database\connection\Connection
-     */
+	 *  Database connection.
+	 *
+	 * @var \kanso\framework\database\connection\Connection
+	 */
 	private $connection;
 
 	/**
 	 * Constructor.
 	 *
 	 * @access public
-	 * @param  \kanso\framework\database\connection\Connection $connection PDO connection
-	 * @param  \kanso\framework\database\connection\Cache      $cache      Connection cache
+	 * @param \kanso\framework\database\connection\Connection $connection PDO connection
+	 * @param \kanso\framework\database\connection\Cache      $cache      Connection cache
 	 */
 	public function __construct(Connection $connection, Cache $cache)
 	{
@@ -68,7 +66,7 @@ class ConnectionHandler
 	}
 
 	/**
-	 * Returns the cache
+	 * Returns the cache.
 	 *
 	 * @access public
 	 * @return \kanso\framework\database\connection\Cache
@@ -79,62 +77,60 @@ class ConnectionHandler
 	}
 
 	/**
-	 * All SQL queries pass through this method
-	 * 
+	 * All SQL queries pass through this method.
+	 *
 	 * @access private
-	 * @param  string  $query      SQL query statement
-	 * @param  array   $parameters Array of parameters to bind (optional) (default [])
-	 */	
-	private function parseQuery(string $query, array $_params = [])
+	 * @param string $query  SQL query statement
+	 * @param array  $params Array of parameters to bind (optional) (default [])
+	 */
+	private function parseQuery(string $query, array $params = [])
 	{
-		# Start time
+		// Start time
 		$start = microtime(true);
 
-		# Prepare query
+		// Prepare query
 		$this->pdoStatement = $this->connection->pdo()->prepare($query);
-		
-		# Add parameters to the parameter array	
-		$this->bindMore($_params);
 
-		# Bind parameters
+		// Add parameters to the parameter array
+		$this->bindMore($params);
+
+		// Bind parameters
 		if (!empty($this->parameters))
 		{
-			foreach($this->parameters as $param)
+			foreach($this->parameters as $_params)
 			{
-				$params = explode("\x7F", $param);
-				
-				$this->pdoStatement->bindParam($params[0], $params[1]);
-			}		
+				$this->pdoStatement->bindParam(':' . $_params[0], $_params[1]);
+			}
 		}
 
-		# Execute SQL
+		// Execute SQL
 		$this->pdoStatement->execute();
 
-		# Log
+		// Log
 		$this->log($query, $this->parameters, $start);
 
-		# Reset the parameters
+		// Reset the parameters
 		$this->parameters = [];
 	}
 
-    /**
-	 * Add the parameter to the parameter array
-	 * 
+	/**
+	 * Add the parameter to the parameter array.
+	 *
 	 * @access public
 	 * @param string $column Column key name
 	 * @param string $value  Value to bind
-	 */	
+	 */
 	public function bind(string $column, $value)
 	{
-		$this->parameters[sizeof($this->parameters)] = ":" . $column . "\x7F" . utf8_encode($value);
+		$this->parameters[] = [$column, $this->sanitizeValue($value)];
 	}
-   
-    /**
-	 * Add more parameters to the parameter array
+
+	/**
+	 * Add more parameters to the parameter array.
 	 *
 	 * @access public
-	 * @param  array  $parray Array of column => value
-	 */	
+	 * @param array $parray Array of column => value
+	 */
 	public function bindMore(array $parray = [])
 	{
 		if (empty($this->parameters) && is_array($parray) && !empty($parray))
@@ -147,19 +143,19 @@ class ConnectionHandler
 			}
 		}
 	}
-   
-    /**
-	 * If the SQL query contains a SELECT or SHOW statement it 
+
+	/**
+	 * If the SQL query contains a SELECT or SHOW statement it
 	 * returns an array containing all of the result set row.
-	 * If the SQL statement is a DELETE, INSERT, or UPDATE statement 
-	 * it returns the number of affected rows
+	 * If the SQL statement is a DELETE, INSERT, or UPDATE statement
+	 * it returns the number of affected rows.
 	 *
 	 * @access public
 	 * @param  string $query     The query to execute
 	 * @param  array  $params    Assoc array of parameters to bind (optional) (default [])
 	 * @param  int    $fetchmode PHP PDO::ATTR_DEFAULT_FETCH_MODE constant or integer
 	 * @return mixed
-	 */			
+	 */
 	public function query(string $query, $params = [], int $fetchmode = PDO::FETCH_ASSOC)
 	{
 		if ($this->queryIsCachable($query))
@@ -195,19 +191,19 @@ class ConnectionHandler
 			}
 		}
 
-		# Reset parameters incase "parseQuery" was not called
+		// Reset parameters incase "parseQuery" was not called
 		$this->parameters = [];
 
 		return $result;
 	}
 
 	/**
-	 * Tries to load the current query from the cache
+	 * Tries to load the current query from the cache.
 	 *
 	 * @access public
-	 * @param  string $query  The type of query being executed e.g 'select'|'delete'|'update'
+	 * @param  string      $query The type of query being executed e.g 'select'|'delete'|'update'
 	 * @return array|false
-	 */	
+	 */
 	private function queryIsCachable(string $query): bool
 	{
 		if (!$this->cache->enabled())
@@ -221,12 +217,12 @@ class ConnectionHandler
 	}
 
 	/**
-	 * Tries to load the current query from the cache
+	 * Tries to load the current query from the cache.
 	 *
 	 * @access public
-	 * @param  string $query  The type of query being executed e.g 'select'|'delete'|'update'
+	 * @param  string      $query The type of query being executed e.g 'select'|'delete'|'update'
 	 * @return array|false
-	 */	
+	 */
 	private function loadQueryFromCache(string $query, array $params)
 	{
 		$this->cache->setQuery($query, $params);
@@ -239,20 +235,20 @@ class ConnectionHandler
 		return false;
 	}
 
-    /**
-	 * Returns an array which represents a column from the result set 
+	/**
+	 * Returns an array which represents a column from the result set.
 	 *
 	 * @access public
 	 * @param  string $query  The query to execute
 	 * @param  array  $params Assoc array of parameters to bind (optional) (default [])
 	 * @return array
-	 */	
+	 */
 	public function column(string $query, array $params = [])
 	{
 		$this->parseQuery($query, $params);
-		
-		$cols = $this->pdoStatement->fetchAll(PDO::FETCH_NUM);		
-		
+
+		$cols = $this->pdoStatement->fetchAll(PDO::FETCH_NUM);
+
 		$result = [];
 
 		foreach($cols as $cells)
@@ -264,60 +260,60 @@ class ConnectionHandler
 	}
 
 	/**
-	 * Returns the table prefix for the connection
+	 * Returns the table prefix for the connection.
 	 *
 	 * @access public
 	 * @return string
-	 */	
+	 */
 	public function tablePrefix(): string
-	{						
-		return $this->connection->tablePrefix();			
+	{
+		return $this->connection->tablePrefix();
 	}
 
-    /**
-	 * Returns an array which represents a row from the result set 
+	/**
+	 * Returns an array which represents a row from the result set.
 	 *
 	 * @access public
 	 * @param  string $query     The query to execute
 	 * @param  array  $params    Assoc array of parameters to bind (optional) (default [])
 	 * @param  int    $fetchmode PHP PDO::ATTR_DEFAULT_FETCH_MODE constant or integer
 	 * @return array
-	 */	
+	 */
 	public function row(string $query, array $params = [], $fetchmode = PDO::FETCH_ASSOC)
-	{				
-		$this->parseQuery($query,$params);
-		
-		return $this->pdoStatement->fetch($fetchmode);			
+	{
+		$this->parseQuery($query, $params);
+
+		return $this->pdoStatement->fetch($fetchmode);
 	}
-   
-    /**
-	 * Returns the value of one single field/column
+
+	/**
+	 * Returns the value of one single field/column.
 	 *
 	 * @access public
- 	 * @param  string $query  The query to execute
+	 * @param  string $query  The query to execute
 	 * @param  array  $params Assoc array of parameters to bind (optional) (default [])
 	 * @return string
-	 */	
+	 */
 	public function single(string $query, array $params = [])
 	{
-		$this->parseQuery($query,$params);
-		
+		$this->parseQuery($query, $params);
+
 		return $this->pdoStatement->fetchColumn();
 	}
 
-    /**
-     *  Returns the last inserted id.
-     *
-     * @access public
-     * @return mixed
-     */	
-	public function lastInsertId() 
+	/**
+	 *  Returns the last inserted id.
+	 *
+	 * @access public
+	 * @return mixed
+	 */
+	public function lastInsertId()
 	{
 		return $this->connection->pdo()->lastInsertId();
 	}
 
 	/**
-	 * Returns the connection query log
+	 * Returns the connection query log.
 	 *
 	 * @access public
 	 * @return array
@@ -326,6 +322,18 @@ class ConnectionHandler
 	{
 		return $this->log;
 	}
+
+    /**
+     * Safely format the query consistently.
+     *
+     * @access  public
+     * @param  string $sql SQL query statement
+     * @return string
+     */
+    public function cleanQuery(string $sql): string
+    {
+       return trim(preg_replace('/\s+/', ' ', $sql));
+    }
 
 	/**
 	 * Prepares query for logging.
@@ -337,15 +345,18 @@ class ConnectionHandler
 	 */
 	protected function prepareQueryForLog(string $query, array $params): string
 	{
-		foreach ($params as $key => $value)
+		foreach (array_reverse($params) as $_params)
 		{
-			$_params = explode("\x7F", $value);
-
 			$k = $_params[0];
 
 			$v = $_params[1];
 
-			$query = preg_replace("/$k/", $v, $query);
+			if ($v === null)
+			{
+				$v = 'NULL';
+			}
+
+			$query = str_replace(":$k", "'$v'", $query);
 		}
 
 		return $query;
@@ -369,26 +380,43 @@ class ConnectionHandler
 	}
 
 	/**
-	 * Gets the query type from the query string
+	 * Gets the query type from the query string.
 	 *
 	 * @access protected
-	 * @param  string    $query SQL query
+	 * @param  string $query SQL query
 	 * @return string
 	 */
 	protected function getQueryType(string $query): string
 	{
-		return strtolower(explode(" ", trim($query))[0]);
+		return strtolower(explode(' ', trim($query))[0]);
 	}
 
 	/**
-     * Safely format the query consistently
-     *
-     * @access  public
-     * @param   string $sql SQL query statement 
-     * @return  string
-     */
-    public function cleanQuery(string $sql): string
-    {
-       return trim(preg_replace('/\s+/', ' ', $sql));
-    }
+	 * Gets the query type from the query string.
+	 *
+	 * @access protected
+	 * @param  mixed $value A query value to sanitize
+	 * @return mixed
+	 */
+	protected function sanitizeValue($value)
+	{
+		if (is_int($value))
+		{
+			return $value;
+		}
+		elseif (is_bool($value))
+		{
+			return !$value ? 0 : 1;
+		}
+		elseif (is_string($value) && trim($value) === '' || is_null($value))
+		{
+			return null;
+		}
+		elseif (is_string($value))
+		{
+			return utf8_encode($value);
+		}
+
+		return $value;
+	}
 }

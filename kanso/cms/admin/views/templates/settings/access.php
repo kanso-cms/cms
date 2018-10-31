@@ -18,19 +18,19 @@
                 Blocking all robots from the site, will disallow all bots (e.g Google indexing) from accessing your site.
             </p>
             <span class="checkbox checkbox-primary js-collapse" data-collapse-target="robots-details">
-                <input type="checkbox" name="block_robots" id="block_robots" <?php echo (!$enable_robots ? 'checked' : '');?>  />
+                <input type="checkbox" name="block_robots" id="block_robots" <?php echo (!$enable_robots ? 'checked' : ''); ?>  />
                 <label for="block_robots">Block all robots</label>
             </span>
         </div>
 
-        <div class="<?php echo $enable_robots ? 'hide-overflow' : 'hide-overflow collapsed';?> " id="robots-details" >
+        <div class="<?php echo $enable_robots ? 'hide-overflow' : 'hide-overflow collapsed'; ?> " id="robots-details" >
             <div class="gutter-lg gutter-l">
                 <div class="form-field row floor-sm">
                     <label for="robots_content">Robots.txt content</label>
                     <p class="color-gray">
                         Enter a custom value for your "robots.txt" file. To allow all bots access, leave this blank.
                     </p>
-                    <textarea name="robots_content" id="robots_content" rows="5" style="resize: vertical;"><?php echo $robots_content;?></textarea>
+                    <textarea name="robots_content" id="robots_content" rows="5" style="resize: vertical;"><?php echo $robots_content; ?></textarea>
                 </div>
             </div>
         </div>
@@ -53,19 +53,19 @@
                 changing the settings in the 'cms' configuration file. 
             </blockquote>
             <span class="checkbox checkbox-primary js-collapse" data-collapse-target="whitelist-details">
-                <input type="checkbox" name="enable_ip_block" id="enable_ip_block" <?php echo ($enable_ip_block ? 'checked' : '');?>  />
+                <input type="checkbox" name="enable_ip_block" id="enable_ip_block" <?php echo ($enable_ip_block ? 'checked' : ''); ?>  />
                 <label for="enable_ip_block">Enable IP blocking</label>
             </span>
         </div>
 
-        <div class="<?php echo $enable_ip_block ? 'hide-overflow' : 'hide-overflow collapsed';?> " id="whitelist-details" >
+        <div class="<?php echo $enable_ip_block ? 'hide-overflow' : 'hide-overflow collapsed'; ?> " id="whitelist-details" >
             <div class="gutter-lg gutter-l">
                 <div class="form-field row floor-sm">
                     <label for="ip_whitelist">IP whitelist</label>
                     <p class="color-gray">
                         Enter a comma seperated list of IP addresses to whitelist for access.
                     </p>
-                    <textarea name="ip_whitelist" id="ip_whitelist" rows="5" style="resize: vertical;"><?php echo implode(',', $ip_whitelist);?></textarea>
+                    <textarea name="ip_whitelist" id="ip_whitelist" rows="5" style="resize: vertical;"><?php echo implode(',', $ip_whitelist); ?></textarea>
                 </div>
             </div>
         </div>

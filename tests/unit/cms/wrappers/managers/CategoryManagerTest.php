@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\wrappers\managers;
+namespace kanso\tests\unit\cms\wrappers\managers;
 
-use Mockery;
-use tests\TestCase;
 use kanso\cms\wrappers\managers\CategoryManager;
+use kanso\tests\TestCase;
+use Mockery;
 
 /**
  * @group unit
+ * @group cms
  */
 class CategoryManagerTest extends TestCase
 {
@@ -27,7 +28,7 @@ class CategoryManagerTest extends TestCase
         $manager  = new CategoryManager($sql, $provider);
 
         $provider->shouldReceive('byKey')->with('slug', 'bar', true)->once()->andReturn(null);
-        
+
         $provider->shouldReceive('create')->with(['name' => 'foo', 'slug' => 'bar'])->once()->andReturn($cat);
 
         $manager->create('foo', 'bar');

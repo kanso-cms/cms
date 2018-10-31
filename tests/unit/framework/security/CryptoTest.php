@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\security\crypto;
+namespace kanso\tests\unit\framework\security\crypto;
 
-use Mockery;
-use tests\TestCase;
 use kanso\framework\security\Crypto;
+use kanso\tests\TestCase;
+use Mockery;
 
 /**
  * @group unit
+ * @group framework
  */
 class CryptoTest extends TestCase
 {

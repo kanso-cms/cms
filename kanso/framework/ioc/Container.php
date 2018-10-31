@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * @author      Josh Lockhart <info@slimframework.com>
  * @copyright   2011 Josh Lockhart
  * @link        http://www.slimframework.com
@@ -29,29 +28,30 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 namespace kanso\framework\ioc;
 
-use Closure;
 use ArrayIterator;
+use Closure;
 
 class Container implements \ArrayAccess, \Countable, \IteratorAggregate
 {
     /**
-     * Key-value array of arbitrary data
-     * 
+     * Key-value array of arbitrary data.
+     *
      * @var array
      */
     protected $data = [];
 
     /**
-     * Singleton instance of self
-     * 
+     * Singleton instance of self.
+     *
      * @var \kanso\framework\ioc\Container
      */
     private static $instance;
 
     /**
-     * Constructor. 
+     * Constructor.
      *
      * @access protected
      */
@@ -60,7 +60,7 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Get the global Container instance
+     * Get the global Container instance.
      *
      * @access public
      * @return \kanso\framework\ioc\Container
@@ -76,14 +76,14 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Normalize data key
+     * Normalize data key.
      *
      * Used to transform data key into the necessary
      * key format for this set. Used in subclasses
      * like \kanso\framework\http\Headers.
      *
      * @param  string $key The data key
-     * @return mixed       The transformed/normalized data key
+     * @return mixed  The transformed/normalized data key
      */
     protected function normalizeKey($key)
     {
@@ -91,7 +91,7 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Set data key to value
+     * Set data key to value.
      * @param string $key   The data key
      * @param mixed  $value The data value
      */
@@ -101,10 +101,10 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Get data value with key
+     * Get data value with key.
      * @param  string $key     The data key
      * @param  mixed  $default The value to return if data key does not exist
-     * @return mixed           The data value, or the default value
+     * @return mixed  The data value, or the default value
      */
     public function get($key, $default = null)
     {
@@ -118,7 +118,7 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Add data to set
+     * Add data to set.
      * @param array $items Key-value array of data to append to this set
      */
     public function replace($items)
@@ -129,7 +129,7 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Fetch set data
+     * Fetch set data.
      * @return array This set's key-value data array
      */
     public function all()
@@ -138,7 +138,7 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Fetch set data keys
+     * Fetch set data keys.
      * @return array This set's key-value data array keys
      */
     public function keys()
@@ -148,8 +148,8 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
 
     /**
      * Does this set contain a key?
-     * @param  string  $key The data key
-     * @return boolean
+     * @param  string $key The data key
+     * @return bool
      */
     public function has($key)
     {
@@ -157,8 +157,8 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Remove value with key from this set
-     * @param  string $key The data key
+     * Remove value with key from this set.
+     * @param string $key The data key
      */
     public function remove($key)
     {
@@ -166,9 +166,8 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Property Overloading
+     * Property Overloading.
      */
-
     public function __get($key)
     {
         return $this->get($key);
@@ -190,7 +189,7 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Clear all values
+     * Clear all values.
      */
     public function clear()
     {
@@ -198,9 +197,8 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Array Access
+     * Array Access.
      */
-
     public function offsetExists($offset)
     {
         return $this->has($offset);
@@ -222,32 +220,30 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Countable
+     * Countable.
      */
-
     public function count()
     {
         return count($this->data);
     }
 
     /**
-     * IteratorAggregate
+     * IteratorAggregate.
      */
-
     public function getIterator()
     {
         return new ArrayIterator($this->data);
     }
 
     /**
-     * Ensure a value or object will remain globally unique
+     * Ensure a value or object will remain globally unique.
      * @param  string   $key   The value or object name
      * @param  \Closure $value The closure that defines the object
      * @return mixed
      */
     public function singleton($key, $value)
     {
-        $this->set($key, function ($c) use ($value)
+        $this->set($key, function($c) use ($value)
         {
             static $object;
 
@@ -262,27 +258,27 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
     }
 
     /**
-     * Ensure a value or object will remain globally unique
+     * Ensure a value or object will remain globally unique.
      * @param  string   $key   The value or object name
      * @param  \Closure $value The closure that defines the object
      * @return mixed
      */
     public function setInstance($key, $object)
     {
-        $this->set($key, function () use ($object)
+        $this->set($key, function() use ($object)
         {
             return $object;
         });
     }
 
     /**
-     * Protect closure from being directly invoked
+     * Protect closure from being directly invoked.
      * @param  \Closure $callable A closure to keep from being invoked and evaluated
      * @return \Closure
      */
     public function protect(Closure $callable)
     {
-        return function () use ($callable) {
+        return function() use ($callable) {
             return $callable;
         };
     }

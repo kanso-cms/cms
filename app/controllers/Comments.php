@@ -10,18 +10,17 @@ namespace app\controllers;
 use kanso\framework\mvc\controller\Controller;
 
 /**
- * Add new comment controller
+ * Add new comment controller.
  *
  * @author Joe J. Howard
  */
 class Comments extends Controller
 {
 	/**
-	 * Dispatch the request
-	 *
+	 * Dispatch the request.
 	 */
 	public function addComment()
-	{		
+	{
 		if ($this->Request->isAjax())
 		{
 			$status = $this->model->validate();

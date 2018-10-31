@@ -8,7 +8,7 @@
 namespace kanso\framework\security\crypto;
 
 /**
- * Encryption key converter
+ * Encryption key converter.
  *
  * @author Joe J. Howard
  */

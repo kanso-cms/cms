@@ -8,24 +8,24 @@
 namespace kanso\framework\http\response;
 
 /**
- * Response protocol
+ * Response protocol.
  *
  * @author Joe J. Howard
  */
 class Protocol
 {
     /**
-     * The http protocol
+     * The http protocol.
      *
      * @var string
      */
     protected $protocol;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
-     * @param  string $protocol HTTP protocol (optional) (default 'http')
+     * @param string $protocol HTTP protocol (optional) (default 'http')
      */
     public function __construct(string $protocol = 'http')
     {
@@ -33,10 +33,10 @@ class Protocol
     }
 
     /**
-     * Set the protocol
+     * Set the protocol.
      *
      * @access public
-     * @param  string $protocol HTTP protocol
+     * @param string $protocol HTTP protocol
      */
     public function set(string $protocol)
     {
@@ -44,7 +44,7 @@ class Protocol
     }
 
     /**
-     * Get the protocol
+     * Get the protocol.
      *
      * @access public
      * @return string

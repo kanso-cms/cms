@@ -4,65 +4,72 @@
  * @copyright Joe J. Howard
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
- 
+
 namespace kanso\cms\access;
 
-use kanso\framework\http\request\Request;
-use kanso\framework\http\response\Response;
 use kanso\framework\file\Filesystem;
+use kanso\framework\http\request\Request;
 use kanso\framework\http\response\exceptions\ForbiddenException;
+use kanso\framework\http\response\Response;
 
 /**
- * Access/Security 
+ * Access/Security.
  *
  * @author Joe J. Howard
  */
 class Access
 {
 	/**
-     * Request object
-     *
-     * @var \kanso\framework\http\request\Request
-     */
+	 * Request object.
+	 *
+	 * @var \kanso\framework\http\request\Request
+	 */
 	private $request;
 
 	/**
-     * Response object
-     *
-     * @var \kanso\framework\http\response\Response
-     */
+	 * Response object.
+	 *
+	 * @var \kanso\framework\http\response\Response
+	 */
 	private $response;
 
 	/**
-     * Path to robots.txt
-     *
-     * @var string
-     */
+	 * Filesystem object.
+	 *
+	 * @var \kanso\framework\file\Filesystem
+	 */
+	private $filesystem;
+
+	/**
+	 * Path to robots.txt.
+	 *
+	 * @var string
+	 */
 	private $robotsPath;
 
 	/**
-     * Is ip address blocking enabled ?
-     *
-     * @var bool
-     */
+	 * Is ip address blocking enabled ?
+	 *
+	 * @var bool
+	 */
 	private $ipBlockEnabled;
 
 	/**
-     * Array of whitelisted ip addresses
-     *
-     * @var array
-     */
+	 * Array of whitelisted ip addresses.
+	 *
+	 * @var array
+	 */
 	private $ipWhitelist;
 
-	/**
-     * Constructor
+    /**
+     * Constructor.
      *
      * @access public
-     * @param  \kanso\framework\http\request\Request   $request     Request object
-     * @param  \kanso\framework\http\response\Response $response    Response object
-     * @param  \kanso\framework\file\Filesystem        $filesystem  Filesystem instancea
-     * @param  bool                                    $blockIps    Should we block all IP address except the whitelist (optional) (default false)
-     * @param  array                                   $ipWhitelist Array of whitelisted ip addresses (optional) (default [])
+     * @param \kanso\framework\http\request\Request   $request     Request object
+     * @param \kanso\framework\http\response\Response $response    Response object
+     * @param \kanso\framework\file\Filesystem        $filesystem  Filesystem instancea
+     * @param bool                                    $blockIps    Should we block all IP address except the whitelist (optional) (default false)
+     * @param array                                   $ipWhitelist Array of whitelisted ip addresses (optional) (default [])
      */
     public function __construct(Request $request, Response $response, Filesystem $filesystem, $blockIps = false, $ipWhitelist = [])
     {
@@ -72,29 +79,29 @@ class Access
 
         $this->filesystem = $filesystem;
 
-        $this->robotsPath = $request->environment()->DOCUMENT_ROOT.'/robots.txt';
+        $this->robotsPath = $request->environment()->DOCUMENT_ROOT . '/robots.txt';
 
         $this->ipBlockEnabled = $blockIps;
 
         $this->ipWhitelist = $ipWhitelist;
     }
 
-    /**
+	/**
 	 * Is ip blocking enabled ?
 	 *
 	 * @access public
-	 * @return bool  
+	 * @return bool
 	 */
 	public function ipBlockEnabled(): bool
 	{
 		return $this->ipBlockEnabled;
 	}
 
-    /**
-	 * Is ip address allowed
+	/**
+	 * Is ip address allowed.
 	 *
 	 * @access public
-	 * @return bool  
+	 * @return bool
 	 */
 	public function isIpAllowed(): bool
 	{
@@ -114,20 +121,20 @@ class Access
 	}
 
 	/**
-	 * Block the current request
+	 * Block the current request.
 	 *
 	 * @access public
 	 */
 	public function block()
 	{
-		throw new ForbiddenException('Blocked IP Address. The CMS has IP address blocking enabled - blocked ip: "'.$this->request->environment()->REMOTE_ADDR.'" from access.');
+		throw new ForbiddenException('Blocked IP Address. The CMS has IP address blocking enabled - blocked ip: "' . $this->request->environment()->REMOTE_ADDR . '" from access.');
 	}
 
 	/**
-	 * Returns the default robots.txt file contents
+	 * Returns the default robots.txt file contents.
 	 *
 	 * @access public
-	 * @return string  
+	 * @return string
 	 */
 	public function defaultRobotsText(): string
 	{
@@ -135,21 +142,21 @@ class Access
 	}
 
 	/**
-	 * Returns the block all robots.txt file contents
+	 * Returns the block all robots.txt file contents.
 	 *
 	 * @access public
-	 * @return string  
+	 * @return string
 	 */
 	public function blockAllRobotsText(): string
 	{
 		return "User-agent: *\nDisallow: /";
 	}
 
-    /**
-	 * Save the robots.txt file
+	/**
+	 * Save the robots.txt file.
 	 *
 	 * @access public
-	 * @param  string  $content Content to put into the file
+	 * @param string $content Content to put into the file
 	 */
 	public function saveRobots(string $content = '')
 	{
@@ -157,7 +164,7 @@ class Access
 	}
 
 	/**
-	 * Save the robots.txt file
+	 * Save the robots.txt file.
 	 *
 	 * @access public
 	 */

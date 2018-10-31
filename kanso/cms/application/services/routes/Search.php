@@ -6,10 +6,10 @@
  */
 
 /**
- * CMS Application search routes
+ * CMS Application search routes.
  *
  * @author Joe J. Howard
  */
 
-# Search
+// Search
 $router->get('/search-results/', '\kanso\cms\application\Application::applyRoute', 'search');

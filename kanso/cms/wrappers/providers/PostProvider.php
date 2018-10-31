@@ -7,18 +7,12 @@
 
 namespace kanso\cms\wrappers\providers;
 
-use kanso\framework\database\query\Builder;
-use kanso\framework\config\Config;
 use kanso\cms\wrappers\Post;
-use kanso\cms\wrappers\providers\Provider;
-use kanso\cms\wrappers\providers\TagProvider;
-use kanso\cms\wrappers\providers\CategoryProvider;
-use kanso\cms\wrappers\providers\UserProvider;
-use kanso\cms\wrappers\providers\MediaProvider;
-use kanso\cms\wrappers\providers\CommentProvider;
+use kanso\framework\config\Config;
+use kanso\framework\database\query\Builder;
 
 /**
- * Post provider
+ * Post provider.
  *
  * @author Joe J. Howard
  */
@@ -35,8 +29,8 @@ class PostProvider extends Provider
     private $commentProvider;
 
     /**
-     * Override inherited constructor
-     * 
+     * Override inherited constructor.
+     *
      * @access public
      */
     public function __construct(Builder $SQL, Config $config, TagProvider $tagProvider, CategoryProvider $categoryProvider, MediaProvider $mediaProvider, CommentProvider $commentProvider, UserProvider $userProvider)
@@ -57,10 +51,10 @@ class PostProvider extends Provider
     }
 
     /**
-     * Create and return new post wrapper around a database entry
-     * 
+     * Create and return new post wrapper around a database entry.
+     *
      * @access public
-     * @param  array  $row Row from the database
+     * @param  array $row Row from the database
      * @return Post
      */
     public function newPost(array $row): Post
@@ -118,7 +112,7 @@ class PostProvider extends Provider
         if ($single)
         {
             $post = $this->SQL->ROW();
-            
+
             if ($post)
             {
                 return $this->newPost($post);

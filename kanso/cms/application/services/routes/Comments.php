@@ -6,12 +6,12 @@
  */
 
 /**
- * CMS Application comments routes
+ * CMS Application comments routes.
  *
  * @author Joe J. Howard
  */
 
-# Ajax Post Comments
+// Ajax Post Comments
 if ($config->get('cms.enable_comments') === true)
 {
 	$router->post('/comments/', '\app\controllers\Comments@addComment', '\app\models\Comments');

@@ -5,11 +5,11 @@
  * @license   https:#github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\common;
+namespace kanso\tests\unit\framework\common;
 
-use tests\TestCase;
 use IteratorAggregate;
 use kanso\framework\common\ArrayIterator;
+use kanso\tests\TestCase;
 
 // --------------------------------------------------------------------------
 // START CLASSES
@@ -34,6 +34,7 @@ class TestArrayIteratorTrait implements IteratorAggregate
 
 /**
  * @group unit
+ * @group framework
  */
 class ArrayIteratorTest extends TestCase
 {

@@ -5,24 +5,25 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\wrappers;
+namespace kanso\tests\unit\cms\wrappers;
 
-use Mockery;
-use tests\TestCase;
 use kanso\cms\wrappers\User;
+use kanso\tests\TestCase;
+use Mockery;
 
 /**
  * @group unit
+ * @group cms
  */
 class UserTest extends TestCase
 {
-	/**
+    /**
      *
      */
     public function testInstantiate()
     {
     	$sql  = Mockery::mock('\kanso\framework\database\query\Builder');
-		
+
 		$user = new User($sql, ['name' => 'foo']);
 
         $this->assertEquals('foo', $user->name);
@@ -34,7 +35,7 @@ class UserTest extends TestCase
     public function testSetGet()
     {
        	$sql  = Mockery::mock('\kanso\framework\database\query\Builder');
-		
+
 		$user = new User($sql);
 
         $user->name = 'baz';
@@ -48,7 +49,7 @@ class UserTest extends TestCase
     public function testHas()
     {
         $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
-		
+
 		$user = new User($sql);
 
         $user->name = 'baz';
@@ -64,7 +65,7 @@ class UserTest extends TestCase
     public function testRemove()
     {
         $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
-		
+
 		$user = new User($sql);
 
         $user->name = 'baz';
@@ -80,7 +81,7 @@ class UserTest extends TestCase
     public function testAsArray()
     {
         $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
-		
+
 		$user = new User($sql, ['name' => 'foo']);
 
         $this->assertEquals(['name' => 'foo'], $user->asArray());
@@ -92,7 +93,7 @@ class UserTest extends TestCase
     public function testGenerateAccessToken()
     {
         $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
-		
+
 		$user = new User($sql, ['name' => 'foo']);
 
 		$user->generateAccessToken();
@@ -106,7 +107,7 @@ class UserTest extends TestCase
     public function testDeleteEmpty()
     {
         $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
-		
+
 		$user = new User($sql, ['name' => 'foo']);
 
         $this->assertFalse($user->delete());
@@ -118,7 +119,7 @@ class UserTest extends TestCase
     public function testDeleteTrue()
     {
         $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
-		
+
 		$user = new User($sql, ['id' => 2, 'name' => 'foo']);
 
 		$sql->shouldReceive('DELETE_FROM')->with('users')->once()->andReturn($sql);
@@ -150,7 +151,7 @@ class UserTest extends TestCase
     	$cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-		
+
 		$user = new User($sql, ['email' => 'foo@bar.com', 'access_token' => 'foobar']);
 
 		$sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);
@@ -184,7 +185,7 @@ class UserTest extends TestCase
     	$cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
-		
+
 		$user = new User($sql, ['id' => 3, 'email' => 'foo@bar.com', 'access_token' => 'foobar']);
 
 		$sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);
@@ -212,7 +213,7 @@ class UserTest extends TestCase
     public function testDeleteAdmin()
     {
         $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
-		
+
 		$user = new User($sql, ['id' => 1, 'name' => 'foo']);
 
         $user->delete();

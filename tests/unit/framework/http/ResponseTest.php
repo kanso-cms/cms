@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\http\response;
+namespace kanso\tests\unit\framework\http\response;
 
-use Mockery;
-use tests\TestCase;
 use kanso\framework\http\response\Response;
+use kanso\tests\TestCase;
+use Mockery;
 
 /**
  * @group unit
+ * @group framework
  */
 class ResponseTest extends TestCase
 {
@@ -31,11 +32,12 @@ class ResponseTest extends TestCase
 		$cache    = Mockery::mock('\kanso\framework\http\response\Cache');
 		$cdn      = Mockery::mock('\kanso\framework\http\response\CDN');
 		$view     = Mockery::mock('\kanso\framework\mvc\view\View');
-	
+		$method   = 'GET';
+
 		$format->shouldReceive('set')->withArgs(['text/html']);
 		$format->shouldReceive('setEncoding')->withArgs(['utf-8']);
 
-		$response = new Response($protocol, $format, $body, $status, $headers, $cookie, $session, $cache, $cdn, $view);
+		$response = new Response($protocol, $format, $body, $status, $headers, $cookie, $session, $cache, $cdn, $view, $method);
 
 		return
 		[
@@ -61,10 +63,10 @@ class ResponseTest extends TestCase
 		$responseArr = $this->mockResponse();
 
 		extract($responseArr);
-		
+
 		$format->shouldReceive('set')->withArgs(['text/html']);
 		$format->shouldReceive('setEncoding')->withArgs(['utf-8']);
-		
+
 		$headers->shouldReceive('set')->withArgs(['Status', 200]);
 		$status->shouldReceive('get')->andReturn(200);
 
@@ -78,6 +80,11 @@ class ResponseTest extends TestCase
 		$headers->shouldReceive('set')->withArgs(['Content-Type', 'text/html;utf-8']);
 		$format->shouldReceive('get')->andReturn('text/html');
 		$format->shouldReceive('getEncoding')->andReturn('utf-8');
+
+		$headers->shouldReceive('set')->withArgs(['Expires', gmdate('D, d M Y H:i:s') . ' GMT']);
+		$headers->shouldReceive('set')->withArgs(['Last-Modified', gmdate('D, d M Y H:i:s') . ' GMT']);
+		$headers->shouldReceive('set')->withArgs(['Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0']);
+		$headers->shouldReceive('set')->withArgs(['Pragma', 'no-cache']);
 
 		$status->shouldReceive('isRedirect')->andReturn(false);
 		$status->shouldReceive('isEmpty')->andReturn(false);

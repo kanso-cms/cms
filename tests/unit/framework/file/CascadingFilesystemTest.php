@@ -5,13 +5,13 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\file;
+namespace kanso\tests\unit\framework\file;
 
-use tests\TestCase;
 use kanso\framework\file\CascadingFilesystem;
+use kanso\tests\TestCase;
 
 /**
- * Cascading file loader
+ * Cascading file loader.
  */
 class Loader
 {
@@ -30,6 +30,7 @@ class Loader
 
 /**
  * @group unit
+ * @group framework
  */
 class CascadingFilesystemTest extends TestCase
 {
@@ -42,8 +43,8 @@ class CascadingFilesystemTest extends TestCase
 
 		$file = substr(__FILE__, strrpos(__FILE__, '/') + 1);
 
-		$file = substr($file, 0,strrpos($file, '.'));
-		
+		$file = substr($file, 0, strrpos($file, '.'));
+
 		$this->assertEquals(__FILE__, $loader->getFilePath($file));
 	}
 }

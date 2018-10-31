@@ -7,15 +7,14 @@
 
 namespace kanso\framework\database\connection;
 
+use kanso\framework\database\query\Builder;
+use kanso\framework\database\query\Query;
 use PDO;
 use PDOException;
 use RuntimeException;
-use kanso\framework\database\connection\Cache;
-use kanso\framework\database\query\Builder;
-use kanso\framework\database\query\Query;
 
 /**
- * Database connection
+ * Database connection.
  *
  * @author Joe J. Howard
  */
@@ -29,28 +28,28 @@ class Connection
 	protected $name;
 
 	/**
-	 * Database host
+	 * Database host.
 	 *
 	 * @var string.
 	 */
 	protected $host;
 
 	/**
-	 * Database username
+	 * Database username.
 	 *
 	 * @var string
 	 */
 	protected $username;
 
 	/**
-	 * Database username password
+	 * Database username password.
 	 *
 	 * @var string
 	 */
 	protected $password;
 
 	/**
-	 * Table prefix
+	 * Table prefix.
 	 *
 	 * @var string
 	 */
@@ -78,17 +77,17 @@ class Connection
 	protected $pdo;
 
 	/**
-     *  Connection handler
-     *
-     * @var \kanso\framework\database\connection\ConnectionHandler
-     */
+	 *  Connection handler.
+	 *
+	 * @var \kanso\framework\database\connection\ConnectionHandler
+	 */
 	private $handler;
 
 	/**
 	 * Constructor.
 	 *
 	 * @access public
-	 * @param  array $config Connection configuration
+	 * @param  array            $config Connection configuration
 	 * @throws RuntimeException If connection type is not supported
 	 */
 	public function __construct(array $config, string $type = 'mysql')
@@ -97,21 +96,21 @@ class Connection
 		{
 			$this->dsn = $config['dsn'];
 		}
-		else if ($type === 'mysql')
+		elseif ($type === 'mysql')
 		{
 			$this->dsn = "mysql:dbname=$config[name];host=$config[host]";
 		}
-		else if ($type === 'sqlite')
+		elseif ($type === 'sqlite')
 		{
 			$this->dsn = "sqlite:sqlite:$config[path]";
 		}
-		else if ($type === 'oci' || 'oracle')
+		elseif ($type === 'oci' || 'oracle')
 		{
 			$this->dsn = "dbname=//$config[host]:$config[port]/$config[name]";
 		}
 		else
 		{
-			throw new RuntimeException("The provided database connection was either not provided or is not supported.");
+			throw new RuntimeException('The provided database connection was either not provided or is not supported.');
 		}
 
 		$this->host = $config['host'] ?? null;
@@ -143,9 +142,9 @@ class Connection
 		}
 		catch(PDOException $e)
 		{
-			throw new PDOException(vsprintf("%s(): Failed to connect to the [ %s ] database. %s", [__METHOD__, $this->name, $e->getMessage()]));
+			throw new PDOException(vsprintf('%s(): Failed to connect to the [ %s ] database. %s', [__METHOD__, $this->name, $e->getMessage()]));
 		}
-		
+
 		return $this->pdo;
 	}
 
@@ -187,7 +186,7 @@ class Connection
 	}
 
 	/**
-	 * Get the table prefix
+	 * Get the table prefix.
 	 *
 	 * @access public
 	 */
@@ -216,18 +215,18 @@ class Connection
 		return true;
 	}
 
-	/**
-	 * Close the current connection
-	 *
-	 * @access public
-	 */
+ 	/**
+ 	 * Close the current connection.
+ 	 *
+ 	 * @access public
+ 	 */
  	public function close()
  	{
  		$this->pdo = null;
  	}
 
- 	/**
-	 * Return a new Query builder instance
+	/**
+	 * Return a new Query builder instance.
 	 *
 	 * @return \kanso\framework\database\query\Builder
 	 */
@@ -237,7 +236,7 @@ class Connection
 	}
 
 	/**
-	 * Return a new Query builder instance
+	 * Return a new Query builder instance.
 	 *
 	 * @return \kanso\framework\database\connection\ConnectionHandler
 	 */

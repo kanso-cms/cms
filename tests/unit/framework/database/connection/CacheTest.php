@@ -5,18 +5,18 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\database\connection;
+namespace kanso\tests\unit\framework\database\connection;
 
-use Mockery;
-use tests\TestCase;
 use kanso\framework\database\connection\Cache;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class CacheTest extends TestCase
 {
-	/**
+    /**
      *
      */
     public function testSet()
@@ -24,7 +24,7 @@ class CacheTest extends TestCase
     	$cache = new Cache;
 
     	$cache->setQuery('SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key', ['column_key' => 'value']);
-	
+
 		$cache->put(['foo' => 'bar', 'foo' => 'baz']);
 
 		$cache->setQuery('SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key', ['column_key' => 'value']);
@@ -40,7 +40,7 @@ class CacheTest extends TestCase
     	$cache = new Cache;
 
     	$cache->setQuery('SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key', ['column_key' => 'value']);
-	
+
 		$cache->put(['foo' => 'bar', 'foo' => 'baz']);
 
 		$cache->setQuery('SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key', ['column_key' => 'value']);
@@ -56,7 +56,7 @@ class CacheTest extends TestCase
     	$cache = new Cache;
 
     	$cache->setQuery('SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key', ['column_key' => 'value']);
-	
+
 		$cache->put(['foo' => 'bar', 'foo' => 'baz']);
 
 		$cache->setQuery('SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key', ['column_key' => 'value']);
@@ -76,7 +76,7 @@ class CacheTest extends TestCase
     	$cache = new Cache;
 
     	$cache->setQuery('SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key', ['column_key' => 'value']);
-	
+
 		$cache->put(['foo' => 'bar', 'foo' => 'baz']);
 
 		$cache->clear();
@@ -92,7 +92,7 @@ class CacheTest extends TestCase
     	$cache = new Cache;
 
     	$cache->setQuery('SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key', ['column_key' => 'value']);
-	
+
 		$cache->put(['foo' => 'bar', 'foo' => 'baz']);
 
 		$cache->disable();

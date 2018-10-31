@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\wrappers\managers;
+namespace kanso\tests\unit\cms\wrappers\managers;
 
-use Mockery;
-use tests\TestCase;
 use kanso\cms\wrappers\managers\PostManager;
+use kanso\tests\TestCase;
+use Mockery;
 
 /**
  * @group unit
+ * @group cms
  */
 class PostManagerTest extends TestCase
 {

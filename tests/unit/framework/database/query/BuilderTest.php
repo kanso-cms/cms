@@ -5,15 +5,16 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\database\query;
+namespace kanso\tests\unit\framework\database\query;
 
-use Mockery;
-use tests\TestCase;
 use kanso\framework\database\query\Builder;
 use kanso\framework\database\query\Query;
+use kanso\tests\TestCase;
+use Mockery;
 
 /**
  * @group unit
+ * @group framework
  */
 class BuilderTest extends TestCase
 {
@@ -22,7 +23,7 @@ class BuilderTest extends TestCase
      */
     public function testCreateTable()
     {
-        $tableConfig = 
+        $tableConfig =
         [
             'id'            => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
             'description'   => 'VARCHAR(255)',
@@ -30,7 +31,7 @@ class BuilderTest extends TestCase
             'notifications' => 'BOOLEAN | DEFAULT TRUE',
         ];
 
-        $query = 'CREATE TABLE `prefixed_my_table_name` ( `id` INT UNSIGNED UNIQUE AUTO_INCREMENT, `description` VARCHAR(255), `thumbnail_id` INTEGER UNSIGNED, `notifications` BOOLEAN DEFAULT TRUE, PRIMARY KEY (id) ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;';
+        $query = 'CREATE TABLE `prefixed_my_table_name` ( `id` INT UNSIGNED UNIQUE AUTO_INCREMENT, `description` VARCHAR(255), `thumbnail_id` INTEGER UNSIGNED, `notifications` BOOLEAN DEFAULT TRUE, PRIMARY KEY (id) ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;';
 
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
 
@@ -140,7 +141,7 @@ class BuilderTest extends TestCase
         $sql->UPDATE('my_table_name')->SET(['column' => 'value'])->WHERE('foo', '=', 'bar')->QUERY();
     }
 
-     /**
+    /**
      *
      */
     public function testInsertInto()
@@ -188,7 +189,7 @@ class BuilderTest extends TestCase
         $sql->SELECT('*')->FROM('my_table_name')->FIND_ALL();
     }
 
-     /**
+    /**
      *
      */
     public function testSelectColumns()
@@ -449,7 +450,7 @@ class BuilderTest extends TestCase
         $sql->SELECT('*')->FROM('my_table_name')->RIGHT_JOIN_ON('foo_table', 'table1.column_name = table2.column_name')->FIND_ALL();
     }
 
-     /**
+    /**
      *
      */
     public function testOutJoinOn()
@@ -541,7 +542,7 @@ class BuilderTest extends TestCase
         $sql->SELECT('*')->FROM('my_table_name')->GROUP_BY('foo')->FIND_ALL();
     }
 
-     /**
+    /**
      *
      */
     public function testGroupConcat()
@@ -562,7 +563,7 @@ class BuilderTest extends TestCase
         $sql = new Builder($connectionHandler, new Query($connectionHandler));
 
         $sql->SELECT('*')->FROM('my_table_name')->GROUP_CONCAT('foo', 'bar')->FIND_ALL();
-    }    
+    }
 
     /**
      *

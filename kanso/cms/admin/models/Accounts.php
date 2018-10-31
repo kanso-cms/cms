@@ -7,12 +7,11 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\cms\admin\models\BaseModel;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
 
 /**
- * Admin panel account pages model
+ * Admin panel account pages model.
  *
  * @author Joe J. Howard
  */
@@ -27,7 +26,7 @@ class Accounts extends BaseModel
         {
             throw new InvalidTokenException('Bad Admin Panel POST Request. The CSRF token was either not provided or was invalid.');
         }
-        
+
         if ($this->requestName === 'login')
         {
             if (!$this->isLoggedIn)
@@ -35,21 +34,21 @@ class Accounts extends BaseModel
                 return $this->processLoginPOST();
             }
         }
-        else if ($this->requestName === 'forgotpassword')
+        elseif ($this->requestName === 'forgotpassword')
         {
             if (!$this->isLoggedIn)
             {
                 return $this->processForgotPassowordPOST();
             }
         }
-        else if ($this->requestName === 'forgotusername')
+        elseif ($this->requestName === 'forgotusername')
         {
             if (!$this->isLoggedIn)
             {
                 return $this->processForgotUsernamePOST();
             }
         }
-        else if ($this->requestName === 'resetpassword')
+        elseif ($this->requestName === 'resetpassword')
         {
             if (!$this->isLoggedIn)
             {
@@ -77,14 +76,14 @@ class Accounts extends BaseModel
         {
             if ($this->isLoggedIn)
             {
-                $this->Response->redirect($this->Request->environment()->HTTP_HOST.'/admin/posts/');
+                $this->Response->redirect($this->Request->environment()->HTTP_HOST . '/admin/posts/');
 
                 return false;
             }
 
             return [];
         }
-        else if ($this->requestName === 'resetpassword')
+        elseif ($this->requestName === 'resetpassword')
         {
             if (!$this->isLoggedIn)
             {
@@ -94,7 +93,7 @@ class Accounts extends BaseModel
                 }
             }
         }
-        else if ($this->requestName === 'logout')
+        elseif ($this->requestName === 'logout')
         {
             if ($this->isLoggedIn)
             {
@@ -106,7 +105,7 @@ class Accounts extends BaseModel
     }
 
     /**
-     * Parse a login request via POST
+     * Parse a login request via POST.
      *
      * @access private
      * @return array
@@ -130,29 +129,29 @@ class Accounts extends BaseModel
         if ($validated_data)
         {
             $user  = $this->UserManager->byUsername($validated_data['username']);
-            
+
             if (!$user || ($user->role !== 'administrator' && $user->role !== 'writer'))
             {
                 return $this->postMessage('danger', 'Either the username or password you entered was incorrect.');
             }
 
             $login = $this->Gatekeeper->login($validated_data['username'], $validated_data['password']);
-            
+
             if ($login === $this->Gatekeeper::LOGIN_ACTIVATING)
             {
                 return $this->postMessage('warning', 'Your account has not yet been activated.');
             }
-            else if ($login === $this->Gatekeeper::LOGIN_LOCKED)
+            elseif ($login === $this->Gatekeeper::LOGIN_LOCKED)
             {
                 return $this->postMessage('warning', 'That account has been temporarily locked.');
             }
-            else if ($login === $this->Gatekeeper::LOGIN_BANNED)
+            elseif ($login === $this->Gatekeeper::LOGIN_BANNED)
             {
                 return $this->postMessage('warning', 'That account has been permanently suspended.');
             }
-            else if ($login === true)
+            elseif ($login === true)
             {
-                $this->Response->redirect($this->Request->environment()->HTTP_HOST.'/admin/posts/');
+                $this->Response->redirect($this->Request->environment()->HTTP_HOST . '/admin/posts/');
             }
         }
 
@@ -160,7 +159,7 @@ class Accounts extends BaseModel
     }
 
     /**
-     * Parse a forgot password request via POST
+     * Parse a forgot password request via POST.
      *
      * @access private
      * @return array
@@ -182,7 +181,7 @@ class Accounts extends BaseModel
         if ($validated_data)
         {
             $user = $this->UserManager->byUsername($validated_data['username']);
-            
+
             if ($user || ($user->role !== 'administrator' && $user->role !== 'writer'))
             {
                 $this->Gatekeeper->forgotPassword($validated_data['username']);
@@ -193,7 +192,7 @@ class Accounts extends BaseModel
     }
 
     /**
-     * Parse a forgot password request via POST
+     * Parse a forgot password request via POST.
      *
      * @access private
      * @return array
@@ -215,7 +214,7 @@ class Accounts extends BaseModel
         if ($validated_data)
         {
             $user = $this->UserManager->byUsername($validated_data['username']);
-            
+
             if ($user || ($user->role !== 'administrator' && $user->role !== 'writer'))
             {
                 $this->Gatekeeper->forgotPassword($validated_data['username']);
@@ -226,26 +225,26 @@ class Accounts extends BaseModel
     }
 
     /**
-     * Validate a GET request to reset password page
+     * Validate a GET request to reset password page.
      *
      * @access private
      * @return bool
      */
     private function validateResetPasswordGET(): bool
     {
-        # Get the token in the url
-        $token = $this->Request->queries('token');        
+        // Get the token in the url
+        $token = $this->Request->queries('token');
 
-        # If no token was given 404
-        if (!$token || trim($token) === '' || $token === 'null' )
+        // If no token was given 404
+        if (!$token || trim($token) === '' || $token === 'null')
         {
             return false;
         }
 
-        # Get the user based on their token
+        // Get the user based on their token
         $user = $this->UserManager->provider()->byKey('kanso_password_key', $token, true);
 
-        # Add the token to their session
+        // Add the token to their session
         if ($user)
         {
             $this->Response->session()->set('kanso_password_key', $token);
@@ -257,14 +256,14 @@ class Accounts extends BaseModel
     }
 
     /**
-     * Parse a reset password POST request
+     * Parse a reset password POST request.
      *
      * @access private
      * @return array||false
      */
     private function processResetpasswordPOST()
     {
-        # $_POST password must be set - get directly from POST so it is untouched
+        // $_POST password must be set - get directly from POST so it is untouched
         if (!isset($_POST['password']))
         {
             return false;
@@ -282,7 +281,7 @@ class Accounts extends BaseModel
 
         $validated_data = $this->validation->run($post);
 
-        # Make sure the user's token is in the session and they match
+        // Make sure the user's token is in the session and they match
         $token = $this->Response->session()->get('kanso_password_key');
 
         if (!$token)
@@ -290,7 +289,7 @@ class Accounts extends BaseModel
             return false;
         }
 
-        # Get the user based on their token
+        // Get the user based on their token
         $user = $this->UserManager->provider()->byKey('kanso_password_key', $token, true);
 
         if ($user)
@@ -307,7 +306,7 @@ class Accounts extends BaseModel
     }
 
     /**
-     * Parse a logout GET request
+     * Parse a logout GET request.
      *
      * @access private
      */
@@ -317,5 +316,5 @@ class Accounts extends BaseModel
 
         $this->Response->redirect($this->Request->environment()->HTTP_HOST);
     }
-    
+
 }

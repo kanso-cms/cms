@@ -7,13 +7,12 @@
 
 namespace kanso\framework\exception;
 
-use Throwable;
 use Closure;
 use ErrorException;
-use kanso\framework\exception\ErrorLogger;
+use Throwable;
 
 /**
- * Error handler
+ * Error handler.
  *
  * @author Joe J. Howard
  */
@@ -41,44 +40,44 @@ class ErrorHandler
 	protected $handlers = [];
 
 	/**
-	 * User defined "error_reporting()" value before Kanso runs
+	 * User defined "error_reporting()" value before Kanso runs.
 	 *
-     * @var int
-     */
+	 * @var int
+	 */
 	private $defaultErrorReporting;
 
 	/**
-	 * User defined "display_errors" value before Kanso runs
+	 * User defined "display_errors" value before Kanso runs.
 	 *
-     * @var bool
-     */
+	 * @var bool
+	 */
 	private $defaultDisplayErrors;
 
 	/**
-	 * Logger
+	 * Logger.
 	 *
-     * @var \kanso\framework\exception\Logger|null
-     */
+	 * @var \kanso\framework\exception\Logger|null
+	 */
 	private $logger;
 
-	/**
-	 * Constructor
-	 *
-	 * @access public
-	 */
-    public function __construct(bool $displayErrors, int $errorReporting) 
+    /**
+     * Constructor.
+     *
+     * @access public
+     */
+    public function __construct(bool $displayErrors, int $errorReporting)
     {
-    	# Save the previously set error reporting levels
+    	// Save the previously set error reporting levels
         $this->defaultErrorReporting = $this->error_reporting();
 
         $this->defaultDisplayErrors = $this->display_errors();
 
-        # Set the user defined error reporting levels
+        // Set the user defined error reporting levels
         $this->display_errors($displayErrors);
-        
+
         $this->error_reporting($errorReporting);
 
-    	# Add a basic exception handler to the stack as a fullback
+    	// Add a basic exception handler to the stack as a fullback
 		$this->handle(Throwable::class, function($e)
 		{
 			echo '[ ' . get_class($e) . '] ' . $e->getMessage() . ' on line [ ' . $e->getLine() . ' ] in [ ' . $e->getFile() . ' ]';
@@ -90,17 +89,17 @@ class ErrorHandler
 			return false;
 		});
 
-		$this->register();    
+		$this->register();
     }
 
-    /**
+	/**
 	 * Registers the exception handler.
 	 *
 	 * @access protected
 	 */
 	protected function register()
 	{
-		# Allows us to handle "fatal" errors
+		// Allows us to handle "fatal" errors
 		register_shutdown_function(function()
 		{
 			$e = error_get_last();
@@ -113,11 +112,11 @@ class ErrorHandler
 			}
 		});
 
-		# Set the exception handler
+		// Set the exception handler
 		set_exception_handler([$this, 'handler']);
 	}
 
-    /**
+	/**
 	 * Set logger instance.
 	 *
 	 * @var \Psr\Log\LoggerInterface
@@ -127,7 +126,7 @@ class ErrorHandler
 		$this->logger = $logger;
 	}
 
-    /**
+	/**
 	 * Disables logging for an exception type.
 	 *
 	 * @access public
@@ -191,15 +190,15 @@ class ErrorHandler
 		$this->handle($exceptionType, $handler);
 	}
 
-	/**
-	 * Restore the default error handler
-	 *
-	 * @access public
-	 */
+    /**
+     * Restore the default error handler.
+     *
+     * @access public
+     */
     public function restore()
     {
         $this->display_errors($this->defaultDisplayErrors);
-        
+
         $this->error_reporting($this->defaultErrorReporting);
 
     	restore_error_handler();
@@ -221,7 +220,7 @@ class ErrorHandler
 	 * Should the exception be logged?
 	 *
 	 * @access public
-	 * @param   \Throwable $exception An exception object
+	 * @param  \Throwable $exception An exception object
 	 * @return bool
 	 */
 	protected function shouldExceptionBeLogged(Throwable $exception): bool
@@ -230,7 +229,7 @@ class ErrorHandler
 
 		$code = intval($exception->getCode());
 
-		# No error reporting or no error logging
+		// No error reporting or no error logging
 		if (!$error_reporting || !$this->logger)
 		{
 			return false;
@@ -262,11 +261,11 @@ class ErrorHandler
 	{
 		try
 		{
-			# Empty output buffers
+			// Empty output buffers
 
 			$this->clearOutputBuffers();
 
-			# Loop through the exception handlers
+			// Loop through the exception handlers
 
 			foreach($this->handlers as $handler)
 			{
@@ -279,7 +278,7 @@ class ErrorHandler
 				}
 			}
 
-			# Log exception
+			// Log exception
 			if($this->shouldExceptionBeLogged($exception))
 			{
 				$this->logger->write();
@@ -287,11 +286,11 @@ class ErrorHandler
 		}
 		catch(Throwable $e)
 		{
-			# Empty output buffers
+			// Empty output buffers
 
 			$this->clearOutputBuffers();
 
-			# One of the exception handlers failed so we'll just show the user a generic error screen
+			// One of the exception handlers failed so we'll just show the user a generic error screen
 
 			echo $e->getMessage() . ' on line [ ' . $e->getLine() . ' ] in [ ' . $e->getFile() . ' ]' . PHP_EOL;
 		}
@@ -300,13 +299,13 @@ class ErrorHandler
 	}
 
     /**
-	 * Set or get the Kanso error reporting level
-	 *
-	 * @access public
-	 * @param  int $level (optional) (default NULL)
-	 * @return int
-	 */
-    public function error_reporting(int $errorReporting = NULL): int
+     * Set or get the Kanso error reporting level.
+     *
+     * @access public
+     * @param  int $level (optional) (default NULL)
+     * @return int
+     */
+    public function error_reporting(int $errorReporting = null): int
     {
     	if (!is_null($errorReporting))
     	{
@@ -319,13 +318,13 @@ class ErrorHandler
     }
 
     /**
-	 * Set or get the Kanso "display_errors" value
-	 *
-	 * @access public
-	 * @param  int $display (optional) (default NULL)
-	 * @return int
-	 */
-    public function display_errors(bool $display_errors = NULL): bool
+     * Set or get the Kanso "display_errors" value.
+     *
+     * @access public
+     * @param  int $display (optional) (default NULL)
+     * @return int
+     */
+    public function display_errors(bool $display_errors = null): bool
     {
     	if (!is_null($display_errors))
     	{

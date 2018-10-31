@@ -8,7 +8,7 @@
 namespace kanso\framework\utility;
 
 /**
- * Array utility functions 
+ * Array utility functions.
  *
  * @author Joe J. Howard
  */
@@ -182,7 +182,7 @@ class Arr
 	}
 
 	/**
-	 * Insert into an associative array at a specific index
+	 * Insert into an associative array at a specific index.
 	 *
 	 * @access public
 	 * @param  array $array Array to use
@@ -204,7 +204,7 @@ class Arr
 			$result   = [];
 			$i        = 0;
 			$inserted = false;
-			
+
 			foreach ($array as $key => $value)
 			{
 				if ($i === $index)
@@ -213,7 +213,7 @@ class Arr
 					$result[] = $item;
 					$i++;
 				}
-				
+
 				$result[$key] = $value;
 
 				$i++;
@@ -227,9 +227,9 @@ class Arr
 		}
 
 		$previousItems = array_slice($array, 0, $index, true);
-	    
-	    $nextItems     = array_slice($array, $index, NULL, true);
-	    
+
+	    $nextItems     = array_slice($array, $index, null, true);
+
 	    return $previousItems + $item + $nextItems;
 	}
 
@@ -238,8 +238,8 @@ class Arr
 	 *
 	 * @access public
 	 * @param  array $needles  Array of needles
-	 * @param  array $haystack Array to check  
-	 * @return boolean
+	 * @param  array $haystack Array to check
+	 * @return bool
 	 */
 	public static function issets(array $needles, array $haystack): bool
 	{
@@ -251,37 +251,37 @@ class Arr
 	}
 
 	/**
-	 * Unsets an array of needles from a target array
+	 * Unsets an array of needles from a target array.
 	 *
 	 * @access public
 	 * @param  array $needles  Array of needles
-	 * @param  array $haystack Array to modify  
+	 * @param  array $haystack Array to modify
 	 * @return array
 	 */
 	public static function unsets(array $needles, array $haystack): array
 	{
 		$result = [];
-		
+
 		foreach ($haystack as $key => $value)
 		{
 			if (!in_array($key, $needles)) $result[$key] = $value;
 		}
-		
+
 		return $result;
 	}
 
 	/**
-	 * Sort a multi-dimensional array by key
+	 * Sort a multi-dimensional array by key.
 	 *
 	 * @access public
 	 * @param  array  $array   Array to sort
 	 * @param  string $key     Key to sort by
 	 * @param  string $reverse Direction to sort 'ASC'|'DESC' (optional) (default 'ASC')
-	 * @return array     
+	 * @return array
 	 */
-	public static function sortMulti(array $array, string $key, string $direction = 'ASC'): array 
+	public static function sortMulti(array $array, string $key, string $direction = 'ASC'): array
 	{
-		# If the key uses dot notation, split it
+		// If the key uses dot notation, split it
 		if (strpos($key, '.') !== false)
 		{
 			$key = explode('.', $key);
@@ -294,13 +294,13 @@ class Arr
 	    	$aV = null;
 	        $bV = null;
 
-	        # If the key uses dot notation
+	        // If the key uses dot notation
 	        if (is_array($key))
 	        {
 	        	$aV = (isset($a[$key[0]]) ? $a[$key[0]] : null);
 	        	$bV = (isset($b[$key[0]]) ? $b[$key[0]] : null);
-	        	
-	        	if ($aV && $bV) 
+
+	        	if ($aV && $bV)
 	        	{
 	        		array_shift($key);
 
@@ -311,7 +311,7 @@ class Arr
 	        		}
 	        	}
 	        }
-	        else 
+	        else
 	        {
 	        	$aV = static::arrayLikeAccess($key, $a);
 	        	$bV = static::arrayLikeAccess($key, $b);
@@ -323,11 +323,11 @@ class Arr
 	            {
 	            	return intval($aV) >= intval($bV);
 	            }
-	            else if (is_string($aV))
+	            elseif (is_string($aV))
 	            {
 	            	return strcasecmp($aV, $bV);
 	            }
-	            else if (is_array($aV))
+	            elseif (is_array($aV))
 	            {
 	            	return count($bV) - count($aV);
 	            }
@@ -335,7 +335,7 @@ class Arr
 
 	        return true;
 	    });
-	    
+
 	    if ($direction !== 'ASC')
 	    {
 	    	$array = array_reverse($array);
@@ -345,12 +345,12 @@ class Arr
 	}
 
 	/**
-	 * Get a value from an array or object
+	 * Get a value from an array or object.
 	 *
 	 * @access public
 	 * @param  string $key   Key to use
 	 * @param  mixed  $mixed Array or object
-	 * @return mixed     
+	 * @return mixed
 	 */
 	public static function arrayLikeAccess(string $key, $mixed)
 	{
@@ -358,54 +358,54 @@ class Arr
 		{
 			return isset($mixed[$key]) ? $mixed[$key] : null;
 		}
-		else if (is_object($mixed))
-		{			
+		elseif (is_object($mixed))
+		{
 			return isset($mixed->{$key}) ? $mixed->{$key} : null;
 		}
 		return null;
 	}
 
-	/**
-	 * Implode an associative array by key
-	 *
-	 * @access public
-	 * @param  string $key   Key to explode by
-	 * @param  array  $array Target array to use
-	 * @param  string $glue  String between pieces (optional) (default '')
-	 * @return string     
-	 */
+    /**
+     * Implode an associative array by key.
+     *
+     * @access public
+     * @param  string $key   Key to explode by
+     * @param  array  $array Target array to use
+     * @param  string $glue  String between pieces (optional) (default '')
+     * @return string
+     */
     public static function implodeByKey(string $key, array $array, string $glue = ''): string
     {
         $str = '';
-        
+
         foreach ($array as $arr)
         {
             if (isset($arr[$key]))
             {
-            	$str .= $arr[$key].$glue;
+            	$str .= $arr[$key] . $glue;
             }
         }
-        
+
         if ($glue === '')
         {
         	return $str;
         }
 
         $split = array_filter(explode($glue, $str));
-        
+
         return implode($glue, $split);
     }
 
 	/**
-	 * Recursively check if a value is in a multi-dimensional array
+	 * Recursively check if a value is in a multi-dimensional array.
 	 *
 	 * @access public
-	 * @param  string  $needle   The value to search for
-	 * @param  array   $haystack The array to search in
-	 * @param  boolean $strict   Applies strict compassions between values (optional) (default FALSE)
-	 * @return boolean     
+	 * @param  string $needle   The value to search for
+	 * @param  array  $haystack The array to search in
+	 * @param  bool   $strict   Applies strict compassions between values (optional) (default FALSE)
+	 * @return bool
 	 */
-	public static function inMulti(string $needle, array $haystack, bool $strict = false): bool 
+	public static function inMulti(string $needle, array $haystack, bool $strict = false): bool
 	{
 	    foreach ($haystack as $item)
 	    {
@@ -422,23 +422,23 @@ class Arr
 	 * Paginate an array. Returns FALSE if current page is more than max pages.
 	 *
 	 * @access public
-	 * @param  array $list  Array of data to paginated
-	 * @param  int   $page  The current page to return 
-	 * @param  int   $limit How many items per page
+	 * @param  array       $list  Array of data to paginated
+	 * @param  int         $page  The current page to return
+	 * @param  int         $limit How many items per page
 	 * @return array|false
 	 */
-	public static function paginate( array $list, int $page, int $limit)
+	public static function paginate(array $list, int $page, int $limit)
 	{
 		$total            = count($list);
 		$limit            = ($limit ? $limit : 10);
 		$pages            = ceil($total / $limit);
-		$page             = ($page === false || $page ===  0 ? 1 : $page); 
-		$offset           = ($page - 1)  * $limit; 
+		$page             = ($page === false || $page ===  0 ? 1 : $page);
+		$offset           = ($page - 1)  * $limit;
 		$start            = $offset + 1;
 		$end              = min(($offset + $limit), $total);
 		if ($page > $pages) return false;
 		$paged = [];
-		for ($i=0; $i < (int)$pages; $i++) {
+		for ($i=0; $i < (int) $pages; $i++) {
 		 	$offset  = $i * $limit;
 		    $paged[] = array_slice($list, $offset, $limit);
 		}

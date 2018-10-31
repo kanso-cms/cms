@@ -8,14 +8,14 @@
 namespace kanso\framework\utility;
 
 /**
- * Mime type converter
+ * Mime type converter.
  *
  * @author Joe J. Howard
  */
 class Mime
 {
     /**
-     * Associative array of file to MIME-types
+     * Associative array of file to MIME-types.
      *
      * @var array
      */
@@ -44,7 +44,7 @@ class Mime
         'ogv'                          => 'video/ogg',
         'webm'                         => 'video/webm',
         'mkv'                          => 'video/x-matroska',
-        
+
         // Text formats
         'txt|asc|c|cc|h'               => 'text/plain',
         'csv'                          => 'text/csv',
@@ -53,8 +53,8 @@ class Mime
         'rtx'                          => 'text/richtext',
         'css'                          => 'text/css',
         'html|htm'                     => 'text/html',
-        'xml'                          => 'text/xml', 
-        
+        'xml'                          => 'text/xml',
+
         // Audio formats
         'mp3|m4a|m4b'                  => 'audio/mpeg',
         'ra|ram'                       => 'audio/x-realaudio',
@@ -64,7 +64,7 @@ class Mime
         'wma'                          => 'audio/x-ms-wma',
         'wax'                          => 'audio/x-ms-wax',
         'mka'                          => 'audio/x-matroska',
-        
+
         // Misc application formats
         'rtf'                          => 'application/rtf',
         'js'                           => 'application/javascript',
@@ -77,7 +77,7 @@ class Mime
         'rar'                          => 'application/rar',
         '7z'                           => 'application/x-7z-compressed',
         'exe'                          => 'application/x-msdownload',
-        
+
         // MS Office formats
         'doc'                          => 'application/msword',
         'pot|pps|ppt'                  => 'application/vnd.ms-powerpoint',
@@ -106,7 +106,7 @@ class Mime
         'sldm'                         => 'application/vnd.ms-powerpoint.slide.macroEnabled.12',
         'onetoc|onetoc2|onetmp|onepkg' => 'application/onenote',
         'json'                         => 'application/json',
-        
+
         // OpenOffice formats
         'odt'                          => 'application/vnd.oasis.opendocument.text',
         'odp'                          => 'application/vnd.oasis.opendocument.presentation',
@@ -115,10 +115,10 @@ class Mime
         'odc'                          => 'application/vnd.oasis.opendocument.chart',
         'odb'                          => 'application/vnd.oasis.opendocument.database',
         'odf'                          => 'application/vnd.oasis.opendocument.formula',
-        
+
         // WordPerfect formats
         'wp|wpd'                       => 'application/wordperfect',
-        
+
         // iWork formats
         'key'                          => 'application/vnd.apple.keynote',
         'numbers'                      => 'application/vnd.apple.numbers',
@@ -131,18 +131,18 @@ class Mime
     ];
 
     /**
-     * Convert a file extension to a valid MIME-type
+     * Convert a file extension to a valid MIME-type.
      *
      * @access public
      * @param  string       $ext File extension
      * @return string|false
      */
-    public static function fromExt(string $ext) 
+    public static function fromExt(string $ext)
     {
         foreach (self::$mimeMap as $type => $mime)
         {
             $types = explode('|', $type);
-            
+
             foreach ($types as $_type)
             {
                 if ($ext === $_type)
@@ -155,19 +155,19 @@ class Mime
     }
 
     /**
-     * Convert a valid MIME-type to a file extension
+     * Convert a valid MIME-type to a file extension.
      *
      * @access public
      * @param  string       $ext File extension
      * @return string|false
      */
-    public static function toExt(string $mime) 
+    public static function toExt(string $mime)
     {
         $mimeMap = array_flip(self::$mimeMap);
-        
+
         if (isset($mimeMap[$mime]))
         {
-            return explode("|", $mimeMap[$mime])[0];
+            return explode('|', $mimeMap[$mime])[0];
         }
 
         return false;

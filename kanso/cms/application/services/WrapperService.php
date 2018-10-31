@@ -7,22 +7,24 @@
 
 namespace kanso\cms\application\services;
 
-use kanso\framework\application\services\Service;
 use kanso\cms\wrappers\managers\CategoryManager;
+use kanso\cms\wrappers\managers\CommentManager;
+use kanso\cms\wrappers\managers\LeadManager;
+use kanso\cms\wrappers\managers\MediaManager;
+use kanso\cms\wrappers\managers\PostManager;
 use kanso\cms\wrappers\managers\TagManager;
 use kanso\cms\wrappers\managers\UserManager;
-use kanso\cms\wrappers\managers\CommentManager;
-use kanso\cms\wrappers\managers\PostManager;
-use kanso\cms\wrappers\managers\MediaManager;
 use kanso\cms\wrappers\providers\CategoryProvider;
+use kanso\cms\wrappers\providers\CommentProvider;
+use kanso\cms\wrappers\providers\LeadProvider;
+use kanso\cms\wrappers\providers\MediaProvider;
+use kanso\cms\wrappers\providers\PostProvider;
 use kanso\cms\wrappers\providers\TagProvider;
 use kanso\cms\wrappers\providers\UserProvider;
-use kanso\cms\wrappers\providers\CommentProvider;
-use kanso\cms\wrappers\providers\PostProvider;
-use kanso\cms\wrappers\providers\MediaProvider;
+use kanso\framework\application\services\Service;
 
 /**
- * Database wrapper setup
+ * Database wrapper setup.
  *
  * @author Joe J. Howard
  */
@@ -39,28 +41,28 @@ class WrapperService extends Service
 	}
 
 	/**
-	 * Registers the provider managers
+	 * Registers the provider managers.
 	 *
 	 * @access private
 	 */
 	private function registerManagers()
 	{
-		$this->container->singleton('CategoryManager', function ($container) 
+		$this->container->singleton('CategoryManager', function($container)
 		{
 			return new CategoryManager($container->Database->connection()->builder(), $container->CategoryProvider);
 		});
 
-		$this->container->singleton('TagManager', function ($container) 
+		$this->container->singleton('TagManager', function($container)
 		{
 			return new TagManager($container->Database->connection()->builder(), $container->TagProvider);
 		});
 
-		$this->container->singleton('PostManager', function ($container) 
+		$this->container->singleton('PostManager', function($container)
 		{
 			return new PostManager($container->Database->connection()->builder(), $container->PostProvider);
 		});
 
-		$this->container->singleton('MediaManager', function ($container) 
+		$this->container->singleton('MediaManager', function($container)
 		{
 			return new MediaManager(
 				$container->Database->connection()->builder(),
@@ -74,7 +76,7 @@ class WrapperService extends Service
 			);
 		});
 
-		$this->container->singleton('UserManager', function ($container) 
+		$this->container->singleton('UserManager', function($container)
 		{
 			return new UserManager(
 				$container->Database->connection()->builder(),
@@ -88,7 +90,7 @@ class WrapperService extends Service
 			);
 		});
 
-		$this->container->singleton('CommentManager', function ($container) 
+		$this->container->singleton('CommentManager', function($container)
 		{
 			return new CommentManager(
 				$container->Database->connection()->builder(),
@@ -99,41 +101,60 @@ class WrapperService extends Service
 				$container->Request->environment()
 			);
 		});
+
+		$this->container->singleton('LeadManager', function($container)
+		{
+			return new LeadManager(
+				$container->Database->connection()->builder(),
+				$container->LeadProvider,
+				$container->Crypto,
+				$container->Cookie,
+				$container->Session,
+				$container->Config,
+				$container->Request->environment(),
+				$container->Email
+			);
+		});
 	}
 
 	/**
-	 * Registers the wrapper providers
+	 * Registers the wrapper providers.
 	 *
 	 * @access private
 	 */
 	private function registerProviders()
 	{
-		$this->container->singleton('MediaProvider', function ($container) 
+		$this->container->singleton('MediaProvider', function($container)
 		{
 			return new MediaProvider($container->Database->connection()->builder(), $container->Config->get('cms.uploads.thumbnail_sizes'));
 		});
 
-		$this->container->singleton('CommentProvider', function ($container) 
+		$this->container->singleton('CommentProvider', function($container)
 		{
 			return new CommentProvider($container->Database->connection()->builder());
 		});
 
-		$this->container->singleton('UserProvider', function ($container) 
+		$this->container->singleton('UserProvider', function($container)
 		{
 			return new UserProvider($this->container->Database->connection()->builder());
 		});
 
-		$this->container->singleton('TagProvider', function ($container) 
+		$this->container->singleton('LeadProvider', function($container)
+		{
+			return new LeadProvider($this->container->Database->connection()->builder());
+		});
+
+		$this->container->singleton('TagProvider', function($container)
 		{
 			return new TagProvider($this->container->Database->connection()->builder());
 		});
 
-		$this->container->singleton('CategoryProvider', function ($container) 
+		$this->container->singleton('CategoryProvider', function($container)
 		{
 			return new CategoryProvider($this->container->Database->connection()->builder());
 		});
 
-		$this->container->singleton('PostProvider', function ($container) 
+		$this->container->singleton('PostProvider', function($container)
 		{
 			return new PostProvider(
 				$container->Database->connection()->builder(),

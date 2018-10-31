@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>404 Not Found</title>
-	<?php include 'style.css.php';?>
+	<?php include 'style.css.php'; ?>
 </head>
 	<body>
 		<div class="interstitial-wrapper">

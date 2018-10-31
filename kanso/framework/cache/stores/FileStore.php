@@ -7,15 +7,14 @@
 
 namespace kanso\framework\cache\stores;
 
-use kanso\framework\cache\stores\StoreInterface;
 use kanso\framework\file\Filesystem;
 
 /**
- * Cache file storage
+ * Cache file storage.
  *
  * @author Joe J. Howard
  */
-Class FileStore implements StoreInterface
+class FileStore implements StoreInterface
 {
     /**
      * {@inheritdoc}
@@ -23,15 +22,15 @@ Class FileStore implements StoreInterface
     private $path;
 
     /**
-     * Filesystem instance
-     * 
+     * Filesystem instance.
+     *
      * @var \kanso\framework\file\Filesystem
      */
     private $filesystem;
 
     /**
-     * Constructo
-     * 
+     * Constructo.
+     *
      * @param \kanso\framework\file\Filesystem $filesystem Filesystem instance
      * @param string                           $path       Directory to store cache files
      */
@@ -92,8 +91,8 @@ Class FileStore implements StoreInterface
                 return true;
             }
         }
-        
-        return false;        
+
+        return false;
     }
 
     /**
@@ -104,7 +103,7 @@ Class FileStore implements StoreInterface
         $files = $this->filesystem->list($this->path);
 
         foreach ($files as $file)
-        { 
+        {
             $path = $this->path . DIRECTORY_SEPARATOR . $file;
 
             if ($this->filesystem->exists($path))
@@ -115,10 +114,10 @@ Class FileStore implements StoreInterface
     }
 
     /**
-     * Converts a key to the file path
+     * Converts a key to the file path.
      *
      * @access public
-     * @param  string $key Key to convert
+     * @param string $key Key to convert
      */
     private function keyToFile(string $key): string
     {

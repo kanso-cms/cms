@@ -5,13 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\security\password;
+namespace kanso\tests\unit\framework\security\password;
 
-use tests\TestCase;
 use kanso\framework\security\password\encrypters\NativePHP;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class RouterTest extends TestCase
 {
@@ -32,10 +33,10 @@ class RouterTest extends TestCase
 	 */
 	public function testAlgos()
 	{
-		$algos = 
+		$algos =
 		[
 			PASSWORD_BCRYPT,
-			PASSWORD_DEFAULT
+			PASSWORD_DEFAULT,
 		];
 
 		foreach ($algos as $algo)

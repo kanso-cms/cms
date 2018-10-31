@@ -9,24 +9,23 @@ namespace kanso\framework\utility;
 
 use kanso\framework\utility\markdown\Parsedown;
 use kanso\framework\utility\markdown\ParsedownExtra;
-use kanso\framework\utility\Str;
 
 /**
- * Convert markdown to HTML
+ * Convert markdown to HTML.
  *
  * @author Joe J. Howard
  */
 class Markdown
 {
 	/**
-     * Convert markdown to HTML
-     *
-     * @access public
-     * @see    https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
-     * @param  string $text  Text in markdown
-     * @param  bool   $extra Convert with markdown extra
-     * @return string
-     */
+	 * Convert markdown to HTML.
+	 *
+	 * @access public
+	 * @see    https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
+	 * @param  string $text  Text in markdown
+	 * @param  bool   $extra Convert with markdown extra
+	 * @return string
+	 */
 	public static function convert(string $text, bool $extra = true): string
 	{
 		$parser = $extra ? new ParsedownExtra : new Parsedown;
@@ -35,7 +34,7 @@ class Markdown
 	}
 
     /**
-     * Converts markdown to plain text
+     * Converts markdown to plain text.
      *
      * @access public
      * @param  string $str The input string

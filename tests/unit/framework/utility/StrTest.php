@@ -5,19 +5,20 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\utility;
+namespace kanso\tests\unit\framework\utility;
 
-use tests\TestCase;
 use kanso\framework\utility\Str;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class StrTest extends TestCase
 {
-	/**
-	 *
-	 */
+	 /**
+	  *
+	  */
 	 public function testNl2br()
 	{
 	 	$this->assertEquals('Hello<br>World!', Str::nl2br("Hello\nWorld!"));
@@ -35,9 +36,9 @@ class StrTest extends TestCase
 	 */
 	public function testBr2nl()
 	{
-	 	$this->assertEquals("Hello\nWorld!", Str::br2nl("Hello<br>World!"));
-	 	$this->assertEquals("Hello\nWorld!", Str::br2nl("Hello<br/>World!"));
-	 	$this->assertEquals("Hello\nWorld!", Str::br2nl("Hello<br />World!"));
+	 	$this->assertEquals("Hello\nWorld!", Str::br2nl('Hello<br>World!'));
+	 	$this->assertEquals("Hello\nWorld!", Str::br2nl('Hello<br/>World!'));
+	 	$this->assertEquals("Hello\nWorld!", Str::br2nl('Hello<br />World!'));
 	}
 
 	/**
@@ -100,7 +101,7 @@ class StrTest extends TestCase
 	public function testContains()
 	{
 		$this->assertEquals(true, Str::contains('This is some text', 'some'));
-		
+
 		$this->assertEquals(false, Str::contains('This is some text', 'thisss'));
 
 		$this->assertEquals(true, Str::contains('This is some text', 's'));
@@ -161,15 +162,15 @@ class StrTest extends TestCase
 	 */
 	public function testRandom()
 	{
-		$this->assertEquals(20 , strlen(Str::random(20)));
+		$this->assertEquals(20, strlen(Str::random(20)));
 
-		$this->assertEquals(20 , strlen(Str::random(20, Str::NUMERIC)));
+		$this->assertEquals(20, strlen(Str::random(20, Str::NUMERIC)));
 
-		$this->assertEquals(20 , strlen(Str::random(20, Str::ALPHA)));
+		$this->assertEquals(20, strlen(Str::random(20, Str::ALPHA)));
 
-		$this->assertEquals(20 , strlen(Str::random(20, Str::HEXDEC)));
+		$this->assertEquals(20, strlen(Str::random(20, Str::HEXDEC)));
 
-		$this->assertEquals(20 , strlen(Str::random(20, Str::SYMBOLS)));
+		$this->assertEquals(20, strlen(Str::random(20, Str::SYMBOLS)));
 	}
 
 	/**
@@ -183,7 +184,6 @@ class StrTest extends TestCase
 
 		$this->assertTrue(Str::compareNumeric('4323', '4323'));
 	}
-
 
 	/**
 	 *

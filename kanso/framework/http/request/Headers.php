@@ -8,14 +8,14 @@
 namespace kanso\framework\http\request;
 
 /**
- * Request headers class
+ * Request headers class.
  *
  * @author Joe J. Howard
  */
-class Headers 
+class Headers
 {
     /**
-     * Array access
+     * Array access.
      *
      * @var string
      */
@@ -64,14 +64,14 @@ class Headers
         'PHP_AUTH_PW',
         'PHP_AUTH_DIGEST',
         'AUTH_TYPE',
-        'X-PJAX'
+        'X-PJAX',
     ];
 
     /**
-     * Constructor. Loads the properties internally
+     * Constructor. Loads the properties internally.
      *
      * @access public
-     * @param  array  $server Optional server overrides (optional) (default [])
+     * @param array $server Optional server overrides (optional) (default [])
      */
     public function __construct(array $server = [])
     {
@@ -79,10 +79,10 @@ class Headers
     }
 
     /**
-     * Reload the headers
+     * Reload the headers.
      *
      * @access public
-     * @param  array  $server Optional server overrides (optional) (default [])
+     * @param array $server Optional server overrides (optional) (default [])
      */
     public function reload(array $server = [])
     {
@@ -90,10 +90,10 @@ class Headers
     }
 
     /**
-     * Returns a fresh copy of the headers
+     * Returns a fresh copy of the headers.
      *
      * @access private
-     * @param  array  $server Optional server overrides (optional) (default [])
+     * @param  array $server Optional server overrides (optional) (default [])
      * @return array
      */
     private function extract($server): array
@@ -102,18 +102,18 @@ class Headers
 
         $server = empty($server) ? $_SERVER : $server;
 
-        # Loop through the $_SERVER superglobal and save result consistently
+        // Loop through the $_SERVER superglobal and save result consistently
         foreach ($server as $key => $value)
         {
             $key = strtoupper($key);
-            
+
             if (strpos($key, 'X_') === 0 || strpos($key, 'HTTP_') === 0 || [$key, $this->special])
             {
                 if ($key === 'HTTP_CONTENT_LENGTH')
                 {
                     continue;
                 }
-                
+
                 $results[$this->normalizeKey($key)] = $value;
             }
         }
@@ -140,28 +140,28 @@ class Headers
     protected function parseAcceptHeader(string $headerValue = null): array
     {
         $groupedAccepts = [];
-        
+
         if(empty($headerValue))
         {
             return $groupedAccepts;
         }
 
-        # Collect acceptable values
+        // Collect acceptable values
         foreach(explode(',', $headerValue) as $accept)
         {
             $quality = 1;
             if(strpos($accept, ';'))
             {
-                # We have a quality so we need to split some more
+                // We have a quality so we need to split some more
                 list($accept, $quality) = explode(';', $accept, 2);
-                # Strip the "q=" part so that we're left with only the numeric value
+                // Strip the "q=" part so that we're left with only the numeric value
                 $quality = substr(trim($quality), 2);
             }
             $groupedAccepts[$quality][] = trim($accept);
         }
-        # Sort in descending order of preference
+        // Sort in descending order of preference
         krsort($groupedAccepts);
-        # Flatten array and return it
+        // Flatten array and return it
         return array_merge(...array_values($groupedAccepts));
     }
 
@@ -230,7 +230,7 @@ class Headers
     }
 
     /**
-     * Return all properties
+     * Return all properties.
      *
      * @access public
      * @return array
@@ -241,7 +241,7 @@ class Headers
     }
 
     /**
-     * Get a property by key
+     * Get a property by key.
      *
      * @access public
      * @return string|null
@@ -257,7 +257,7 @@ class Headers
     }
 
     /**
-     * Set a property by key
+     * Set a property by key.
      *
      * @access public
      */
@@ -267,7 +267,7 @@ class Headers
     }
 
     /**
-     * Check if a property by key exists
+     * Check if a property by key exists.
      *
      * @access public
      * @return bool
@@ -278,7 +278,7 @@ class Headers
     }
 
     /**
-     * Unset a property by key
+     * Unset a property by key.
      *
      * @access public
      */
@@ -287,6 +287,6 @@ class Headers
         if (isset($this->data[$this->normalizeKey($key)]))
         {
             unset($this->data[$this->normalizeKey($key)]);
-        } 
+        }
     }
 }

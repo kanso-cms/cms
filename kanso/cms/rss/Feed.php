@@ -4,7 +4,7 @@
  * @copyright Joe J. Howard
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
- 
+
 namespace kanso\cms\rss;
 
 use kanso\framework\http\request\Request;
@@ -13,40 +13,40 @@ use kanso\framework\utility\Mime;
 use kanso\Kanso;
 
 /**
- * RSS feeds
+ * RSS feeds.
  *
  * @author Joe J. Howard
  */
 class Feed
 {
 	/**
-     * Request object
-     *
-     * @var \kanso\framework\http\request\Request
-     */
+	 * Request object.
+	 *
+	 * @var \kanso\framework\http\request\Request
+	 */
 	private $request;
 
 	/**
-     * Response object
-     *
-     * @var \kanso\framework\http\response\Response
-     */
+	 * Response object.
+	 *
+	 * @var \kanso\framework\http\response\Response
+	 */
 	private $response;
 
 	/**
-     * RSS format to load
-     *
-     * @var string
-     */
+	 * RSS format to load.
+	 *
+	 * @var string
+	 */
 	private $format;
 
-	/**
-     * Constructor
+    /**
+     * Constructor.
      *
      * @access public
-     * @param  \kanso\framework\http\request\Request   $request  Request object
-     * @param  \kanso\framework\http\response\Response $response Response object
-     * @param  string 								   $format   RSS format 'rss'||'atom'||'rdf' (optional) (default 'rss')
+     * @param \kanso\framework\http\request\Request   $request  Request object
+     * @param \kanso\framework\http\response\Response $response Response object
+     * @param string                                  $format   RSS format 'rss'||'atom'||'rdf' (optional) (default 'rss')
      */
     public function __construct(Request $request, Response $response, string $format = 'rss')
     {
@@ -60,30 +60,30 @@ class Feed
     }
 
 	/**
-	 * Render the XML into the HTPP response
+	 * Render the XML into the HTPP response.
 	 *
 	 * @access public
 	 */
 	public function render()
 	{
-		# Set appropriate content type header
-        $this->response->format()->set(Mime::fromExt($this->format).', application/xml');
+		// Set appropriate content type header
+        $this->response->format()->set(Mime::fromExt($this->format) . ', application/xml');
 
-        # Filter posts for feed
-        Kanso::instance()->Filters->apply('RSS', $this);
+        // Filter posts for feed
+        //Kanso::instance()->Filters->apply('RSS', $this);
 
-        # Set the response body
+        // Set the response body
         $this->response->body()->set($this->xml());
-        
-        # Set the status
+
+        // Set the status
         $this->response->status()->set(200);
 
-        # Disable the cache
+        // Disable the cache
         $this->response->cache()->disable();
 	}
 
 	/**
-	 * Load an RSS XML feed
+	 * Load an RSS XML feed.
 	 *
 	 * @access private
 	 * @return string
@@ -100,13 +100,13 @@ class Feed
 	}
 
 	/**
-	 * Load an RSS template file
-	 * 
+	 * Load an RSS template file.
+	 *
 	 * @param  string $name The name of the template to load
 	 * @return string
 	 */
 	private function template(string $name): string
 	{
-		return dirname(__FILE__).DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.strtolower($this->format).DIRECTORY_SEPARATOR.$name.'.php';
+		return dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . strtolower($this->format) . DIRECTORY_SEPARATOR . $name . '.php';
 	}
 }

@@ -7,48 +7,48 @@
 
 namespace kanso\framework\http\response;
 
-use \kanso\framework\utility\Mime;
+use kanso\framework\utility\Mime;
 
 /**
- * Response format
+ * Response format.
  *
  * @author Joe J. Howard
  */
 class Format
 {
     /**
-     * Mime type for response
+     * Mime type for response.
      *
      * @var string
      */
     protected $type;
 
     /**
-     * Encoding for response
+     * Encoding for response.
      *
      * @var string
      */
     protected $encoding;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
      */
     public function __construct()
-    {  
+    {
     }
 
     /**
-     * Set the mime type
+     * Set the mime type.
      *
      * @access public
-     * @param  string $type Mime type or extension of file format
+     * @param string $type Mime type or extension of file format
      */
     public function set(string $type)
     {
         $fromExt = Mime::fromExt($type);
-        
+
         if ($fromExt)
         {
             $this->type = $fromExt;
@@ -60,10 +60,10 @@ class Format
     }
 
     /**
-     * Set the mime type
+     * Set the mime type.
      *
      * @access public
-     * @param  string $encoding A valid encoding format
+     * @param string $encoding A valid encoding format
      * @see    http://php.net/manual/en/mbstring.supported-encodings.php
      */
     public function setEncoding(string $encoding)
@@ -72,7 +72,7 @@ class Format
     }
 
     /**
-     * Get the mime type
+     * Get the mime type.
      *
      * @access public
      * @return string
@@ -83,7 +83,7 @@ class Format
     }
 
     /**
-     * Get the encoding
+     * Get the encoding.
      *
      * @access public
      * @return string

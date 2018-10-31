@@ -7,14 +7,12 @@
 
 namespace kanso\framework\http\session;
 
-use kanso\framework\common\ArrayIterator;
 use kanso\framework\common\ArrayAccessTrait;
-use kanso\framework\http\session\Flash;
-use kanso\framework\http\session\Token;
+use kanso\framework\common\ArrayIterator;
 use kanso\framework\http\session\storage\StoreInterface;
 
 /**
- * Session Manager
+ * Session Manager.
  *
  * @author Joe J. Howard
  */
@@ -23,47 +21,47 @@ class Session implements \IteratorAggregate
     use ArrayAccessTrait;
 
     /**
-     * The session flash data
+     * The session flash data.
      *
      * @var array
      */
     private $flash;
 
     /**
-     * CSRF token
+     * CSRF token.
      *
      * @var array
      */
     private $token;
 
     /**
-     * The key that is used to store flash data inside $_SESSION[$sessionKey]
+     * The key that is used to store flash data inside $_SESSION[$sessionKey].
      *
      * @var string
      */
     private $flashKey = 'kanso_flash';
 
     /**
-     * The key that is used to store the CSRF token inside $_SESSION[$sessionKey]
+     * The key that is used to store the CSRF token inside $_SESSION[$sessionKey].
      *
      * @var string
      */
     private $tokenKey = 'kanso_token';
 
     /**
-     * The key that is used to store the key/values inside $_SESSION[$sessionKey]
+     * The key that is used to store the key/values inside $_SESSION[$sessionKey].
      *
      * @var string
      */
     private $dataKey = 'kanso_data';
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
-     * @param  kanso\framework\http\session\Token                   $token Token wrapper
-     * @param  kanso\framework\http\session\Flash                   $flash Flash wrapper
-     * @param  kanso\framework\http\session\storage\StoreInterface  $store Store implementation
+     * @param kanso\framework\http\session\Token                  $token Token wrapper
+     * @param kanso\framework\http\session\Flash                  $flash Flash wrapper
+     * @param kanso\framework\http\session\storage\StoreInterface $store Store implementation
      */
     public function __construct(Token $token, Flash $flash, StoreInterface $store, array $configuration)
     {
@@ -87,7 +85,7 @@ class Session implements \IteratorAggregate
     }
 
     /**
-     * Set cookie the configuration
+     * Set cookie the configuration.
      *
      * @access public
      * @param  $configuration array Array of configuration options
@@ -100,13 +98,13 @@ class Session implements \IteratorAggregate
     }
 
     /**
-     * Save the session so PHP can send it
+     * Save the session so PHP can send it.
      *
      * @access public
      */
     public function save()
     {
-        $data = 
+        $data =
         [
             $this->dataKey => $this->get(),
 
@@ -121,7 +119,7 @@ class Session implements \IteratorAggregate
     }
 
     /**
-     * Initialize the session
+     * Initialize the session.
      *
      * @access private
      */
@@ -140,7 +138,7 @@ class Session implements \IteratorAggregate
     }
 
     /**
-     * Load the data from the session
+     * Load the data from the session.
      *
      * @access private
      */
@@ -158,7 +156,7 @@ class Session implements \IteratorAggregate
             if (isset($data[$this->flashKey]))
             {
                 $this->flash->clear();
-                
+
                 $this->flash->putRaw($data[$this->flashKey]);
             }
 
@@ -170,7 +168,7 @@ class Session implements \IteratorAggregate
     }
 
     /**
-     * Get the access token
+     * Get the access token.
      *
      * @access public
      * @return string
@@ -181,7 +179,7 @@ class Session implements \IteratorAggregate
     }
 
     /**
-     * Get the access token
+     * Get the access token.
      *
      * @access public
      * @return string
@@ -192,18 +190,18 @@ class Session implements \IteratorAggregate
     }
 
     /**
-     * Clear the session
+     * Clear the session.
      * @access public
      */
     public function destroy()
     {
-        # Clear the internal session data
+        // Clear the internal session data
         $this->clear();
 
-        # Clear the flash data
+        // Clear the flash data
         $this->flash->clear();
 
-        # Generate a new access token
+        // Generate a new access token
         $this->token->regenerate();
     }
 }

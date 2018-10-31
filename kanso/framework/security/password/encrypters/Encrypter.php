@@ -8,7 +8,7 @@
 namespace kanso\framework\security\password\encrypters;
 
 /**
- * Password hashing abstract
+ * Password hashing abstract.
  *
  * @author Joe J. Howard
  */

@@ -23,12 +23,12 @@ class ProcessBuilder
 {
     private $arguments;
     private $cwd;
-    private $env = array();
+    private $env = [];
     private $input;
     private $timeout = 60;
-    private $options = array();
+    private $options = [];
     private $inheritEnv = true;
-    private $prefix = array();
+    private $prefix = [];
     private $outputDisabled = false;
 
     /**
@@ -36,7 +36,7 @@ class ProcessBuilder
      *
      * @param string[] $arguments An array of arguments
      */
-    public function __construct(array $arguments = array())
+    public function __construct(array $arguments = [])
     {
         $this->arguments = $arguments;
     }
@@ -48,7 +48,7 @@ class ProcessBuilder
      *
      * @return ProcessBuilder
      */
-    public static function create(array $arguments = array())
+    public static function create(array $arguments = [])
     {
         return new static($arguments);
     }
@@ -78,7 +78,7 @@ class ProcessBuilder
      */
     public function setPrefix($prefix)
     {
-        $this->prefix = is_array($prefix) ? $prefix : array($prefix);
+        $this->prefix = is_array($prefix) ? $prefix : [$prefix];
 
         return $this;
     }
@@ -169,9 +169,8 @@ class ProcessBuilder
      *
      * @param resource|scalar|\Traversable|null $input The input content
      *
-     * @return ProcessBuilder
-     *
      * @throws InvalidArgumentException In case the argument is invalid
+     * @return ProcessBuilder
      */
     public function setInput($input)
     {
@@ -187,9 +186,8 @@ class ProcessBuilder
      *
      * @param float|null $timeout
      *
-     * @return ProcessBuilder
-     *
      * @throws InvalidArgumentException
+     * @return ProcessBuilder
      */
     public function setTimeout($timeout)
     {
@@ -252,9 +250,8 @@ class ProcessBuilder
     /**
      * Creates a Process instance and returns it.
      *
-     * @return Process
-     *
      * @throws LogicException In case no arguments have been provided
+     * @return Process
      */
     public function getProcess()
     {
@@ -265,7 +262,7 @@ class ProcessBuilder
         $options = $this->options;
 
         $arguments = array_merge($this->prefix, $this->arguments);
-        $script = implode(' ', array_map(array(__NAMESPACE__.'\\ProcessUtils', 'escapeArgument'), $arguments));
+        $script = implode(' ', array_map([__NAMESPACE__ . '\\ProcessUtils', 'escapeArgument'], $arguments));
 
         if ($this->inheritEnv) {
             $env = array_replace($_ENV, $_SERVER, $this->env);

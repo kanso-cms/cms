@@ -21,7 +21,7 @@ use kanso\framework\shell\process\exception\RuntimeException;
 class InputStream implements \IteratorAggregate
 {
     private $onEmpty = null;
-    private $input = array();
+    private $input = [];
     private $open = true;
 
     /**

@@ -5,13 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\security\crypto;
+namespace kanso\tests\unit\framework\security\crypto;
 
-use tests\TestCase;
 use kanso\framework\security\crypto\Signer;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class SignerTest extends TestCase
 {

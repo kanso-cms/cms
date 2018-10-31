@@ -20,6 +20,11 @@ composer.phar
 composer.lock
 /vendor
 
+# Phan #
+######################
+analysis.txt
+.phan/config.php
+
 # Kanso #
 ######################
 robots.txt

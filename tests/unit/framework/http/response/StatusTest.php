@@ -5,13 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\http\response;
+namespace kanso\tests\unit\framework\http\response;
 
-use tests\TestCase;
 use kanso\framework\http\response\Status;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class StatusTest extends TestCase
 {

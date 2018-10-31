@@ -5,14 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\http\session;
+namespace kanso\tests\unit\framework\http\session;
 
-use Mockery;
-use tests\TestCase;
 use kanso\framework\http\session\Flash;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class FlashTest extends TestCase
 {
@@ -68,7 +68,7 @@ class FlashTest extends TestCase
 
         $this->assertEquals('bar', $flash->get('foo'));
         $this->assertEquals('foo', $flash->get('bar'));
-        $this->assertEquals(['foo' => 'bar','bar' => 'foo'], $flash->get());
+        $this->assertEquals(['foo' => 'bar', 'bar' => 'foo'], $flash->get());
     }
 
     /**
@@ -111,7 +111,7 @@ class FlashTest extends TestCase
         $this->assertFalse($flash->has('bar'));
     }
 
-     /**
+    /**
      *
      */
     public function testClear()
@@ -142,7 +142,7 @@ class FlashTest extends TestCase
 
         $flash->iterate();
 
-        $this->assertEquals(['foo' => 'bar','bar' => 'foo'], $flash->get());
+        $this->assertEquals(['foo' => 'bar', 'bar' => 'foo'], $flash->get());
 
         $flash->iterate();
 
@@ -164,7 +164,7 @@ class FlashTest extends TestCase
 
         $flash->putRaw($raw);
 
-        $this->assertEquals(['foo' => 'bar','bar' => 'foo'], $flash->get());
+        $this->assertEquals(['foo' => 'bar', 'bar' => 'foo'], $flash->get());
 
         $flash->clear();
 
@@ -178,7 +178,7 @@ class FlashTest extends TestCase
      */
     public function testGetRaw()
     {
-        $raw = 
+        $raw =
         [
             'foo' => ['key' => 'bar', 'count' => 0],
             'bar' => ['key' => 'foo', 'count' => 0],

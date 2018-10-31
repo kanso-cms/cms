@@ -8,113 +8,113 @@
 namespace kanso\cms\query\methods;
 
 /**
- * CMS Query properties
+ * CMS Query properties.
  *
  * @author Joe J. Howard
  */
 trait Properties
 {
-	/**
-     * The page request type
+    /**
+     * The page request type.
      *
      * @var string
      */
     public $requestType = 'custom';
 
     /**
-     * The string-query to use on the database
+     * The string-query to use on the database.
      *
-     * @var string    
+     * @var string
      */
     public $queryStr;
 
     /**
-     * Current page request if it exists
+     * Current page request if it exists.
      *
-     * @var int    
+     * @var int
      */
     public $pageIndex = 0;
 
     /**
-     * Current post index of paginated array of posts
+     * Current post index of paginated array of posts.
      *
-     * @var int   
+     * @var int
      */
     public $postIndex = -1;
 
     /**
-     * Current post count
+     * Current post count.
      *
-     * @var int    
+     * @var int
      */
     public $postCount = 0;
 
     /**
-     * Array of posts from query result
+     * Array of posts from query result.
      *
-     * @var array   
+     * @var array
      */
     public $posts = [];
 
     /**
-     * The current post
+     * The current post.
      *
-     * @var array    
+     * @var array
      */
     public $post = null;
 
     /**
-     * Current taxonomy slug if applicable (e.g tag, category, author)
+     * Current taxonomy slug if applicable (e.g tag, category, author).
      *
-     * @var string    
+     * @var string
      */
     public $taxonomySlug;
 
     /**
-     * Current attachment URL: if applicable (e.g foo.com/app/public/uploads/my-image_large.png)
+     * Current attachment URL: if applicable (e.g foo.com/app/public/uploads/my-image_large.png).
      *
-     * @var string    
+     * @var string
      */
     private $attachmentURL;
 
     /**
-     * Current attachment size: if applicable (image_large)
+     * Current attachment size: if applicable (image_large).
      *
-     * @var string    
+     * @var string
      */
     private $attachmentSize;
 
     /**
-     * Search term if applicable
+     * Search term if applicable.
      *
-     * @var string    
+     * @var string
      */
     public $searchQuery;
 
     /**
-     * Array of previously called methods and results
+     * Array of previously called methods and results.
      *
-     * @var array     
+     * @var array
      */
     private $methodCache = [];
 
     /**
-     * SQL query builder instance
-     * 
+     * SQL query builder instance.
+     *
      * @var \kanso\framework\database\query\Builder
-     */ 
+     */
     private $SQL;
 
     /**
-     * Config 
-     * 
+     * Config.
+     *
      * @var \kanso\cms\query\QueryParser
      */
     private $queryParser;
 
     /**
-     * Method cache 
-     * 
+     * Method cache.
+     *
      * @var \kanso\cms\query\Cache
      */
     private $cache;

@@ -10,7 +10,7 @@ namespace kanso\framework\http\response\exceptions;
 use ErrorException;
 
 /**
- * Stop the application gracefully
+ * Stop the application gracefully.
  *
  * @author Joe J. Howard
  */

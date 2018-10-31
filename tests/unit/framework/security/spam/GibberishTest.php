@@ -5,13 +5,14 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\security\spam;
+namespace kanso\tests\unit\framework\security\spam;
 
-use tests\TestCase;
 use kanso\framework\security\spam\gibberish\Gibberish;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class GibberishTest extends TestCase
 {
@@ -20,10 +21,10 @@ class GibberishTest extends TestCase
 	 */
 	public function testGibberish()
 	{
-		$gibberish = new Gibberish(dirname(__FILE__).'/Gibberish.txt');
+		$gibberish = new Gibberish(dirname(__FILE__) . '/Gibberish.txt');
 
 		$this->assertFalse($gibberish->test('Hello world this is real text.'));
 
 		$this->assertTrue($gibberish->test('worfsdfald fasdfreal.'));
-	}	
+	}
 }

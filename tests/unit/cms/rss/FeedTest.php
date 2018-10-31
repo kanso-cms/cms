@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\cms\rss;
+namespace kanso\tests\unit\cms\rss;
 
-use Mockery;
-use tests\TestCase;
 use kanso\cms\rss\Feed;
+use kanso\tests\TestCase;
+use Mockery;
 
 /**
  * @group unit
+ * @group cms
  */
 class FeedTest extends TestCase
 {
@@ -42,7 +43,7 @@ class FeedTest extends TestCase
 		$response->shouldReceive('view')->once()->andReturn($view)->times(3);
 
 		$format->shouldReceive('set')->once()->with('application/rss+xml, application/xml');
-		
+
 		$body->shouldReceive('set')->once();
 
 		$status->shouldReceive('set')->once()->with(200);
@@ -80,7 +81,7 @@ class FeedTest extends TestCase
 		$response->shouldReceive('view')->once()->andReturn($view)->times(3);
 
 		$format->shouldReceive('set')->once()->with('application/atom+xml, application/xml');
-		
+
 		$body->shouldReceive('set')->once();
 
 		$status->shouldReceive('set')->once()->with(200);
@@ -118,7 +119,7 @@ class FeedTest extends TestCase
 		$response->shouldReceive('view')->once()->andReturn($view)->times(3);
 
 		$format->shouldReceive('set')->once()->with('application/rdf+xml, application/xml');
-		
+
 		$body->shouldReceive('set')->once();
 
 		$status->shouldReceive('set')->once()->with(200);

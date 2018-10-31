@@ -7,17 +7,15 @@
 
 namespace kanso\cms\admin\controllers;
 
-use kanso\cms\admin\controllers\BaseController;
-
 /**
- * Admin panel dashboard pages controller
+ * Admin panel dashboard pages controller.
  *
  * @author Joe J. Howard
  */
 class Dashboard extends BaseController
 {
 	/**
-	 * Dispatch posts request
+	 * Dispatch posts request.
 	 *
 	 * @access public
 	 */
@@ -31,7 +29,7 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch pages request
+	 * Dispatch pages request.
 	 *
 	 * @access public
 	 */
@@ -45,7 +43,7 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch tags request
+	 * Dispatch tags request.
 	 *
 	 * @access public
 	 */
@@ -57,7 +55,7 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch categories request
+	 * Dispatch categories request.
 	 *
 	 * @access public
 	 */
@@ -69,7 +67,7 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch comments request
+	 * Dispatch comments request.
 	 *
 	 * @access public
 	 */
@@ -81,7 +79,7 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch commentUsers request
+	 * Dispatch commentUsers request.
 	 *
 	 * @access public
 	 */
@@ -93,7 +91,7 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch mediaLibrary request
+	 * Dispatch mediaLibrary request.
 	 *
 	 * @access public
 	 */
@@ -105,7 +103,7 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch writer request
+	 * Dispatch writer request.
 	 *
 	 * @access public
 	 */
@@ -117,7 +115,7 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch settings request
+	 * Dispatch settings request.
 	 *
 	 * @access public
 	 */
@@ -129,7 +127,7 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch settingsAccount request
+	 * Dispatch settingsAccount request.
 	 *
 	 * @access public
 	 */
@@ -141,7 +139,7 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch settingsAuthor request
+	 * Dispatch settingsAuthor request.
 	 *
 	 * @access public
 	 */
@@ -153,7 +151,7 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch settingsKanso request
+	 * Dispatch settingsKanso request.
 	 *
 	 * @access public
 	 */
@@ -165,7 +163,7 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch settingsAccess request
+	 * Dispatch settingsAccess request.
 	 *
 	 * @access public
 	 */
@@ -177,7 +175,7 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch settingsUsers request
+	 * Dispatch settingsUsers request.
 	 *
 	 * @access public
 	 */
@@ -189,7 +187,7 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch settingsErrors request
+	 * Dispatch settingsErrors request.
 	 *
 	 * @access public
 	 */
@@ -201,7 +199,7 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch settingsTools request
+	 * Dispatch settingsTools request.
 	 *
 	 * @access public
 	 */
@@ -213,7 +211,7 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch errorLogs request
+	 * Dispatch errorLogs request.
 	 *
 	 * @access public
 	 */
@@ -225,7 +223,43 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch custom page
+	 * Dispatch emailLogs request.
+	 *
+	 * @access public
+	 */
+	public function emailLogs()
+	{
+		$this->init('emailLogs');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch emailPreview request.
+	 *
+	 * @access public
+	 */
+	public function emailPreview()
+	{
+		$this->init('emailPreview');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch emailPreview request.
+	 *
+	 * @access public
+	 */
+	public function leads()
+	{
+		$this->init('leads');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch custom page.
 	 *
 	 * @access public
 	 */
@@ -237,7 +271,7 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch custom post-type
+	 * Dispatch custom post-type.
 	 *
 	 * @access public
 	 */

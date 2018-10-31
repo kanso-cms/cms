@@ -7,17 +7,15 @@
 
 namespace kanso\cms\admin\controllers;
 
-use kanso\cms\admin\controllers\BaseController;
-
 /**
- * Admin panel access pages controller
+ * Admin panel access pages controller.
  *
  * @author Joe J. Howard
  */
 class Accounts extends BaseController
 {
 	/**
-	 * Dispatch login request
+	 * Dispatch login request.
 	 *
 	 * @access public
 	 */
@@ -29,7 +27,7 @@ class Accounts extends BaseController
 	}
 
 	/**
-	 * Dispatch logout request
+	 * Dispatch logout request.
 	 *
 	 * @access public
 	 */
@@ -41,7 +39,7 @@ class Accounts extends BaseController
 	}
 
 	/**
-	 * Dispatch forgotpassword request
+	 * Dispatch forgotpassword request.
 	 *
 	 * @access public
 	 */
@@ -53,7 +51,7 @@ class Accounts extends BaseController
 	}
 
 	/**
-	 * Dispatch forgotUsername request
+	 * Dispatch forgotUsername request.
 	 *
 	 * @access public
 	 */
@@ -65,12 +63,12 @@ class Accounts extends BaseController
 	}
 
 	/**
-	 * Dispatch resetPassword request
+	 * Dispatch resetPassword request.
 	 *
 	 * @access public
 	 */
 	public function resetPassword()
-	{		
+	{
 		$this->init('resetpassword');
 
 		$this->dispatch();

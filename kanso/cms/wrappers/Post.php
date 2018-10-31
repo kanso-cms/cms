@@ -7,40 +7,36 @@
 
 namespace kanso\cms\wrappers;
 
-use kanso\framework\database\query\Builder;
+use kanso\cms\wrappers\providers\CategoryProvider;
+use kanso\cms\wrappers\providers\CommentProvider;
+use kanso\cms\wrappers\providers\MediaProvider;
+use kanso\cms\wrappers\providers\TagProvider;
+use kanso\cms\wrappers\providers\UserProvider;
 use kanso\framework\config\Config;
-use kanso\framework\utility\Str;
+use kanso\framework\database\query\Builder;
 use kanso\framework\utility\Arr;
 use kanso\framework\utility\Markdown;
-use kanso\cms\wrappers\Wrapper;
-use kanso\cms\wrappers\providers\TagProvider;
-use kanso\cms\wrappers\providers\CategoryProvider;
-use kanso\cms\wrappers\providers\UserProvider;
-use kanso\cms\wrappers\providers\MediaProvider;
-use kanso\cms\wrappers\providers\CommentProvider;
-use kanso\cms\wrappers\Category;
-use kanso\cms\wrappers\Tag;
-
+use kanso\framework\utility\Str;
 
 /**
- * Category utility wrapper
+ * Category utility wrapper.
  *
  * @author Joe J. Howard
  */
 class Post extends Wrapper
 {
 	/**
-     * Pending changes that need to be saved
-     * 
-     * @var array
-     */ 
+	 * Pending changes that need to be saved.
+	 *
+	 * @var array
+	 */
 	private $pending = [];
 
 	/**
-     * Assoc array of post data
-     * 
-     * @var array
-     */ 
+	 * Assoc array of post data.
+	 *
+	 * @var array
+	 */
 	private $defaults =
 	[
 		'created'     => null,
@@ -54,7 +50,7 @@ class Post extends Wrapper
 		'thumbnail_id'     => null,
 		'comments_enabled' => false,
 
-		# Joins
+		// Joins
 		'tags' 	      => null,
 		'categories'  => null,
 		'author'      => null,
@@ -65,50 +61,50 @@ class Post extends Wrapper
 	];
 
 	/**
-     * Tag provider
-     * 
-     * @var kanso\cms\wrappers\providers\TagProvider
-     */ 
+	 * Tag provider.
+	 *
+	 * @var kanso\cms\wrappers\providers\TagProvider
+	 */
 	private $tagProvider;
 
-	/**
-     * Category provider
-     * 
+    /**
+     * Category provider.
+     *
      * @var kanso\cms\wrappers\providers\CategoryProvider
-     */ 
+     */
     private $categoryProvider;
 
     /**
-     * Media provider
-     * 
+     * Media provider.
+     *
      * @var kanso\cms\wrappers\providers\MediaProvider
-     */ 
+     */
     private $mediaProvider;
 
     /**
-     * User provider
-     * 
+     * User provider.
+     *
      * @var kanso\cms\wrappers\providers\UserProvider
-     */ 
+     */
     private $userProvider;
 
     /**
-     * Comment provider
-     * 
+     * Comment provider.
+     *
      * @var kanso\cms\wrappers\providers\CommentProvider
      */
     private $commentProvider;
 
     /**
-     * Framework configuration
-     * 
+     * Framework configuration.
+     *
      * @var kanso\framework\config\Config
      */
     private $config;
 
-	/**
-     * Override inherited constructor
-     * 
+    /**
+     * Override inherited constructor.
+     *
      * @access public
      */
     public function __construct(Builder $SQL, Config $config, TagProvider $tagProvider, CategoryProvider $categoryProvider, MediaProvider $mediaProvider, CommentProvider $commentProvider, UserProvider $userProvider, array $data = [])
@@ -142,7 +138,7 @@ class Post extends Wrapper
 			$this->getTheTags();
 
 			$this->getTheAuthor();
-			
+
 			$this->getTheCategories();
 		}
 
@@ -153,66 +149,66 @@ class Post extends Wrapper
     }
 
 	/**
-     * {@inheritdoc}
-     */
+	 * {@inheritdoc}
+	 */
 	public function __get(string $key)
 	{
 		if ($key === 'categories')
 		{
 			return $this->getTheCategories();
 		}
-		else if ($key === 'category')
+		elseif ($key === 'category')
 		{
 			return $this->getTheCategories()[0];
 		}
-		else if ($key === 'tags')
+		elseif ($key === 'tags')
 		{
 			return $this->getTheTags();
 		}
-		else if ($key === 'tag')
+		elseif ($key === 'tag')
 		{
 			return $this->getTheTags()[0];
 		}
-		else if ($key === 'author')
+		elseif ($key === 'author')
 		{
 			return $this->getTheAuthor();
 		}
-		else if ($key === 'content')
+		elseif ($key === 'content')
 		{
 			return $this->getTheContent();
 		}
-		else if ($key === 'comments')
+		elseif ($key === 'comments')
 		{
 			return $this->getTheComments();
 		}
-		else if ($key === 'excerpt')
+		elseif ($key === 'excerpt')
 		{
 			return $this->getTheExceprt();
 		}
-		else if ($key === 'meta')
+		elseif ($key === 'meta')
 		{
 			return $this->getPostMeta();
 		}
-		else if ($key === 'thumbnail')
+		elseif ($key === 'thumbnail')
 		{
 			return $this->getTheThumbnail();
 		}
-		else if (array_key_exists($key, $this->data))
+		elseif (array_key_exists($key, $this->data))
 		{
 			return $this->data[$key];
 		}
 		else
 		{
 			return null;
-		}	
+		}
 	}
 
 	/**
-	 * Set a value by key
+	 * Set a value by key.
 	 *
 	 * @access public
-	 * @param  string $key   Key to save value to
-	 * @param  mixed  $value Value to save
+	 * @param string $key   Key to save value to
+	 * @param mixed  $value Value to save
 	 */
 	public function __set(string $key, $value)
 	{
@@ -220,34 +216,34 @@ class Post extends Wrapper
 		{
 			$this->setPending('tags', $value);
 		}
-		else if ($key === 'categories')
+		elseif ($key === 'categories')
 		{
 			$this->setPending('categories', $value);
 		}
-		else if ($key === 'author')
+		elseif ($key === 'author')
 		{
 			$this->setPending('author', $value);
 		}
-		else if ($key === 'excerpt')
+		elseif ($key === 'excerpt')
 		{
 			$this->data['excerpt'] = Str::reduce(Markdown::plainText($value), 255);
 		}
-		else if ($key === 'content')
+		elseif ($key === 'content')
 		{
 			$this->data['content'] = $value;
 		}
-		else if (array_key_exists($key, $this->data))
+		elseif (array_key_exists($key, $this->data))
 		{
 			$this->data[$key] = $value;
 		}
 	}
 
 	/**
-	 * Set a pending key/value on a join table that needs to be saved
+	 * Set a pending key/value on a join table that needs to be saved.
 	 *
 	 * @access public
-	 * @param  string $key   Key to set
-	 * @param  mixef  $value Value to save
+	 * @param string $key   Key to set
+	 * @param mixef  $value Value to save
 	 */
 	private function setPending(string $key, $value)
 	{
@@ -255,7 +251,7 @@ class Post extends Wrapper
 	}
 
 	/**
-	 *  Get the array of category objects
+	 *  Get the array of category objects.
 	 *
 	 * @access private
 	 * @return array
@@ -276,7 +272,7 @@ class Post extends Wrapper
 				}
 			}
 		}
-		
+
 		if (empty($this->data['categories']))
 		{
 			$this->data['categories'] = [$this->categoryProvider->byId(1)];
@@ -286,7 +282,7 @@ class Post extends Wrapper
 	}
 
 	/**
-	 * Get the array of tag objects
+	 * Get the array of tag objects.
 	 *
 	 * @access private
 	 * @return array
@@ -317,7 +313,7 @@ class Post extends Wrapper
 	}
 
 	/**
-	 * Get the post content
+	 * Get the post content.
 	 *
 	 * @access private
 	 * @return string
@@ -329,7 +325,7 @@ class Post extends Wrapper
 			if (is_null($this->data['content']))
 			{
 				$content = $this->SQL->SELECT('content')->FROM('content_to_posts')->WHERE('post_id', '=', $this->data['id'])->ROW();
-				
+
 				if (isset($content['content']))
 				{
 					$this->data['content'] = $content['content'];
@@ -349,7 +345,7 @@ class Post extends Wrapper
 	}
 
 	/**
-	 * Get the post excerpt
+	 * Get the post excerpt.
 	 *
 	 * @access private
 	 * @return string
@@ -360,7 +356,7 @@ class Post extends Wrapper
 	}
 
 	/**
-	 * Get the post author
+	 * Get the post author.
 	 *
 	 * @access private
 	 * @return array
@@ -383,13 +379,13 @@ class Post extends Wrapper
 	}
 
 	/**
-	 * Get the post comments
+	 * Get the post comments.
 	 *
 	 * @access private
 	 * @return array
 	 */
 	private function getTheComments(): array
-	{		
+	{
 		if (!empty($this->data['id']))
 		{
 			if (is_null($this->data['comments']))
@@ -397,7 +393,7 @@ class Post extends Wrapper
 				$this->data['comments'] = [];
 
 				$comments = $this->SQL->SELECT('id')->FROM('comments')->WHERE('post_id', '=', $this->data['id'])->AND_WHERE('parent', '=', 0)->AND_WHERE('status', '=', 'approved')->FIND_ALL();
-				
+
 				foreach ($comments as $comment)
 				{
 					$this->data['comments'][] = $this->commentProvider->byId($comment['id']);
@@ -413,7 +409,7 @@ class Post extends Wrapper
 	}
 
 	/**
-	 * Get the post thumbnail
+	 * Get the post thumbnail.
 	 *
 	 * @access private
 	 * @return mixed
@@ -432,7 +428,7 @@ class Post extends Wrapper
 	}
 
 	/**
-	 * Get the post meta
+	 * Get the post meta.
 	 *
 	 * @access private
 	 * @return array
@@ -443,13 +439,13 @@ class Post extends Wrapper
 		{
 			return $this->data['meta'];
 		}
-		
+
 		if (!empty($this->data['id']))
 		{
 			$meta = $this->SQL->SELECT('*')->FROM('post_meta')->WHERE('post_id', '=', $this->data['id'])->ROW();
 
 			if ($meta)
-			{					
+			{
 				$this->data['meta'] = unserialize($meta['content']);
 			}
 			else
@@ -466,8 +462,8 @@ class Post extends Wrapper
 	}
 
 	/**
-     * {@inheritdoc}
-     */
+	 * {@inheritdoc}
+	 */
 	public function save(): bool
 	{
 		$row = $this->data;
@@ -481,22 +477,22 @@ class Post extends Wrapper
 
 		$row['modified'] = time();
 
-		# If the tags don't exist - create them
+		// If the tags don't exist - create them
 		$row['tags'] = $this->createTags($row['tags']);
 
-		# If the tags don't exist - create them
+		// If the tags don't exist - create them
 		$row['categories'] = $this->createCategories($row['categories']);
 
-		# Make sure there is a valid author
+		// Make sure there is a valid author
 		$row['author']    = $this->getTheAuthor();
 		$row['author_id'] = $row['author']->id;
 
-		# Get the content
+		// Get the content
 		$row['content'] = Str::mysqlEncode($this->getTheContent());
 
 		$row['excerpt'] = Str::mysqlEncode($this->getTheExceprt());
 
-		# Validate the title
+		// Validate the title
 		$row['title'] = trim($row['title']);
 		if (empty($row['title']))
 		{
@@ -508,29 +504,29 @@ class Post extends Wrapper
 			$row['title'] = $this->uniqueBaseTitle($row['title']);
 		}
 
-		# Sanitize the thumbnail
+		// Sanitize the thumbnail
 		$row['thumbnail_id'] = intval($row['thumbnail_id']);
 		if ($row['thumbnail_id'] === 0)
 		{
-			$row['thumbnail_id'] = NULL;
+			$row['thumbnail_id'] = null;
 		}
 
-		# Slug may or may not have been set manually
+		// Slug may or may not have been set manually
 		$row['slug'] = isset($row['slug']) ? $row['slug'] : false;
-		
-		# Create a slug based on the category, tags, slug, author
+
+		// Create a slug based on the category, tags, slug, author
 		$row['slug'] = trim(preg_replace('/-+/', '-', $this->titleToSlug($row['title'], $row['categories'][0]->slug, $row['author']->slug, $row['created'], $row['type'], $row['slug'])), '-');
 
-		# Sanitize comments_enabled
+		// Sanitize comments_enabled
 		$row['comments_enabled'] = boolval($row['comments_enabled']);
 
-		# Get the post meta
+		// Get the post meta
 		$postMeta = empty($row['meta']) ? $this->getPostMeta() : $row['meta'];
-	
-		# Remove joined rows so we can update/insert
+
+		// Remove joined rows so we can update/insert
 		$insertRow = Arr::unsets(['thumbnail', 'tags', 'categories', 'content', 'comments', 'author', 'meta'], $row);
 
-		# Insert a new article
+		// Insert a new article
 		if ($newPost)
 		{
 			unset($insertRow['id']);
@@ -540,36 +536,36 @@ class Post extends Wrapper
 			$row['id'] = intval($this->SQL->connectionHandler()->lastInsertId());
 		}
 
-		# Or update an existing row
+		// Or update an existing row
 		else
 		{
 			$this->SQL->UPDATE('posts')->SET($insertRow)->WHERE('id', '=', $row['id'])->QUERY();
-			
+
 			$this->SQL->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', $row['id'])->QUERY();
 
 			$this->SQL->DELETE_FROM('categories_to_posts')->WHERE('post_id', '=', $row['id'])->QUERY();
-			
+
 			$this->SQL->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $row['id'])->QUERY();
 
 			$this->SQL->DELETE_FROM('post_meta')->WHERE('post_id', '=', $row['id'])->QUERY();
 		}
 
-		# Join the tags
+		// Join the tags
 		foreach ($row['tags'] as $tag)
 		{
 			$this->SQL->INSERT_INTO('tags_to_posts')->VALUES(['post_id' => $row['id'], 'tag_id' => $tag->id])->QUERY();
 		}
 
-		# Join the categories
+		// Join the categories
 		foreach ($row['categories'] as $cat)
 		{
 			$this->SQL->INSERT_INTO('categories_to_posts')->VALUES(['post_id' => $row['id'], 'category_id' => $cat->id])->QUERY();
 		}
 
-		# Join the content
+		// Join the content
 		$this->SQL->INSERT_INTO('content_to_posts')->VALUES(['post_id' => $row['id'], 'content' => $row['content']])->QUERY();
 
-		# Join the post meta
+		// Join the post meta
 		if (!empty($postMeta))
 		{
 			$this->SQL->INSERT_INTO('post_meta')->VALUES(['post_id' => $row['id'], 'content' => serialize($postMeta)])->QUERY();
@@ -579,13 +575,13 @@ class Post extends Wrapper
 
 		$this->pending = [];
 
-		# return the row data
+		// return the row data
 		return true;
 	}
 
 	/**
-     * {@inheritdoc}
-     */
+	 * {@inheritdoc}
+	 */
 	public function delete(): bool
 	{
 		if (isset($this->data['id']))
@@ -593,27 +589,27 @@ class Post extends Wrapper
 			$this->SQL->DELETE_FROM('comments')->WHERE('post_id', '=', $this->data['id'])->QUERY();
 
 			$this->SQL->DELETE_FROM('tags_to_posts')->WHERE('post_id', '=', $this->data['id'])->QUERY();
-			
+
 			$this->SQL->DELETE_FROM('categories_to_posts')->WHERE('post_id', '=', $this->data['id'])->QUERY();
 
 			$this->SQL->DELETE_FROM('content_to_posts')->WHERE('post_id', '=', $this->data['id'])->QUERY();
-			
+
 			$this->SQL->DELETE_FROM('posts')->WHERE('id', '=', $this->data['id'])->QUERY();
 
 			$this->SQL->DELETE_FROM('post_meta')->WHERE('post_id', '=', $this->data['id'])->QUERY();
 
 			return true;
 		}
-		
+
 		return false;
 	}
 
 	/**
-	 * Creates categories if they don't already exist
+	 * Creates categories if they don't already exist.
 	 *
 	 * @access private
 	 * @param  mixed $cats categories names, or category wrapper
-	 * @return array         
+	 * @return array
 	 */
 	private function createCategories($cats): array
 	{
@@ -632,19 +628,19 @@ class Post extends Wrapper
 
 	  	foreach ($cats as $cat)
 	  	{
-	  		if ($cat instanceOf Category)
+	  		if ($cat instanceof Category)
 	        {
 	        	$result[] = $cat;
 	        }
-	        else if (is_string($cat))
+	        elseif (is_string($cat))
 		   	{
 		   		if (ucfirst($cat) === 'Uncategorized')
 		   		{
 		   			continue;
 		   		}
-		   		
+
 		   		$catWrapper = $this->categoryProvider->byKey('name', $cat, true);
-		   		
+
 		   		if ($catWrapper)
 		   		{
 		   			$result[] = $catWrapper;
@@ -668,11 +664,11 @@ class Post extends Wrapper
 	}
 
 	/**
-	 * Creates tags if they don't already exist
+	 * Creates tags if they don't already exist.
 	 *
 	 * @access private
 	 * @param  mixed $category tag names, or tag wrapper
-	 * @return array         
+	 * @return array
 	 */
 	private function createTags($tags): array
 	{
@@ -692,19 +688,19 @@ class Post extends Wrapper
 
 	  	foreach ($tags as $tag)
 	  	{
-	  		if ($tag instanceOf Tag)
+	  		if ($tag instanceof Tag)
 	        {
 	        	$result[] = $tag;
 	        }
-	        else if (is_string($tag))
+	        elseif (is_string($tag))
 		   	{
 		   		if (ucfirst($tag) === 'Untagged')
 		   		{
 		   			continue;
 		   		}
-		   		
+
 		   		$tagWrapper = $this->tagProvider->byKey('name', $tag, true);
-		   		
+
 		   		if ($tagWrapper)
 		   		{
 		   			$result[] = $tagWrapper;
@@ -728,22 +724,22 @@ class Post extends Wrapper
 	}
 
 	/**
-	 * Create a title that - append a number to end if it exist already
+	 * Create a title that - append a number to end if it exist already.
 	 *
 	 * @access private
 	 */
 	private function uniqueBaseTitle($title)
 	{
-		# Set the base title
+		// Set the base title
 		$baseTitle = $title;
-    	
-    	# Counter
+
+    	// Counter
     	$i = 1;
 
-        # Loop and append number
+        // Loop and append number
     	while(!empty($this->SQL->SELECT('id')->FROM('posts')->WHERE('title', '=', $title)->ROW()))
     	{
-    		$title = preg_replace("/(".$baseTitle.")(-\d+)/", "$1"."", $title).'-'.$i;
+    		$title = preg_replace('/(' . $baseTitle . ")(-\d+)/", '$1' . '', $title) . '-' . $i;
     		$i++;
     	}
 
@@ -751,40 +747,40 @@ class Post extends Wrapper
 	}
 
 	/**
-	 * Convert a title to a slug with permalink structure
+	 * Convert a title to a slug with permalink structure.
 	 *
-	 * @param  string      $title         The title of the article
-	 * @param  string      $categorySlug  The category slug
-	 * @param  string      $authorSlug    The author's slug
-	 * @param  int         $created       A unix timestamp of when the article was created
-	 * @param  sting|false $_slug         Existing slug - may or may not be set
-	 * @return string                     The slug to the article             
+	 * @param  string      $title        The title of the article
+	 * @param  string      $categorySlug The category slug
+	 * @param  string      $authorSlug   The author's slug
+	 * @param  int         $created      A unix timestamp of when the article was created
+	 * @param  sting|false $_slug        Existing slug - may or may not be set
+	 * @return string      The slug to the article
 	 */
-	private function titleToSlug($title, $categorySlug, $authorSlug, $created, $type, $_slug) 
+	private function titleToSlug($title, $categorySlug, $authorSlug, $created, $type, $_slug)
 	{
-		# Custom posts have their own route, thus their own slug structure
+		// Custom posts have their own route, thus their own slug structure
 	  	if ($type === 'page')
 	  	{
 	  		if ($_slug)
 	  		{
-	  			return Str::slug($_slug).'/';
+	  			return Str::slug($_slug) . '/';
 	  		}
-	  		
-	  		return Str::slug($title).'/';
+
+	  		return Str::slug($title) . '/';
 	  	}
-	  	else if ($type === 'post')
+	  	elseif ($type === 'post')
 	  	{
 	  		$format = $this->config->get('cms.permalinks');
 	  	}
-	  	else 
+	  	else
 	  	{
-	  		if ($this->config->get('cms.custom_posts.'.$type))
+	  		if ($this->config->get('cms.custom_posts.' . $type))
 	  		{
-	  			$format = $this->config->get('cms.custom_posts.'.$type);
+	  			$format = $this->config->get('cms.custom_posts.' . $type);
 	  		}
 	  		else
 	  		{
-	  			return Str::slug($title).'/';
+	  			return Str::slug($title) . '/';
 	  		}
 	  	}
 
@@ -803,74 +799,74 @@ class Post extends Wrapper
 	  		'category' => $categorySlug,
 	  		'author'   => $authorSlug,
 	  	];
-	  	
+
 	  	$slug = '';
-	  	
+
 	  	$slugPieces   = !$_slug ? [] : explode('/', trim($_slug, '/'));
 	  	$formatPieces = explode('/', $format);
 
-	  	# if the slug is being set pragmatically
-	  	# e.g $post->slug = 'foobar'; $post->save();
-	  	# Then the slug pieces should always be the postname
-	  	# and $slugPieces should have only 1 item
+	  	// if the slug is being set pragmatically
+	  	// e.g $post->slug = 'foobar'; $post->save();
+	  	// Then the slug pieces should always be the postname
+	  	// and $slugPieces should have only 1 item
 
 	  	foreach ($formatPieces as $i => $key)
 	  	{
 	  		if (isset($dateMap[$key]))
 	  		{
-	  			$slug .= date($dateMap[$key], $created).'/';
+	  			$slug .= date($dateMap[$key], $created) . '/';
 	  		}
-	  		else if (isset($varMap[$key]))
+	  		elseif (isset($varMap[$key]))
 	  		{
 	  			if ($key === 'postname')
 	  			{
 	  				if (count($slugPieces) === 1)
 	  				{
-	  					$slug .= Str::slug($slugPieces[0]).'/';
+	  					$slug .= Str::slug($slugPieces[0]) . '/';
 	  				}
 	  				else
 	  				{
-	  					$slug .= $varMap[$key].'/';
+	  					$slug .= $varMap[$key] . '/';
 	  				}
 	  			}
 
-	  			# Nested categories
-	  			else if ($key === 'category')
+	  			// Nested categories
+	  			elseif ($key === 'category')
 	  			{
 	  				$category = $this->categoryProvider->byKey('slug', $varMap['category'], true);
-	  				
+
 	  				if (!$category->parent())
 	  				{
-	  					$slug .= $varMap[$key].'/';
+	  					$slug .= $varMap[$key] . '/';
 	  				}
 	  				else
 	  				{
-	  					$slug .= $this->the_category_slug($category).'/';
+	  					$slug .= $this->the_category_slug($category) . '/';
 	  				}
 	  			}
 	  			else
 	  			{
-	  				$slug .= $varMap[$key].'/';
+	  				$slug .= $varMap[$key] . '/';
 	  			}
 	  		}
 	  		else
 	  		{
-	  			$slug .= $key.'/';
+	  			$slug .= $key . '/';
 	  		}
 	  	}
 
-	  	$slug = trim($slug, '/').'/';
-	  	
+	  	$slug = trim($slug, '/') . '/';
+
 	  	return $slug;
 
 	}
 
-	/**
-     * Returns the category slug with nested
+    /**
+     * Returns the category slug with nested.
      *
      * @access  public
-     * @param   kanso\cms\wrappers\Category $category Category wrapper
-     * @return  string
+     * @param  kanso\cms\wrappers\Category $category Category wrapper
+     * @return string
      */
     private function the_category_slug(Category $category = null): string
     {
@@ -888,10 +884,10 @@ class Post extends Wrapper
 	    	}
 
 	    	$slugs = array_reverse($slugs);
-	    	
+
 	    	return trim(implode('/', $slugs), '/');
 	    }
-	    
+
 	    return $category->slug;
     }
 }

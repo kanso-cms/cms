@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\cache\stores;
+namespace kanso\tests\unit\framework\cache\stores;
 
-use Mockery;
-use tests\TestCase;
 use kanso\framework\cache\stores\FileStore;
+use kanso\tests\TestCase;
+use Mockery;
 
 /**
  * @group unit
+ * @group framework
  */
 class FileStoreTest extends TestCase
 {

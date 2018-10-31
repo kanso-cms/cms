@@ -2,13 +2,13 @@
 
 return
 [
-    /**
+    /*
      * ---------------------------------------------------------
      * SMTP Configurations
      * ---------------------------------------------------------
      *
      * Configure SMTP settings
-     * 
+     *
      * use_smtp      : Use STMP to send emails
      * smtp_settings : Settings to use when sending via SMTP
      * debug         : Enable/disable SMTP debugging (0 = off), (1 = client messages), (2 = client and server messages)
@@ -31,23 +31,23 @@ return
         'hashed_pass' => 'hashedpassword',
     ],
 
-    /**
+    /*
      * ---------------------------------------------------------
      * Email logging path
      * ---------------------------------------------------------
-     * 
+     *
      */
-    'log_dir' => APP_DIR.'/storage/emails',
+    'log_dir' => APP_DIR . '/storage/emails',
 
-    /**
+    /*
      * ---------------------------------------------------------
      * CMS email theme
      * ---------------------------------------------------------
      *
-     * These settings setup the styling theme for emails sent by 
+     * These settings setup the styling theme for emails sent by
      * the CMS. They are pretty much self explanatory.
      */
-    'theme' => 
+    'theme' =>
     [
         'body_bg'         => '#FFFFFF',
         'content_bg'      => '#FFFFFF',
@@ -65,8 +65,8 @@ return
         'btn_size'        => '18px',
         'btn_font_size'   => '13px',
         'border_radius'   => '3px',
-        'logo_link'       => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] && $_SERVER['HTTPS'] != 'off' ? 'https://'.$_SERVER['HTTP_HOST'] : 'http://'.$_SERVER['HTTP_HOST'],
-        'logo_url'        => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] && $_SERVER['HTTPS'] != 'off' ? 'https://'.$_SERVER['HTTP_HOST'].'/app/public/uploads/kanso-logo.jpg' : 'http://'.$_SERVER['HTTP_HOST'].'/app/public/uploads/kanso-logo.jpg',
+        'logo_link'       => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] && $_SERVER['HTTPS'] != 'off' ? 'https://' . $_SERVER['HTTP_HOST'] : 'http://' . $_SERVER['HTTP_HOST'],
+        'logo_url'        => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] && $_SERVER['HTTPS'] != 'off' ? 'https://' . $_SERVER['HTTP_HOST'] . '/app/public/uploads/kanso-logo.jpg' : 'http://' . $_SERVER['HTTP_HOST'] . '/app/public/uploads/kanso-logo.jpg',
         'font_size_h1'    => '30px',
         'font_size_h2'    => '28px',
         'font_size_h3'    => '24px',
@@ -75,16 +75,16 @@ return
         'font_size_h6'    => '15px',
     ],
 
-    /**
+    /*
      * ---------------------------------------------------------
      * CMS email paths
      * ---------------------------------------------------------
      *
-     * These are the slugs for when you use the Gatekeeper functions 
+     * These are the slugs for when you use the Gatekeeper functions
      * to register new users, forgot password, reset password etc..
      * These are for your own application purpose and have no effect
      * on the admin panel
-     * 
+     *
      * login            : Slug to use in emails for links to your application's login url
      * register         : Slug to use in emails for links to your application's register url
      * forgot_password  : Slug to use in emails for links to your application's forgot password url
@@ -98,6 +98,6 @@ return
         'register'        => 'register/',
         'forgot_password' => 'forgot-password/',
         'reset_password'  => 'reset-password/',
-        'confirm_account' => 'confirm-account/'
+        'confirm_account' => 'confirm-account/',
     ],
 ];

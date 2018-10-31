@@ -10,14 +10,14 @@ namespace app\controllers;
 use kanso\framework\mvc\controller\Controller;
 
 /**
- * Example controller
+ * Example controller.
  *
  * @author Joe J. Howard
  */
 class Example extends Controller
 {
 	public function welcome()
-	{		
+	{
 		if ($this->model->validate())
 		{
 			$this->Response->body()->set('Hello World!');

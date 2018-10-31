@@ -11,26 +11,26 @@ use kanso\framework\mvc\model\Model;
 use kanso\framework\utility\Str;
 
 /**
- * Add new comment model
+ * Add new comment model.
  *
  * @author Joe J. Howard
  */
 class Comments extends Model
 {
-	/**
-	 * Validate the incoming request
+    /**
+     * Validate the incoming request.
      *
      * @return string|false
-	 */
+     */
     public function validate()
     {
-    	# $_POST
+    	// $_POST
     	$post = $this->Request->fetch();
 
-    	# GUMP
+    	// GUMP
     	$validation = $this->Validation;
 
-    	# Sanitize and validate the POST variables
+    	// Sanitize and validate the POST variables
         $post = $validation->sanitize($post);
 
         $validation->validation_rules([
@@ -54,14 +54,14 @@ class Comments extends Model
 
         if ($validated_data)
         {
-            # Extra sanitization
+            // Extra sanitization
             $row = $validated_data;
             $row['email-thread'] = Str::bool($row['email-thread']);
             $row['email-reply']  = Str::bool($row['email-reply']);
             $row['post-id']      = intval($row['post-id']);
-            $row['reply-id']     = intval($row['reply-id']) == 0 ? null : intval($row['reply-id']);  
+            $row['reply-id']     = intval($row['reply-id']) == 0 ? null : intval($row['reply-id']);
 
-            $comment = $this->CommentManager->create($row['content'], $row['name'], $row['email'], $row['post-id'], $row['reply-id'] , true, $row['email-thread'], $row['email-reply']);
+            $comment = $this->CommentManager->create($row['content'], $row['name'], $row['email'], $row['post-id'], $row['reply-id'], true, $row['email-thread'], $row['email-reply']);
 
             return $comment->status;
         }

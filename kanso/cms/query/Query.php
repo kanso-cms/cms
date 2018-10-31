@@ -7,37 +7,35 @@
 
 namespace kanso\cms\query;
 
-use kanso\Kanso;
-use kanso\framework\ioc\ContainerAwareTrait;
-use kanso\cms\query\methods\Properties;
-use kanso\cms\query\methods\Validation;
-use kanso\cms\query\methods\Meta;
-use kanso\cms\query\methods\Urls;
-use kanso\cms\query\methods\Templates;
-use kanso\cms\query\methods\PostIteration;
-use kanso\cms\query\methods\Post;
-use kanso\cms\query\methods\Author;
-use kanso\cms\query\methods\Tag;
-use kanso\cms\query\methods\Category;
 use kanso\cms\query\methods\Attachment;
-use kanso\cms\query\methods\Comment;
-use kanso\cms\query\methods\Pagination;
-use kanso\cms\query\methods\Search;
+use kanso\cms\query\methods\Author;
 use kanso\cms\query\methods\CacheAccess;
+use kanso\cms\query\methods\Category;
+use kanso\cms\query\methods\Comment;
 use kanso\cms\query\methods\Filter;
-use kanso\cms\query\QueryParser;
-use kanso\cms\query\Cache;
+use kanso\cms\query\methods\Meta;
+use kanso\cms\query\methods\Pagination;
+use kanso\cms\query\methods\Post;
+use kanso\cms\query\methods\PostIteration;
+use kanso\cms\query\methods\Properties;
+use kanso\cms\query\methods\Search;
+use kanso\cms\query\methods\Tag;
+use kanso\cms\query\methods\Templates;
+use kanso\cms\query\methods\Urls;
+use kanso\cms\query\methods\Validation;
+use kanso\framework\ioc\ContainerAwareTrait;
+use kanso\Kanso;
 
 /**
- * CMS Query object
+ * CMS Query object.
  *
  * @author Joe J. Howard
  */
 class Query
 {
-    /**
+    /*
      * Class traits
-     * 
+     *
      */
     use Properties;
     use ContainerAwareTrait;
@@ -58,11 +56,11 @@ class Query
     use Filter;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @access public
-     * @param  \kanso\cms\query\QueryParser $queryParser Query parser
-     * @param  \kanso\cms\query\Cache       $cache       Method cache
+     * @param \kanso\cms\query\QueryParser $queryParser Query parser
+     * @param \kanso\cms\query\Cache       $cache       Method cache
      */
     public function __construct(QueryParser $queryParser, Cache $cache)
     {
@@ -72,11 +70,11 @@ class Query
     }
 
     /**
-     * Loads private dependencies
+     * Loads private dependencies.
      *
      * @access private
-     * @param  \kanso\cms\query\QueryParser $queryParser Query parser
-     * @param  \kanso\cms\query\Cache       $cache       Method cache
+     * @param \kanso\cms\query\QueryParser $queryParser Query parser
+     * @param \kanso\cms\query\Cache       $cache       Method cache
      */
     private function loadDependencies(QueryParser $queryParser, Cache $cache)
     {
@@ -88,7 +86,7 @@ class Query
     }
 
     /**
-     * Create and return a new Query object
+     * Create and return a new Query object.
      *
      * @access public
      * @param  string queryStr  Query to filter posts

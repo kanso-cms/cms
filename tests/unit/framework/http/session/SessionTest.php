@@ -5,14 +5,15 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\framework\http\session;
+namespace kanso\tests\unit\framework\http\session;
 
-use Mockery;
-use tests\TestCase;
 use kanso\framework\http\session\Session;
+use kanso\tests\TestCase;
+use Mockery;
 
 /**
  * @group unit
+ * @group framework
  */
 class SessionTest extends TestCase
 {
@@ -103,7 +104,7 @@ class SessionTest extends TestCase
 
 		$session->setMultiple([
 		    'foo' => 'bar',
-		    'bar' => 'foo'
+		    'bar' => 'foo',
 		]);
 
 		$this->assertEquals('bar', $session->get('foo'));

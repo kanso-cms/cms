@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>405 Method Not Allowed</title>
-	<?php include 'style.css.php';?>
+	<?php include 'style.css.php'; ?>
 </head>
 	<body>
 		<div class="interstitial-wrapper">

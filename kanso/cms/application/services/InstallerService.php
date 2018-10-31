@@ -7,11 +7,11 @@
 
 namespace kanso\cms\application\services;
 
-use kanso\framework\application\services\Service;
 use kanso\cms\install\Installer;
+use kanso\framework\application\services\Service;
 
 /**
- * CMS Installer
+ * CMS Installer.
  *
  * @author Joe J. Howard
  */
@@ -22,7 +22,7 @@ class InstallerService extends Service
 	 */
 	public function register()
 	{
-		$this->container->singleton('Installer', function ($container) 
+		$this->container->singleton('Installer', function($container)
 		{
 			return new Installer($container->Config, $container->Database, $container->Access, KANSO_DIR);
 		});

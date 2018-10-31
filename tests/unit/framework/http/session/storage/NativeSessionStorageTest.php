@@ -5,20 +5,20 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace tests\unit\http\session\storage;
+namespace kanso\tests\unit\http\session\storage;
 
-use Mockery;
-use tests\TestCase;
 use kanso\framework\http\session\storage\NativeSessionStorage;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
+ * @group framework
  */
 class NativeStorageTest extends TestCase
 {
 	private function getSessionConfig()
 	{
-		return 
+		return
 		[
 			'cookie_name'  => 'kanso_session',
 			'expire'       => strtotime('+1 month'),
@@ -78,7 +78,7 @@ class NativeStorageTest extends TestCase
 
 		$this->assertEquals('bar', $storage->read()['foo']);
 	}
-	
+
 	/**
 	 * @runInSeparateProcess
 	 */
@@ -146,13 +146,13 @@ class NativeStorageTest extends TestCase
 
 		$storage->session_set_cookie_params($params);
 
-		$expected = 
+		$expected =
 		[
 			'lifetime' => strtotime('+1 month'),
 			'path'     => '/',
 			'domain'   => '',
 			'secure'   => false,
-			'httponly' => false
+			'httponly' => false,
 		];
 
 		$this->assertEquals($expected, $storage->session_get_cookie_params());

@@ -7,14 +7,13 @@
 
 namespace kanso\framework\exception;
 
-use kanso\framework\http\request\Environment;
-use kanso\framework\exception\ExceptionLogicTrait;
 use kanso\framework\file\Filesystem;
-use Throwable;
+use kanso\framework\http\request\Environment;
 use PDOException;
+use Throwable;
 
 /**
- * Error logger class 
+ * Error logger class.
  *
  * @author Joe J. Howard
  */
@@ -23,36 +22,36 @@ class ErrorLogger
     use ExceptionLogicTrait;
 
     /**
-     * Directory where logs are stored
+     * Directory where logs are stored.
      *
      * @var string
      */
     private $path;
 
     /**
-     * HttpEnv instance
+     * HttpEnv instance.
      *
      * @var \kanso\framework\http\request\Environment;
      */
     private $environment;
 
     /**
-     * Filesystem instance
+     * Filesystem instance.
      *
      * @var \kanso\framework\file\Filesystem
      */
     private $fileSystem;
 
-	/**
-	 * Constructor
-	 *
-	 * @access public
+    /**
+     * Constructor.
+     *
+     * @access public
      * @param \Throwable                                $exception   Throwable
      * @param \kanso\framework\file\Filesystem          $filesystem  Filesystem instance
      * @param \kanso\framework\http\request\Environment $environment HttpEnv instance for logging details
      * @param string                                    $path        Directory to store log files in
-	 */
-    public function __construct(Throwable $exception, Filesystem $filesystem, Environment $environment, string $path) 
+     */
+    public function __construct(Throwable $exception, Filesystem $filesystem, Environment $environment, string $path)
     {
         $this->fileSystem = $filesystem;
 
@@ -64,7 +63,7 @@ class ErrorLogger
     }
 
     /**
-     * Write the current exception to file
+     * Write the current exception to file.
      *
      * @access public
      */
@@ -73,12 +72,12 @@ class ErrorLogger
         $msg = $this->logMsg();
 
         $this->fileSystem->appendContents($this->genericPath(), $msg);
-        
+
         $this->fileSystem->appendContents($this->errnoPath(), $msg);
     }
 
     /**
-     * Set the error logs directory
+     * Set the error logs directory.
      *
      * @access public
      */
@@ -88,51 +87,51 @@ class ErrorLogger
     }
 
     /**
-     * Build and return the log text
+     * Build and return the log text.
      *
      * @access private
      * @return string
      */
     private function logMsg(): string
     {
-        return 
-        'DATE    : '.date('l jS \of F Y h:i:s A', time())."\n".
-        'TYPE    : '.$this->errType().' ['.$this->exception->getCode()."]\n".
-        'URL     : '.$this->environment->REQUEST_URL."\n".
-        'REFERER : '.$this->environment->REFERER."\n".
-        'CLASS   : '.$this->errClass()."\n".
-        'FILE    : '.$this->exception->getFile()."\n".
-        'LINE    : '.$this->exception->getLine()."\n".
-        'MESSAGE : '.$this->exception->getMessage()."\n".
-        'IP      : '.$this->environment->REMOTE_ADDR."\n".
-        'AGENT   : '.$this->environment->HTTP_USER_AGENT."\n".
-        'TRACE   : '.ltrim(implode("\n\t\t ", $this->errTrace()))."\n\n\n";
+        return
+        'DATE    : ' . date('l jS \of F Y h:i:s A', time()) . "\n" .
+        'TYPE    : ' . $this->errType() . ' [' . $this->exception->getCode() . "]\n" .
+        'URL     : ' . $this->environment->REQUEST_URL . "\n" .
+        'REFERER : ' . $this->environment->REFERER . "\n" .
+        'CLASS   : ' . $this->errClass() . "\n" .
+        'FILE    : ' . $this->exception->getFile() . "\n" .
+        'LINE    : ' . $this->exception->getLine() . "\n" .
+        'MESSAGE : ' . $this->exception->getMessage() . "\n" .
+        'IP      : ' . $this->environment->REMOTE_ADDR . "\n" .
+        'AGENT   : ' . $this->environment->HTTP_USER_AGENT . "\n" .
+        'TRACE   : ' . ltrim(implode("\n\t\t ", $this->errTrace())) . "\n\n\n";
     }
 
     /**
-     * Get the path to generic error log file
+     * Get the path to generic error log file.
      *
      * @access private
      * @return string
      */
     private function genericPath(): string
     {
-        return $this->path.DIRECTORY_SEPARATOR.date('d_m_y').'_all_errors.log';
+        return $this->path . DIRECTORY_SEPARATOR . date('d_m_y') . '_all_errors.log';
     }
 
     /**
-     * Get the path to the specific error log file for current error
+     * Get the path to the specific error log file for current error.
      *
      * @access private
      * @return string
      */
     private function errnoPath(): string
     {
-        return $this->path.DIRECTORY_SEPARATOR.date('d_m_y').'_'.$this->errnoToFile().'.log';
+        return $this->path . DIRECTORY_SEPARATOR . date('d_m_y') . '_' . $this->errnoToFile() . '.log';
     }
 
     /**
-     * Convert the error code to the log file name
+     * Convert the error code to the log file name.
      *
      * @access private
      * @return string
@@ -141,17 +140,17 @@ class ErrorLogger
     {
         if ($this->exception instanceof PDOException || get_class($this->exception) === 'PDOException' || strpos($this->exception->getMessage(), 'SQLSTATE') !== false)
         {
-            return 'database_errors'; 
+            return 'database_errors';
         }
 
-        switch($this->exception->getCode()) 
+        switch($this->exception->getCode())
         {
             case E_ERROR:
             case E_PARSE:
             case E_CORE_ERROR:
             case E_COMPILE_ERROR:
             case E_USER_ERROR:
-                return 'fatal_errors'; 
+                return 'fatal_errors';
 
             case E_WARNING:
             case E_NOTICE:
@@ -163,10 +162,10 @@ class ErrorLogger
             case E_RECOVERABLE_ERROR:
             case E_DEPRECATED:
             case E_USER_DEPRECATED:
-                return 'nonfatal_errors'; 
+                return 'nonfatal_errors';
 
             default:
-                return "other_errors"; 
+                return 'other_errors';
         }
     }
 }

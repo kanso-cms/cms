@@ -10,7 +10,7 @@ namespace kanso\framework\mvc\view;
 use kanso\framework\common\ArrayAccessTrait;
 
 /**
- * View abstract
+ * View abstract.
  *
  * @author Joe J. Howard
  */
@@ -19,17 +19,17 @@ abstract class ViewBase
 	use ArrayAccessTrait;
 
 	/**
-	 * Array of files to include when rendering
+	 * Array of files to include when rendering.
 	 *
 	 * @var array
 	 */
 	protected $includes = [];
 
-	/**
-     * Constructor
-     * 
+    /**
+     * Constructor.
+     *
      * @access public
-     * @param  array  $data Assoc array of variables to pass to the template
+     * @param array $data Assoc array of variables to pass to the template
      */
     public function __construct(array $data = [])
     {

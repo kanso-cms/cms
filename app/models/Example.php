@@ -10,7 +10,7 @@ namespace app\models;
 use kanso\framework\mvc\model\Model;
 
 /**
- * Example model
+ * Example model.
  *
  * @author Joe J. Howard
  */
