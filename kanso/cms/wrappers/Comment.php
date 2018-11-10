@@ -76,7 +76,7 @@ class Comment extends Wrapper
      */
     public function children(): array
     {
-        if (is_null($this->parent))
+        if (is_null($this->children))
         {
            $this->children = $this->commentChildren($this);
         }

@@ -1,5 +1,35 @@
 --------------------------------------------------------
 
+### 2.1.0 <small> (10-11-2018)</small>
+
+Update using ```git fetch```.
+
+#### New
+* Added new `Pixl` service as default framework service `app/configurations/application.php`.
+* Added new `PixlService` to framework application services.
+* Added new `Pixl` configuration file in `app/configurations/pixl.php`.
+* Added new `Plugin` abstract class for CMS.
+* Added new `Image::loadImage` method.
+* New `parent` method added to `Comment`.
+* `CategoryManager::create` returns `FALSE` if category already exists.
+* `TagManager::create` returns `FALSE` if tag already exists.
+* `UserManager::createAdmin` returns `User` if successful.
+* `UserManager::createUser` parameters changed. 
+* `CategoryProvider::byKey` returns `FALSE` if category does not exist. 
+* `CommentProvider::byKey` returns `FALSE` if comment does not exist. 
+* `MediaProvider::byKey` returns `FALSE` if media does not exist. 
+* `PostProvider::byKey` returns `FALSE` if post does not exist. 
+
+#### Changes
+* Updated to single root level `.gitignore`.
+* `kanso\framework\pixl\Image` constructor file path is now optional.
+* `kanso\framework\pixl\processor\GD` constructor now has optional second argument for default image quality.
+* Bumped `Kanso::VERSION` number.
+
+#### Bugfixes
+
+--------------------------------------------------------
+
 ### 2.0.0 <small> (01-10-2018)</small>
 
 Update using ```git fetch```.
