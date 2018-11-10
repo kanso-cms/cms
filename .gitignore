@@ -9,20 +9,22 @@ ehthumbs.db
 Thumbs.db
 
 # Composer
-composer.phar
-composer.lock
+/composer.phar
+/composer.lock
 /vendor/*
 
 # Dev Generated Files
 /.phan/*
 /bin/*
-analysis.txt
+/analysis.txt
 
 # Kanso Specific
-robots.txt
+/robots.txt
 /app/public/themes/*
 /app/services/*
 /app/storage/cache/*
 /app/storage/emails/*
 /app/storage/logs/*
 /app/storage/session/*
+/app/configurations/*
+!/app/configurations/defaults
