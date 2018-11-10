@@ -1,34 +1,28 @@
-# Minified Scripts #
-###################
-# *.min.css
-# *.min.js
-# *.min.css.map
-
-# OS generated files #
-######################
+# OS Generated Files
 .DS_Store
 .DS_Store?
 ._*
+.*.sw[op]
 .Spotlight-V100
 .Trashes
 ehthumbs.db
 Thumbs.db
 
-# Composer #
-######################
+# Composer
 composer.phar
 composer.lock
-/vendor
+/vendor/*
 
-# Phan #
-######################
-analysis.txt
-.phan/config.php
-
-# Dev Bins
-# ######################
+# Dev Generated Files
+/.phan/*
 /bin/*
+analysis.txt
 
-# Kanso #
-######################
+# Kanso Specific
 robots.txt
+/app/public/themes/*
+/app/services/*
+/app/storage/cache/*
+/app/storage/emails/*
+/app/storage/logs/*
+/app/storage/session/*
