@@ -95,7 +95,7 @@ function findPhpFiles($dir)
 $repoRoot = dirname(dirname(__FILE__));
 
 # php-cs locally
-$fixer = dirname(__FILE__) . '/php-cs-fixer-v2.phar';
+$fixer = dirname(dirname(__FILE__)) . '/vendor/bin/php-cs-fixer';
 
 # List of files to fix
 $files     = [];

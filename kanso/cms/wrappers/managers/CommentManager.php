@@ -104,8 +104,15 @@ class CommentManager extends Manager
      * Creates a new category.
      *
      * @access public
-     * @param  string $name Comment name
-     * @param  string $slug Comment slug (optional) (default null)
+     * @param  string $name             Comment name
+     * @param  string $name             Name of the commentor
+     * @param  string $email            Email address of the commentor
+     * @param  int    $postId           Post id
+     * @param  int    $parentId         Comment parent id (optional) (default null)
+     * @param  bool   $validate         Validate the comment through the spam protector (optional) (default true)
+     * @param  bool   $subscribeThread  Subscribe email address to thread notifications (optional) (default true)
+     * @param  bool   $subscribeReplies Subscribe email address to reply notifications (optional) (default true)
+     * @param  bool   $sendEmails       Send emails to all subscribers and admins (optional) (default true)
      * @return mixed
      */
     public function create(string $content, string $name, string $email, int $postId, int $parentId = null, bool $validate = true, bool $subscribeThread = true, bool $subscribeReplies = true, bool $sendEmails = true)

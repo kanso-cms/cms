@@ -37,11 +37,11 @@ class TagManager extends Manager
 	{
 		$slug = !$slug ? Str::slug($name) : Str::slug($slug);
 
-		$catExists = $this->provider->byKey('slug', $slug, true);
+		$tagExists = $this->provider->byKey('slug', $slug, true);
 
-		if ($catExists)
+		if ($tagExists)
 		{
-			return $catExists;
+			return false;
 		}
 
 		return $this->provider->create(['name' => $name, 'slug' => $slug]);

@@ -36,13 +36,9 @@
 		"phpunit/phpunit": "^6.5",
 		"mockery/mockery": "^1.0",
 		"php-mock/php-mock": "^1.0",
-		"phan/phan": "1.x"
+		"friendsofphp/php-cs-fixer": "^2.13",
+		"sami/sami": "v4.1.2"
 	},
 	"prefer-stable": true,
-	"minimum-stability": "dev",
-	"extra": {
-		"branch-alias": {
-			 "dev-master": "5.4-dev"
-		}
-	}
+	"minimum-stability": "dev"
 }

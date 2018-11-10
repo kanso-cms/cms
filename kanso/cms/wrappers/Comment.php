@@ -14,7 +14,19 @@ namespace kanso\cms\wrappers;
  */
 class Comment extends Wrapper
 {
+    /**
+     * Array of comment children.
+     *
+     * @var array
+     */
     private $children;
+
+    /**
+     * Parent comment.
+     *
+     * @var kanso\cms\wrappers\Comment
+     */
+    private $parent;
 
     /**
      * {@inheritdoc}
@@ -64,12 +76,28 @@ class Comment extends Wrapper
      */
     public function children(): array
     {
-        if (is_null($this->children))
+        if (is_null($this->parent))
         {
            $this->children = $this->commentChildren($this);
         }
 
         return $this->children;
+    }
+
+    /**
+     * Returns the parent Comment if it exists.
+     *
+     * @access public
+     * @return kanso\cms\wrappers\Comment||false
+     */
+    public function parent(): array
+    {
+        if (is_null($this->parent))
+        {
+           $this->parent = $this->commentParent($this);
+        }
+
+        return $this->parent;
     }
 
     /**
@@ -114,5 +142,28 @@ class Comment extends Wrapper
         }
 
         return $children;
+    }
+
+    /**
+     * Returns the parent comment.
+     *
+     * @access private
+     * @return kanso\cms\wrappers\Comment||false
+     */
+    private function commentParent()
+    {
+        if (!$this->parent_id)
+        {
+            return false;
+        }
+
+        $parent = $this->SQL->SELECT('*')->FROM('comments')->WHERE('id', '=', $comment->parent_id)->ROW();
+
+        if ($parent)
+        {
+            return new Comment($this->SQL, $parent);
+        }
+
+        return false;
     }
 }

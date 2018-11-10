@@ -27,7 +27,7 @@ class Image
     /**
      * Processor instance.
      *
-     * @var string
+     * @var kanso\framework\pixl\processor\ProcessorInterface
      */
     private $processor;
 
@@ -35,18 +35,34 @@ class Image
      * Constructor.
      *
      * @access public
-     * @param string $image Absolute path to file
+     * @param string                                            $image     Absolute path to file (optional) (default '')
+     * @param kanso\framework\pixl\processor\ProcessorInterface $processor Image processor implementation
      */
-    public function __construct(string $image, ProcessorInterface $processor)
+    public function __construct(string $image = '', ProcessorInterface $processor)
     {
-        $this->image = $image;
-
         $this->processor = $processor;
 
-        if (file_exists($this->image) === false)
+        if (!empty($image))
         {
-            throw new RuntimeException(vsprintf('The image [ %s ] does not exist.', [$this->image]));
+            $this->loadImage($image);
         }
+    }
+
+    /**
+     * Load an image file into the processor.
+     *
+     * @access public
+     * @param  string           $image Absolute path to file (optional) (default '')
+     * @throws RuntimeException If image file doesn't exist
+     */
+    public function loadImage(string $image)
+    {
+        if (!file_exists($image))
+        {
+            throw new RuntimeException(vsprintf('The image [ %s ] does not exist.', [$image]));
+        }
+
+        $this->image = $image;
 
         $this->processor->load($this->image);
     }

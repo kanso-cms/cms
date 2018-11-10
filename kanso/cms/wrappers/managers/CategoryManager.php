@@ -41,7 +41,7 @@ class CategoryManager extends Manager
 
 		if ($catExists)
 		{
-			return $catExists;
+			return false;
 		}
 
 		return $this->provider->create(['name' => $name, 'slug' => $slug]);

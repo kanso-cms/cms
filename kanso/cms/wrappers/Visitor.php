@@ -317,7 +317,7 @@ class Visitor extends Wrapper
             // SQL
             if ($visitCount >= 8)
             {
-                return $returnString ? 'SQL' : 3;
+                return $returnString ? 'sql' : 3;
             }
 
             // Lead

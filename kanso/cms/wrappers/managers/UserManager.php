@@ -223,7 +223,7 @@ class UserManager extends Manager
             $this->email->send($emailTo, $senderName, $senderEmail, $emailSubject, $emailContent);
         }
 
-        return true;
+        return $user;
     }
 
     /**
@@ -231,15 +231,15 @@ class UserManager extends Manager
      *
      * @access public
      * @param  string $email    Valid email address
-     * @param  string $username Username (optional) (default '')
      * @param  string $password Password string (optional) (default '')
      * @param  string $name     Users name  (optional) (default '')
+     * @param  string $username Username (optional) (default '')
      * @param  string $role     User role  (optional) (default 'guest')
      * @param  bool   $activate Activate the user straight away (optional) (default false)
      * @param  bool   $activate Should we send the user an email with username and password ? (optional) (default true)
      * @return mixed
      */
-    public function createUser(string $email, string $username = '', string $password = '', string $name = '', string $role = 'guest', bool $activate = false, bool $sendEamil = true)
+    public function createUser(string $email, string $password = '', string $name = '', string $username = '', string $role = 'guest', bool $activate = false, bool $sendEamil = true)
     {
         // Create a unique username based on the email if one
         // wasnt provided

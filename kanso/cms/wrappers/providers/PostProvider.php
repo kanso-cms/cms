@@ -74,7 +74,7 @@ class PostProvider extends Provider
             return $post;
         }
 
-        return null;
+        return false;
     }
 
     /**

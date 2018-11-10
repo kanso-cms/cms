@@ -25,6 +25,10 @@ composer.lock
 analysis.txt
 .phan/config.php
 
+# Dev Bins
+# ######################
+/bin/*
+
 # Kanso #
 ######################
 robots.txt

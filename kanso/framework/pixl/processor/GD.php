@@ -104,13 +104,21 @@ class GD implements ProcessorInterface
      * Constructor.
      *
      * @access public
-     * @param string $filename Absolute path to file
+     * @param string $filename     Absolute path to file (optional) (default null)
+     * @param int    $imageQuality Default image quality to use (optional) (default null)
      */
-    public function __construct(string $filename = null)
+    public function __construct(string $filename = null, int $imageQuality = null)
     {
         if ($filename)
         {
             $this->load($filename);
+        }
+
+        if ($imageQuality)
+        {
+            $this->quality_png = $imageQuality;
+
+            $this->quality_jpg = $imageQuality === 0 ? 100 : 100 - ($imageQuality * 10 - 10);
         }
     }
 
@@ -227,7 +235,8 @@ class GD implements ProcessorInterface
             break;
 
             case IMAGETYPE_JPEG:
-                if ($quality === null) {
+                if ($quality === null)
+                {
                     $quality = $this->quality_jpg;
                 }
 
@@ -235,7 +244,8 @@ class GD implements ProcessorInterface
             break;
 
             case IMAGETYPE_PNG:
-                if ($quality === null) {
+                if ($quality === null)
+                {
                     $quality = $this->quality_png;
                 }
 
@@ -298,7 +308,8 @@ class GD implements ProcessorInterface
      */
     public function resize(int $width, int $height, bool $allow_enlarge = false)
     {
-        if (!$allow_enlarge) {
+        if (!$allow_enlarge)
+        {
             // if the user hasn't explicitly allowed enlarging,
             // but either of the dimensions are larger then the original,
             // then just use original dimensions - this logic may need rethinking
@@ -327,16 +338,19 @@ class GD implements ProcessorInterface
      */
     public function crop(int $width, int $height, bool $allow_enlarge = false)
     {
-        if (!$allow_enlarge) {
+        if (!$allow_enlarge)
+        {
             // this logic is slightly different to resize(),
             // it will only reset dimensions to the original
             // if that particular dimenstion is larger
 
-            if ($width > $this->source_w) {
+            if ($width > $this->source_w)
+            {
                 $width  = $this->source_w;
             }
 
-            if ($height > $this->source_h) {
+            if ($height > $this->source_h)
+            {
                 $height = $this->source_h;
             }
         }
@@ -344,7 +358,8 @@ class GD implements ProcessorInterface
         $ratio_source = $this->source_w / $this->source_h;
         $ratio_dest = $width / $height;
 
-        if ($ratio_dest < $ratio_source) {
+        if ($ratio_dest < $ratio_source)
+        {
             $this->resizeToHeight($height, $allow_enlarge);
 
             $excess_width = ($this->dest_w - $width) / $this->dest_w * $this->source_w;
