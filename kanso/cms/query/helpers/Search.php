@@ -5,14 +5,16 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\cms\query\methods;
+namespace kanso\cms\query\helpers;
+
+use kanso\cms\query\helpers\Helper;
 
 /**
  * CMS Query search methods.
  *
  * @author Joe J. Howard
  */
-trait Search
+class Search extends Helper
 {
     /**
      * Returns the searched query for search result requests.
@@ -22,9 +24,9 @@ trait Search
      */
     public function search_query()
     {
-        if ($this->is_search())
+        if ($this->parent->is_search())
         {
-            return urldecode($this->searchQuery);
+            return urldecode($this->parent->searchQuery);
         }
 
         return null;
@@ -39,16 +41,16 @@ trait Search
     public function get_search_form(): string
     {
         // Load from template if it exists
-        $formTemplate = $this->theme_directory() . DIRECTORY_SEPARATOR . 'searchform.php';
+        $formTemplate = $this->parent->theme_directory() . DIRECTORY_SEPARATOR . 'searchform.php';
 
         if (file_exists($formTemplate))
         {
-            return $this->include_template('searchform');
+            return $this->parent->include_template('searchform');
         }
 
         return '
 
-            <form role="search" method="get" action="' . $this->home_url() . '/search-results/">
+            <form role="search" method="get" action="' . $this->parent->home_url() . '/search-results/">
 
                 <fieldset>
                         

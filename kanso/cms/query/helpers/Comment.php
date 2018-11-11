@@ -5,14 +5,16 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\cms\query\methods;
+namespace kanso\cms\query\helpers;
+
+use kanso\cms\query\helpers\Helper;
 
 /**
  * CMS Query comment methods.
  *
  * @author Joe J. Howard
  */
-trait Comment
+class Comment extends Helper
 {
     /**
      * Are comments (if enabled globally) enabled on the current post or a post by id.
@@ -23,14 +25,14 @@ trait Comment
      */
     public function comments_open(int $post_id = null): bool
     {
-        if ($this->Config->get('cms.enable_comments') === false)
+        if ($this->container->get('Config')->get('cms.enable_comments') === false)
         {
             return false;
         }
 
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
@@ -40,9 +42,9 @@ trait Comment
             return false;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            return $this->post->comments_enabled == true;
+            return $this->parent->post->comments_enabled == true;
         }
 
         return false;
@@ -57,7 +59,7 @@ trait Comment
      */
     public function has_comments(int $post_id = null): bool
     {
-        return !empty($this->get_comments($post_id));
+        return !empty($this->parent->get_comments($post_id));
     }
 
     /**
@@ -69,7 +71,7 @@ trait Comment
      */
     public function comments_number(int $post_id = null): int
     {
-        return count($this->get_comments($post_id));
+        return count($this->parent->get_comments($post_id));
     }
 
     /**
@@ -81,7 +83,7 @@ trait Comment
      */
     public function get_comment(int $comment_id)
     {
-        return $this->CommentManager->byId($comment_id);
+        return $this->container->get('CommentManager')->byId($comment_id);
     }
 
     /**
@@ -95,7 +97,7 @@ trait Comment
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
@@ -105,9 +107,9 @@ trait Comment
             return [];
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            return $this->post->comments;
+            return $this->parent->post->comments;
         }
 
         return [];
@@ -124,7 +126,7 @@ trait Comment
     public function display_comments(array $args = null, int $post_id = null): string
     {
         // If there no comments return empty string
-        if ($this->comments_number($post_id) === 0)
+        if ($this->parent->comments_number($post_id) === 0)
         {
             return '';
         }
@@ -133,13 +135,13 @@ trait Comment
         $HTML = '';
 
         // Save the article row locally
-        $post  = !$post_id ? $this->post : $this->getPostByID($post_id);
+        $post  = !$post_id ? $this->parent->post : $this->parent->helpers['cache']->getPostByID($post_id);
 
         // Fallback incase nothing is present
         if (!$post || empty($post)) return '';
 
         // Save the article permalink locally
-        $permalink = $this->the_permalink($post->id);
+        $permalink = $this->parent->the_permalink($post->id);
 
         // Default comment format
         $defaultFormat = '
@@ -210,11 +212,11 @@ trait Comment
         if (empty($comments)) return $HTML;
 
         // Load from template if it exists
-        $formTemplate = $this->theme_directory() . DIRECTORY_SEPARATOR . 'comments.php';
+        $formTemplate = $this->parent->theme_directory() . DIRECTORY_SEPARATOR . 'comments.php';
 
         if (file_exists($formTemplate))
         {
-            return $this->include_template('comments', ['comments' => $comments]);
+            return $this->parent->include_template('comments', ['comments' => $comments]);
         }
 
         // Start looping comments
@@ -234,14 +236,14 @@ trait Comment
     public function comment_form(array $args = null, int $post_id = null): string
     {
         // Load from template if it exists
-        $formTemplate = $this->theme_directory() . DIRECTORY_SEPARATOR . 'commentform.php';
-        if (file_exists($formTemplate)) return $this->include_template('commentform');
+        $formTemplate = $this->parent->theme_directory() . DIRECTORY_SEPARATOR . 'commentform.php';
+        if (file_exists($formTemplate)) return $this->parent->include_template('commentform');
 
         // HTML string
         $HTML = '';
 
         // Save the article row locally
-        $post  = !$post_id ? $this->post : $this->getPostByID($post_id);
+        $post  = !$post_id ? $this->parent->post : $this->parent->helpers['cache']->getPostByID($post_id);
 
         // Fallback incase nothing is present
         if (!$post || empty($post)) return '';
@@ -250,7 +252,7 @@ trait Comment
         $postID = $post->id;
 
         // Save the article permalink locally
-        $permalink   = $this->the_permalink($postID);
+        $permalink   = $this->parent->the_permalink($postID);
 
         $options = [
 
@@ -306,7 +308,7 @@ trait Comment
         $replacements = [$postID, $options['reply_id']];
 
         // No replies when comments are disabled
-        if (!$this->comments_open($post_id))
+        if (!$this->parent->comments_open($post_id))
         {
             $options['reply_id_field'] = '';
         }
@@ -344,7 +346,7 @@ trait Comment
 
         $isEmail = !filter_var($email_or_md5, FILTER_VALIDATE_EMAIL) === false;
 
-        $domain = $this->Request->isSecure() ? 'https://secure.gravatar.com' : 'http://www.gravatar.com';
+        $domain = $this->container->get('Request')->isSecure() ? 'https://secure.gravatar.com' : 'http://www.gravatar.com';
 
         // If there is an error with the emaill or md5 default to fallback
         // force a mystery man
@@ -419,7 +421,7 @@ trait Comment
 
             // Replace avatar src
             $patterns[]     = '/\(:avatar_src\)/';
-            $replacements[] = $this->get_gravatar($comment->email, $options['avatar_size'], true);
+            $replacements[] = $this->parent->get_gravatar($comment->email, $options['avatar_size'], true);
 
             // Replace avatar size
             $patterns[]     = '/\(:avatar_size\)/';

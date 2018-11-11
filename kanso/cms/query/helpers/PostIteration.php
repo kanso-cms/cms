@@ -5,14 +5,16 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\cms\query\methods;
+namespace kanso\cms\query\helpers;
+
+use kanso\cms\query\helpers\Helper;
 
 /**
  * CMS Query post iteration methods.
  *
  * @author Joe J. Howard
  */
-trait PostIteration
+class PostIteration extends Helper
 {
     /**
      * Increment the internal pointer by 1 and return the current post
@@ -26,10 +28,10 @@ trait PostIteration
     {
         if ($post_id)
         {
-            return $this->getPostByID($post_id);
+            return $this->parent->helpers['cache']->getPostByID($post_id);
         }
 
-        return $this->_next();
+        return $this->parent->_next();
     }
 
     /**
@@ -40,7 +42,7 @@ trait PostIteration
      */
     public function the_posts(): array
     {
-        return $this->posts;
+        return $this->parent->posts;
     }
 
     /**
@@ -51,7 +53,7 @@ trait PostIteration
      */
     public function the_posts_count(): int
     {
-        return $this->postCount;
+        return $this->parent->postCount;
     }
 
     /**
@@ -62,7 +64,7 @@ trait PostIteration
      */
     public function posts_per_page(): int
     {
-        return $this->Config->get('cms.posts_per_page');
+        return $this->container->get('Config')->get('cms.posts_per_page');
     }
 
     /**
@@ -76,10 +78,10 @@ trait PostIteration
     {
         if ($post_id)
         {
-            return !empty($this->getPostByID($post_id));
+            return !empty($this->parent->helpers['cache']->getPostByID($post_id));
         }
 
-        return $this->postIndex < $this->postCount -1;
+        return $this->parent->postIndex < $this->parent->postCount -1;
     }
 
     /**
@@ -89,11 +91,11 @@ trait PostIteration
      */
     public function rewind_posts()
     {
-        $this->postIndex = -1;
+        $this->parent->postIndex = -1;
 
-        if ($this->postCount > 0)
+        if ($this->parent->postCount > 0)
         {
-            $this->post = $this->posts[0];
+            $this->parent->post = $this->parent->posts[0];
         }
     }
 
@@ -105,18 +107,18 @@ trait PostIteration
      */
     public function _next()
     {
-        $this->postIndex++;
+        $this->parent->postIndex++;
 
-        if (isset($this->posts[$this->postIndex]))
+        if (isset($this->parent->posts[$this->parent->postIndex]))
         {
-            $this->post = $this->posts[$this->postIndex];
+            $this->parent->post = $this->parent->posts[$this->parent->postIndex];
         }
         else
         {
-            $this->post = null;
+            $this->parent->post = null;
         }
 
-        return $this->post;
+        return $this->parent->post;
     }
 
     /**
@@ -127,17 +129,17 @@ trait PostIteration
      */
     public function _previous()
     {
-        $this->postIndex--;
+        $this->parent->postIndex--;
 
-        if (isset($this->posts[$this->postIndex]))
+        if (isset($this->parent->posts[$this->parent->postIndex]))
         {
-            $this->post = $this->posts[$this->postIndex];
+            $this->parent->post = $this->parent->posts[$this->parent->postIndex];
         }
         else
         {
-            $this->post = null;
+            $this->parent->post = null;
         }
 
-        return $this->post;
+        return $this->parent->post;
     }
 }

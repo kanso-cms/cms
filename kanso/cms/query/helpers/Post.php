@@ -5,16 +5,17 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\cms\query\methods;
+namespace kanso\cms\query\helpers;
 
 use kanso\framework\utility\Markdown;
+use kanso\cms\query\helpers\Helper;
 
 /**
  * CMS Query post methods.
  *
  * @author Joe J. Howard
  */
-trait Post
+class Post extends Helper
 {
     /**
      * Get the current post id.
@@ -24,9 +25,9 @@ trait Post
      */
     public function the_post_id()
     {
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            return $this->post->id;
+            return $this->parent->post->id;
         }
 
         return null;
@@ -43,7 +44,7 @@ trait Post
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
@@ -53,9 +54,9 @@ trait Post
             return null;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            return $this->post->excerpt;
+            return $this->parent->post->excerpt;
         }
 
         return null;
@@ -72,7 +73,7 @@ trait Post
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
@@ -82,9 +83,9 @@ trait Post
             return null;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            return $this->post->status;
+            return $this->parent->post->status;
         }
 
         return null;
@@ -101,7 +102,7 @@ trait Post
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
@@ -111,9 +112,9 @@ trait Post
             return null;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            return $this->post->type;
+            return $this->parent->post->type;
         }
 
         return null;
@@ -130,7 +131,7 @@ trait Post
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
@@ -140,9 +141,9 @@ trait Post
             return [];
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            return $this->post->meta;
+            return $this->parent->post->meta;
         }
 
         return [];
@@ -160,7 +161,7 @@ trait Post
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
@@ -170,9 +171,9 @@ trait Post
             return null;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            return date($format, $this->post->created);
+            return date($format, $this->parent->post->created);
         }
 
         return null;
@@ -190,7 +191,7 @@ trait Post
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
@@ -200,9 +201,9 @@ trait Post
             return null;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            return date($format, $this->post->modified);
+            return date($format, $this->parent->post->modified);
         }
 
         return null;
@@ -219,19 +220,19 @@ trait Post
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post && !empty($post->thumbnail_id))
             {
-                return !empty($this->getMediaById($post->thumbnail_id));
+                return !empty($this->parent->helpers['cache']->getMediaById($post->thumbnail_id));
             }
 
             return false;
         }
 
-        if (!empty($this->post) && !empty($this->post->thumbnail_id))
+        if (!empty($this->parent->post) && !empty($this->parent->post->thumbnail_id))
         {
-            return !empty($this->getMediaById($this->post->thumbnail_id));
+            return !empty($this->parent->helpers['cache']->getMediaById($this->parent->post->thumbnail_id));
         }
 
         return false;
@@ -248,7 +249,7 @@ trait Post
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
@@ -258,9 +259,9 @@ trait Post
             return null;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            return $this->post->title;
+            return $this->parent->post->title;
         }
 
         if (is_category() || is_tag() || is_author())
@@ -282,23 +283,23 @@ trait Post
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
-                $prefix = !empty($this->blog_location()) && $post->type === 'post' ? '/' . $this->blog_location() . '/' : '/';
+                $prefix = !empty($this->parent->blog_location()) && $post->type === 'post' ? '/' . $this->parent->blog_location() . '/' : '/';
 
-                return $this->Request->environment()->HTTP_HOST . $prefix . trim($post->slug, '/') . '/';
+                return $this->container->get('Request')->environment()->HTTP_HOST . $prefix . trim($post->slug, '/') . '/';
             }
 
             return null;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            $prefix = !empty($this->blog_location()) && $this->post->type === 'post' ? '/' . $this->blog_location() . '/' : '/';
+            $prefix = !empty($this->parent->blog_location()) && $this->parent->post->type === 'post' ? '/' . $this->parent->blog_location() . '/' : '/';
 
-            return $this->Request->environment()->HTTP_HOST . $prefix . trim($this->post->slug, '/') . '/';
+            return $this->container->get('Request')->environment()->HTTP_HOST . $prefix . trim($this->parent->post->slug, '/') . '/';
         }
 
         return null;
@@ -315,7 +316,7 @@ trait Post
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
@@ -325,9 +326,9 @@ trait Post
             return null;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            return trim($this->post->slug, '/') . '/';
+            return trim($this->parent->post->slug, '/') . '/';
         }
 
         return null;
@@ -347,7 +348,7 @@ trait Post
 
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
@@ -356,9 +357,9 @@ trait Post
         }
         else
         {
-            if (!empty($this->post))
+            if (!empty($this->parent->post))
             {
-                $content = $this->post->content;
+                $content = $this->parent->post->content;
             }
         }
 
@@ -386,18 +387,18 @@ trait Post
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
-                return $this->getMediaById($post->thumbnail_id);
+                return $this->parent->helpers['cache']->getMediaById($post->thumbnail_id);
             }
 
             return null;
         }
-        elseif (!empty($this->post))
+        elseif (!empty($this->parent->post))
         {
-            return $this->getMediaById($this->post->thumbnail_id);
+            return $this->parent->helpers['cache']->getMediaById($this->parent->post->thumbnail_id);
         }
 
         return null;
@@ -413,7 +414,7 @@ trait Post
      */
     public function the_post_thumbnail_src(int $post_id = null, string $size = 'original')
     {
-        $thumbnail = $this->the_post_thumbnail($post_id);
+        $thumbnail = $this->parent->the_post_thumbnail($post_id);
 
         if ($thumbnail)
         {
@@ -460,7 +461,7 @@ trait Post
      */
     public function all_static_pages(bool $published = true): array
     {
-        return $this->PostManager->provider()->byKey('posts.type', 'page', false, $published);
+        return $this->container->get('PostManager')->provider()->byKey('posts.type', 'page', false, $published);
     }
 
     /**
@@ -472,6 +473,6 @@ trait Post
      */
     public function all_custom_posts(string $type, bool $published = true): array
     {
-        return $this->PostManager->provider()->byKey('posts.type', $type, false, $published);
+        return $this->container->get('PostManager')->provider()->byKey('posts.type', $type, false, $published);
     }
 }

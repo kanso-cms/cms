@@ -7,9 +7,7 @@
 
 namespace kanso\cms\application\services;
 
-use kanso\cms\query\Cache;
 use kanso\cms\query\Query;
-use kanso\cms\query\QueryParser;
 use kanso\framework\application\services\Service;
 
 /**
@@ -26,21 +24,7 @@ class QueryService extends Service
 	{
 		$this->container->singleton('Query', function($container)
 		{
-			return new Query(
-				$this->loadQueryParser(),
-				new Cache
-			);
+			return new Query($container);
 		});
-	}
-
-	/**
-	 * Loads the query parser.
-	 *
-	 * @access private
-	 * @return \kanso\cms\query\QueryParser
-	 */
-	private function loadQueryParser(): QueryParser
-	{
-		return new QueryParser($this->container->Database->connection()->builder(), $this->container->PostProvider);
 	}
 }

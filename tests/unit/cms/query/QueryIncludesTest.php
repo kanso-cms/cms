@@ -279,21 +279,12 @@ class QueryIncludesTest extends TestCase
 	 */
 	public function testMethodsExist()
 	{
-		$kanso = Mockery::mock('\Kanso\kanso');
-
-		$query = Mockery::mock('\kanso\cms\query\Query');
-
-		$kanso->Query = $query;
-
 		require_once KANSO_DIR . '/cms/query/Includes.php';
 
 		foreach ($this->queryMethods as $func)
 		{
 			$this->assertTrue(function_exists($func));
 		}
-
-		unset($KANSO_QUERY);
-    	$KANSO_QUERY = null;
 	}
 
 	/**
@@ -301,16 +292,11 @@ class QueryIncludesTest extends TestCase
 	 */
 	public function testMethodCallsQuery()
 	{
-		$kanso = Mockery::mock('\Kanso\kanso');
+		$kanso = Mockery::mock('kanso\Kanso');
 
 		$query = Mockery::mock('\kanso\cms\query\Query');
 
 		$kanso->Query = $query;
-
-		require_once KANSO_DIR . '/cms/query/Includes.php';
-
-		global $KANSO_QUERY;
-		$KANSO_QUERY = $query;
 
 		foreach ($this->queryCalls as $func => $queryFunc)
 		{
@@ -319,7 +305,7 @@ class QueryIncludesTest extends TestCase
 
 			$query->shouldReceive($method)->once();
 
-			$func($args);
+			$query->$method($args);
 		}
 
 		unset($KANSO_QUERY);

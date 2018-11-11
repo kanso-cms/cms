@@ -5,14 +5,16 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\cms\query\methods;
+namespace kanso\cms\query\helpers;
+
+use kanso\cms\query\helpers\Helper;
 
 /**
  * CMS Query tag methods.
  *
  * @author Joe J. Howard
  */
-trait Tag
+class Tag extends Helper
 {
     /**
      * Checks whether a given tag exists by the tag name or id.
@@ -27,7 +29,7 @@ trait Tag
 
         $tag_name = is_numeric($tag_name) ? intval($tag_name) : $tag_name;
 
-        return !empty($this->TagManager->provider()->byKey($index, $tag_name));
+        return !empty($this->container->get('TagManager')->provider()->byKey($index, $tag_name));
     }
 
     /**
@@ -41,15 +43,15 @@ trait Tag
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
             if ($post)
             {
                 return $post->tags;
             }
         }
-        elseif (!empty($this->post))
+        elseif (!empty($this->parent->post))
         {
-            return $this->post->tags;
+            return $this->parent->post->tags;
         }
 
         return [];
@@ -67,16 +69,16 @@ trait Tag
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
                 return $this->listTags($post->tags, $glue);
             }
         }
-        elseif (!empty($this->post))
+        elseif (!empty($this->parent->post))
         {
-            return $this->listTags($this->post->tags, $glue);
+            return $this->listTags($this->parent->post->tags, $glue);
         }
 
         return '';
@@ -117,14 +119,14 @@ trait Tag
 
         if (!$tag_id)
         {
-            if (!empty($this->post))
+            if (!empty($this->parent->post))
             {
-                $tag = $this->post->tags[0];
+                $tag = $this->parent->post->tags[0];
             }
         }
         else
         {
-            $tag = $this->getTagById($tag_id);
+            $tag = $this->parent->helpers['cache']->getTagById($tag_id);
         }
 
         if ($tag)
@@ -148,21 +150,21 @@ trait Tag
 
         if (!$tag_id)
         {
-            if (!empty($this->post))
+            if (!empty($this->parent->post))
             {
-                $tag = $this->post->tags[0];
+                $tag = $this->parent->post->tags[0];
             }
         }
         else
         {
-            $tag = $this->getTagById($tag_id);
+            $tag = $this->parent->helpers['cache']->getTagById($tag_id);
         }
 
         if ($tag)
         {
-            $prefix = !empty($this->blog_location()) ? '/' . $this->blog_location() . '/' : '/';
+            $prefix = !empty($this->parent->blog_location()) ? '/' . $this->parent->blog_location() . '/' : '/';
 
-            return $this->Request->environment()->HTTP_HOST . $prefix . 'tag/' . $tag->slug . '/';
+            return $this->container->get('Request')->environment()->HTTP_HOST . $prefix . 'tag/' . $tag->slug . '/';
         }
 
         return false;
@@ -176,24 +178,24 @@ trait Tag
      */
     public function the_taxonomy()
     {
-        $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
 
-        if ($this->cache->has($key))
+        if ($this->parent->helpers['cache']->has($key))
         {
-            return $this->cache->get($key);
+            return $this->parent->helpers['cache']->get($key);
         }
 
-        if ($this->requestType === 'category')
+        if ($this->parent->requestType === 'category')
         {
-            return $this->cache->set($key, $this->CategoryManager->provider()->byKey('slug', $this->taxonomySlug, true));
+            return $this->parent->helpers['cache']->set($key, $this->container->get('CategoryManager')->provider()->byKey('slug', $this->parent->taxonomySlug, true));
         }
-        elseif ($this->requestType === 'tag')
+        elseif ($this->parent->requestType === 'tag')
         {
-            return $this->cache->set($key, $this->TagManager->provider()->byKey('slug', $this->taxonomySlug, true));
+            return $this->parent->helpers['cache']->set($key, $this->container->get('TagManager')->provider()->byKey('slug', $this->parent->taxonomySlug, true));
         }
-        elseif ($this->requestType === 'author')
+        elseif ($this->parent->requestType === 'author')
         {
-            return $this->cache->set($key, $this->UserManager->provider()->byKey('slug', $this->taxonomySlug, true));
+            return $this->parent->helpers['cache']->set($key, $this->container->get('UserManager')->provider()->byKey('slug', $this->parent->taxonomySlug, true));
         }
 
         return null;
@@ -207,23 +209,23 @@ trait Tag
      */
     public function all_the_tags(): array
     {
-        $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
 
-        if ($this->cache->has($key))
+        if ($this->parent->helpers['cache']->has($key))
         {
-            return $this->cache->get($key);
+            return $this->parent->helpers['cache']->get($key);
         }
 
         $tags = [];
 
-        $rows = $this->SQL->SELECT('id')->FROM('tags')->FIND_ALL();
+        $rows = $this->sql()->SELECT('id')->FROM('tags')->FIND_ALL();
 
         foreach ($rows as $row)
         {
-            $tags[] = $this->TagManager->byId($row['id']);
+            $tags[] = $this->container->get('TagManager')->byId($row['id']);
         }
 
-        return $this->cache->set($key, $tags);
+        return $this->parent->helpers['cache']->set($key, $tags);
     }
 
     /**
@@ -237,7 +239,7 @@ trait Tag
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
@@ -254,9 +256,9 @@ trait Tag
             return false;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            $tags = $this->post->tags;
+            $tags = $this->parent->post->tags;
 
             if (count($tags) === 1)
             {
@@ -278,18 +280,18 @@ trait Tag
      */
     public function the_tag_posts(int $tag_id, bool $published = true): array
     {
-        $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
 
-        if ($this->cache->has($key))
+        if ($this->parent->helpers['cache']->has($key))
         {
-            return $this->cache->get($key);
+            return $this->parent->helpers['cache']->get($key);
         }
 
-        if ($this->tag_exists($tag_id))
+        if ($this->parent->tag_exists($tag_id))
         {
-            return $this->cache->set($key, $this->PostManager->provider()->byKey('tags.id', $tag_id, false, $published));
+            return $this->parent->helpers['cache']->set($key, $this->container->get('PostManager')->provider()->byKey('tags.id', $tag_id, false, $published));
         }
 
-        return $this->cache->set($key, []);
+        return $this->parent->helpers['cache']->set($key, []);
     }
 }

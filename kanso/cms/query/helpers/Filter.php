@@ -5,8 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\cms\query\methods;
+namespace kanso\cms\query\helpers;
 
+use kanso\cms\query\helpers\Helper;
 use kanso\framework\utility\Str;
 
 /**
@@ -14,7 +15,7 @@ use kanso\framework\utility\Str;
  *
  * @author Joe J. Howard
  */
-trait Filter
+class Filter extends Helper
 {
     /**
      * Reset the internal properties to default.
@@ -23,27 +24,27 @@ trait Filter
      */
     public function reset()
     {
-        $this->pageIndex    = 0;
-        $this->postIndex    = -1;
-        $this->postCount    = 0;
-        $this->posts        = [];
-        $this->requestType  = null;
-        $this->queryStr     = null;
-        $this->post         = null;
-        $this->taxonomySlug = null;
-        $this->searchQuery  = null;
+        $this->parent->pageIndex    = 0;
+        $this->parent->postIndex    = -1;
+        $this->parent->postCount    = 0;
+        $this->parent->posts        = [];
+        $this->parent->requestType  = null;
+        $this->parent->queryStr     = null;
+        $this->parent->post         = null;
+        $this->parent->taxonomySlug = null;
+        $this->parent->searchQuery  = null;
     }
 
     /**
      * Fetch and set the currently requested page.
      *
-     * @access private
+     * @access public
      */
-    private function fetchPageIndex()
+    public function fetchPageIndex()
     {
-        $this->pageIndex = $this->Request->fetch('page');
+        $this->parent->pageIndex = $this->container->get('Request')->fetch('page');
 
-        $this->pageIndex = $this->pageIndex === 1 || $this->pageIndex === 0 ? 0 : $this->pageIndex-1;
+        $this->parent->pageIndex = $this->parent->pageIndex === 1 || $this->parent->pageIndex === 0 ? 0 : $this->parent->pageIndex-1;
     }
 
     /**
@@ -56,17 +57,17 @@ trait Filter
     {
         $this->reset();
 
-        $this->queryStr = trim($queryStr);
+        $this->parent->queryStr = trim($queryStr);
 
-        $this->posts = $this->queryParser->parseQuery($this->queryStr);
+        $this->parent->posts = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
 
-        $this->postCount = count($this->posts);
+        $this->parent->postCount = count($this->parent->posts);
 
-        $this->requestType = 'custom';
+        $this->parent->requestType = 'custom';
 
-        if (isset($this->posts[0]))
+        if (isset($this->parent->posts[0]))
         {
-            $this->post = $this->posts[0];
+            $this->parent->post = $this->parent->posts[0];
         }
     }
 
@@ -85,7 +86,7 @@ trait Filter
         $this->reset();
 
         // Reset the response to 200
-        $this->Response->status()->set(200);
+        $this->container->get('Response')->status()->set(200);
 
         // Reset the page index
         $this->fetchPageIndex();
@@ -156,9 +157,9 @@ trait Filter
         }
 
         // Set the_post so we're looking at the first item
-        if (isset($this->posts[0]))
+        if (isset($this->parent->posts[0]))
         {
-            $this->post = $this->posts[0];
+            $this->parent->post = $this->parent->posts[0];
         }
     }
 
@@ -171,17 +172,17 @@ trait Filter
      */
     private function filterHome(string $requestType): bool
     {
-        $perPage   = $this->Config->get('cms.posts_per_page');
-        $offset    = $this->pageIndex * $perPage;
+        $perPage   = $this->container->get('Config')->get('cms.posts_per_page');
+        $offset    = $this->parent->pageIndex * $perPage;
 
-        $this->requestType = $requestType;
-        $this->queryStr    = "post_status = published : post_type = post : orderBy = post_created, DESC : limit = $offset, $perPage";
-        $this->posts       = $this->queryParser->parseQuery($this->queryStr);
-        $this->postCount   = count($this->posts);
+        $this->parent->requestType = $requestType;
+        $this->parent->queryStr    = "post_status = published : post_type = post : orderBy = post_created, DESC : limit = $offset, $perPage";
+        $this->parent->posts       = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+        $this->parent->postCount   = count($this->parent->posts);
 
-        if ($this->postCount === 0)
+        if ($this->parent->postCount === 0)
         {
-            $this->Response->status()->set(404);
+            $this->container->get('Response')->status()->set(404);
 
             return false;
         }
@@ -198,33 +199,33 @@ trait Filter
      */
     private function filterSingle(string $requestType): bool
     {
-        $blogPrefix = $this->Config->get('cms.blog_location');
+        $blogPrefix = $this->container->get('Config')->get('cms.blog_location');
         $uri        = trim($this->container->Request->environment()->REQUEST_URI, '/');
         $postType   = $requestType === 'single' ? 'post' : Str::getAfterFirstChar($requestType, '-');
 
-        $this->requestType = $requestType;
+        $this->parent->requestType = $requestType;
 
-        if ($this->Request->fetch('query') === 'draft' && $this->Gatekeeper->isAdmin())
+        if ($this->container->get('Request')->fetch('query') === 'draft' && $this->container->get('Gatekeeper')->isAdmin())
         {
             $uri       = Str::queryFilterUri($uri);
             $uri       = !empty($blogPrefix) ? str_replace($blogPrefix . '/', '', $uri) : $uri;
-            $this->queryStr  = 'post_status = draft : post_type = ' . $postType . ' : post_slug = ' . $uri . '/';
-            $this->posts     = $this->queryParser->parseQuery($this->queryStr);
-            $this->postCount = count($this->posts);
+            $this->parent->queryStr  = 'post_status = draft : post_type = ' . $postType . ' : post_slug = ' . $uri . '/';
+            $this->parent->posts     = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+            $this->parent->postCount = count($this->parent->posts);
         }
         else
         {
             $uri = Str::getBeforeLastWord(Str::queryFilterUri($uri), '/feed');
             $uri = !empty($blogPrefix) ? str_replace($blogPrefix . '/', '', $uri) : $uri;
 
-            $this->queryStr  = 'post_status = published : post_type = ' . $postType . ' : post_slug = ' . $uri . '/';
-            $this->posts     = $this->queryParser->parseQuery($this->queryStr);
-            $this->postCount = count($this->posts);
+            $this->parent->queryStr  = 'post_status = published : post_type = ' . $postType . ' : post_slug = ' . $uri . '/';
+            $this->parent->posts     = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+            $this->parent->postCount = count($this->parent->posts);
         }
 
-        if ($this->postCount === 0)
+        if ($this->parent->postCount === 0)
         {
-            $this->Response->status()->set(404);
+            $this->container->get('Response')->status()->set(404);
 
             return false;
         }
@@ -241,26 +242,26 @@ trait Filter
     private function filterPage(): bool
     {
         $uri = trim($this->container->Request->environment()->REQUEST_URI, '/');
-        $this->requestType = 'page';
+        $this->parent->requestType = 'page';
 
-        if ($this->Request->fetch('query') === 'draft' && $this->Gatekeeper->isAdmin())
+        if ($this->container->get('Request')->fetch('query') === 'draft' && $this->container->get('Gatekeeper')->isAdmin())
         {
             $uri             = Str::queryFilterUri($uri);
-            $this->queryStr  = 'post_status = draft : post_type = page : post_slug = ' . $uri . '/';
-            $this->posts     = $this->queryParser->parseQuery($this->queryStr);
-            $this->postCount = count($this->posts);
+            $this->parent->queryStr  = 'post_status = draft : post_type = page : post_slug = ' . $uri . '/';
+            $this->parent->posts     = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+            $this->parent->postCount = count($this->parent->posts);
         }
         else
         {
             $uri = Str::getBeforeLastWord(Str::queryFilterUri($uri), '/feed');
-            $this->queryStr   = 'post_status = published : post_type = page : post_slug = ' . $uri . '/';
-            $this->posts      = $this->queryParser->parseQuery($this->queryStr);
-            $this->postCount  = count($this->posts);
+            $this->parent->queryStr   = 'post_status = published : post_type = page : post_slug = ' . $uri . '/';
+            $this->parent->posts      = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+            $this->parent->postCount  = count($this->parent->posts);
         }
 
-        if ($this->postCount === 0)
+        if ($this->parent->postCount === 0)
         {
-            $this->Response->status()->set(404);
+            $this->container->get('Response')->status()->set(404);
 
             return false;
         }
@@ -276,9 +277,9 @@ trait Filter
      */
     private function filterCategory(): bool
     {
-        $blogPrefix   = $this->Config->get('cms.blog_location');
-        $perPage      = $this->Config->get('cms.posts_per_page');
-        $offset       = $this->pageIndex * $perPage;
+        $blogPrefix   = $this->container->get('Config')->get('cms.blog_location');
+        $perPage      = $this->container->get('Config')->get('cms.posts_per_page');
+        $offset       = $this->parent->pageIndex * $perPage;
         $urlParts     = explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI));
         $isPage       = in_array('page', $urlParts);
         $isFeed       = in_array('feed', $urlParts);
@@ -314,36 +315,36 @@ trait Filter
         }
 
         // Get the last category slug
-        $lastCat = $this->CategoryManager->provider()->byKey('slug', array_values(array_slice($urlParts, -1))[0], true);
+        $lastCat = $this->container->get('CategoryManager')->provider()->byKey('slug', array_values(array_slice($urlParts, -1))[0], true);
 
         // Make sure the category exists
         if (!$lastCat)
         {
-            $this->Response->status()->set(404);
+            $this->container->get('Response')->status()->set(404);
 
             return false;
         }
 
         // Make sure the path to a nested category is correct
-        if (!$this->the_category_slug($lastCat->id) === implode('/', $urlParts))
+        if (!$this->parent->the_category_slug($lastCat->id) === implode('/', $urlParts))
         {
-            $this->Response->status()->set(404);
+            $this->container->get('Response')->status()->set(404);
 
             return false;
         }
 
-        $this->requestType  = 'category';
-        $this->taxonomySlug = array_pop($urlParts);
-        $this->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = ' . $this->taxonomySlug . " : limit = $offset, $perPage";
-        $this->posts        = $this->queryParser->parseQuery($this->queryStr);
-        $this->postCount    = count($this->posts);
+        $this->parent->requestType  = 'category';
+        $this->parent->taxonomySlug = array_pop($urlParts);
+        $this->parent->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = ' . $this->parent->taxonomySlug . " : limit = $offset, $perPage";
+        $this->parent->posts        = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+        $this->parent->postCount    = count($this->parent->posts);
 
         // If there are no posts and the page is more than 2 return false
-        if ($this->postCount === 0 && $this->pageIndex >= 1)
+        if ($this->parent->postCount === 0 && $this->parent->pageIndex >= 1)
         {
             $this->reset();
 
-            $this->Response->status()->set(404);
+            $this->container->get('Response')->status()->set(404);
 
             return false;
         }
@@ -359,32 +360,32 @@ trait Filter
      */
     private function filterTag(): bool
     {
-        $blogPrefix   = $this->Config->get('cms.blog_location');
-        $perPage      = $this->Config->get('cms.posts_per_page');
-        $offset       = $this->pageIndex * $perPage;
+        $blogPrefix   = $this->container->get('Config')->get('cms.blog_location');
+        $perPage      = $this->container->get('Config')->get('cms.posts_per_page');
+        $offset       = $this->parent->pageIndex * $perPage;
         $urlParts     = array_filter(explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI)));
 
-        $this->requestType  = 'tag';
-        $this->taxonomySlug = !empty($blogPrefix) ? $urlParts[2] : $urlParts[1];
-        $this->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC : tag_slug = ' . $this->taxonomySlug . " : limit = $offset, $perPage";
-        $this->posts        = $this->queryParser->parseQuery($this->queryStr);
-        $this->postCount    = count($this->posts);
+        $this->parent->requestType  = 'tag';
+        $this->parent->taxonomySlug = !empty($blogPrefix) ? $urlParts[2] : $urlParts[1];
+        $this->parent->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC : tag_slug = ' . $this->parent->taxonomySlug . " : limit = $offset, $perPage";
+        $this->parent->posts        = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+        $this->parent->postCount    = count($this->parent->posts);
 
         // If there are no posts and the page is more than 2 return false
-        if ($this->postCount === 0 && $this->pageIndex >= 1)
+        if ($this->parent->postCount === 0 && $this->parent->pageIndex >= 1)
         {
             $this->reset();
 
-            $this->Response->status()->set(404);
+            $this->container->get('Response')->status()->set(404);
 
             return false;
         }
 
-        if ($this->postCount === 0)
+        if ($this->parent->postCount === 0)
         {
-            if (!$this->SQL->SELECT('id')->FROM('tags')->WHERE('slug', '=', $this->taxonomySlug)->ROW())
+            if (!$this->sql()->SELECT('id')->FROM('tags')->WHERE('slug', '=', $this->parent->taxonomySlug)->ROW())
             {
-                $this->Response->status()->set(404);
+                $this->container->get('Response')->status()->set(404);
 
                 return false;
             }
@@ -401,33 +402,33 @@ trait Filter
      */
     private function filterAuthor(): bool
     {
-        $blogPrefix   = $this->Config->get('cms.blog_location');
-        $perPage      = $this->Config->get('cms.posts_per_page');
-        $offset       = $this->pageIndex * $perPage;
+        $blogPrefix   = $this->container->get('Config')->get('cms.blog_location');
+        $perPage      = $this->container->get('Config')->get('cms.posts_per_page');
+        $offset       = $this->parent->pageIndex * $perPage;
         $urlParts     = array_filter(explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI)));
 
-        $this->requestType  = 'author';
-        $this->taxonomySlug = !empty($blogPrefix) ? $urlParts[2] : $urlParts[1];
-        $this->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC: author_slug = ' . $this->taxonomySlug . ": limit = $offset, $perPage";
-        $this->posts        = $this->queryParser->parseQuery($this->queryStr);
-        $this->postCount    = count($this->posts);
+        $this->parent->requestType  = 'author';
+        $this->parent->taxonomySlug = !empty($blogPrefix) ? $urlParts[2] : $urlParts[1];
+        $this->parent->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC: author_slug = ' . $this->parent->taxonomySlug . ": limit = $offset, $perPage";
+        $this->parent->posts        = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+        $this->parent->postCount    = count($this->parent->posts);
 
         // Double check if the author exists
         // and that they are an admin or writer
-        $role = $this->SQL->SELECT('role')->FROM('users')->WHERE('slug', '=', $this->taxonomySlug)->ROW();
+        $role = $this->sql()->SELECT('role')->FROM('users')->WHERE('slug', '=', $this->parent->taxonomySlug)->ROW();
 
         if ($role)
         {
             if ($role['role'] !== 'administrator' && $role['role'] !== 'writer')
             {
-                $this->Response->status()->set(404);
+                $this->container->get('Response')->status()->set(404);
 
                 return false;
             }
         }
         else
         {
-            $this->Response->status()->set(404);
+            $this->container->get('Response')->status()->set(404);
 
             return false;
         }
@@ -444,11 +445,11 @@ trait Filter
     private function filterSearch(): bool
     {
         $uri     = trim($this->container->Request->environment()->REQUEST_URI, '/');
-        $perPage = $this->Config->get('cms.posts_per_page');
-        $offset  = $this->pageIndex * $perPage;
+        $perPage = $this->container->get('Config')->get('cms.posts_per_page');
+        $offset  = $this->parent->pageIndex * $perPage;
 
         // Get the query
-        $query = $this->Request->queries('q');
+        $query = $this->container->get('Request')->queries('q');
 
         if (!$query || empty(trim($query)))
         {
@@ -463,21 +464,21 @@ trait Filter
         if (!$query || empty(trim($query)))
         {
             // Empty search results
-            $this->queryStr    = '';
-            $this->posts       = [];
-            $this->postCount   = count($this->posts);
-            $this->searchQuery = '';
-            $this->requestType = 'search';
+            $this->parent->queryStr    = '';
+            $this->parent->posts       = [];
+            $this->parent->postCount   = count($this->parent->posts);
+            $this->parent->searchQuery = '';
+            $this->parent->requestType = 'search';
 
             return true;
         }
 
         // Filter the posts
-        $this->queryStr    = "post_status = published : post_type != page : orderBy = post_created, DESC : post_title LIKE $query : limit = $offset, $perPage";
-        $this->posts       = $this->queryParser->parseQuery($this->queryStr);
-        $this->postCount   = count($this->posts);
-        $this->searchQuery = $query;
-        $this->requestType = 'search';
+        $this->parent->queryStr    = "post_status = published : post_type != page : orderBy = post_created, DESC : post_title LIKE $query : limit = $offset, $perPage";
+        $this->parent->posts       = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+        $this->parent->postCount   = count($this->parent->posts);
+        $this->parent->searchQuery = $query;
+        $this->parent->requestType = 'search';
 
         return true;
     }
@@ -490,17 +491,17 @@ trait Filter
      */
     private function filterAttachment(): bool
     {
-        $blogPrefix      = $this->Config->get('cms.blog_location');
+        $blogPrefix      = $this->container->get('Config')->get('cms.blog_location');
         $urlParts        = array_filter(explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI)));
 
         $attachmentName  = !empty($blogPrefix) ? $urlParts[2] : $urlParts[1];
         $attachmentSlug  = Str::getBeforeLastChar($attachmentName, '.');
         $attachemmentExt = Str::getAfterLastChar($attachmentName, '.');
-        $uploadsUrl      = str_replace($this->Request->environment()->DOCUMENT_ROOT, $this->Request->environment()->HTTP_HOST, $this->Config->get('cms.uploads.path'));
+        $uploadsUrl      = str_replace($this->container->get('Request')->environment()->DOCUMENT_ROOT, $this->container->get('Request')->environment()->HTTP_HOST, $this->container->get('Config')->get('cms.uploads.path'));
         $isImage         = in_array($attachemmentExt, ['jpg', 'jpeg', 'png', 'gif']);
-        $thumbnailSizes  = array_keys($this->Config->get('cms.uploads.thumbnail_sizes'));
+        $thumbnailSizes  = array_keys($this->container->get('Config')->get('cms.uploads.thumbnail_sizes'));
         $attachmentURL   = $uploadsUrl . '/' . $attachmentSlug . '.' . $attachemmentExt;
-        $attachment      = $this->MediaManager->provider()->byKey('url', $attachmentURL, true);
+        $attachment      = $this->container->get('MediaManager')->provider()->byKey('url', $attachmentURL, true);
         $attachmentSize  = 'original';
 
         // We may need to check if the attachment exists but we are requesting a sized version
@@ -511,7 +512,7 @@ trait Filter
                 if (Str::contains($attachmentSlug, '_' . $suffix))
                 {
                     $attachmentURL = $uploadsUrl . '/' . Str::getBeforeLastWord($attachmentSlug, '_' . $suffix) . '.' . $attachemmentExt;
-                    $attachment    = $this->MediaManager->provider()->byKey('url', $attachmentURL, true);
+                    $attachment    = $this->container->get('MediaManager')->provider()->byKey('url', $attachmentURL, true);
                     if ($attachment)
                     {
                         $attachmentSize = $suffix;
@@ -523,7 +524,7 @@ trait Filter
         // 404 If the attachment does not exist
         if (!$attachment)
         {
-            $this->Response->status()->set(404);
+            $this->container->get('Response')->status()->set(404);
 
             return false;
         }
@@ -541,13 +542,13 @@ trait Filter
             'comments_enabled' => -1,
         ];
 
-        $this->attachmentSize = $attachmentSize;
-        $this->attachmentURL  = $attachmentURL;
+        $this->parent->attachmentSize = $attachmentSize;
+        $this->parent->attachmentURL  = $attachmentURL;
 
-        $this->queryStr    = '';
-        $this->posts       = [$this->PostManager->provider()->newPost($postRow)];
-        $this->postCount   = count($this->posts);
-        $this->requestType = 'attachment';
+        $this->parent->queryStr    = '';
+        $this->parent->posts       = [$this->container->get('PostManager')->provider()->newPost($postRow)];
+        $this->parent->postCount   = count($this->parent->posts);
+        $this->parent->requestType = 'attachment';
 
         return true;
     }
@@ -561,10 +562,10 @@ trait Filter
      */
     private function filterSitemap(): bool
     {
-        $this->requestType = 'sitemap';
-        $this->queryStr    = 'post_status = published : post_type = post : orderBy = post_created';
-        $this->posts       = $this->queryParser->parseQuery($this->queryStr);
-        $this->postCount   = count($this->posts);
+        $this->parent->requestType = 'sitemap';
+        $this->parent->queryStr    = 'post_status = published : post_type = post : orderBy = post_created';
+        $this->parent->posts       = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+        $this->parent->postCount   = count($this->parent->posts);
 
         return true;
     }
@@ -579,7 +580,7 @@ trait Filter
      */
     private function childrenCategories(int $parentId, array $slugs = [])
     {
-        $children = $this->SQL->SELECT('*')->FROM('categories')->WHERE('parent_id', '=', $parentId)->FIND_ALL();
+        $children = $this->sql()->SELECT('*')->FROM('categories')->WHERE('parent_id', '=', $parentId)->FIND_ALL();
 
         foreach ($children as $child)
         {

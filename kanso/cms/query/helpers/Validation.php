@@ -5,8 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\cms\query\methods;
+namespace kanso\cms\query\helpers;
 
+use kanso\cms\query\helpers\Helper;
 use kanso\framework\utility\Str;
 
 /**
@@ -14,7 +15,7 @@ use kanso\framework\utility\Str;
  *
  * @author Joe J. Howard
  */
-trait Validation
+class Validation extends Helper
 {
     /**
      * Get the currently logged in Kanso user (if any).
@@ -24,7 +25,7 @@ trait Validation
      */
     public function user()
     {
-        return $this->Gatekeeper->getUser();
+        return $this->container->get('Gatekeeper')->getUser();
     }
 
     /**
@@ -35,7 +36,7 @@ trait Validation
      */
     public function is_loggedIn(): bool
     {
-        return $this->Gatekeeper->isLoggedIn();
+        return $this->container->get('Gatekeeper')->isLoggedIn();
     }
 
     /**
@@ -46,7 +47,7 @@ trait Validation
      */
     public function user_is_admin(): bool
     {
-        return $this->Gatekeeper->isAdmin();
+        return $this->container->get('Gatekeeper')->isAdmin();
     }
 
     /**
@@ -57,12 +58,12 @@ trait Validation
      */
     public function the_page_type(): string
     {
-        if (empty($this->requestType))
+        if (empty($this->parent->requestType))
         {
             return '';
         }
 
-        return $this->requestType;
+        return $this->parent->requestType;
     }
 
     /**
@@ -73,7 +74,7 @@ trait Validation
      */
     public function is_single(): bool
     {
-        return $this->requestType === 'single';
+        return $this->parent->requestType === 'single';
     }
 
     /**
@@ -84,12 +85,12 @@ trait Validation
      */
     public function is_custom_post(): bool
     {
-        if (empty($this->requestType))
+        if (empty($this->parent->requestType))
         {
             return false;
         }
 
-        return Str::getBeforeFirstChar($this->requestType, '-') === 'single' && !$this->is_single();
+        return Str::getBeforeFirstChar($this->parent->requestType, '-') === 'single' && !$this->parent->is_single();
     }
 
     /**
@@ -100,7 +101,7 @@ trait Validation
      */
     public function is_home(): bool
     {
-        return $this->requestType === 'home';
+        return $this->parent->requestType === 'home';
     }
 
     /**
@@ -111,7 +112,7 @@ trait Validation
      */
     public function is_blog_location(): bool
     {
-        return $this->requestType === 'home-page';
+        return $this->parent->requestType === 'home-page';
     }
 
     /**
@@ -122,7 +123,7 @@ trait Validation
      */
     function is_front_page(): bool
     {
-       return $this->pageIndex === 0;
+       return $this->parent->pageIndex === 0;
     }
 
     /**
@@ -136,7 +137,7 @@ trait Validation
     {
         if ($slug)
         {
-            $uri = strtolower(Str::queryFilterUri($this->Request->environment()->REQUEST_URI));
+            $uri = strtolower(Str::queryFilterUri($this->container->get('Request')->environment()->REQUEST_URI));
 
             $slug = strtolower(trim($slug, '/'));
 
@@ -179,7 +180,7 @@ trait Validation
             return false;
         }
 
-        return $this->requestType === 'page';
+        return $this->parent->requestType === 'page';
     }
 
     /**
@@ -190,7 +191,7 @@ trait Validation
      */
     public function is_search(): bool
     {
-        return $this->requestType === 'search';
+        return $this->parent->requestType === 'search';
     }
 
     /**
@@ -201,7 +202,7 @@ trait Validation
      */
     public function is_tag(): bool
     {
-        return $this->requestType === 'tag';
+        return $this->parent->requestType === 'tag';
     }
 
     /**
@@ -212,7 +213,7 @@ trait Validation
      */
     public function is_category(): bool
     {
-        return $this->requestType === 'category';
+        return $this->parent->requestType === 'category';
     }
 
     /**
@@ -223,7 +224,7 @@ trait Validation
      */
     public function is_author(): bool
     {
-        return $this->requestType === 'author';
+        return $this->parent->requestType === 'author';
     }
 
     /**
@@ -234,7 +235,7 @@ trait Validation
      */
     public function is_admin(): bool
     {
-        return  $this->requestType === 'admin';
+        return  $this->parent->requestType === 'admin';
     }
 
     /**
@@ -245,7 +246,7 @@ trait Validation
      */
     public function is_attachment(): bool
     {
-        return  $this->requestType === 'attachment';
+        return  $this->parent->requestType === 'attachment';
     }
 
     /**
@@ -256,6 +257,6 @@ trait Validation
      */
     public function is_not_found(): bool
     {
-        return $this->Response->status()->get() === 404;
+        return $this->container->get('Response')->status()->get() === 404;
     }
 }

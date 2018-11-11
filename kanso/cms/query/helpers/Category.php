@@ -5,14 +5,16 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\cms\query\methods;
+namespace kanso\cms\query\helpers;
+
+use kanso\cms\query\helpers\Helper;
 
 /**
  * CMS Query category methods.
  *
  * @author Joe J. Howard
  */
-trait Category
+class Category extends Helper
 {
     /**
      * Checks whether a given category exists by the category name or id.
@@ -27,7 +29,7 @@ trait Category
 
         $category_name = is_numeric($category_name) ? intval($category_name) : $category_name;
 
-        return !empty($this->CategoryManager->provider()->byKey($index, $category_name));
+        return !empty($this->container->get('CategoryManager')->provider()->byKey($index, $category_name));
     }
 
     /**
@@ -41,7 +43,7 @@ trait Category
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
@@ -49,9 +51,9 @@ trait Category
             }
         }
 
-        elseif (!empty($this->post))
+        elseif (!empty($this->parent->post))
         {
-            return $this->post->categories[0];
+            return $this->parent->post->categories[0];
         }
 
         return null;
@@ -66,7 +68,7 @@ trait Category
      */
     public function the_category_name(int $post_id = null)
     {
-        $category = $this->the_category($post_id);
+        $category = $this->parent->the_category($post_id);
 
         if ($category)
         {
@@ -89,7 +91,7 @@ trait Category
 
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
@@ -97,9 +99,9 @@ trait Category
             }
         }
 
-        elseif (!empty($this->post))
+        elseif (!empty($this->parent->post))
         {
-            $categories = $this->post->categories;
+            $categories = $this->parent->post->categories;
         }
 
         if ($categories && isset($categories[0]))
@@ -139,16 +141,16 @@ trait Category
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
-                return $this->listCategories($this->the_categories($post->id), $glue);
+                return $this->listCategories($this->parent->the_categories($post->id), $glue);
             }
         }
-        elseif (!empty($this->post))
+        elseif (!empty($this->parent->post))
         {
-            return $this->listCategories($this->the_categories($this->post->id), $glue);
+            return $this->listCategories($this->parent->the_categories($this->parent->post->id), $glue);
         }
 
         return '';
@@ -189,14 +191,14 @@ trait Category
 
         if (!$category_id)
         {
-            if (!empty($this->post))
+            if (!empty($this->parent->post))
             {
-                $category = $this->post->category;
+                $category = $this->parent->post->category;
             }
         }
         else
         {
-            $category = $this->getCategoryById($category_id);
+            $category = $this->parent->helpers['cache']->getCategoryById($category_id);
         }
 
         if ($category)
@@ -234,13 +236,13 @@ trait Category
      */
     public function the_category_url(int $category_id = null)
     {
-        $slug = $this->the_category_slug($category_id);
+        $slug = $this->parent->the_category_slug($category_id);
 
         if ($slug)
         {
-            $prefix = !empty($this->blog_location()) ? '/' . $this->blog_location() . '/' : '/';
+            $prefix = !empty($this->parent->blog_location()) ? '/' . $this->parent->blog_location() . '/' : '/';
 
-            return $this->Request->environment()->HTTP_HOST . $prefix . 'category/' . $slug . '/';
+            return $this->container->get('Request')->environment()->HTTP_HOST . $prefix . 'category/' . $slug . '/';
         }
 
         return null;
@@ -254,23 +256,23 @@ trait Category
      */
     public function all_the_categories(): array
     {
-        $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
 
-        if ($this->cache->has($key))
+        if ($this->parent->helpers['cache']->has($key))
         {
-            return $this->cache->get($key);
+            return $this->parent->helpers['cache']->get($key);
         }
 
         $categories = [];
 
-        $rows = $this->SQL->SELECT('id')->FROM('categories')->FIND_ALL();
+        $rows = $this->sql()->SELECT('id')->FROM('categories')->FIND_ALL();
 
         foreach ($rows as $row)
         {
-            $categories[] = $this->CategoryManager->byId($row['id']);
+            $categories[] = $this->container->get('CategoryManager')->byId($row['id']);
         }
 
-        return $this->cache->set($key, $categories);
+        return $this->parent->helpers['cache']->set($key, $categories);
     }
 
     /**
@@ -284,7 +286,7 @@ trait Category
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
@@ -301,9 +303,9 @@ trait Category
             return false;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            $categories = $this->post->categories;
+            $categories = $this->parent->post->categories;
 
             if (count($categories) === 1)
             {
@@ -325,18 +327,18 @@ trait Category
      */
     public function the_category_posts(int $category_id, bool $published = true): array
     {
-        $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
 
-        if ($this->cache->has($key))
+        if ($this->parent->helpers['cache']->has($key))
         {
-            return $this->cache->get($key);
+            return $this->parent->helpers['cache']->get($key);
         }
 
-        if ($this->category_exists($category_id))
+        if ($this->parent->category_exists($category_id))
         {
-            return $this->cache->set($key, $this->create('post_status = published : category_id = ' . $category_id)->the_posts());
+            return $this->parent->helpers['cache']->set($key, $this->parent->create('post_status = published : category_id = ' . $category_id)->the_posts());
         }
 
-        return $this->cache->set($key, []);
+        return $this->parent->helpers['cache']->set($key, []);
     }
 }

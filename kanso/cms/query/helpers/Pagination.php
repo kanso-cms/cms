@@ -5,8 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\cms\query\methods;
+namespace kanso\cms\query\helpers;
 
+use kanso\cms\query\helpers\Helper;
 use kanso\framework\utility\Arr;
 use kanso\framework\utility\Str;
 
@@ -15,7 +16,7 @@ use kanso\framework\utility\Str;
  *
  * @author Joe J. Howard
  */
-trait Pagination
+class Pagination extends Helper
 {
     /**
      * Build the pagination links for the current page.
@@ -29,7 +30,7 @@ trait Pagination
     {
         // Default options
         $options = [
-          'base'               => $this->Request->environment()->HTTP_HOST,
+          'base'               => $this->container->get('Request')->environment()->HTTP_HOST,
           'format'             => '<li class="(:class)"><a href="(:link)">(:num)</a></li>',
           'format_disabled'    => '<li class="(:class)"><span>(:num)</span></li>',
           'white_space'        => ' ',
@@ -44,20 +45,20 @@ trait Pagination
         ];
 
         // Segment the reuest URI
-        $uri = explode('/', Str::queryFilterUri($this->Request->environment()->REQUEST_URI));
+        $uri = explode('/', Str::queryFilterUri($this->container->get('Request')->environment()->REQUEST_URI));
 
         // Declare the pagination string
         $pagination = '';
 
         // Count the posts
-        $posts = $this->queryParser->countQuery($this->queryStr);
-        $pages = Arr::paginate($posts, $this->pageIndex, $this->Config->get('cms.posts_per_page'));
+        $posts = $this->parent->helpers['parser']->countQuery($this->parent->queryStr);
+        $pages = Arr::paginate($posts, $this->parent->pageIndex, $this->container->get('Config')->get('cms.posts_per_page'));
 
         // If no args were defined, Kanso will figure it out for us
         if (!$args || !isset($args['current']) || !isset($args['total']))
         {
             // pages here are used as for an array so +1
-            $options['current'] = $this->pageIndex === 0 ? 1 : $this->pageIndex+1;
+            $options['current'] = $this->parent->pageIndex === 0 ? 1 : $this->parent->pageIndex+1;
 
             $options['total'] = is_array($pages) ? count($pages) : 1;
         }
@@ -78,7 +79,7 @@ trait Pagination
         $options['base'] = rtrim($options['base'], '/');
 
         // Update the base url depending on the page type
-        $options['base'] = $this->base_url();
+        $options['base'] = $this->parent->base_url();
 
         // loop always at the current minus the context, minus 1
         $loopStart  = ($options['current'] - $options['context']);

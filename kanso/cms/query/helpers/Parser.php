@@ -1,11 +1,10 @@
 <?php
 
-namespace kanso\cms\query;
+namespace kanso\cms\query\helpers;
 
 use InvalidArgumentException;
-use kanso\cms\wrappers\providers\PostProvider;
-use kanso\framework\database\query\Builder;
 use kanso\framework\utility\Str;
+use kanso\cms\query\helpers\Helper;
 
 /**
  * Query Parser.
@@ -13,22 +12,8 @@ use kanso\framework\utility\Str;
  * This class is used by \kanso\query\Query to parse a string
  * query on the the database and return the results
  */
-class QueryParser
+class Parser extends Helper
 {
-    /**
-     * SQL query builder instance.
-     *
-     * @var \kanso\framework\database\query\Builder
-     */
-    private $SQL;
-
-    /**
-     * Post provider.
-     *
-     * @var \kanso\cms\wrappers\providers\PostProvider
-     */
-    private $postProvider;
-
     /**
      * The input query to parse.
      *
@@ -56,7 +41,15 @@ class QueryParser
      *
      * @var array
      */
-    private $queryVarsDefaults;
+    private $queryVarsDefaults = 
+    [
+        'FROM'         => 'posts',
+        'SELECT'       => [],
+        'AND_WHERE'    => [],
+        'OR_WHERE'     => [],
+        'ORDER_BY'     => [],
+        'LIMIT'        => [],
+    ];
 
     /**
      * Accepted logical operators.
@@ -103,22 +96,6 @@ class QueryParser
         'author_gplus'    => 'users.gplus',
         'author_thumbnail'=> 'users.thumbnail',
     ];
-
-    /**
-     * Constructor.
-     *
-     * @access public
-     * @param \kanso\framework\database\query\Builder    $SQL          SQL query builder
-     * @param \kanso\cms\wrappers\providers\PostProvider $postProvider Post provider instance
-     */
-    public function __construct(Builder $SQL, postProvider $postProvider)
-    {
-        $this->SQL = $SQL;
-
-        $this->postProvider = $postProvider;
-
-        $this->queryVarsDefaults = $this->queryVars;
-    }
 
     /**
      * Parse a query and return the posts.
@@ -262,7 +239,7 @@ class QueryParser
                 $keys     = array_flip(self::$acceptedKeys);
                 $key      = $keys[$query['field']];
                 $key      = Str::getAfterLastChar($key, '_');
-                $category = $this->SQL->SELECT('*')->FROM('categories')->WHERE($key, '=', $query['val'])->ROW();
+                $category = $this->sql()->SELECT('*')->FROM('categories')->WHERE($key, '=', $query['val'])->ROW();
                 $children = [];
 
                 if ($category)
@@ -293,9 +270,9 @@ class QueryParser
      */
     private function executeQuery(): array
     {
-        $this->SQL->SELECT('posts.id');
+        $this->sql()->SELECT('posts.id');
 
-        $this->SQL->FROM($this->queryVars['FROM']);
+        $this->sql()->FROM($this->queryVars['FROM']);
 
         if (!empty($this->queryVars['AND_WHERE']))
         {
@@ -306,7 +283,7 @@ class QueryParser
                     $condition['val'] = '%' . str_replace('%', '', $condition['val']) . '%';
                 }
 
-                $this->SQL->AND_WHERE($condition['field'], $condition['op'], $condition['val']);
+                $this->sql()->AND_WHERE($condition['field'], $condition['op'], $condition['val']);
             }
         }
 
@@ -319,42 +296,42 @@ class QueryParser
                     $condition['val'] = '%' . str_replace('%', '', $condition['val']) . '%';
                 }
 
-                $this->SQL->OR_WHERE($condition['field'], $condition['op'], $condition['val']);
+                $this->sql()->OR_WHERE($condition['field'], $condition['op'], $condition['val']);
             }
         }
 
-        $this->SQL->LEFT_JOIN_ON('users', 'users.id = posts.author_id');
+        $this->sql()->LEFT_JOIN_ON('users', 'users.id = posts.author_id');
 
-        $this->SQL->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id');
+        $this->sql()->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id');
 
-        $this->SQL->LEFT_JOIN_ON('categories_to_posts', 'posts.id = categories_to_posts.post_id');
+        $this->sql()->LEFT_JOIN_ON('categories_to_posts', 'posts.id = categories_to_posts.post_id');
 
-        $this->SQL->LEFT_JOIN_ON('categories', 'categories.id = categories_to_posts.category_id');
+        $this->sql()->LEFT_JOIN_ON('categories', 'categories.id = categories_to_posts.category_id');
 
-        $this->SQL->LEFT_JOIN_ON('tags_to_posts', 'posts.id = tags_to_posts.post_id');
+        $this->sql()->LEFT_JOIN_ON('tags_to_posts', 'posts.id = tags_to_posts.post_id');
 
-        $this->SQL->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id');
+        $this->sql()->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id');
 
-        $this->SQL->GROUP_BY('posts.id');
+        $this->sql()->GROUP_BY('posts.id');
 
         if (!empty($this->queryVars['ORDER_BY']))
         {
-            $this->SQL->ORDER_BY($this->queryVars['ORDER_BY'][0], $this->queryVars['ORDER_BY'][1]);
+            $this->sql()->ORDER_BY($this->queryVars['ORDER_BY'][0], $this->queryVars['ORDER_BY'][1]);
         }
 
         if (!empty($this->queryVars['LIMIT']))
         {
             if (isset($this->queryVars['LIMIT'][1]))
             {
-                $this->SQL->LIMIT($this->queryVars['LIMIT'][0], $this->queryVars['LIMIT'][1]);
+                $this->sql()->LIMIT($this->queryVars['LIMIT'][0], $this->queryVars['LIMIT'][1]);
             }
             else
             {
-                $this->SQL->LIMIT($this->queryVars['LIMIT'][0]);
+                $this->sql()->LIMIT($this->queryVars['LIMIT'][0]);
             }
         }
 
-        $articles = $this->SQL->FIND_ALL();
+        $articles = $this->sql()->FIND_ALL();
 
         $aticleObjs = [];
 
@@ -362,7 +339,7 @@ class QueryParser
         {
             foreach ($articles as $row)
             {
-                $aticleObjs[] = $this->postProvider->byId($row['id']);
+                $aticleObjs[] = $this->container->get('PostManager')->provider()->byId($row['id']);
             }
         }
 
@@ -392,9 +369,9 @@ class QueryParser
         // Parse the query and execute the chain
         $this->parse();
 
-        $this->SQL->SELECT('posts.id');
+        $this->sql()->SELECT('posts.id');
 
-        $this->SQL->FROM($this->queryVars['FROM']);
+        $this->sql()->FROM($this->queryVars['FROM']);
 
         if (!empty($this->queryVars['AND_WHERE']))
         {
@@ -405,7 +382,7 @@ class QueryParser
                     $condition['val'] = '%' . str_replace('%', '', $condition['val']) . '%';
                 }
 
-                $this->SQL->AND_WHERE($condition['field'], $condition['op'], $condition['val']);
+                $this->sql()->AND_WHERE($condition['field'], $condition['op'], $condition['val']);
             }
         }
 
@@ -418,30 +395,30 @@ class QueryParser
                     $condition['val'] = '%' . str_replace('%', '', $condition['val']) . '%';
                 }
 
-                $this->SQL->OR_WHERE($condition['field'], $condition['op'], $condition['val']);
+                $this->sql()->OR_WHERE($condition['field'], $condition['op'], $condition['val']);
             }
         }
 
-        $this->SQL->LEFT_JOIN_ON('users', 'users.id = posts.author_id');
+        $this->sql()->LEFT_JOIN_ON('users', 'users.id = posts.author_id');
 
-        $this->SQL->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id');
+        $this->sql()->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id');
 
-        $this->SQL->LEFT_JOIN_ON('categories_to_posts', 'posts.id = categories_to_posts.post_id');
+        $this->sql()->LEFT_JOIN_ON('categories_to_posts', 'posts.id = categories_to_posts.post_id');
 
-        $this->SQL->LEFT_JOIN_ON('categories', 'categories.id = categories_to_posts.category_id');
+        $this->sql()->LEFT_JOIN_ON('categories', 'categories.id = categories_to_posts.category_id');
 
-        $this->SQL->LEFT_JOIN_ON('tags_to_posts', 'posts.id = tags_to_posts.post_id');
+        $this->sql()->LEFT_JOIN_ON('tags_to_posts', 'posts.id = tags_to_posts.post_id');
 
-        $this->SQL->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id');
+        $this->sql()->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id');
 
-        $this->SQL->GROUP_BY('posts.id');
+        $this->sql()->GROUP_BY('posts.id');
 
         if (!empty($this->queryVars['ORDER_BY']))
         {
-            $this->SQL->ORDER_BY($this->queryVars['ORDER_BY'][0], $this->queryVars['ORDER_BY'][1]);
+            $this->sql()->ORDER_BY($this->queryVars['ORDER_BY'][0], $this->queryVars['ORDER_BY'][1]);
         }
 
-        return $this->SQL->FIND_ALL();
+        return $this->sql()->FIND_ALL();
     }
 
     /**
@@ -578,7 +555,7 @@ class QueryParser
      */
     private function recursiveCategoryChildren(int $parent_id, array $categories = []): array
     {
-        $children = $this->SQL->SELECT('*')->FROM('categories')->WHERE('parent_id', '=', $parent_id)->FIND_ALL();
+        $children = $this->sql()->SELECT('*')->FROM('categories')->WHERE('parent_id', '=', $parent_id)->FIND_ALL();
 
         if (is_array($children) && count($children) > 0)
         {

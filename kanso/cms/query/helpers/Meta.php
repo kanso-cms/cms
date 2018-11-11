@@ -5,8 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\cms\query\methods;
+namespace kanso\cms\query\helpers;
 
+use kanso\cms\query\helpers\Helper;
 use kanso\framework\utility\Str;
 
 /**
@@ -14,7 +15,7 @@ use kanso\framework\utility\Str;
  *
  * @author Joe J. Howard
  */
-trait Meta
+class Meta extends Helper
 {
     /**
      * Get the website title from the config.
@@ -24,7 +25,7 @@ trait Meta
      */
     public function website_title(): string
     {
-        return $this->Config->get('cms.site_title');
+        return $this->container->get('Config')->get('cms.site_title');
     }
 
     /**
@@ -35,7 +36,7 @@ trait Meta
      */
     public function website_description(): string
     {
-        return $this->Config->get('cms.site_description');
+        return $this->container->get('Config')->get('cms.site_description');
     }
 
     /**
@@ -46,7 +47,7 @@ trait Meta
      */
     public function domain_name(): string
     {
-        return $this->Request->environment()->DOMAIN_NAME;
+        return $this->container->get('Request')->environment()->DOMAIN_NAME;
     }
 
     /**
@@ -57,24 +58,24 @@ trait Meta
      */
     public function the_meta_description(): string
     {
-        if ($this->is_not_found())
+        if ($this->parent->is_not_found())
         {
             return 'The page you are looking for could not be found.';
         }
 
-        $description = $this->website_description();
+        $description = $this->parent->website_description();
 
-        if ($this->is_single() || $this->is_page() || $this->is_custom_post())
+        if ($this->parent->is_single() || $this->parent->is_page() || $this->parent->is_custom_post())
         {
-            $description = $this->post->excerpt;
+            $description = $this->parent->post->excerpt;
         }
-        elseif ($this->is_tag() || $this->is_category() || $this->is_author())
+        elseif ($this->parent->is_tag() || $this->parent->is_category() || $this->parent->is_author())
         {
-            $description = $this->the_taxonomy()->description;
+            $description = $this->parent->the_taxonomy()->description;
         }
-        elseif ($this->is_search())
+        elseif ($this->parent->is_search())
         {
-            $description = 'Search Results for: ' . $this->search_query() . ' - ' . $this->website_title();
+            $description = 'Search Results for: ' . $this->parent->search_query() . ' - ' . $this->parent->website_title();
         }
 
         if (!$description)
@@ -93,28 +94,28 @@ trait Meta
      */
     public function the_meta_title(): string
     {
-        $uri        = explode('/', Str::queryFilterUri($this->Request->environment()->REQUEST_URI));
-        $titleBase  = $this->website_title();
-        $titlePage  = $this->pageIndex > 0 ? 'Page ' . ($this->pageIndex+1) . ' | ' : '';
+        $uri        = explode('/', Str::queryFilterUri($this->container->get('Request')->environment()->REQUEST_URI));
+        $titleBase  = $this->parent->website_title();
+        $titlePage  = $this->parent->pageIndex > 0 ? 'Page ' . ($this->parent->pageIndex+1) . ' | ' : '';
         $titleTitle = '';
 
-        if ($this->is_not_found())
+        if ($this->parent->is_not_found())
         {
             return 'Page Not Found';
         }
 
-        if ($this->is_single() || $this->is_page() || $this->is_custom_post())
+        if ($this->parent->is_single() || $this->parent->is_page() || $this->parent->is_custom_post())
         {
-            if ($this->have_posts())
+            if ($this->parent->have_posts())
             {
-                $titleTitle = $this->post->title . ' | ';
+                $titleTitle = $this->parent->post->title . ' | ';
             }
         }
-        elseif ($this->is_tag() || $this->is_category() || $this->is_author())
+        elseif ($this->parent->is_tag() || $this->parent->is_category() || $this->parent->is_author())
         {
-            $titleTitle = $this->the_taxonomy()->name . ' | ';
+            $titleTitle = $this->parent->the_taxonomy()->name . ' | ';
         }
-        elseif ($this->is_search())
+        elseif ($this->parent->is_search())
         {
             $titleTitle = 'Search Results | ';
         }
@@ -130,12 +131,12 @@ trait Meta
      */
     public function the_canonical_url(): string
     {
-        $urlParts = array_filter(explode('/', Str::queryFilterUri($this->Request->environment()->REQUEST_URI)));
+        $urlParts = array_filter(explode('/', Str::queryFilterUri($this->container->get('Request')->environment()->REQUEST_URI)));
         $last     = isset($urlParts[0]) ? array_values(array_slice($urlParts, -1))[0] : false;
 
         if (!$last || is_home())
         {
-            return $this->home_url();
+            return $this->parent->home_url();
         }
 
         if ($last === 'rss' || $last === 'rdf' || $last == 'atom')
@@ -148,7 +149,7 @@ trait Meta
             array_pop($urlParts);
         }
 
-        return $this->Request->environment()->HTTP_HOST . '/' . implode('/', $urlParts) . '/';
+        return $this->container->get('Request')->environment()->HTTP_HOST . '/' . implode('/', $urlParts) . '/';
     }
 
     /**
@@ -160,7 +161,7 @@ trait Meta
      */
     public function the_previous_page_title()
     {
-        $prev_page = $this->the_previous_page();
+        $prev_page = $this->parent->the_previous_page();
 
         if ($prev_page && isset($prev_page['title']))
         {
@@ -179,7 +180,7 @@ trait Meta
      */
     public function the_next_page_title()
     {
-        $next_page = $this->the_next_page();
+        $next_page = $this->parent->the_next_page();
 
         if ($next_page && isset($next_page['title']))
         {
@@ -199,11 +200,11 @@ trait Meta
      */
     public function the_next_page_url()
     {
-        $next_page = $this->the_next_page();
+        $next_page = $this->parent->the_next_page();
 
         if ($next_page && isset($next_page['slug']))
         {
-            return $this->Request->environment()->HTTP_HOST . '/' . $next_page['slug'];
+            return $this->container->get('Request')->environment()->HTTP_HOST . '/' . $next_page['slug'];
         }
 
         return false;
@@ -218,11 +219,11 @@ trait Meta
      */
     public function the_previous_page_url()
     {
-        $prev_page = $this->the_previous_page();
+        $prev_page = $this->parent->the_previous_page();
 
         if ($prev_page && isset($prev_page['slug']))
         {
-            return $this->Request->environment()->HTTP_HOST . '/' . $prev_page['slug'];
+            return $this->container->get('Request')->environment()->HTTP_HOST . '/' . $prev_page['slug'];
         }
 
         return false;
@@ -238,43 +239,43 @@ trait Meta
     public function the_previous_page()
     {
         // Not found don't bother
-        if ($this->is_not_found())
+        if ($this->parent->is_not_found())
         {
             return false;
         }
 
         // Get from the cache
-        $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
 
         // There are only next/prev pages for single, tags, category, author, and homepage
-        if (!in_array($this->requestType, ['single', 'home', 'home-page', 'tag', 'category', 'author']) && !$this->is_custom_post())
+        if (!in_array($this->parent->requestType, ['single', 'home', 'home-page', 'tag', 'category', 'author']) && !$this->parent->is_custom_post())
         {
-            return $this->cache->set($key, false);
+            return $this->parent->helpers['cache']->set($key, false);
         }
 
         // Load from cache if we can
-        if ($this->cache->has($key))
+        if ($this->parent->helpers['cache']->has($key))
         {
-            return $this->cache->get($key);
+            return $this->parent->helpers['cache']->get($key);
         }
 
         // If this is a single or custom post just find the next post
-        if ($this->is_single() || $this->is_custom_post())
+        if ($this->parent->is_single() || $this->parent->is_custom_post())
         {
-            return $this->cache->set($key, $this->findPrevPost($this->post));
+            return $this->parent->helpers['cache']->set($key, $this->findPrevPost($this->parent->post));
         }
 
         // This must now be a paginated page - tag, category, author or homepage listing
         // Get the current page + posts per page and check if there is a page before that
-        if ($this->pageIndex > 0)
+        if ($this->parent->pageIndex > 0)
         {
-            $perPage  = $this->Config->get('cms.posts_per_page');
-            $page     = $this->pageIndex - 1;
+            $perPage  = $this->container->get('Config')->get('cms.posts_per_page');
+            $page     = $this->parent->pageIndex - 1;
             $offset   = $page * $perPage;
             $limit    = 1;
-            $queryStr = preg_replace('/limit.+/', "limit = $offset, $limit", $this->queryStr);
+            $queryStr = preg_replace('/limit.+/', "limit = $offset, $limit", $this->parent->queryStr);
 
-            $posts    = $this->queryParser->parseQuery($queryStr);
+            $posts    = $this->parent->helpers['parser']->parseQuery($queryStr);
         }
         else
         {
@@ -283,47 +284,47 @@ trait Meta
 
         if (!empty($posts))
         {
-            $prevpage   = $this->pageIndex;
-            $uri        = explode('/', Str::queryFilterUri($this->Request->environment()->REQUEST_URI));
+            $prevpage   = $this->parent->pageIndex;
+            $uri        = explode('/', Str::queryFilterUri($this->container->get('Request')->environment()->REQUEST_URI));
 
-            $titleBase  = $this->website_title();
+            $titleBase  = $this->parent->website_title();
             $titlePage  = $prevpage > 1 ? 'Page ' . $prevpage . ' | ' : '';
             $titleTitle = '';
-            $base       = !empty($this->blog_location()) && ($this->is_tag() || $this->is_category() || $this->is_author() || $this->is_home() || $this->is_blog_location()) ? $this->blog_location() . '/' : '';
+            $base       = !empty($this->parent->blog_location()) && ($this->parent->is_tag() || $this->parent->is_category() || $this->parent->is_author() || $this->parent->is_home() || $this->parent->is_blog_location()) ? $this->parent->blog_location() . '/' : '';
 
-            if ($this->is_home())
+            if ($this->parent->is_home())
             {
-                if (!empty($this->blog_location()))
+                if (!empty($this->parent->blog_location()))
                 {
                     return false;
                 }
 
                 $slug = $prevpage > 1 ? 'page/' . $prevpage . '/' : '';
             }
-            elseif ($this->is_blog_location())
+            elseif ($this->parent->is_blog_location())
             {
                 $titleTitle = 'Blog | ';
                 $slug       = $prevpage > 1 ? $base . 'page/' . $prevpage . '/' : $base;
             }
-            elseif ($this->is_tag() || $this->is_category() || $this->is_author())
+            elseif ($this->parent->is_tag() || $this->parent->is_category() || $this->parent->is_author())
             {
-                $taxonomy   = $this->is_tag() ? 'tag' : 'author';
-                $taxonomy   = $this->is_category() ? 'category' : $taxonomy;
-                $titleTitle = $this->the_taxonomy()->name . ' | ';
-                $slug       = $prevpage > 1 ? $base . $taxonomy . '/' . $this->taxonomySlug . '/page/' . $prevpage . '/' : $base . $taxonomy . '/' . $this->taxonomySlug . '/';
+                $taxonomy   = $this->parent->is_tag() ? 'tag' : 'author';
+                $taxonomy   = $this->parent->is_category() ? 'category' : $taxonomy;
+                $titleTitle = $this->parent->the_taxonomy()->name . ' | ';
+                $slug       = $prevpage > 1 ? $base . $taxonomy . '/' . $this->parent->taxonomySlug . '/page/' . $prevpage . '/' : $base . $taxonomy . '/' . $this->parent->taxonomySlug . '/';
             }
-            elseif ($this->is_search())
+            elseif ($this->parent->is_search())
             {
                 $titleTitle = 'Search Results | ';
                 $slug       =  $prevpage > 1 ? $uri[0] . '/' . $uri[1] . '/page/' . $prevpage . '/' : $uri[0] . '/' . $uri[1] . '/';
             }
-            return $this->cache->set($key, [
+            return $this->parent->helpers['cache']->set($key, [
                 'title' => $titleTitle . $titlePage . $titleBase,
                 'slug'  => $slug,
             ]);
         }
 
-        return $this->cache->set($key, false);
+        return $this->parent->helpers['cache']->set($key, false);
     }
 
     /**
@@ -336,84 +337,84 @@ trait Meta
     public function the_next_page()
     {
         // Not found don't bother
-        if ($this->is_not_found())
+        if ($this->parent->is_not_found())
         {
             return false;
         }
 
         // Get for the cache
-        $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
 
         // There are only next/prev pages for single, tags, category, author, and homepage
-        if (!in_array($this->requestType, ['single', 'home', 'home-page', 'tag', 'category', 'author']) && !$this->is_custom_post())
+        if (!in_array($this->parent->requestType, ['single', 'home', 'home-page', 'tag', 'category', 'author']) && !$this->parent->is_custom_post())
         {
-            return $this->cache->set($key, false);
+            return $this->parent->helpers['cache']->set($key, false);
         }
 
         // Load from cache if we can
-        if ($this->cache->has($key))
+        if ($this->parent->helpers['cache']->has($key))
         {
-            return $this->cache->get($key);
+            return $this->parent->helpers['cache']->get($key);
         }
 
         // If this is a single or custom post just find the next post
-        if ($this->is_single() || $this->is_custom_post())
+        if ($this->parent->is_single() || $this->parent->is_custom_post())
         {
-            return $this->cache->set($key, $this->findNextPost($this->post));
+            return $this->parent->helpers['cache']->set($key, $this->findNextPost($this->parent->post));
         }
 
         // This must now be a paginated page - tag, category, author or homepage listing
         // Get the current page + posts per page and check if there is a page after that
-        $perPage  = $this->Config->get('cms.posts_per_page');
-        $page     = $this->pageIndex + 1;
+        $perPage  = $this->container->get('Config')->get('cms.posts_per_page');
+        $page     = $this->parent->pageIndex + 1;
         $offset   = $page * $perPage;
         $limit    = 1;
-        $queryStr = preg_replace('/limit.+/', "limit = $offset, $limit", $this->queryStr);
-        $posts    = $this->queryParser->parseQuery($queryStr);
-        $base     = !empty($this->blog_location()) && ($this->is_tag() || $this->is_category() || $this->is_author() || $this->is_home() || $this->is_blog_location()) ? $this->blog_location() . '/' : '';
+        $queryStr = preg_replace('/limit.+/', "limit = $offset, $limit", $this->parent->queryStr);
+        $posts    = $this->parent->helpers['parser']->parseQuery($queryStr);
+        $base     = !empty($this->parent->blog_location()) && ($this->parent->is_tag() || $this->parent->is_category() || $this->parent->is_author() || $this->parent->is_home() || $this->parent->is_blog_location()) ? $this->parent->blog_location() . '/' : '';
 
         if (!empty($posts))
         {
-            $nextPage   = $this->pageIndex + 2;
-            $uri        = explode('/', Str::queryFilterUri($this->Request->environment()->REQUEST_URI));
-            $titleBase  = $this->website_title();
+            $nextPage   = $this->parent->pageIndex + 2;
+            $uri        = explode('/', Str::queryFilterUri($this->container->get('Request')->environment()->REQUEST_URI));
+            $titleBase  = $this->parent->website_title();
             $titlePage  = $nextPage > 1 ? 'Page ' . $nextPage . ' | ' : '';
             $titleTitle = '';
 
-            if ($this->is_home())
+            if ($this->parent->is_home())
             {
-                if (!empty($this->blog_location()))
+                if (!empty($this->parent->blog_location()))
                 {
                     return false;
                 }
 
                 $slug = 'page/' . $nextPage . '/';
             }
-            elseif ($this->is_blog_location())
+            elseif ($this->parent->is_blog_location())
             {
                 $titleTitle = 'Blog | ';
                 $slug       = $base . 'page/' . $nextPage . '/';
             }
-            elseif ($this->is_tag() || $this->is_category() || $this->is_author())
+            elseif ($this->parent->is_tag() || $this->parent->is_category() || $this->parent->is_author())
             {
-                $taxonomy   = $this->is_tag() ? 'tag' : 'author';
-                $taxonomy   = $this->is_category() ? 'category' : $taxonomy;
-                $titleTitle = $this->the_taxonomy()->name . ' | ';
-                $titleTitle = $this->the_taxonomy()->name . ' | ';
-                $slug       = $base . $taxonomy . '/' . $this->taxonomySlug . '/page/' . $nextPage . '/';
+                $taxonomy   = $this->parent->is_tag() ? 'tag' : 'author';
+                $taxonomy   = $this->parent->is_category() ? 'category' : $taxonomy;
+                $titleTitle = $this->parent->the_taxonomy()->name . ' | ';
+                $titleTitle = $this->parent->the_taxonomy()->name . ' | ';
+                $slug       = $base . $taxonomy . '/' . $this->parent->taxonomySlug . '/page/' . $nextPage . '/';
             }
-            elseif ($this->is_search())
+            elseif ($this->parent->is_search())
             {
                 $titleTitle = 'Search Results | ';
                 $slug       = $uri[0] . '/' . $uri[1] . '/page/' . $nextPage . '/';
             }
-            return $this->cache->set($key, [
+            return $this->parent->helpers['cache']->set($key, [
                 'title' => $titleTitle . $titlePage . $titleBase,
                 'slug'  => $slug,
             ]);
         }
 
-        return $this->cache->set($key, false);
+        return $this->parent->helpers['cache']->set($key, false);
     }
 
     /**
@@ -430,7 +431,7 @@ trait Meta
             return false;
         }
 
-        $next = $this->SQL->SELECT('id')->FROM('posts')->WHERE('created', '>=', $post->created)->AND_WHERE('type', '=', $post->type)->AND_WHERE('status', '=', 'published')->ORDER_BY('created', 'ASC')->FIND_ALL();
+        $next = $this->sql()->SELECT('id')->FROM('posts')->WHERE('created', '>=', $post->created)->AND_WHERE('type', '=', $post->type)->AND_WHERE('status', '=', 'published')->ORDER_BY('created', 'ASC')->FIND_ALL();
 
         if (!empty($next))
         {
@@ -442,7 +443,7 @@ trait Meta
                 {
                     if (isset($next[$i+1]))
                     {
-                        return $this->SQL->SELECT('*')->FROM('posts')->AND_WHERE('type', '=', $post->type)->WHERE('id', '=', $next[$i+1]['id'])->ROW();
+                        return $this->sql()->SELECT('*')->FROM('posts')->AND_WHERE('type', '=', $post->type)->WHERE('id', '=', $next[$i+1]['id'])->ROW();
                     }
                 }
             }
@@ -465,7 +466,7 @@ trait Meta
             return false;
         }
 
-        $next = $this->SQL->SELECT('id')->FROM('posts')->WHERE('created', '<=', $post->created)->AND_WHERE('type', '=', $post->type)->AND_WHERE('status', '=', 'published')->ORDER_BY('created', 'DESC')->FIND_ALL();
+        $next = $this->sql()->SELECT('id')->FROM('posts')->WHERE('created', '<=', $post->created)->AND_WHERE('type', '=', $post->type)->AND_WHERE('status', '=', 'published')->ORDER_BY('created', 'DESC')->FIND_ALL();
 
         if (!empty($next))
         {
@@ -477,7 +478,7 @@ trait Meta
                 {
                     if (isset($next[$i+1]))
                     {
-                        return $this->SQL->SELECT('*')->FROM('posts')->AND_WHERE('type', '=', $post->type)->WHERE('id', '=', $next[$i+1]['id'])->ROW();
+                        return $this->sql()->SELECT('*')->FROM('posts')->AND_WHERE('type', '=', $post->type)->WHERE('id', '=', $next[$i+1]['id'])->ROW();
                     }
                 }
             }

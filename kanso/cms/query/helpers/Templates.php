@@ -5,14 +5,16 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\cms\query\methods;
+namespace kanso\cms\query\helpers;
+
+use kanso\cms\query\helpers\Helper;
 
 /**
  * CMS Query template methods.
  *
  * @author Joe J. Howard
  */
-trait Templates
+class Templates extends Helper
 {
     /**
      * Display the contents of header.php.
@@ -22,7 +24,7 @@ trait Templates
      */
     public function the_header(): string
     {
-        return $this->Response->view()->display($this->theme_directory() . DIRECTORY_SEPARATOR . 'header.php');
+        return $this->container->get('Response')->view()->display($this->parent->theme_directory() . DIRECTORY_SEPARATOR . 'header.php');
     }
 
     /**
@@ -33,7 +35,7 @@ trait Templates
      */
     public function the_footer(): string
     {
-        return $this->Response->view()->display($this->theme_directory() . DIRECTORY_SEPARATOR . 'footer.php');
+        return $this->container->get('Response')->view()->display($this->parent->theme_directory() . DIRECTORY_SEPARATOR . 'footer.php');
     }
 
     /**
@@ -44,7 +46,7 @@ trait Templates
      */
     public function the_sidebar(): string
     {
-        return $this->Response->view()->display($this->theme_directory() . DIRECTORY_SEPARATOR . 'sidebar.php');
+        return $this->container->get('Response')->view()->display($this->parent->theme_directory() . DIRECTORY_SEPARATOR . 'sidebar.php');
     }
 
     /**
@@ -57,11 +59,11 @@ trait Templates
      */
     public function include_template(string $template_name, array $data = []): string
     {
-        $template = $this->theme_directory() . DIRECTORY_SEPARATOR . $template_name . '.php';
+        $template = $this->parent->theme_directory() . DIRECTORY_SEPARATOR . $template_name . '.php';
 
         if (file_exists($template))
         {
-            return $this->Response->view()->display($template, $data);
+            return $this->container->get('Response')->view()->display($template, $data);
         }
 
         return '';

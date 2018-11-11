@@ -5,8 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\cms\query\methods;
+namespace kanso\cms\query\helpers;
 
+use kanso\cms\query\helpers\Helper;
 use kanso\framework\utility\Str;
 
 /**
@@ -14,7 +15,7 @@ use kanso\framework\utility\Str;
  *
  * @author Joe J. Howard
  */
-trait Author
+class Author extends Helper
 {
     /**
      * Get the author of the current post or a post by id.
@@ -27,19 +28,19 @@ trait Author
     {
         if ($post_id)
         {
-            $post = $this->getPostByID($post_id);
+            $post = $this->parent->helpers['cache']->getPostByID($post_id);
 
             if ($post)
             {
-                return $this->getAuthorById($post->author_id);
+                return $this->parent->helpers['cache']->getAuthorById($post->author_id);
             }
 
             return null;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            return $this->getAuthorById($this->post->author_id);
+            return $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
         }
 
         return null;
@@ -58,7 +59,7 @@ trait Author
 
         $author_name = is_numeric($author_name) ? intval($author_name) : $author_name;
 
-        $author = $this->UserManager->provider()->byKey($index, $tag_name);
+        $author = $this->container->get('UserManager')->provider()->byKey($index, $tag_name);
 
         if ($author)
         {
@@ -79,23 +80,23 @@ trait Author
     {
         if ($author_id)
         {
-            $author = $this->getAuthorById($author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
 
             if ($author)
             {
-                return !empty($this->getMediaById($author_id->thumbnail_id));
+                return !empty($this->parent->helpers['cache']->getMediaById($author_id->thumbnail_id));
             }
 
             return false;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            $author = $this->getAuthorById($this->post->author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
 
             if ($author)
             {
-                return !empty($this->getMediaById($author->thumbnail_id));
+                return !empty($this->parent->helpers['cache']->getMediaById($author->thumbnail_id));
             }
         }
 
@@ -113,7 +114,7 @@ trait Author
     {
         if ($author_id)
         {
-            $author = $this->getAuthorById($author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
 
             if ($author)
             {
@@ -123,9 +124,9 @@ trait Author
             return null;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            $author = $this->getAuthorById($this->post->author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
 
             if ($author)
             {
@@ -147,27 +148,27 @@ trait Author
     {
         if ($author_id)
         {
-            $author = $this->getAuthorById($author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
 
             if ($author)
             {
-                $prefix = !empty($this->blog_location()) ? '/' . $this->blog_location() . '/' : '/';
+                $prefix = !empty($this->parent->blog_location()) ? '/' . $this->parent->blog_location() . '/' : '/';
 
-                return $this->Request->environment()->HTTP_HOST . $prefix . 'author/' . $author->slug;
+                return $this->container->get('Request')->environment()->HTTP_HOST . $prefix . 'author/' . $author->slug;
             }
 
             return null;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            $author = $this->getAuthorById($this->post->author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
 
             if ($author)
             {
-                $prefix = !empty($this->blog_location()) ? '/' . $this->blog_location() . '/' : '/';
+                $prefix = !empty($this->parent->blog_location()) ? '/' . $this->parent->blog_location() . '/' : '/';
 
-                return $this->Request->environment()->HTTP_HOST . $prefix . 'author/' . $author->slug;
+                return $this->container->get('Request')->environment()->HTTP_HOST . $prefix . 'author/' . $author->slug;
             }
         }
 
@@ -185,24 +186,24 @@ trait Author
     {
         if ($author_id)
         {
-            $author = $this->getAuthorById($author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
 
             if ($author)
             {
-                return $this->getMediaById($author->thumbnail_id);
+                return $this->parent->helpers['cache']->getMediaById($author->thumbnail_id);
             }
 
             return null;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            $author = $this->getAuthorById($this->post->author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
 
             if ($author)
             {
 
-                return $this->getMediaById($author->thumbnail_id);
+                return $this->parent->helpers['cache']->getMediaById($author->thumbnail_id);
             }
 
             return null;
@@ -222,7 +223,7 @@ trait Author
     {
         if ($author_id)
         {
-            $author = $this->getAuthorById($author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
 
             if ($author)
             {
@@ -232,9 +233,9 @@ trait Author
             return null;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            $author = $this->getAuthorById($this->post->author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
 
             if ($author)
             {
@@ -257,7 +258,7 @@ trait Author
     {
         if ($author_id)
         {
-            $author = $this->getAuthorById($author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
 
             if ($author)
             {
@@ -267,9 +268,9 @@ trait Author
             return null;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            $author = $this->getAuthorById($this->post->author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
 
             if ($author)
             {
@@ -292,7 +293,7 @@ trait Author
     {
         if ($author_id)
         {
-            $author = $this->getAuthorById($author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
 
             if ($author)
             {
@@ -302,9 +303,9 @@ trait Author
             return null;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            $author = $this->getAuthorById($this->post->author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
 
             if ($author)
             {
@@ -327,7 +328,7 @@ trait Author
     {
         if ($author_id)
         {
-            $author = $this->getAuthorById($author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
 
             if ($author)
             {
@@ -337,9 +338,9 @@ trait Author
             return null;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            $author = $this->getAuthorById($this->post->author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
 
             if ($author)
             {
@@ -361,7 +362,7 @@ trait Author
     {
         if ($author_id)
         {
-            $author = $this->getAuthorById($author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
 
             if ($author)
             {
@@ -371,9 +372,9 @@ trait Author
             return false;
         }
 
-        if (!empty($this->post))
+        if (!empty($this->parent->post))
         {
-            $author = $this->getAuthorById($this->post->author_id);
+            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
             if ($author)
             {
                 return $author->instagram;
@@ -390,16 +391,16 @@ trait Author
      */
     public function all_the_authors(): array
     {
-        $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
 
-        if ($this->cache->has($key))
+        if ($this->parent->helpers['cache']->has($key))
         {
-            return $this->cache->get($key);
+            return $this->parent->helpers['cache']->get($key);
         }
 
         $authors = [];
 
-        $rows = $this->SQL->SELECT('id, role')->FROM('users')->FIND_ALL();
+        $rows = $this->sql()->SELECT('id, role')->FROM('users')->FIND_ALL();
 
         foreach ($rows as $row)
         {
@@ -408,10 +409,10 @@ trait Author
                 continue;
             }
 
-            $authors[] = $this->UserManager->byId($row['id']);
+            $authors[] = $this->container->get('UserManager')->byId($row['id']);
         }
 
-        return $this->cache->set($key, $authors);
+        return $this->parent->helpers['cache']->set($key, $authors);
     }
 
     /**
@@ -424,18 +425,18 @@ trait Author
      */
     public function the_author_posts(int $author_id, bool $published = true): array
     {
-        $key = $this->cache->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
 
-        if ($this->cache->has($key))
+        if ($this->parent->helpers['cache']->has($key))
         {
-            return $this->cache->get($key);
+            return $this->parent->helpers['cache']->get($key);
         }
 
-        if ($this->author_exists($author_id))
+        if ($this->parent->author_exists($author_id))
         {
-            return $this->cache->set($key, $this->PostManager->provider()->byKey('posts.author_id', $author_id, false, $published));
+            return $this->parent->helpers['cache']->set($key, $this->container->get('PostManager')->provider()->byKey('posts.author_id', $author_id, false, $published));
         }
 
-        return $this->cache->set($key, []);
+        return $this->parent->helpers['cache']->set($key, []);
     }
 }
