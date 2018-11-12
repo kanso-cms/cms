@@ -7,8 +7,6 @@
 
 namespace kanso\cms\query\helpers;
 
-use kanso\cms\query\helpers\Helper;
-
 /**
  * CMS Query search methods.
  *

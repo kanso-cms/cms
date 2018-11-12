@@ -4,7 +4,6 @@ namespace kanso\cms\query\helpers;
 
 use InvalidArgumentException;
 use kanso\framework\utility\Str;
-use kanso\cms\query\helpers\Helper;
 
 /**
  * Query Parser.
@@ -41,7 +40,7 @@ class Parser extends Helper
      *
      * @var array
      */
-    private $queryVarsDefaults = 
+    private $queryVarsDefaults =
     [
         'FROM'         => 'posts',
         'SELECT'       => [],

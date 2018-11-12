@@ -7,7 +7,6 @@
 
 namespace kanso\cms\query\helpers;
 
-use kanso\cms\query\helpers\Helper;
 use kanso\framework\common\ArrayAccessTrait;
 
 /**
@@ -23,7 +22,7 @@ class Cache extends Helper
      * Get/set a post by id from the PostManager or cache.
      *
      * @access public
-     * @param  int $post_id Post id
+     * @param  int                           $post_id Post id
      * @return \kanso\cms\wrappers\Post|null
      */
     public function getPostByID(int $post_id)
@@ -42,7 +41,7 @@ class Cache extends Helper
      * Get/set an author by id from the UserManager or cache.
      *
      * @access public
-     * @param  int $author_id Author id
+     * @param  int                           $author_id Author id
      * @return \kanso\cms\wrappers\User|null
      */
     public function getAuthorById(int $author_id)
@@ -61,7 +60,7 @@ class Cache extends Helper
      * Get/set a tag by id from the TagManager or cache.
      *
      * @access public
-     * @param  int $tag_id Tag id
+     * @param  int                          $tag_id Tag id
      * @return \kanso\cms\wrappers\Tag|null
      */
     public function getTagById(int $tag_id)
@@ -80,7 +79,7 @@ class Cache extends Helper
      * Get/set a category by id from the CategoryManager or cache.
      *
      * @access public
-     * @param  int $category_id Category id
+     * @param  int                               $category_id Category id
      * @return \kanso\cms\wrappers\Category|null
      */
     public function getCategoryById(int $category_id)
@@ -99,7 +98,7 @@ class Cache extends Helper
      * Get/set a media attachment by id from the MediaManager or cache.
      *
      * @access public
-     * @param  int $thumb_id Media attachment id
+     * @param  int                            $thumb_id Media attachment id
      * @return \kanso\cms\wrappers\Media|null
      */
     public function getMediaById(int $thumb_id)

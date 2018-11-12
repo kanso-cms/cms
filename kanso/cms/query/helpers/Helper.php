@@ -7,9 +7,9 @@
 
 namespace kanso\cms\query\helpers;
 
-use kanso\framework\ioc\Container;
-use kanso\framework\database\query\Builder;
 use kanso\cms\query\QueryBase;
+use kanso\framework\database\query\Builder;
+use kanso\framework\ioc\Container;
 
 /**
  * CMS Query object.
@@ -26,24 +26,24 @@ abstract class Helper
     protected $sql;
 
     /**
-     * IoC container instance
+     * IoC container instance.
      *
      * @var kanso\framework\ioc\Container
      */
     protected $container;
 
     /**
-     * Query instance
+     * Query instance.
      *
      * @var kanso\cms\query\QueryBase
      */
     protected $parent;
 
-	/**
+    /**
      * Constructor.
      *
      * @access public
-     * @param  kanso\framework\ioc\Container $container IoC container
+     * @param kanso\framework\ioc\Container $container IoC container
      */
     public function __construct(Container $container)
     {
@@ -51,10 +51,10 @@ abstract class Helper
     }
 
     /**
-     * Returns query builder instance
+     * Returns query builder instance.
      *
      * @access public
-     * @param  kanso\cms\query\QueryBase $query Query instance
+     * @param kanso\cms\query\QueryBase $query Query instance
      */
     public function setParent(QueryBase $query)
     {
@@ -62,10 +62,10 @@ abstract class Helper
     }
 
     /**
-     * Returns query builder instance
+     * Returns query builder instance.
      *
      * @access public
-     * @param  kanso\framework\ioc\Container $container IoC container
+     * @param kanso\framework\ioc\Container $container IoC container
      */
     protected function sql(): Builder
     {

@@ -7,7 +7,6 @@
 
 namespace kanso\cms\query\helpers;
 
-use kanso\cms\query\helpers\Helper;
 use kanso\framework\utility\Str;
 
 /**

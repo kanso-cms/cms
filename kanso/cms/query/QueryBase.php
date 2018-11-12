@@ -13,8 +13,10 @@ use kanso\cms\query\helpers\Cache;
 use kanso\cms\query\helpers\Category;
 use kanso\cms\query\helpers\Comment;
 use kanso\cms\query\helpers\Filter;
+use kanso\cms\query\helpers\Helper;
 use kanso\cms\query\helpers\Meta;
 use kanso\cms\query\helpers\Pagination;
+use kanso\cms\query\helpers\Parser;
 use kanso\cms\query\helpers\Post;
 use kanso\cms\query\helpers\PostIteration;
 use kanso\cms\query\helpers\Search;
@@ -22,8 +24,6 @@ use kanso\cms\query\helpers\Tag;
 use kanso\cms\query\helpers\Templates;
 use kanso\cms\query\helpers\Urls;
 use kanso\cms\query\helpers\Validation;
-use kanso\cms\query\helpers\Parser;
-use kanso\cms\query\helpers\Helper;
 use kanso\framework\ioc\Container;
 
 /**
@@ -33,7 +33,7 @@ use kanso\framework\ioc\Container;
  */
 abstract class QueryBase
 {
-	/**
+    /**
      * The page request type.
      *
      * @var string
@@ -111,7 +111,7 @@ abstract class QueryBase
     public $searchQuery;
 
     /**
-     * Helper classes
+     * Helper classes.
      *
      * @var array
      */
@@ -136,17 +136,17 @@ abstract class QueryBase
     ];
 
     /**
-     * IoC container instance
+     * IoC container instance.
      *
      * @var kanso\framework\ioc\Container
      */
     protected $container;
 
-	/**
+    /**
      * Constructor.
      *
      * @access public
-     * @param  kanso\framework\ioc\Container $container IoC container
+     * @param kanso\framework\ioc\Container $container IoC container
      */
     public function __construct(Container $container)
     {
@@ -174,11 +174,11 @@ abstract class QueryBase
     }
 
     /**
-     * Retrieves and returns a helper class by name
+     * Retrieves and returns a helper class by name.
      *
      * @access public
-     * @throws InvalidArgumentException If class does not exist
-     * @param  string $name Name of helper class
+     * @param  string                          $name Name of helper class
+     * @throws InvalidArgumentException        If class does not exist
      * @return \kanso\cms\query\helpers\Helper
      */
     public function helper(string $name): Helper
@@ -188,7 +188,7 @@ abstract class QueryBase
             return $this->helpers[$name];
         }
 
-        throw new InvalidArgumentException('Invalid helper class. Class "'.$name.'" does not exist.');
+        throw new InvalidArgumentException('Invalid helper class. Class "' . $name . '" does not exist.');
     }
 
     /**
@@ -205,6 +205,8 @@ abstract class QueryBase
             $class->setParent($this);
 
             $this->helpers[$key] = $class;
-        }  
+        }
     }
+
+    public abstract function applyQuery(string $queryStr);
 }

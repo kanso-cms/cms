@@ -4,7 +4,6 @@
  * @copyright Joe J. Howard
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
-
 use kanso\Kanso;
 
 /**
@@ -12,7 +11,6 @@ use kanso\Kanso;
  *
  * @author Joe J. Howard
  */
-
 function tag_exists($tag_name)
 {
     return Kanso::instance()->Query->tag_exists($tag_name);

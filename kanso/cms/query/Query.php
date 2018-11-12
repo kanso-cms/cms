@@ -7,9 +7,6 @@
 
 namespace kanso\cms\query;
 
-use kanso\cms\query\QueryBase;
-use kanso\cms\query\QueryInterface;
-
 /**
  * CMS Query object.
  *

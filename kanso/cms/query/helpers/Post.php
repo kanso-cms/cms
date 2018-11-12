@@ -8,7 +8,6 @@
 namespace kanso\cms\query\helpers;
 
 use kanso\framework\utility\Markdown;
-use kanso\cms\query\helpers\Helper;
 
 /**
  * CMS Query post methods.
