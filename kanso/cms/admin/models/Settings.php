@@ -23,7 +23,7 @@ class Settings extends BaseModel
      */
     public function onGET()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parseGet();
         }
@@ -36,7 +36,7 @@ class Settings extends BaseModel
      */
     public function onPOST()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             if (!isset($this->post['access_token']) || !$this->Gatekeeper->verifyToken($this->post['access_token']))
             {
@@ -137,23 +137,23 @@ class Settings extends BaseModel
      */
     private function submitAccountSettings()
     {
-        $post = $this->validation->sanitize($this->post);
+        $post = $this->container->get('Validator')->sanitize($this->post);
 
-        $this->validation->validation_rules([
+        $this->container->get('Validator')->validation_rules([
             'username'            => 'required|alpha_dash|max_len,100|min_len,4',
             'email'               => 'required|valid_email',
             'password'            => 'max_len,100|min_len,6',
             'email_notifications' => 'boolean',
         ]);
 
-        $this->validation->filter_rules([
+        $this->container->get('Validator')->filter_rules([
             'username' => 'trim|sanitize_string',
             'email'    => 'trim|sanitize_email',
             'password' => 'trim',
             'email_notifications' => 'trim|sanitize_string',
         ]);
 
-        $validated_data = $this->validation->run($post);
+        $validated_data = $this->container->get('Validator')->run($post);
 
         if (!$validated_data)
         {
@@ -212,9 +212,9 @@ class Settings extends BaseModel
     private function submitAuthorSettings()
     {
         // Sanitize and validate the POST
-        $post = $this->validation->sanitize($this->post);
+        $post = $this->container->get('Validator')->sanitize($this->post);
 
-        $this->validation->validation_rules([
+        $this->container->get('Validator')->validation_rules([
             'name'         => 'required|alpha_space|max_len,50|min_len,3',
             'slug'         => 'required|alpha_dash|max_len,50|min_len,3',
             'description'  => 'required',
@@ -224,7 +224,7 @@ class Settings extends BaseModel
             'instagram'    => 'valid_url',
         ]);
 
-        $this->validation->filter_rules([
+        $this->container->get('Validator')->filter_rules([
             'name'         => 'trim|sanitize_string',
             'slug'         => 'trim|sanitize_string',
             'description'  => 'trim|sanitize_string',
@@ -236,7 +236,7 @@ class Settings extends BaseModel
         ]);
 
         // Validate POST
-        $validated_data = $this->validation->run($post);
+        $validated_data = $this->container->get('Validator')->run($post);
 
         if (!$validated_data)
         {
@@ -276,9 +276,9 @@ class Settings extends BaseModel
         }
 
         // Validate post variables
-        $post = $this->validation->sanitize($this->post);
+        $post = $this->container->get('Validator')->sanitize($this->post);
 
-        $this->validation->validation_rules([
+        $this->container->get('Validator')->validation_rules([
             'enable_authors '    => 'boolean',
             'enable_cats'        => 'boolean',
             'enable_tags'        => 'boolean',
@@ -297,7 +297,7 @@ class Settings extends BaseModel
             'permalinks'         => 'required|max_len,50',
         ]);
 
-        $this->validation->filter_rules([
+        $this->container->get('Validator')->filter_rules([
             'posts_per_page'    => 'sanitize_numbers',
             'thumbnail_quality' => 'sanitize_numbers',
             'cdn_url'           => 'trim|sanitize_string|basic_tags',
@@ -317,7 +317,7 @@ class Settings extends BaseModel
             return $this->postMessage('success', 'The application cache was successfully cleared.');
         }
 
-        $validated_data = $this->validation->run($post);
+        $validated_data = $this->container->get('Validator')->run($post);
 
         if ($validated_data)
         {
@@ -666,19 +666,19 @@ class Settings extends BaseModel
             return false;
         }
 
-        $post = $this->validation->sanitize($this->post);
+        $post = $this->container->get('Validator')->sanitize($this->post);
 
-        $this->validation->validation_rules([
+        $this->container->get('Validator')->validation_rules([
             'email' => 'required|valid_email',
             'role'  => 'required|contains, administrator writer',
         ]);
 
-        $this->validation->filter_rules([
+        $this->container->get('Validator')->filter_rules([
             'email' => 'trim|sanitize_email',
             'role'  => 'trim|sanitize_string',
         ]);
 
-        $validated_data = $this->validation->run($post);
+        $validated_data = $this->container->get('Validator')->run($post);
 
         if (!$validated_data)
         {
@@ -724,17 +724,17 @@ class Settings extends BaseModel
             return false;
         }
 
-        $post = $this->validation->sanitize($this->post);
+        $post = $this->container->get('Validator')->sanitize($this->post);
 
-        $this->validation->validation_rules([
+        $this->container->get('Validator')->validation_rules([
             'user_id' => 'required|numeric',
         ]);
 
-        $this->validation->filter_rules([
+        $this->container->get('Validator')->filter_rules([
             'user_id' => 'trim|sanitize_numbers',
         ]);
 
-        $validated_data = $this->validation->run($post);
+        $validated_data = $this->container->get('Validator')->run($post);
 
         if (!$validated_data)
         {
@@ -774,19 +774,19 @@ class Settings extends BaseModel
             return false;
         }
 
-        $post = $this->validation->sanitize($this->post);
+        $post = $this->container->get('Validator')->sanitize($this->post);
 
-        $this->validation->validation_rules([
+        $this->container->get('Validator')->validation_rules([
             'user_id' => 'required|numeric',
             'role'    => 'required|contains, administrator writer',
         ]);
 
-        $this->validation->filter_rules([
+        $this->container->get('Validator')->filter_rules([
             'user_id' => 'trim|sanitize_numbers',
             'role'    => 'trim|sanitize_string',
         ]);
 
-        $validated_data = $this->validation->run($post);
+        $validated_data = $this->container->get('Validator')->run($post);
 
         if (!$validated_data)
         {
@@ -823,7 +823,7 @@ class Settings extends BaseModel
     private function resetPostSlugs()
     {
         // Select the posts
-        $posts = $this->SQL->SELECT('posts.id')->FROM('posts')->FIND_ALL();
+        $posts = $this->sql()->SELECT('posts.id')->FROM('posts')->FIND_ALL();
 
         foreach ($posts as $row)
         {

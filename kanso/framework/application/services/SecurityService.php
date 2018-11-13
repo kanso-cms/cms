@@ -14,6 +14,7 @@ use kanso\framework\security\crypto\Signer;
 use kanso\framework\security\password\encrypters\NativePHP;
 use kanso\framework\security\spam\gibberish\Gibberish;
 use kanso\framework\security\spam\SpamProtector;
+use kanso\framework\validator\ValidatorFactory;
 
 /**
  * Security service.
@@ -35,6 +36,11 @@ class SecurityService extends Service
 		$this->container->singleton('SpamProtector', function($container)
 		{
 			return new SpamProtector($this->getGibberish(), $container->Config);
+		});
+
+		$this->container->singleton('Validator', function($container)
+		{
+			return new ValidatorFactory($container);
 		});
 	}
 

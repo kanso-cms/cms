@@ -42,7 +42,7 @@ class Posts extends BaseModel
      */
     public function onGET()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parseGet();
         }
@@ -55,7 +55,7 @@ class Posts extends BaseModel
      */
     public function onPOST()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parsePost();
         }
@@ -358,62 +358,62 @@ class Posts extends BaseModel
         if ($queries['sort'] === 'title')     $sortKey   = 'posts.title';
 
         // Select the posts
-        $this->SQL->SELECT('posts.id')->FROM('posts')->WHERE('posts.type', '=', $this->postType);
+        $this->sql()->SELECT('posts.id')->FROM('posts')->WHERE('posts.type', '=', $this->postType);
 
         // Set the order
-        $this->SQL->ORDER_BY($sortKey, $sort);
+        $this->sql()->ORDER_BY($sortKey, $sort);
 
         // Apply basic joins for queries
-        $this->SQL->LEFT_JOIN_ON('users', 'users.id = posts.author_id');
-        $this->SQL->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id');
-        $this->SQL->LEFT_JOIN_ON('categories_to_posts', 'posts.id = categories_to_posts.post_id');
-        $this->SQL->LEFT_JOIN_ON('categories', 'categories.id = categories_to_posts.category_id');
-        $this->SQL->LEFT_JOIN_ON('tags_to_posts', 'posts.id = tags_to_posts.post_id');
-        $this->SQL->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id');
-        $this->SQL->GROUP_BY('posts.id');
+        $this->sql()->LEFT_JOIN_ON('users', 'users.id = posts.author_id');
+        $this->sql()->LEFT_JOIN_ON('comments', 'comments.post_id = posts.id');
+        $this->sql()->LEFT_JOIN_ON('categories_to_posts', 'posts.id = categories_to_posts.post_id');
+        $this->sql()->LEFT_JOIN_ON('categories', 'categories.id = categories_to_posts.category_id');
+        $this->sql()->LEFT_JOIN_ON('tags_to_posts', 'posts.id = tags_to_posts.post_id');
+        $this->sql()->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id');
+        $this->sql()->GROUP_BY('posts.id');
 
         // Filter status/published
         if ($status === 'published')
         {
-            $this->SQL->AND_WHERE('posts.status', '=', 'published');
+            $this->sql()->AND_WHERE('posts.status', '=', 'published');
         }
         elseif ($status === 'drafts')
         {
-            $this->SQL->AND_WHERE('posts.status', '=', 'draft');
+            $this->sql()->AND_WHERE('posts.status', '=', 'draft');
         }
 
         // Search the title
         if ($search)
         {
-            $this->SQL->AND_WHERE('posts.title', 'like', '%' . $queries['search'] . '%');
+            $this->sql()->AND_WHERE('posts.title', 'like', '%' . $queries['search'] . '%');
         }
 
         // Filter by author
         if ($author)
         {
-            $this->SQL->AND_WHERE('posts.author_id', '=', intval($author));
+            $this->sql()->AND_WHERE('posts.author_id', '=', intval($author));
         }
 
         // Filter by tag
         if ($tag)
         {
-            $this->SQL->AND_WHERE('tags.id', '=', intval($tag));
+            $this->sql()->AND_WHERE('tags.id', '=', intval($tag));
         }
 
         // Filter by category
         if ($category)
         {
-            $this->SQL->AND_WHERE('categories.id', '=', intval($category));
+            $this->sql()->AND_WHERE('categories.id', '=', intval($category));
         }
 
         // Set the limit - Only if we're returning the actual articles
         if (!$checkMaxPages)
         {
-            $this->SQL->LIMIT($offset, $limit);
+            $this->sql()->LIMIT($offset, $limit);
         }
 
         // Find the articles
-        $rows = $this->SQL->FIND_ALL();
+        $rows = $this->sql()->FIND_ALL();
 
         // Are we checking the pages ?
         if ($checkMaxPages)

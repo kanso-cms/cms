@@ -29,28 +29,28 @@ class Accounts extends BaseModel
 
         if ($this->requestName === 'login')
         {
-            if (!$this->isLoggedIn)
+            if (!$this->isLoggedIn())
             {
                 return $this->processLoginPOST();
             }
         }
         elseif ($this->requestName === 'forgotpassword')
         {
-            if (!$this->isLoggedIn)
+            if (!$this->isLoggedIn())
             {
                 return $this->processForgotPassowordPOST();
             }
         }
         elseif ($this->requestName === 'forgotusername')
         {
-            if (!$this->isLoggedIn)
+            if (!$this->isLoggedIn())
             {
                 return $this->processForgotUsernamePOST();
             }
         }
         elseif ($this->requestName === 'resetpassword')
         {
-            if (!$this->isLoggedIn)
+            if (!$this->isLoggedIn())
             {
                 return $this->processResetpasswordPOST();
             }
@@ -74,7 +74,7 @@ class Accounts extends BaseModel
     {
         if ($this->requestName === 'login' || $this->requestName === 'forgotusername' || $this->requestName === 'forgotpassword')
         {
-            if ($this->isLoggedIn)
+            if ($this->isLoggedIn())
             {
                 $this->Response->redirect($this->Request->environment()->HTTP_HOST . '/admin/posts/');
 
@@ -85,7 +85,7 @@ class Accounts extends BaseModel
         }
         elseif ($this->requestName === 'resetpassword')
         {
-            if (!$this->isLoggedIn)
+            if (!$this->isLoggedIn())
             {
                 if ($this->validateResetPasswordGET())
                 {
@@ -95,7 +95,7 @@ class Accounts extends BaseModel
         }
         elseif ($this->requestName === 'logout')
         {
-            if ($this->isLoggedIn)
+            if ($this->isLoggedIn())
             {
                 return $this->processLogoutGET();
             }
@@ -112,23 +112,23 @@ class Accounts extends BaseModel
      */
     private function processLoginPOST(): array
     {
-        $post = $this->validation->sanitize($this->post);
+        $post = $this->container->get('Validator')->sanitize($this->post);
 
-        $this->validation->validation_rules([
+        $this->container->get('Validator')->validation_rules([
             'username'  => 'required|max_len,100|min_len,5',
             'password'  => 'required|max_len,100|min_len,5',
         ]);
 
-        $this->validation->filter_rules([
+        $this->container->get('Validator')->filter_rules([
             'username' => 'trim|sanitize_string',
             'password' => 'trim',
         ]);
 
-        $validated_data = $this->validation->run($post);
+        $validated_data = $this->container->get('Validator')->run($post);
 
         if ($validated_data)
         {
-            $user  = $this->UserManager->byUsername($validated_data['username']);
+            $user = $this->UserManager->byUsername($validated_data['username']);
 
             if (!$user || ($user->role !== 'administrator' && $user->role !== 'writer'))
             {
@@ -166,17 +166,17 @@ class Accounts extends BaseModel
      */
     private function processForgotPassowordPOST(): array
     {
-        $post = $this->validation->sanitize($this->post);
+        $post = $this->container->get('Validator')->sanitize($this->post);
 
-        $this->validation->validation_rules([
+        $this->container->get('Validator')->validation_rules([
             'username'  => 'required|max_len,100|min_len,5',
         ]);
 
-        $this->validation->filter_rules([
+        $this->container->get('Validator')->filter_rules([
             'username' => 'trim|sanitize_string',
         ]);
 
-        $validated_data = $this->validation->run($post);
+        $validated_data = $this->container->get('Validator')->run($post);
 
         if ($validated_data)
         {
@@ -199,17 +199,17 @@ class Accounts extends BaseModel
      */
     private function processForgotUsernamePOST(): array
     {
-        $post = $this->validation->sanitize($this->post);
+        $post = $this->container->get('Validator')->sanitize($this->post);
 
-        $this->validation->validation_rules([
+        $this->container->get('Validator')->validation_rules([
             'username'  => 'required|max_len,100|min_len,5',
         ]);
 
-        $this->validation->filter_rules([
+        $this->container->get('Validator')->filter_rules([
             'username' => 'trim|sanitize_string',
         ]);
 
-        $validated_data = $this->validation->run($post);
+        $validated_data = $this->container->get('Validator')->run($post);
 
         if ($validated_data)
         {
@@ -269,17 +269,17 @@ class Accounts extends BaseModel
             return false;
         }
 
-        $post = $this->validation->sanitize($this->post);
+        $post = $this->container->get('Validator')->sanitize($this->post);
 
-        $this->validation->validation_rules([
+        $this->container->get('Validator')->validation_rules([
             'username'  => 'required|max_len,100|min_len,5',
         ]);
 
-        $this->validation->filter_rules([
+        $this->container->get('Validator')->filter_rules([
             'username' => 'trim|sanitize_string',
         ]);
 
-        $validated_data = $this->validation->run($post);
+        $validated_data = $this->container->get('Validator')->run($post);
 
         // Make sure the user's token is in the session and they match
         $token = $this->Response->session()->get('kanso_password_key');

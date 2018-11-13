@@ -24,6 +24,8 @@ Update using ```git fetch```.
 * Updated to single root level `.gitignore`.
 * `kanso\framework\pixl\Image` constructor file path is now optional.
 * `kanso\framework\pixl\processor\GD` constructor now has optional second argument for default image quality.
+* `kanso\framework\utility\Gump` replaced with `kanso\framework\validator\Validator`. See documentation for details. 
+
 * Bumped `Kanso::VERSION` number.
 
 #### Bugfixes

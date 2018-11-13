@@ -24,7 +24,7 @@ class CommentUsers extends BaseModel
      */
     public function onGET()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parseGet();
         }
@@ -37,7 +37,7 @@ class CommentUsers extends BaseModel
      */
     public function onPOST()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parsePost();
         }
@@ -229,7 +229,7 @@ class CommentUsers extends BaseModel
         if ($queries['sort'] === 'name')  $sortKey   = 'name';
         if ($queries['sort'] === 'email') $sortKey   = 'email';
 
-        $this->SQL->SELECT('*')->FROM('comments');
+        $this->sql()->SELECT('*')->FROM('comments');
 
         // Is this a search
         if ($search)
@@ -240,16 +240,16 @@ class CommentUsers extends BaseModel
 
                 if (in_array($keys[0], ['name', 'email', 'ip_address']))
                 {
-                    $this->SQL->AND_WHERE($keys[0], 'LIKE', "%$keys[1]%");
+                    $this->sql()->AND_WHERE($keys[0], 'LIKE', "%$keys[1]%");
                 }
             }
         }
 
         // Set the order
-        $this->SQL->ORDER_BY($sortKey, $sort);
+        $this->sql()->ORDER_BY($sortKey, $sort);
 
         // Find comments
-        $comments = $this->SQL->FIND_ALL();
+        $comments = $this->sql()->FIND_ALL();
 
         // Create a list of users
         $users = [];

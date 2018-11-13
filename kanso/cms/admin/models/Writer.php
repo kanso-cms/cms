@@ -23,7 +23,7 @@ class Writer extends BaseModel
      */
     public function onGET()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parseGet();
         }
@@ -118,14 +118,14 @@ class Writer extends BaseModel
     private function saveExistingArticle()
     {
         // Sanitize and validate the POST variables
-        $post = $this->validation->sanitize($this->post);
+        $post = $this->container->get('Validation')->sanitize($this->post);
 
-        $this->validation->validation_rules([
+        $this->container->get('Validation')->validation_rules([
             'type' => 'required',
             'id'   => 'required|integer',
         ]);
 
-        $this->validation->filter_rules([
+        $this->container->get('Validation')->filter_rules([
             'title'        => 'trim|sanitize_string',
             'category'     => 'trim|sanitize_string',
             'tags'         => 'trim|sanitize_string',
@@ -137,7 +137,7 @@ class Writer extends BaseModel
             'author'       => 'trim|sanitize_numbers',
         ]);
 
-        $validated_data = $this->validation->run($post);
+        $validated_data = $this->container->get('Validation')->run($post);
 
         if (!$validated_data)
         {
@@ -235,13 +235,13 @@ class Writer extends BaseModel
     private function saveNewArticle()
     {
         // Sanitize and validate the POST variables
-        $post = $this->validation->sanitize($this->post);
+        $post = $this->container->get('Validation')->sanitize($this->post);
 
-        $this->validation->validation_rules([
+        $this->container->get('Validation')->validation_rules([
             'type' => 'required',
         ]);
 
-        $this->validation->filter_rules([
+        $this->container->get('Validation')->filter_rules([
             'title'        => 'trim|sanitize_string',
             'category'     => 'trim|sanitize_string',
             'tags'         => 'trim|sanitize_string',
@@ -252,7 +252,7 @@ class Writer extends BaseModel
             'author'       => 'trim|sanitize_numbers',
         ]);
 
-        $validated_data = $this->validation->run($post);
+        $validated_data = $this->container->get('Validation')->run($post);
 
         if (!$validated_data)
         {

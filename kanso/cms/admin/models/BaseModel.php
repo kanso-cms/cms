@@ -2,6 +2,7 @@
 
 namespace kanso\cms\admin\models;
 
+use kanso\framework\database\query\Builder;
 use kanso\framework\mvc\model\Model;
 
 /**
@@ -21,23 +22,9 @@ abstract class BaseModel extends Model
 	/**
 	 * Identifying name of the requested page.
 	 *
-	 * @var bool
-	 */
-	protected $isLoggedIn;
-
-	/**
-	 * Identifying name of the requested page.
-	 *
 	 * @var \kanso\framework\database\query\Builder
 	 */
-	protected $SQL;
-
-	/**
-	 * Identifying name of the requested page.
-	 *
-	 * @var kanso\framework\utility\GUMP
-	 */
-	protected $validation;
+	protected $sql;
 
 	/**
 	 * POST variables.
@@ -76,13 +63,24 @@ abstract class BaseModel extends Model
 	{
 		$this->requestName = $requestName;
 
-		$this->isLoggedIn = $this->isLoggedIn();
-
-    	$this->SQL = $this->Database->connection()->builder();
-
-    	$this->validation = $this->Validation;
-
     	$this->post = $this->Request->fetch();
+	}
+
+	/**
+	 * Returns query builder instance.
+	 *
+	 * @access public
+	 * @param  string                                 $name Identifying name of the requested page
+	 * @return kanso\framework\database\query\Builder
+	 */
+	protected function sql(): Builder
+	{
+		if (is_null($this->sql))
+		{
+			$this->sql = $this->Database->connection()->builder();
+		}
+
+		return $this->sql;
 	}
 
 	/**

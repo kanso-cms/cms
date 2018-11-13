@@ -23,7 +23,7 @@ class Comments extends BaseModel
      */
     public function onGET()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parseGet();
         }
@@ -36,7 +36,7 @@ class Comments extends BaseModel
      */
     public function onPOST()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parsePost();
         }
@@ -247,24 +247,24 @@ class Comments extends BaseModel
         if ($queries['sort'] === 'name')  $sortKey   = 'name';
         if ($queries['sort'] === 'email') $sortKey   = 'email';
 
-        $this->SQL->SELECT('id')->FROM('comments');
+        $this->sql()->SELECT('id')->FROM('comments');
 
         // Filter by status
         if ($filter === 'approved')
         {
-            $this->SQL->WHERE('status', '=', 'approved');
+            $this->sql()->WHERE('status', '=', 'approved');
         }
         if ($filter === 'spam')
         {
-            $this->SQL->WHERE('status', '=', 'spam');
+            $this->sql()->WHERE('status', '=', 'spam');
         }
         if ($filter === 'pending')
         {
-            $this->SQL->WHERE('status', '=', 'pending');
+            $this->sql()->WHERE('status', '=', 'pending');
         }
         if ($filter === 'deleted')
         {
-            $this->SQL->WHERE('status', '=', 'pending');
+            $this->sql()->WHERE('status', '=', 'pending');
         }
 
         // Is this a search
@@ -275,26 +275,26 @@ class Comments extends BaseModel
                 $keys = explode(':', $search);
                 if (in_array($keys[0], ['name', 'email', 'ip_address']))
                 {
-                    $this->SQL->AND_WHERE($keys[0], 'LIKE', "%$keys[1]%");
+                    $this->sql()->AND_WHERE($keys[0], 'LIKE', "%$keys[1]%");
                 }
             }
             else
             {
-                $this->SQL->AND_WHERE('content', 'LIKE', "%$search%");
+                $this->sql()->AND_WHERE('content', 'LIKE', "%$search%");
             }
         }
 
         // Set the order
-        $this->SQL->ORDER_BY($sortKey, $sort);
+        $this->sql()->ORDER_BY($sortKey, $sort);
 
         // Set the limit - Only if we're returning the actual articles
         if (!$checkMaxPages)
         {
-            $this->SQL->LIMIT($offset, $limit);
+            $this->sql()->LIMIT($offset, $limit);
         }
 
         // Find comments
-        $rows = $this->SQL->FIND_ALL();
+        $rows = $this->sql()->FIND_ALL();
 
         // Are we checking the pages ?
         if ($checkMaxPages)

@@ -24,7 +24,7 @@ class Categories extends BaseModel
      */
     public function onGET()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parseGet();
         }
@@ -37,7 +37,7 @@ class Categories extends BaseModel
      */
     public function onPOST()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parsePost();
         }
@@ -312,30 +312,30 @@ class Categories extends BaseModel
         $search       = $queries['search'];
 
         // Select the posts
-        $this->SQL->SELECT('categories.id')->FROM('categories');
+        $this->sql()->SELECT('categories.id')->FROM('categories');
 
         // Search the name
         if ($search)
         {
-            $this->SQL->AND_WHERE('name', 'like', '%' . $queries['search'] . '%');
+            $this->sql()->AND_WHERE('name', 'like', '%' . $queries['search'] . '%');
         }
 
         // Find the articles
-        $rows = $this->SQL->FIND_ALL();
+        $rows = $this->sql()->FIND_ALL();
 
         // Add all the article count
         $result = [];
 
         foreach ($rows as $row)
         {
-            $this->SQL->SELECT('posts.id')->FROM('posts')
+            $this->sql()->SELECT('posts.id')->FROM('posts')
             ->LEFT_JOIN_ON('categories_to_posts', 'posts.id = categories_to_posts.post_id')
             ->LEFT_JOIN_ON('categories', 'categories.id = categories_to_posts.category_id')
             ->WHERE('categories.id', '=', $row['id']);
 
             $category = $this->CategoryManager->byId($row['id']);
 
-            $category->article_count = count($this->SQL->FIND_ALL());
+            $category->article_count = count($this->sql()->FIND_ALL());
 
             $result[] = $category;
         }
@@ -424,7 +424,7 @@ class Categories extends BaseModel
     private function resetPostSlugs()
     {
         // Select the posts
-        $posts = $this->SQL->SELECT('posts.id')->FROM('posts')->FIND_ALL();
+        $posts = $this->sql()->SELECT('posts.id')->FROM('posts')->FIND_ALL();
 
         foreach ($posts as $row)
         {

@@ -108,7 +108,6 @@ return
 			'\kanso\framework\application\services\OnionService',
 			'\kanso\framework\application\services\DatabaseService',
 			'\kanso\framework\application\services\MVCService',
-            '\kanso\framework\application\services\UtilityService',
             '\kanso\framework\application\services\PixlService',
             '\kanso\framework\application\services\CrawlerService',
             '\kanso\framework\application\services\DeploymentService',

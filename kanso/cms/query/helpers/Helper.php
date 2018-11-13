@@ -7,7 +7,7 @@
 
 namespace kanso\cms\query\helpers;
 
-use kanso\cms\query\QueryBase;
+use kanso\cms\query\Query;
 use kanso\framework\database\query\Builder;
 use kanso\framework\ioc\Container;
 
@@ -56,7 +56,7 @@ abstract class Helper
      * @access public
      * @param kanso\cms\query\QueryBase $query Query instance
      */
-    public function setParent(QueryBase $query)
+    public function setParent(Query $query)
     {
         $this->parent = $query;
     }
