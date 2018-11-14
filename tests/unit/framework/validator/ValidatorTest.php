@@ -24,6 +24,7 @@ class ValidatorTest extends TestCase
 	{
 		$fields =
 		[
+			'alpha_space'              => 'foo bar',
 			'alpha_dash'               => 'foo-bar',
 			'alpha'                    => 'foobar',
 			'alphanumeric'             => 'foobar32',
@@ -49,6 +50,7 @@ class ValidatorTest extends TestCase
 
 		$rules =
 		[
+			'alpha_space'              => ['required', 'alpha_space'],
 			'alpha_dash'               => ['required', 'alpha_dash'],
 			'alpha'                    => ['required', 'alpha'],
 			'alphanumeric'             => ['required', 'alpha_numeric'],
@@ -90,6 +92,7 @@ class ValidatorTest extends TestCase
 	{
 		$fields =
 		[
+			'alpha_space'              => 'foo !4-bar',
 			'alpha_dash'               => 'foo-bar foo',
 			'alpha'                    => 'foobar-baz',
 			'alphanumeric'             => 'foobar-32!!',
@@ -114,6 +117,7 @@ class ValidatorTest extends TestCase
 
 		$rules =
 		[
+			'alpha_space'              => ['required', 'alpha_space'],
 			'alpha_dash'               => ['required', 'alpha_dash'],
 			'alpha'                    => ['required', 'alpha'],
 			'alphanumeric'             => ['required', 'alpha_numeric'],

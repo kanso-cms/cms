@@ -257,7 +257,7 @@ class Writer extends BaseModel
 
         // Default is to save as draft
         $post['status'] = !isset($post['status']) ? 'draft' : $post['status'];
-            
+
         // Default excerpt
         $post['excerpt'] = empty($post['excerpt']) ? $_POST['content'] : $post['excerpt'];
 

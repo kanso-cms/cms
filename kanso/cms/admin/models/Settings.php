@@ -401,7 +401,7 @@ class Settings extends BaseModel
         }
 
         return $this->postMessage('success', 'Kanso settings successfully updated!');
-        
+
     }
 
     /**

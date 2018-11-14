@@ -23,7 +23,7 @@ interface FilterInterface
 	public function filter(string $value);
 
 	/**
-	 * Pass through filter when field is not set
+	 * Pass through filter when field is not set.
 	 *
 	 * @return bool
 	 */

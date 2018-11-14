@@ -132,7 +132,7 @@ class Accounts extends BaseModel
 
         // Sanitize and validate the POST
         $post = $validator->filter();
- 
+
         $user = $this->UserManager->byUsername($post['username']);
 
         if (!$user || ($user->role !== 'administrator' && $user->role !== 'writer'))
@@ -158,7 +158,7 @@ class Accounts extends BaseModel
         {
             $this->Response->redirect($this->Request->environment()->HTTP_HOST . '/admin/posts/');
         }
-        
+
         return $this->postMessage('danger', 'Either the username or password you entered was incorrect.');
     }
 
@@ -204,7 +204,7 @@ class Accounts extends BaseModel
      * @return array
      */
     private function processForgotUsernamePOST(): array
-    {        
+    {
         $rules =
         [
             'email'  => ['required', 'email'],

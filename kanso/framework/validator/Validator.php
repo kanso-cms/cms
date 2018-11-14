@@ -29,14 +29,14 @@ use kanso\framework\validator\filters\UrlEncode as FilterUrlEncode;
 use kanso\framework\validator\rules\Alpha;
 use kanso\framework\validator\rules\Alphanumeric;
 use kanso\framework\validator\rules\AlphanumericDash;
+use kanso\framework\validator\rules\AlphaSpace;
 use kanso\framework\validator\rules\Email;
 use kanso\framework\validator\rules\ExactLength;
 use kanso\framework\validator\rules\FloatingPoint;
 use kanso\framework\validator\rules\GreaterThan;
 use kanso\framework\validator\rules\GreaterThanOrEqualTo;
-use kanso\framework\validator\rules\In;
 
-use kanso\framework\validator\rules\AlphaSpace;
+use kanso\framework\validator\rules\In;
 use kanso\framework\validator\rules\Integer;
 use kanso\framework\validator\rules\IP;
 use kanso\framework\validator\rules\JSON;

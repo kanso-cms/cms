@@ -8,7 +8,6 @@
 namespace app\models;
 
 use kanso\framework\mvc\model\Model;
-use kanso\framework\utility\Str;
 
 /**
  * Add new comment model.

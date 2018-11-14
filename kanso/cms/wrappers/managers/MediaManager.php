@@ -218,7 +218,7 @@ class MediaManager extends Manager
         {
             // Grab our image processor
             $pixl = $this->pixl;
-            
+
             $pixl->loadImage($FILE['tmp_name']);
 
             // Get the file extension from the mime type
