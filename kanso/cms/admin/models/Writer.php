@@ -117,37 +117,35 @@ class Writer extends BaseModel
      */
     private function saveExistingArticle()
     {
-        // Sanitize and validate the POST variables
-        $post = $this->container->get('Validation')->sanitize($this->post);
+        $rules =
+        [
+            'type'  => ['required'],
+            'id'    => ['required', 'integer'],
+        ];
+        $filters =
+        [
+            'title'        => ['trim', 'string'],
+            'category'     => ['trim', 'string'],
+            'tags'         => ['trim', 'string'],
+            'type'         => ['trim', 'string'],
+            'excerpt'      => ['trim', 'string'],
+            'status'       => ['trim', 'string'],
+            'comments'     => ['trim', 'boolean'],
+            'id'           => ['trim', 'integer'],
+            'thumbnail_id' => ['trim', 'integer'],
+            'author'       => ['trim', 'integer'],
+        ];
 
-        $this->container->get('Validation')->validation_rules([
-            'type' => 'required',
-            'id'   => 'required|integer',
-        ]);
+        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
 
-        $this->container->get('Validation')->filter_rules([
-            'title'        => 'trim|sanitize_string',
-            'category'     => 'trim|sanitize_string',
-            'tags'         => 'trim|sanitize_string',
-            'type'         => 'trim|sanitize_string',
-            'excerpt'      => 'trim|sanitize_string',
-            'status'       => 'trim|sanitize_string',
-            'id'           => 'trim|sanitize_numbers',
-            'thumbnail_id' => 'trim|sanitize_numbers',
-            'author'       => 'trim|sanitize_numbers',
-        ]);
-
-        $validated_data = $this->container->get('Validation')->run($post);
-
-        if (!$validated_data)
+        if (!$validator->isValid())
         {
             return false;
         }
 
-        $validated_data['id'] = intval($validated_data['id']);
-        $validated_data['author'] = intval($validated_data['author']);
+        $post = $validator->filter();
 
-        $article = $this->PostManager->byId($validated_data['id']);
+        $article = $this->PostManager->byId($post['id']);
 
         $postMeta = $this->getPostMeta();
 
@@ -156,13 +154,14 @@ class Writer extends BaseModel
             return false;
         }
 
-        $article->title            = $validated_data['title'];
-        $article->categories       = $validated_data['category'];
-        $article->tags             = $validated_data['tags'];
-        $article->excerpt          = $validated_data['excerpt'];
-        $article->type             = $validated_data['type'];
-        $article->author_id        = $validated_data['author'];
-        $article->comments_enabled = Str::bool($validated_data['comments']);
+        $article->title            = $post['title'];
+        $article->categories       = $post['category'];
+        $article->tags             = $post['tags'];
+        $article->excerpt          = $post['excerpt'];
+        $article->type             = $post['type'];
+        $article->author_id        = $post['author'];
+        $article->comments_enabled = $post['comments'];
+        $article->thumbnail_id     = $post['thumbnail_id'];
         $article->meta             = !empty($postMeta) ? $postMeta : null;
 
         if (isset($_POST['content']))
@@ -170,12 +169,12 @@ class Writer extends BaseModel
             $article->content = $_POST['content'];
         }
 
-        if (isset($validated_data['status']))
+        if (isset($post['status']))
         {
-            $article->status = $validated_data['status'];
+            $article->status = $post['status'];
         }
 
-        if (empty($validated_data['excerpt']))
+        if (empty($post['excerpt']))
         {
             $article->excerpt = $_POST['content'];
         }
@@ -183,21 +182,12 @@ class Writer extends BaseModel
         {
             if (empty($article->excerpt))
             {
-                $article->excerpt = $validated_data['excerpt'];
+                $article->excerpt = $post['excerpt'];
             }
             else
             {
                 $article->excerpt = $article->excerpt;
             }
-        }
-
-        if (!empty($validated_data['thumbnail_id']))
-        {
-            $article->thumbnail_id = intval($validated_data['thumbnail_id']);
-        }
-        else
-        {
-            $article->thumbnail_id = null;
         }
 
         if ($article->save())
@@ -213,7 +203,7 @@ class Writer extends BaseModel
             // Return slug/id
             $suffix = $article->status === 'published' ? '' : '?draft';
 
-            if ($validated_data['type'] === 'post')
+            if ($post['type'] === 'post')
             {
                 $blogPrefix = $this->Config->get('cms.blog_location');
 
@@ -235,84 +225,70 @@ class Writer extends BaseModel
     private function saveNewArticle()
     {
         // Sanitize and validate the POST variables
-        $post = $this->container->get('Validation')->sanitize($this->post);
+        $rules =
+        [
+            'type'  => ['required'],
+        ];
+        $filters =
+        [
+            'title'        => ['trim', 'string'],
+            'category'     => ['trim', 'string'],
+            'tags'         => ['trim', 'string'],
+            'type'         => ['trim', 'string'],
+            'excerpt'      => ['trim', 'string'],
+            'status'       => ['trim', 'string'],
+            'comments'     => ['trim', 'boolean'],
+            'thumbnail_id' => ['trim', 'integer'],
+            'author'       => ['trim', 'integer'],
+        ];
 
-        $this->container->get('Validation')->validation_rules([
-            'type' => 'required',
-        ]);
+        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
 
-        $this->container->get('Validation')->filter_rules([
-            'title'        => 'trim|sanitize_string',
-            'category'     => 'trim|sanitize_string',
-            'tags'         => 'trim|sanitize_string',
-            'type'         => 'trim|sanitize_string',
-            'excerpt'      => 'trim|sanitize_string',
-            'status'       => 'trim|sanitize_string',
-            'thumbnail_id' => 'trim|sanitize_numbers',
-            'author'       => 'trim|sanitize_numbers',
-        ]);
-
-        $validated_data = $this->container->get('Validation')->run($post);
-
-        if (!$validated_data)
+        if (!$validator->isValid())
         {
             return false;
         }
 
+        $post = $validator->filter();
+
         // Get the article content directly from the _POST global
         // so it is not filtered in any way
-        if (isset($_POST['content']))
-        {
-            $validated_data['content'] = $_POST['content'];
-        }
+        $post['content'] = !empty($post['content']) ? $_POST['content'] : '';
 
         // Default is to save as draft
-        if (!isset($validated_data['status']))
-        {
-            $validated_data['status'] = 'draft';
-        }
-
-        $validated_data['author'] = intval($validated_data['author']);
+        $post['status'] = !isset($post['status']) ? 'draft' : $post['status'];
+            
+        // Default excerpt
+        $post['excerpt'] = empty($post['excerpt']) ? $_POST['content'] : $post['excerpt'];
 
         $postMeta = $this->getPostMeta();
 
-        $excerpt = '';
-
-        if (empty($validated_data['excerpt']))
-        {
-            $excerpt = $validated_data['content'];
-        }
-        else
-        {
-            $excerpt = $validated_data['excerpt'];
-        }
-
-        $post = $this->PostManager->create([
-            'title'        => $validated_data['title'],
-            'categories'   => $validated_data['category'],
-            'tags'         => $validated_data['tags'],
-            'excerpt'      => $excerpt,
-            'thumbnail_id' => $validated_data['thumbnail_id'],
-            'status'       => $validated_data['status'],
-            'type'         => $validated_data['type'],
-            'author_id'    => $validated_data['author'],
-            'content'      => !empty($_POST['content']) ? $_POST['content'] : null,
-            'comments_enabled' => Str::bool($validated_data['comments']),
-            'meta'         => !empty($postMeta) ? serialize($postMeta) : null,
+        $newPost = $this->PostManager->create([
+            'title'            => $post['title'],
+            'categories'       => $post['category'],
+            'tags'             => $post['tags'],
+            'excerpt'          => $post['excerpt'],
+            'thumbnail_id'     => $post['thumbnail_id'],
+            'status'           => $post['status'],
+            'type'             => $post['type'],
+            'author_id'        => $post['author'],
+            'content'          => $post['content'],
+            'comments_enabled' => $post['comments'],
+            'meta'             => !empty($postMeta) ? serialize($postMeta) : null,
         ]);
 
-        if ($post)
+        if ($newPost)
         {
-            $suffix = $validated_data['status'] === 'published' ? '' : '?draft';
+            $suffix = $post['status'] === 'published' ? '' : '?draft';
 
-            if ($post->type === 'post')
+            if ($newPost->type === 'post')
             {
                 $blogPrefix = $this->Config->get('cms.blog_location');
 
-                return ['id' => $post->id, 'slug' => !$blogPrefix ? $post->slug . $suffix : $blogPrefix . '/' . $post->slug . $suffix];
+                return ['id' => $newPost->id, 'slug' => !$blogPrefix ? $newPost->slug . $suffix : $blogPrefix . '/' . $newPost->slug . $suffix];
             }
 
-            return ['id' => $post->id, 'slug' => $post->slug . $suffix];
+            return ['id' => $newPost->id, 'slug' => $newPost->slug . $suffix];
         }
 
         return false;

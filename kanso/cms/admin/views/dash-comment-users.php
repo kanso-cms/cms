@@ -3,7 +3,7 @@
 
 	<!-- HEADING -->
 	<section class="page-heading">
-		<h1>Comment Users</h1>
+		<h1>Commentors</h1>
 	</section>
 
 	<?php require_once($_TEMPLATES_DIR . DIRECTORY_SEPARATOR . 'post-message.php'); ?>
@@ -13,7 +13,7 @@
 		<ul class="tab-nav tab-border">
 			<li><a href="/admin/leads/">Leads</a></li>
 			<li><a href="/admin/comments/">Comments</a></li>
-		    <li><a href="/admin/comment-users/" class="active">Users</a></li>
+		    <li><a href="/admin/comment-users/" class="active">Commentors</a></li>
 		</ul>
 	</div>
 	

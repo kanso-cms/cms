@@ -36,6 +36,7 @@ use kanso\framework\validator\rules\GreaterThan;
 use kanso\framework\validator\rules\GreaterThanOrEqualTo;
 use kanso\framework\validator\rules\In;
 
+use kanso\framework\validator\rules\AlphaSpace;
 use kanso\framework\validator\rules\Integer;
 use kanso\framework\validator\rules\IP;
 use kanso\framework\validator\rules\JSON;
@@ -102,6 +103,7 @@ class Validator
 	 */
 	private $rules =
 	[
+		'alpha_space'              => AlphaSpace::class,
 		'alpha'                    => Alpha::class,
 		'alpha_dash'               => AlphanumericDash::class,
 		'alpha_numeric'            => Alphanumeric::class,

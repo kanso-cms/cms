@@ -234,13 +234,6 @@ class Leads extends BaseModel
                         unset($visitors[$i]);
                     }
                 }
-                elseif ($action === 'visited-checkout')
-                {
-                    if (!$visitor->visitedCheckout())
-                    {
-                        unset($visitors[$i]);
-                    }
-                }
             }
 
             $visitors = array_values($visitors);

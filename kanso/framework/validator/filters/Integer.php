@@ -7,6 +7,8 @@
 
 namespace kanso\framework\validator\filters;
 
+use kanso\framework\validator\filters\traits\FiltersWhenUnset;
+
 /**
  * Integer.
  *
@@ -14,11 +16,13 @@ namespace kanso\framework\validator\filters;
  */
 class Integer extends FilterBase implements FilterInterface
 {
+	use FiltersWhenUnset;
+
 	/**
 	 * {@inheritdoc}
 	 */
 	public function filter(string $value)
 	{
-		return intval($value);
+		return $value === '' ? null : intval($value);
 	}
 }

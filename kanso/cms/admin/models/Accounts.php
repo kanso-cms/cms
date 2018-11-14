@@ -112,49 +112,53 @@ class Accounts extends BaseModel
      */
     private function processLoginPOST(): array
     {
-        $post = $this->container->get('Validator')->sanitize($this->post);
+        $rules =
+        [
+            'username'  => ['required', 'max_length(50)', 'min_length(4)'],
+            'password'  => ['required', 'max_length(50)', 'min_length(4)'],
+        ];
+        $filters =
+        [
+            'username' => ['trim', 'string'],
+            'password' => ['trim'],
+        ];
 
-        $this->container->get('Validator')->validation_rules([
-            'username'  => 'required|max_len,100|min_len,5',
-            'password'  => 'required|max_len,100|min_len,5',
-        ]);
+        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
 
-        $this->container->get('Validator')->filter_rules([
-            'username' => 'trim|sanitize_string',
-            'password' => 'trim',
-        ]);
-
-        $validated_data = $this->container->get('Validator')->run($post);
-
-        if ($validated_data)
+        if (!$validator->isValid())
         {
-            $user = $this->UserManager->byUsername($validated_data['username']);
-
-            if (!$user || ($user->role !== 'administrator' && $user->role !== 'writer'))
-            {
-                return $this->postMessage('danger', 'Either the username or password you entered was incorrect.');
-            }
-
-            $login = $this->Gatekeeper->login($validated_data['username'], $validated_data['password']);
-
-            if ($login === $this->Gatekeeper::LOGIN_ACTIVATING)
-            {
-                return $this->postMessage('warning', 'Your account has not yet been activated.');
-            }
-            elseif ($login === $this->Gatekeeper::LOGIN_LOCKED)
-            {
-                return $this->postMessage('warning', 'That account has been temporarily locked.');
-            }
-            elseif ($login === $this->Gatekeeper::LOGIN_BANNED)
-            {
-                return $this->postMessage('warning', 'That account has been permanently suspended.');
-            }
-            elseif ($login === true)
-            {
-                $this->Response->redirect($this->Request->environment()->HTTP_HOST . '/admin/posts/');
-            }
+            return $this->postMessage('danger', 'Either the username or password you entered was incorrect.');
         }
 
+        // Sanitize and validate the POST
+        $post = $validator->filter();
+ 
+        $user = $this->UserManager->byUsername($post['username']);
+
+        if (!$user || ($user->role !== 'administrator' && $user->role !== 'writer'))
+        {
+            return $this->postMessage('danger', 'Either the username or password you entered was incorrect.');
+        }
+
+        $login = $this->Gatekeeper->login($post['username'], $post['password']);
+
+        if ($login === $this->Gatekeeper::LOGIN_ACTIVATING)
+        {
+            return $this->postMessage('warning', 'Your account has not yet been activated.');
+        }
+        elseif ($login === $this->Gatekeeper::LOGIN_LOCKED)
+        {
+            return $this->postMessage('warning', 'That account has been temporarily locked.');
+        }
+        elseif ($login === $this->Gatekeeper::LOGIN_BANNED)
+        {
+            return $this->postMessage('warning', 'That account has been permanently suspended.');
+        }
+        elseif ($login === true)
+        {
+            $this->Response->redirect($this->Request->environment()->HTTP_HOST . '/admin/posts/');
+        }
+        
         return $this->postMessage('danger', 'Either the username or password you entered was incorrect.');
     }
 
@@ -166,25 +170,27 @@ class Accounts extends BaseModel
      */
     private function processForgotPassowordPOST(): array
     {
-        $post = $this->container->get('Validator')->sanitize($this->post);
+        $post  = $this->post;
+        $rules =
+        [
+            'username'  => ['required', 'max_length(50)', 'min_length(4)'],
+        ];
+        $filters =
+        [
+            'username' => ['trim', 'string'],
+        ];
 
-        $this->container->get('Validator')->validation_rules([
-            'username'  => 'required|max_len,100|min_len,5',
-        ]);
+        $validator = $this->container->get('Validator')->create($post, $rules, $filters);
 
-        $this->container->get('Validator')->filter_rules([
-            'username' => 'trim|sanitize_string',
-        ]);
+        $post = $validator->filter();
 
-        $validated_data = $this->container->get('Validator')->run($post);
-
-        if ($validated_data)
+        if ($validator->isValid())
         {
-            $user = $this->UserManager->byUsername($validated_data['username']);
+            $user = $this->UserManager->byUsername($post['username']);
 
             if ($user || ($user->role !== 'administrator' && $user->role !== 'writer'))
             {
-                $this->Gatekeeper->forgotPassword($validated_data['username']);
+                $this->Gatekeeper->forgotPassword($post['username']);
             }
         }
 
@@ -198,26 +204,27 @@ class Accounts extends BaseModel
      * @return array
      */
     private function processForgotUsernamePOST(): array
-    {
-        $post = $this->container->get('Validator')->sanitize($this->post);
+    {        
+        $rules =
+        [
+            'email'  => ['required', 'email'],
+        ];
+        $filters =
+        [
+            'email' => ['trim', 'email'],
+        ];
 
-        $this->container->get('Validator')->validation_rules([
-            'username'  => 'required|max_len,100|min_len,5',
-        ]);
+        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
 
-        $this->container->get('Validator')->filter_rules([
-            'username' => 'trim|sanitize_string',
-        ]);
+        $post = $validator->filter();
 
-        $validated_data = $this->container->get('Validator')->run($post);
-
-        if ($validated_data)
+        if ($validator->isValid())
         {
-            $user = $this->UserManager->byUsername($validated_data['username']);
+            $user = $this->UserManager->byEmail($post['email']);
 
             if ($user || ($user->role !== 'administrator' && $user->role !== 'writer'))
             {
-                $this->Gatekeeper->forgotPassword($validated_data['username']);
+                $this->Gatekeeper->forgotUsername($post['email']);
             }
         }
 
@@ -239,6 +246,15 @@ class Accounts extends BaseModel
         if (!$token || trim($token) === '' || $token === 'null')
         {
             return false;
+        }
+
+        // The user just updated their password they can load the page once
+        // to show the success message
+        if ($this->Response->session()->get('kanso_updated_password'))
+        {
+            $this->Response->session()->remove('kanso_updated_password');
+
+            return true;
         }
 
         // Get the user based on their token
@@ -263,30 +279,33 @@ class Accounts extends BaseModel
      */
     private function processResetpasswordPOST()
     {
-        // $_POST password must be set - get directly from POST so it is untouched
-        if (!isset($_POST['password']))
+        $post  = $this->post;
+        $rules =
+        [
+            'password'  => ['required', 'max_length(50)', 'min_length(4)'],
+        ];
+        $filters =
+        [
+            'password' => ['trim'],
+        ];
+
+        $validator = $this->container->get('Validator')->create($post, $rules, $filters);
+
+        if (!$validator->isValid())
         {
-            return false;
+            $errors = $validator->getErrors();
+
+            return $this->postMessage('warning', array_shift($errors));
         }
 
-        $post = $this->container->get('Validator')->sanitize($this->post);
-
-        $this->container->get('Validator')->validation_rules([
-            'username'  => 'required|max_len,100|min_len,5',
-        ]);
-
-        $this->container->get('Validator')->filter_rules([
-            'username' => 'trim|sanitize_string',
-        ]);
-
-        $validated_data = $this->container->get('Validator')->run($post);
+        $post = $validator->filter();
 
         // Make sure the user's token is in the session and they match
         $token = $this->Response->session()->get('kanso_password_key');
 
         if (!$token)
         {
-            return false;
+            return $this->postMessage('danger', 'There was an error processing your request.');
         }
 
         // Get the user based on their token
@@ -294,9 +313,11 @@ class Accounts extends BaseModel
 
         if ($user)
         {
-            if ($this->Gatekeeper->resetPassword($_POST['password'], $token))
+            if ($this->Gatekeeper->resetPassword($post['password'], $token))
             {
                 $this->Response->session()->remove('kanso_password_key');
+
+                $this->Response->session()->set('kanso_updated_password', true);
 
                 return $this->postMessage('success', 'Your password was successfully reset.');
             }

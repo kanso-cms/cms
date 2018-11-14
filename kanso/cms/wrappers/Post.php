@@ -352,7 +352,7 @@ class Post extends Wrapper
 	 */
 	private function getTheExceprt(): string
 	{
-		return Str::mysqlDecode($this->data['excerpt']);
+		return !empty($this->data['excerpt']) ? Str::mysqlDecode($this->data['excerpt']) : '';
 	}
 
 	/**
