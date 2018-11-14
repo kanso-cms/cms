@@ -137,33 +137,34 @@ class Settings extends BaseModel
      */
     private function submitAccountSettings()
     {
-        $post = $this->container->get('Validator')->sanitize($this->post);
+        $post  = $this->post;
+        $rules =
+        [
+            'username' => ['required', 'alpha_dash', 'max_length(100)', 'min_length(4)'],
+            'email'    => ['required', 'email'],
+            'password' => ['max_length(100)', 'min_length(6)'],
+        ];
+        $filters =
+        [
+            'username' => ['trim', 'string'],
+            'email'    => ['trim', 'string', 'email'],
+            'password' => ['trim'],
+            'email_notifications' => ['trim', 'boolean'],
+        ];
 
-        $this->container->get('Validator')->validation_rules([
-            'username'            => 'required|alpha_dash|max_len,100|min_len,4',
-            'email'               => 'required|valid_email',
-            'password'            => 'max_len,100|min_len,6',
-            'email_notifications' => 'boolean',
-        ]);
+        $validator = $this->container->get('Validator')->create($post, $rules, $filters);
 
-        $this->container->get('Validator')->filter_rules([
-            'username' => 'trim|sanitize_string',
-            'email'    => 'trim|sanitize_email',
-            'password' => 'trim',
-            'email_notifications' => 'trim|sanitize_string',
-        ]);
-
-        $validated_data = $this->container->get('Validator')->run($post);
-
-        if (!$validated_data)
+        if (!$validator->isValid())
         {
             return false;
         }
 
+        $validated_data = $validator->filter();
+
         $username = $validated_data['username'];
         $email    = $validated_data['email'];
         $password = $validated_data['password'];
-        $emailNotifications = isset($validated_data['email_notifications']) ? true : false;
+        $emailNotifications = $validated_data['email_notifications'];
 
         // Grab the user's object
         $user = $this->Gatekeeper->getUser();
@@ -211,6 +212,30 @@ class Settings extends BaseModel
      */
     private function submitAuthorSettings()
     {
+        $post  = $this->post;
+        $rules =
+        [
+            'name'        => ['required', 'alpha_dash', 'max_length(100)', 'min_length(4)'],
+            'slug'        => ['required', 'email'],
+            'description' => ['max_length(100)', 'min_length(6)'],
+        ];
+        $filters =
+        [
+            'username' => ['trim', 'string'],
+            'email'    => ['trim', 'string', 'email'],
+            'password' => ['trim'],
+            'email_notifications' => ['trim', 'boolean'],
+        ];
+
+        $validator = $this->container->get('Validator')->create($post, $rules, $filters);
+
+        if (!$validator->isValid())
+        {
+            return false;
+        }
+
+        $validated_data = $validator->filter();
+
         // Sanitize and validate the POST
         $post = $this->container->get('Validator')->sanitize($this->post);
 

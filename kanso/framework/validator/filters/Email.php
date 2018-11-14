@@ -12,7 +12,7 @@ namespace kanso\framework\validator\filters;
  *
  * @author Joe J. Howard
  */
-class Email implements FilterInterface
+class Email extends FilterBase implements FilterInterface
 {
 	/**
 	 * {@inheritdoc}

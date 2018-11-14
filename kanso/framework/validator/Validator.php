@@ -10,6 +10,7 @@ namespace kanso\framework\validator;
 use kanso\framework\ioc\Container;
 use kanso\framework\utility\Arr;
 use kanso\framework\utility\Str;
+use kanso\framework\validator\filters\BoolVal as FilterBool;
 use kanso\framework\validator\filters\Email as FilterEmail;
 use kanso\framework\validator\filters\FilterInterface;
 use kanso\framework\validator\filters\FloatingPoint as FilterFloat;
@@ -131,6 +132,7 @@ class Validator
 	 */
 	private $filters =
 	[
+		'boolean'     => FilterBool::class,
 		'email'       => FilterEmail::class,
 		'float'       => FilterFloat::class,
 		'html_decode' => FilterHtmlDecode::class,
@@ -238,14 +240,22 @@ class Validator
 
 		foreach ($this->filterSets as $field => $filters)
 		{
-			if (isset($input[$field]))
+			foreach ($filters as $filter)
 			{
-				foreach ($filters as $filter)
+				if (isset($input[$field]))
 				{
 					$input[$field] = $this->applyFilter($input[$field], $filter);
 				}
-			}
+				else
+				{
+					$class = $this->filterFactory($filter);
 
+					if ($class->filterWhenUnset() === true)
+					{
+						$input[$field] = $class->filter('');
+					}
+				}
+			}
 		}
 
 		return $input;

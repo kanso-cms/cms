@@ -21,4 +21,11 @@ interface FilterInterface
 	 * @return mixed
 	 */
 	public function filter(string $value);
+
+	/**
+	 * Pass through filter when field is not set
+	 *
+	 * @return bool
+	 */
+	public function filterWhenUnset(): bool;
 }

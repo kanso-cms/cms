@@ -12,7 +12,7 @@ namespace kanso\framework\validator\filters;
  *
  * @author Joe J. Howard
  */
-class StripTags implements FilterInterface
+class StripTags extends FilterBase implements FilterInterface
 {
 	/**
 	 * {@inheritdoc}

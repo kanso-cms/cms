@@ -12,7 +12,7 @@ namespace kanso\framework\validator\filters;
  *
  * @author Joe J. Howard
  */
-class FloatingPoint implements FilterInterface
+class FloatingPoint extends FilterBase implements FilterInterface
 {
 	/**
 	 * {@inheritdoc}

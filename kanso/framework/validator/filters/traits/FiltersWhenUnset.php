@@ -5,20 +5,20 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\framework\validator\filters;
+namespace kanso\framework\validator\filters\traits;
 
 /**
- * Trim.
+ * Boolean filter.
  *
  * @author Joe J. Howard
  */
-class Trim extends FilterBase implements FilterInterface
+trait FiltersWhenUnset
 {
 	/**
 	 * {@inheritdoc}
 	 */
-	public function filter(string $value)
+	public function filterWhenUnset(): bool
 	{
-		return trim($value);
+		return true;
 	}
 }

@@ -12,7 +12,7 @@ namespace kanso\framework\validator\filters;
  *
  * @author Joe J. Howard
  */
-class Json implements FilterInterface
+class Json extends FilterBase implements FilterInterface
 {
 	/**
 	 * {@inheritdoc}

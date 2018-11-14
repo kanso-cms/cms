@@ -12,7 +12,7 @@ namespace kanso\framework\validator\filters;
  *
  * @author Joe J. Howard
  */
-class UpperCase implements FilterInterface
+class UpperCase extends FilterBase implements FilterInterface
 {
 	/**
 	 * {@inheritdoc}

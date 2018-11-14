@@ -7,18 +7,14 @@
 
 namespace kanso\framework\validator\filters;
 
+use kanso\framework\validator\filters\traits\DoesntFilterWhenUnset;
+
 /**
- * Numeric.
+ * Boolean filter.
  *
  * @author Joe J. Howard
  */
-class Numeric extends FilterBase implements FilterInterface
+abstract class FilterBase
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	public function filter(string $value)
-	{
-		return preg_replace('/[^0-9]+/', '', $value);
-	}
+	use DoesntFilterWhenUnset;
 }

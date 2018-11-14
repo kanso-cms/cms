@@ -12,7 +12,7 @@ namespace kanso\framework\validator\filters;
  *
  * @author Joe J. Howard
  */
-class Integer implements FilterInterface
+class Integer extends FilterBase implements FilterInterface
 {
 	/**
 	 * {@inheritdoc}

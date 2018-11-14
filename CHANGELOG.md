@@ -11,6 +11,13 @@ Update using ```git fetch```.
 * Added new `Plugin` abstract class for CMS.
 * Added new `Image::loadImage` method.
 * New `parent` method added to `Comment`.
+
+
+#### Changes
+* Updated to single root level `.gitignore`.
+* `kanso\framework\pixl\Image` constructor file path is now optional.
+* `kanso\framework\pixl\processor\GD` constructor now has optional second argument for default image quality.
+* `kanso\framework\utility\Gump` replaced with `kanso\framework\validator\Validator`. See documentation for details. 
 * `CategoryManager::create` returns `FALSE` if category already exists.
 * `TagManager::create` returns `FALSE` if tag already exists.
 * `UserManager::createAdmin` returns `User` if successful.
@@ -19,13 +26,6 @@ Update using ```git fetch```.
 * `CommentProvider::byKey` returns `FALSE` if comment does not exist. 
 * `MediaProvider::byKey` returns `FALSE` if media does not exist. 
 * `PostProvider::byKey` returns `FALSE` if post does not exist. 
-
-#### Changes
-* Updated to single root level `.gitignore`.
-* `kanso\framework\pixl\Image` constructor file path is now optional.
-* `kanso\framework\pixl\processor\GD` constructor now has optional second argument for default image quality.
-* `kanso\framework\utility\Gump` replaced with `kanso\framework\validator\Validator`. See documentation for details. 
-
 * Bumped `Kanso::VERSION` number.
 
 #### Bugfixes

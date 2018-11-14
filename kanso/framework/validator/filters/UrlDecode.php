@@ -12,7 +12,7 @@ namespace kanso\framework\validator\filters;
  *
  * @author Joe J. Howard
  */
-class UrlDecode implements FilterInterface
+class UrlDecode extends FilterBase implements FilterInterface
 {
 	/**
 	 * {@inheritdoc}

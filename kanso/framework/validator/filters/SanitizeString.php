@@ -12,7 +12,7 @@ namespace kanso\framework\validator\filters;
  *
  * @author Joe J. Howard
  */
-class SanitizeString implements FilterInterface
+class SanitizeString extends FilterBase implements FilterInterface
 {
 	/**
 	 * {@inheritdoc}
