@@ -69,10 +69,10 @@ class WrapperService extends Service
 				$container->MediaProvider,
 				$container->Request->environment(),
 				$container->Gatekeeper,
+				$container->Pixl,
 				$container->Config->get('cms.uploads.path'),
 				$container->Config->get('cms.uploads.accepted_mime'),
-				$container->Config->get('cms.uploads.thumbnail_sizes'),
-				$container->Config->get('cms.uploads.thumbnail_quality')
+				$container->Config->get('cms.uploads.thumbnail_sizes')
 			);
 		});
 

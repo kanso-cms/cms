@@ -283,7 +283,7 @@ class Settings extends BaseModel
         $rules =
         [
             'posts_per_page'     => ['required'],
-            'thumbnail_quality'  => ['required'],
+            'thumbnail_quality'  => ['required', 'greater_than_or_equal_to(0)', 'less_than_or_equal_to(9)'],
             'cdn_url'            => ['url'],
             'cache_life'         => [],
             'site_title'         => ['required'],
@@ -344,12 +344,6 @@ class Settings extends BaseModel
             return $this->postMessage('warning', 'The cache life value you entered is invalid. Please ensure you enter a cache lifetime - e.g. "1 month" or "3 days".');
         }
 
-        // Validate thumbnail quality
-        if ($post['thumbnail_quality'] > 100 || $post['thumbnail_quality'] < 1)
-        {
-            return $this->postMessage('warning', 'The image quality value you entered is invalid. Please enter a number between 0 and 100.');
-        }
-
         // Validate the CDN URL
         if ($post['enable_cdn'] && !filter_var($post['cdn_url'], FILTER_VALIDATE_URL))
         {
@@ -390,7 +384,7 @@ class Settings extends BaseModel
             $this->Config->set('cms.' . $key, $val);
         }
 
-        $this->Config->set('cms.uploads.thumbnail_quality', $post['thumbnail_quality']);
+        $this->Config->set('pixl.compression', $post['thumbnail_quality']);
 
         $this->Config->set('cdn.enabled', $post['enable_cdn']);
         $this->Config->set('cdn.host', $post['cdn_url']);

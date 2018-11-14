@@ -12,7 +12,6 @@ use kanso\cms\wrappers\providers\MediaProvider;
 use kanso\framework\database\query\Builder;
 use kanso\framework\http\request\Environment;
 use kanso\framework\pixl\Image;
-use kanso\framework\pixl\processor\GD;
 use kanso\framework\utility\Mime;
 use kanso\framework\utility\Str;
 
@@ -59,13 +58,6 @@ class MediaManager extends Manager
     private $thumbnailSizes;
 
     /**
-     * Thumbnail quality for images 0 -> 100.
-     *
-     * @var int
-     */
-    private $thumbnailQuality;
-
-    /**
      * Array of image mime types.
      *
      * @var array
@@ -87,7 +79,7 @@ class MediaManager extends Manager
      * @param string                                      $uploadDir    Path to upload files to
      * @param array                                       $acceptedMime Array of accepted mime types
      */
-    public function __construct(Builder $SQL, MediaProvider $provider, Environment $environment, Gatekeeper $gatekeeper, string $uploadDir, array $acceptedMime, array $thumbnailSizes, int $thumbnailQuality)
+    public function __construct(Builder $SQL, MediaProvider $provider, Environment $environment, Gatekeeper $gatekeeper, Image $pixl, string $uploadDir, array $acceptedMime, array $thumbnailSizes)
     {
         $this->SQL = $SQL;
 
@@ -103,7 +95,7 @@ class MediaManager extends Manager
 
         $this->thumbnailSizes = $thumbnailSizes;
 
-        $this->thumbnailQuality = $thumbnailQuality;
+        $this->pixl = $pixl;
     }
 
     /**
@@ -225,7 +217,9 @@ class MediaManager extends Manager
         else
         {
             // Grab our image processor
-            $Imager = new Image($FILE['tmp_name'], new GD);
+            $pixl = $this->pixl;
+            
+            $pixl->loadImage($FILE['tmp_name']);
 
             // Get the file extension from the mime type
             $ext = Mime::toExt($FILE['type']);
@@ -235,9 +229,6 @@ class MediaManager extends Manager
 
             // Save the destination path
             $destPath = $this->uniqueName($this->uploadDir . DIRECTORY_SEPARATOR . $name . '.' . $ext);
-
-            // Image quality
-            $qual = $ext === 'png' ? ($this->thumbnailQuality/10) : $this->thumbnailQuality;
 
             // Loop through config sizes, resize and upload
             foreach ($this->thumbnailSizes as $suffix => $size) {
@@ -249,15 +240,15 @@ class MediaManager extends Manager
                 // otherwise just resize to width;
                 if (is_array($size))
                 {
-                    $Imager->crop($size[0], $size[1], true);
+                    $pixl->crop($size[0], $size[1], true);
                 }
                 else
                 {
-                    $Imager->resizeToWidth($size, true);
+                    $pixl->resizeToWidth($size, true);
                 }
 
                 // Save the file
-                $saved = $Imager->save($dst, false, $qual);
+                $saved = $pixl->save($dst, false);
 
                 if (!$saved)
                 {

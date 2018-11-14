@@ -76,9 +76,9 @@ $cdn_enabbled  = $kanso->Config->get('cdn.enabled');
         <div class="form-field row floor-sm">
             <label for="thumbnail_quality">Thumbnail quality</label>
             <p class="color-gray">
-                What image quality should Kanso use for resizing. 0 is bad, 100 is great.
+                What image quality should Kanso use for uploading. 0 best. 9 is bad.
             </p>
-            <input type="text" name="thumbnail_quality" id="thumbnail_quality" class="js-mask-numeric" data-js-required="true" data-js-validation="numeric" value="<?php echo $kansoConfig['uploads']['thumbnail_quality']; ?>" autocomplete="off"/>
+            <input type="text" name="thumbnail_quality" id="thumbnail_quality" class="js-mask-numeric" data-js-required="true" data-js-validation="numeric" value="<?php echo $kanso->Config->get('pixl.compression'); ?>" autocomplete="off"/>
             <p class="help-danger">* Please enter a thumbnail quality.</p>
         </div>
 
