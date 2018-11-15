@@ -7,6 +7,8 @@
 
 namespace kanso\framework\cache;
 
+use kanso\framework\cache\stores\StoreInterface;
+
 /**
  * Cache storage.
  *
@@ -24,7 +26,7 @@ class Cache
     /**
      * Storage implementation.
      *
-     * @var int
+     * @var \kanso\framework\cache\stores\StoreInterface
      */
     private $store;
 
@@ -32,10 +34,10 @@ class Cache
      * Constructor.
      *
      * @access public
-     * @param int   $lifetime Date the cache will expire (unix timestamp)
-     * @param mixed $store    Storage impementation
+     * @param int                                          $lifetime Date the cache will expire (unix timestamp)
+     * @param \kanso\framework\cache\stores\StoreInterface $store    Storage impementation
      */
-    public function __construct($lifetime, $store)
+    public function __construct(int $lifetime, StoreInterface $store)
     {
         $this->store = $store;
 

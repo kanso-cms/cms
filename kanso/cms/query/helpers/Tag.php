@@ -41,7 +41,7 @@ class Tag extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
             if ($post)
             {
                 return $post->tags;
@@ -67,7 +67,7 @@ class Tag extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -124,7 +124,7 @@ class Tag extends Helper
         }
         else
         {
-            $tag = $this->parent->helpers['cache']->getTagById($tag_id);
+            $tag = $this->parent->helper('cache')->getTagById($tag_id);
         }
 
         if ($tag)
@@ -155,7 +155,7 @@ class Tag extends Helper
         }
         else
         {
-            $tag = $this->parent->helpers['cache']->getTagById($tag_id);
+            $tag = $this->parent->helper('cache')->getTagById($tag_id);
         }
 
         if ($tag)
@@ -176,24 +176,24 @@ class Tag extends Helper
      */
     public function the_taxonomy()
     {
-        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helper('cache')->key(__FUNCTION__, func_get_args(), func_num_args());
 
-        if ($this->parent->helpers['cache']->has($key))
+        if ($this->parent->helper('cache')->has($key))
         {
-            return $this->parent->helpers['cache']->get($key);
+            return $this->parent->helper('cache')->get($key);
         }
 
         if ($this->parent->requestType === 'category')
         {
-            return $this->parent->helpers['cache']->set($key, $this->container->get('CategoryManager')->provider()->byKey('slug', $this->parent->taxonomySlug, true));
+            return $this->parent->helper('cache')->set($key, $this->container->get('CategoryManager')->provider()->byKey('slug', $this->parent->taxonomySlug, true));
         }
         elseif ($this->parent->requestType === 'tag')
         {
-            return $this->parent->helpers['cache']->set($key, $this->container->get('TagManager')->provider()->byKey('slug', $this->parent->taxonomySlug, true));
+            return $this->parent->helper('cache')->set($key, $this->container->get('TagManager')->provider()->byKey('slug', $this->parent->taxonomySlug, true));
         }
         elseif ($this->parent->requestType === 'author')
         {
-            return $this->parent->helpers['cache']->set($key, $this->container->get('UserManager')->provider()->byKey('slug', $this->parent->taxonomySlug, true));
+            return $this->parent->helper('cache')->set($key, $this->container->get('UserManager')->provider()->byKey('slug', $this->parent->taxonomySlug, true));
         }
 
         return null;
@@ -207,11 +207,11 @@ class Tag extends Helper
      */
     public function all_the_tags(): array
     {
-        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helper('cache')->key(__FUNCTION__, func_get_args(), func_num_args());
 
-        if ($this->parent->helpers['cache']->has($key))
+        if ($this->parent->helper('cache')->has($key))
         {
-            return $this->parent->helpers['cache']->get($key);
+            return $this->parent->helper('cache')->get($key);
         }
 
         $tags = [];
@@ -223,7 +223,7 @@ class Tag extends Helper
             $tags[] = $this->container->get('TagManager')->byId($row['id']);
         }
 
-        return $this->parent->helpers['cache']->set($key, $tags);
+        return $this->parent->helper('cache')->set($key, $tags);
     }
 
     /**
@@ -237,7 +237,7 @@ class Tag extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -278,18 +278,18 @@ class Tag extends Helper
      */
     public function the_tag_posts(int $tag_id, bool $published = true): array
     {
-        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helper('cache')->key(__FUNCTION__, func_get_args(), func_num_args());
 
-        if ($this->parent->helpers['cache']->has($key))
+        if ($this->parent->helper('cache')->has($key))
         {
-            return $this->parent->helpers['cache']->get($key);
+            return $this->parent->helper('cache')->get($key);
         }
 
         if ($this->parent->tag_exists($tag_id))
         {
-            return $this->parent->helpers['cache']->set($key, $this->container->get('PostManager')->provider()->byKey('tags.id', $tag_id, false, $published));
+            return $this->parent->helper('cache')->set($key, $this->container->get('PostManager')->provider()->byKey('tags.id', $tag_id, false, $published));
         }
 
-        return $this->parent->helpers['cache']->set($key, []);
+        return $this->parent->helper('cache')->set($key, []);
     }
 }

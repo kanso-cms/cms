@@ -7,6 +7,7 @@
 
 namespace kanso\cms\admin\models;
 
+use kanso\cms\wrappers\Category;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
 use kanso\framework\utility\Arr;
@@ -400,11 +401,11 @@ class Categories extends BaseModel
      * Recursively get category children.
      *
      * @access private
-     * @param  Category $parent Category parent object
-     * @param  array    $parent Category parent children (optional) (default [])
+     * @param  \kanso\cms\wrappers\Category $parent Category parent object
+     * @param  array                        $parent Category parent children (optional) (default [])
      * @return array
      */
-    private function recursiveChildren($parent, $children = []): array
+    private function recursiveChildren(Category $parent, $children = []): array
     {
         foreach ($parent->children() as $child)
         {

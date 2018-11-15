@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @copyright Frederic G. Østby
- * @license   http://www.makoframework.com/license
+ * @copyright Joe J. Howard
+ * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
 namespace kanso\framework\validator\rules;
@@ -15,7 +15,7 @@ use function sprintf;
 /**
  * Exact length rule.
  *
- * @author Frederic G. Østby
+ * @author Joe J. Howard
  */
 class ExactLength extends Rule implements RuleInterface, WithParametersInterface
 {

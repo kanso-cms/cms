@@ -66,7 +66,7 @@ class Middleware
      * Returns the callback.
      *
      * @access public
-     * @return \closure|string
+     * @return closure|string
      */
     public function getCallback()
     {

@@ -56,7 +56,7 @@ class ErrorHandler
 	/**
 	 * Logger.
 	 *
-	 * @var \kanso\framework\exception\Logger|null
+	 * @var \kanso\framework\exception\ErrorLogger
 	 */
 	private $logger;
 
@@ -119,7 +119,8 @@ class ErrorHandler
 	/**
 	 * Set logger instance.
 	 *
-	 * @var \Psr\Log\LoggerInterface
+	 * @access public
+	 * @param \kanso\framework\exception\ErrorLogger $logger Error logger
 	 */
 	public function setLogger(ErrorLogger $logger)
 	{

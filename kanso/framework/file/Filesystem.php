@@ -417,10 +417,10 @@ class Filesystem
 	 * Returns a SplFileObject.
 	 *
 	 * @access  public
-	 * @param  string         $file           Path to file
-	 * @param  string         $openMode       Open mode
-	 * @param  bool           $useIncludePath Use include path? (optional) (default FALSE)
-	 * @return \SplFileObject
+	 * @param  string        $file           Path to file
+	 * @param  string        $openMode       Open mode
+	 * @param  bool          $useIncludePath Use include path? (optional) (default FALSE)
+	 * @return SplFileObject
 	 */
 	public static function file(string $file, string $openMode = 'r', bool $useIncludePath = false)
 	{

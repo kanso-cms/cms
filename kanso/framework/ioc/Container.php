@@ -274,7 +274,7 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
     /**
      * Protect closure from being directly invoked.
      * @param  \Closure $callable A closure to keep from being invoked and evaluated
-     * @return \Closure
+     * @return Closure
      */
     public function protect(Closure $callable)
     {

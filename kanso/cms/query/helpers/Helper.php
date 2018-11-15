@@ -28,14 +28,14 @@ abstract class Helper
     /**
      * IoC container instance.
      *
-     * @var kanso\framework\ioc\Container
+     * @var \kanso\framework\ioc\Container
      */
     protected $container;
 
     /**
      * Query instance.
      *
-     * @var kanso\cms\query\QueryBase
+     * @var \kanso\cms\query\Query
      */
     protected $parent;
 
@@ -43,7 +43,7 @@ abstract class Helper
      * Constructor.
      *
      * @access public
-     * @param kanso\framework\ioc\Container $container IoC container
+     * @param \kanso\framework\ioc\Container $container IoC container
      */
     public function __construct(Container $container)
     {
@@ -54,7 +54,7 @@ abstract class Helper
      * Returns query builder instance.
      *
      * @access public
-     * @param kanso\cms\query\QueryBase $query Query instance
+     * @param \kanso\cms\query\Query $query Query instance
      */
     public function setParent(Query $query)
     {
@@ -65,7 +65,7 @@ abstract class Helper
      * Returns query builder instance.
      *
      * @access public
-     * @param kanso\framework\ioc\Container $container IoC container
+     * @param \kanso\framework\ioc\Container $container IoC container
      */
     protected function sql(): Builder
     {

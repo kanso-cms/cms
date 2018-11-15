@@ -17,16 +17,16 @@ use kanso\framework\deployment\webhooks\WebhookInterface;
 class Deployment
 {
     /**
-     * Deployment interface implementation.
+     * Webhook interface.
      *
-     * @var string
+     * @var \kanso\framework\deployment\webhooks\WebhookInterface
      */
     private $webhook;
 
     /**
      * Constructor.
      *
-     * @param kanso\framework\deployment\methods\WebhookInterface $method Webhook deployment impelementation
+     * @param \kanso\framework\deployment\webhooks\WebhookInterface $method Webhook deployment impelementation
      */
     public function __construct(WebhookInterface $webhook)
     {

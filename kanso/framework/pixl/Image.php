@@ -27,7 +27,7 @@ class Image
     /**
      * Processor instance.
      *
-     * @var kanso\framework\pixl\processor\ProcessorInterface
+     * @var \kanso\framework\pixl\processor\ProcessorInterface
      */
     private $processor;
 
@@ -35,8 +35,8 @@ class Image
      * Constructor.
      *
      * @access public
-     * @param string                                            $image     Absolute path to file (optional) (default '')
-     * @param kanso\framework\pixl\processor\ProcessorInterface $processor Image processor implementation
+     * @param string                                             $image     Absolute path to file (optional) (default '')
+     * @param \kanso\framework\pixl\processor\ProcessorInterface $processor Image processor implementation
      */
     public function __construct(string $image = '', ProcessorInterface $processor)
     {

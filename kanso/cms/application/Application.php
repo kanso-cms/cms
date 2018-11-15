@@ -47,7 +47,7 @@ class Application
 	 * Starts and/or returns the instance of the application.
 	 *
 	 * @access public
-	 * @param  \kanso\framework\application\Container $container IoC container (optional) (default null)
+	 * @param  \kanso\framework\application\Container|null $container IoC container (optional) (default null)
 	 * @return \kanso\cms\CMS
 	 */
 	public static function instance($container = null): Application

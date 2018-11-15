@@ -63,42 +63,42 @@ class Post extends Wrapper
 	/**
 	 * Tag provider.
 	 *
-	 * @var kanso\cms\wrappers\providers\TagProvider
+	 * @var \kanso\cms\wrappers\providers\TagProvider
 	 */
 	private $tagProvider;
 
     /**
      * Category provider.
      *
-     * @var kanso\cms\wrappers\providers\CategoryProvider
+     * @var \kanso\cms\wrappers\providers\CategoryProvider
      */
     private $categoryProvider;
 
     /**
      * Media provider.
      *
-     * @var kanso\cms\wrappers\providers\MediaProvider
+     * @var \kanso\cms\wrappers\providers\MediaProvider
      */
     private $mediaProvider;
 
     /**
      * User provider.
      *
-     * @var kanso\cms\wrappers\providers\UserProvider
+     * @var \kanso\cms\wrappers\providers\UserProvider
      */
     private $userProvider;
 
     /**
      * Comment provider.
      *
-     * @var kanso\cms\wrappers\providers\CommentProvider
+     * @var \kanso\cms\wrappers\providers\CommentProvider
      */
     private $commentProvider;
 
     /**
      * Framework configuration.
      *
-     * @var kanso\framework\config\Config
+     * @var \kanso\framework\config\Config
      */
     private $config;
 
@@ -359,7 +359,7 @@ class Post extends Wrapper
 	 * Get the post author.
 	 *
 	 * @access private
-	 * @return array
+	 * @return \kanso\cms\wrappers\Author|null
 	 */
 	private function getTheAuthor()
 	{

@@ -8,9 +8,9 @@
 namespace kanso\framework\exception\handlers;
 
 use kanso\framework\exception\ExceptionLogicTrait;
-use kanso\framework\http\exceptions\MethodNotAllowedException;
-use kanso\framework\http\exceptions\RequestException;
 use kanso\framework\http\request\Request;
+use kanso\framework\http\response\exceptions\MethodNotAllowedException;
+use kanso\framework\http\response\exceptions\RequestException;
 use kanso\framework\http\response\Response;
 use kanso\framework\mvc\view\View;
 use Throwable;
@@ -27,32 +27,39 @@ class WebHandler
 	/**
 	 * Request instance.
 	 *
-	 * @var \kanso\framework\http\Request
+	 * @var \kanso\framework\http\request\Request
 	 */
 	protected $request;
 
 	/**
 	 * Response instance.
 	 *
-	 * @var \kanso\framework\http\Response
+	 * @var \kanso\framework\http\response\Response
 	 */
 	protected $response;
 
 	/**
 	 * View instance.
 	 *
-	 * @var \kanso\framework\http\View
+	 * @var \kanso\framework\mvc\view\View
 	 */
 	protected $view;
+
+	/**
+	 * Error.
+	 *
+	 * @var \Throwable|\kanso\framework\http\response\exceptions\ForbiddenException|\kanso\framework\http\response\exceptions\InvalidTokenException|\kanso\framework\http\response\exceptions\MethodNotAllowedException|\kanso\framework\http\response\exceptions\NotFoundException|\kanso\framework\http\response\exceptions\RequestException|\kanso\framework\http\response\exceptions\Stop|\Exception
+	 */
+	protected $exception;
 
 	/**
 	 * Constructor.
 	 *
 	 * @access public
-	 * @param \Throwable                     $exception Throwable
-	 * @param \kanso\framework\http\Request  $request   Request instance
-	 * @param \kanso\framework\http\Response $response  Response instance
-	 * @param \kanso\framework\mvc\view\View $view      View instance
+	 * @param \Throwable                              $exception Throwable
+	 * @param \kanso\framework\http\request\Request   $request   Request instance
+	 * @param \kanso\framework\http\response\Response $response  Response instance
+	 * @param \kanso\framework\mvc\view\View          $view      View instance
 	 */
 	public function __construct(Throwable $exception, Request $request, Response $response, View $view)
 	{
@@ -183,7 +190,7 @@ class WebHandler
 
 			$view = $dir . '/500.php';
 
-			if($this->exception instanceof RequestException || $this->exceptionParentName() === 'RequestException')
+			if($this->exception instanceof RequestException)
 			{
 				if (file_exists($dir . '/' . $code . '.php'))
 				{
@@ -225,11 +232,11 @@ class WebHandler
 		}
 
 		// Send the response along with appropriate headers
-		if ($this->exception instanceof RequestException || $this->exceptionClassName() === 'RequestException' || $this->exceptionParentName() === 'RequestException')
+		if ($this->exception instanceof RequestException)
 		{
 			$status = $this->exception->getCode();
 
-			if ($this->exception instanceof MethodNotAllowedException || $this->exceptionClassName() === 'MethodNotAllowedException')
+			if ($this->exception instanceof MethodNotAllowedException)
 			{
 				$this->response->headers()->set('allows', implode(',', $this->exception->getAllowedMethods()));
 			}

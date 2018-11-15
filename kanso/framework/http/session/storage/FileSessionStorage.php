@@ -99,7 +99,7 @@ class FileSessionStorage implements StoreInterface
     /**
      * Crypto instance.
      *
-     * @var \kanso\framework\file\Filesystem
+     * @var \kanso\framework\security\Crypto
      */
     private $crypto;
 

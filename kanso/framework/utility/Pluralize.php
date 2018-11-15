@@ -121,7 +121,7 @@ class Pluralize
         // Nouns that end in a consonant + y drop the y and take ies:
         if (in_array(self::nthLast(self::$lowercase, 1), self::$consonants) && self::suffix(self::$lowercase, 1) === 'y')
         {
-            return self::toCasing(sliceFromEnd($word, 1) . 'ies', self::$casing);
+            return self::toCasing(self::sliceFromEnd($word, 1) . 'ies', self::$casing);
         }
 
         // Nouns that end in a consonant + o add s:

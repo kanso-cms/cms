@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @copyright Frederic G. Østby
- * @license   http://www.makoframework.com/license
+ * @copyright Joe J. Howard
+ * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
 namespace kanso\framework\validator\rules\traits;
@@ -10,7 +10,7 @@ namespace kanso\framework\validator\rules\traits;
 /**
  * Doesn't validate when empty trait.
  *
- * @author Frederic G. Østby
+ * @author Joe J. Howard
  */
 trait DoesntValidateWhenEmptyTrait
 {

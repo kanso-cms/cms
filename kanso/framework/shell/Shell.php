@@ -68,7 +68,7 @@ class Shell
     /**
      * Smyfony process.
      *
-     * @var kanso\framework\shell\process\Process
+     * @var \kanso\framework\shell\process\Process
      */
     private $process;
 

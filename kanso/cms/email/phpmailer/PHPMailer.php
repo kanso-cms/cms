@@ -20,6 +20,8 @@
 
 namespace kanso\cms\email\phpmailer;
 
+use Exception;
+
 /**
  * PHPMailer - PHP email creation and transport class.
  *

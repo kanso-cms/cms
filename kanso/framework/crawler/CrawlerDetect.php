@@ -16,7 +16,7 @@ class CrawlerDetect
     /**
      * Headers that contain a user agent.
      *
-     * @var kanso\framework\http\request\Headers
+     * @var \kanso\framework\http\request\Headers
      */
     private $headers;
 

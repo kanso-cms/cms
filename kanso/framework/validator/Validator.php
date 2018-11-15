@@ -53,12 +53,9 @@ use kanso\framework\validator\rules\URL;
 use kanso\framework\validator\rules\WithParametersInterface;
 use RuntimeException;
 
-use function array_fill_keys;
-use function array_merge_recursive;
 use function array_unique;
 use function compact;
 use function in_array;
-use function strpos;
 use function vsprintf;
 
 /**
@@ -184,7 +181,7 @@ class Validator
 	{
 		$this->input = $input;
 
-		$this->ruleSets = $this->expandFields($ruleSets);
+		$this->ruleSets = $ruleSets;
 
 		$this->filterSets = $filters;
 
@@ -315,18 +312,6 @@ class Validator
 	}
 
 	/**
-	 * Returns true if the field name has a wildcard and false if not.
-	 *
-	 * @access private
-	 * @param  string $string Field name
-	 * @return bool
-	 */
-	private function hasWilcard(string $string): bool
-	{
-		return strpos($string, '*') !== false;
-	}
-
-	/**
 	 * Saves original field name along with the expanded field name.
 	 *
 	 * @access private
@@ -351,39 +336,6 @@ class Validator
 	private function getOriginalFieldName(string $field): string
 	{
 		return $this->originalFieldNames[$field] ?? $field;
-	}
-
-	/**
-	 * Expands fields.
-	 *
-	 * @access private
-	 * @param  array $ruleSets Rule sets
-	 * @return array
-	 */
-	private function expandFields(array $ruleSets): array
-	{
-		$expanded = [];
-
-		foreach($ruleSets as $field => $ruleSet)
-		{
-			if($this->hasWilcard($field) === false)
-			{
-				$expanded = array_merge_recursive($expanded, [$field => $ruleSet]);
-
-				continue;
-			}
-
-			if(!empty($fields = Arr::expandKey($this->input, $field)))
-			{
-				$this->saveOriginalFieldNames($fields, $field);
-
-				$fields = array_fill_keys($fields, $ruleSet);
-			}
-
-			$expanded = array_merge_recursive($expanded, $fields);
-		}
-
-		return $expanded;
 	}
 
 	/**

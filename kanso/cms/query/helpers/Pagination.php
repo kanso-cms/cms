@@ -50,7 +50,7 @@ class Pagination extends Helper
         $pagination = '';
 
         // Count the posts
-        $posts = $this->parent->helpers['parser']->countQuery($this->parent->queryStr);
+        $posts = $this->parent->helper('parser')->countQuery($this->parent->queryStr);
         $pages = Arr::paginate($posts, $this->parent->pageIndex, $this->container->get('Config')->get('cms.posts_per_page'));
 
         // If no args were defined, Kanso will figure it out for us

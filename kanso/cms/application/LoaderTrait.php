@@ -21,6 +21,8 @@ use kanso\framework\utility\Str;
  */
 trait LoaderTrait
 {
+	abstract public static function instance();
+
     /**
      * Apply route to filter posts and load theme templates.
      *

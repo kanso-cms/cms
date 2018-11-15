@@ -70,8 +70,7 @@ abstract class BaseModel extends Model
 	 * Returns query builder instance.
 	 *
 	 * @access public
-	 * @param  string                                 $name Identifying name of the requested page
-	 * @return kanso\framework\database\query\Builder
+	 * @return \kanso\framework\database\query\Builder
 	 */
 	protected function sql(): Builder
 	{
@@ -87,7 +86,6 @@ abstract class BaseModel extends Model
 	 * Is the current client logged in ?
 	 *
 	 * @access public
-	 * @param  string $name Identifying name of the requested page
 	 * @return bool
 	 */
 	protected function isLoggedIn(): bool

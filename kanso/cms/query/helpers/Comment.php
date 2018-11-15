@@ -30,7 +30,7 @@ class Comment extends Helper
 
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -95,7 +95,7 @@ class Comment extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -133,7 +133,7 @@ class Comment extends Helper
         $HTML = '';
 
         // Save the article row locally
-        $post  = !$post_id ? $this->parent->post : $this->parent->helpers['cache']->getPostByID($post_id);
+        $post  = !$post_id ? $this->parent->post : $this->parent->helper('cache')->getPostByID($post_id);
 
         // Fallback incase nothing is present
         if (!$post || empty($post)) return '';
@@ -241,7 +241,7 @@ class Comment extends Helper
         $HTML = '';
 
         // Save the article row locally
-        $post  = !$post_id ? $this->parent->post : $this->parent->helpers['cache']->getPostByID($post_id);
+        $post  = !$post_id ? $this->parent->post : $this->parent->helper('cache')->getPostByID($post_id);
 
         // Fallback incase nothing is present
         if (!$post || empty($post)) return '';

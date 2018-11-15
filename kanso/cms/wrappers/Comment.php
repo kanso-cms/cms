@@ -24,7 +24,7 @@ class Comment extends Wrapper
     /**
      * Parent comment.
      *
-     * @var kanso\cms\wrappers\Comment
+     * @var \kanso\cms\wrappers\Comment
      */
     private $parent;
 
@@ -88,7 +88,7 @@ class Comment extends Wrapper
      * Returns the parent Comment if it exists.
      *
      * @access public
-     * @return kanso\cms\wrappers\Comment||false
+     * @return \kanso\cms\wrappers\Comment||false
      */
     public function parent(): array
     {
@@ -148,7 +148,7 @@ class Comment extends Wrapper
      * Returns the parent comment.
      *
      * @access private
-     * @return kanso\cms\wrappers\Comment||false
+     * @return \kanso\cms\wrappers\Comment||false
      */
     private function commentParent()
     {

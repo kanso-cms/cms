@@ -27,11 +27,11 @@ class Author extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
-                return $this->parent->helpers['cache']->getAuthorById($post->author_id);
+                return $this->parent->helper('cache')->getAuthorById($post->author_id);
             }
 
             return null;
@@ -39,7 +39,7 @@ class Author extends Helper
 
         if (!empty($this->parent->post))
         {
-            return $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
+            return $this->parent->helper('cache')->getAuthorById($this->parent->post->author_id);
         }
 
         return null;
@@ -79,11 +79,11 @@ class Author extends Helper
     {
         if ($author_id)
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($author_id);
 
             if ($author)
             {
-                return !empty($this->parent->helpers['cache']->getMediaById($author_id->thumbnail_id));
+                return !empty($this->parent->helper('cache')->getMediaById($author->thumbnail_id));
             }
 
             return false;
@@ -91,11 +91,11 @@ class Author extends Helper
 
         if (!empty($this->parent->post))
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($this->parent->post->author_id);
 
             if ($author)
             {
-                return !empty($this->parent->helpers['cache']->getMediaById($author->thumbnail_id));
+                return !empty($this->parent->helper('cache')->getMediaById($author->thumbnail_id));
             }
         }
 
@@ -113,7 +113,7 @@ class Author extends Helper
     {
         if ($author_id)
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($author_id);
 
             if ($author)
             {
@@ -125,7 +125,7 @@ class Author extends Helper
 
         if (!empty($this->parent->post))
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($this->parent->post->author_id);
 
             if ($author)
             {
@@ -147,7 +147,7 @@ class Author extends Helper
     {
         if ($author_id)
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($author_id);
 
             if ($author)
             {
@@ -161,7 +161,7 @@ class Author extends Helper
 
         if (!empty($this->parent->post))
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($this->parent->post->author_id);
 
             if ($author)
             {
@@ -185,11 +185,11 @@ class Author extends Helper
     {
         if ($author_id)
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($author_id);
 
             if ($author)
             {
-                return $this->parent->helpers['cache']->getMediaById($author->thumbnail_id);
+                return $this->parent->helper('cache')->getMediaById($author->thumbnail_id);
             }
 
             return null;
@@ -197,12 +197,12 @@ class Author extends Helper
 
         if (!empty($this->parent->post))
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($this->parent->post->author_id);
 
             if ($author)
             {
 
-                return $this->parent->helpers['cache']->getMediaById($author->thumbnail_id);
+                return $this->parent->helper('cache')->getMediaById($author->thumbnail_id);
             }
 
             return null;
@@ -222,7 +222,7 @@ class Author extends Helper
     {
         if ($author_id)
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($author_id);
 
             if ($author)
             {
@@ -234,7 +234,7 @@ class Author extends Helper
 
         if (!empty($this->parent->post))
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($this->parent->post->author_id);
 
             if ($author)
             {
@@ -257,7 +257,7 @@ class Author extends Helper
     {
         if ($author_id)
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($author_id);
 
             if ($author)
             {
@@ -269,7 +269,7 @@ class Author extends Helper
 
         if (!empty($this->parent->post))
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($this->parent->post->author_id);
 
             if ($author)
             {
@@ -292,7 +292,7 @@ class Author extends Helper
     {
         if ($author_id)
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($author_id);
 
             if ($author)
             {
@@ -304,7 +304,7 @@ class Author extends Helper
 
         if (!empty($this->parent->post))
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($this->parent->post->author_id);
 
             if ($author)
             {
@@ -327,7 +327,7 @@ class Author extends Helper
     {
         if ($author_id)
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($author_id);
 
             if ($author)
             {
@@ -339,7 +339,7 @@ class Author extends Helper
 
         if (!empty($this->parent->post))
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($this->parent->post->author_id);
 
             if ($author)
             {
@@ -361,7 +361,7 @@ class Author extends Helper
     {
         if ($author_id)
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($author_id);
 
             if ($author)
             {
@@ -373,7 +373,7 @@ class Author extends Helper
 
         if (!empty($this->parent->post))
         {
-            $author = $this->parent->helpers['cache']->getAuthorById($this->parent->post->author_id);
+            $author = $this->parent->helper('cache')->getAuthorById($this->parent->post->author_id);
             if ($author)
             {
                 return $author->instagram;
@@ -390,11 +390,11 @@ class Author extends Helper
      */
     public function all_the_authors(): array
     {
-        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helper('cache')->key(__FUNCTION__, func_get_args(), func_num_args());
 
-        if ($this->parent->helpers['cache']->has($key))
+        if ($this->parent->helper('cache')->has($key))
         {
-            return $this->parent->helpers['cache']->get($key);
+            return $this->parent->helper('cache')->get($key);
         }
 
         $authors = [];
@@ -411,7 +411,7 @@ class Author extends Helper
             $authors[] = $this->container->get('UserManager')->byId($row['id']);
         }
 
-        return $this->parent->helpers['cache']->set($key, $authors);
+        return $this->parent->helper('cache')->set($key, $authors);
     }
 
     /**
@@ -424,18 +424,18 @@ class Author extends Helper
      */
     public function the_author_posts(int $author_id, bool $published = true): array
     {
-        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helper('cache')->key(__FUNCTION__, func_get_args(), func_num_args());
 
-        if ($this->parent->helpers['cache']->has($key))
+        if ($this->parent->helper('cache')->has($key))
         {
-            return $this->parent->helpers['cache']->get($key);
+            return $this->parent->helper('cache')->get($key);
         }
 
         if ($this->parent->author_exists($author_id))
         {
-            return $this->parent->helpers['cache']->set($key, $this->container->get('PostManager')->provider()->byKey('posts.author_id', $author_id, false, $published));
+            return $this->parent->helper('cache')->set($key, $this->container->get('PostManager')->provider()->byKey('posts.author_id', $author_id, false, $published));
         }
 
-        return $this->parent->helpers['cache']->set($key, []);
+        return $this->parent->helper('cache')->set($key, []);
     }
 }

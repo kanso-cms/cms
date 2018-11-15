@@ -31,9 +31,9 @@ class ConnectionHandler
 	protected $parameters = [];
 
 	/**
-	 * @var PDO statement object returned from \PDO::prepare()
+	 * PDO statement object returned from \PDO::prepare().
 	 *
-	 * \PDOStatement
+	 * @var \PDOStatement|\PDO
 	 */
 	private $pdoStatement;
 

@@ -32,8 +32,8 @@ class PixlService extends Service
 	/**
 	 * Returns the image processor.
 	 *
-	 * @param  array                                             $config Pixl configuration
-	 * @return kanso\framework\pixl\processor\ProcessorInterface
+	 * @param  array                                              $config Pixl configuration
+	 * @return \kanso\framework\pixl\processor\ProcessorInterface
 	 */
 	private function getImageProcessor(array $config): ProcessorInterface
 	{

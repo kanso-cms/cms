@@ -19,17 +19,17 @@ abstract class Plugin
 	use ContainerAwareTrait;
 
 	/**
-	 * Install the plugin
+	 * Install the plugin.
 	 *
 	 * @access public
 	 */
 	public function install();
 
 	/**
-	 * Checks if this plugin is installed
+	 * Checks if this plugin is installed.
 	 *
 	 * @access public
 	 * @return bool
 	 */
-	public function installed(): bool
+	public function installed(): bool;
 }

@@ -7,6 +7,7 @@
 
 namespace kanso\cms\query;
 
+use InvalidArgumentException;
 use kanso\cms\query\helpers\Attachment;
 use kanso\cms\query\helpers\Author;
 use kanso\cms\query\helpers\Cache;
@@ -78,7 +79,7 @@ abstract class QueryBase
     /**
      * The current post.
      *
-     * @var array
+     * @var \kanso\cms\wrappers\Post
      */
     public $post = null;
 
@@ -115,7 +116,7 @@ abstract class QueryBase
      *
      * @var array
      */
-    public $helpers =
+    public $helperClasses =
     [
         'attachment'    => Attachment::class,
         'author'        => Author::class,
@@ -136,9 +137,16 @@ abstract class QueryBase
     ];
 
     /**
+     * Helper classes.
+     *
+     * @var array
+     */
+    public $helpers = [];
+
+    /**
      * IoC container instance.
      *
-     * @var kanso\framework\ioc\Container
+     * @var \kanso\framework\ioc\Container
      */
     protected $container;
 
@@ -146,7 +154,7 @@ abstract class QueryBase
      * Constructor.
      *
      * @access public
-     * @param kanso\framework\ioc\Container $container IoC container
+     * @param \kanso\framework\ioc\Container $container IoC container
      */
     public function __construct(Container $container)
     {
@@ -154,7 +162,7 @@ abstract class QueryBase
 
         $this->loadDependencies();
 
-        $this->helpers['filter']->fetchPageIndex();
+        $this->helper('filter')->fetchPageIndex();
     }
 
     /**
@@ -162,7 +170,7 @@ abstract class QueryBase
      *
      * @access public
      * @param  string queryStr  Query to filter posts
-     * @return \kanso\cms\Query
+     * @return \kanso\cms\query\Query
      */
     public function create(string $queryStr = ''): Query
     {
@@ -177,9 +185,9 @@ abstract class QueryBase
      * Retrieves and returns a helper class by name.
      *
      * @access public
-     * @param  string                          $name Name of helper class
-     * @throws InvalidArgumentException        If class does not exist
-     * @return \kanso\cms\query\helpers\Helper
+     * @param  string                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         $name Name of helper class
+     * @throws \InvalidArgumentException                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      If class does not exist
+     * @return \kanso\cms\query\helpers\Attachment|\kanso\cms\query\helpers\Author|\kanso\cms\query\helpers\Cache|\kanso\cms\query\helpers\Category|\kanso\cms\query\helpers\Comment|\kanso\cms\query\helpers\Filter|\kanso\cms\query\helpers\Helper|\kanso\cms\query\helpers\Meta|\kanso\cms\query\helpers\Pagination|\kanso\cms\query\helpers\Parser|\kanso\cms\query\helpers\Post|\kanso\cms\query\helpers\PostIteration|\kanso\cms\query\helpers\Search|\kanso\cms\query\helpers\Tag|\kanso\cms\query\helpers\Templates|\kanso\cms\query\helpers\Urls|\kanso\cms\query\helpers\Validation
      */
     public function helper(string $name): Helper
     {
@@ -198,7 +206,7 @@ abstract class QueryBase
      */
     private function loadDependencies()
     {
-        foreach ($this->helpers as $key => $class)
+        foreach ($this->helperClasses as $key => $class)
         {
             $class = new $class($this->container);
 

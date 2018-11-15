@@ -19,7 +19,7 @@ class Cache
     /**
      * Cache manager.
      *
-     * @var kanso\framework\cache\Cache
+     * @var \kanso\framework\cache\Cache
      */
     private $cache;
 
@@ -41,9 +41,9 @@ class Cache
      * Constructor.
      *
      * @access public
-     * @param kanso\framework\cache\Cache $cahce   Framework caching utility
-     * @param string                      $key     The key to cache the current request under
-     * @param bool                        $enabled Enable of disable the cache (optional) (default false)
+     * @param \kanso\framework\cache\Cache $cahce   Framework caching utility
+     * @param string                       $key     The key to cache the current request under
+     * @param bool                         $enabled Enable of disable the cache (optional) (default false)
      */
     public function __construct(FrameworkCache $cache, string $key, bool $enabled = false)
     {

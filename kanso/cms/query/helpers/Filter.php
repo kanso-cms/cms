@@ -52,13 +52,13 @@ class Filter extends Helper
      * @access public
      * @param string $queryStr Query string to parse
      */
-    private function applyQuery(string $queryStr)
+    public function applyQuery(string $queryStr)
     {
         $this->reset();
 
         $this->parent->queryStr = trim($queryStr);
 
-        $this->parent->posts = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+        $this->parent->posts = $this->parent->helper('parser')->parseQuery($this->parent->queryStr);
 
         $this->parent->postCount = count($this->parent->posts);
 
@@ -176,7 +176,7 @@ class Filter extends Helper
 
         $this->parent->requestType = $requestType;
         $this->parent->queryStr    = "post_status = published : post_type = post : orderBy = post_created, DESC : limit = $offset, $perPage";
-        $this->parent->posts       = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+        $this->parent->posts       = $this->parent->helper('parser')->parseQuery($this->parent->queryStr);
         $this->parent->postCount   = count($this->parent->posts);
 
         if ($this->parent->postCount === 0)
@@ -209,7 +209,7 @@ class Filter extends Helper
             $uri       = Str::queryFilterUri($uri);
             $uri       = !empty($blogPrefix) ? str_replace($blogPrefix . '/', '', $uri) : $uri;
             $this->parent->queryStr  = 'post_status = draft : post_type = ' . $postType . ' : post_slug = ' . $uri . '/';
-            $this->parent->posts     = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+            $this->parent->posts     = $this->parent->helper('parser')->parseQuery($this->parent->queryStr);
             $this->parent->postCount = count($this->parent->posts);
         }
         else
@@ -218,7 +218,7 @@ class Filter extends Helper
             $uri = !empty($blogPrefix) ? str_replace($blogPrefix . '/', '', $uri) : $uri;
 
             $this->parent->queryStr  = 'post_status = published : post_type = ' . $postType . ' : post_slug = ' . $uri . '/';
-            $this->parent->posts     = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+            $this->parent->posts     = $this->parent->helper('parser')->parseQuery($this->parent->queryStr);
             $this->parent->postCount = count($this->parent->posts);
         }
 
@@ -247,14 +247,14 @@ class Filter extends Helper
         {
             $uri             = Str::queryFilterUri($uri);
             $this->parent->queryStr  = 'post_status = draft : post_type = page : post_slug = ' . $uri . '/';
-            $this->parent->posts     = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+            $this->parent->posts     = $this->parent->helper('parser')->parseQuery($this->parent->queryStr);
             $this->parent->postCount = count($this->parent->posts);
         }
         else
         {
             $uri = Str::getBeforeLastWord(Str::queryFilterUri($uri), '/feed');
             $this->parent->queryStr   = 'post_status = published : post_type = page : post_slug = ' . $uri . '/';
-            $this->parent->posts      = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+            $this->parent->posts      = $this->parent->helper('parser')->parseQuery($this->parent->queryStr);
             $this->parent->postCount  = count($this->parent->posts);
         }
 
@@ -335,7 +335,7 @@ class Filter extends Helper
         $this->parent->requestType  = 'category';
         $this->parent->taxonomySlug = array_pop($urlParts);
         $this->parent->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = ' . $this->parent->taxonomySlug . " : limit = $offset, $perPage";
-        $this->parent->posts        = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+        $this->parent->posts        = $this->parent->helper('parser')->parseQuery($this->parent->queryStr);
         $this->parent->postCount    = count($this->parent->posts);
 
         // If there are no posts and the page is more than 2 return false
@@ -367,7 +367,7 @@ class Filter extends Helper
         $this->parent->requestType  = 'tag';
         $this->parent->taxonomySlug = !empty($blogPrefix) ? $urlParts[2] : $urlParts[1];
         $this->parent->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC : tag_slug = ' . $this->parent->taxonomySlug . " : limit = $offset, $perPage";
-        $this->parent->posts        = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+        $this->parent->posts        = $this->parent->helper('parser')->parseQuery($this->parent->queryStr);
         $this->parent->postCount    = count($this->parent->posts);
 
         // If there are no posts and the page is more than 2 return false
@@ -409,7 +409,7 @@ class Filter extends Helper
         $this->parent->requestType  = 'author';
         $this->parent->taxonomySlug = !empty($blogPrefix) ? $urlParts[2] : $urlParts[1];
         $this->parent->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC: author_slug = ' . $this->parent->taxonomySlug . ": limit = $offset, $perPage";
-        $this->parent->posts        = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+        $this->parent->posts        = $this->parent->helper('parser')->parseQuery($this->parent->queryStr);
         $this->parent->postCount    = count($this->parent->posts);
 
         // Double check if the author exists
@@ -474,7 +474,7 @@ class Filter extends Helper
 
         // Filter the posts
         $this->parent->queryStr    = "post_status = published : post_type != page : orderBy = post_created, DESC : post_title LIKE $query : limit = $offset, $perPage";
-        $this->parent->posts       = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+        $this->parent->posts       = $this->parent->helper('parser')->parseQuery($this->parent->queryStr);
         $this->parent->postCount   = count($this->parent->posts);
         $this->parent->searchQuery = $query;
         $this->parent->requestType = 'search';
@@ -563,7 +563,7 @@ class Filter extends Helper
     {
         $this->parent->requestType = 'sitemap';
         $this->parent->queryStr    = 'post_status = published : post_type = post : orderBy = post_created';
-        $this->parent->posts       = $this->parent->helpers['parser']->parseQuery($this->parent->queryStr);
+        $this->parent->posts       = $this->parent->helper('parser')->parseQuery($this->parent->queryStr);
         $this->parent->postCount   = count($this->parent->posts);
 
         return true;

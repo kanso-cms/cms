@@ -19,7 +19,7 @@ class NativeCookieStorage implements StoreInterface
     /**
      * Encryption service.
      *
-     * @var kanso\framework\security\Crypto
+     * @var \kanso\framework\security\Crypto
      */
     private $crypto;
 

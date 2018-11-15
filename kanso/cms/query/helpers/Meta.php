@@ -244,24 +244,24 @@ class Meta extends Helper
         }
 
         // Get from the cache
-        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helper('cache')->key(__FUNCTION__, func_get_args(), func_num_args());
 
         // There are only next/prev pages for single, tags, category, author, and homepage
         if (!in_array($this->parent->requestType, ['single', 'home', 'home-page', 'tag', 'category', 'author']) && !$this->parent->is_custom_post())
         {
-            return $this->parent->helpers['cache']->set($key, false);
+            return $this->parent->helper('cache')->set($key, false);
         }
 
         // Load from cache if we can
-        if ($this->parent->helpers['cache']->has($key))
+        if ($this->parent->helper('cache')->has($key))
         {
-            return $this->parent->helpers['cache']->get($key);
+            return $this->parent->helper('cache')->get($key);
         }
 
         // If this is a single or custom post just find the next post
         if ($this->parent->is_single() || $this->parent->is_custom_post())
         {
-            return $this->parent->helpers['cache']->set($key, $this->findPrevPost($this->parent->post));
+            return $this->parent->helper('cache')->set($key, $this->findPrevPost($this->parent->post));
         }
 
         // This must now be a paginated page - tag, category, author or homepage listing
@@ -274,7 +274,7 @@ class Meta extends Helper
             $limit    = 1;
             $queryStr = preg_replace('/limit.+/', "limit = $offset, $limit", $this->parent->queryStr);
 
-            $posts    = $this->parent->helpers['parser']->parseQuery($queryStr);
+            $posts    = $this->parent->helper('parser')->parseQuery($queryStr);
         }
         else
         {
@@ -317,13 +317,13 @@ class Meta extends Helper
                 $titleTitle = 'Search Results | ';
                 $slug       =  $prevpage > 1 ? $uri[0] . '/' . $uri[1] . '/page/' . $prevpage . '/' : $uri[0] . '/' . $uri[1] . '/';
             }
-            return $this->parent->helpers['cache']->set($key, [
+            return $this->parent->helper('cache')->set($key, [
                 'title' => $titleTitle . $titlePage . $titleBase,
                 'slug'  => $slug,
             ]);
         }
 
-        return $this->parent->helpers['cache']->set($key, false);
+        return $this->parent->helper('cache')->set($key, false);
     }
 
     /**
@@ -342,24 +342,24 @@ class Meta extends Helper
         }
 
         // Get for the cache
-        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helper('cache')->key(__FUNCTION__, func_get_args(), func_num_args());
 
         // There are only next/prev pages for single, tags, category, author, and homepage
         if (!in_array($this->parent->requestType, ['single', 'home', 'home-page', 'tag', 'category', 'author']) && !$this->parent->is_custom_post())
         {
-            return $this->parent->helpers['cache']->set($key, false);
+            return $this->parent->helper('cache')->set($key, false);
         }
 
         // Load from cache if we can
-        if ($this->parent->helpers['cache']->has($key))
+        if ($this->parent->helper('cache')->has($key))
         {
-            return $this->parent->helpers['cache']->get($key);
+            return $this->parent->helper('cache')->get($key);
         }
 
         // If this is a single or custom post just find the next post
         if ($this->parent->is_single() || $this->parent->is_custom_post())
         {
-            return $this->parent->helpers['cache']->set($key, $this->findNextPost($this->parent->post));
+            return $this->parent->helper('cache')->set($key, $this->findNextPost($this->parent->post));
         }
 
         // This must now be a paginated page - tag, category, author or homepage listing
@@ -369,7 +369,7 @@ class Meta extends Helper
         $offset   = $page * $perPage;
         $limit    = 1;
         $queryStr = preg_replace('/limit.+/', "limit = $offset, $limit", $this->parent->queryStr);
-        $posts    = $this->parent->helpers['parser']->parseQuery($queryStr);
+        $posts    = $this->parent->helper('parser')->parseQuery($queryStr);
         $base     = !empty($this->parent->blog_location()) && ($this->parent->is_tag() || $this->parent->is_category() || $this->parent->is_author() || $this->parent->is_home() || $this->parent->is_blog_location()) ? $this->parent->blog_location() . '/' : '';
 
         if (!empty($posts))
@@ -407,13 +407,13 @@ class Meta extends Helper
                 $titleTitle = 'Search Results | ';
                 $slug       = $uri[0] . '/' . $uri[1] . '/page/' . $nextPage . '/';
             }
-            return $this->parent->helpers['cache']->set($key, [
+            return $this->parent->helper('cache')->set($key, [
                 'title' => $titleTitle . $titlePage . $titleBase,
                 'slug'  => $slug,
             ]);
         }
 
-        return $this->parent->helpers['cache']->set($key, false);
+        return $this->parent->helper('cache')->set($key, false);
     }
 
     /**

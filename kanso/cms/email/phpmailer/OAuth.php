@@ -95,7 +95,7 @@ class OAuth
     /**
      * Get a new RefreshToken.
      *
-     * @return RefreshToken
+     * @return \League\OAuth2\Client\Grant\RefreshToken
      */
     protected function getGrant()
     {

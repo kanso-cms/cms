@@ -26,7 +26,7 @@ class PostIteration extends Helper
     {
         if ($post_id)
         {
-            return $this->parent->helpers['cache']->getPostByID($post_id);
+            return $this->parent->helper('cache')->getPostByID($post_id);
         }
 
         return $this->parent->_next();
@@ -76,7 +76,7 @@ class PostIteration extends Helper
     {
         if ($post_id)
         {
-            return !empty($this->parent->helpers['cache']->getPostByID($post_id));
+            return !empty($this->parent->helper('cache')->getPostByID($post_id));
         }
 
         return $this->parent->postIndex < $this->parent->postCount -1;

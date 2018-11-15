@@ -33,7 +33,7 @@ class Category extends Helper
     /**
      * Gets the first category of the current post or a post by id.
      *
-     * @access  public
+     * @access public
      * @param  int                               $post_id Post id or null for category of current post (optional) (Default NULL)
      * @return \kanso\cms\wrappers\Category|null
      */
@@ -41,7 +41,7 @@ class Category extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -89,7 +89,7 @@ class Category extends Helper
 
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -139,7 +139,7 @@ class Category extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -196,7 +196,7 @@ class Category extends Helper
         }
         else
         {
-            $category = $this->parent->helpers['cache']->getCategoryById($category_id);
+            $category = $this->parent->helper('cache')->getCategoryById($category_id);
         }
 
         if ($category)
@@ -254,11 +254,11 @@ class Category extends Helper
      */
     public function all_the_categories(): array
     {
-        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helper('cache')->key(__FUNCTION__, func_get_args(), func_num_args());
 
-        if ($this->parent->helpers['cache']->has($key))
+        if ($this->parent->helper('cache')->has($key))
         {
-            return $this->parent->helpers['cache']->get($key);
+            return $this->parent->helper('cache')->get($key);
         }
 
         $categories = [];
@@ -270,7 +270,7 @@ class Category extends Helper
             $categories[] = $this->container->get('CategoryManager')->byId($row['id']);
         }
 
-        return $this->parent->helpers['cache']->set($key, $categories);
+        return $this->parent->helper('cache')->set($key, $categories);
     }
 
     /**
@@ -284,7 +284,7 @@ class Category extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -325,18 +325,18 @@ class Category extends Helper
      */
     public function the_category_posts(int $category_id, bool $published = true): array
     {
-        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helper('cache')->key(__FUNCTION__, func_get_args(), func_num_args());
 
-        if ($this->parent->helpers['cache']->has($key))
+        if ($this->parent->helper('cache')->has($key))
         {
-            return $this->parent->helpers['cache']->get($key);
+            return $this->parent->helper('cache')->get($key);
         }
 
         if ($this->parent->category_exists($category_id))
         {
-            return $this->parent->helpers['cache']->set($key, $this->parent->create('post_status = published : category_id = ' . $category_id)->the_posts());
+            return $this->parent->helper('cache')->set($key, $this->parent->create('post_status = published : category_id = ' . $category_id)->the_posts());
         }
 
-        return $this->parent->helpers['cache']->set($key, []);
+        return $this->parent->helper('cache')->set($key, []);
     }
 }

@@ -19,14 +19,14 @@ class ValidatorFactory
 	/**
 	 * Container.
 	 *
-	 * @var \mako\syringe\Container|null
+	 * @var \kanso\framework\ioc\Container
 	 */
 	protected $container;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param \mako\syringe\Container|null $container Container
+	 * @param \kanso\framework\ioc\Container $container Container
 	 */
 	public function __construct(Container $container)
 	{

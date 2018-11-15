@@ -3,6 +3,7 @@
 namespace kanso\framework\exception;
 
 use ErrorException;
+use kanso\framework\http\response\exceptions\RequestException;
 use kanso\framework\utility\Str;
 use Throwable;
 

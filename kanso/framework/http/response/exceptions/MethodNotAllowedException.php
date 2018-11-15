@@ -16,12 +16,12 @@ use Throwable;
  */
 class MethodNotAllowedException extends RequestException
 {
-	 /**
-	  * Allowed methods.
-	  *
-	  * @var array
-	  */
-	 protected $allowedMethods;
+	/**
+	 * Allowed methods.
+	 *
+	 * @var array
+	 */
+	protected $allowedMethods;
 
 	/**
 	 * Constructor.
@@ -44,7 +44,7 @@ class MethodNotAllowedException extends RequestException
 	 * @access public
 	 * @return array
 	 */
-	public function getAllowedMethods()
+	public function getAllowedMethods(): array
 	{
 		return $this->allowedMethods;
 	}

@@ -20,20 +20,20 @@ class Attachment extends Helper
      * If the request is for an attachment returns an array of that attachment.
      *
      * @access public
-     * @return kanso\cms\wrappers\Media|null
+     * @return \kanso\cms\wrappers\Media|null
      */
     public function the_attachment()
     {
-        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helper('cache')->key(__FUNCTION__, func_get_args(), func_num_args());
 
-        if ($this->parent->helpers['cache']->has($key))
+        if ($this->parent->helper('cache')->has($key))
         {
-            return $this->parent->helpers['cache']->get($key);
+            return $this->parent->helper('cache')->get($key);
         }
 
         if ($this->parent->requestType === 'attachment')
         {
-            return $this->parent->helpers['cache']->set($key, $this->container->get('MediaManager')->provider()->byKey('url', $this->parent->attachmentURL, true));
+            return $this->parent->helper('cache')->set($key, $this->container->get('MediaManager')->provider()->byKey('url', $this->parent->attachmentURL, true));
         }
 
         return null;
@@ -43,18 +43,18 @@ class Attachment extends Helper
      * If the request is for an attachment returns an array of that attachment.
      *
      * @access public
-     * @return kanso\cms\wrappers\Media|null
+     * @return \kanso\cms\wrappers\Media|null
      */
     public function all_the_attachments()
     {
-        $key = $this->parent->helpers['cache']->key(__FUNCTION__, func_get_args(), func_num_args());
+        $key = $this->parent->helper('cache')->key(__FUNCTION__, func_get_args(), func_num_args());
 
-        if ($this->parent->helpers['cache']->has($key))
+        if ($this->parent->helper('cache')->has($key))
         {
-            return $this->parent->helpers['cache']->get($key);
+            return $this->parent->helper('cache')->get($key);
         }
 
-        return $this->parent->helpers['cache']->set($key, $this->container->get('MediaManager')->provider()->all());
+        return $this->parent->helper('cache')->set($key, $this->container->get('MediaManager')->provider()->all());
     }
 
     /**

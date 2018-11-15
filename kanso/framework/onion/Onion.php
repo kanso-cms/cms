@@ -118,7 +118,7 @@ class Onion
      *
      * @access private
      * @throws \kanso\framework\http\response\exceptions\ForbiddenException If the onion is finished peeling and the response is a 404
-     * @return \Closure
+     * @return Closure
      */
     private function getNextLayer(): Closure
     {

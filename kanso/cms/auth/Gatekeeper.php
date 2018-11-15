@@ -60,14 +60,14 @@ class Gatekeeper
     /**
      * CMS User Provider.
      *
-     * @var \kanso\cms\auth\UserProvider
+     * @var \kanso\cms\wrappers\providers\UserProvider
      */
     private $provider;
 
     /**
      * The HTTP current user if one exists.
      *
-     * @var \kanso\cms\wrappers\User|null
+     * @var \kanso\cms\wrappers\User
      */
     private $user = null;
 
@@ -95,7 +95,7 @@ class Gatekeeper
     /**
      * Mailer utility.
      *
-     * @var \kanso\cms\email\EmailAdapter
+     * @var \kanso\cms\auth\adapters\EmailAdapter
      */
     private $emailAdapter;
 
@@ -103,12 +103,12 @@ class Gatekeeper
      * Constructor.
      *
      * @access public
-     * @param \kanso\framework\database\query\Builder $SQL          Query builder instance
-     * @param \kanso\cms\auth\UserProvider            $provider     User provider instance
-     * @param \kanso\framework\security\Crypto        $crypto       Encryption manager
-     * @param \kanso\framework\http\cookie\Cookie     $cookie       Cookie manager
-     * @param \kanso\framework\http\session\Session   $session      Session manager
-     * @param \kanso\cms\email\EmailAdapter           $emailAdapter Mailer utility
+     * @param \kanso\framework\database\query\Builder    $SQL          Query builder instance
+     * @param \kanso\cms\wrappers\providers\UserProvider $provider     User provider instance
+     * @param \kanso\framework\security\Crypto           $crypto       Encryption manager
+     * @param \kanso\framework\http\cookie\Cookie        $cookie       Cookie manager
+     * @param \kanso\framework\http\session\Session      $session      Session manager
+     * @param \kanso\cms\auth\adapters\EmailAdapter      $emailAdapter Mailer utility
      */
     public function __construct(Builder $SQL, UserProvider $provider, Crypto $crypto, Cookie $cookie, Session $session, EmailAdapter $emailAdapter)
     {

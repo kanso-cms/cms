@@ -30,7 +30,7 @@ class Application
     /**
      * IoC container instance.
      *
-     * @var \kanso\framework\application\Container
+     * @var \kanso\framework\ioc\Container
      */
     protected $container;
 

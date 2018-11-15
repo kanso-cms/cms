@@ -43,7 +43,7 @@ class Post extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -72,7 +72,7 @@ class Post extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -101,7 +101,7 @@ class Post extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -130,7 +130,7 @@ class Post extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -160,7 +160,7 @@ class Post extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -190,7 +190,7 @@ class Post extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -219,11 +219,11 @@ class Post extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post && !empty($post->thumbnail_id))
             {
-                return !empty($this->parent->helpers['cache']->getMediaById($post->thumbnail_id));
+                return !empty($this->parent->helper('cache')->getMediaById($post->thumbnail_id));
             }
 
             return false;
@@ -231,7 +231,7 @@ class Post extends Helper
 
         if (!empty($this->parent->post) && !empty($this->parent->post->thumbnail_id))
         {
-            return !empty($this->parent->helpers['cache']->getMediaById($this->parent->post->thumbnail_id));
+            return !empty($this->parent->helper('cache')->getMediaById($this->parent->post->thumbnail_id));
         }
 
         return false;
@@ -248,7 +248,7 @@ class Post extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -282,7 +282,7 @@ class Post extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -315,7 +315,7 @@ class Post extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -347,7 +347,7 @@ class Post extends Helper
 
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
@@ -386,18 +386,18 @@ class Post extends Helper
     {
         if ($post_id)
         {
-            $post = $this->parent->helpers['cache']->getPostByID($post_id);
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
 
             if ($post)
             {
-                return $this->parent->helpers['cache']->getMediaById($post->thumbnail_id);
+                return $this->parent->helper('cache')->getMediaById($post->thumbnail_id);
             }
 
             return null;
         }
         elseif (!empty($this->parent->post))
         {
-            return $this->parent->helpers['cache']->getMediaById($this->parent->post->thumbnail_id);
+            return $this->parent->helper('cache')->getMediaById($this->parent->post->thumbnail_id);
         }
 
         return null;

@@ -21,6 +21,13 @@ class Visitor extends Wrapper
 	use MagicArrayAccessTrait;
 
     /**
+     * Current visit.
+     *
+     * @var \kanso\cms\wrappers\Visit
+     */
+    protected $visit;
+
+    /**
      * Regenerates a unique visitor id and returns it.
      *
      * @access public
@@ -37,7 +44,7 @@ class Visitor extends Wrapper
      * Gets the current visit.
      *
      * @access public
-     * @return kanso\cms\crm\visitor\Visit
+     * @return \kanso\cms\wrappers\Visit
      */
     public function visit(): Visit
     {
@@ -118,7 +125,7 @@ class Visitor extends Wrapper
      * Gets a visitor's most recent visit (excluding the current one).
      *
      * @access public
-     * @return kanso\cms\crm\visitor\Visit|false
+     * @return \kanso\cms\crm\visitor\Visit|false
      */
     public function previousVisit()
     {
@@ -154,7 +161,7 @@ class Visitor extends Wrapper
      * Gets a their first visit.
      *
      * @access public
-     * @return kanso\cms\crm\visitor\Visit
+     * @return \kanso\cms\crm\visitor\Visit
      */
     public function firstVisit(): Visit
     {
