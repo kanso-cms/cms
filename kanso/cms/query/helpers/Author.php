@@ -49,20 +49,20 @@ class Author extends Helper
      * Checks whether a given author exists by name or id.
      *
      * @access  public
-     * @param  string|int $author_name Author name or id
+     * @param  string|int $usernameOrId Username or id
      * @return bool
      */
-    public function author_exists($author_name): bool
+    public function author_exists($usernameOrId): bool
     {
-        $index = is_numeric($author_name) ? 'id' : 'username';
+        $index = is_numeric($usernameOrId) ? 'id' : 'username';
 
-        $author_name = is_numeric($author_name) ? intval($author_name) : $author_name;
+        $usernameOrId = is_numeric($usernameOrId) ? intval($usernameOrId) : $usernameOrId;
 
-        $author = $this->container->get('UserManager')->provider()->byKey($index, $tag_name);
+        $author = $this->container->get('UserManager')->provider()->byKey($index, $usernameOrId, true);
 
         if ($author)
         {
-            return $author->role === 'administrator' ||$author->role === 'writer';
+            return $author->role === 'administrator' || $author->role === 'writer';
         }
 
         return false;
