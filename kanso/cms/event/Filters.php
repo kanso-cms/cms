@@ -63,7 +63,7 @@ class Filters
      * @access public
      * @param string $eventName The name of the filter
      * @param mixed  $callback  Callback to apply
-     * @param mixed  $args      Args to add (optional) (default null)
+     * @param mixed  $args      Args to add
      */
     public function on(string $eventName, $callback)
     {

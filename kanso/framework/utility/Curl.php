@@ -19,7 +19,7 @@ class Curl
 	 *
 	 * @access public
 	 * @param  string      $url         The url to request to
-	 * @param  arary       $headers     Any additional headers to send (optional) (default [])
+	 * @param  array       $headers     Any additional headers to send (optional) (default [])
 	 * @param  array       $postData    POST fields (optional) (default [])
 	 * @param  string      $auth        HTTP 'Authorization' header (optional) (default '')
 	 * @param  string      $contentType HTTP content type header (optional) (default 'application/json')

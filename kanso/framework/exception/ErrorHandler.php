@@ -303,7 +303,7 @@ class ErrorHandler
      * Set or get the Kanso error reporting level.
      *
      * @access public
-     * @param  int $level (optional) (default NULL)
+     * @param  int|null $errorReporting (optional) (default NULL)
      * @return int
      */
     public function error_reporting(int $errorReporting = null): int
@@ -312,7 +312,7 @@ class ErrorHandler
     	{
     		error_reporting($errorReporting);
 
-    		ini_set('error_reporting', $errorReporting);
+    		ini_set('error_reporting', strval($errorReporting));
     	}
 
     	return error_reporting();
@@ -322,14 +322,14 @@ class ErrorHandler
      * Set or get the Kanso "display_errors" value.
      *
      * @access public
-     * @param  int $display (optional) (default NULL)
-     * @return int
+     * @param  bool|null $display_errors (optional) (default NULL)
+     * @return bool
      */
     public function display_errors(bool $display_errors = null): bool
     {
     	if (!is_null($display_errors))
     	{
-    		ini_set('display_errors', $display_errors);
+    		ini_set('display_errors', $display_errors === true ? '1' : '0');
     	}
 
     	return ini_get('display_errors');

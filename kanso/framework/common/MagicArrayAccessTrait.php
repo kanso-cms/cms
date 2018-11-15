@@ -17,7 +17,7 @@ trait MagicArrayAccessTrait
 	/**
 	 * Array access.
 	 *
-	 * @var string
+	 * @var array
 	 */
 	protected $data = [];
 

@@ -40,6 +40,6 @@ class LessThanOrEqualTo extends Rule implements RuleInterface, WithParametersInt
 	 */
 	public function getErrorMessage(string $field): string
 	{
-		return sprintf('The value of the %1$s field must be less than or equal to %2$s.', $field, $this->parameters['lessThanOrEqualTo']);
+		return sprintf('The value of the %1$s field must be less than or equal to %2$s.', $field, $this->getParameter('lessThanOrEqualTo'));
 	}
 }

@@ -31,21 +31,21 @@ class OpenSSL extends Encrypter implements EncrypterInterface
 	/**
 	 * Initialization vector size.
 	 *
-	 * @var string
+	 * @var int
 	 */
 	protected $ivSize;
 
 	/**
 	 * Initialization vector size.
 	 *
-	 * @var string
+	 * @var array
 	 */
 	protected $ciphers;
 
 	/**
 	 * Cyphers we don't use.
 	 *
-	 * @var string
+	 * @var array
 	 */
 	protected $nonCyphers =
 	[
@@ -64,15 +64,15 @@ class OpenSSL extends Encrypter implements EncrypterInterface
 	 *
 	 * @access public
 	 * @param string $key    Encryption key
-	 * @param string $cipher Cipher
+	 * @param string $cipher Cipher (optional) (default 'AES-256-ECB')
 	 */
-	public function __construct(string $key, string $cipher = null)
+	public function __construct(string $key, string $cipher = 'AES-256-ECB')
 	{
 		$this->loadCyphers();
 
 		$this->key = $key;
 
-		$this->cipher = !$cipher || !in_array($cipher, $this->ciphers) ? 'AES-256-ECB' : $cipher;
+		$this->cipher = !in_array($cipher, $this->ciphers) ? 'AES-256-ECB' : $cipher;
 
 		$this->ivSize = openssl_cipher_iv_length($this->cipher);
 	}

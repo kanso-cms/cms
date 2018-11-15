@@ -214,7 +214,7 @@ trait ExceptionLogicTrait
 	 * Get the classname of the error file.
 	 *
 	 * @access protected
-	 * @return sting
+	 * @return string
 	 */
 	protected function errClass(): string
 	{

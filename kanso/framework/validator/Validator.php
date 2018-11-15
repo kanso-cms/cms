@@ -174,7 +174,7 @@ class Validator
 	 *
 	 * @param array                          $input     Input
 	 * @param array                          $ruleSets  Rule sets
-	 * @param array                          $filter    Filter sets (optional default [])
+	 * @param array                          $filters   Filter sets (optional default [])
 	 * @param \kanso\framework\ioc\Container $container Container
 	 */
 	public function __construct(array $input, array $ruleSets, array $filters = [], Container $container)
@@ -279,8 +279,8 @@ class Validator
 	 * Creates a filter instance.
 	 *
 	 * @access private
-	 * @param  string                                         $name Rule name
-	 * @return \kanso\framework\validator\rules\RuleInterface
+	 * @param  string                                             $name Rule name
+	 * @return \kanso\framework\validator\filters\FilterInterface
 	 */
 	private function filterFactory(string $name): FilterInterface
 	{

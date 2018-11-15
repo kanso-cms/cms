@@ -40,6 +40,6 @@ class GreaterThanOrEqualTo extends Rule implements RuleInterface, WithParameters
 	 */
 	public function getErrorMessage(string $field): string
 	{
-		return sprintf('The value of the %1$s field must be greater than or equal to %2$s.', $field, $this->parameters['greaterThanOrEqualTo']);
+		return sprintf('The value of the %1$s field must be greater than or equal to %2$s.', $field, $this->getParameter('greaterThanOrEqualTo'));
 	}
 }

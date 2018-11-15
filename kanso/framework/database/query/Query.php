@@ -23,21 +23,21 @@ class Query
 	/**
 	 * SQL query string.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $SQL;
 
 	/**
 	 * SQL query bindings.
 	 *
-	 * @var string
+	 * @var array
 	 */
 	private $SQL_bindings;
 
 	/**
 	 * SQL query table.
 	 *
-	 * @var string
+	 * @var string|null
 	 */
 	private $table;
 
@@ -49,14 +49,14 @@ class Query
 	private $pending;
 
 	/**
-	 * @var Current operation to run - SET | DELETE | SELECT FROM | INSERT
+	 * Current operation to run - SET | DELETE | SELECT FROM | INSERT.
 	 *
 	 * @var string
 	 */
 	private $operation;
 
 	/**
-	 * @var Values to use in the Query
+	 * Values to use in the Query.
 	 *
 	 * @var array
 	 */
@@ -73,7 +73,7 @@ class Query
 	 * Constructor.
 	 *
 	 * @access public
-	 * @param \kanso\framework\database\connection\Connection $connection
+	 * @param \kanso\framework\database\connection\ConnectionHandler $connectionHandler
 	 */
 	public function __construct(ConnectionHandler $connectionHandler)
 	{
@@ -131,7 +131,7 @@ class Query
 	 * Select a single column in a query.
 	 *
 	 * @access public
-	 * @param string $colum Column name
+	 * @param string $column Column name
 	 */
 	public function column(string $column)
 	{
@@ -423,8 +423,8 @@ class Query
 	 * Limit/ offset results.
 	 *
 	 * @access public
-	 * @param int $offset Offset to start at
-	 * @param int $limit  Limit results (optional) (default null)
+	 * @param int      $offset Offset to start at
+	 * @param int|null $value  Limit results (optional) (default null)
 	 */
 	public function limit(int $offset, int $value = null)
 	{
@@ -454,7 +454,7 @@ class Query
 	 * and/or find a single row by id.
 	 *
 	 * @access public
-	 * @param  int   $id Row id to find (optional) (default null)
+	 * @param  int|null $id Row id to find (optional) (default null)
 	 * @return mixed
 	 */
 	public function find(int $id = null)
@@ -865,9 +865,10 @@ class Query
 
 	/**
 	 * Validate a table has been loaded to query.
+	 *
 	 * @return bool
 	 */
-	private function tableLoaded()
+	private function tableLoaded(): bool
 	{
 		return $this->table != null;
 	}

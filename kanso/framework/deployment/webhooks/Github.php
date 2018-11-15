@@ -140,7 +140,7 @@ class Github implements WebhookInterface
      */
     public function deploy()
     {
-        $git = $this->gitPull();
+        $this->gitPull();
 
         $this->composerUpdate();
 
@@ -150,8 +150,7 @@ class Github implements WebhookInterface
     /**
      * Update repo via git.
      *
-     * @throws Exception if 'git pull' was unsuccefull
-     * @return bool
+     * @throws \Exception if 'git pull' was unsuccefull
      */
     private function gitPull()
     {
@@ -173,7 +172,6 @@ class Github implements WebhookInterface
      * Update any comoser dependancies.
      *
      * @throws Exception if 'composer update' was unsuccefull
-     * @return bool
      */
     private function composerUpdate()
     {

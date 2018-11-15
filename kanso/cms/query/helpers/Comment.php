@@ -18,7 +18,7 @@ class Comment extends Helper
      * Are comments (if enabled globally) enabled on the current post or a post by id.
      *
      * @access public
-     * @param  int  $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int|null $post_id Post id or null for current post (optional) (Default NULL)
      * @return bool
      */
     public function comments_open(int $post_id = null): bool
@@ -52,7 +52,7 @@ class Comment extends Helper
      * Does the current post or a post by id have any comments ?
      *
      * @access public
-     * @param  int  $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int|null $post_id Post id or null for current post (optional) (Default NULL)
      * @return bool
      */
     public function has_comments(int $post_id = null): bool
@@ -64,7 +64,7 @@ class Comment extends Helper
      * How many approved comments does the current post or a post by id have.
      *
      * @access public
-     * @param  int $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int|null $post_id Post id or null for current post (optional) (Default NULL)
      * @return int
      */
     public function comments_number(int $post_id = null): int
@@ -88,7 +88,7 @@ class Comment extends Helper
      * Get all of the current post or a post by id's comments.
      *
      * @access public
-     * @param  int   $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int|null $post_id Post id or null for current post (optional) (Default NULL)
      * @return array
      */
     public function get_comments(int $post_id = null): array
@@ -117,8 +117,8 @@ class Comment extends Helper
      * Get the HTML that displays the comments of the current post or a post by id.
      *
      * @access public
-     * @param  array  $args    (optional) (default NULL)
-     * @param  int    $post_id Post id or null for comments of current post (optional) (Default NULL)
+     * @param  array|null $args    (optional) (default NULL)
+     * @param  int|null   $post_id Post id or null for comments of current post (optional) (Default NULL)
      * @return string
      */
     public function display_comments(array $args = null, int $post_id = null): string
@@ -227,8 +227,8 @@ class Comment extends Helper
      * Get the HTML that displays the comment form of the current post or a post by id.
      *
      * @access public
-     * @param  array  $args    (optional) (default NULL)
-     * @param  int    $post_id Post id or null for comments of current post (optional) (Default NULL)
+     * @param  array|null $args    (optional) (default NULL)
+     * @param  int|null   $post_id Post id or null for comments of current post (optional) (Default NULL)
      * @return string
      */
     public function comment_form(array $args = null, int $post_id = null): string
@@ -333,9 +333,9 @@ class Comment extends Helper
      * Retrieve the gravatar 'img' tag or src from an email address or md5 hash.
      *
      * @access public
-     * @param  string $email_address The email address or md5 of the current user (optional)
-     * @param  int    $size          Image size in px
-     * @param  bool   $srcOnly       Should we return only the img src (rather than the actual HTML tag)
+     * @param  string    $email_address The email address or md5 of the current user (optional)
+     * @param  int|null  $size          Image size in px
+     * @param  bool|null $srcOnly       Should we return only the img src (rather than the actual HTML tag)
      * @return string
      */
     public function get_gravatar(string $email_or_md5, int $size = 160, bool $srcOnly = false)
@@ -471,7 +471,7 @@ class Comment extends Helper
      * is string a valid md5 hash ?
      *
      * @access private
-     * @param  string $md5 md5 hash
+     * @param  string|null $md5 md5 hash
      * @return bool
      */
     private function isValidMd5(string $md5 =''): bool

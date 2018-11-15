@@ -40,7 +40,7 @@ class GD implements ProcessorInterface
     /**
      * Image resource.
      *
-     * @var array
+     * @var resource
      */
     private $source_image;
 
@@ -104,8 +104,8 @@ class GD implements ProcessorInterface
      * Constructor.
      *
      * @access public
-     * @param string $filename     Absolute path to file (optional) (default null)
-     * @param int    $imageQuality Default image quality to use (optional) (default null)
+     * @param string|null $filename     Absolute path to file (optional) (default null)
+     * @param int|null    $imageQuality Default image quality to use (optional) (default null)
      */
     public function __construct(string $filename = null, int $imageQuality = null)
     {

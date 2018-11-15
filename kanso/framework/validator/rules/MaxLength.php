@@ -41,6 +41,6 @@ class MaxLength extends Rule implements RuleInterface, WithParametersInterface
 	 */
 	public function getErrorMessage(string $field): string
 	{
-		return sprintf('The value of the %1$s field must be at most %2$s characters long.', $field, $this->parameters['maxLength']);
+		return sprintf('The value of the %1$s field must be at most %2$s characters long.', $field, $this->getParameter('maxLength'));
 	}
 }

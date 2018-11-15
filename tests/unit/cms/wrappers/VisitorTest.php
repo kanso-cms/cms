@@ -218,7 +218,7 @@ class VisitorTest extends TestCase
 
         $visitor->addVisit(['id' => 1, 'page' => 'foo']);
 
-        $this->assertTrue($visitor->visit->page === 'foo');
+        $this->assertTrue($visitor->visit()->page === 'foo');
     }
 
     /**

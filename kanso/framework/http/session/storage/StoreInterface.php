@@ -40,7 +40,7 @@ interface StoreInterface
 	 * Set and/or gets the current session id.
 	 *
 	 * @access public
-	 * @param  string $id Id to set (optional) (default null)
+	 * @param  string|null $id Id to set (optional) (default null)
 	 * @return string
 	 */
 	public function session_id(string $id = null);
@@ -49,7 +49,7 @@ interface StoreInterface
 	 * Get and/or set the session cookie name.
 	 *
 	 * @access public
-	 * @param string $name The cookie name to set
+	 * @param string|null $name The cookie name to set
 	 */
 	public function session_name(string $name = null);
 

@@ -27,7 +27,6 @@ class Flash implements \Iterator
      * Constructor.
      *
      * @access public
-     * @param  $configuration array Array of configuration options
      */
     public function __construct()
     {
@@ -116,7 +115,7 @@ class Flash implements \Iterator
      * Get a key from the flash data or the entire flash data.
      *
      * @access public
-     * @param  string $key The key to use for the value (optional) (default null)
+     * @param  string|null $key The key to use for the value (optional) (default null)
      * @return mixed
      */
     public function get(string $key = null)

@@ -34,7 +34,7 @@ class Category extends Helper
      * Gets the first category of the current post or a post by id.
      *
      * @access public
-     * @param  int                               $post_id Post id or null for category of current post (optional) (Default NULL)
+     * @param  int|null                          $post_id Post id or null for category of current post (optional) (Default NULL)
      * @return \kanso\cms\wrappers\Category|null
      */
     public function the_category(int $post_id = null)
@@ -61,7 +61,7 @@ class Category extends Helper
      * Gets the first category name of the current post or a post by id.
      *
      * @access  public
-     * @param  int         $post_id Post id or null for category of current post (optional) (Default NULL)
+     * @param  int|null    $post_id Post id or null for category of current post (optional) (Default NULL)
      * @return string|null
      */
     public function the_category_name(int $post_id = null)
@@ -80,7 +80,7 @@ class Category extends Helper
      * Get an array of categories of the current post or a post by id.
      *
      * @access  public
-     * @param  int   $post_id Post id or null for category of current post (optional) (Default NULL)
+     * @param  int|null $post_id Post id or null for category of current post (optional) (Default NULL)
      * @return array
      */
     public function the_categories(int $post_id = null): array
@@ -131,8 +131,8 @@ class Category extends Helper
      * Get a comma separated list of the category names of the current post or a post by id.
      *
      * @access public
-     * @param  int    $post_id Post id or null for category of current post (optional) (Default NULL)
-     * @param  string $glue    Glue to separate category names
+     * @param  int|null    $post_id Post id or null for category of current post (optional) (Default NULL)
+     * @param  string|null $glue    Glue to separate category names
      * @return string
      */
     public function the_categories_list(int $post_id = null, string $glue = ', '): string
@@ -180,7 +180,7 @@ class Category extends Helper
      * Get the slug of a category by id or the current post's first category.
      *
      * @access  public
-     * @param  int         $category_id Category id or null for category of current post (optional) (Default NULL)
+     * @param  int|null    $category_id Category id or null for category of current post (optional) (Default NULL)
      * @return string|null
      */
     public function the_category_slug(int $category_id = null)
@@ -229,7 +229,7 @@ class Category extends Helper
      * Get the full URL of a category by id or current post's first category.
      *
      * @access  public
-     * @param  int         $category_id Category id or null for category of current post (optional) (Default NULL)
+     * @param  int|null    $category_id Category id or null for category of current post (optional) (Default NULL)
      * @return string|null
      */
     public function the_category_url(int $category_id = null)
@@ -277,7 +277,7 @@ class Category extends Helper
      * Is the current post or a post by id uncategorized ?
      *
      * @access  public
-     * @param  int  $post_id Post id or null for category of current post (optional) (Default NULL)
+     * @param  int|null $post_id Post id or null for category of current post (optional) (Default NULL)
      * @return bool
      */
     public function has_categories(int $post_id = null): bool

@@ -9,9 +9,6 @@ namespace kanso\framework\validator\rules\traits;
 
 use RuntimeException;
 
-use function array_combine;
-use function array_fill;
-use function count;
 use function vsprintf;
 
 /**
@@ -23,10 +20,14 @@ trait WithParametersTrait
 {
 	/**
 	 * {@inheritdoc}
+	 * @suppress PhanUndeclaredProperty
 	 */
 	public function setParameters(array $parameters)
 	{
-		$this->parameters = array_combine($this->parameters, $parameters + array_fill(0, count($this->parameters), null));
+		if (property_exists(self::class, 'parameters'))
+		{
+			$this->parameters[$this->parameters[0]] = $parameters[0];
+		}
 	}
 
 	/**
@@ -35,6 +36,7 @@ trait WithParametersTrait
 	 * @param  string $name     Parameter name
 	 * @param  bool   $optional Is the parameter optional?
 	 * @return mixed
+	 * @suppress PhanUndeclaredProperty
 	 */
 	protected function getParameter($name, $optional = false)
 	{

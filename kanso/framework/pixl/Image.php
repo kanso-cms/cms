@@ -93,11 +93,11 @@ class Image
      * Save the new file to disk.
      *
      * @access public
-     * @param  string                         $image       Absolute path to file (optional) (default NULL)
-     * @param  mixed                          $image_type  PHP image type constant (optional) (default NULL)
-     * @param  int                            $quality     Quality of image to save (optional)
-     * @param  int                            $permissions File permissions to save with (optional)
-     * @return \kanso\framework\utility\Image
+     * @param  string|null $image       Absolute path to file (optional) (default NULL)
+     * @param  int|null    $image_type  PHP image type constant (optional) (default NULL)
+     * @param  int|null    $quality     Quality of image to save (optional)
+     * @param  int|null    $permissions File permissions to save with (optional)
+     * @return mixed
      */
     public function save(string $image = null, int $image_type = null, int $quality = null, int $permissions = null)
     {
@@ -127,9 +127,9 @@ class Image
      * Resize to height.
      *
      * @access public
-     * @param  int                            $height        Height in px
-     * @param  bool                           $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
-     * @return \kanso\framework\utility\Image
+     * @param  int                         $height        Height in px
+     * @param  bool                        $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
+     * @return \kanso\framework\pixl\Image
      */
     public function resizeToHeight(int $height, bool $allow_enlarge = false): Image
     {
@@ -142,9 +142,9 @@ class Image
      * Resize to width.
      *
      * @access public
-     * @param  int                            $width         Width in px
-     * @param  bool                           $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
-     * @return \kanso\framework\utility\Image
+     * @param  int                         $width         Width in px
+     * @param  bool                        $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
+     * @return \kanso\framework\pixl\Image
      */
     public function resizeToWidth(int $width, bool $allow_enlarge = false): Image
     {
@@ -156,9 +156,8 @@ class Image
     /**
      * Scale image by a percentage.
      *
-     * @param  int                            $scale         Scale percentage
-     * @param  bool                           $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
-     * @return \kanso\framework\utility\Image
+     * @param  int                         $scale Scale percentage
+     * @return \kanso\framework\pixl\Image
      */
     public function scale(int $scale): Image
     {
@@ -170,10 +169,10 @@ class Image
     /**
      * Resize image to height and width.
      *
-     * @param  int                            $width         Width in px
-     * @param  int                            $height        Height in px
-     * @param  bool                           $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
-     * @return \kanso\framework\utility\Image
+     * @param  int                         $width         Width in px
+     * @param  int                         $height        Height in px
+     * @param  bool                        $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
+     * @return \kanso\framework\pixl\Image
      */
     public function resize(int $width, int $height, bool $allow_enlarge = false): Image
     {
@@ -185,10 +184,10 @@ class Image
     /**
      * Crop to width and height.
      *
-     * @param  int                            $width         Width in px
-     * @param  int                            $height        Height in px
-     * @param  bool                           $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
-     * @return \kanso\framework\utility\Image
+     * @param  int                         $width         Width in px
+     * @param  int                         $height        Height in px
+     * @param  bool                        $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
+     * @return \kanso\framework\pixl\Image
      */
     public function crop(int $width, int $height, bool $allow_enlarge = false): Image
     {

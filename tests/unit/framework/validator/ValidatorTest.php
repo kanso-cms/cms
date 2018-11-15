@@ -59,7 +59,7 @@ class ValidatorTest extends TestCase
 			'float'                    => ['required', 'float'],
 			'greater_than_or_equal_to' => ['required', 'greater_than_or_equal_to(9)'],
 			'greater_than'             => ['required', 'greater_than(30)'],
-			'in'                       => ['required', 'in(["foo","bar","baz"])'],
+			'in'                       => ['required', 'in(["bar","foo","baz"])'],
 			'integer'                  => ['required', 'integer'],
 			'ip'                       => ['required', 'ip'],
 			'json'                     => ['required', 'json'],

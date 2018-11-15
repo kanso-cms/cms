@@ -26,7 +26,7 @@ class Deployment
     /**
      * Constructor.
      *
-     * @param \kanso\framework\deployment\webhooks\WebhookInterface $method Webhook deployment impelementation
+     * @param \kanso\framework\deployment\webhooks\WebhookInterface $webhook Webhook deployment impelementation
      */
     public function __construct(WebhookInterface $webhook)
     {
@@ -36,7 +36,7 @@ class Deployment
     /**
      * Update the framework.
      *
-     * @return mixed
+     * @return \kanso\framework\deployment\webhooks\WebhookInterface
      */
     public function webhook(): WebhookInterface
     {

@@ -18,9 +18,8 @@ class NativeSessionStorage implements StoreInterface
      * Constructor.
      *
      * @access public
-     * @param \kanso\framework\security\Crypto $Crypto       Encryption service
-     * @param array                            $cookieParams Assoc array of cookie configurations
-     * @param string                           $path         Where to save the cookie files to
+     * @param array  $cookieParams Assoc array of cookie configurations
+     * @param string $path         Where to save the cookie files to
      */
     public function __construct(array $cookieParams = [], string $path = '')
     {

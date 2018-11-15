@@ -25,7 +25,6 @@ class Token
      * Constructor.
      *
      * @access public
-     * @param  $configuration array Array of configuration options
      */
     public function __construct()
     {

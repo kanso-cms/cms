@@ -143,7 +143,7 @@ class Pluralize
         }
 
         // Lastly, change the word based on suffix rules
-        $pluralized = self::autoSuffix(self::$lowercase);
+        $pluralized = self::autoSuffix();
 
         if ($pluralized)
         {
@@ -345,7 +345,6 @@ class Pluralize
      */
     private static function autoSuffix()
     {
-
         $suffix1 = self::suffix(self::$lowercase, 1);
         $suffix2 = self::suffix(self::$lowercase, 2);
         $suffix3 = self::suffix(self::$lowercase, 3);
@@ -450,12 +449,12 @@ class Pluralize
      * Get the nth last character of a string.
      *
      * @access private
-     * @param  string  $word  The word to convert
-     * @param  int     $count The index to get
-     * @return string|
+     * @param  string $word  The word to convert
+     * @param  int    $count The index to get
+     * @return string
      */
-    private static function nthLast(string $word, int $count)
+    private static function nthLast(string $word, int $count): string
     {
-        implode('', array_reverse(str_split($word)))[$count];
+        return implode('', array_reverse(str_split($word)))[$count];
     }
 }

@@ -300,7 +300,7 @@ class Filesystem
 	 *
 	 * @access  public
 	 * @param  string   $file File path
-	 * @param  mixed    $data File data
+	 * @param  string   $data File data
 	 * @param  bool     $lock Acquire an exclusive write lock? (optional) (default FALSE)
 	 * @return int|bool
 	 */
@@ -314,7 +314,7 @@ class Filesystem
 	 *
 	 * @access  public
 	 * @param  string   $file File path
-	 * @param  mixed    $data File data
+	 * @param  string   $data File data
 	 * @param  bool     $lock Acquire an exclusive write lock? (optional) (default FALSE)
 	 * @return int|bool
 	 */
@@ -328,7 +328,7 @@ class Filesystem
 	 *
 	 * @access  public
 	 * @param  string   $file File path
-	 * @param  mixed    $data File data
+	 * @param  string   $data File data
 	 * @param  bool     $lock Acquire an exclusive write lock? (optional) (default FALSE)
 	 * @return int|bool
 	 */
@@ -342,7 +342,6 @@ class Filesystem
 	 *
 	 * @access  public
 	 * @param  string   $file File path
-	 * @param  mixed    $data File data
 	 * @param  bool     $lock Acquire an exclusive write lock? (optional) (default FALSE)
 	 * @return int|bool
 	 */
@@ -417,10 +416,10 @@ class Filesystem
 	 * Returns a SplFileObject.
 	 *
 	 * @access  public
-	 * @param  string        $file           Path to file
-	 * @param  string        $openMode       Open mode
-	 * @param  bool          $useIncludePath Use include path? (optional) (default FALSE)
-	 * @return SplFileObject
+	 * @param  string         $file           Path to file
+	 * @param  string         $openMode       Open mode
+	 * @param  bool           $useIncludePath Use include path? (optional) (default FALSE)
+	 * @return \SplFileObject
 	 */
 	public static function file(string $file, string $openMode = 'r', bool $useIncludePath = false)
 	{
@@ -431,7 +430,7 @@ class Filesystem
 	 * Creates a temporary file and returns the handle.
 	 *
 	 * @access  public
-	 * @return handle
+	 * @return resource
 	 */
 	public static function tmpfile()
 	{
@@ -442,9 +441,9 @@ class Filesystem
 	 * Read and return the contents of a php file.
 	 *
 	 * @access  public
-	 * @param  string $file Path to file
-	 * @param  array  $data Array of variables to extract
-	 * @return mixed
+	 * @param  string      $file Path to file
+	 * @param  array       $vars Array of variables to extract
+	 * @return string|null
 	 */
 	public static function ob_read(string $file, array $vars = [])
 	{

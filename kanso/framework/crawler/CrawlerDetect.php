@@ -87,11 +87,10 @@ class CrawlerDetect
     /**
      * Compile the regex patterns into one regex string.
      *
-     * @param array
-     *
+     * @param  array  $patterns Definition patterns
      * @return string
      */
-    public function compileRegex($patterns): string
+    public function compileRegex(array $patterns): string
     {
         return '(' . implode('|', $patterns) . ')';
     }

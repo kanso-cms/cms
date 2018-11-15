@@ -46,7 +46,7 @@ class Arr
 	 *
 	 * @access public
 	 * @param  array  $array Array we're goint to search
-	 * @param  string $path  Array path
+	 * @param  string $path  Path
 	 * @return bool
 	 */
 	public static function has(array $array, string $path): bool
@@ -149,7 +149,7 @@ class Arr
 	 * Returns TRUE if the array is multi-dimensional and FALSE if not.
 	 *
 	 * @access public
-	 * @param  array $arr Array to check
+	 * @param  array $array Array to check
 	 * @return bool
 	 */
 	public static function isMulti(array $array): bool
@@ -274,9 +274,9 @@ class Arr
 	 * Sort a multi-dimensional array by key.
 	 *
 	 * @access public
-	 * @param  array  $array   Array to sort
-	 * @param  string $key     Key to sort by
-	 * @param  string $reverse Direction to sort 'ASC'|'DESC' (optional) (default 'ASC')
+	 * @param  array  $array     Array to sort
+	 * @param  string $key       Key to sort by
+	 * @param  string $direction Direction to sort 'ASC'|'DESC' (optional) (default 'ASC')
 	 * @return array
 	 */
 	public static function sortMulti(array $array, string $key, string $direction = 'ASC'): array

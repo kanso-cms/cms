@@ -129,8 +129,7 @@ class Config
 	 * Get a default setting - bypass the environment.
 	 *
 	 * @access public
-	 * @param  string     $key     Config key
-	 * @param  null|mixed $default Default value to return if config value doesn't exist
+	 * @param  string     $key Config key
 	 * @return null|mixed
 	 */
 	public function getDefault(string $key)
@@ -177,7 +176,7 @@ class Config
 	 * Save the configuration.
 	 *
 	 * @access public
-	 * @return mixed
+	 * @return bool
 	 */
 	public function save(): bool
 	{

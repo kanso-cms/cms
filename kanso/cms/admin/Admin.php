@@ -129,15 +129,15 @@ class Admin
      * Adds a custom page to the Admin Panel.
      *
      * @access public
-     * @param string $title     The page title
-     * @param string $slug      The page slug
-     * @param string $icon      The icon in the sidebar to use
-     * @param string $model     The model to use for loading
-     * @param string $view      Absolute file path to include for page content
-     * @param string $parent    Parent page slug (optional) (default null)
-     * @param bool   $adminOnly Allow only administrators to use this page
-     * @param array  $styles    Any custom styles to add into the page <head> (optional) (default null)
-     * @param array  $scripts   Anything to go before the closing <body> tag (optional) (default null)
+     * @param string      $title     The page title
+     * @param string      $slug      The page slug
+     * @param string      $icon      The icon in the sidebar to use
+     * @param string      $model     The model to use for loading
+     * @param string      $view      Absolute file path to include for page content
+     * @param string|null $parent    Parent page slug (optional) (default null)
+     * @param bool        $adminOnly Allow only administrators to use this page
+     * @param array       $styles    Any custom styles to add into the page <head> (optional) (default null)
+     * @param array       $scripts   Anything to go before the closing <body> tag (optional) (default null)
      */
     public function addPage(string $title, string $slug, string $icon, string $model, string $view, string $parent = null, bool $adminOnly = false, array $styles = null, array $scripts = null)
     {

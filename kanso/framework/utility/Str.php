@@ -174,7 +174,7 @@ class Str
 	 * @access public
 	 * @param  string $string The target string
 	 * @param  string $query  The query to check for
-	 * @return bool
+	 * @return string
 	 */
 	public static function getAfterLastChar(string $string, string $query): string
 	{
@@ -189,7 +189,7 @@ class Str
 	 * @access public
 	 * @param  string $string The target string
 	 * @param  string $query  The query to check for
-	 * @return bool
+	 * @return string
 	 */
 	public static function getBeforeLastChar(string $string, string $query): string
 	{
@@ -204,7 +204,7 @@ class Str
 	 * @access public
 	 * @param  string $string The target string
 	 * @param  string $query  The query to check for
-	 * @return bool
+	 * @return string
 	 */
 	public static function getAfterFirstChar(string $string, string $query): string
 	{
@@ -219,7 +219,7 @@ class Str
 	 * @access public
 	 * @param  string $string The target string
 	 * @param  string $query  The query to check for
-	 * @return bool
+	 * @return string
 	 */
 	public static function getBeforeFirstChar(string $string, string $query): string
 	{
@@ -234,7 +234,7 @@ class Str
 	 * @access public
 	 * @param  string $string The target string
 	 * @param  string $query  The query to check for
-	 * @return bool
+	 * @return string
 	 */
 	public static function getAfterLastWord(string $string, string $query): string
 	{
@@ -254,7 +254,7 @@ class Str
 	 * @access public
 	 * @param  string $string The target string
 	 * @param  string $query  The query to check for
-	 * @return bool
+	 * @return string
 	 */
 	public static function getBeforeLastWord(string $string, string $query): string
 	{
@@ -313,7 +313,7 @@ class Str
 	 * Creates a URL friendly string.
 	 *
 	 * @access public
-	 * @param  string $string The input string
+	 * @param  string $str The input string
 	 * @return string
 	 */
 	public static function slug(string $str): string
@@ -325,7 +325,7 @@ class Str
 	 * Filters a a string to alpha characters.
 	 *
 	 * @access public
-	 * @param  string $string The input string
+	 * @param  string $str The input string
 	 * @return string
 	 */
 	public static function alpha(string $str): string
@@ -337,7 +337,7 @@ class Str
 	 * Filters a a string to alpha characters with dashes.
 	 *
 	 * @access public
-	 * @param  string $string The input string
+	 * @param  string $str The input string
 	 * @return string
 	 */
 	public static function alphaDash(string $str): string
@@ -349,7 +349,7 @@ class Str
 	 * Filters a a string to alpha-numeric characters.
 	 *
 	 * @access public
-	 * @param  string $string The input string
+	 * @param  string $str The input string
 	 * @return string
 	 */
 	public static function alphaNum(string $str): string
@@ -361,7 +361,7 @@ class Str
 	 * Filters a a string to alpha-numeric characters with dashes.
 	 *
 	 * @access public
-	 * @param  string $string The input string
+	 * @param  string $str The input string
 	 * @return string
 	 */
 	public static function alphaNumDash(string $str): string
@@ -439,7 +439,7 @@ class Str
 	 * Remove the query string and santize a uri.
 	 *
 	 * @access public
-	 * @param  string $str REQUEST_URI
+	 * @param  string $uri REQUEST_URI
 	 * @return string
 	 */
 	public static function queryFilterUri(string $uri): string

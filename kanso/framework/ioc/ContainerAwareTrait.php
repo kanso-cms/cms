@@ -25,7 +25,7 @@ trait ContainerAwareTrait
 	 * Sets and or gets the container.
 	 *
 	 * @access public
-	 * @param \kanso\framework\ioc\Container $container IoC container instance
+	 * @return \kanso\framework\ioc\Container
 	 */
 	public function container(): Container
 	{

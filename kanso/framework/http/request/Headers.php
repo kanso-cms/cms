@@ -17,7 +17,7 @@ class Headers
     /**
      * Array access.
      *
-     * @var string
+     * @var array
      */
     protected $data = [];
 

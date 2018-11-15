@@ -24,6 +24,13 @@ class Cache
     private $data = [];
 
     /**
+     * SQL query parameters.
+     *
+     * @var array
+     */
+    private $params = [];
+
+    /**
      * Current query string from connection.
      *
      * @var string
@@ -202,8 +209,8 @@ class Cache
      * Returns the cache key based on query and params.
      *
      * @access public
-     * @param  string $queryStr SQL query string
-     * @param  array  $params   SQL query parameters
+     * @param  string $query  SQL query string
+     * @param  array  $params SQL query parameters
      * @return string
      */
     private function queryToKey(string $query, array $params): string

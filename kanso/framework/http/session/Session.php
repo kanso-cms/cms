@@ -21,6 +21,13 @@ class Session implements \IteratorAggregate
     use ArrayAccessTrait;
 
     /**
+     * The session storage implementation.
+     *
+     * @var \kanso\framework\http\session\storage\StoreInterface
+     */
+    private $store;
+
+    /**
      * The session flash data.
      *
      * @var \kanso\framework\http\session\Flash
@@ -171,7 +178,7 @@ class Session implements \IteratorAggregate
      * Get the access token.
      *
      * @access public
-     * @return string
+     * @return \kanso\framework\http\session\Token
      */
     public function token(): Token
     {
@@ -182,7 +189,7 @@ class Session implements \IteratorAggregate
      * Get the access token.
      *
      * @access public
-     * @return string
+     * @return \kanso\framework\http\session\Flash
      */
     public function flash(): Flash
     {
