@@ -27,8 +27,8 @@ interface EncrypterInterface
 	 * Verifies a hashed password with an unhashed one.
 	 *
 	 * @access public
-	 * @param  string      $string String to decrypt
-	 * @return string|bool
+	 * @param  string $string String to decrypt
+	 * @return bool
 	 */
 	public function verify(string $string, string $hashed): bool;
 }

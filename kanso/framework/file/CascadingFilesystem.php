@@ -19,7 +19,7 @@ trait CascadingFilesystem
     /**
      * Default path.
      *
-     * @var string
+     * @var string|null
      */
     protected $path;
 
@@ -41,7 +41,7 @@ trait CascadingFilesystem
      * Sets the default path.
      *
      * @access public
-     * @param string $path Path
+     * @param string|null $path Path
      */
     public function __construct(string $path = null)
     {
@@ -86,9 +86,9 @@ trait CascadingFilesystem
      * Returns the path to the file.
      *
      * @access protected
-     * @param  string $file      File name
-     * @param  string $extension File extension
-     * @param  string $suffix    Path suffix
+     * @param  string      $file      File name
+     * @param  string|null $extension File extension (optional) (default null)
+     * @param  string|null $suffix    Path suffix (optional) (default null)
      * @return string
      */
     public function getFilePath(string $file, string $extension = null, string $suffix = null): string
@@ -129,9 +129,9 @@ trait CascadingFilesystem
      * Returns an array of cascading file paths.
      *
      * @access protected
-     * @param  string $file      File name
-     * @param  string $extension File extension
-     * @param  string $suffix    Path suffix
+     * @param  string      $file      File name
+     * @param  string|null $extension File extension (optional) (default null)
+     * @param  string|null $suffix    Path suffix (optional) (default null)
      * @return array
      */
     public function getCascadingFilePaths(string $file, string $extension = null, string $suffix = null): array

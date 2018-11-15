@@ -3,6 +3,7 @@
 namespace kanso\framework\exception;
 
 use ErrorException;
+use kanso\framework\http\response\exceptions\RequestException;
 use kanso\framework\utility\Str;
 use Throwable;
 
@@ -213,7 +214,7 @@ trait ExceptionLogicTrait
 	 * Get the classname of the error file.
 	 *
 	 * @access protected
-	 * @return sting
+	 * @return string
 	 */
 	protected function errClass(): string
 	{

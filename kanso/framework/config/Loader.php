@@ -23,7 +23,7 @@ class Loader
 	/**
 	 * File system instance.
 	 *
-	 * @var \mako\file\Filesystem
+	 * @var \kanso\framework\file\Filesystem
 	 */
 	private $filesystem;
 

@@ -31,7 +31,7 @@ class CDN
     /**
      * The current HTTP host.
      *
-     * @var string
+     * @var bool
      */
     private $enabled = false;
 
@@ -39,9 +39,9 @@ class CDN
 	 * Constructor.
 	 *
 	 * @access public
-	 * @param string $currrHost HTTP host of current server
-	 * @param string $cdnHost   Http host of CDN
-	 * @param bool   $enabled   Is the CDN enabled ? (optional) (default false)
+	 * @param string $currHost HTTP host of current server
+	 * @param string $cdnHost  Http host of CDN
+	 * @param bool   $enabled  Is the CDN enabled ? (optional) (default false)
 	 */
 	public function __construct(string $currHost, string $cdnHost, bool $enabled = false)
     {
@@ -86,7 +86,7 @@ class CDN
      * Filter HTML via the CDN.
      *
      * @access public
-     * @param  sting  $html HTML to filter
+     * @param  string $html HTML to filter
      * @return string
      */
     public function filter(string $html): string

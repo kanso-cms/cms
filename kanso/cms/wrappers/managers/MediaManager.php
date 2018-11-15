@@ -12,7 +12,6 @@ use kanso\cms\wrappers\providers\MediaProvider;
 use kanso\framework\database\query\Builder;
 use kanso\framework\http\request\Environment;
 use kanso\framework\pixl\Image;
-use kanso\framework\pixl\processor\GD;
 use kanso\framework\utility\Mime;
 use kanso\framework\utility\Str;
 
@@ -45,6 +44,34 @@ class MediaManager extends Manager
     private $uploadDir;
 
     /**
+     * SQL query builder.
+     *
+     * @var \kanso\framework\database\query\Builder
+     */
+    protected $SQL;
+
+    /**
+     * Path to uploads.
+     *
+     * @var \kanso\framework\http\request\Environment
+     */
+    private $environment;
+
+    /**
+     * Gatekeeper instance.
+     *
+     * @var \kanso\cms\auth\Gatekeeper
+     */
+    private $gatekeeper;
+
+    /**
+     * Pixl instance.
+     *
+     * @var \kanso\framework\pixl\Image
+     */
+    private $pixl;
+
+    /**
      * Array of accepted mime types.
      *
      * @var array
@@ -57,13 +84,6 @@ class MediaManager extends Manager
      * @var array
      */
     private $thumbnailSizes;
-
-    /**
-     * Thumbnail quality for images 0 -> 100.
-     *
-     * @var int
-     */
-    private $thumbnailQuality;
 
     /**
      * Array of image mime types.
@@ -82,12 +102,16 @@ class MediaManager extends Manager
      * Override inherited constructor.
      *
      * @access public
-     * @param \kanso\framework\database\query\Builder     $SQL          SQL query builder
-     * @param \kanso\cms\wrappers\providers\MediaProvider $provider     Provider manager
-     * @param string                                      $uploadDir    Path to upload files to
-     * @param array                                       $acceptedMime Array of accepted mime types
+     * @param \kanso\framework\database\query\Builder     $SQL            SQL query builder
+     * @param \kanso\cms\wrappers\providers\MediaProvider $provider       Provider manager
+     * @param \kanso\framework\http\request\Environment   $environment    Request environment
+     * @param \kanso\cms\auth\Gatekeeper                  $gatekeeper     Gatekeeper instance
+     * @param \kanso\framework\pixl\Image                 $pixl           Pixl Instance
+     * @param string                                      $uploadDir      Path to upload files to
+     * @param array                                       $acceptedMime   Array of accepted mime types
+     * @param array                                       $thumbnailSizes Array of thumbnail size configurations
      */
-    public function __construct(Builder $SQL, MediaProvider $provider, Environment $environment, Gatekeeper $gatekeeper, string $uploadDir, array $acceptedMime, array $thumbnailSizes, int $thumbnailQuality)
+    public function __construct(Builder $SQL, MediaProvider $provider, Environment $environment, Gatekeeper $gatekeeper, Image $pixl, string $uploadDir, array $acceptedMime, array $thumbnailSizes)
     {
         $this->SQL = $SQL;
 
@@ -103,7 +127,7 @@ class MediaManager extends Manager
 
         $this->thumbnailSizes = $thumbnailSizes;
 
-        $this->thumbnailQuality = $thumbnailQuality;
+        $this->pixl = $pixl;
     }
 
     /**
@@ -156,10 +180,10 @@ class MediaManager extends Manager
     }
 
 	/**
-	 * Gets a post by id.
+	 * Gets a media item by id.
 	 *
 	 * @access public
-	 * @param  int   $id Tag id
+	 * @param  int   $id Media id
 	 * @return mixed
 	 */
 	public function byId(int $id)
@@ -170,11 +194,11 @@ class MediaManager extends Manager
     /**
      * Create and save a single uploaded file.
      *
-     * @param  array                              $file     Single file item from the $_FILES super global
-     * @param  string                             $title    Title for the attachment
-     * @param  string                             $alt      Alt text for the attachment
-     * @param  bool                               $validate Allow only valid file types
-     * @return bool|CORRUPT_FILE|UNSUPPORTED_TYPE
+     * @param  array    $FILE     Single file item from the $_FILES super global
+     * @param  string   $title    Title for the attachment
+     * @param  string   $alt      Alt text for the attachment
+     * @param  bool     $validate Allow only valid file types
+     * @return bool|int
      */
     public function upload($FILE, $title = '', $alt = '', $validate = true)
     {
@@ -225,7 +249,9 @@ class MediaManager extends Manager
         else
         {
             // Grab our image processor
-            $Imager = new Image($FILE['tmp_name'], new GD);
+            $pixl = $this->pixl;
+
+            $pixl->loadImage($FILE['tmp_name']);
 
             // Get the file extension from the mime type
             $ext = Mime::toExt($FILE['type']);
@@ -235,9 +261,6 @@ class MediaManager extends Manager
 
             // Save the destination path
             $destPath = $this->uniqueName($this->uploadDir . DIRECTORY_SEPARATOR . $name . '.' . $ext);
-
-            // Image quality
-            $qual = $ext === 'png' ? ($this->thumbnailQuality/10) : $this->thumbnailQuality;
 
             // Loop through config sizes, resize and upload
             foreach ($this->thumbnailSizes as $suffix => $size) {
@@ -249,15 +272,15 @@ class MediaManager extends Manager
                 // otherwise just resize to width;
                 if (is_array($size))
                 {
-                    $Imager->crop($size[0], $size[1], true);
+                    $pixl->crop($size[0], $size[1], true);
                 }
                 else
                 {
-                    $Imager->resizeToWidth($size, true);
+                    $pixl->resizeToWidth($size, true);
                 }
 
                 // Save the file
-                $saved = $Imager->save($dst, false, $qual);
+                $saved = $pixl->save($dst);
 
                 if (!$saved)
                 {

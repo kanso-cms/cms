@@ -75,10 +75,10 @@ class Github implements WebhookInterface
      * Constructor.
      *
      * @access public
-     * @param kanso\framework\http\request\Request   $request  Request object
-     * @param kanso\framework\http\response\Response $response Response object
-     * @param kanso\framework\shell\Shell            $shell    Shell utility
-     * @param string                                 $secret   Github token
+     * @param \kanso\framework\http\request\Request   $request  Request object
+     * @param \kanso\framework\http\response\Response $response Response object
+     * @param \kanso\framework\shell\Shell            $shell    Shell utility
+     * @param string                                  $secret   Github token
      */
     public function __construct(Request $request, Response $response, Shell $shell, string $secret)
     {
@@ -140,7 +140,7 @@ class Github implements WebhookInterface
      */
     public function deploy()
     {
-        $git = $this->gitPull();
+        $this->gitPull();
 
         $this->composerUpdate();
 
@@ -150,8 +150,7 @@ class Github implements WebhookInterface
     /**
      * Update repo via git.
      *
-     * @throws Exception if 'git pull' was unsuccefull
-     * @return bool
+     * @throws \Exception if 'git pull' was unsuccefull
      */
     private function gitPull()
     {
@@ -173,7 +172,6 @@ class Github implements WebhookInterface
      * Update any comoser dependancies.
      *
      * @throws Exception if 'composer update' was unsuccefull
-     * @return bool
      */
     private function composerUpdate()
     {

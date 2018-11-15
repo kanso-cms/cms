@@ -19,9 +19,6 @@ namespace kanso\framework\security\spam\gibberish;
  * @link http://stackoverflow.com/questions/6297991/is-there-any-way-to-detect-strings-like-putjbtghguhjjjanika
  * @link https://github.com/rrenaud/Gibberish-Detector
  * @link http://en.wikipedia.org/wiki/Markov_chain
- * @param  string $text    The text to check.
- * @param  array  $options
- * @return mixed
  * @author Oliver Lillie
  * @author Rob Renaud Python implementation
  */

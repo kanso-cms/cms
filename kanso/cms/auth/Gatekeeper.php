@@ -60,7 +60,7 @@ class Gatekeeper
     /**
      * CMS User Provider.
      *
-     * @var \kanso\cms\auth\UserProvider
+     * @var \kanso\cms\wrappers\providers\UserProvider
      */
     private $provider;
 
@@ -95,7 +95,7 @@ class Gatekeeper
     /**
      * Mailer utility.
      *
-     * @var \kanso\cms\email\EmailAdapter
+     * @var \kanso\cms\auth\adapters\EmailAdapter
      */
     private $emailAdapter;
 
@@ -103,12 +103,12 @@ class Gatekeeper
      * Constructor.
      *
      * @access public
-     * @param \kanso\framework\database\query\Builder $SQL          Query builder instance
-     * @param \kanso\cms\auth\UserProvider            $provider     User provider instance
-     * @param \kanso\framework\security\Crypto        $crypto       Encryption manager
-     * @param \kanso\framework\http\cookie\Cookie     $cookie       Cookie manager
-     * @param \kanso\framework\http\session\Session   $session      Session manager
-     * @param \kanso\cms\email\EmailAdapter           $emailAdapter Mailer utility
+     * @param \kanso\framework\database\query\Builder    $SQL          Query builder instance
+     * @param \kanso\cms\wrappers\providers\UserProvider $provider     User provider instance
+     * @param \kanso\framework\security\Crypto           $crypto       Encryption manager
+     * @param \kanso\framework\http\cookie\Cookie        $cookie       Cookie manager
+     * @param \kanso\framework\http\session\Session      $session      Session manager
+     * @param \kanso\cms\auth\adapters\EmailAdapter      $emailAdapter Mailer utility
      */
     public function __construct(Builder $SQL, UserProvider $provider, Crypto $crypto, Cookie $cookie, Session $session, EmailAdapter $emailAdapter)
     {
@@ -286,10 +286,10 @@ class Gatekeeper
      * Try to log the current user in by email and password.
      *
      * @access public
-     * @param  string                                                                                  $username Username or email address
-     * @param  string                                                                                  $password Raw passowrd
-     * @param  bool                                                                                    $force    Login a user without their password needed (optional) (default false)
-     * @return true|self::LOGIN_INCORRECT|self::LOGIN_ACTIVATING|self::LOGIN_LOCKED|self::LOGIN_BANNED
+     * @param  string   $username Username or email address
+     * @param  string   $password Raw passowrd
+     * @param  bool     $force    Login a user without their password needed (optional) (default false)
+     * @return bool|int
      */
     public function login(string $username, string $password, bool $force = false)
     {

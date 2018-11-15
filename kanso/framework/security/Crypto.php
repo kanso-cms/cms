@@ -7,8 +7,9 @@
 
 namespace kanso\framework\security;
 
+use kanso\framework\security\crypto\encrypters\EncrypterInterface as CryptoEncrypter;
 use kanso\framework\security\crypto\Signer;
-use RuntimeException;
+use kanso\framework\security\password\encrypters\EncrypterInterface as PasswordEncrypter;
 
 /**
  * Encryption/Decryption and password hashing.
@@ -49,12 +50,11 @@ class Crypto
 	 * Constructor.
 	 *
 	 * @access public
-	 * @param  \kanso\framework\security\crypto\Signer $signer    Encryption/Decryption signer
-	 * @param  object                                  $encrytper Encryption/Decryption library
-	 * @param  object                                  $password  Password hashing library
-	 * @throws RuntimeException                        If encrypter or password objects are not extensions
+	 * @param \kanso\framework\security\crypto\Signer                          $signer    Encryption/Decryption signer
+	 * @param \kanso\framework\security\crypto\encrypters\EncrypterInterface   $encrytper Encryption/Decryption library
+	 * @param \kanso\framework\security\password\encrypters\EncrypterInterface $password  Password hashing library
 	 */
-	public function __construct(Signer $signer, $encrytper, $password)
+	public function __construct(Signer $signer, CryptoEncrypter $encrytper, PasswordEncrypter $password)
 	{
         $this->defaultMemory = $this->getDefaultMemory();
 
@@ -112,9 +112,9 @@ class Crypto
 	 * Get the password hasher.
 	 *
 	 * @access public
-	 * @return object
+	 * @return \kanso\framework\security\password\encrypters\EncrypterInterface
 	 */
-	public function password()
+	public function password(): PasswordEncrypter
     {
         return $this->password;
     }
@@ -123,11 +123,11 @@ class Crypto
      * Get the data signer.
      *
      * @access public
-     * @return object
+     * @return \kanso\framework\security\crypto\Signer
      */
-    public function signer()
+    public function signer(): Signer
     {
-        return $this->singer;
+        return $this->signer;
     }
 
     /**

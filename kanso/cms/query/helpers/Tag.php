@@ -1,0 +1,296 @@
+<?php
+
+/**
+ * @copyright Joe J. Howard
+ * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
+ */
+
+namespace kanso\cms\query\helpers;
+
+/**
+ * CMS Query tag methods.
+ *
+ * @author Joe J. Howard
+ */
+class Tag extends Helper
+{
+    /**
+     * Checks whether a given tag exists by the tag name or id.
+     *
+     * @access  public
+     * @param  string|int $tag_name Tag name or id
+     * @return bool
+     */
+    public function tag_exists($tag_name)
+    {
+        $index = is_numeric($tag_name) ? 'id' : 'name';
+
+        $tag_name = is_numeric($tag_name) ? intval($tag_name) : $tag_name;
+
+        return !empty($this->container->get('TagManager')->provider()->byKey($index, $tag_name));
+    }
+
+    /**
+     * Gets an array of tag objects of the current post or a post by id.
+     *
+     * @access  public
+     * @param  int|null $post_id Post id or null for tags of current post (optional) (Default NULL)
+     * @return array
+     */
+    public function the_tags(int $post_id = null)
+    {
+        if ($post_id)
+        {
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
+
+            if ($post)
+            {
+                return $post->tags;
+            }
+        }
+        elseif (!empty($this->parent->post))
+        {
+            return $this->parent->post->tags;
+        }
+
+        return [];
+    }
+
+    /**
+     * Get a comma separated list of the tag names of the current post or a post by id.
+     *
+     * @access public
+     * @param  int|null $post_id Post id or null for tags of current post (optional) (Default NULL)
+     * @param  string   $glue    Glue to separate tag names
+     * @return string
+     */
+    public function the_tags_list(int $post_id = null, string $glue = ', '): string
+    {
+        if ($post_id)
+        {
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
+
+            if ($post)
+            {
+                return $this->listTags($post->tags, $glue);
+            }
+        }
+        elseif (!empty($this->parent->post))
+        {
+            return $this->listTags($this->parent->post->tags, $glue);
+        }
+
+        return '';
+    }
+
+    /**
+     * Implode tag names.
+     *
+     * @access private
+     * @param  array  $tags Array of tag objects
+     * @param  string $glue Glue to separate tag names
+     * @return string
+     */
+    private function listTags(array $tags, string $glue): string
+    {
+        $str = '';
+
+        foreach ($tags as $tag)
+        {
+            $str .= $tag->name . $glue;
+        }
+
+        $split = array_filter(explode($glue, $str));
+
+        return implode($glue, $split);
+    }
+
+    /**
+     * Get the slug of a tag by id or the current post's tag.
+     *
+     * @access  public
+     * @param  int|null    $tag_id Tag id or null for tag of current post (optional) (Default NULL)
+     * @return string|null
+     */
+    public function the_tag_slug(int $tag_id = null)
+    {
+        $tag = false;
+
+        if (!$tag_id)
+        {
+            if (!empty($this->parent->post))
+            {
+                $tag = $this->parent->post->tags[0];
+            }
+        }
+        else
+        {
+            $tag = $this->parent->helper('cache')->getTagById($tag_id);
+        }
+
+        if ($tag)
+        {
+            return $tag->slug;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the full URL of a tag by id or current post's tag.
+     *
+     * @access  public
+     * @param  int|null    $tag_id Tag id or null for tag of current post (optional) (Default NULL)
+     * @return string|null
+     */
+    public function the_tag_url(int $tag_id = null)
+    {
+        $tag = false;
+
+        if (!$tag_id)
+        {
+            if (!empty($this->parent->post))
+            {
+                $tag = $this->parent->post->tags[0];
+            }
+        }
+        else
+        {
+            $tag = $this->parent->helper('cache')->getTagById($tag_id);
+        }
+
+        if ($tag)
+        {
+            $prefix = !empty($this->parent->blog_location()) ? '/' . $this->parent->blog_location() . '/' : '/';
+
+            return $this->container->get('Request')->environment()->HTTP_HOST . $prefix . 'tag/' . $tag->slug . '/';
+        }
+
+        return null;
+    }
+
+    /**
+     * If the request is for a tag, category or author returns the object of that request.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function the_taxonomy()
+    {
+        $key = $this->parent->helper('cache')->key(__FUNCTION__, func_get_args(), func_num_args());
+
+        if ($this->parent->helper('cache')->has($key))
+        {
+            return $this->parent->helper('cache')->get($key);
+        }
+
+        if ($this->parent->requestType === 'category')
+        {
+            return $this->parent->helper('cache')->set($key, $this->container->get('CategoryManager')->provider()->byKey('slug', $this->parent->taxonomySlug, true));
+        }
+        elseif ($this->parent->requestType === 'tag')
+        {
+            return $this->parent->helper('cache')->set($key, $this->container->get('TagManager')->provider()->byKey('slug', $this->parent->taxonomySlug, true));
+        }
+        elseif ($this->parent->requestType === 'author')
+        {
+            return $this->parent->helper('cache')->set($key, $this->container->get('UserManager')->provider()->byKey('slug', $this->parent->taxonomySlug, true));
+        }
+
+        return null;
+    }
+
+    /**
+     * Get an array of all the tag objects.
+     *
+     * @access  public
+     * @return array
+     */
+    public function all_the_tags(): array
+    {
+        $key = $this->parent->helper('cache')->key(__FUNCTION__, func_get_args(), func_num_args());
+
+        if ($this->parent->helper('cache')->has($key))
+        {
+            return $this->parent->helper('cache')->get($key);
+        }
+
+        $tags = [];
+
+        $rows = $this->sql()->SELECT('id')->FROM('tags')->FIND_ALL();
+
+        foreach ($rows as $row)
+        {
+            $tags[] = $this->container->get('TagManager')->byId($row['id']);
+        }
+
+        return $this->parent->helper('cache')->set($key, $tags);
+    }
+
+    /**
+     * Is the current post or a post by id untagged ?
+     *
+     * @access  public
+     * @param  int|null $post_id Post id or null for tag of current post (optional) (Default NULL)
+     * @return bool
+     */
+    public function has_tags(int $post_id = null)
+    {
+        if ($post_id)
+        {
+            $post = $this->parent->helper('cache')->getPostByID($post_id);
+
+            if ($post)
+            {
+                $tags = $post->tags;
+
+                if (count($tags) === 1)
+                {
+                    if ($tags[0]->id === 1) return false;
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        if (!empty($this->parent->post))
+        {
+            $tags = $this->parent->post->tags;
+
+            if (count($tags) === 1)
+            {
+                if ($tags[0]->id === 1) return false;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Ge an array of Post objects by tag id.
+     *
+     * @param  int   $tag_id    The Tag id
+     * @param  bool  $published Get only published articles (optional) (Default TRUE)
+     * @return array
+     */
+    public function the_tag_posts(int $tag_id, bool $published = true): array
+    {
+        $key = $this->parent->helper('cache')->key(__FUNCTION__, func_get_args(), func_num_args());
+
+        if ($this->parent->helper('cache')->has($key))
+        {
+            return $this->parent->helper('cache')->get($key);
+        }
+
+        if ($this->parent->tag_exists($tag_id))
+        {
+            return $this->parent->helper('cache')->set($key, $this->container->get('PostManager')->provider()->byKey('tags.id', $tag_id, false, $published));
+        }
+
+        return $this->parent->helper('cache')->set($key, []);
+    }
+}

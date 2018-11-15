@@ -17,7 +17,7 @@ trait MagicArrayAccessTrait
 	/**
 	 * Array access.
 	 *
-	 * @var string
+	 * @var array
 	 */
 	protected $data = [];
 
@@ -36,7 +36,7 @@ trait MagicArrayAccessTrait
      * Get a property by key.
      *
      * @access public
-     * @return string|null
+     * @return mixed
      */
     public function __get(string $key)
     {

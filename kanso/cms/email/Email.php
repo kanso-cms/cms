@@ -89,12 +89,12 @@ class Email
      * Constructor.
      *
      * @access public
-     * @param \kanso\framework\file\Filesystem     $filesystem Filesystem instance
-     * @param \kanso\cms\email\phpmailer\PHPMailer $smtpMailer SMTP mail utility
-     * @param \kanso\cms\email\Log                 $log        Mail logging utility
-     * @param array                                $theme      Array of theme options (optional) (default [])
-     * @param bool                                 $useStmp    Use SMTP to send emails (optional) (default false)
-     * @param array                                $stmp       SMTP setings
+     * @param \kanso\framework\file\Filesystem     $filesystem   Filesystem instance
+     * @param \kanso\cms\email\phpmailer\PHPMailer $smtpMailer   SMTP mail utility
+     * @param \kanso\cms\email\Log                 $log          Mail logging utility
+     * @param array                                $theme        Array of theme options (optional) (default [])
+     * @param bool                                 $useStmp      Use SMTP to send emails (optional) (default false)
+     * @param array                                $smtpSettings SMTP setings
      */
     public function __construct(Filesystem $filesystem, PHPMailer $smtpMailer, Log $log, $theme = [], $useStmp = false, $smtpSettings = [])
     {
@@ -132,7 +132,7 @@ class Email
      * Send an HTML or plain text email.
      *
      * @access public
-     * @param  string $emailTo     The email address to send the email to
+     * @param  string $toEmail     The email address to send the email to
      * @param  string $senderName  The name of the sender
      * @param  string $senderEmail The email address of the sender
      * @param  string $subject     The subject of the email

@@ -33,7 +33,7 @@ interface ViewInterface
 	 *
 	 * @access public
 	 * @param string $file Absolute path to file to render
-	 * @param aray   $data Array of variables to extract
+	 * @param array  $data Array of variables to extract
 	 */
 	public function display(string $file, array $data = []): string;
 }

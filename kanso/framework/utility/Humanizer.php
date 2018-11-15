@@ -37,11 +37,11 @@ class Humanizer
 				$terms = ['byte', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 			}
 
-			$e = floor(log($size, $base));
+			$e = intval(floor(log($size, $base)));
 
 			$s = round($size / pow($base, $e), 2);
 
-			return $s . ' ' . self::pluralize($terms[$e], $s);
+			return $s . ' ' . self::pluralize($terms[$e], intval($s));
 		}
 		else
 		{
@@ -53,10 +53,10 @@ class Humanizer
 	 * Returns a time ago from a timestamp or strtotime string.
 	 *
 	 * @access public
-	 * @param mixed $time A valid UNIX timestamp or PHP valid "strtotime" parameter
-	 * @param  string|null
+	 * @param  mixed  $time A valid UNIX timestamp or PHP valid "strtotime" parameter
+	 * @return string
 	 */
-	public static function timeAgo($time)
+	public static function timeAgo($time): string
 	{
 		$timeStamp = self::isTimestamp($time) ? $time : strtotime($time);
 
@@ -76,12 +76,17 @@ class Humanizer
 
 	    foreach ($tokens as $unit => $text)
 	    {
-	        if ($time < $unit) continue;
+	        if ($time < $unit)
+	        {
+	        	continue;
+	        }
 
 	        $numberOfUnits = floor($time / $unit);
 
 	        return $numberOfUnits . ' ' . $text . (($numberOfUnits>1)?'s':'');
 	    }
+
+	    return '';
 	}
 
 	/**
@@ -92,7 +97,7 @@ class Humanizer
 	 * @param  int    $count The amount of items (optional) (default 2)
 	 * @return string
 	 */
-	public static function pluralize(string $word, int $count = 2)
+	public static function pluralize(string $word, int $count = 2): string
 	{
 	    return Pluralize::convert($word, $count);
 	}
@@ -101,10 +106,10 @@ class Humanizer
 	 * Validate that a variable is a valid UNIX timestamp.
 	 *
 	 * @access  private
-	 * @param mixed $timestamp
-	 * @param   bool
+	 * @param  mixed $timestamp A valid UNIX timestamp or PHP valid "strtotime" parameter
+	 * @return bool
 	 */
-	private static function isTimestamp($timestamp)
+	private static function isTimestamp($timestamp): bool
 	{
 	    return (is_numeric($timestamp) && intval($timestamp) == $timestamp);
 	}

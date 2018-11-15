@@ -30,7 +30,7 @@ class Application
     /**
      * IoC container instance.
      *
-     * @var \kanso\framework\application\Container
+     * @var \kanso\framework\ioc\Container
      */
     protected $container;
 
@@ -130,9 +130,9 @@ class Application
      */
     public function environment()
     {
-        if (defined('KANSO_ENV'))
+        if (defined('\KANSO_ENV'))
         {
-            return KANSO_ENV;
+            constant('\KANSO_ENV');
         }
 
         return null;
@@ -142,9 +142,9 @@ class Application
      * Returns the IoC container instance.
      *
      * @access public
-     * @return \kanso\framework\application\Container
+     * @return \kanso\framework\ioc\Container
      */
-    public function container()
+    public function container(): Container
     {
         return $this->container;
     }

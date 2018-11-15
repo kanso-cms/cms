@@ -29,19 +29,19 @@ class TagManager extends Manager
 	 * Creates a new tag.
 	 *
 	 * @access public
-	 * @param  string $name Tag name
-	 * @param  string $slug Tag slug (optional) (default null)
+	 * @param  string      $name Tag name
+	 * @param  string|null $slug Tag slug (optional) (default null)
 	 * @return mixed
 	 */
 	public function create(string $name, string $slug = null)
 	{
 		$slug = !$slug ? Str::slug($name) : Str::slug($slug);
 
-		$catExists = $this->provider->byKey('slug', $slug, true);
+		$tagExists = $this->provider->byKey('slug', $slug, true);
 
-		if ($catExists)
+		if ($tagExists)
 		{
-			return $catExists;
+			return false;
 		}
 
 		return $this->provider->create(['name' => $name, 'slug' => $slug]);

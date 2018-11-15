@@ -19,7 +19,7 @@ class Cache
     /**
      * Cache manager.
      *
-     * @var kanso\framework\cache\Cache
+     * @var \kanso\framework\cache\Cache
      */
     private $cache;
 
@@ -41,9 +41,9 @@ class Cache
      * Constructor.
      *
      * @access public
-     * @param kanso\framework\cache\Cache $cahce   Framework caching utility
-     * @param string                      $key     The key to cache the current request under
-     * @param bool                        $enabled Enable of disable the cache (optional) (default false)
+     * @param \kanso\framework\cache\Cache $cache   Framework caching utility
+     * @param string                       $key     The key to cache the current request under
+     * @param bool                         $enabled Enable of disable the cache (optional) (default false)
      */
     public function __construct(FrameworkCache $cache, string $key, bool $enabled = false)
     {
@@ -112,9 +112,9 @@ class Cache
      * Check if the response body exists.
      *
      * @access public
-     * @param string $key Key to check
+     * @return bool
      */
-    public function has()
+    public function has(): bool
     {
         if ($this->expired())
         {
@@ -130,7 +130,6 @@ class Cache
      * Remove the response body.
      *
      * @access public
-     * @param string $key Key to delete
      */
     public function delete()
     {
@@ -141,7 +140,6 @@ class Cache
      * Checks if the response body expired.
      *
      * @access public
-     * @param string $key Key to check
      */
     public function expired()
     {

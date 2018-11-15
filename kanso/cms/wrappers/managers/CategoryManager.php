@@ -29,8 +29,8 @@ class CategoryManager extends Manager
 	 * Creates a new category.
 	 *
 	 * @access public
-	 * @param  string $name Category name
-	 * @param  string $slug Category slug (optional) (default null)
+	 * @param  string      $name Category name
+	 * @param  string|null $slug Category slug (optional) (default null)
 	 * @return mixed
 	 */
 	public function create(string $name, string $slug = null)
@@ -41,7 +41,7 @@ class CategoryManager extends Manager
 
 		if ($catExists)
 		{
-			return $catExists;
+			return false;
 		}
 
 		return $this->provider->create(['name' => $name, 'slug' => $slug]);

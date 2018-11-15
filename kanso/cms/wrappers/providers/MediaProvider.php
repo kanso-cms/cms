@@ -75,7 +75,7 @@ class MediaProvider extends Provider
                 return new Media($this->SQL, $this->thumbnailSizes, $row);
             }
 
-            return null;
+            return false;
     	}
     	else
         {

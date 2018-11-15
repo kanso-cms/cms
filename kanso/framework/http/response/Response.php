@@ -59,6 +59,13 @@ class Response
     private $body;
 
     /**
+     * The HTTP protocol.
+     *
+     * @var \kanso\framework\http\session\Session
+     */
+    private $session;
+
+    /**
      * Response status.
      *
      * @var \kanso\framework\http\response\Status
@@ -150,7 +157,7 @@ class Response
      * @access public
      * @return \kanso\framework\http\response\Protocol
      */
-    public function protocol()
+    public function protocol(): Protocol
     {
         return $this->protocol;
     }
@@ -161,7 +168,7 @@ class Response
      * @access public
      * @return \kanso\framework\http\response\Body
      */
-    public function body()
+    public function body(): Body
     {
         return $this->body;
     }
@@ -172,7 +179,7 @@ class Response
      * @access public
      * @return \kanso\framework\http\response\Format
      */
-    public function format()
+    public function format(): Format
     {
         return $this->format;
     }
@@ -183,7 +190,7 @@ class Response
      * @access public
      * @return \kanso\framework\http\response\Status
      */
-    public function status()
+    public function status(): Status
     {
         return $this->status;
     }
@@ -194,7 +201,7 @@ class Response
      * @access public
      * @return \kanso\framework\http\response\Headers
      */
-    public function headers()
+    public function headers(): Headers
     {
         return $this->headers;
     }
@@ -205,7 +212,7 @@ class Response
      * @access public
      * @return \kanso\framework\http\response\Cache
      */
-    public function cache()
+    public function cache(): Cache
     {
         return $this->cache;
     }
@@ -216,7 +223,7 @@ class Response
      * @access public
      * @return \kanso\framework\http\cookie\Cookie
      */
-    public function cookie()
+    public function cookie(): Cookie
     {
         return $this->cookie;
     }
@@ -227,7 +234,7 @@ class Response
      * @access public
      * @return \kanso\framework\http\session\Session
      */
-    public function session()
+    public function session(): Session
     {
         return $this->session;
     }
@@ -236,9 +243,9 @@ class Response
      * Get the CDN object.
      *
      * @access public
-     * @return \kanso\framework\http\response\Cache
+     * @return \kanso\framework\http\response\CDN
      */
-    public function CDN()
+    public function CDN(): CDN
     {
         return $this->CDN;
     }
@@ -249,7 +256,7 @@ class Response
      * @access public
      * @return \kanso\framework\mvc\view\View
      */
-    public function view()
+    public function view(): View
     {
         return $this->view;
     }

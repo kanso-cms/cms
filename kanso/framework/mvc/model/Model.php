@@ -8,7 +8,6 @@
 namespace kanso\framework\mvc\model;
 
 use kanso\framework\ioc\ContainerAwareTrait;
-use kanso\Kanso;
 
 /**
  * Base Model.

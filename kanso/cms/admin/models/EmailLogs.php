@@ -24,7 +24,7 @@ class EmailLogs extends BaseModel
      */
     public function onGET()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parseGet();
         }
@@ -35,7 +35,7 @@ class EmailLogs extends BaseModel
      */
     public function onPOST()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parsePost();
         }
@@ -91,12 +91,7 @@ class EmailLogs extends BaseModel
      */
     private function parsePost(): array
     {
-        $validate = $this->validatePost();
-
-        if (!$validate)
-        {
-            return false;
-        }
+        $this->validatePost();
 
         $id           = $this->post['id'];
         $path         = $this->Config->get('email.log_dir');

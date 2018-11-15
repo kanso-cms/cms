@@ -37,7 +37,7 @@ class Alter
     /**
      * Array of columns and column parameters of current table.
      *
-     * @var string
+     * @var array
      */
     private $columns;
 
@@ -137,7 +137,7 @@ class Alter
      *
      * @access public
      * @param  string                                $column
-     * @param  string                                $dataType (optional) (default null)
+     * @param  string|null                           $dataType (optional) (default null)
      * @throws PDOException                          If the column does not exist
      * @return \kanso\framework\database\query\Alter
      */
@@ -520,7 +520,7 @@ class Alter
      * @access public
      * @param  string                                $referenceTable The name of the reference table
      * @param  string                                $referenceKey   The name of the column on the reference table
-     * @param  string                                $constraint     The constraint name to add (optional) (default null)
+     * @param  string|null                           $constraint     The constraint name to add (optional) (default null)
      * @return \kanso\framework\database\query\Alter
      */
     public function ADD_FOREIGN_KEY(string $referenceTable, string $referenceKey, string $constraint = null): Alter
@@ -572,8 +572,6 @@ class Alter
         $this->loadColumns();
 
         return $this;
-
-        return false;
     }
 
     /********************************************************************************
@@ -632,7 +630,7 @@ class Alter
     /**
      * Get a column or the current column's configuration.
      *
-     * @param  string $column (optional) (default null)
+     * @param  string|null $column (optional) (default null)
      * @return string
      */
     private function getColumnConfig(string $column = null): string
@@ -660,9 +658,9 @@ class Alter
      * Set a key/value pair on a column or the current column configuration.
      *
      * @access private
-     * @param  string $key    The configuration key
-     * @param  string $value  The configuration value for the column
-     * @param  string $column The column name (optional) (default null)
+     * @param  string      $key    The configuration key
+     * @param  string      $value  The configuration value for the column
+     * @param  string|null $column The column name (optional) (default null)
      * @return string
      */
     private function setColumnConfig(string $key, string $value, string $column = null): string

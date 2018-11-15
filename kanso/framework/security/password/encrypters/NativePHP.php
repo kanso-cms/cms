@@ -38,11 +38,6 @@ class NativePHP extends Encrypter implements EncrypterInterface
 	 */
 	public function hash(string $string): string
 	{
-		if (!function_exists('password_hash'))
-		{
-			require_once __DIR__ . DIRECTORY_SEPARATOR . '_polyfill.php';
-		}
-
 		return password_hash($string, $this->algo, ['cost' => 8]);
 	}
 
@@ -51,11 +46,6 @@ class NativePHP extends Encrypter implements EncrypterInterface
 	 */
 	public function verify(string $string, string $hashed): bool
 	{
-		if (!function_exists('password_verify'))
-		{
-			require_once __DIR__ . DIRECTORY_SEPARATOR . '_polyfill.php';
-		}
-
 		return password_verify($string, $hashed);
 	}
 }

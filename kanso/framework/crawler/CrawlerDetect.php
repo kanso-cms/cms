@@ -16,7 +16,7 @@ class CrawlerDetect
     /**
      * Headers that contain a user agent.
      *
-     * @var kanso\framework\http\request\Headers
+     * @var \kanso\framework\http\request\Headers
      */
     private $headers;
 
@@ -87,11 +87,10 @@ class CrawlerDetect
     /**
      * Compile the regex patterns into one regex string.
      *
-     * @param array
-     *
+     * @param  array  $patterns Definition patterns
      * @return string
      */
-    public function compileRegex($patterns): string
+    public function compileRegex(array $patterns): string
     {
         return '(' . implode('|', $patterns) . ')';
     }

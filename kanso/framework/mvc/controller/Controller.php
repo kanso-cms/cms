@@ -11,7 +11,6 @@ use Closure;
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
 use kanso\framework\utility\Callback;
-use kanso\Kanso;
 
 /**
  * Base controller.
@@ -40,10 +39,10 @@ abstract class Controller
      * Constructor.
      *
      * @access public
-     * @param \kanso\framework\http\request\Request  $request    Request instance
-     * @param \kanso\framework\http\request\Response $response   Response instance
-     * @param \Closure                               $next       Next middleware closure
-     * @param string                                 $modelClass Full namespaced class name of the model
+     * @param \kanso\framework\http\request\Request   $request    Request instance
+     * @param \kanso\framework\http\response\Response $response   Response instance
+     * @param \Closure                                $next       Next middleware closure
+     * @param string                                  $modelClass Full namespaced class name of the model
      */
     public function __construct(Request $request, Response $response, Closure $next, string $modelClass)
     {
@@ -56,7 +55,7 @@ abstract class Controller
      * Loads and instantiates the model.
      *
      * @access private
-     * @param string $class Full namespaced class name of the model
+     * @param string $className Full namespaced class name of the model
      */
     private function loadModel(string $className)
 	{

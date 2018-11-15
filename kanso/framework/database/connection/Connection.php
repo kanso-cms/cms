@@ -72,7 +72,7 @@ class Connection
 	/**
 	 * PDO object.
 	 *
-	 * @var \PDO
+	 * @var \PDO|null
 	 */
 	protected $pdo;
 
@@ -132,7 +132,7 @@ class Connection
 	 * Creates a PDO instance.
 	 *
 	 * @access protected
-	 * @return \PDO
+	 * @return PDO
 	 */
 	protected function connect(): PDO
 	{

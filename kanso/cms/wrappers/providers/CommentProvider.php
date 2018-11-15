@@ -53,7 +53,7 @@ class CommentProvider extends Provider
                 return new Comment($this->SQL, $row);
             }
 
-            return null;
+            return false;
     	}
     	else
         {

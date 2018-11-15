@@ -93,14 +93,14 @@ class UserManager extends Manager
      * Override inherited constructor.
      *
      * @access public
-     * @param \kanso\framework\database\query\Builder   $SQL         Query builder instance
-     * @param \kanso\cms\auth\UserProvider              $provider    User provider instance
-     * @param \kanso\framework\security\Crypto          $crypto      Encryption manager
-     * @param \kanso\framework\http\cookie\Cookie       $cookie      Cookie manager
-     * @param \kanso\framework\http\session\Session     $session     Session manager
-     * @param \kanso\framework\http\request\Environment $environment Request environment
-     * @param \kanso\framework\config\Config            $config      Config
-     * @param \kanso\cms\email\Email                    $email       Mailer utility
+     * @param \kanso\framework\database\query\Builder    $SQL         Query builder instance
+     * @param \kanso\cms\wrappers\providers\UserProvider $provider    User provider instance
+     * @param \kanso\framework\security\Crypto           $crypto      Encryption manager
+     * @param \kanso\framework\http\cookie\Cookie        $cookie      Cookie manager
+     * @param \kanso\framework\http\session\Session      $session     Session manager
+     * @param \kanso\framework\config\Config             $config      Config
+     * @param \kanso\framework\http\request\Environment  $environment Request environment
+     * @param \kanso\cms\email\Email                     $email       Mailer utility
      */
     public function __construct(Builder $SQL, UserProvider $provider, Crypto $crypto, Cookie $cookie, Session $session, Config $config, Environment $environment, Email $email)
     {
@@ -223,23 +223,23 @@ class UserManager extends Manager
             $this->email->send($emailTo, $senderName, $senderEmail, $emailSubject, $emailContent);
         }
 
-        return true;
+        return $user;
     }
 
     /**
      * Create a new regular user.
      *
      * @access public
-     * @param  string $email    Valid email address
-     * @param  string $username Username (optional) (default '')
-     * @param  string $password Password string (optional) (default '')
-     * @param  string $name     Users name  (optional) (default '')
-     * @param  string $role     User role  (optional) (default 'guest')
-     * @param  bool   $activate Activate the user straight away (optional) (default false)
-     * @param  bool   $activate Should we send the user an email with username and password ? (optional) (default true)
+     * @param  string $email     Valid email address
+     * @param  string $password  Password string (optional) (default '')
+     * @param  string $name      Users name  (optional) (default '')
+     * @param  string $username  Username (optional) (default '')
+     * @param  string $role      User role  (optional) (default 'guest')
+     * @param  bool   $activate  Activate the user straight away (optional) (default false)
+     * @param  bool   $sendEamil Should we send the user an email with username and password ? (optional) (default true)
      * @return mixed
      */
-    public function createUser(string $email, string $username = '', string $password = '', string $name = '', string $role = 'guest', bool $activate = false, bool $sendEamil = true)
+    public function createUser(string $email, string $password = '', string $name = '', string $username = '', string $role = 'guest', bool $activate = false, bool $sendEamil = true)
     {
         // Create a unique username based on the email if one
         // wasnt provided

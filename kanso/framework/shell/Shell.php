@@ -40,21 +40,21 @@ class Shell
     /**
      * Sub command to run.
      *
-     * @var string
+     * @var string|null
      */
     private $subCmd  = null;
 
     /**
      * The actual cmd to run.
      *
-     * @var string
+     * @var string|null
      */
     private $cmd = null;
 
     /**
      * The directory to run the cmd in.
      *
-     * @var string
+     * @var string|null
      */
     private $dir = null;
 
@@ -68,28 +68,28 @@ class Shell
     /**
      * Smyfony process.
      *
-     * @var kanso\framework\shell\process\Process
+     * @var \kanso\framework\shell\process\Process
      */
     private $process;
 
     /**
      * Input stream.
      *
-     * @var string
+     * @var string|null
      */
     private $_I;
 
     /**
      * Output stream.
      *
-     * @var string
+     * @var string|null
      */
     private $_O;
 
     /**
      * Result from the command.
      *
-     * @var string
+     * @var bool
      */
     private $result = false;
 
@@ -104,11 +104,11 @@ class Shell
      * Constructor.
      *
      * @access public
-     * @param string $directory Directory to run command on (optional) (default null)
+     * @param string|null $dir Directory to run command on (optional) (default null)
      */
     public function __construct(string $dir = null)
     {
-        $this->process = new Process(null);
+        $this->process = new Process('');
 
         $this->process->setTimeout($this->timeout);
 
@@ -122,10 +122,10 @@ class Shell
      * Cd into a directory.
      *
      * @access public
-     * @param  string $directory Directory to move to
-     * @return this
+     * @param  string                       $dir Directory to move to
+     * @return \kanso\framework\shell\Shell
      */
-    public function cd(string $dir)
+    public function cd(string $dir): Shell
     {
         $this->dir = escapeshellarg($dir);
 
@@ -136,11 +136,11 @@ class Shell
      * Run a command and optional sub command.
      *
      * @access public
-     * @param  string $cmd    Command name
-     * @param  string $subCmd sub command name (optional) (default null)
-     * @return this
+     * @param  string                       $cmd    Command name
+     * @param  string|null                  $subCmd sub command name (optional) (default null)
+     * @return \kanso\framework\shell\Shell
      */
-    public function cmd(string $cmd, string $subCmd = null)
+    public function cmd(string $cmd, string $subCmd = null): Shell
     {
         $this->cmd = escapeshellcmd($cmd);
 
@@ -156,16 +156,16 @@ class Shell
      * Add an option or flag to the current command.
      *
      * @access public
-     * @param  string $flag  Option key or flag
-     * @param  string $value Option value (optional) (default null)
-     * @return this
+     * @param  string                       $flag  Option key or flag
+     * @param  string|null                  $value Option value (optional) (default null)
+     * @return \kanso\framework\shell\Shell
      */
-    public function option(string $flag, string $value = null)
+    public function option(string $flag, string $value = null): Shell
     {
         // No supplied value
         if ($value === false)
         {
-            return;
+            return $this;
         }
         elseif ($value === null)
         {
@@ -189,10 +189,10 @@ class Shell
      * Add an array of flags and options.
      *
      * @access public
-     * @param  array $options Array of options with flags
-     * @return this
+     * @param  array                        $options Array of options with flags
+     * @return \kanso\framework\shell\Shell
      */
-    public function options(array $options)
+    public function options(array $options): Shell
     {
         foreach ($options as $key => $flag)
         {
@@ -213,14 +213,14 @@ class Shell
      * Add parameter to the current command.
      *
      * @access public
-     * @param  string $param Parameter to add
-     * @return this
+     * @param  string                       $param Parameter to add
+     * @return \kanso\framework\shell\Shell
      */
-    public function param($param = null)
+    public function param($param = null): Shell
     {
         if (!$param)
         {
-            return;
+            return $this;
         }
 
         $this->params[$param] = escapeshellarg($param);
@@ -232,15 +232,16 @@ class Shell
      * Add an array of parameters to the current command.
      *
      * @access public
-     * @param  array $params Array of parameters to add
-     * @return this
+     * @param  array                        $params Array of parameters to add
+     * @return \kanso\framework\shell\Shell
      */
-    public function params(array $params)
+    public function params(array $params): Shell
     {
         foreach ($params as $param)
         {
             $this->param($param);
         }
+
         return $this;
     }
 
@@ -248,10 +249,10 @@ class Shell
      * Add an input argument to the command.
      *
      * @access public
-     * @param  string $path Path to command input
-     * @return this
+     * @param  string                       $path Path to command input
+     * @return \kanso\framework\shell\Shell
      */
-    public function input(string $path)
+    public function input(string $path): Shell
     {
         $this->_I = escapeshellarg($path);
 
@@ -262,10 +263,10 @@ class Shell
      * Add an output argument to the command.
      *
      * @access public
-     * @param  string $path Path to command output
-     * @return this
+     * @param  string                       $path Path to command output
+     * @return \kanso\framework\shell\Shell
      */
-    public function output(string $path)
+    public function output(string $path): Shell
     {
         $this->_O = escapeshellarg($path);
 
@@ -276,8 +277,8 @@ class Shell
      * Run the command.
      *
      * @access public
-     * @param  bool $showErrors Return errors or output
-     * @return this
+     * @param  bool  $showErrors Return errors or output
+     * @return mixed
      */
     public function run($showErrors = false)
     {
@@ -366,11 +367,23 @@ class Shell
         return $output;
     }
 
-    public function is_successful()
+    /**
+     * Was the command successful?
+     *
+     * @access public
+     * @return bool
+     */
+    public function is_successful(): bool
     {
         return $this->result !== false;
     }
 
+    /**
+     * Reset the shell.
+     *
+     * @access public
+     * @param bool $hard_reset If set to true the working directory, output and result are reset (optional) (default false)
+     */
     public function reset($hard_reset = false)
     {
         $this->options = [];
@@ -381,17 +394,22 @@ class Shell
         $this->_I      = null;
         $this->process->clearOutput();
         $this->process->clearOutput();
-        $this->process->setCommandLine(null);
+        $this->process->setCommandLine('');
         if ($hard_reset === true)
         {
             $this->dir     = null;
             $this->result  = false;
-            $this->output  = [];
         }
     }
 
-    // Makes sure than the binary for the cmd being run exists
-    private function resolveBins($cmd)
+    /**
+     *  Makes sure than the binary for the cmd being run exists.
+     *
+     * @access private
+     * @param  string $cmd The command to check
+     * @return string
+     */
+    private function resolveBins(string $cmd): string
     {
         // If this is a built in command we can skip
         if (in_array($cmd, $this->built_ins))
@@ -418,11 +436,11 @@ class Shell
         if (!in_array('/usr/local/bin', $paths))
         {
             putenv('PATH=' . getenv('PATH') . ':/usr/local/bin');
+
             return '/usr/local/bin/' . $cmd;
         }
 
         // Just return the command otherwise
         return $cmd;
     }
-
 }

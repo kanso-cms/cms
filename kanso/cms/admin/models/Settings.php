@@ -23,7 +23,7 @@ class Settings extends BaseModel
      */
     public function onGET()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parseGet();
         }
@@ -36,7 +36,7 @@ class Settings extends BaseModel
      */
     public function onPOST()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             if (!isset($this->post['access_token']) || !$this->Gatekeeper->verifyToken($this->post['access_token']))
             {
@@ -46,7 +46,7 @@ class Settings extends BaseModel
             return $this->parsePost();
         }
 
-        throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+        throw new RequestException(500, 'Bad Admin Panel POST Request. The user was not logged in as an admin.');
     }
 
     /**
@@ -137,33 +137,35 @@ class Settings extends BaseModel
      */
     private function submitAccountSettings()
     {
-        $post = $this->validation->sanitize($this->post);
+        $rules =
+        [
+            'username' => ['required', 'alpha_dash', 'max_length(100)', 'min_length(4)'],
+            'email'    => ['required', 'email'],
+            'password' => ['max_length(100)', 'min_length(6)'],
+        ];
+        $filters =
+        [
+            'username' => ['trim', 'string'],
+            'email'    => ['trim', 'string', 'email'],
+            'password' => ['trim'],
+            'email_notifications' => ['trim', 'boolean'],
+        ];
 
-        $this->validation->validation_rules([
-            'username'            => 'required|alpha_dash|max_len,100|min_len,4',
-            'email'               => 'required|valid_email',
-            'password'            => 'max_len,100|min_len,6',
-            'email_notifications' => 'boolean',
-        ]);
+        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
 
-        $this->validation->filter_rules([
-            'username' => 'trim|sanitize_string',
-            'email'    => 'trim|sanitize_email',
-            'password' => 'trim',
-            'email_notifications' => 'trim|sanitize_string',
-        ]);
-
-        $validated_data = $this->validation->run($post);
-
-        if (!$validated_data)
+        if (!$validator->isValid())
         {
-            return false;
+            $errors = $validator->getErrors();
+
+            return $this->postMessage('warning', array_shift($errors));
         }
 
-        $username = $validated_data['username'];
-        $email    = $validated_data['email'];
-        $password = $validated_data['password'];
-        $emailNotifications = isset($validated_data['email_notifications']) ? true : false;
+        $post = $validator->filter();
+
+        $username = $post['username'];
+        $email    = $post['email'];
+        $password = $post['password'];
+        $emailNotifications = $post['email_notifications'];
 
         // Grab the user's object
         $user = $this->Gatekeeper->getUser();
@@ -211,50 +213,52 @@ class Settings extends BaseModel
      */
     private function submitAuthorSettings()
     {
-        // Sanitize and validate the POST
-        $post = $this->validation->sanitize($this->post);
+        $rules =
+        [
+            'name'        => ['required', 'alpha_space', 'max_length(50)', 'min_length(3)'],
+            'slug'        => ['required', 'alpha_dash', 'max_length(50)', 'min_length(3)'],
+            'description' => ['required'],
+            'facebook'    => ['url'],
+            'twitter'     => ['url'],
+            'gplus'       => ['url'],
+            'instagram'   => ['url'],
+        ];
+        $filters =
+        [
+            'name'         => ['trim', 'string'],
+            'slug'         => ['trim', 'string'],
+            'description'  => ['trim', 'string'],
+            'facebook'     => ['trim'],
+            'twitter'      => ['trim'],
+            'gplus'        => ['trim'],
+            'instagram'    => ['trim'],
+            'thumbnail_id' => ['trim', 'integer'],
+        ];
 
-        $this->validation->validation_rules([
-            'name'         => 'required|alpha_space|max_len,50|min_len,3',
-            'slug'         => 'required|alpha_dash|max_len,50|min_len,3',
-            'description'  => 'required',
-            'facebook'     => 'valid_url',
-            'twitter'      => 'valid_url',
-            'gplus'        => 'valid_url',
-            'instagram'    => 'valid_url',
-        ]);
+        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
 
-        $this->validation->filter_rules([
-            'name'         => 'trim|sanitize_string',
-            'slug'         => 'trim|sanitize_string',
-            'description'  => 'trim|sanitize_string',
-            'facebook'     => 'trim|sanitize_string',
-            'twitter'      => 'trim|sanitize_string',
-            'gplus'        => 'trim|sanitize_string',
-            'instagram'    => 'trim|sanitize_string',
-            'thumbnail_id' => 'trim|sanitize_numbers',
-        ]);
-
-        // Validate POST
-        $validated_data = $this->validation->run($post);
-
-        if (!$validated_data)
+        if (!$validator->isValid())
         {
-            return false;
+            $errors = $validator->getErrors();
+
+            return $this->postMessage('warning', array_shift($errors));
         }
+
+        // Sanitize and validate the POST
+        $post = $validator->filter();
 
         // Grab the Row and update settings
         $user = $this->Gatekeeper->getUser();
 
         // Change authors details
-        $user->name         = $validated_data['name'];
-        $user->slug         = $validated_data['slug'];
-        $user->facebook     = $validated_data['facebook'];
-        $user->twitter      = $validated_data['twitter'];
-        $user->gplus        = $validated_data['gplus'];
-        $user->instagram    = $validated_data['instagram'];
-        $user->description  = $validated_data['description'];
-        $user->thumbnail_id = empty($validated_data['thumbnail_id']) ? null : intval($validated_data['thumbnail_id']);
+        $user->name         = $post['name'];
+        $user->slug         = $post['slug'];
+        $user->facebook     = $post['facebook'];
+        $user->twitter      = $post['twitter'];
+        $user->gplus        = $post['gplus'];
+        $user->instagram    = $post['instagram'];
+        $user->description  = $post['description'];
+        $user->thumbnail_id = $post['thumbnail_id'];
         $user->save();
 
         $this->Gatekeeper->refreshUser();
@@ -275,140 +279,129 @@ class Settings extends BaseModel
             return false;
         }
 
-        // Validate post variables
-        $post = $this->validation->sanitize($this->post);
+        $post  = $this->post;
+        $rules =
+        [
+            'posts_per_page'     => ['required'],
+            'thumbnail_quality'  => ['required', 'greater_than_or_equal_to(0)', 'less_than_or_equal_to(9)'],
+            'cdn_url'            => ['url'],
+            'cache_life'         => [],
+            'site_title'         => ['required'],
+            'site_description'   => ['required'],
+            'sitemap_url'        => ['required'],
+            'theme'              => ['required'],
+            'permalinks'         => ['required'],
+        ];
+        $filters =
+        [
+            'enable_authors'     => ['boolean'],
+            'enable_cats'        => ['boolean'],
+            'enable_tags'        => ['boolean'],
+            'enable_cdn'         => ['boolean'],
+            'enable_cache'       => ['boolean'],
+            'enable_comments'    => ['boolean'],
+            'enable_attachments' => ['boolean'],
+            'clear_cache'        => ['boolean'],
+            'posts_per_page'     => ['integer'],
+            'thumbnail_quality'  => ['integer'],
+            'cdn_url'            => ['trim'],
+            'cache_life'         => ['trim'],
+            'site_title'         => ['trim'],
+            'site_description'   => ['trim'],
+            'sitemap_url'        => ['trim'],
+            'theme'              => ['trim'],
+            'permalinks'         => ['trim'],
+            'blog_location'      => ['trim'],
+        ];
 
-        $this->validation->validation_rules([
-            'enable_authors '    => 'boolean',
-            'enable_cats'        => 'boolean',
-            'enable_tags'        => 'boolean',
-            'enable_cdn'         => 'boolean',
-            'enable_cache'       => 'boolean',
-            'enable_comments'    => 'boolean',
-            'enable_attachments' => 'boolean',
-            'posts_per_page'     => 'required|integer',
-            'thumbnail_quality'  => 'required|integer',
-            'cdn_url'            => 'max_len,100',
-            'cache_life'         => 'max_len,50',
-            'site_title'         => 'required|max_len,100',
-            'site_description'   => 'required|max_len,300',
-            'sitemap_url'        => 'required|max_len,100',
-            'theme'              => 'required|max_len,100',
-            'permalinks'         => 'required|max_len,50',
-        ]);
+        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
 
-        $this->validation->filter_rules([
-            'posts_per_page'    => 'sanitize_numbers',
-            'thumbnail_quality' => 'sanitize_numbers',
-            'cdn_url'           => 'trim|sanitize_string|basic_tags',
-            'cache_life'        => 'trim|sanitize_string|basic_tags',
-            'site_title'        => 'trim|sanitize_string|basic_tags',
-            'site_description'  => 'trim|sanitize_string|basic_tags',
-            'sitemap_url'       => 'trim|sanitize_string|basic_tags',
-            'theme'             => 'trim|sanitize_string|basic_tags',
-            'permalinks'        => 'trim|sanitize_string|basic_tags',
-            'blog_location'     => 'trim|sanitize_string|basic_tags',
-        ]);
+        if (!$validator->isValid())
+        {
+            $errors = $validator->getErrors();
 
-        if (isset($post['clear_cache']))
+            return $this->postMessage('warning', array_shift($errors));
+        }
+
+        $post = $validator->filter();
+
+        if ($post['clear_cache'] === true)
         {
             $this->Cache->clear();
 
             return $this->postMessage('success', 'The application cache was successfully cleared.');
         }
 
-        $validated_data = $this->validation->run($post);
-
-        if ($validated_data)
+        // Validate the permalinks
+        if (!$this->validatePermalinks($post['permalinks']))
         {
-            // Filter basic booleans
-            $validated_data['enable_authors']     = !isset($validated_data['enable_authors'])     ? false : Str::bool($validated_data['enable_authors']);
-            $validated_data['enable_cats']        = !isset($validated_data['enable_cats'])        ? false : Str::bool($validated_data['enable_cats']);
-            $validated_data['enable_tags']        = !isset($validated_data['enable_tags'])        ? false : Str::bool($validated_data['enable_tags']);
-            $validated_data['enable_cdn']         = !isset($validated_data['enable_cdn'])         ? false : Str::bool($validated_data['enable_cdn']);
-            $validated_data['enable_cache']       = !isset($validated_data['enable_cache'])       ? false : Str::bool($validated_data['enable_cache']);
-            $validated_data['enable_comments']    = !isset($validated_data['enable_comments'])    ? false : Str::bool($validated_data['enable_comments']);
-            $validated_data['enable_attachments'] = !isset($validated_data['enable_attachments']) ? false : Str::bool($validated_data['enable_attachments']);
-            $validated_data['thumbnail_quality']  = intval($validated_data['thumbnail_quality']);
-
-            // Validate the permalinks
-            if (!$this->validatePermalinks($validated_data['permalinks']))
-            {
-                return $this->postMessage('warning', 'The permalinks value you entered is invalid. Please ensure you enter a valid permalink structure - e.g. "year/month/postname/".');
-            }
-
-            // Validate cache life
-            if ($validated_data['enable_cache'] && !$this->validateCacheLife($validated_data['cache_life']))
-            {
-                return $this->postMessage('warning', 'The cache life value you entered is invalid. Please ensure you enter a cache lifetime - e.g. "1 month" or "3 days".');
-            }
-
-            // Validate thumbnail quality
-            if ($validated_data['thumbnail_quality'] > 100 || $validated_data['thumbnail_quality'] < 1)
-            {
-                return $this->postMessage('warning', 'The image quality value you entered is invalid. Please enter a number between 0 and 100.');
-            }
-
-            // Validate the CDN URL
-            if ($validated_data['enable_cdn'] && !filter_var($validated_data['cdn_url'], FILTER_VALIDATE_URL))
-            {
-                return $this->postMessage('warning', 'The CDN URL you entered is invalid. Please provide a valid URL.');
-            }
-
-            // Filter the cache life
-            $validated_data['cache_life'] = $this->filterCacheLife($validated_data['cache_life']);
-
-            // Filter the permalinks
-            $permalinks = $this->filterPermalinks($validated_data['permalinks']);
-
-            // Previous permalinks value
-            $oldPermalinks = $this->Config->get('cms.permalinks');
-
-            // Sanitize the blog location
-            $validated_data['blog_location'] = !empty($validated_data['blog_location']) ? rtrim(ltrim($validated_data['blog_location'], '/'), '/') : false;
-
-            $cms =
-            [
-                'theme_name'        => $validated_data['theme'],
-                'site_title'        => $validated_data['site_title'],
-                'site_description'  => $validated_data['site_description'],
-                'blog_location'     => $validated_data['blog_location'],
-                'sitemap_route'     => $validated_data['sitemap_url'],
-                'permalinks'        => $permalinks['permalinks'],
-                'permalinks_route'  => $permalinks['permalinks_route'],
-                'posts_per_page'    => $validated_data['posts_per_page'] < 1 ? 10 : intval($validated_data['posts_per_page']),
-                'route_tags'        => Str::bool($validated_data['enable_tags']),
-                'route_categories'  => Str::bool($validated_data['enable_cats']),
-                'route_attachments' => Str::bool($validated_data['enable_attachments']),
-                'route_authors'     => Str::bool($validated_data['enable_authors']),
-                'enable_comments'   => Str::bool($validated_data['enable_comments']),
-            ];
-
-            foreach ($cms as $key => $val)
-            {
-                $this->Config->set('cms.' . $key, $val);
-            }
-
-            $this->Config->set('cms.uploads.thumbnail_quality', $validated_data['thumbnail_quality']);
-
-            $this->Config->set('cdn.enabled', $validated_data['enable_cdn']);
-            $this->Config->set('cdn.host', $validated_data['cdn_url']);
-
-            $this->Config->set('cache.http_cache_enabled', $validated_data['enable_cache']);
-            $this->Config->set('cache.configurations.' . $this->Config->get('cache.default') . '.expire', $validated_data['cache_life']);
-
-            $this->Config->save();
-
-            // If permalinks were changed - reset all post slugs
-            if ($oldPermalinks !== $permalinks['permalinks'])
-            {
-                $this->resetPostSlugs();
-            }
-
-            return $this->postMessage('success', 'Kanso settings successfully updated!');
+            return $this->postMessage('warning', 'The permalinks value you entered is invalid. Please ensure you enter a valid permalink structure - e.g. "year/month/postname/".');
         }
 
-        return false;
+        // Validate cache life
+        if ($post['enable_cache'] && !$this->validateCacheLife($post['cache_life']))
+        {
+            return $this->postMessage('warning', 'The cache life value you entered is invalid. Please ensure you enter a cache lifetime - e.g. "1 month" or "3 days".');
+        }
+
+        // Validate the CDN URL
+        if ($post['enable_cdn'] && !filter_var($post['cdn_url'], FILTER_VALIDATE_URL))
+        {
+            return $this->postMessage('warning', 'The CDN URL you entered is invalid. Please provide a valid URL.');
+        }
+
+        // Filter the cache life
+        $post['cache_life'] = $this->filterCacheLife($post['cache_life']);
+
+        // Filter the permalinks
+        $permalinks = $this->filterPermalinks($post['permalinks']);
+
+        // Previous permalinks value
+        $oldPermalinks = $this->Config->get('cms.permalinks');
+
+        // Sanitize the blog location
+        $post['blog_location'] = !empty($post['blog_location']) ? rtrim(ltrim($post['blog_location'], '/'), '/') : false;
+
+        $cms =
+        [
+            'theme_name'        => $post['theme'],
+            'site_title'        => $post['site_title'],
+            'site_description'  => $post['site_description'],
+            'blog_location'     => $post['blog_location'],
+            'sitemap_route'     => $post['sitemap_url'],
+            'permalinks'        => $permalinks['permalinks'],
+            'permalinks_route'  => $permalinks['permalinks_route'],
+            'posts_per_page'    => $post['posts_per_page'] < 1 ? 10 : intval($post['posts_per_page']),
+            'route_tags'        => $post['enable_tags'],
+            'route_categories'  => $post['enable_cats'],
+            'route_attachments' => $post['enable_attachments'],
+            'route_authors'     => $post['enable_authors'],
+            'enable_comments'   => $post['enable_comments'],
+        ];
+
+        foreach ($cms as $key => $val)
+        {
+            $this->Config->set('cms.' . $key, $val);
+        }
+
+        $this->Config->set('pixl.compression', $post['thumbnail_quality']);
+
+        $this->Config->set('cdn.enabled', $post['enable_cdn']);
+        $this->Config->set('cdn.host', $post['cdn_url']);
+
+        $this->Config->set('cache.http_cache_enabled', $post['enable_cache']);
+        $this->Config->set('cache.configurations.' . $this->Config->get('cache.default') . '.expire', $post['cache_life']);
+
+        $this->Config->save();
+
+        // If permalinks were changed - reset all post slugs
+        if ($oldPermalinks !== $permalinks['permalinks'])
+        {
+            $this->resetPostSlugs();
+        }
+
+        return $this->postMessage('success', 'Kanso settings successfully updated!');
+
     }
 
     /**
@@ -656,7 +649,7 @@ class Settings extends BaseModel
      * Parse, validate and process the add new user form.
      *
      * @access private
-     * @return array||false
+     * @return array|false
      */
     private function submitInviteUser()
     {
@@ -666,31 +659,33 @@ class Settings extends BaseModel
             return false;
         }
 
-        $post = $this->validation->sanitize($this->post);
+        $rules =
+        [
+            'email' => ['required', 'email'],
+            'role'  => ['required', 'in(["administrator", "writer"])'],
+        ];
+        $filters =
+        [
+            'username' => ['trim', 'email'],
+        ];
 
-        $this->validation->validation_rules([
-            'email' => 'required|valid_email',
-            'role'  => 'required|contains, administrator writer',
-        ]);
+        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
 
-        $this->validation->filter_rules([
-            'email' => 'trim|sanitize_email',
-            'role'  => 'trim|sanitize_string',
-        ]);
-
-        $validated_data = $this->validation->run($post);
-
-        if (!$validated_data)
+        if (!$validator->isValid())
         {
-            return false;
+            $errors = $validator->getErrors();
+
+            return $this->postMessage('warning', array_shift($errors));
         }
 
-        if ($this->Gatekeeper->getUser()->email === $validated_data['email'])
+        $post = $validator->filter();
+
+        if ($this->Gatekeeper->getUser()->email === $post['email'])
         {
             return $this->postMessage('warning', 'Another user is already registered with that email address.');
         }
 
-        $user = $this->UserManager->byEmail($validated_data['email']);
+        $user = $this->UserManager->byEmail($post['email']);
 
         if ($user && $user->status === 'confirmed')
         {
@@ -700,7 +695,7 @@ class Settings extends BaseModel
         // If theyre deleted or pending re-invite them
         if (!$user || ($user && $user->status !== 'confirmed'))
         {
-            if ($this->UserManager->createAdmin($validated_data['email'], $validated_data['role']))
+            if ($this->UserManager->createAdmin($post['email'], $post['role']))
             {
                 return $this->postMessage('success', 'The user was successfully sent a registration invite.');
             }
@@ -714,7 +709,7 @@ class Settings extends BaseModel
      * Parse, validate and process the delete user form.
      *
      * @access private
-     * @return array||false
+     * @return array|false
      */
     private function submitDeleteUser()
     {
@@ -724,31 +719,32 @@ class Settings extends BaseModel
             return false;
         }
 
-        $post = $this->validation->sanitize($this->post);
+        $rules =
+        [
+            'user_id' => ['required', 'integer'],
+        ];
+        $filters =
+        [
+            'user_id' => ['trim', 'integer'],
+        ];
 
-        $this->validation->validation_rules([
-            'user_id' => 'required|numeric',
-        ]);
+        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
 
-        $this->validation->filter_rules([
-            'user_id' => 'trim|sanitize_numbers',
-        ]);
+        if (!$validator->isValid())
+        {
+            $errors = $validator->getErrors();
 
-        $validated_data = $this->validation->run($post);
+            return $this->postMessage('warning', array_shift($errors));
+        }
 
-        if (!$validated_data)
+        $post = $validator->filter();
+
+        if ($post['user_id'] === $this->Gatekeeper->getUser()->id || $post['user_id'] === 1)
         {
             return false;
         }
 
-        $user_id = intval($validated_data['user_id']);
-
-        if ($user_id === $this->Gatekeeper->getUser()->id || $user_id === 1)
-        {
-            return false;
-        }
-
-        $user = $this->UserManager->byId($user_id);
+        $user = $this->UserManager->byId($post['user_id']);
 
         if ($user)
         {
@@ -764,7 +760,7 @@ class Settings extends BaseModel
      * Parse, validate and process the change user role form.
      *
      * @access private
-     * @return array||false
+     * @return array|false
      */
     private function submitChangeUserRole()
     {
@@ -774,37 +770,37 @@ class Settings extends BaseModel
             return false;
         }
 
-        $post = $this->validation->sanitize($this->post);
+        $rules =
+        [
+            'user_id' => ['required', 'integer'],
+            'role'    => ['required', 'in(["administrator", "writer"])'],
+        ];
+        $filters =
+        [
+            'user_id' => ['trim', 'integer'],
+        ];
 
-        $this->validation->validation_rules([
-            'user_id' => 'required|numeric',
-            'role'    => 'required|contains, administrator writer',
-        ]);
+        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
 
-        $this->validation->filter_rules([
-            'user_id' => 'trim|sanitize_numbers',
-            'role'    => 'trim|sanitize_string',
-        ]);
+        if (!$validator->isValid())
+        {
+            $errors = $validator->getErrors();
 
-        $validated_data = $this->validation->run($post);
+            return $this->postMessage('warning', array_shift($errors));
+        }
 
-        if (!$validated_data)
+        $post = $validator->filter();
+
+        if ($post['user_id'] === $this->Gatekeeper->getUser()->id || $post['user_id'] === 1)
         {
             return false;
         }
 
-        $user_id = intval($validated_data['user_id']);
-
-        if ($user_id === $this->Gatekeeper->getUser()->id || $user_id === 1)
-        {
-            return false;
-        }
-
-        $user = $this->UserManager->byId($user_id);
+        $user = $this->UserManager->byId($post['user_id']);
 
         if ($user)
         {
-            $user->role = $validated_data['role'];
+            $user->role = $post['role'];
 
             $user->save();
 
@@ -818,12 +814,11 @@ class Settings extends BaseModel
      * Update and reset post slugs when permalinks have changed.
      *
      * @access private
-     * @return
      */
     private function resetPostSlugs()
     {
         // Select the posts
-        $posts = $this->SQL->SELECT('posts.id')->FROM('posts')->FIND_ALL();
+        $posts = $this->sql()->SELECT('posts.id')->FROM('posts')->FIND_ALL();
 
         foreach ($posts as $row)
         {
@@ -837,7 +832,7 @@ class Settings extends BaseModel
      * Parse, validate and process the restore kanso form.
      *
      * @access private
-     * @return array||null
+     * @return array|null
      */
     private function submitRestoreKanso()
     {
@@ -852,7 +847,7 @@ class Settings extends BaseModel
 
                 $this->Response->redirect($this->Request->environment()->HTTP_HOST . '/admin/login/');
 
-                return;
+                return null;
             }
         }
 

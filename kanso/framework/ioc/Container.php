@@ -221,8 +221,10 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
 
     /**
      * Countable.
+     *
+     * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->data);
     }
@@ -259,9 +261,8 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
 
     /**
      * Ensure a value or object will remain globally unique.
-     * @param  string   $key   The value or object name
-     * @param  \Closure $value The closure that defines the object
-     * @return mixed
+     * @param string $key    The value or object name
+     * @param object $object The closure that defines the object
      */
     public function setInstance($key, $object)
     {
@@ -274,7 +275,7 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
     /**
      * Protect closure from being directly invoked.
      * @param  \Closure $callable A closure to keep from being invoked and evaluated
-     * @return \Closure
+     * @return Closure
      */
     public function protect(Closure $callable)
     {

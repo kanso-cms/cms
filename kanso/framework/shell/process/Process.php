@@ -506,7 +506,7 @@ class Process implements \IteratorAggregate
      * @throws LogicException in case the output has been disabled
      * @throws LogicException In case the process is not started
      *
-     * @return \Generator
+     * @return Generator
      */
     public function getIterator($flags = 0)
     {
@@ -1254,7 +1254,7 @@ class Process implements \IteratorAggregate
      *
      * @param callable|null $callback The user defined PHP callback
      *
-     * @return \Closure A PHP closure
+     * @return Closure A PHP closure
      */
     protected function buildCallback(callable $callback = null)
     {

@@ -200,7 +200,7 @@ class Media extends Wrapper
      * Returns the img width if this is an image.
      *
      * @access public
-     * @return int
+     * @return string
      */
     public function ext(): string
     {

@@ -15,6 +15,13 @@ namespace kanso\framework\common;
 class ArrayIterator implements \Iterator
 {
     /**
+     * Array access.
+     *
+     * @var array
+     */
+    protected $data = [];
+
+    /**
      * Constructor.
      *
      * @access public

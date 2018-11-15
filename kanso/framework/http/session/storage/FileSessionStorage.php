@@ -22,7 +22,7 @@ class FileSessionStorage implements StoreInterface
     /**
      * Current session id.
      *
-     * @var string
+     * @var string|null
      */
     private $id = '';
 
@@ -99,7 +99,7 @@ class FileSessionStorage implements StoreInterface
     /**
      * Crypto instance.
      *
-     * @var \kanso\framework\file\Filesystem
+     * @var \kanso\framework\security\Crypto
      */
     private $crypto;
 
@@ -110,7 +110,7 @@ class FileSessionStorage implements StoreInterface
      * @param \kanso\framework\security\Crypto $crypto       Crypto instance
      * @param \kanso\framework\file\Filesystem $filesystem   Filesystem instance
      * @param array                            $cookieParams Assoc array of cookie configurations
-     * @param string                           $storageDir   Path to save session files to (optional) (default null)
+     * @param string|null                      $storageDir   Path to save session files to (optional) (default null)
      */
     public function __construct(Crypto $crypto, Filesystem $filesystem, array $cookieParams = [], string $storageDir = null)
     {
@@ -402,7 +402,7 @@ class FileSessionStorage implements StoreInterface
      * Delete old session files.
      *
      * @access private
-     * @return array
+     * @return int
      */
     private function deleteOldSessions(): int
     {

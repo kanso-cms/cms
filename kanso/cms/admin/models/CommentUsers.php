@@ -24,7 +24,7 @@ class CommentUsers extends BaseModel
      */
     public function onGET()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parseGet();
         }
@@ -37,7 +37,7 @@ class CommentUsers extends BaseModel
      */
     public function onPOST()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parsePost();
         }
@@ -108,8 +108,8 @@ class CommentUsers extends BaseModel
      * Moderate a list of ip addresses.
      *
      * @access private
-     * @param  array   Array of ip addresses to moderate
-     * @param  string  The list to add them to
+     * @param array  $ips  Array of ip addresses to moderate
+     * @param string $list The list to add them to
      */
     private function moderateIps(array $ips, string $list)
     {
@@ -148,17 +148,17 @@ class CommentUsers extends BaseModel
 
         if (!isset($this->post['bulk_action']) || empty($this->post['bulk_action']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         if (!in_array($this->post['bulk_action'], ['whitelist', 'blacklist', 'nolist']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         if (!isset($this->post['users']) || !is_array($this->post['users']) || empty($this->post['users']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         return true;
@@ -229,7 +229,7 @@ class CommentUsers extends BaseModel
         if ($queries['sort'] === 'name')  $sortKey   = 'name';
         if ($queries['sort'] === 'email') $sortKey   = 'email';
 
-        $this->SQL->SELECT('*')->FROM('comments');
+        $this->sql()->SELECT('*')->FROM('comments');
 
         // Is this a search
         if ($search)
@@ -240,16 +240,16 @@ class CommentUsers extends BaseModel
 
                 if (in_array($keys[0], ['name', 'email', 'ip_address']))
                 {
-                    $this->SQL->AND_WHERE($keys[0], 'LIKE', "%$keys[1]%");
+                    $this->sql()->AND_WHERE($keys[0], 'LIKE', "%$keys[1]%");
                 }
             }
         }
 
         // Set the order
-        $this->SQL->ORDER_BY($sortKey, $sort);
+        $this->sql()->ORDER_BY($sortKey, $sort);
 
         // Find comments
-        $comments = $this->SQL->FIND_ALL();
+        $comments = $this->sql()->FIND_ALL();
 
         // Create a list of users
         $users = [];

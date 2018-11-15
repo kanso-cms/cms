@@ -240,7 +240,7 @@ class Builder
      * Set the query to DELETE and load table.
      *
      * @access public
-     * @param  string                                  $table The table name to use
+     * @param  string                                  $tableName The table name to use
      * @return \kanso\framework\database\query\Builder
      */
     public function DELETE_FROM(string $tableName): Builder
@@ -419,8 +419,8 @@ class Builder
      * Set an outer join clause.
      *
      * @access public
-     * @param  string                                  $tableName The table name to join
-     * @param  string                                  $query     Column comparison e.g table1.id = table2.column_name
+     * @param  string                                  $table The table name to join
+     * @param  string                                  $query Column comparison e.g table1.id = table2.column_name
      * @return \kanso\framework\database\query\Builder
      */
     public function OUTER_JOIN_ON(string $table, string $query): Builder
@@ -489,7 +489,7 @@ class Builder
      *
      * @access public
      * @param  int                                     $offset Offset to start at
-     * @param  int                                     $limit  Limit results (optional) (default null)
+     * @param  int|null                                $limit  Limit results (optional) (default null)
      * @return \kanso\framework\database\query\Builder
      */
     public function LIMIT(int $offset, int $limit = null): Builder
@@ -515,7 +515,7 @@ class Builder
      * and/or find a single row by id.
      *
      * @access public
-     * @param  int   $id Row id to find (optional) (default null)
+     * @param  int|null $id Row id to find (optional) (default null)
      * @return mixed
      */
     public function FIND(int $id = null)
@@ -555,7 +555,7 @@ class Builder
      * Filter a column name to valid SQL.
      *
      * @access private
-     * @param  string $str Table index
+     * @param  string $query Table index
      * @return string
      */
     private function queryFilter(string $query): string

@@ -24,7 +24,7 @@ class AdminService extends Service
 	{
 		$this->container->singleton('Admin', function($container)
 		{
-			return new Admin($container->Router, $container->Request, $container->Response, $container->Config, $container->Filters, $container->Events);
+			return new Admin;
 		});
 	}
 }

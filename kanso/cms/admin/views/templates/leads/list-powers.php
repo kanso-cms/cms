@@ -20,12 +20,12 @@
 		        <div class="drop">
 		            <ul>
 		                <li class="drop-header">Sort by:</li>
-		                <li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=last_active&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['sort'] === 'last_active') echo 'class="selected"'; ?>>Last Active</a></li>
-						<li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=email&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['sort'] === 'email') echo 'class="selected"'; ?>>Email</a></li>
-						<li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=name&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['sort'] === 'name') echo 'class="selected"'; ?>>Name</a></li>
-						<li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=funnel&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['sort'] === 'funnel') echo 'class="selected"'; ?>>Funnel</a></li>
-						<li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=visits&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['sort'] === 'visits') echo 'class="selected"'; ?>>Visits</a></li>
-						<li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=id&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['sort'] === 'id') echo 'class="selected"'; ?>>Id</a></li>
+		                <li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=last_active&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['sort'] === 'last_active') echo 'class="selected"'; ?>>Last Active</a></li>
+						<li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=email&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['sort'] === 'email') echo 'class="selected"'; ?>>Email</a></li>
+						<li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=name&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['sort'] === 'name') echo 'class="selected"'; ?>>Name</a></li>
+						<li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=funnel&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['sort'] === 'funnel') echo 'class="selected"'; ?>>Funnel</a></li>
+						<li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=visits&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['sort'] === 'visits') echo 'class="selected"'; ?>>Visits</a></li>
+						<li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=id&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['sort'] === 'id') echo 'class="selected"'; ?>>Id</a></li>
 		            </ul>
 		        </div>
 		    </div>
@@ -40,11 +40,10 @@
 		        <div class="drop">
 		            <ul>
 		                <li class="drop-header">Filter by:</li>
-		                <li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['action'] === false) echo 'class="selected"'; ?>>None</a></li>
-		                <li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=visited-checkout&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['action'] === 'visited-checkout') echo 'class="selected"'; ?>>Visited Checkout</a></li>
-		                <li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=created-account&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['action'] === 'created-account') echo 'class="selected"'; ?>>Created Account</a></li>
-		                <li><a href="/admin/e-commerce/leads/?<?php echo "$queries[status]&sort=$queries[sort]&action=not-bounced&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['action'] === 'not-bounced') echo 'class="selected"'; ?>>Unbounced</a></li>
-		                <li><a href="/admin/e-commerce/leads/?<?php echo "$queries[status]&sort=$queries[sort]&action=bounced&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['action'] === 'bounced') echo 'class="selected"'; ?>>Bounced</a></li>
+		                <li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['action'] === false) echo 'class="selected"'; ?>>None</a></li>
+		                <li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=created-account&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['action'] === 'created-account') echo 'class="selected"'; ?>>Created Account</a></li>
+		                <li><a href="/admin/leads/?<?php echo "$queries[status]&sort=$queries[sort]&action=not-bounced&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['action'] === 'not-bounced') echo 'class="selected"'; ?>>Unbounced</a></li>
+		                <li><a href="/admin/leads/?<?php echo "$queries[status]&sort=$queries[sort]&action=bounced&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['action'] === 'bounced') echo 'class="selected"'; ?>>Bounced</a></li>
 		            </ul>
 		        </div>
 		    </div>
@@ -59,11 +58,11 @@
 		        <div class="drop">
 		            <ul>
 		                <li class="drop-header">Filter by:</li>
-		                <li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=&search=$queries[search]"; ?>" <?php if ($queries['channel'] === false) echo 'class="selected"'; ?>>All</a></li>
-		                <li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=social&search=$queries[search]"; ?>" <?php if ($queries['channel'] === 'social') echo 'class="selected"'; ?>>Social</a></li>
-		                <li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=cpc&search=$queries[search]"; ?>" <?php if ($queries['channel'] === 'cpc') echo 'class="selected"'; ?>>CPC</a></li>
-		                <li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=display&search=$queries[search]"; ?>" <?php if ($queries['channel'] === 'display') echo 'class="selected"'; ?>>Display</a></li>
-		                <li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=email&search=$queries[search]"; ?>" <?php if ($queries['channel'] === 'email') echo 'class="selected"'; ?>>Email</a></li>
+		                <li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=&search=$queries[search]"; ?>" <?php if ($queries['channel'] === false) echo 'class="selected"'; ?>>All</a></li>
+		                <li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=social&search=$queries[search]"; ?>" <?php if ($queries['channel'] === 'social') echo 'class="selected"'; ?>>Social</a></li>
+		                <li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=cpc&search=$queries[search]"; ?>" <?php if ($queries['channel'] === 'cpc') echo 'class="selected"'; ?>>CPC</a></li>
+		                <li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=display&search=$queries[search]"; ?>" <?php if ($queries['channel'] === 'display') echo 'class="selected"'; ?>>Display</a></li>
+		                <li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=email&search=$queries[search]"; ?>" <?php if ($queries['channel'] === 'email') echo 'class="selected"'; ?>>Email</a></li>
 		            </ul>
 		        </div>
 		    </div>
@@ -78,10 +77,10 @@
 		        <div class="drop">
 		            <ul>
 		                <li class="drop-header">Filter by:</li>
-		               	<li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['medium'] === false) echo 'class="selected"'; ?>>All</a></li>
-		               	<li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=google&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['medium'] === 'google') echo 'class="selected"'; ?>>Google</a></li>
-		               	<li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=facebook&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['medium'] === 'facebook') echo 'class="selected"'; ?>>Facebook</a></li>
-		               	<li><a href="/admin/e-commerce/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=instagram&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['medium'] === 'instagram') echo 'class="selected"'; ?>>Instagram</a></li>
+		               	<li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['medium'] === false) echo 'class="selected"'; ?>>All</a></li>
+		               	<li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=google&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['medium'] === 'google') echo 'class="selected"'; ?>>Google</a></li>
+		               	<li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=facebook&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['medium'] === 'facebook') echo 'class="selected"'; ?>>Facebook</a></li>
+		               	<li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=$queries[action]&medium=instagram&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['medium'] === 'instagram') echo 'class="selected"'; ?>>Instagram</a></li>
 		            </ul>
 		        </div>
 		    </div>
@@ -96,19 +95,19 @@
 		        <div class="drop">
 		            <ul>
 		                <li class="drop-header">Filter by:</li>
-		                <li><a href="/admin/e-commerce/leads/?<?php echo "status=&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['status'] === false) echo 'class="selected"'; ?>>All</a></li>
-						<li><a href="/admin/e-commerce/leads/?<?php echo "status=visitor&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['status'] === 'visitor') echo 'class="selected"'; ?>>Visitor</a></li>
-						<li><a href="/admin/e-commerce/leads/?<?php echo "status=lead&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['status'] === 'lead') echo 'class="selected"'; ?>>Lead</a></li>
-						<li><a href="/admin/e-commerce/leads/?<?php echo "status=sql&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['status'] === 'sql') echo 'class="selected"'; ?>>Sales Qualified Lead</a></li>
-      					<li><a href="/admin/e-commerce/leads/?<?php echo "status=opportunity&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['status'] === 'opportunity') echo 'class="selected"'; ?>>Opportunity</a></li>
-      					<li><a href="/admin/e-commerce/leads/?<?php echo "status=customer&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['status'] === 'customer') echo 'class="selected"'; ?>>Customer</a></li>
+		                <li><a href="/admin/leads/?<?php echo "status=&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['status'] === false) echo 'class="selected"'; ?>>All</a></li>
+						<li><a href="/admin/leads/?<?php echo "status=visitor&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['status'] === 'visitor') echo 'class="selected"'; ?>>Visitor</a></li>
+						<li><a href="/admin/leads/?<?php echo "status=lead&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['status'] === 'lead') echo 'class="selected"'; ?>>Lead</a></li>
+						<li><a href="/admin/leads/?<?php echo "status=sql&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['status'] === 'sql') echo 'class="selected"'; ?>>Sales Qualified Lead</a></li>
+      					<li><a href="/admin/leads/?<?php echo "status=opportunity&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['status'] === 'opportunity') echo 'class="selected"'; ?>>Opportunity</a></li>
+      					<li><a href="/admin/leads/?<?php echo "status=customer&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['status'] === 'customer') echo 'class="selected"'; ?>>Customer</a></li>
 
 		            </ul>
 		        </div>
 		    </div>
 		</div>
 
-		<a href="/admin/e-commerce/leads/" class="btn <?php echo !$empty_queries ? 'btn-info' : ''; ?> tooltipped tooltipped-s" data-tooltip="Clear filters &amp; sorts">
+		<a href="/admin/leads/" class="btn <?php echo !$empty_queries ? 'btn-info' : ''; ?> tooltipped tooltipped-s" data-tooltip="Clear filters &amp; sorts">
 			<span class="glyph-icon glyph-icon-times"></span>
 		</a>
 	</div>

@@ -23,7 +23,7 @@ class Comments extends BaseModel
      */
     public function onGET()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parseGet();
         }
@@ -36,7 +36,7 @@ class Comments extends BaseModel
      */
     public function onPOST()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parsePost();
         }
@@ -125,17 +125,17 @@ class Comments extends BaseModel
 
         if (!isset($this->post['bulk_action']) || empty($this->post['bulk_action']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         if (!in_array($this->post['bulk_action'], ['spam', 'delete', 'pending', 'approved']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         if (!isset($this->post['comments']) || !is_array($this->post['comments']) || empty($this->post['comments']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         return true;
@@ -145,8 +145,7 @@ class Comments extends BaseModel
      * Delete comments by id.
      *
      * @access private
-     * @param  array $ids List of post ids
-     * @return bool
+     * @param array $ids List of post ids
      */
     private function delete(array $ids)
     {
@@ -165,8 +164,7 @@ class Comments extends BaseModel
      * Change a list of comment statuses.
      *
      * @access private
-     * @param  array $ids List of post ids
-     * @return bool
+     * @param array $ids List of post ids
      */
     private function changeStatus(array $ids, string $status)
     {
@@ -192,7 +190,7 @@ class Comments extends BaseModel
     {
         $queries = $this->getQueries();
 
-       return (
+        return (
             $queries['search'] === false &&
             $queries['page']   === 0 &&
             $queries['sort']   === 'newest' &&
@@ -247,24 +245,24 @@ class Comments extends BaseModel
         if ($queries['sort'] === 'name')  $sortKey   = 'name';
         if ($queries['sort'] === 'email') $sortKey   = 'email';
 
-        $this->SQL->SELECT('id')->FROM('comments');
+        $this->sql()->SELECT('id')->FROM('comments');
 
         // Filter by status
         if ($filter === 'approved')
         {
-            $this->SQL->WHERE('status', '=', 'approved');
+            $this->sql()->WHERE('status', '=', 'approved');
         }
         if ($filter === 'spam')
         {
-            $this->SQL->WHERE('status', '=', 'spam');
+            $this->sql()->WHERE('status', '=', 'spam');
         }
         if ($filter === 'pending')
         {
-            $this->SQL->WHERE('status', '=', 'pending');
+            $this->sql()->WHERE('status', '=', 'pending');
         }
         if ($filter === 'deleted')
         {
-            $this->SQL->WHERE('status', '=', 'pending');
+            $this->sql()->WHERE('status', '=', 'pending');
         }
 
         // Is this a search
@@ -275,26 +273,26 @@ class Comments extends BaseModel
                 $keys = explode(':', $search);
                 if (in_array($keys[0], ['name', 'email', 'ip_address']))
                 {
-                    $this->SQL->AND_WHERE($keys[0], 'LIKE', "%$keys[1]%");
+                    $this->sql()->AND_WHERE($keys[0], 'LIKE', "%$keys[1]%");
                 }
             }
             else
             {
-                $this->SQL->AND_WHERE('content', 'LIKE', "%$search%");
+                $this->sql()->AND_WHERE('content', 'LIKE', "%$search%");
             }
         }
 
         // Set the order
-        $this->SQL->ORDER_BY($sortKey, $sort);
+        $this->sql()->ORDER_BY($sortKey, $sort);
 
         // Set the limit - Only if we're returning the actual articles
         if (!$checkMaxPages)
         {
-            $this->SQL->LIMIT($offset, $limit);
+            $this->sql()->LIMIT($offset, $limit);
         }
 
         // Find comments
-        $rows = $this->SQL->FIND_ALL();
+        $rows = $this->sql()->FIND_ALL();
 
         // Are we checking the pages ?
         if ($checkMaxPages)

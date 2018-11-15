@@ -19,7 +19,7 @@ trait ArrayAccessTrait
 	/**
 	 * Array access.
 	 *
-	 * @var string
+	 * @var array
 	 */
 	protected $data = [];
 
@@ -86,7 +86,7 @@ trait ArrayAccessTrait
 	 * Get a key/value from the internal array using dot notation.
 	 *
 	 * @access public
-	 * @param  string $key Key to use
+	 * @param  string|null $key Key to use (optional) (default null)
 	 * @return mixed
 	 */
 	public function get(string $key = null)

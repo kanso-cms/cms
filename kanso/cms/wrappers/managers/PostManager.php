@@ -52,10 +52,10 @@ class PostManager extends Manager
      * Deletes a post by id.
      *
      * @access public
-     * @param  string $id Post name id or slug
+     * @param  int  $id Post id
      * @return bool
      */
-    public function delete($id): bool
+    public function delete(int $id): bool
     {
         $post = $this->byId($id);
 

@@ -289,7 +289,7 @@ function admin_sirebar_links()
 			],
 		],
 		'crm' => [
-			'link'     => '/admin/visitors/',
+			'link'     => '/admin/leads/',
 			'text'     => 'CRM',
 			'icon'     => 'users',
 			'children' => [

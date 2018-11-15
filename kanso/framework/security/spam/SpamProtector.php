@@ -21,7 +21,7 @@ class SpamProtector
     /**
      * Gibberish detector.
      *
-     * @var \kanso\framework\security\spam\Gibberish
+     * @var \kanso\framework\security\spam\gibberish\Gibberish
      */
     private $gibberish;
 
@@ -36,8 +36,8 @@ class SpamProtector
      * Constructor.
      *
      * @access public
-     * @param \kanso\framework\security\spam\Gibberish $gibberish Gibberish detector
-     * @param \kanso\framework\config\Config           $config    Config loader
+     * @param \kanso\framework\security\spam\gibberish\Gibberish $gibberish Gibberish detector
+     * @param \kanso\framework\config\Config                     $config    Config loader
      */
     public function __construct(Gibberish $gibberish, Config $config)
     {

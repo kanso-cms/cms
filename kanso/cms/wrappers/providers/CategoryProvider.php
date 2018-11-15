@@ -53,7 +53,7 @@ class CategoryProvider extends Provider
                 return new Category($this->SQL, $row);
             }
 
-            return null;
+            return false;
     	}
     	else
         {

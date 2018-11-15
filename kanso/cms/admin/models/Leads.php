@@ -150,22 +150,22 @@ class Leads extends BaseModel
         if ($queries['sort'] === 'id')      $sortKey = 'id';
 
         // Select the leads
-        $this->SQL->SELECT('id, email, name')->FROM('crm_visitors');
+        $this->sql()->SELECT('id, email, name')->FROM('crm_visitors');
 
         // Set the order
-        $this->SQL->ORDER_BY($sortKey, $sort);
+        $this->sql()->ORDER_BY($sortKey, $sort);
 
         // Search by user name, user email, or id
         if ($search)
         {
-            $this->SQL->OR_WHERE('email', 'like', '%' . $queries['search'] . '%');
-            $this->SQL->OR_WHERE('name', 'like', '%' . $queries['search'] . '%');
-            $this->SQL->OR_WHERE('id', '=', $queries['search']);
-            $this->SQL->OR_WHERE('visitor_id', 'like', '%' . $queries['search'] . '%');
+            $this->sql()->OR_WHERE('email', 'like', '%' . $queries['search'] . '%');
+            $this->sql()->OR_WHERE('name', 'like', '%' . $queries['search'] . '%');
+            $this->sql()->OR_WHERE('id', '=', $queries['search']);
+            $this->sql()->OR_WHERE('visitor_id', 'like', '%' . $queries['search'] . '%');
         }
 
         // Find the leads
-        $rows = $this->SQL->FIND_ALL();
+        $rows = $this->sql()->FIND_ALL();
 
         // If we're sorting by name or email, those values could be empty
         // Reorder the array so empty values go on the end
@@ -234,13 +234,6 @@ class Leads extends BaseModel
                         unset($visitors[$i]);
                     }
                 }
-                elseif ($action === 'visited-checkout')
-                {
-                    if (!$visitor->visitedCheckout())
-                    {
-                        unset($visitors[$i]);
-                    }
-                }
             }
 
             $visitors = array_values($visitors);
@@ -288,7 +281,7 @@ class Leads extends BaseModel
         {
             usort($visitors, function($a, $b)
             {
-                return $a->countVisits() < $b->countVisits();
+                return $a->countVisits() < $b->countVisits() ? 1 : 0;
             });
         }
 

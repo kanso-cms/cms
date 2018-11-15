@@ -24,7 +24,7 @@ class Kanso
 	 *
 	 * @var string
 	 */
-	const VERSION = '2.0.0';
+	const VERSION = '3.0.0';
 
 	/**
 	 * Singleton instance of self.
@@ -64,6 +64,17 @@ class Kanso
 		}
 
 		return static::$instance = new static;
+	}
+
+	/**
+	 * Application run.
+	 *
+	 * @access public
+	 * @return \kanso\framework\application\Application
+	 */
+	public function application(): Application
+	{
+		return $this->application;
 	}
 
 	/**

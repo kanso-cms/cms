@@ -86,7 +86,7 @@ class LeadProvider extends Provider
             $visitors[] = new Visitor($this->SQL, $row);
         }
 
-        return $media;
+        return $visitors;
     }
 
     /**
@@ -106,6 +106,6 @@ class LeadProvider extends Provider
             $visitors[] = new Visitor($this->SQL, $row);
         }
 
-        return $media;
+        return $visitors;
     }
 }

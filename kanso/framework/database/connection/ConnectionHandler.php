@@ -31,9 +31,9 @@ class ConnectionHandler
 	protected $parameters = [];
 
 	/**
-	 * @var PDO statement object returned from \PDO::prepare()
+	 * PDO statement object returned from \PDO::prepare().
 	 *
-	 * \PDOStatement
+	 * @var \PDOStatement|\PDO
 	 */
 	private $pdoStatement;
 
@@ -201,8 +201,8 @@ class ConnectionHandler
 	 * Tries to load the current query from the cache.
 	 *
 	 * @access public
-	 * @param  string      $query The type of query being executed e.g 'select'|'delete'|'update'
-	 * @return array|false
+	 * @param  string $query The type of query being executed e.g 'select'|'delete'|'update'
+	 * @return bool
 	 */
 	private function queryIsCachable(string $query): bool
 	{

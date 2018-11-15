@@ -12,7 +12,7 @@
 		<ul class="tab-nav tab-border ">
 			<li><a href="/admin/leads/">Leads</a></li>
 			<li><a href="/admin/comments/" class="active">Comments</a></li>
-		    <li><a href="/admin/comment-users/">Users</a></li>
+		    <li><a href="/admin/comment-users/">Commentors</a></li>
 		</ul>
 	</div>
 

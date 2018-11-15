@@ -25,7 +25,7 @@ class ErrorLogs extends BaseModel
      */
     public function onGET()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parseGet();
         }
@@ -38,7 +38,7 @@ class ErrorLogs extends BaseModel
      */
     public function onPOST()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parsePost();
         }

@@ -61,8 +61,8 @@ return
     'posts_per_page'    => 10,
     'permalinks'        => 'category/postname/',
     'permalinks_route'  => '(:category)/(:postname)/',
-    'blog_location'     => 'blog',
-    'route_tags'        => false,
+    'blog_location'     => '',
+    'route_tags'        => true,
     'route_categories'  => true,
     'route_authors'     => true,
     'route_attachments' => true,
@@ -133,16 +133,6 @@ return
             'medium' => 800,
             'large'  => 1200,
         ],
-
-        /*
-         * ---------------------------------------------------------
-         * Image thumbnail quality
-         * ---------------------------------------------------------
-         *
-         * Compression quality for image uploading via the admin panel.
-         * 0-100
-         */
-        'thumbnail_quality' => 95,
 
         /*
          * ---------------------------------------------------------

@@ -296,7 +296,7 @@ class Request
      * of the array key if requested; if the array key does not exist, false is returned.
      *
      * @access public
-     * @param  string $key (optional) (default null)
+     * @param  string|null $key (optional) (default null)
      * @return mixed
      */
     public function fetch(string $key = null)
@@ -354,7 +354,7 @@ class Request
      * eg example.com?foo=bar -> ['foo' => 'bar'];
      *
      * @access public
-     * @param  string $key (optional) (default null)
+     * @param  string|null $_key (optional) (default null)
      * @return mixed
      */
     public function queries(string $_key = null)

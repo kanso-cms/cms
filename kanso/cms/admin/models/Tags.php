@@ -24,7 +24,7 @@ class Tags extends BaseModel
      */
     public function onGET()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parseGet();
         }
@@ -37,7 +37,7 @@ class Tags extends BaseModel
      */
     public function onPOST()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parsePost();
         }
@@ -142,17 +142,17 @@ class Tags extends BaseModel
 
         if (!isset($this->post['bulk_action']) || empty($this->post['bulk_action']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         if (!in_array($this->post['bulk_action'], ['clear', 'delete', 'update']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         if (!isset($this->post['tags']) || !is_array($this->post['tags']) || empty($this->post['tags']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         return true;
@@ -210,8 +210,7 @@ class Tags extends BaseModel
      * Delete articles by id.
      *
      * @access private
-     * @param  array $ids List of post ids
-     * @return bool
+     * @param array $ids List of post ids
      */
     private function delete(array $ids)
     {
@@ -230,8 +229,7 @@ class Tags extends BaseModel
      * Clear tags of articles.
      *
      * @access private
-     * @param  array $ids List of post ids
-     * @return bool
+     * @param array $ids List of post ids
      */
     private function clear(array $ids)
     {
@@ -305,25 +303,25 @@ class Tags extends BaseModel
         $search       = $queries['search'];
 
         // Select the posts
-        $this->SQL->SELECT('tags.id')->FROM('tags');
+        $this->sql()->SELECT('tags.id')->FROM('tags');
 
         // Set the limit - Only if we're returning the actual tag list
         // and not sorting by article count
         if (!$checkMaxPages && $queries['sort'] === 'name')
         {
-            $this->SQL->LIMIT($offset, $limit);
+            $this->sql()->LIMIT($offset, $limit);
 
-            $this->SQL->ORDER_BY($sortKey, $sort);
+            $this->sql()->ORDER_BY($sortKey, $sort);
         }
 
         // Search the name
         if ($search)
         {
-            $this->SQL->AND_WHERE('name', 'like', '%' . $queries['search'] . '%');
+            $this->sql()->AND_WHERE('name', 'like', '%' . $queries['search'] . '%');
         }
 
         // Find the articles
-        $rows = $this->SQL->FIND_ALL();
+        $rows = $this->sql()->FIND_ALL();
 
         // Are we checking the pages ?
         if ($checkMaxPages)
@@ -335,14 +333,14 @@ class Tags extends BaseModel
         $result = [];
         foreach ($rows as $row)
         {
-            $this->SQL->SELECT('posts.id')->FROM('posts')
+            $this->sql()->SELECT('posts.id')->FROM('posts')
             ->LEFT_JOIN_ON('tags_to_posts', 'posts.id = tags_to_posts.post_id')
             ->LEFT_JOIN_ON('tags', 'tags.id = tags_to_posts.tag_id')
             ->WHERE('tags.id', '=', $row['id']);
 
             $tag = $this->TagManager->byId($row['id']);
 
-            $tag->article_count = count($this->SQL->FIND_ALL());
+            $tag->article_count = count($this->sql()->FIND_ALL());
 
             $result[] = $tag;
         }

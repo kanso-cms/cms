@@ -21,6 +21,13 @@ class Visitor extends Wrapper
 	use MagicArrayAccessTrait;
 
     /**
+     * Current visit.
+     *
+     * @var \kanso\cms\wrappers\Visit
+     */
+    protected $visit;
+
+    /**
      * Regenerates a unique visitor id and returns it.
      *
      * @access public
@@ -37,7 +44,7 @@ class Visitor extends Wrapper
      * Gets the current visit.
      *
      * @access public
-     * @return kanso\cms\crm\visitor\Visit
+     * @return \kanso\cms\wrappers\Visit
      */
     public function visit(): Visit
     {
@@ -118,7 +125,7 @@ class Visitor extends Wrapper
      * Gets a visitor's most recent visit (excluding the current one).
      *
      * @access public
-     * @return kanso\cms\crm\visitor\Visit|false
+     * @return \kanso\cms\wrappers\Visit|false
      */
     public function previousVisit()
     {
@@ -154,7 +161,7 @@ class Visitor extends Wrapper
      * Gets a their first visit.
      *
      * @access public
-     * @return kanso\cms\crm\visitor\Visit
+     * @return \kanso\cms\wrappers\Visit
      */
     public function firstVisit(): Visit
     {
@@ -296,9 +303,9 @@ class Visitor extends Wrapper
      * 3. SQL
      *
      * @access public
-     * @param  kanso\cms\crm\visitor\Visitor $visitor      Visitor to grade (optional) (default null)
-     * @param  kanso\cms\crm\visitor\Visitor $returnString Return score as string (optional) (default false)
-     * @return string|false
+     * @param  \kanso\cms\wrappers\Visitor|null $visitor      Visitor to grade (optional) (default null)
+     * @param  bool                             $returnString Return score as string (optional) (default false)
+     * @return string|int
      */
     public function grade(Visitor $visitor = null, bool $returnString = false)
     {
@@ -317,7 +324,7 @@ class Visitor extends Wrapper
             // SQL
             if ($visitCount >= 8)
             {
-                return $returnString ? 'SQL' : 3;
+                return $returnString ? 'sql' : 3;
             }
 
             // Lead

@@ -36,7 +36,7 @@ class Log
      *
      * @access public
      * @param \kanso\framework\file\Filesystem $filesystem Filesystem instance
-     * @param string                           $logDir     Directory to log files
+     * @param string                           $path       Directory to log files
      */
     public function __construct(Filesystem $filesystem, string $path)
     {
@@ -49,13 +49,12 @@ class Log
      * Write email to log.
      *
      * @access public
-     * @param  string $emailTo     The email address to send the email to
-     * @param  string $senderName  The name of the sender
-     * @param  string $senderEmail The email address of the sender
-     * @param  string $subject     The subject of the email
-     * @param  string $content     The message to be sent
-     * @param  string $format      html or plain
-     * @return bool
+     * @param string $toEmail     The email address to send the email to
+     * @param string $senderName  The name of the sender
+     * @param string $senderEmail The email address of the sender
+     * @param string $subject     The subject of the email
+     * @param string $content     The message to be sent
+     * @param string $format      html or plain
      */
     public function save(string $toEmail, string $senderName, string $senderEmail, string $subject, string $content, string $format)
     {

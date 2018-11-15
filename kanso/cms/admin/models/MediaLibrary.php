@@ -45,7 +45,7 @@ class MediaLibrary extends BaseModel
      */
     public function onGET()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return [];
         }
@@ -58,7 +58,7 @@ class MediaLibrary extends BaseModel
      */
     public function onPOST()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return [];
         }
@@ -98,7 +98,7 @@ class MediaLibrary extends BaseModel
             }
         }
 
-        throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+        throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
     }
 
     /**
@@ -123,7 +123,7 @@ class MediaLibrary extends BaseModel
 
         // Select the images
         $response      = [];
-        $rows          = $this->SQL->SELECT('*')->FROM('media_uploads')->ORDER_BY('date', 'DESC')->LIMIT($offset, $limit)->FIND_ALL();
+        $rows          = $this->sql()->SELECT('*')->FROM('media_uploads')->ORDER_BY('date', 'DESC')->LIMIT($offset, $limit)->FIND_ALL();
         $imagesBaseURL = str_replace($this->Request->environment()->DOCUMENT_ROOT, $this->Request->environment()->HTTP_HOST, $this->Config->get('cms.uploads.path'));
 
         foreach ($rows as $image)
@@ -131,7 +131,7 @@ class MediaLibrary extends BaseModel
             if (!file_exists($image['path'])) continue;
             $image['date']    = Humanizer::timeAgo($image['date']) . ' ago';
             $image['size']    = Humanizer::fileSize($image['size']);
-            $image['user']    = $this->SQL->SELECT('name')->FROM('users')->WHERE('id', '=', $image['uploader_id'])->ROW()['name'];
+            $image['user']    = $this->sql()->SELECT('name')->FROM('users')->WHERE('id', '=', $image['uploader_id'])->ROW()['name'];
             $image['type']    = Mime::fromExt(Str::getAfterLastChar($image['path'], '.'));
             $image['preview'] = $image['url'];
             $image['name']    = Str::getAfterLastChar($image['url'], '/');
@@ -152,7 +152,7 @@ class MediaLibrary extends BaseModel
      * Delete images by ids.
      *
      * @access private
-     * @return array|false
+     * @return string|false
      */
     private function deleteMedia()
     {
@@ -183,7 +183,7 @@ class MediaLibrary extends BaseModel
      * Update an attachment info.
      *
      * @access private
-     * @return array|false
+     * @return string|false
      */
     private function updateMediaInfo()
     {
@@ -271,7 +271,7 @@ class MediaLibrary extends BaseModel
                 $image = $media->asArray();
                 $image['date']    = Humanizer::timeAgo($image['date']) . ' ago';
                 $image['size']    = Humanizer::fileSize($image['size']);
-                $image['user']    = $this->SQL->SELECT('name')->FROM('users')->WHERE('id', '=', $image['uploader_id'])->ROW()['name'];
+                $image['user']    = $this->sql()->SELECT('name')->FROM('users')->WHERE('id', '=', $image['uploader_id'])->ROW()['name'];
                 $image['type']    = Mime::fromExt(Str::getAfterLastChar($image['path'], '.'));
                 $image['preview'] = $image['url'];
                 $image['name']    = Str::getAfterLastChar($image['url'], '/');

@@ -7,6 +7,7 @@
 
 namespace kanso\cms\admin\models;
 
+use kanso\cms\wrappers\Category;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
 use kanso\framework\utility\Arr;
@@ -24,7 +25,7 @@ class Categories extends BaseModel
      */
     public function onGET()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parseGet();
         }
@@ -37,7 +38,7 @@ class Categories extends BaseModel
      */
     public function onPOST()
     {
-        if ($this->isLoggedIn)
+        if ($this->isLoggedIn())
         {
             return $this->parsePost();
         }
@@ -142,17 +143,17 @@ class Categories extends BaseModel
 
         if (!isset($this->post['bulk_action']) || empty($this->post['bulk_action']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         if (!in_array($this->post['bulk_action'], ['clear', 'delete', 'update']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         if (!isset($this->post['categories']) || !is_array($this->post['categories']) || empty($this->post['categories']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         return true;
@@ -213,8 +214,7 @@ class Categories extends BaseModel
      * Delete articles by id.
      *
      * @access private
-     * @param  array $ids List of post ids
-     * @return bool
+     * @param array $ids List of post ids
      */
     private function delete(array $ids)
     {
@@ -235,8 +235,7 @@ class Categories extends BaseModel
      * Clear tags of articles.
      *
      * @access private
-     * @param  array $ids List of post ids
-     * @return bool
+     * @param array $ids List of post ids
      */
     private function clear(array $ids)
     {
@@ -312,30 +311,30 @@ class Categories extends BaseModel
         $search       = $queries['search'];
 
         // Select the posts
-        $this->SQL->SELECT('categories.id')->FROM('categories');
+        $this->sql()->SELECT('categories.id')->FROM('categories');
 
         // Search the name
         if ($search)
         {
-            $this->SQL->AND_WHERE('name', 'like', '%' . $queries['search'] . '%');
+            $this->sql()->AND_WHERE('name', 'like', '%' . $queries['search'] . '%');
         }
 
         // Find the articles
-        $rows = $this->SQL->FIND_ALL();
+        $rows = $this->sql()->FIND_ALL();
 
         // Add all the article count
         $result = [];
 
         foreach ($rows as $row)
         {
-            $this->SQL->SELECT('posts.id')->FROM('posts')
+            $this->sql()->SELECT('posts.id')->FROM('posts')
             ->LEFT_JOIN_ON('categories_to_posts', 'posts.id = categories_to_posts.post_id')
             ->LEFT_JOIN_ON('categories', 'categories.id = categories_to_posts.category_id')
             ->WHERE('categories.id', '=', $row['id']);
 
             $category = $this->CategoryManager->byId($row['id']);
 
-            $category->article_count = count($this->SQL->FIND_ALL());
+            $category->article_count = count($this->sql()->FIND_ALL());
 
             $result[] = $category;
         }
@@ -400,11 +399,11 @@ class Categories extends BaseModel
      * Recursively get category children.
      *
      * @access private
-     * @param  Category $parent Category parent object
-     * @param  array    $parent Category parent children (optional) (default [])
+     * @param  \kanso\cms\wrappers\Category $parent   Category parent object
+     * @param  array                        $children Category parent children (optional) (default [])
      * @return array
      */
-    private function recursiveChildren($parent, $children = []): array
+    private function recursiveChildren(Category $parent, $children = []): array
     {
         foreach ($parent->children() as $child)
         {
@@ -419,12 +418,11 @@ class Categories extends BaseModel
      * Update and reset post slugs when permalinks have changed.
      *
      * @access private
-     * @return
      */
     private function resetPostSlugs()
     {
         // Select the posts
-        $posts = $this->SQL->SELECT('posts.id')->FROM('posts')->FIND_ALL();
+        $posts = $this->sql()->SELECT('posts.id')->FROM('posts')->FIND_ALL();
 
         foreach ($posts as $row)
         {

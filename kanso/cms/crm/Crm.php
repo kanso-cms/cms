@@ -7,8 +7,10 @@
 
 namespace kanso\cms\crm;
 
+use Exception;
 use kanso\cms\wrappers\providers\LeadProvider;
 use kanso\cms\wrappers\Visitor;
+use kanso\framework\database\query\Builder;
 use kanso\framework\ioc\ContainerAwareTrait;
 
 /**
@@ -30,7 +32,7 @@ class Crm
     /**
      * The current visitor making the request.
      *
-     * @var kanso\cms\wrappers\Visitor
+     * @var \kanso\cms\wrappers\Visitor
      */
     private $visitor;
 
@@ -61,7 +63,7 @@ class Crm
      * Return a new query builder instance.
      *
      * @access private
-     * @return kanso\framework\database\query\Builder
+     * @return \kanso\framework\database\query\Builder
      */
     protected function sql(): Builder
     {
@@ -72,7 +74,7 @@ class Crm
      * Finds/and/or returns the current visitor.
      *
      * @access public
-     * @return kanso\cms\wrappers\Visitor
+     * @return \kanso\cms\wrappers\Visitor
      */
     public function visitor(): Visitor
     {
@@ -83,7 +85,7 @@ class Crm
      * Get the visitor provider.
      *
      * @access public
-     * @return kanso\cms\wrappers\providers\LeadProvider
+     * @return \kanso\cms\wrappers\providers\LeadProvider
      */
     public function leadProvider(): LeadProvider
     {
@@ -94,7 +96,7 @@ class Crm
      * Find the current visitor.
      *
      * @access private
-     * @return kanso\cms\wrappers\Visitor
+     * @return \kanso\cms\wrappers\Visitor
      */
     private function findVisitor(): Visitor
     {
