@@ -91,12 +91,7 @@ class EmailLogs extends BaseModel
      */
     private function parsePost(): array
     {
-        $validate = $this->validatePost();
-
-        if (!$validate)
-        {
-            return false;
-        }
+        $this->validatePost();
 
         $id           = $this->post['id'];
         $path         = $this->Config->get('email.log_dir');

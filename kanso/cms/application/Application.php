@@ -21,22 +21,22 @@ class Application
 	/**
 	 * IoC container instance.
 	 *
-	 * @var \kanso\framework\application\Container
+	 * @var \kanso\framework\ioc\Container
 	 */
-	private $container;
+	protected $container;
 
 	/**
 	 * Instance of self.
 	 *
-	 * @var \kanso\framework\application\Container
+	 * @var \kanso\cms\application\Application
 	 */
-	private static $instance;
+	protected static $instance;
 
     /**
      * Constructor.
      *
      * @access private
-     * @param \kanso\framework\application\Container $container IoC container
+     * @param \kanso\framework\ioc\Container $container IoC container
      */
     private function __construct(Container $container)
     {
@@ -47,10 +47,10 @@ class Application
 	 * Starts and/or returns the instance of the application.
 	 *
 	 * @access public
-	 * @param  \kanso\framework\application\Container|null $container IoC container (optional) (default null)
-	 * @return \kanso\cms\CMS
+	 * @param  \kanso\framework\ioc\Container|null $container IoC container (optional) (default null)
+	 * @return \kanso\cms\application\Application
 	 */
-	public static function instance($container = null): Application
+	public static function instance(Container $container = null): Application
 	{
 		if (is_null(static::$instance))
 		{

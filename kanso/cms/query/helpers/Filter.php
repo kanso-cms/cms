@@ -556,7 +556,6 @@ class Filter extends Helper
      * Filter the posts for sitemap.
      *
      * @access private
-     * @param  string $requestType The incoming request type ('home'|'home-blog')
      * @return bool
      */
     private function filterSitemap(): bool

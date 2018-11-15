@@ -20,7 +20,7 @@ class Post extends Helper
      * Get the current post id.
      *
      * @access public
-     * @return int|false
+     * @return int|null
      */
     public function the_post_id()
     {
@@ -36,7 +36,7 @@ class Post extends Helper
      * Get the excerpt of the current post or a post by id.
      *
      * @access  public
-     * @param  int         $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @return string|null
      */
     public function the_excerpt(int $post_id = null)
@@ -65,7 +65,7 @@ class Post extends Helper
      * Get the status of the current post or post by id.
      *
      * @access  public
-     * @param  int         $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @return string|null
      */
     public function the_post_status(int $post_id = null)
@@ -94,7 +94,7 @@ class Post extends Helper
      * Get the type of the current post or post by id.
      *
      * @access  public
-     * @param  int         $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @return string|null
      */
     public function the_post_type(int $post_id = null)
@@ -123,7 +123,7 @@ class Post extends Helper
      * Get the meta for the current post or post by id.
      *
      * @access  public
-     * @param  int   $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int|null $post_id Post id or null for current post (optional) (Default NULL)
      * @return array
      */
     public function the_post_meta($post_id = null): array
@@ -153,7 +153,7 @@ class Post extends Helper
      *
      * @access public
      * @param  string      $format  PHP date() string format (optional) (Default 'U')
-     * @param  int         $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @return string|null
      */
     public function the_time(string $format = 'U', int $post_id = null)
@@ -183,7 +183,7 @@ class Post extends Helper
      *
      * @access public
      * @param  string      $format  PHP date() string format (optional) (Default 'U')
-     * @param  int         $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @return string|null
      */
     public function the_modified_time(string $format = 'U', int $post_id = null)
@@ -212,7 +212,7 @@ class Post extends Helper
      * Does the current post or a post by id have a thumbnail attachment.
      *
      * @access public
-     * @param  int  $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int|null $post_id Post id or null for current post (optional) (Default NULL)
      * @return bool
      */
     public function has_post_thumbnail(int $post_id = null): bool
@@ -241,7 +241,7 @@ class Post extends Helper
      * Get the title of the current post or a post by id.
      *
      * @access public
-     * @param  int         $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @return string|null
      */
     public function the_title(int $post_id = null)
@@ -275,7 +275,7 @@ class Post extends Helper
      * Get the full URL of the current post or a post by id.
      *
      * @access public
-     * @param  int         $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @return string|null
      */
     public function the_permalink(int $post_id = null)
@@ -308,7 +308,7 @@ class Post extends Helper
      * Get the slug of the current post or a post by id.
      *
      * @access public
-     * @param  int         $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @return string|null
      */
     public function the_slug(int $post_id = null)
@@ -337,8 +337,8 @@ class Post extends Helper
      * Gets the HTML content for current post or a post by id.
      *
      * @access public
-     * @param  int    $post_id Post id or null for current post (optional) (Default NULL)
-     * @param  bool   $raw     Return raw content not HTML formatted (optional) (default false)
+     * @param  int|null $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  bool     $raw     Return raw content not HTML formatted (optional) (default false)
      * @return string
      */
     public function the_content(int $post_id = null, $raw = false): string
@@ -379,7 +379,7 @@ class Post extends Helper
      * Gets an attachment object for the current post or a post by id.
      *
      * @access public
-     * @param  int                            $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int|null                       $post_id Post id or null for current post (optional) (Default NULL)
      * @return \kanso\cms\wrappers\Media|null
      */
     public function the_post_thumbnail(int $post_id = null)
@@ -407,7 +407,7 @@ class Post extends Helper
      * Gets the thumbnail src for the current post or a post by id in a given size.
      *
      * @access public
-     * @param  int         $post_id Post id or null for current post (optional) (Default NULL)
+     * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @param  string      $size    The post thumbnail size "small"|"medium"|"large"|"original" (optional) (Default 'original')
      * @return string|null
      */
@@ -428,8 +428,8 @@ class Post extends Helper
      *
      * @param  \kanso\cms\wrappers\Media $thumbnail The attachment to print
      * @param  string                    $size      The post thumbnail size "small"|"medium"|"large"|"original" (optional) (Default 'original')
-     * @param  int                       $width     The img tag's width attribute  (optional) (Default '')
-     * @param  int                       $height    The img tag's height attribute (optional) (Default '')
+     * @param  string|int                $width     The img tag's width attribute  (optional) (Default '')
+     * @param  string|int                $height    The img tag's height attribute (optional) (Default '')
      * @param  string                    $classes   The img tag's class attribute  (optional) (Default '')
      * @param  string                    $id        The img tag's id attribute (optional) (Default '')
      * @return string

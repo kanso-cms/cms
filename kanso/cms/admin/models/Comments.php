@@ -125,17 +125,17 @@ class Comments extends BaseModel
 
         if (!isset($this->post['bulk_action']) || empty($this->post['bulk_action']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         if (!in_array($this->post['bulk_action'], ['spam', 'delete', 'pending', 'approved']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         if (!isset($this->post['comments']) || !is_array($this->post['comments']) || empty($this->post['comments']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         return true;
@@ -145,8 +145,7 @@ class Comments extends BaseModel
      * Delete comments by id.
      *
      * @access private
-     * @param  array $ids List of post ids
-     * @return bool
+     * @param array $ids List of post ids
      */
     private function delete(array $ids)
     {
@@ -165,8 +164,7 @@ class Comments extends BaseModel
      * Change a list of comment statuses.
      *
      * @access private
-     * @param  array $ids List of post ids
-     * @return bool
+     * @param array $ids List of post ids
      */
     private function changeStatus(array $ids, string $status)
     {
@@ -192,7 +190,7 @@ class Comments extends BaseModel
     {
         $queries = $this->getQueries();
 
-       return (
+        return (
             $queries['search'] === false &&
             $queries['page']   === 0 &&
             $queries['sort']   === 'newest' &&

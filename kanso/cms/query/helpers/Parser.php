@@ -264,8 +264,9 @@ class Parser extends Helper
     /**
      * Execute the current query.
      *
-     * @access private
+     * @access   private
      * @return array
+     * @suppress PhanTypeInvalidDimOffset
      */
     private function executeQuery(): array
     {
@@ -315,7 +316,14 @@ class Parser extends Helper
 
         if (!empty($this->queryVars['ORDER_BY']))
         {
-            $this->sql()->ORDER_BY($this->queryVars['ORDER_BY'][0], $this->queryVars['ORDER_BY'][1]);
+            if (isset($this->queryVars['ORDER_BY'][1]))
+            {
+                $this->sql()->ORDER_BY($this->queryVars['ORDER_BY'][0], $this->queryVars['ORDER_BY'][1]);
+            }
+            else
+            {
+                $this->sql()->ORDER_BY($this->queryVars['ORDER_BY'][0]);
+            }
         }
 
         if (!empty($this->queryVars['LIMIT']))
@@ -351,6 +359,7 @@ class Parser extends Helper
      * @access public
      * @param  string $queryStr Query string to parse
      * @return array
+     * @suppress PhanTypeInvalidDimOffset
      */
     public function countQuery(string $queryStr): array
     {
@@ -414,7 +423,14 @@ class Parser extends Helper
 
         if (!empty($this->queryVars['ORDER_BY']))
         {
-            $this->sql()->ORDER_BY($this->queryVars['ORDER_BY'][0], $this->queryVars['ORDER_BY'][1]);
+            if (isset($this->queryVars['ORDER_BY'][1]))
+            {
+                $this->sql()->ORDER_BY($this->queryVars['ORDER_BY'][0], $this->queryVars['ORDER_BY'][1]);
+            }
+            else
+            {
+                $this->sql()->ORDER_BY($this->queryVars['ORDER_BY'][0]);
+            }
         }
 
         return $this->sql()->FIND_ALL();

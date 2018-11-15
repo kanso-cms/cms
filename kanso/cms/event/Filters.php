@@ -19,7 +19,7 @@ class Filters
     /**
      * Instance of self.
      *
-     * @var \kanso\cms\events\Events
+     * @var \kanso\cms\event\Filters
      */
     private static $instance;
 
@@ -45,7 +45,7 @@ class Filters
      * This creates and/or returns an Filters instance (singleton)
      *
      * @access public
-     * @return \kanso\cms\events\Filters
+     * @return \kanso\cms\event\Filters
      */
     public static function instance(): Filters
     {
@@ -63,7 +63,6 @@ class Filters
      * @access public
      * @param string $eventName The name of the filter
      * @param mixed  $callback  Callback to apply
-     * @param mixed  $args      Args to add
      */
     public function on(string $eventName, $callback)
     {

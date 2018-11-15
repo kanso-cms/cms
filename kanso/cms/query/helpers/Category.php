@@ -131,8 +131,8 @@ class Category extends Helper
      * Get a comma separated list of the category names of the current post or a post by id.
      *
      * @access public
-     * @param  int|null    $post_id Post id or null for category of current post (optional) (Default NULL)
-     * @param  string|null $glue    Glue to separate category names
+     * @param  int|null $post_id Post id or null for category of current post (optional) (Default NULL)
+     * @param  string   $glue    Glue to separate category names
      * @return string
      */
     public function the_categories_list(int $post_id = null, string $glue = ', '): string

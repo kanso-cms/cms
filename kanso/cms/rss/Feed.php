@@ -10,7 +10,6 @@ namespace kanso\cms\rss;
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
 use kanso\framework\utility\Mime;
-use kanso\Kanso;
 
 /**
  * RSS feeds.

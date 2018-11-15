@@ -18,20 +18,58 @@ use kanso\framework\database\query\Builder;
  */
 class PostProvider extends Provider
 {
+    /**
+     * Config.
+     *
+     * @var \kanso\framework\config\Config
+     */
+    private $config;
+
+    /**
+     * Tag provider.
+     *
+     * @var \kanso\cms\wrappers\providers\TagProvider
+     */
     private $tagProvider;
 
+    /**
+     * Category provider.
+     *
+     * @var \kanso\cms\wrappers\providers\CategoryProvider
+     */
     private $categoryProvider;
 
+    /**
+     * Media provider.
+     *
+     * @var \kanso\cms\wrappers\providers\MediaProvider
+     */
     private $mediaProvider;
 
+    /**
+     * User provider.
+     *
+     * @var \kanso\cms\wrappers\providers\UserProvider
+     */
     private $userProvider;
 
+    /**
+     * Comment provider.
+     *
+     * @var \kanso\cms\wrappers\providers\CommentProvider
+     */
     private $commentProvider;
 
     /**
      * Override inherited constructor.
      *
      * @access public
+     * @param \kanso\framework\database\query\Builder        $SQL              SQL query builder
+     * @param \kanso\framework\config\Config                 $config           Configuration instance
+     * @param \kanso\cms\wrappers\providers\TagProvider      $tagProvider      Tag provider instance
+     * @param \kanso\cms\wrappers\providers\CategoryProvider $categoryProvider Category provider instance
+     * @param \kanso\cms\wrappers\providers\MediaProvider    $mediaProvider    Media provider instance
+     * @param \kanso\cms\wrappers\providers\UserProvider     $userProvider     User provider instance
      */
     public function __construct(Builder $SQL, Config $config, TagProvider $tagProvider, CategoryProvider $categoryProvider, MediaProvider $mediaProvider, CommentProvider $commentProvider, UserProvider $userProvider)
     {
@@ -54,8 +92,8 @@ class PostProvider extends Provider
      * Create and return new post wrapper around a database entry.
      *
      * @access public
-     * @param  array $row Row from the database
-     * @return Post
+     * @param  array                    $row Row from the database
+     * @return \kanso\cms\wrappers\Post
      */
     public function newPost(array $row): Post
     {

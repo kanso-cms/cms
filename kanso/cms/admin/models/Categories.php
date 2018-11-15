@@ -143,17 +143,17 @@ class Categories extends BaseModel
 
         if (!isset($this->post['bulk_action']) || empty($this->post['bulk_action']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         if (!in_array($this->post['bulk_action'], ['clear', 'delete', 'update']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         if (!isset($this->post['categories']) || !is_array($this->post['categories']) || empty($this->post['categories']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         return true;
@@ -214,8 +214,7 @@ class Categories extends BaseModel
      * Delete articles by id.
      *
      * @access private
-     * @param  array $ids List of post ids
-     * @return bool
+     * @param array $ids List of post ids
      */
     private function delete(array $ids)
     {
@@ -236,8 +235,7 @@ class Categories extends BaseModel
      * Clear tags of articles.
      *
      * @access private
-     * @param  array $ids List of post ids
-     * @return bool
+     * @param array $ids List of post ids
      */
     private function clear(array $ids)
     {
@@ -401,8 +399,8 @@ class Categories extends BaseModel
      * Recursively get category children.
      *
      * @access private
-     * @param  \kanso\cms\wrappers\Category $parent Category parent object
-     * @param  array                        $parent Category parent children (optional) (default [])
+     * @param  \kanso\cms\wrappers\Category $parent   Category parent object
+     * @param  array                        $children Category parent children (optional) (default [])
      * @return array
      */
     private function recursiveChildren(Category $parent, $children = []): array
@@ -420,7 +418,6 @@ class Categories extends BaseModel
      * Update and reset post slugs when permalinks have changed.
      *
      * @access private
-     * @return
      */
     private function resetPostSlugs()
     {

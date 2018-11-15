@@ -67,7 +67,7 @@ class Gatekeeper
     /**
      * The HTTP current user if one exists.
      *
-     * @var \kanso\cms\wrappers\User
+     * @var \kanso\cms\wrappers\User|null
      */
     private $user = null;
 
@@ -286,10 +286,10 @@ class Gatekeeper
      * Try to log the current user in by email and password.
      *
      * @access public
-     * @param  string                                                                                  $username Username or email address
-     * @param  string                                                                                  $password Raw passowrd
-     * @param  bool                                                                                    $force    Login a user without their password needed (optional) (default false)
-     * @return true|self::LOGIN_INCORRECT|self::LOGIN_ACTIVATING|self::LOGIN_LOCKED|self::LOGIN_BANNED
+     * @param  string   $username Username or email address
+     * @param  string   $password Raw passowrd
+     * @param  bool     $force    Login a user without their password needed (optional) (default false)
+     * @return bool|int
      */
     public function login(string $username, string $password, bool $force = false)
     {

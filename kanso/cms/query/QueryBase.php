@@ -37,14 +37,14 @@ abstract class QueryBase
     /**
      * The page request type.
      *
-     * @var string
+     * @var string|null
      */
     public $requestType = 'custom';
 
     /**
      * The string-query to use on the database.
      *
-     * @var string
+     * @var string|null
      */
     public $queryStr;
 
@@ -79,35 +79,35 @@ abstract class QueryBase
     /**
      * The current post.
      *
-     * @var \kanso\cms\wrappers\Post
+     * @var \kanso\cms\wrappers\Post|null
      */
     public $post = null;
 
     /**
      * Current taxonomy slug if applicable (e.g tag, category, author).
      *
-     * @var string
+     * @var string|null
      */
     public $taxonomySlug;
 
     /**
      * Current attachment URL: if applicable (e.g foo.com/app/public/uploads/my-image_large.png).
      *
-     * @var string
+     * @var string|null
      */
     public $attachmentURL;
 
     /**
      * Current attachment size: if applicable (image_large).
      *
-     * @var string
+     * @var string|null
      */
     public $attachmentSize;
 
     /**
      * Search term if applicable.
      *
-     * @var string
+     * @var string|null
      */
     public $searchQuery;
 
@@ -169,7 +169,7 @@ abstract class QueryBase
      * Create and return a new Query object.
      *
      * @access public
-     * @param  string queryStr  Query to filter posts
+     * @param  string                 $queryStr Query to filter posts
      * @return \kanso\cms\query\Query
      */
     public function create(string $queryStr = ''): Query
@@ -203,6 +203,7 @@ abstract class QueryBase
      * Loads dependencies.
      *
      * @access private
+     * @suppress PhanTypeMismatchArgument
      */
     private function loadDependencies()
     {

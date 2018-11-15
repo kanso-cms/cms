@@ -51,8 +51,8 @@ class Templates extends Helper
      * Display the contents of any template file relative to the theme's base directory.
      *
      * @access public
-     * @param  string $template Template file name/path without .php extension
-     * @param  array  $data     Array of variables to make available within file scope (optional) (default [])
+     * @param  string $template_name Template file name/path without .php extension
+     * @param  array  $data          Array of variables to make available within file scope (optional) (default [])
      * @return string
      */
     public function include_template(string $template_name, array $data = []): string

@@ -65,7 +65,7 @@ abstract class Helper
      * Returns query builder instance.
      *
      * @access public
-     * @param \kanso\framework\ioc\Container $container IoC container
+     * @return \kanso\framework\database\query\Builder
      */
     protected function sql(): Builder
     {

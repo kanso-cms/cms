@@ -29,7 +29,6 @@ abstract class Plugin
 	 * Checks if this plugin is installed.
 	 *
 	 * @access public
-	 * @return bool
 	 */
-	public function installed(): bool;
+	public function installed();
 }

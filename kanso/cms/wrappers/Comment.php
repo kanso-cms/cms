@@ -88,13 +88,13 @@ class Comment extends Wrapper
      * Returns the parent Comment if it exists.
      *
      * @access public
-     * @return \kanso\cms\wrappers\Comment||false
+     * @return \kanso\cms\wrappers\Comment|false
      */
-    public function parent(): array
+    public function parent()
     {
         if (is_null($this->parent))
         {
-           $this->parent = $this->commentParent($this);
+           $this->parent = $this->commentParent();
         }
 
         return $this->parent;
@@ -104,7 +104,7 @@ class Comment extends Wrapper
      * Recursively delete comment tree.
      *
      * @access private
-     * @param  kanso\cms\wrappers\Comment $comment Comment
+     * @param  \kanso\cms\wrappers\Comment $comment Comment
      * @return bool
      */
     private function deleteCommentChildren(Comment $comment): bool
@@ -123,7 +123,7 @@ class Comment extends Wrapper
      * Recursively build comment tree.
      *
      * @access private
-     * @param  kanso\cms\wrappers\Comment $comment Comment
+     * @param  \kanso\cms\wrappers\Comment $comment Comment
      * @return array
      */
     private function commentChildren(Comment $comment): array
@@ -148,7 +148,7 @@ class Comment extends Wrapper
      * Returns the parent comment.
      *
      * @access private
-     * @return \kanso\cms\wrappers\Comment||false
+     * @return \kanso\cms\wrappers\Comment|false
      */
     private function commentParent()
     {
@@ -157,7 +157,7 @@ class Comment extends Wrapper
             return false;
         }
 
-        $parent = $this->SQL->SELECT('*')->FROM('comments')->WHERE('id', '=', $comment->parent_id)->ROW();
+        $parent = $this->SQL->SELECT('*')->FROM('comments')->WHERE('id', '=', $this->parent_id)->ROW();
 
         if ($parent)
         {

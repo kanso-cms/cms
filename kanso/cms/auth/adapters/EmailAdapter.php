@@ -63,7 +63,7 @@ class EmailAdapter
      * Constructor.
      *
      * @access public
-     * @param \kanso\cms\email\Email $Email      Email utility
+     * @param \kanso\cms\email\Email $email      Email utility
      * @param string                 $httpHost   HTTP_HOST
      * @param string                 $domainName Current domain name (e.g 'example.com')
      * @param string                 $siteTitle  Website base title (e.g 'Kanso CMS')
@@ -86,7 +86,7 @@ class EmailAdapter
      * Forgot password.
      *
      * @access public
-     * @param  kanso\cms\wrappers\User $user User to run request on
+     * @param  \kanso\cms\wrappers\User $user User to run request on
      * @return bool
      */
     public function forgotPassword(User $user): bool
@@ -122,7 +122,7 @@ class EmailAdapter
      * Reset password.
      *
      * @access public
-     * @param  kanso\cms\wrappers\User $user User to run request on
+     * @param  \kanso\cms\wrappers\User $user User to run request on
      * @return bool
      */
     public function resetPassword(User $user): bool
@@ -158,7 +158,7 @@ class EmailAdapter
      * Forgot username.
      *
      * @access public
-     * @param  kanso\cms\wrappers\User $user User to run request on
+     * @param  \kanso\cms\wrappers\User $user User to run request on
      * @return bool
      */
     public function forgotUsername(User $user): bool

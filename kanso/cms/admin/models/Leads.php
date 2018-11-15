@@ -281,7 +281,7 @@ class Leads extends BaseModel
         {
             usort($visitors, function($a, $b)
             {
-                return $a->countVisits() < $b->countVisits();
+                return $a->countVisits() < $b->countVisits() ? 1 : 0;
             });
         }
 

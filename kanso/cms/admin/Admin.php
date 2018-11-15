@@ -11,7 +11,6 @@ use kanso\framework\ioc\ContainerAwareTrait;
 use kanso\framework\utility\Arr;
 use kanso\framework\utility\Humanizer;
 use kanso\framework\utility\Str;
-use kanso\Kanso;
 
 /**
  * Admin access.
@@ -21,15 +20,6 @@ use kanso\Kanso;
 class Admin
 {
     use ContainerAwareTrait;
-
-    /**
-     * Constructor.
-     *
-     * @access public
-     */
-    public function __construct()
-    {
-    }
 
     /**
      * Register a custom post type.
@@ -68,10 +58,10 @@ class Admin
 
         // Add the custom post type to the config
         // So that when the post is saved, the CMS knows what permalink structure to use
-        $custom_types   = $this->Config->get('cms.custom_posts');
-        $custom_posts[$type] = str_replace(['(', ':', ')'], '', $route);
+        $custom_types = $this->Config->get('cms.custom_posts');
+        $custom_types[$type] = str_replace(['(', ':', ')'], '', $route);
 
-        $this->Config->set('cms.custom_posts', $custom_posts);
+        $this->Config->set('cms.custom_posts', $custom_types);
 
         // Add the menu to the sidebar
         $this->Filters->on('adminSidebar', function($sidebar) use ($title, $slug, $icon)
@@ -136,8 +126,8 @@ class Admin
      * @param string      $view      Absolute file path to include for page content
      * @param string|null $parent    Parent page slug (optional) (default null)
      * @param bool        $adminOnly Allow only administrators to use this page
-     * @param array       $styles    Any custom styles to add into the page <head> (optional) (default null)
-     * @param array       $scripts   Anything to go before the closing <body> tag (optional) (default null)
+     * @param array|null  $styles    Any custom styles to add into the page <head> (optional) (default null)
+     * @param array|null  $scripts   Anything to go before the closing <body> tag (optional) (default null)
      */
     public function addPage(string $title, string $slug, string $icon, string $model, string $view, string $parent = null, bool $adminOnly = false, array $styles = null, array $scripts = null)
     {

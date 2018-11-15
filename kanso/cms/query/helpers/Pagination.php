@@ -22,7 +22,7 @@ class Pagination extends Helper
      * Works on home, search, tag, category, author requests.
      *
      * @access public
-     * @param  array  $args Array of display arguments (optional) (default NULL)
+     * @param  array|null $args Array of display arguments (optional) (default NULL)
      * @return string
      */
     public function pagination_links(array $args = null): string

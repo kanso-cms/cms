@@ -10,6 +10,7 @@ namespace kanso\cms\crm;
 use Exception;
 use kanso\cms\wrappers\providers\LeadProvider;
 use kanso\cms\wrappers\Visitor;
+use kanso\framework\database\query\Builder;
 use kanso\framework\ioc\ContainerAwareTrait;
 
 /**

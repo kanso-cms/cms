@@ -67,7 +67,7 @@ class Writer extends BaseModel
             }
         }
 
-        throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+        throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
     }
 
     /**

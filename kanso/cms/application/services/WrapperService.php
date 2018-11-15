@@ -106,13 +106,7 @@ class WrapperService extends Service
 		{
 			return new LeadManager(
 				$container->Database->connection()->builder(),
-				$container->LeadProvider,
-				$container->Crypto,
-				$container->Cookie,
-				$container->Session,
-				$container->Config,
-				$container->Request->environment(),
-				$container->Email
+				$container->LeadProvider
 			);
 		});
 	}

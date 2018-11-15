@@ -420,7 +420,7 @@ class Meta extends Helper
      * Find the next post (used internally).
      *
      * @access private
-     * @param  \Kanso\cms\wrappers\Post|null
+     * @param  \Kanso\cms\wrappers\Post|null $post Current post (if it exists)
      * @return array|false
      */
     private function findNextPost($post)
@@ -455,7 +455,7 @@ class Meta extends Helper
      * Find the previous post (used internally).
      *
      * @access private
-     * @param  \Kanso\cms\wrappers\Post|null
+     * @param  \Kanso\cms\wrappers\Post|null $post Current post (if it exists)
      * @return array|false
      */
     private function findPrevPost($post)

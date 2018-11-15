@@ -104,15 +104,15 @@ class CommentManager extends Manager
      * Creates a new category.
      *
      * @access public
-     * @param  string $name             Comment name
-     * @param  string $name             Name of the commentor
-     * @param  string $email            Email address of the commentor
-     * @param  int    $postId           Post id
-     * @param  int    $parentId         Comment parent id (optional) (default null)
-     * @param  bool   $validate         Validate the comment through the spam protector (optional) (default true)
-     * @param  bool   $subscribeThread  Subscribe email address to thread notifications (optional) (default true)
-     * @param  bool   $subscribeReplies Subscribe email address to reply notifications (optional) (default true)
-     * @param  bool   $sendEmails       Send emails to all subscribers and admins (optional) (default true)
+     * @param  string   $content          Comment name
+     * @param  string   $name             Name of the commentor
+     * @param  string   $email            Email address of the commentor
+     * @param  int      $postId           Post id
+     * @param  int|null $parentId         Comment parent id (optional) (default null)
+     * @param  bool     $validate         Validate the comment through the spam protector (optional) (default true)
+     * @param  bool     $subscribeThread  Subscribe email address to thread notifications (optional) (default true)
+     * @param  bool     $subscribeReplies Subscribe email address to reply notifications (optional) (default true)
+     * @param  bool     $sendEmails       Send emails to all subscribers and admins (optional) (default true)
      * @return mixed
      */
     public function create(string $content, string $name, string $email, int $postId, int $parentId = null, bool $validate = true, bool $subscribeThread = true, bool $subscribeReplies = true, bool $sendEmails = true)
@@ -339,7 +339,7 @@ class CommentManager extends Manager
      * Get all email addresses that are subscribed to receive reply emails.
      *
      * @access private
-     * @param  int   $postId    Post id
+     * @param  int   $parentId  Post id
      * @param  int   $commentId The current comment to skip
      * @return array
      */

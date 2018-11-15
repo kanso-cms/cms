@@ -56,7 +56,7 @@ class Accounts extends BaseModel
             }
         }
 
-        throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+        throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
     }
 
     /**
@@ -275,7 +275,7 @@ class Accounts extends BaseModel
      * Parse a reset password POST request.
      *
      * @access private
-     * @return array||false
+     * @return array
      */
     private function processResetpasswordPOST()
     {

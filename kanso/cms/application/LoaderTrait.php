@@ -21,6 +21,20 @@ use kanso\framework\utility\Str;
  */
 trait LoaderTrait
 {
+	/**
+	 * IoC container instance.
+	 *
+	 * @var \kanso\framework\ioc\Container
+	 */
+	protected $container;
+
+	/**
+	 * Instance of self.
+	 *
+	 * @var \kanso\cms\application\Application
+	 */
+	protected static $instance;
+
 	abstract public static function instance();
 
     /**

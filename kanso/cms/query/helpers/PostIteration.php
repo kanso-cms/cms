@@ -19,7 +19,7 @@ class PostIteration extends Helper
      * or just return a single post by id.
      *
      * @access public
-     * @param  int                           $post_id Post id or null for next post in loop (optional) (Default NULL)
+     * @param  int|null                      $post_id Post id or null for next post in loop (optional) (Default NULL)
      * @return \kanso\cms\wrappers\Post|null
      */
     public function the_post(int $post_id = null)
@@ -69,7 +69,7 @@ class PostIteration extends Helper
      * Do we have posts in the loop? or does a post by id exist ?
      *
      * @access  public
-     * @param  int  $post_id Post id or null for current loop (optional) (Default NULL)
+     * @param  int|null $post_id Post id or null for current loop (optional) (Default NULL)
      * @return bool
      */
     public function have_posts(int $post_id = null): bool

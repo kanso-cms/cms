@@ -333,9 +333,9 @@ class Comment extends Helper
      * Retrieve the gravatar 'img' tag or src from an email address or md5 hash.
      *
      * @access public
-     * @param  string    $email_address The email address or md5 of the current user (optional)
-     * @param  int|null  $size          Image size in px
-     * @param  bool|null $srcOnly       Should we return only the img src (rather than the actual HTML tag)
+     * @param  string $email_or_md5 The email address or md5 of the current user (optional)
+     * @param  int    $size         Image size in px
+     * @param  bool   $srcOnly      Should we return only the img src (rather than the actual HTML tag)
      * @return string
      */
     public function get_gravatar(string $email_or_md5, int $size = 160, bool $srcOnly = false)
@@ -471,7 +471,7 @@ class Comment extends Helper
      * is string a valid md5 hash ?
      *
      * @access private
-     * @param  string|null $md5 md5 hash
+     * @param  string $md5 md5 hash
      * @return bool
      */
     private function isValidMd5(string $md5 =''): bool

@@ -46,7 +46,7 @@ class Settings extends BaseModel
             return $this->parsePost();
         }
 
-        throw new RequestException('Bad Admin Panel POST Request. The user was not logged in as an admin.');
+        throw new RequestException(500, 'Bad Admin Panel POST Request. The user was not logged in as an admin.');
     }
 
     /**
@@ -649,7 +649,7 @@ class Settings extends BaseModel
      * Parse, validate and process the add new user form.
      *
      * @access private
-     * @return array||false
+     * @return array|false
      */
     private function submitInviteUser()
     {
@@ -709,7 +709,7 @@ class Settings extends BaseModel
      * Parse, validate and process the delete user form.
      *
      * @access private
-     * @return array||false
+     * @return array|false
      */
     private function submitDeleteUser()
     {
@@ -760,7 +760,7 @@ class Settings extends BaseModel
      * Parse, validate and process the change user role form.
      *
      * @access private
-     * @return array||false
+     * @return array|false
      */
     private function submitChangeUserRole()
     {
@@ -814,7 +814,6 @@ class Settings extends BaseModel
      * Update and reset post slugs when permalinks have changed.
      *
      * @access private
-     * @return
      */
     private function resetPostSlugs()
     {
@@ -833,7 +832,7 @@ class Settings extends BaseModel
      * Parse, validate and process the restore kanso form.
      *
      * @access private
-     * @return array||null
+     * @return array|null
      */
     private function submitRestoreKanso()
     {
@@ -848,7 +847,7 @@ class Settings extends BaseModel
 
                 $this->Response->redirect($this->Request->environment()->HTTP_HOST . '/admin/login/');
 
-                return;
+                return null;
             }
         }
 

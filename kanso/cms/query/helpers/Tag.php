@@ -34,14 +34,15 @@ class Tag extends Helper
      * Gets an array of tag objects of the current post or a post by id.
      *
      * @access  public
-     * @param  int                          $post_id Post id or null for tags of current post (optional) (Default NULL)
-     * @return \kanso\cms\wrappers\Tag|null
+     * @param  int|null $post_id Post id or null for tags of current post (optional) (Default NULL)
+     * @return array
      */
     public function the_tags(int $post_id = null)
     {
         if ($post_id)
         {
             $post = $this->parent->helper('cache')->getPostByID($post_id);
+
             if ($post)
             {
                 return $post->tags;
@@ -59,8 +60,8 @@ class Tag extends Helper
      * Get a comma separated list of the tag names of the current post or a post by id.
      *
      * @access public
-     * @param  int    $post_id Post id or null for tags of current post (optional) (Default NULL)
-     * @param  string $glue    Glue to separate tag names
+     * @param  int|null $post_id Post id or null for tags of current post (optional) (Default NULL)
+     * @param  string   $glue    Glue to separate tag names
      * @return string
      */
     public function the_tags_list(int $post_id = null, string $glue = ', '): string
@@ -86,8 +87,8 @@ class Tag extends Helper
      * Implode tag names.
      *
      * @access private
-     * @param  array  $categories Array of tag objects
-     * @param  string $glue       Glue to separate tag names
+     * @param  array  $tags Array of tag objects
+     * @param  string $glue Glue to separate tag names
      * @return string
      */
     private function listTags(array $tags, string $glue): string
@@ -108,7 +109,7 @@ class Tag extends Helper
      * Get the slug of a tag by id or the current post's tag.
      *
      * @access  public
-     * @param  int         $tag_id Tag id or null for tag of current post (optional) (Default NULL)
+     * @param  int|null    $tag_id Tag id or null for tag of current post (optional) (Default NULL)
      * @return string|null
      */
     public function the_tag_slug(int $tag_id = null)
@@ -132,14 +133,14 @@ class Tag extends Helper
             return $tag->slug;
         }
 
-        return false;
+        return null;
     }
 
     /**
      * Get the full URL of a tag by id or current post's tag.
      *
      * @access  public
-     * @param  int         $tag_id Tag id or null for tag of current post (optional) (Default NULL)
+     * @param  int|null    $tag_id Tag id or null for tag of current post (optional) (Default NULL)
      * @return string|null
      */
     public function the_tag_url(int $tag_id = null)
@@ -165,7 +166,7 @@ class Tag extends Helper
             return $this->container->get('Request')->environment()->HTTP_HOST . $prefix . 'tag/' . $tag->slug . '/';
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -230,7 +231,7 @@ class Tag extends Helper
      * Is the current post or a post by id untagged ?
      *
      * @access  public
-     * @param  int  $post_id Post id or null for tag of current post (optional) (Default NULL)
+     * @param  int|null $post_id Post id or null for tag of current post (optional) (Default NULL)
      * @return bool
      */
     public function has_tags(int $post_id = null)

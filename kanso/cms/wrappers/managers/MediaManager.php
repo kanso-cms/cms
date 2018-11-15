@@ -44,6 +44,34 @@ class MediaManager extends Manager
     private $uploadDir;
 
     /**
+     * SQL query builder.
+     *
+     * @var \kanso\framework\database\query\Builder
+     */
+    protected $SQL;
+
+    /**
+     * Path to uploads.
+     *
+     * @var \kanso\framework\http\request\Environment
+     */
+    private $environment;
+
+    /**
+     * Gatekeeper instance.
+     *
+     * @var \kanso\cms\auth\Gatekeeper
+     */
+    private $gatekeeper;
+
+    /**
+     * Pixl instance.
+     *
+     * @var \kanso\framework\pixl\Image
+     */
+    private $pixl;
+
+    /**
      * Array of accepted mime types.
      *
      * @var array
@@ -74,10 +102,14 @@ class MediaManager extends Manager
      * Override inherited constructor.
      *
      * @access public
-     * @param \kanso\framework\database\query\Builder     $SQL          SQL query builder
-     * @param \kanso\cms\wrappers\providers\MediaProvider $provider     Provider manager
-     * @param string                                      $uploadDir    Path to upload files to
-     * @param array                                       $acceptedMime Array of accepted mime types
+     * @param \kanso\framework\database\query\Builder     $SQL            SQL query builder
+     * @param \kanso\cms\wrappers\providers\MediaProvider $provider       Provider manager
+     * @param \kanso\framework\http\request\Environment   $environment    Request environment
+     * @param \kanso\cms\auth\Gatekeeper                  $gatekeeper     Gatekeeper instance
+     * @param \kanso\framework\pixl\Image                 $pixl           Pixl Instance
+     * @param string                                      $uploadDir      Path to upload files to
+     * @param array                                       $acceptedMime   Array of accepted mime types
+     * @param array                                       $thumbnailSizes Array of thumbnail size configurations
      */
     public function __construct(Builder $SQL, MediaProvider $provider, Environment $environment, Gatekeeper $gatekeeper, Image $pixl, string $uploadDir, array $acceptedMime, array $thumbnailSizes)
     {
@@ -148,10 +180,10 @@ class MediaManager extends Manager
     }
 
 	/**
-	 * Gets a post by id.
+	 * Gets a media item by id.
 	 *
 	 * @access public
-	 * @param  int   $id Tag id
+	 * @param  int   $id Media id
 	 * @return mixed
 	 */
 	public function byId(int $id)
@@ -162,11 +194,11 @@ class MediaManager extends Manager
     /**
      * Create and save a single uploaded file.
      *
-     * @param  array                              $file     Single file item from the $_FILES super global
-     * @param  string                             $title    Title for the attachment
-     * @param  string                             $alt      Alt text for the attachment
-     * @param  bool                               $validate Allow only valid file types
-     * @return bool|CORRUPT_FILE|UNSUPPORTED_TYPE
+     * @param  array    $FILE     Single file item from the $_FILES super global
+     * @param  string   $title    Title for the attachment
+     * @param  string   $alt      Alt text for the attachment
+     * @param  bool     $validate Allow only valid file types
+     * @return bool|int
      */
     public function upload($FILE, $title = '', $alt = '', $validate = true)
     {
@@ -248,7 +280,7 @@ class MediaManager extends Manager
                 }
 
                 // Save the file
-                $saved = $pixl->save($dst, false);
+                $saved = $pixl->save($dst);
 
                 if (!$saved)
                 {

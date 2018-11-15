@@ -140,8 +140,8 @@ class Author extends Helper
      * Get the author's full URL of the current post or an author by id.
      *
      * @access  public
-     * @param  int|null     $author_id Author id or null for author of current post (optional) (default NULL)
-     * @return string|false
+     * @param  int|null    $author_id Author id or null for author of current post (optional) (default NULL)
+     * @return string|null
      */
     public function the_author_url(int $author_id = null)
     {
@@ -215,8 +215,8 @@ class Author extends Helper
      * Get the authors bio of the current post or an author by id.
      *
      * @access  public
-     * @param  int|null     $author_id Author id or null for author of current post (optional) (default NULL)
-     * @return string|false
+     * @param  int|null    $author_id Author id or null for author of current post (optional) (default NULL)
+     * @return string|null
      */
     public function the_author_bio(int $author_id = null)
     {
@@ -250,8 +250,8 @@ class Author extends Helper
      * Get the authors twitter URL of the current post or an author by id.
      *
      * @access  public
-     * @param  int|null     $author_id Author id or null for author of current post (optional) (default NULL)
-     * @return string|false
+     * @param  int|null    $author_id Author id or null for author of current post (optional) (default NULL)
+     * @return string|null
      */
     public function the_author_twitter(int $author_id = null)
     {
@@ -285,8 +285,8 @@ class Author extends Helper
      * Get the authors google URL of the current post or an author by id.
      *
      * @access  public
-     * @param  int|null     $author_id Author id or null for author of current post (optional) (default NULL)
-     * @return string|false
+     * @param  int|null    $author_id Author id or null for author of current post (optional) (default NULL)
+     * @return string|null
      */
     public function the_author_google(int $author_id = null)
     {
@@ -320,8 +320,8 @@ class Author extends Helper
      * Get the authors facebook URL of the current post or an author by id.
      *
      * @access  public
-     * @param  int|null     $author_id Author id or null for author of current post (optional) (default NULL)
-     * @return string|false
+     * @param  int|null    $author_id Author id or null for author of current post (optional) (default NULL)
+     * @return string|null
      */
     public function the_author_facebook(int $author_id = null)
     {
@@ -354,8 +354,8 @@ class Author extends Helper
      * Get the authors instagram URL of the current post or an author by id.
      *
      * @access  public
-     * @param  int|null     $author_id Author id or null for author of current post (optional) (default NULL)
-     * @return string|false
+     * @param  int|null    $author_id Author id or null for author of current post (optional) (default NULL)
+     * @return string|null
      */
     public function the_author_instagram(int $author_id = null)
     {
@@ -368,7 +368,7 @@ class Author extends Helper
                 return $author->instagram;
             }
 
-            return false;
+            return null;
         }
 
         if (!empty($this->parent->post))
@@ -379,7 +379,8 @@ class Author extends Helper
                 return $author->instagram;
             }
         }
-        return false;
+
+        return null;
     }
 
     /**

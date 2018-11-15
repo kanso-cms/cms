@@ -243,7 +243,7 @@ class Post extends Wrapper
 	 *
 	 * @access public
 	 * @param string $key   Key to set
-	 * @param mixef  $value Value to save
+	 * @param mixed  $value Value to save
 	 */
 	private function setPending(string $key, $value)
 	{
@@ -359,7 +359,7 @@ class Post extends Wrapper
 	 * Get the post author.
 	 *
 	 * @access private
-	 * @return \kanso\cms\wrappers\Author|null
+	 * @return \kanso\cms\wrappers\User|null
 	 */
 	private function getTheAuthor()
 	{
@@ -667,7 +667,7 @@ class Post extends Wrapper
 	 * Creates tags if they don't already exist.
 	 *
 	 * @access private
-	 * @param  mixed $category tag names, or tag wrapper
+	 * @param  mixed $tags tag names, array of Tags, or array of tag names
 	 * @return array
 	 */
 	private function createTags($tags): array
@@ -749,12 +749,12 @@ class Post extends Wrapper
 	/**
 	 * Convert a title to a slug with permalink structure.
 	 *
-	 * @param  string      $title        The title of the article
-	 * @param  string      $categorySlug The category slug
-	 * @param  string      $authorSlug   The author's slug
-	 * @param  int         $created      A unix timestamp of when the article was created
-	 * @param  sting|false $_slug        Existing slug - may or may not be set
-	 * @return string      The slug to the article
+	 * @param  string       $title        The title of the article
+	 * @param  string       $categorySlug The category slug
+	 * @param  string       $authorSlug   The author's slug
+	 * @param  int          $created      A unix timestamp of when the article was created
+	 * @param  string|false $_slug        Existing slug - may or may not be set
+	 * @return string       The slug to the article
 	 */
 	private function titleToSlug($title, $categorySlug, $authorSlug, $created, $type, $_slug)
 	{
@@ -865,7 +865,7 @@ class Post extends Wrapper
      * Returns the category slug with nested.
      *
      * @access  public
-     * @param  kanso\cms\wrappers\Category $category Category wrapper
+     * @param  \kanso\cms\wrappers\Category|null $category Category wrapper
      * @return string
      */
     private function the_category_slug(Category $category = null): string

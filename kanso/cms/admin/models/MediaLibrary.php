@@ -98,7 +98,7 @@ class MediaLibrary extends BaseModel
             }
         }
 
-        throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+        throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
     }
 
     /**
@@ -152,7 +152,7 @@ class MediaLibrary extends BaseModel
      * Delete images by ids.
      *
      * @access private
-     * @return array|false
+     * @return string|false
      */
     private function deleteMedia()
     {
@@ -183,7 +183,7 @@ class MediaLibrary extends BaseModel
      * Update an attachment info.
      *
      * @access private
-     * @return array|false
+     * @return string|false
      */
     private function updateMediaInfo()
     {

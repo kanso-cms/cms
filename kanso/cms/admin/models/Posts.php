@@ -30,7 +30,7 @@ class Posts extends BaseModel
      * Set the post type to filter.
      *
      * @access public
-     * @param array $ids List of post ids
+     * @param string $postType Post tyype
      */
     public function setPostType(string $postType)
     {
@@ -167,17 +167,17 @@ class Posts extends BaseModel
 
         if (!isset($this->post['bulk_action']) || empty($this->post['bulk_action']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         if (!in_array($this->post['bulk_action'], ['published', 'draft', 'delete', 'update']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         if (!isset($this->post['posts']) || !is_array($this->post['posts']) || empty($this->post['posts']))
         {
-            throw new RequestException('Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
+            throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
         return true;

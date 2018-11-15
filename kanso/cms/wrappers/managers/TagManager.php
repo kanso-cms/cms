@@ -29,8 +29,8 @@ class TagManager extends Manager
 	 * Creates a new tag.
 	 *
 	 * @access public
-	 * @param  string $name Tag name
-	 * @param  string $slug Tag slug (optional) (default null)
+	 * @param  string      $name Tag name
+	 * @param  string|null $slug Tag slug (optional) (default null)
 	 * @return mixed
 	 */
 	public function create(string $name, string $slug = null)

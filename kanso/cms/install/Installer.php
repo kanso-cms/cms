@@ -63,7 +63,7 @@ class Installer
      *
      * @access public
      * @param \kanso\framework\config\Config     $config   Config manager
-     * @param \kanso\framework\database\Database $Database Database manager
+     * @param \kanso\framework\database\Database $database Database manager
      * @param \kanso\cms\access\Access           $access   Access module
      */
     public function __construct(Config $config, Database $database, Access $access, string $installPath)
@@ -107,7 +107,6 @@ class Installer
      * @param \kanso\framework\http\request\Request   $request  Framework Request instance
      * @param \kanso\framework\http\response\Response $response Framework Response instance
      * @param \Closure                                $next     Next middleware layer
-     * @param string                                  $pageType The page type being loaded
      */
     public function run(Request $request, Response $response, Closure $next)
     {
@@ -136,7 +135,6 @@ class Installer
      * @param \kanso\framework\http\request\Request   $request  Framework Request instance
      * @param \kanso\framework\http\response\Response $response Framework Response instance
      * @param \Closure                                $next     Next middleware layer
-     * @param string                                  $pageType The page type being loaded
      */
     public function display(Request $request, Response $response, Closure $next)
     {
@@ -178,8 +176,8 @@ class Installer
     /**
      * Install the Kanso database.
      *
-     * @access private
-     * @return null
+     * @access   private
+     * @suppress PhanUndeclaredVariable
      */
     private function installDB()
     {
