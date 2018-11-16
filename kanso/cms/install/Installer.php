@@ -74,11 +74,11 @@ class Installer
 
         $this->access = $access;
 
-        $this->installPath = $installPath . DIRECTORY_SEPARATOR . 'Install.php';
+        $this->installPath = $installPath . DIRECTORY_SEPARATOR . 'install.php';
 
-        if (file_exists($installPath . DIRECTORY_SEPARATOR . 'Install.sample.php'))
+        if (file_exists($installPath . DIRECTORY_SEPARATOR . 'install.sample.php'))
         {
-            throw new NotFoundException('Could not install Kanso. You need to rename the "Install.sample.php" to "Install.php".');
+            throw new NotFoundException('Could not install Kanso. You need to rename the "install.sample.php" to "install.php".');
         }
 
         $this->isInstalled();
