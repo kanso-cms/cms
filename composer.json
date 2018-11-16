@@ -37,7 +37,7 @@
 		"mockery/mockery": "^1.0",
 		"php-mock/php-mock": "^1.0",
 		"friendsofphp/php-cs-fixer": "^2.13",
-		"sami/sami": "v4.1.2"
+		"phan/phan": "^1.1"
 	},
 	"prefer-stable": true,
 	"minimum-stability": "dev"
