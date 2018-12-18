@@ -175,9 +175,9 @@ class Validator
 	 * @param array                          $input     Input
 	 * @param array                          $ruleSets  Rule sets
 	 * @param array                          $filters   Filter sets (optional default [])
-	 * @param \kanso\framework\ioc\Container $container Container
+	 * @param \kanso\framework\ioc\Container $container Container (optional) (default null)
 	 */
-	public function __construct(array $input, array $ruleSets, array $filters = [], Container $container)
+	public function __construct(array $input, array $ruleSets, array $filters = [], Container $container = null)
 	{
 		$this->input = $input;
 
@@ -185,7 +185,7 @@ class Validator
 
 		$this->filterSets = $filters;
 
-		$this->container = $container;
+		$this->container = !$container ? Container::instance() : $container;
 	}
 
 	/**

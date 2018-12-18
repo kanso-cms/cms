@@ -141,9 +141,7 @@ class ValidatorTest extends TestCase
 			'url'                      => ['required', 'url'],
 		];
 
-		$container = Container::instance();
-
-		$validator = new Validator($fields, $rules, [], $container);
+		$validator = new Validator($fields, $rules, []);
 
 		$this->assertFalse($validator->isValid());
 
@@ -211,9 +209,7 @@ class ValidatorTest extends TestCase
 			'url_encode'  => 'foo+bar',
 		];
 
-		$container = Container::instance();
-
-		$validator = new Validator($fields, [], $filters, $container);
+		$validator = new Validator($fields, [], $filters);
 
 		$this->assertEquals($expected, $validator->filter());
 	}
@@ -250,9 +246,7 @@ class ValidatorTest extends TestCase
 			'numeric'     => '',
 		];
 
-		$container = Container::instance();
-
-		$validator = new Validator($fields, [], $filters, $container);
+		$validator = new Validator($fields, [], $filters);
 
 		$this->assertEquals($expected, $validator->filter());
 	}
