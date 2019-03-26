@@ -7,9 +7,9 @@
 
 namespace kanso\framework\validator\rules;
 
-use kanso\framework\validator\rules\traits\ValidatesWhenEmptyTrait;
-
 use function in_array;
+
+use kanso\framework\validator\rules\traits\ValidatesWhenEmptyTrait;
 use function sprintf;
 
 /**

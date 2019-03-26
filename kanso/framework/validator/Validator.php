@@ -7,6 +7,9 @@
 
 namespace kanso\framework\validator;
 
+use function array_unique;
+use function compact;
+use function in_array;
 use kanso\framework\ioc\Container;
 use kanso\framework\utility\Arr;
 use kanso\framework\utility\Str;
@@ -32,10 +35,10 @@ use kanso\framework\validator\rules\AlphanumericDash;
 use kanso\framework\validator\rules\AlphaSpace;
 use kanso\framework\validator\rules\Email;
 use kanso\framework\validator\rules\ExactLength;
+
 use kanso\framework\validator\rules\FloatingPoint;
 use kanso\framework\validator\rules\GreaterThan;
 use kanso\framework\validator\rules\GreaterThanOrEqualTo;
-
 use kanso\framework\validator\rules\In;
 use kanso\framework\validator\rules\Integer;
 use kanso\framework\validator\rules\IP;
@@ -49,13 +52,10 @@ use kanso\framework\validator\rules\NotIn;
 use kanso\framework\validator\rules\Regex;
 use kanso\framework\validator\rules\Required;
 use kanso\framework\validator\rules\RuleInterface;
+
 use kanso\framework\validator\rules\URL;
 use kanso\framework\validator\rules\WithParametersInterface;
 use RuntimeException;
-
-use function array_unique;
-use function compact;
-use function in_array;
 use function vsprintf;
 
 /**
@@ -172,9 +172,9 @@ class Validator
 	/**
 	 * Constructor.
 	 *
-	 * @param array                          $input     Input
-	 * @param array                          $ruleSets  Rule sets
-	 * @param array                          $filters   Filter sets (optional default [])
+	 * @param array                               $input     Input
+	 * @param array                               $ruleSets  Rule sets
+	 * @param array                               $filters   Filter sets (optional default [])
 	 * @param \kanso\framework\ioc\Container|null $container Container (optional) (default null)
 	 */
 	public function __construct(array $input, array $ruleSets, array $filters = [], Container $container = null)
