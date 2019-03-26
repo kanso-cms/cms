@@ -88,7 +88,7 @@ class Settings extends BaseModel
      * @access private
      * @return array|false
      */
-    public function parsePost()
+    private function parsePost()
     {
         if (isset($this->post['form_name']))
         {

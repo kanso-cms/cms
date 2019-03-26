@@ -200,7 +200,7 @@ class ConnectionHandler
 	/**
 	 * Tries to load the current query from the cache.
 	 *
-	 * @access public
+	 * @access private
 	 * @param  string $query The type of query being executed e.g 'select'|'delete'|'update'
 	 * @return bool
 	 */
@@ -219,7 +219,7 @@ class ConnectionHandler
 	/**
 	 * Tries to load the current query from the cache.
 	 *
-	 * @access public
+	 * @access private
 	 * @param  string      $query The type of query being executed e.g 'select'|'delete'|'update'
 	 * @return array|false
 	 */

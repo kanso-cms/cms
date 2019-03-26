@@ -100,8 +100,8 @@ class Validator
 	 */
 	private $rules =
 	[
-		'alpha_space'              => AlphaSpace::class,
 		'alpha'                    => Alpha::class,
+		'alpha_space'              => AlphaSpace::class,
 		'alpha_dash'               => AlphanumericDash::class,
 		'alpha_numeric'            => Alphanumeric::class,
 		'email'                    => Email::class,
@@ -175,7 +175,7 @@ class Validator
 	 * @param array                          $input     Input
 	 * @param array                          $ruleSets  Rule sets
 	 * @param array                          $filters   Filter sets (optional default [])
-	 * @param \kanso\framework\ioc\Container $container Container (optional) (default null)
+	 * @param \kanso\framework\ioc\Container|null $container Container (optional) (default null)
 	 */
 	public function __construct(array $input, array $ruleSets, array $filters = [], Container $container = null)
 	{

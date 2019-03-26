@@ -58,7 +58,7 @@ class SecurityService extends Service
 	/**
 	 * Returns the encryption library.
 	 *
-	 * @access private
+	 * @access protected
 	 * @return mixed
 	 */
 	protected function getEncrypter()
@@ -76,7 +76,7 @@ class SecurityService extends Service
 	/**
 	 * Returns the the Open SSL Encrypter/Decrypter implementation.
 	 *
-	 * @access private
+	 * @access protected
 	 * @param  array                                               $configuration Encryption configuration
 	 * @return \kanso\framework\security\crypto\encrypters\OpenSSL
 	 */
@@ -88,7 +88,7 @@ class SecurityService extends Service
 	/**
 	 * Returns the password hashing library.
 	 *
-	 * @access private
+	 * @access protected
 	 * @return mixed
 	 */
 	protected function getPassword()
@@ -106,7 +106,7 @@ class SecurityService extends Service
 	/**
 	 * Returns the the native PHP password hasher.
 	 *
-	 * @access private
+	 * @access protected
 	 * @param  array                                                   $passwordConfiguration Configuration to pass to constructor
 	 * @return \kanso\framework\security\password\encrypters\NativePHP
 	 */
@@ -118,7 +118,7 @@ class SecurityService extends Service
 	/**
 	 * Returns the gibberish detector.
 	 *
-	 * @access private
+	 * @access protected
 	 * @return \kanso\framework\security\spam\gibberish\Gibberish
 	 */
 	protected function getGibberish(): Gibberish

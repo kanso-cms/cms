@@ -116,7 +116,7 @@ class FileStore implements StoreInterface
     /**
      * Converts a key to the file path.
      *
-     * @access public
+     * @access private
      * @param string $key Key to convert
      */
     private function keyToFile(string $key): string

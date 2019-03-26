@@ -69,7 +69,7 @@ abstract class BaseModel extends Model
 	/**
 	 * Returns query builder instance.
 	 *
-	 * @access public
+	 * @access protected
 	 * @return \kanso\framework\database\query\Builder
 	 */
 	protected function sql(): Builder
@@ -85,7 +85,7 @@ abstract class BaseModel extends Model
 	/**
 	 * Is the current client logged in ?
 	 *
-	 * @access public
+	 * @access protected
 	 * @return bool
 	 */
 	protected function isLoggedIn(): bool

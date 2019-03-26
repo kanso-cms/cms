@@ -62,7 +62,7 @@ class Crm
     /**
      * Return a new query builder instance.
      *
-     * @access private
+     * @access protected
      * @return \kanso\framework\database\query\Builder
      */
     protected function sql(): Builder

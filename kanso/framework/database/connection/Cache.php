@@ -208,7 +208,7 @@ class Cache
     /**
      * Returns the cache key based on query and params.
      *
-     * @access public
+     * @access private
      * @param  string $query  SQL query string
      * @param  array  $params SQL query parameters
      * @return string
@@ -228,7 +228,7 @@ class Cache
     /**
      * Gets the table name based on the query string.
      *
-     * @access protected
+     * @access private
      * @param  string $query SQL query string
      * @return string
      */

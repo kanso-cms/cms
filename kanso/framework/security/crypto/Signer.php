@@ -85,7 +85,7 @@ class Signer
 	/**
 	 * Compares to strings properly.
 	 *
-	 * @access public
+	 * @access private
 	 * @param  string $string1 The first string
 	 * @param  string $string2 The second string
 	 * @return bool

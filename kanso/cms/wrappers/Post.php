@@ -241,7 +241,7 @@ class Post extends Wrapper
 	/**
 	 * Set a pending key/value on a join table that needs to be saved.
 	 *
-	 * @access public
+	 * @access private
 	 * @param string $key   Key to set
 	 * @param mixed  $value Value to save
 	 */

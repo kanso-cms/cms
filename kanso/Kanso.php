@@ -43,7 +43,7 @@ class Kanso
 	/**
 	 * Constructor. Boots application.
 	 *
-	 * @access public
+	 * @access protected
 	 */
 	protected function __construct()
 	{

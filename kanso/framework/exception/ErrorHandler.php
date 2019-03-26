@@ -220,7 +220,7 @@ class ErrorHandler
 	/**
 	 * Should the exception be logged?
 	 *
-	 * @access public
+	 * @access protected
 	 * @param  \Throwable $exception An exception object
 	 * @return bool
 	 */

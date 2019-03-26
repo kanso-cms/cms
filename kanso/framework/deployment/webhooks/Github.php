@@ -238,7 +238,7 @@ class Github implements WebhookInterface
     /**
      * Validate the github signature and decode the payload.
      *
-     * @access public
+     * @access private
      */
     private function verifySignature(): bool
     {

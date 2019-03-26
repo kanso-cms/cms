@@ -117,7 +117,7 @@ class Onion
      * Return a closure for executing the next middleware layer.
      *
      * @access private
-     * @throws \kanso\framework\http\response\exceptions\ForbiddenException If the onion is finished peeling and the response is a 404
+     * @throws \kanso\framework\http\response\exceptions\NotFoundException If the onion is finished peeling and the response is a 404
      * @return Closure
      */
     private function getNextLayer(): Closure
@@ -144,8 +144,8 @@ class Onion
     /**
      * When the onion is completely peeled return the response.
      *
-     * @access private
-     * @throws \kanso\framework\http\response\exceptions\ForbiddenException
+     * @access public
+     * @throws \kanso\framework\http\response\exceptions\NotFoundException
      */
     public function peeled(): Response
     {

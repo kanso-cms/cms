@@ -40,7 +40,7 @@ class GatekeeperService extends Service
 	/**
 	 * Loads the email adapter.
 	 *
-	 * @access public
+	 * @access private
 	 * @return \kanso\cms\auth\adapters\EmailAdapter
 	 */
 	private function emailAdapter(): EmailAdapter
