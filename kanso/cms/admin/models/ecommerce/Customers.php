@@ -89,8 +89,7 @@ class Customers extends BaseModel
      * Delete an order.
      *
      * @access private
-     * @param array  $ids    List of post ids
-     * @param string $status Post status to change to
+     * @param array $ids List of post ids
      */
     private function delete(array $ids)
     {

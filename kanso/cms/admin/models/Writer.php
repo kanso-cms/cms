@@ -346,7 +346,7 @@ class Writer extends BaseModel
 
             foreach ($offerKeys as $postKey => $offerKey)
             {
-                $postKey = str_replace('X', $i, $postKey);
+                $postKey = str_replace('X', strval($i), $postKey);
 
                 if (isset($_POST[$postKey]))
                 {

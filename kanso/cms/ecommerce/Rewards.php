@@ -49,7 +49,7 @@ class Rewards extends UtilityBase
 	 * Get user's un-used coupons.
 	 *
 	 * @access public
-	 * @param  int                      $userId user_id (optional) (default null)
+	 * @param  int|null                 $userId user_id (optional) (default null)
 	 * @throws InvalidArgumentException If current user is not logged in and $userId is not provided
 	 * @return array
 	 */
@@ -69,7 +69,7 @@ class Rewards extends UtilityBase
 	 * Get users loyalty points balance.
 	 *
 	 * @access public
-	 * @param  int                      $userId user_id (optional) (default null)
+	 * @param  int|null                 $userId user_id (optional) (default null)
 	 * @throws InvalidArgumentException If current user is not logged in and $userId is not provided
 	 * @return int
 	 */
@@ -98,7 +98,7 @@ class Rewards extends UtilityBase
 	 * Get user lifetime loyalty points.
 	 *
 	 * @access public
-	 * @param  int                      $userId user_id (optional) (default null)
+	 * @param  int|null                 $userId user_id (optional) (default null)
 	 * @throws InvalidArgumentException If current user is not logged in and $userId is not provided
 	 * @return int
 	 */
@@ -123,7 +123,7 @@ class Rewards extends UtilityBase
 	 * Get user loyalty redemption history.
 	 *
 	 * @access public
-	 * @param  int                      $userId user_id (optional) (default null)
+	 * @param  int|null                 $userId user_id (optional) (default null)
 	 * @throws InvalidArgumentException If current user is not logged in and $userId is not provided
 	 * @return array
 	 */
@@ -161,7 +161,7 @@ class Rewards extends UtilityBase
 	 * @access public
 	 * @param  int                      $points      How many points to add
 	 * @param  string                   $description Description of event
-	 * @param  int                      $userId      user_id (optional) (default null)
+	 * @param  int|null                 $userId      user_id (optional) (default null)
 	 * @throws InvalidArgumentException If current user is not logged in and $userId is not provided
 	 */
 	public function addPoints(int $points, string $description, int $userId = null)
@@ -188,7 +188,7 @@ class Rewards extends UtilityBase
 	 * @access public
 	 * @param  int                      $points      How many points to add
 	 * @param  string                   $description Description of event
-	 * @param  int                      $userId      user_id (optional) (default null)
+	 * @param  int|null                 $userId      user_id (optional) (default null)
 	 * @throws InvalidArgumentException If current user is not logged in and $userId is not provided
 	 */
 	public function minusPoints(int $points, string $description, int $userId = null)
@@ -217,7 +217,7 @@ class Rewards extends UtilityBase
 	 * @param  string                   $description Description of event
 	 * @param  int                      $discount    Discount percentage of coupon
 	 * @param  int                      $points      Points cost of coupon redemption
-	 * @param  int                      $userId      user_id (optional) (default null)
+	 * @param  int|null                 $userId      user_id (optional) (default null)
 	 * @throws InvalidArgumentException If current user is not logged in and $userId is not provided
 	 * @return string
 	 */
@@ -266,7 +266,7 @@ class Rewards extends UtilityBase
 	 * Calculate discount from points.
 	 *
 	 * @access public
-	 * @param  float $spend How much did a user spend
+	 * @param  int $points How much did a user spend
 	 * @return int
 	 */
 	public function calcDiscount(int $points): int

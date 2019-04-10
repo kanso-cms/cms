@@ -43,9 +43,9 @@ class Checkout extends UtilityBase
      * Handle checkout.
      *
      * @access public
-     * @param  array                    $option Array of configuration options
+     * @param  array                    $options Array of configuration options
      * @throws InvalidArgumentException
-     * @return string|array
+     * @return string|array|int
      */
     public function payment(array $options)
     {
@@ -74,7 +74,7 @@ class Checkout extends UtilityBase
         $cart = $this->Ecommerce->cart()->items();
 
         // Figure out the amount to charge
-        $prices = $this->getCheckoutPrice($cart, $coupon);
+        $prices = $this->getCheckoutPrice($coupon);
 
         // Get the card if it was provided
         $card = $options['billing_use_new_card'] === false ? $this->Ecommerce->braintree()->findCustomerCard($options['billing_existing_card'], $this->Gatekeeper->getUser()->id) : false;
@@ -116,14 +116,14 @@ class Checkout extends UtilityBase
 
         // Attempt the transaction with Braintree
         $nonceOrToken = $options['billing_use_new_card'] === false ? $card->token : $options['billing_method_nonce'];
-        $transaction  = $this->processTransaction($nonceOrToken, $prices['total'], $options['billing_use_new_card'], !$this->Ecommerce->braintree()->customer(), $userId);
+        $transaction  = $this->processTransaction($nonceOrToken, $prices['total'], !$this->Ecommerce->braintree()->customer(), $options['billing_use_new_card'], $userId);
 
         // Validate the transaction
         // If the transaction fails for any reason, we need to delete the user
         // we created, if we created one
         if ($transaction === 'processor_declined' || !$transaction)
         {
-            if ($createdUser)
+            if ($createdUser && $user)
             {
                 $user->delete();
             }
@@ -132,7 +132,7 @@ class Checkout extends UtilityBase
         }
         elseif ($transaction === 'settlement_declined')
         {
-            if ($createdUser)
+            if ($createdUser && $user)
             {
                 $user->delete();
             }
@@ -141,7 +141,7 @@ class Checkout extends UtilityBase
         }
 
         // Prep the base row for the transaction
-        $transactionRow = $this->getTransactionRow($options, $this->getTransactionItems($cart), $prices, $coupon, $userId, $transaction->id);
+        $transactionRow = $this->getTransactionRow($options, $this->getTransactionItems($cart), $transaction->id, $prices, $coupon, $userId);
 
         // Prep the shipping row
         if ($options['shipping_use_new_address'] === false)
@@ -317,7 +317,7 @@ class Checkout extends UtilityBase
      *
      * @access private
      * @param  array       $options POST shipping details
-     * @param  int         $userId  Current user id (optional) (default null)
+     * @param  int|null    $userId  Current user id (optional) (default null)
      * @return array|false
      */
     private function getShippingRow(array $options, int $userId = null)
@@ -341,13 +341,16 @@ class Checkout extends UtilityBase
      * Get the base transaction row to insert into the DB.
      *
      * @access private
-     * @param  array $options Array with credit card details
-     * @param  array $items   Cart item descriptions to serialize
-     * @param  array $prices  Array of price breakdown
-     * @param  int   $userId  Current user id (optional) (default null)
+     * @param array    $options       Array with credit card details
+     * @param array    $items         Cart item descriptions to serialize
+     * @param string   $transactionId Braintree transaction id
+     * @param array    $prices        Array of price breakdown
+     * @param int|null $coupon        Coupon discount percentage (optional) (default null)
+     * @param int|null $userId        Current user id (optional) (default null)
+     *
      * @return array
      */
-    private function getTransactionRow(array $options, array $items, array $prices, $coupon = null, int $userId = null, $transactionId): array
+    private function getTransactionRow(array $options, array $items, string $transactionId, array $prices, $coupon = null, int $userId = null): array
     {
         return
         [
@@ -357,7 +360,7 @@ class Checkout extends UtilityBase
             'date'              => time(),
             'status'            => 'received',
             'shipped'           => -1,
-            'eta'               => time('+7 days'),
+            'eta'               => strtotime('+7 days'),
             'card_type'         => $options['billing_card_type'],
             'card_last_four'    => $options['billing_card_last_four'],
             'card_expiry'       => $options['billing_card_mm'] . '/' . $options['billing_card_yy'],
@@ -413,11 +416,10 @@ class Checkout extends UtilityBase
      * Get the price to checkout.
      *
      * @access private
-     * @param  string    $nonceOrToken A payment method nonce or existing card token
-     * @param  float|int $coupon       The amount of the transaction
+     * @param  float|int|false $coupon The amount of the transaction
      * @return array
      */
-    private function getCheckoutPrice(array $cart, $coupon = false): array
+    private function getCheckoutPrice($coupon = false): array
     {
         $subtotal     = $this->Ecommerce->cart()->subTotal();
         $shippingCost = $this->Ecommerce->cart()->shippingCost();
@@ -446,14 +448,14 @@ class Checkout extends UtilityBase
      * Process the transaction with Braintree.
      *
      * @access private
-     * @param  string      $nonceOrToken   A payment method nonce or existing card token
-     * @param  float       $amount         The amount of the transaction
-     * @param  bool        $useNonce       Pay using a new card
-     * @param  bool        $createCustomer Create a new customer
-     * @param  int         $userId         User id to create customer from (optional) (default null)
-     * @return sting|false
+     * @param  string                              $nonceOrToken   A payment method nonce or existing card token
+     * @param  float                               $amount         The amount of the transaction
+     * @param  bool                                $createCustomer Create a new customer
+     * @param  bool                                $useNonce       Pay using a new card
+     * @param  int|null                            $userId         User id to create customer from (optional) (default null)
+     * @return string|false|\Braintree\Transaction
      */
-    private function processTransaction($nonceOrToken, $amount, $useNonce = false, bool $createCustomer, int $userId = null)
+    private function processTransaction($nonceOrToken, $amount, bool $createCustomer, $useNonce = false, int $userId = null)
     {
         $sale =
         [
@@ -517,7 +519,7 @@ class Checkout extends UtilityBase
      * Validate and sanitize checkout options.
      *
      * @access private
-     * @param  array                    $option Array of configuration options
+     * @param  array                    $options Array of configuration options
      * @throws InvalidArgumentException
      * @return array
      */
@@ -650,8 +652,8 @@ class Checkout extends UtilityBase
      * validate that the email address they entered does not already exist.
      *
      * @access private
-     * @param  array $option Array of configuration options
-     * @return array
+     * @param  array $options Array of configuration options
+     * @return bool
      */
     private function validateUserExists(array $options): bool
     {
@@ -673,7 +675,7 @@ class Checkout extends UtilityBase
      * validate that the email address they entered does not already exist.
      *
      * @access private
-     * @param  array                    $option Array of configuration options
+     * @param  array                    $options Array of configuration options
      * @throws InvalidArgumentException
      */
     private function validateCreditCardOptions(array $options)
@@ -709,7 +711,7 @@ class Checkout extends UtilityBase
      * existing address validate it exists and belongs to them.
      *
      * @access private
-     * @param  array                    $option Array of configuration options
+     * @param  array                    $options Array of configuration options
      * @throws InvalidArgumentException
      */
     private function validateAddressOptions(array $options)
@@ -732,7 +734,7 @@ class Checkout extends UtilityBase
      * If a coupon is being used, validate it exists and is not used.
      *
      * @access private
-     * @param  array                    $option Array of configuration options
+     * @param  array                    $options Array of configuration options
      * @throws InvalidArgumentException
      */
     private function validateCouponOptions(array $options)

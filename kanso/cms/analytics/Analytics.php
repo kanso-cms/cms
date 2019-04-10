@@ -69,10 +69,13 @@ class Analytics extends Model
      * Constructor.
      *
      * @access public
-     * @param string $gAnalyticsId Google analytics tracking id
-     * @param string $gAdwordsId   Google adwords tracking id
-     * @param string $gAdwordsId   Google adwords conversion id
-     * @param string $fbPixelId    Facebook pixel tracking id
+     * @param bool   $gAnalyticsEnabled Enable or disable google analytics
+     * @param string $gAnalyticsId      Google analytics tracking id
+     * @param bool   $adwordsEnabled    Enable or disable google adwords
+     * @param string $gAdwordsId        Google adwords tracking id
+     * @param string $googleAwCvId      Google adwords conversion id
+     * @param bool   $fbEnabled         Enable or disable fb pixel
+     * @param string $fbPixelId         Facebook pixel tracking id
      */
     public function __construct(bool $gAnalyticsEnabled, string $gAnalyticsId, bool $adwordsEnabled, string $gAdwordsId, string $googleAwCvId, bool $fbEnabled, string $fbPixelId)
     {
@@ -220,7 +223,7 @@ class Analytics extends Model
             {
                 'value'    : '" . number_format(($order['sub-total'] + $order['shipping-cost']), 2, '.', '') . "',
                 'currency' : 'AUD',
-                'items'    : " . str_replace('\u003E', '>', json_encode($items, true)) . '
+                'items'    : " . str_replace('\u003E', '>', json_encode($items)) . '
             });
         </script>');
     }
@@ -288,7 +291,7 @@ class Analytics extends Model
                 'currency'       : 'AUD',
                 'tax'            : " . number_format((10 / 100) * $order['total'], 2, '.', '') . ",
                 'shipping'       : " . number_format($order['shipping_costs'], 2, '.', '') . ",
-                'items'          : " . str_replace('\u003E', '>', json_encode($items, true)) . "
+                'items'          : " . str_replace('\u003E', '>', json_encode($items)) . "
             });
         </script>
         <script>
@@ -323,13 +326,11 @@ class Analytics extends Model
             ];
         }
 
-        ini_set('serialize_precision', -1);
-
         return $this->cleanWhiteSpace("
         <script type=\"text/javascript\">
             fbq('track', 'Purchase',
             {
-                contents     : " . json_encode($contents, true) . ",
+                contents     : " . json_encode($contents) . ",
                 content_type : 'product',
                 value        : " . $order['total'] . ",
                 currency     : 'AUD'
@@ -375,7 +376,7 @@ class Analytics extends Model
                 'ln' => $lastname,
             ];
 
-            return json_encode($fbUser, true);
+            return json_encode($fbUser);
         }
         else
         {

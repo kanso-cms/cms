@@ -18,8 +18,8 @@ class Reviews extends UtilityBase
      * Get product reviews sorted the upvotes (most relevant) from a product review.
      *
      * @access public
-     * @param  int $productId Product post id
-     * @return int
+     * @param  int   $productId Product post id
+     * @return array
      */
     public function all(int $productId): array
     {
@@ -27,7 +27,7 @@ class Reviews extends UtilityBase
 
         usort($reviews, function($a, $b)
         {
-            return $this->reviewUpVotes($b->id) - $this->reviewUpVotes($a->id);
+            return $this->upVotes($b->id) - $this->upVotes($a->id);
         });
 
         return $reviews;

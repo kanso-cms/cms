@@ -7,7 +7,6 @@
 
 namespace kanso\cms\admin\models\ecommerce;
 
-use app\models\utility\Emails;
 use kanso\cms\admin\models\BaseModel;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
@@ -90,8 +89,7 @@ class Orders extends BaseModel
      * Delete an order.
      *
      * @access private
-     * @param array  $ids    List of post ids
-     * @param string $status Post status to change to
+     * @param array $ids List of post ids
      */
     private function delete(array $ids)
     {
@@ -160,7 +158,7 @@ class Orders extends BaseModel
         $senderName   = 'Vebena';
         $senderEmail  = 'orders@vebena.com.au';
         $emailSubject = 'Your Order Has Been Posted';
-        $emailContent = Emails::template('tracking', $emailData);
+        $emailContent = $this->Email->preset('order-sent', $emailData, true);
         $emailTo      = $shippingRow['email'];
 
         $this->Email->send($emailTo, $senderName, $senderEmail, $emailSubject, $emailContent);

@@ -31,7 +31,7 @@ class BrainTree extends UtilityBase
     /**
      * Braintree customer object.
      *
-     * @var \Braintree_Customer
+     * @var \Braintree\Customer|null
      */
     private $btCustomer;
 
@@ -152,7 +152,8 @@ class BrainTree extends UtilityBase
      * Create New Braintree customer.
      *
      * @access public
-     * @return \Braintree_Customer|null
+     * @throws Exception                                            If customer couldn't be created
+     * @return \Braintree\Result\Error|\Braintree\Result\Successful
      */
     public function createCustomer()
     {
@@ -180,7 +181,7 @@ class BrainTree extends UtilityBase
      * Create New Braintree customer.
      *
      * @access public
-     * @return \PaymentMethod|false
+     * @return \Braintree\PaymentMethod|false
      */
     public function addCard(string $nonce)
     {
@@ -233,7 +234,7 @@ class BrainTree extends UtilityBase
      * Find braintree customer.
      *
      * @access private
-     * @return \Braintree_Customer|null
+     * @return \Braintree\Result\Error|\Braintree\Result\Successful|null
      */
     private function getBtCustomer()
     {

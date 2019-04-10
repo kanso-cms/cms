@@ -7,8 +7,6 @@
 
 namespace kanso\cms\ecommerce;
 
-use kanso\cms\wrappers\Post;
-
 /**
  * Shopping Cart Utility Model.
  *
@@ -86,7 +84,7 @@ class Cart extends UtilityBase
      * Is the shopping cart empty ?
      *
      * @access public
-     * @return int
+     * @return bool
      */
     public function isEmpty(): bool
     {
@@ -159,7 +157,7 @@ class Cart extends UtilityBase
      *
      * @access public
      * @param int    $productId Product post id
-     * @param string $productId Product offer id
+     * @param string $offerId   Product offer id
      */
     public function add(int $productId, string $offerId)
     {
@@ -216,7 +214,7 @@ class Cart extends UtilityBase
      *
      * @access public
      * @param int    $productId Product post id
-     * @param string $productId Product offer id (sku)
+     * @param string $offerId   Product offer id (sku)
      */
     public function remove(int $productId, string $offerId)
     {
@@ -246,7 +244,7 @@ class Cart extends UtilityBase
      *
      * @access public
      * @param int    $productId Product post id
-     * @param string $productId Product offer id (sku)
+     * @param string $offerId   Product offer id (sku)
      */
     public function minus(int $productId, string $offerId)
     {
@@ -316,14 +314,14 @@ class Cart extends UtilityBase
             $subtotal += ($item['quantity'] * $item['offer']['sale_price']);
         }
 
-        return number_format($subtotal, 2);
+        return floatval(number_format($subtotal, 2));
     }
 
     /**
      * Calculate the shipping cost.
      *
      * @access public
-     * @return int
+     * @return float
      */
     public function shippingCost(): float
     {

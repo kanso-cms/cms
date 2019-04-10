@@ -7,6 +7,7 @@
 
 namespace app\models\admin;
 
+use kanso\framework\mvc\model\Model;
 use kanso\framework\utility\Str;
 
 /**
@@ -14,7 +15,7 @@ use kanso\framework\utility\Str;
  *
  * @author Joe J. Howard
  */
-class Invoice extends BaseModel
+class Invoice extends Model
 {
     /**
      * {@inheritdoc}
@@ -25,10 +26,10 @@ class Invoice extends BaseModel
         $transactionId = array_pop($transactionId);
 
         // SQL Builder
-        $this->sql() = $this->Database->connection()->builder();
+        $sql = $this->Database->connection()->builder();
 
         // Find the transaction
-        $transaction = $this->sql()->SELECT('*')->FROM('transactions')->WHERE('bt_transaction_id', '=', $transactionId)->ROW();
+        $transaction = $sql->SELECT('*')->FROM('transactions')->WHERE('bt_transaction_id', '=', $transactionId)->ROW();
 
         if (!$transaction)
         {
@@ -37,9 +38,9 @@ class Invoice extends BaseModel
 
         $transaction['items'] = unserialize($transaction['items']);
 
-        $customer = $this->sql()->SELECT('*')->FROM('users')->WHERE('id', '=', $transaction['user_id'])->ROW();
+        $customer = $sql->SELECT('*')->FROM('users')->WHERE('id', '=', $transaction['user_id'])->ROW();
 
-        $address = $this->sql()->SELECT('*')->FROM('shipping_addresses')->WHERE('id', '=', $transaction['shipping_id'])->ROW();
+        $address = $sql->SELECT('*')->FROM('shipping_addresses')->WHERE('id', '=', $transaction['shipping_id'])->ROW();
 
         return
         [
