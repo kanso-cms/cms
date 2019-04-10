@@ -8,18 +8,18 @@
 namespace kanso\cms\ecommerce;
 
 /**
- * Coupon manager utility class
+ * Coupon manager utility class.
  *
  * @author Joe J. Howard
  */
 class Coupons extends UtilityBase
 {
 	/**
-	 * Check if a coupon exists
+	 * Check if a coupon exists.
 	 *
 	 * @access public
 	 * @param  string $couponName The coupon name or code
-	 * @return bool 
+	 * @return bool
 	 */
 	public function exists(string $couponName): bool
 	{
@@ -27,17 +27,17 @@ class Coupons extends UtilityBase
 
 		if (!empty($couponName))
         {
-            # Find the coupon
-            $coupon = $this->Config->get('ecommerce.coupons.'.$couponName);
+            // Find the coupon
+            $coupon = $this->Config->get('ecommerce.coupons.' . $couponName);
 
-            # Coupon may be a public coupon
+            // Coupon may be a public coupon
             if ($coupon)
             {
                	return true;
             }
 
-            # Coupon could be a loyalty redemption
-            else if ($this->Gatekeeper->isLoggedIn())
+            // Coupon could be a loyalty redemption
+            elseif ($this->Gatekeeper->isLoggedIn())
             {
                 if ($this->sql()->SELECT('*')->FROM('loyalty_coupons')->WHERE('code', '=', $couponName)->AND_WHERE('user_id', '=', $this->Gatekeeper->getUser()->id)->ROW())
                 {
@@ -50,11 +50,11 @@ class Coupons extends UtilityBase
 	}
 
     /**
-     * Check if a coupon exists and is used
+     * Check if a coupon exists and is used.
      *
      * @access public
      * @param  string $couponName The coupon name or code
-     * @return bool 
+     * @return bool
      */
     public function used(string $couponName, string $email = ''): bool
     {
@@ -62,25 +62,25 @@ class Coupons extends UtilityBase
 
         if (!empty($couponName))
         {
-            # Find the coupon
-            $coupon = $this->Config->get('ecommerce.coupons.'.$couponName);
+            // Find the coupon
+            $coupon = $this->Config->get('ecommerce.coupons.' . $couponName);
 
-            # Coupon may be a public coupon
+            // Coupon may be a public coupon
             if ($coupon)
             {
-                # Validate the user has not already used the coupon before
+                // Validate the user has not already used the coupon before
                 if ($this->Gatekeeper->isLoggedIn())
                 {
                     if ($this->sql()->SELECT('*')->FROM('used_public_coupons')->WHERE('coupon_name', '=', $couponName)->AND_WHERE('user_id', '=', $this->Gatekeeper->getUser()->id)->ROW())
                     {
                         return true;
                     }
-                    else if ($this->sql()->SELECT('*')->FROM('used_public_coupons')->WHERE('coupon_name', '=', $couponName)->AND_WHERE('email', '=', $this->Gatekeeper->getUser()->email)->ROW())
+                    elseif ($this->sql()->SELECT('*')->FROM('used_public_coupons')->WHERE('coupon_name', '=', $couponName)->AND_WHERE('email', '=', $this->Gatekeeper->getUser()->email)->ROW())
                     {
                         return true;
                     }
                 }
-                else if ($email)
+                elseif ($email)
                 {
                     if ($this->sql()->SELECT('*')->FROM('used_public_coupons')->WHERE('coupon_name', '=', $couponName)->AND_WHERE('email', '=', $email)->ROW())
                     {
@@ -90,8 +90,8 @@ class Coupons extends UtilityBase
 
                 return false;
             }
-            # Coupon could be a loyalty redemption
-            else if ($this->Gatekeeper->isLoggedIn())
+            // Coupon could be a loyalty redemption
+            elseif ($this->Gatekeeper->isLoggedIn())
             {
                 if ($this->sql()->SELECT('*')->FROM('loyalty_coupons')->WHERE('code', '=', $couponName)->AND_WHERE('user_id', '=', $this->Gatekeeper->getUser()->id)->AND_WHERE('used', '=', true)->ROW())
                 {
@@ -106,11 +106,11 @@ class Coupons extends UtilityBase
     }
 
 	/**
-	 * Get a coupon's discount value
+	 * Get a coupon's discount value.
 	 *
 	 * @access public
-	 * @param  string $couponName The coupon name or code
-	 * @return int|float|false 
+	 * @param  string          $couponName The coupon name or code
+	 * @return int|float|false
 	 */
 	public function discount(string $couponName)
 	{
@@ -118,17 +118,17 @@ class Coupons extends UtilityBase
 
         if (!empty($couponName))
         {
-            # Find the coupon
-            $coupon = $this->Config->get('ecommerce.coupons.'.$couponName);
+            // Find the coupon
+            $coupon = $this->Config->get('ecommerce.coupons.' . $couponName);
 
-            # Coupon may be a public coupon
+            // Coupon may be a public coupon
             if ($coupon)
             {
                 return $coupon;
             }
 
-            # Coupon could be a loyalty redemption
-            else if ($this->Gatekeeper->isLoggedIn())
+            // Coupon could be a loyalty redemption
+            elseif ($this->Gatekeeper->isLoggedIn())
             {
                 $coupon = $this->sql()->SELECT('*')->FROM('loyalty_coupons')->WHERE('code', '=', $couponName)->AND_WHERE('user_id', '=', $this->Gatekeeper->getUser()->id)->AND_WHERE('used', '=', false)->ROW();
 
@@ -143,10 +143,10 @@ class Coupons extends UtilityBase
 	}
 
 	/**
-	 * Set a coupon as used
+	 * Set a coupon as used.
 	 *
 	 * @access public
-	 * @param  string $couponName The coupon name or code
+	 * @param string $couponName The coupon name or code
 	 */
 	public function setUsed(string $couponName = '', string $email = '')
 	{
@@ -157,10 +157,10 @@ class Coupons extends UtilityBase
             return false;
         }
 
-        # Find the coupon
-        $coupon = $this->Config->get('ecommerce.coupons.'.$couponName);
+        // Find the coupon
+        $coupon = $this->Config->get('ecommerce.coupons.' . $couponName);
 
-        # Coupon may be a public coupon
+        // Coupon may be a public coupon
         if ($coupon)
         {
             $couponRow =
@@ -172,8 +172,8 @@ class Coupons extends UtilityBase
 
             return $this->sql()->INSERT_INTO('used_public_coupons')->VALUES($couponRow)->QUERY();
         }
-        # Coupon could be a loyalty redemption
-        else if ($this->Gatekeeper->isLoggedIn())
+        // Coupon could be a loyalty redemption
+        elseif ($this->Gatekeeper->isLoggedIn())
         {
         	$coupon = $this->sql()->SELECT('*')->FROM('loyalty_coupons')->WHERE('code', '=', $couponName)->AND_WHERE('user_id', '=', $this->Gatekeeper->getUser()->id)->AND_WHERE('used', '=', false)->ROW();
 

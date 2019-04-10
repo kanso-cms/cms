@@ -7,17 +7,15 @@
 
 namespace kanso\cms\ecommerce;
 
-use kanso\cms\ecommerce\UtilityBase;
-
 /**
- * Reviews utility class
+ * Reviews utility class.
  *
  * @author Joe J. Howard
  */
 class Reviews extends UtilityBase
 {
-	/**
-     * Get product reviews sorted the upvotes (most relevant) from a product review
+    /**
+     * Get product reviews sorted the upvotes (most relevant) from a product review.
      *
      * @access public
      * @param  int $productId Product post id
@@ -27,7 +25,7 @@ class Reviews extends UtilityBase
     {
         $reviews = $this->Query->get_comments($productId);
 
-        usort($reviews, function ($a, $b)
+        usort($reviews, function($a, $b)
         {
             return $this->reviewUpVotes($b->id) - $this->reviewUpVotes($a->id);
         });
@@ -36,7 +34,7 @@ class Reviews extends UtilityBase
     }
 
     /**
-     * Get product review rating number
+     * Get product review rating number.
      *
      * @access public
      * @param  int $commentId Comment id
@@ -45,36 +43,36 @@ class Reviews extends UtilityBase
     public function rating(int $commentId): int
     {
         $rating = $this->sql()->SELECT('rating')->FROM('product_reviews')->WHERE('comment_id', '=', $commentId)->ROW();
-        
+
         if ($rating)
         {
             return intval($rating['rating']);
         }
-        
+
         return 0;
     }
 
     /**
-     * Get product review recommended value
+     * Get product review recommended value.
      *
      * @access public
-     * @param  int $commentId Comment id
+     * @param  int  $commentId Comment id
      * @return bool
      */
     public function reccomends(int $commentId): bool
     {
         $recommended = $this->sql()->SELECT('recommended')->FROM('product_reviews')->WHERE('comment_id', '=', $commentId)->ROW();
-        
+
         if ($recommended)
         {
             return boolval($recommended['recommended']);
         }
-        
+
         return false;
     }
 
     /**
-     * Get the upvotes from a product review
+     * Get the upvotes from a product review.
      *
      * @access public
      * @param  int $commentId Comment id
@@ -86,7 +84,7 @@ class Reviews extends UtilityBase
     }
 
     /**
-     * Get the downvotes from a product review
+     * Get the downvotes from a product review.
      *
      * @access public
      * @param  int $commentId Comment id
@@ -98,7 +96,7 @@ class Reviews extends UtilityBase
     }
 
     /**
-     * Get the downvotes from a product review
+     * Get the downvotes from a product review.
      *
      * @access public
      * @param  int $commentId Comment id
@@ -106,7 +104,7 @@ class Reviews extends UtilityBase
      */
     public function upVote(int $commentId): int
     {
-        $row = 
+        $row =
         [
             'comment_id' => $commentId,
             'up_vote'    => true,
@@ -117,7 +115,7 @@ class Reviews extends UtilityBase
     }
 
     /**
-     * Get the downvotes from a product review
+     * Get the downvotes from a product review.
      *
      * @access public
      * @param  int $commentId Comment id
@@ -125,7 +123,7 @@ class Reviews extends UtilityBase
      */
     public function downVote(int $commentId): int
     {
-        $row = 
+        $row =
         [
             'comment_id' => $commentId,
             'up_vote'    => false,
@@ -136,10 +134,10 @@ class Reviews extends UtilityBase
     }
 
     /**
-     * Get a product's ratings data
+     * Get a product's ratings data.
      *
      * @access public
-     * @param  int $productId Product post id
+     * @param  int   $productId Product post id
      * @return array
      */
     function ratings(int $productId): array
@@ -152,9 +150,9 @@ class Reviews extends UtilityBase
         $star4   = 0;
         $star5   = 0;
         $best    = 0;
-        
+
         $ratings = $this->sql()->SELECT('rating')->FROM('product_reviews')->WHERE('product_id', '=', $productId)->FIND_ALL();
-        
+
         if ($ratings)
         {
             foreach ($ratings as $rating)
@@ -165,19 +163,19 @@ class Reviews extends UtilityBase
                 {
                     $star1 += 1;
                 }
-                else if ($star === 2)
+                elseif ($star === 2)
                 {
                     $star2 += 1;
                 }
-                else if ($star === 3)
+                elseif ($star === 3)
                 {
                     $star3 += 1;
                 }
-                else if ($star === 4)
+                elseif ($star === 4)
                 {
                     $star4 += 1;
                 }
-                else if ($star === 5)
+                elseif ($star === 5)
                 {
                     $star5 += 1;
                 }
@@ -188,12 +186,12 @@ class Reviews extends UtilityBase
             }
             $avg = round($total/count($ratings), 1);
         }
-        else 
+        else
         {
             $avg = 0;
         }
-        
-        return 
+
+        return
         [
             'average' => $avg,
             'count'   => count($ratings),
@@ -218,7 +216,7 @@ class Reviews extends UtilityBase
                 [
                     'number' => 1,
                     'count'  => $star1,
-                ]
+                ],
             ],
         ];
     }

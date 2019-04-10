@@ -6,17 +6,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Invoice #<?php echo $order['bt_transaction_id']; ?></title>
 
-	<?php $adminAssetsUrl = str_replace($kanso->Request->environment()->DOCUMENT_ROOT, $kanso->Request->environment()->HTTP_HOST, KANSO_DIR.'/cms/admin/assets'); ?>
-	<link rel="shortcut icon"                    href="<?php echo $adminAssetsUrl;?>/images/favicon.png">
-	<link rel="apple-touch-icon" sizes="57x57"   href="<?php echo $adminAssetsUrl;?>/images/apple-touch-icon.png">
-	<link rel="apple-touch-icon" sizes="72x72"   href="<?php echo $adminAssetsUrl;?>/images/apple-touch-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="<?php echo $adminAssetsUrl;?>/images/apple-touch-icon-114x114.png">
+	<?php $adminAssetsUrl = str_replace($kanso->Request->environment()->DOCUMENT_ROOT, $kanso->Request->environment()->HTTP_HOST, KANSO_DIR . '/cms/admin/assets'); ?>
+	<link rel="shortcut icon"                    href="<?php echo $adminAssetsUrl; ?>/images/favicon.png">
+	<link rel="apple-touch-icon" sizes="57x57"   href="<?php echo $adminAssetsUrl; ?>/images/apple-touch-icon.png">
+	<link rel="apple-touch-icon" sizes="72x72"   href="<?php echo $adminAssetsUrl; ?>/images/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="<?php echo $adminAssetsUrl; ?>/images/apple-touch-icon-114x114.png">
 
 	<link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700">
 	<link rel="stylesheet" media="all" href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900">
-	<link rel="stylesheet" media="all" href="<?php echo $adminAssetsUrl;?>/css/hubble.css?v=<?php echo $kanso::VERSION;?>">
-	<link rel="stylesheet" media="all" href="<?php echo $adminAssetsUrl;?>/css/theme.css?v=<?php echo $kanso::VERSION;?>">
-	<link rel="stylesheet" media="all" href="<?php echo str_replace($kanso->Request->environment()->DOCUMENT_ROOT, $kanso->Request->environment()->HTTP_HOST, APP_DIR.'/views/admin/assets/css/styles.css');?>?v=<?php echo time();?>">
+	<link rel="stylesheet" media="all" href="<?php echo $adminAssetsUrl; ?>/css/hubble.css?v=<?php echo $kanso::VERSION; ?>">
+	<link rel="stylesheet" media="all" href="<?php echo $adminAssetsUrl; ?>/css/theme.css?v=<?php echo $kanso::VERSION; ?>">
+	<link rel="stylesheet" media="all" href="<?php echo str_replace($kanso->Request->environment()->DOCUMENT_ROOT, $kanso->Request->environment()->HTTP_HOST, APP_DIR . '/views/admin/assets/css/styles.css'); ?>?v=<?php echo time(); ?>">
 	<style type="text/css">
 		@page
 		{ 	size: auto;
@@ -57,20 +57,20 @@
 			    <div class="media-left nowrap">
 			        <address>
 			        	<strong class="p3 block color-gray">Customer:</strong>
-			        	<strong><?php echo $address['first_name']. ' '.$address['last_name'];?></strong><br>
-			        	<?php echo $address['street_address_1'];?><br>
-			        	<?php echo !empty($address['street_address_2']) ? $address['street_address_2'].'<br>' : '';?>
-			        	<?php echo $address['suburb'].', '.$address['state'].' '.$address['zip_code'] ;?><br>
+			        	<strong><?php echo $address['first_name'] . ' ' . $address['last_name']; ?></strong><br>
+			        	<?php echo $address['street_address_1']; ?><br>
+			        	<?php echo !empty($address['street_address_2']) ? $address['street_address_2'] . '<br>' : ''; ?>
+			        	<?php echo $address['suburb'] . ', ' . $address['state'] . ' ' . $address['zip_code']; ?><br>
 			        </address>
 			    </div>
 			    <div class="media-body gutter-sm"></div>
 			    <div class="media-right text-right nowrap">
 			       <dl class="dl-horizontal invoice-info" style="margin-bottom: 0">
-			       		<dt class="color-gray">Transaction Id : </dt><dd>#<?php echo $order['bt_transaction_id'];?></dd>
-						<dt class="color-gray">Date : </dt><dd><?php echo date('M d, Y', $order['date']);?></dd>
-		                <dt class="color-gray">Payment Method : </dt><dd>Credit Card (<?php echo ucfirst($order['card_type']);?>)</dd>
-		                <dt class="color-gray">Card : </dt><dd> •••• •••• •••• <?php echo $order['card_last_four'];?></dd>
-		                <dt class="color-gray">Total : </dt><dd>$<?php echo $order['total'];?></dd>
+			       		<dt class="color-gray">Transaction Id : </dt><dd>#<?php echo $order['bt_transaction_id']; ?></dd>
+						<dt class="color-gray">Date : </dt><dd><?php echo date('M d, Y', $order['date']); ?></dd>
+		                <dt class="color-gray">Payment Method : </dt><dd>Credit Card (<?php echo ucfirst($order['card_type']); ?>)</dd>
+		                <dt class="color-gray">Card : </dt><dd> •••• •••• •••• <?php echo $order['card_last_four']; ?></dd>
+		                <dt class="color-gray">Total : </dt><dd>$<?php echo $order['total']; ?></dd>
 		            </dl>
 			    </div>
 			</div>
@@ -88,31 +88,31 @@
 					</thead>
 					<?php foreach($order['items'] as $item) : ?>
 					<tr>
-						<th><span class="strong"><?php echo $item['quantity'];?>x</span> - <?php echo $item['name'].' - '.$item['offer']; ?></th>
+						<th><span class="strong"><?php echo $item['quantity']; ?>x</span> - <?php echo $item['name'] . ' - ' . $item['offer']; ?></th>
 						<td><span class="text-right block">$<?php echo number_format($item['price'], 2, '.', ''); ?></span></td>
 					</tr>
 					<?php endforeach; ?>
 					<?php if (!empty($order['coupon'])) : ?>
 					<tr>
 						<th><span class="color-success font-bold">Coupon Promotion</span></th>
-						<td><span class="color-success font-bold text-right block">-<?php echo $order['coupon'];?>%</span></td>
+						<td><span class="color-success font-bold text-right block">-<?php echo $order['coupon']; ?>%</span></td>
 					</tr>
-					<?php endif;?>
+					<?php endif; ?>
 					<tr class="divider-border">
 						<th style="text-align: right;">Sub Total</th>
-						<td><span class="text-right block"><span>$<?php echo number_format($order['sub_total'],  2, '.', '');?></span></span></td>
+						<td><span class="text-right block"><span>$<?php echo number_format($order['sub_total'], 2, '.', ''); ?></span></span></td>
 					</tr>
 					<tr>
 						<th style="text-align: right;">Shipping &amp; Handling</th>
-						<td><span class="text-right block">$<span><?php echo number_format($order['shipping_costs'],  2, '.', '');?></span></span></td>
+						<td><span class="text-right block">$<span><?php echo number_format($order['shipping_costs'], 2, '.', ''); ?></span></span></td>
 					</tr>
 					<tr>
 						<th style="text-align: right;">Incl GST</th>
-						<td><span class="text-right block">$<span class="js-gst-costs"><?php echo number_format( ((10 / 100) * $order['total']), 2, '.', '');?></span></span></td>
+						<td><span class="text-right block">$<span class="js-gst-costs"><?php echo number_format(((10 / 100) * $order['total']), 2, '.', ''); ?></span></span></td>
 					</tr>
 					<tr class="divider-border">
 						<th style="text-align: right;"><span class="strong color-black">Total</span></th>
-						<td><span class="strong text-right block color-black">$<span><?php echo number_format( $order['total'], 2, '.', '');?></span></span></td>
+						<td><span class="strong text-right block color-black">$<span><?php echo number_format($order['total'], 2, '.', ''); ?></span></span></td>
 					</tr>
 				</tbody>
 			</table>

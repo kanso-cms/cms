@@ -218,9 +218,9 @@ class Installer
         $SQL->CREATE_TABLE('payment_tokens', $KANSO_DEFAULTS_PAYMENT_TOKENS_TABLE);
 
         $SQL->CREATE_TABLE('shopping_cart_items', $KANSO_DEFAULTS_SHOPPING_CART_TABLE);
-        
+
         $SQL->CREATE_TABLE('shipping_addresses', $KANSO_DEFAULTS_SHIPPING_ADDRESS_TABLE);
-        
+
         $SQL->CREATE_TABLE('transactions', $KANSO_DEFAULTS_TRANSACTION_TABLE);
 
         $SQL->CREATE_TABLE('loyalty_points', $KANSO_DEFAULTS_LOYALTY_POINTS_TABLE);

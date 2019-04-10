@@ -7,9 +7,9 @@
 
 namespace kanso\cms\email;
 
-use kanso\Kanso;
 use kanso\cms\email\phpmailer\PHPMailer;
 use kanso\framework\file\Filesystem;
+use kanso\Kanso;
 
 /**
  * CMS email utility.

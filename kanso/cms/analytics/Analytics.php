@@ -10,7 +10,7 @@ namespace kanso\cms\analytics;
 use kanso\framework\mvc\model\Model;
 
 /**
- * Google/Facebook Analytics Utility
+ * Google/Facebook Analytics Utility.
  *
  * @author Joe J. Howard
  */
@@ -64,15 +64,15 @@ class Analytics extends Model
      * @var string
      */
     private $fbPixelId;
-    
+
     /**
      * Constructor.
      *
      * @access public
      * @param string $gAnalyticsId Google analytics tracking id
-     * @param string $gAdwordsId Google adwords tracking id
-     * @param string $gAdwordsId Google adwords conversion id
-     * @param string $fbPixelId Facebook pixel tracking id
+     * @param string $gAdwordsId   Google adwords tracking id
+     * @param string $gAdwordsId   Google adwords conversion id
+     * @param string $fbPixelId    Facebook pixel tracking id
      */
     public function __construct(bool $gAnalyticsEnabled, string $gAnalyticsId, bool $adwordsEnabled, string $gAdwordsId, string $googleAwCvId, bool $fbEnabled, string $fbPixelId)
     {
@@ -92,7 +92,7 @@ class Analytics extends Model
     }
 
     /**
-     * Get the main Google Analytics tracking code
+     * Get the main Google Analytics tracking code.
      *
      * @access public
      * @return string
@@ -107,19 +107,19 @@ class Analytics extends Model
             gtag('js', new Date());
             gtag('config', '" . $this->gAnalyticsId . "');
             gtag('config', '" . $this->gAdwordsId . "');
-            ".$this->googleUserData()."
+            " . $this->googleUserData() . "
             gtag('event', 'page_view', {'send_to': '" . $this->gAdwordsId . "'} );
         </script>");
     }
 
     /**
-     * Get the main Facebook tracking code
+     * Get the main Facebook tracking code.
      *
      * @access public
      * @return string
      */
     public function facebookTrackingCode(): string
-    {        
+    {
         return $this->cleanWhiteSpace("
         <script type=\"text/javascript\">
             !function(f,b,e,v,n,t,s)
@@ -130,13 +130,13 @@ class Analytics extends Model
             t.src=v;s=b.getElementsByTagName(e)[0];
             s.parentNode.insertBefore(t,s)}(window, document,'script',
             'https://connect.facebook.net/en_US/fbevents.js');
-            fbq('init', '" . $this->fbPixelId . "', ".$this->facebookUserData().");
+            fbq('init', '" . $this->fbPixelId . "', " . $this->facebookUserData() . ");
             fbq('track', 'PageView');
-        </script><noscript><img height=\"1\" width=\"1\" style=\"display:none\" src=\"https://www.facebook.com/tr?id=" . $this->fbPixelId . "&ev=PageView&noscript=1\"/></noscript>");
+        </script><noscript><img height=\"1\" width=\"1\" style=\"display:none\" src=\"https://www.facebook.com/tr?id=" . $this->fbPixelId . '&ev=PageView&noscript=1"/></noscript>');
     }
 
     /**
-     * Track a product view for Google Analytics
+     * Track a product view for Google Analytics.
      *
      * @access public
      * @return string
@@ -151,14 +151,14 @@ class Analytics extends Model
         <script type=\"text/javascript\">
             gtag('event', 'view_item',
             {
-                'event_label'  : '".$this->Query->the_title()."',
+                'event_label'  : '" . $this->Query->the_title() . "',
                 'items'        : [{
-                    'id'       : '".$this->Query->the_post_id()."',
-                    'name'     : '".$this->Query->the_title()."',
+                    'id'       : '" . $this->Query->the_post_id() . "',
+                    'name'     : '" . $this->Query->the_title() . "',
                     'brand'    : 'Vebena',
-                    'category' : 'Products > ".$this->Query->the_categories_list(the_post_id(), ' > ')."',
-                    'price'    : '".$offer['sale_price']."',
-                    'variant'  : '".$offer['name']."',
+                    'category' : 'Products > " . $this->Query->the_categories_list(the_post_id(), ' > ') . "',
+                    'price'    : '" . $offer['sale_price'] . "',
+                    'variant'  : '" . $offer['name'] . "',
                 }]
             });
         </script>
@@ -166,7 +166,7 @@ class Analytics extends Model
     }
 
     /**
-     * Track a product view for Facebook
+     * Track a product view for Facebook.
      *
      * @access public
      * @return string
@@ -174,24 +174,24 @@ class Analytics extends Model
     public function facebookTrackingProductView(): string
     {
         $this->Query->rewind_posts();
-        
+
         return $this->cleanWhiteSpace("
         <script type=\"text/javascript\">
             fbq('track', 'ViewContent',
             {
-                content_name     : '".$this->Query->the_title()."',
-                content_category : 'Products > ".$this->Query->the_categories_list(the_post_id(), ' > ')."',
-                content_ids      : ['".$this->Query->the_post_id()."'],
+                content_name     : '" . $this->Query->the_title() . "',
+                content_category : 'Products > " . $this->Query->the_categories_list(the_post_id(), ' > ') . "',
+                content_ids      : ['" . $this->Query->the_post_id() . "'],
                 content_type     : 'product',
-                value            : ".$this->ShoppingCart->productOffers($this->Query->the_post())[0]['sale_price'].",
+                value            : " . $this->ShoppingCart->productOffers($this->Query->the_post())[0]['sale_price'] . ",
                 currency         : 'AUD',
-                userAgent        : '".$this->Request->environment()->HTTP_USER_AGENT."'
+                userAgent        : '" . $this->Request->environment()->HTTP_USER_AGENT . "'
             });
         </script>");
     }
 
     /**
-     * Track a checkout started event for Google Analytics
+     * Track a checkout started event for Google Analytics.
      *
      * @access public
      * @return string
@@ -202,12 +202,12 @@ class Analytics extends Model
 
         foreach($order['cart'] as $item)
         {
-            $items[] = 
+            $items[] =
             [
                 'id'       => strval($item['product']->id),
                 'name'     => $item['product']->title,
                 'brand'    => 'Vebena',
-                'category' => 'Products > '.$this->Query->the_categories_list($item['product']->id, ' > '),
+                'category' => 'Products > ' . $this->Query->the_categories_list($item['product']->id, ' > '),
                 'price'    => strval($item['offer']['sale_price']),
                 'quantity' => $item['quantity'],
                 'variant'  => $item['offer']['name'],
@@ -218,15 +218,15 @@ class Analytics extends Model
         <script type=\"text/javascript\">
             gtag('event', 'begin_checkout',
             {
-                'value'    : '".number_format( ($order['sub-total'] + $order['shipping-cost']), 2, '.', '')."',
+                'value'    : '" . number_format(($order['sub-total'] + $order['shipping-cost']), 2, '.', '') . "',
                 'currency' : 'AUD',
-                'items'    : ".str_replace('\u003E', '>', json_encode($items, true))."
+                'items'    : " . str_replace('\u003E', '>', json_encode($items, true)) . '
             });
-        </script>");
+        </script>');
     }
 
     /**
-     * Track a checkout started event for Facebook Analytics
+     * Track a checkout started event for Facebook Analytics.
      *
      * @access public
      * @return string
@@ -245,20 +245,20 @@ class Analytics extends Model
         <script type=\"text/javascript\">
             fbq('track', 'InitiateCheckout',
             {
-                num_items     : ".$items.",
-                content_ids   : ".json_encode($itemIds).",
+                num_items     : " . $items . ',
+                content_ids   : ' . json_encode($itemIds) . ",
                 content_type  : 'product',
-                value         : ".number_format( ($order['sub-total'] + $order['shipping-cost']), 2, '.', '').",
+                value         : " . number_format(($order['sub-total'] + $order['shipping-cost']), 2, '.', '') . ",
                 currency      : 'AUD'
             });
         </script>");
     }
 
     /**
-     * Track a checkout complete for Google Analytics
+     * Track a checkout complete for Google Analytics.
      *
      * @access public
-     * @param  array   $order Order variables
+     * @param  array  $order Order variables
      * @return string
      */
     public function googleTrackCheckoutComplete(array $order): string
@@ -267,12 +267,12 @@ class Analytics extends Model
 
         foreach($order['items'] as $item)
         {
-            $items[] = 
+            $items[] =
             [
                 'id'       => strval($item['product_id']),
                 'name'     => $item['name'],
                 'brand'    => 'Vebena',
-                'category' => 'Products > '.$this->Query->the_categories_list($item['product_id'], ' > '),
+                'category' => 'Products > ' . $this->Query->the_categories_list($item['product_id'], ' > '),
                 'price'    => strval($item['price']),
                 'quantity' => $item['quantity'],
                 'variant'  => $item['offer'],
@@ -283,30 +283,30 @@ class Analytics extends Model
         <script type=\"text/javascript\">
             gtag('event', 'purchase',
             {
-                'transaction_id' : '".$order['bt_transaction_id']."',
-                'value'          : ".$order['total'].",
+                'transaction_id' : '" . $order['bt_transaction_id'] . "',
+                'value'          : " . $order['total'] . ",
                 'currency'       : 'AUD',
-                'tax'            : ".number_format( (10 / 100) * $order['total'],  2, '.', '').",
-                'shipping'       : ".number_format($order['shipping_costs'],  2, '.', '').",
-                'items'          : ".str_replace('\u003E', '>', json_encode($items, true))."
+                'tax'            : " . number_format((10 / 100) * $order['total'], 2, '.', '') . ",
+                'shipping'       : " . number_format($order['shipping_costs'], 2, '.', '') . ",
+                'items'          : " . str_replace('\u003E', '>', json_encode($items, true)) . "
             });
         </script>
         <script>
             gtag('event', 'conversion',
             {
                 'send_to'  : '" . $this->googleAwCvId . "',
-                'value'    : ".$order['total'].",
+                'value'    : " . $order['total'] . ",
                 'currency' : 'AUD',
-                'transaction_id' : '".$order['bt_transaction_id']."'
+                'transaction_id' : '" . $order['bt_transaction_id'] . "'
             });
         </script>");
     }
 
     /**
-     * Track a checkout complete for Facebook
+     * Track a checkout complete for Facebook.
      *
      * @access public
-     * @param  array   $order Order variables
+     * @param  array  $order Order variables
      * @return string
      */
     public function facebookTrackCheckoutComplete(array $order): string
@@ -315,7 +315,7 @@ class Analytics extends Model
 
         foreach($order['items'] as $i => $item)
         {
-            $contents[] = 
+            $contents[] =
             [
                 'id'         => strval($item['product_id']),
                 'quantity'   => $item['quantity'],
@@ -323,15 +323,15 @@ class Analytics extends Model
             ];
         }
 
-        ini_set( 'serialize_precision', -1);
+        ini_set('serialize_precision', -1);
 
         return $this->cleanWhiteSpace("
         <script type=\"text/javascript\">
             fbq('track', 'Purchase',
             {
-                contents     : ".json_encode($contents, true).",
+                contents     : " . json_encode($contents, true) . ",
                 content_type : 'product',
-                value        : ".$order['total'].",
+                value        : " . $order['total'] . ",
                 currency     : 'AUD'
             });
         </script>
@@ -339,7 +339,7 @@ class Analytics extends Model
     }
 
     /**
-     * Get google user id
+     * Get google user id.
      *
      * @access private
      * @return string
@@ -348,14 +348,14 @@ class Analytics extends Model
     {
         if ($this->Gatekeeper->isLoggedIn())
         {
-            return "gtag('set', {'user_id': '".$this->Gatekeeper->getUser()->id."'});";
+            return "gtag('set', {'user_id': '" . $this->Gatekeeper->getUser()->id . "'});";
         }
 
         return '';
     }
 
     /**
-     * Get facebook user data
+     * Get facebook user data.
      *
      * @access private
      * @return string
@@ -368,11 +368,11 @@ class Analytics extends Model
             $firstname = trim(ucwords(array_shift($names)));
             $lastname  = trim(implode(' ', $names));
             $email     = $this->Gatekeeper->getUser()->email;
-            $fbUser    = 
+            $fbUser    =
             [
-                'em' => $email, 
+                'em' => $email,
                 'fn' => $firstname,
-                'ln' => $lastname
+                'ln' => $lastname,
             ];
 
             return json_encode($fbUser, true);
@@ -384,14 +384,14 @@ class Analytics extends Model
     }
 
     /**
-     * Format HTML nicely
+     * Format HTML nicely.
      *
      * @access private
-     * @param  string  $html HTML to format
+     * @param  string $html HTML to format
      * @return string
      */
     private function cleanWhiteSpace(string $html)
     {
-        return trim(preg_replace('/\t+/', '', $html))."\n";
+        return trim(preg_replace('/\t+/', '', $html)) . "\n";
     }
 }

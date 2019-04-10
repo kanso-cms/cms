@@ -8,11 +8,9 @@
 namespace kanso\cms\ecommerce;
 
 use kanso\cms\wrappers\Post;
-use kanso\framework\utility\Str;
-use Exception;
 
 /**
- * Shopping Cart Utility Model
+ * Shopping Cart Utility Model.
  *
  * @author Joe J. Howard
  */
@@ -20,17 +18,17 @@ class Cart extends UtilityBase
 {
     /**
      * Get products and offers from cart
-     * organized by quantity
+     * organized by quantity.
      *
      * @access public
      * @return array
      */
     public function items(): array
     {
-        # Items to return
+        // Items to return
         $items = [];
 
-        # Get entries from DB or session
+        // Get entries from DB or session
         if (!$this->Gatekeeper->isLoggedIn())
         {
             $entries = $this->Session->get('shopping_cart_items');
@@ -40,10 +38,10 @@ class Cart extends UtilityBase
             $entries = $this->sql()->SELECT('*')->FROM('shopping_cart_items')->WHERE('user_id', '=', $this->Gatekeeper->getUser()->id)->FIND_ALL();
         }
 
-        # Empty cart
+        // Empty cart
         if ($entries)
         {
-            # Get posts
+            // Get posts
             foreach ($entries as $entry)
             {
                 $product = $this->PostManager->byId($entry['product_id']);
@@ -64,11 +62,11 @@ class Cart extends UtilityBase
                     continue;
                 }
 
-                # Offer was added when it was instock but is now out of stock
+                // Offer was added when it was instock but is now out of stock
                 if (!$offer['instock'])
                 {
                     $this->remove($entry['product_id'], $entry['offer_id']);
-                    
+
                     continue;
                 }
 
@@ -92,7 +90,7 @@ class Cart extends UtilityBase
      */
     public function isEmpty(): bool
     {
-        # Get entries from DB or session
+        // Get entries from DB or session
         if (!$this->Gatekeeper->isLoggedIn())
         {
             $entries = $this->Session->get('shopping_cart_items');
@@ -106,7 +104,7 @@ class Cart extends UtilityBase
     }
 
     /**
-     * Calculate the count of total items in the cart
+     * Calculate the count of total items in the cart.
      *
      * @access public
      * @return int
@@ -115,7 +113,7 @@ class Cart extends UtilityBase
     {
         $count = 0;
 
-        # Get entries from DB or session
+        // Get entries from DB or session
         if (!$this->Gatekeeper->isLoggedIn())
         {
             $entries = $this->Session->get('shopping_cart_items');
@@ -125,10 +123,10 @@ class Cart extends UtilityBase
             $entries = $this->sql()->SELECT('*')->FROM('shopping_cart_items')->WHERE('user_id', '=', $this->Gatekeeper->getUser()->id)->FIND_ALL();
         }
 
-        # Empty cart
+        // Empty cart
         if ($entries)
         {
-            # Get posts
+            // Get posts
             foreach ($entries as $entry)
             {
                 $count += $entry['quantity'];
@@ -139,7 +137,7 @@ class Cart extends UtilityBase
     }
 
     /**
-     * Clear the user's cart
+     * Clear the user's cart.
      *
      * @access public
      * @return bool
@@ -157,14 +155,14 @@ class Cart extends UtilityBase
     }
 
     /**
-     * Add a product offer to the user's db/session
+     * Add a product offer to the user's db/session.
      *
      * @access public
-     * @param  int $productId Product post id
-     * @param  string $productId Product offer id
+     * @param int    $productId Product post id
+     * @param string $productId Product offer id
      */
     public function add(int $productId, string $offerId)
-    {        
+    {
         $row =
         [
             'product_id' => $productId,
@@ -180,7 +178,7 @@ class Cart extends UtilityBase
             if ($entry)
             {
                 $row['quantity'] = ($entry['quantity'] + 1);
-                
+
                 $this->sql()->UPDATE('shopping_cart_items')->SET($row)->WHERE('id', '=', $entry['id'])->QUERY();
             }
             else
@@ -193,7 +191,7 @@ class Cart extends UtilityBase
             $items = $this->Session->get('shopping_cart_items');
             $items = !$items ? [] : $items;
             $found = false;
-            
+
             foreach ($items as $i => $item)
             {
                 if ($item['offer_id'] === $offerId && $item['product_id'] === $productId)
@@ -214,11 +212,11 @@ class Cart extends UtilityBase
     }
 
     /**
-     * Remove a product offer from the user's db/session
+     * Remove a product offer from the user's db/session.
      *
      * @access public
-     * @param  int    $productId Product post id
-     * @param  string $productId Product offer id (sku)
+     * @param int    $productId Product post id
+     * @param string $productId Product offer id (sku)
      */
     public function remove(int $productId, string $offerId)
     {
@@ -244,11 +242,11 @@ class Cart extends UtilityBase
     }
 
     /**
-     * Minus a product quantity from the user's cart
+     * Minus a product quantity from the user's cart.
      *
      * @access public
-     * @param  int $productId    Product post id
-     * @param  string $productId Product offer id (sku)
+     * @param int    $productId Product post id
+     * @param string $productId Product offer id (sku)
      */
     public function minus(int $productId, string $offerId)
     {
@@ -285,7 +283,7 @@ class Cart extends UtilityBase
                 if ($item['offer_id'] === $offerId && $item['product_id'] === $productId)
                 {
                     $row['quantity'] = ($item['quantity'] - 1);
-                    
+
                     if ($row['quantity'] === 0)
                     {
                         unset($items[$i]);
@@ -302,17 +300,17 @@ class Cart extends UtilityBase
     }
 
     /**
-     * Calculate the cart subtotal
+     * Calculate the cart subtotal.
      *
      * @access public
      * @return float
      */
     public function subTotal(): float
     {
-        $items    = $this->items(); 
+        $items    = $this->items();
         $subtotal = 0;
 
-        # Get posts
+        // Get posts
         foreach ($items as $item)
         {
             $subtotal += ($item['quantity'] * $item['offer']['sale_price']);
@@ -322,14 +320,14 @@ class Cart extends UtilityBase
     }
 
     /**
-     * Calculate the shipping cost
+     * Calculate the shipping cost.
      *
      * @access public
      * @return int
      */
     public function shippingCost(): float
     {
-        # Calculate subtotal
+        // Calculate subtotal
         $subtotal = $this->subTotal();
 
         if ($subtotal >= 99)
@@ -337,7 +335,7 @@ class Cart extends UtilityBase
             return 0.00;
         }
 
-        # Does the item(s) offer free shipping ?
+        // Does the item(s) offer free shipping ?
         $freeShipping = $this->Config->get('ecommerce.free_shipping_products');
 
         foreach ($this->items() as $item)
@@ -352,7 +350,7 @@ class Cart extends UtilityBase
     }
 
     /**
-     * Calculate the inclusive GST
+     * Calculate the inclusive GST.
      *
      * @access public
      * @return float
@@ -363,7 +361,7 @@ class Cart extends UtilityBase
     }
 
     /**
-     * Get logged in user's stored shipping addresses
+     * Get logged in user's stored shipping addresses.
      *
      * @access public
      * @return array
@@ -374,12 +372,12 @@ class Cart extends UtilityBase
         {
             return $this->sql()->SELECT('*')->FROM('shipping_addresses')->WHERE('user_id', '=', $this->Gatekeeper->getUser()->id)->FIND_ALL();
         }
-            
+
         return [];
     }
 
     /**
-     * Get logged in user's stored credit cards from BT
+     * Get logged in user's stored credit cards from BT.
      *
      * @access public
      * @return array

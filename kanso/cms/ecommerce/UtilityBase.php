@@ -7,8 +7,8 @@
 
 namespace kanso\cms\ecommerce;
 
-use kanso\framework\ioc\ContainerAwareTrait;
 use kanso\framework\database\query\Builder;
+use kanso\framework\ioc\ContainerAwareTrait;
 
 /**
  * Base Model.
@@ -20,7 +20,7 @@ abstract class UtilityBase
     use ContainerAwareTrait;
 
     /**
-     * SQL query builder instance
+     * SQL query builder instance.
      *
      * @var \kanso\framework\database\query\Builder
      */
@@ -33,11 +33,11 @@ abstract class UtilityBase
      */
     public function __construct()
     {
-       
+
     }
 
     /**
-     * Instantiate and/or return a query builder instance
+     * Instantiate and/or return a query builder instance.
      *
      * @access private
      * @return \kanso\framework\database\query\Builder
@@ -48,7 +48,7 @@ abstract class UtilityBase
         {
             $this->sql = $this->Database->connection()->builder();
         }
-        
+
         return $this->sql;
     }
 }

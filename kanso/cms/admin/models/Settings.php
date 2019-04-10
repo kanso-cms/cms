@@ -493,7 +493,7 @@ class Settings extends BaseModel
         $this->Config->set('analytics.google.adwords.id', $post['gAdwords_id']);
         $this->Config->set('analytics.google.adwords.conversion', $post['gAdwords_cnv_id']);
         $this->Config->set('analytics.facebook.pixel', $post['fbPixel_id']);
- 
+
         $this->Config->save();
 
         return $this->postMessage('success', 'Analytics settings successfully updated!');

@@ -36,9 +36,9 @@ return
  	 * enabled : Enable/disable Facebook pixel tracking
  	 * pixel   : Facebook pixel tracking id
  	 */
-	'facebook' => 
+	'facebook' =>
 	[
 		'enabled' => true,
-		'pixel'   => '13434423423432'
+		'pixel'   => '13434423423432',
 	],
 ];

@@ -347,7 +347,7 @@ class Writer extends BaseModel
             foreach ($offerKeys as $postKey => $offerKey)
             {
                 $postKey = str_replace('X', $i, $postKey);
-                
+
                 if (isset($_POST[$postKey]))
                 {
                     $offer[$offerKey] = $offerKey === 'instock' ? Str::bool($_POST[$postKey]) : trim($_POST[$postKey]);

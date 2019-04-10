@@ -8,13 +8,12 @@
 namespace kanso\cms\admin\models\ecommerce;
 
 use kanso\cms\admin\models\BaseModel;
-use kanso\framework\utility\Str;
-use kanso\framework\utility\Humanizer;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
+use kanso\framework\utility\Str;
 
 /**
- * Admin customers page/list model
+ * Admin customers page/list model.
  *
  * @author Joe J. Howard
  */
@@ -41,25 +40,25 @@ class Customers extends BaseModel
      */
     public function onAJAX()
     {
-        # Process any AJAX requests here
-        # 
-        # Returning an associative array will
-        # send a JSON response to the client
-        
-        # Returning false sends a 404 
+        // Process any AJAX requests here
+        //
+        // Returning an associative array will
+        // send a JSON response to the client
+
+        // Returning false sends a 404
         return false;
     }
 
     /**
-     * Parse and validate the POST request from any submitted forms
-     * 
+     * Parse and validate the POST request from any submitted forms.
+     *
      * @access private
      * @return array|false
      */
     public function parsePost()
     {
         $validate = $this->validatePost();
-        
+
         if (!$validate)
         {
             return false;
@@ -78,7 +77,7 @@ class Customers extends BaseModel
             if (in_array($this->post['bulk_action'], ['confirmed', 'pending', 'locked', 'banned', 'delete']))
             {
                 $this->changeStatus($customerIds, $this->post['bulk_action']);
-                
+
                 return $this->postMessage('success', 'Customers were successfully updated!');
             }
         }
@@ -87,11 +86,11 @@ class Customers extends BaseModel
     }
 
     /**
-     * Delete an order
+     * Delete an order.
      *
      * @access private
-     * @param  array   $ids    List of post ids
-     * @param  string  $status Post status to change to
+     * @param array  $ids    List of post ids
+     * @param string $status Post status to change to
      */
     private function delete(array $ids)
     {
@@ -102,29 +101,29 @@ class Customers extends BaseModel
     }
 
     /**
-     * Change order status
+     * Change order status.
      *
      * @access private
-     * @param  array   $ids    List of post ids
-     * @param  string  $status Post status to change to
+     * @param array  $ids    List of post ids
+     * @param string $status Post status to change to
      */
     private function changeStatus(array $ids, string $status)
     {
         foreach ($ids as $id)
         {
-            $this->sql()->UPDATE('users')->SET(['status' => $status])->WHERE('id', '=', $id)->QUERY();   
+            $this->sql()->UPDATE('users')->SET(['status' => $status])->WHERE('id', '=', $id)->QUERY();
         }
     }
 
     /**
-     * Validates all POST variables are set
-     * 
+     * Validates all POST variables are set.
+     *
      * @access private
      * @return bool|array
      */
     private function validatePost()
     {
-        # Validation
+        // Validation
         if (!isset($this->post['access_token']) || !$this->Gatekeeper->verifyToken($this->post['access_token']))
         {
             throw new InvalidTokenException('Bad Admin Panel POST Request. The CSRF token was either not provided or was invalid.');
@@ -156,7 +155,7 @@ class Customers extends BaseModel
      */
     private function parseGet(): array
     {
-        # Prep the response
+        // Prep the response
         $response =
         [
             'customers'     => $this->loadCustomers(),
@@ -166,8 +165,8 @@ class Customers extends BaseModel
             'active_tab'    => Str::getAfterLastChar(Str::queryFilterUri($this->Request->environment()->REQUEST_URI), '/'),
         ];
 
-        # If the customers are empty,
-        # There's no need to check for max pages
+        // If the customers are empty,
+        // There's no need to check for max pages
         if (!empty($response['customers']))
         {
             $response['max_page'] = $this->loadCustomers(true);
@@ -177,7 +176,7 @@ class Customers extends BaseModel
     }
 
     /**
-     * Check if the GET URL queries are either empty or set to defaults
+     * Check if the GET URL queries are either empty or set to defaults.
      *
      * @access private
      * @return bool
@@ -187,25 +186,25 @@ class Customers extends BaseModel
         $queries = $this->getQueries();
 
         return (
-            $queries['search'] === false && 
-            $queries['page']   === 0 && 
-            $queries['sort']   === 'email' && 
+            $queries['search'] === false &&
+            $queries['page']   === 0 &&
+            $queries['sort']   === 'email' &&
             $queries['status'] === false
         );
     }
 
     /**
-     * Returns the requested GET queries with defaults
+     * Returns the requested GET queries with defaults.
      *
      * @access private
      * @return array
      */
     private function getQueries(): array
     {
-        # Get queries
+        // Get queries
         $queries = $this->Request->queries();
 
-        # Set defaults
+        // Set defaults
         if (!isset($queries['search']))   $queries['search']   = false;
         if (!isset($queries['page']))     $queries['page']     = 0;
         if (!isset($queries['sort']))     $queries['sort']     = 'email';
@@ -215,19 +214,19 @@ class Customers extends BaseModel
     }
 
     /**
-     * Returns the list of customers for display
+     * Returns the list of customers for display.
      *
      * @access private
-     * @param  bool $checkMaxPages Count the max pages
+     * @param  bool      $checkMaxPages Count the max pages
      * @return array|int
      */
     private function loadCustomers(bool $checkMaxPages = false)
     {
-        # Get queries
+        // Get queries
         $queries = $this->getQueries();
 
-        # Default operation values
-        $page         = ((int)$queries['page']);
+        // Default operation values
+        $page         = ((int) $queries['page']);
         $page         = $page === 1 || $page === 0 ? 0 : $page-1;
         $sort         = 'ASC';
         $sortKey      = 'email';
@@ -237,66 +236,64 @@ class Customers extends BaseModel
         $status       = $queries['status'];
         $search       = $queries['search'];
 
-        # Filter and sanitize the sort order
+        // Filter and sanitize the sort order
         if ($queries['sort'] === 'email' || $queries['sort'] === 'name') $sort = 'ASC';
         if ($queries['sort'] === 'email')   $sortKey = 'email';
         if ($queries['sort'] === 'name')    $sortKey = 'name';
         if ($queries['sort'] === 'status')  $sortKey = 'status';
         if ($queries['sort'] === 'id')      $sortKey = 'id';
 
-        # Select the customers
+        // Select the customers
         $this->sql()->SELECT('*')->FROM('users')->WHERE('role', '=', 'customer');
-        
-        # Set the order
+
+        // Set the order
         $this->sql()->ORDER_BY($sortKey, $sort);
 
-        # Filter status
+        // Filter status
         if ($status === 'pending')
         {
             $this->sql()->AND_WHERE('status', '=', 'pending');
         }
-        else if ($status === 'confirmed')
+        elseif ($status === 'confirmed')
         {
             $this->sql()->AND_WHERE('status', '=', 'confirmed');
         }
-        else if ($status === 'banned')
+        elseif ($status === 'banned')
         {
             $this->sql()->AND_WHERE('status', '=', 'banned');
         }
-        else if ($status === 'locked')
+        elseif ($status === 'locked')
         {
             $this->sql()->AND_WHERE('status', '=', 'locked');
         }
-         else if ($status === 'active')
+         elseif ($status === 'active')
         {
             $this->sql()->AND_WHERE('status', '=', 'active');
         }
 
-
-        # Search by user name, user email, or id, status
+        // Search by user name, user email, or id, status
         if ($search)
         {
-            $this->sql()->OR_WHERE('email', 'like', '%'.$queries['search'].'%');
-            $this->sql()->OR_WHERE('name', 'like', '%'.$queries['search'].'%');
-            $this->sql()->OR_WHERE('status', 'like',  '%'.$queries['search'].'%');
+            $this->sql()->OR_WHERE('email', 'like', '%' . $queries['search'] . '%');
+            $this->sql()->OR_WHERE('name', 'like', '%' . $queries['search'] . '%');
+            $this->sql()->OR_WHERE('status', 'like', '%' . $queries['search'] . '%');
             $this->sql()->OR_WHERE('id', '=', $queries['search']);
         }
 
-        # Set the limit - Only if we're returning the actual customers
+        // Set the limit - Only if we're returning the actual customers
         if (!$checkMaxPages)
         {
             $this->sql()->LIMIT($offset, $limit);
         }
 
-        # Find the customers
+        // Find the customers
         $rows = $this->sql()->FIND_ALL();
 
-        # Are we checking the pages ?
+        // Are we checking the pages ?
         if ($checkMaxPages)
         {
             return ceil(count($rows) / $perPage);
         }
-
 
         return $rows;
     }

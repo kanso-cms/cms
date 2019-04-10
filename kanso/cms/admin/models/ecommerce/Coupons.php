@@ -8,12 +8,11 @@
 namespace kanso\cms\admin\models\ecommerce;
 
 use kanso\cms\admin\models\BaseModel;
-use kanso\framework\utility\Str;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
 
 /**
- * Admin coupons page
+ * Admin coupons page.
  *
  * @author Joe J. Howard
  */
@@ -43,25 +42,25 @@ class Coupons extends BaseModel
      */
     public function onAJAX()
     {
-        # Process any AJAX requests here
-        # 
-        # Returning an associative array will
-        # send a JSON response to the client
-        
-        # Returning false sends a 404 
+        // Process any AJAX requests here
+        //
+        // Returning an associative array will
+        // send a JSON response to the client
+
+        // Returning false sends a 404
         return false;
     }
 
     /**
-     * Parse and validate the POST request from the submitted form
-     * 
+     * Parse and validate the POST request from the submitted form.
+     *
      * @access private
      * @return array|false
      */
     public function parsePost()
     {
         $validate = $this->validatePost();
-        
+
         if (!$validate)
         {
             return false;
@@ -79,15 +78,15 @@ class Coupons extends BaseModel
         }
 
         $this->Config->set('coupons', $result);
-        
+
         $this->Config->save();
 
         return $this->postMessage('success', 'Settings were successfully updated!');
     }
 
     /**
-     * Validates all POST variables are set
-     * 
+     * Validates all POST variables are set.
+     *
      * @access private
      * @return bool
      */
@@ -97,8 +96,8 @@ class Coupons extends BaseModel
         {
             throw new InvalidTokenException('Bad Admin Panel POST Request. The CSRF token was either not provided or was invalid.');
         }
-        
-        # Validation
+
+        // Validation
         if (!isset($this->post['form_name']))
         {
             throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');

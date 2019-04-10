@@ -388,7 +388,7 @@ $KANSO_DEFAULT_ARTICLES =
 		'thumbnail_id'     => 4,
 		'comments_enabled' => true,
 		'meta'        => [
-			'offers' => 
+			'offers' =>
 			[
 				[
 					'offer_id'   => 'SKU3424',
@@ -403,9 +403,9 @@ $KANSO_DEFAULT_ARTICLES =
 					'price'      => 19.95,
 					'sale_price' => 9.95,
 					'instock'    => true,
-				]
-			]
-		]
+				],
+			],
+		],
 	],
 ];
 

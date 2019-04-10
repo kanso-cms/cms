@@ -7,16 +7,14 @@
 
 namespace kanso\cms\admin\models\ecommerce;
 
+use app\models\utility\Emails;
 use kanso\cms\admin\models\BaseModel;
-use kanso\framework\utility\Str;
-use kanso\framework\utility\Humanizer;
-use kanso\framework\file\Filesystem;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
-use app\models\utility\Emails;
+use kanso\framework\utility\Str;
 
 /**
- * Admin orders page/list model
+ * Admin orders page/list model.
  *
  * @author Joe J. Howard
  */
@@ -43,25 +41,25 @@ class Orders extends BaseModel
      */
     public function onAJAX()
     {
-        # Process any AJAX requests here
-        # 
-        # Returning an associative array will
-        # send a JSON response to the client
-        
-        # Returning false sends a 404 
+        // Process any AJAX requests here
+        //
+        // Returning an associative array will
+        // send a JSON response to the client
+
+        // Returning false sends a 404
         return false;
     }
 
     /**
-     * Parse and validate the POST request from any submitted forms
-     * 
+     * Parse and validate the POST request from any submitted forms.
+     *
      * @access private
      * @return array|false
      */
     public function parsePost()
     {
         $validate = $this->validatePost();
-        
+
         if (!$validate || is_array($validate))
         {
             return $validate;
@@ -80,7 +78,7 @@ class Orders extends BaseModel
             if ($this->post['bulk_action'] === 'delivered' || $this->post['bulk_action'] === 'shipped' || $this->post['bulk_action'] === 'received')
             {
                 $this->changeStatus($orderIds, $this->post['bulk_action']);
-                
+
                 return $this->postMessage('success', 'Orders were successfully updated!');
             }
         }
@@ -89,11 +87,11 @@ class Orders extends BaseModel
     }
 
     /**
-     * Delete an order
+     * Delete an order.
      *
      * @access private
-     * @param  array   $ids    List of post ids
-     * @param  string  $status Post status to change to
+     * @param array  $ids    List of post ids
+     * @param string $status Post status to change to
      */
     private function delete(array $ids)
     {
@@ -104,11 +102,11 @@ class Orders extends BaseModel
     }
 
     /**
-     * Change order status
+     * Change order status.
      *
      * @access private
-     * @param  array   $ids    List of post ids
-     * @param  string  $status Post status to change to
+     * @param array  $ids    List of post ids
+     * @param string $status Post status to change to
      */
     private function changeStatus(array $ids, string $status)
     {
@@ -119,11 +117,11 @@ class Orders extends BaseModel
                 'status'  => $status,
                 'shipped' => false,
             ];
-            
+
             if ($status === 'shipped' || $status === 'delivered')
             {
                 $changes['shipped'] = true;
-                
+
                 if (isset($this->post['tracking_code']))
                 {
                     $changes['tracking_code'] = $this->post['tracking_code'];
@@ -140,11 +138,11 @@ class Orders extends BaseModel
     }
 
     /**
-     * Email customer their tracking code
+     * Email customer their tracking code.
      *
      * @access private
-     * @param  string  $trakingCode   Tracking code
-     * @param  int     $transactionId Transaction row id
+     * @param string $trakingCode   Tracking code
+     * @param int    $transactionId Transaction row id
      */
     private function emailTrackingCode(string $trakingCode, int $transactionId)
     {
@@ -158,7 +156,7 @@ class Orders extends BaseModel
             'orderRefernce' => $transationRow['bt_transaction_id'],
         ];
 
-        # Email credentials
+        // Email credentials
         $senderName   = 'Vebena';
         $senderEmail  = 'orders@vebena.com.au';
         $emailSubject = 'Your Order Has Been Posted';
@@ -169,19 +167,19 @@ class Orders extends BaseModel
     }
 
     /**
-     * Validates all POST variables are set
-     * 
+     * Validates all POST variables are set.
+     *
      * @access private
      * @return bool|array
      */
     private function validatePost()
     {
-        # Validation
+        // Validation
         if (!isset($this->post['access_token']) || !$this->Gatekeeper->verifyToken($this->post['access_token']))
         {
             throw new InvalidTokenException('Bad Admin Panel POST Request. The CSRF token was either not provided or was invalid.');
         }
-        
+
         if (!isset($this->post['bulk_action']) || empty($this->post['bulk_action']))
         {
             throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
@@ -219,7 +217,7 @@ class Orders extends BaseModel
      */
     private function parseGet(): array
     {
-        # Prep the response
+        // Prep the response
         $response =
         [
             'orders'        => $this->loadOrders(),
@@ -234,8 +232,8 @@ class Orders extends BaseModel
             $response['active_tab'] = 'orders';
         }
 
-        # If the orders are empty,
-        # There's no need to check for max pages
+        // If the orders are empty,
+        // There's no need to check for max pages
         if (!empty($response['orders']))
         {
             $response['max_page'] = $this->loadOrders(true);
@@ -245,7 +243,7 @@ class Orders extends BaseModel
     }
 
     /**
-     * Check if the GET URL queries are either empty or set to defaults
+     * Check if the GET URL queries are either empty or set to defaults.
      *
      * @access private
      * @return bool
@@ -255,26 +253,26 @@ class Orders extends BaseModel
         $queries = $this->getQueries();
 
         return (
-            $queries['search'] === false && 
-            $queries['page']   === 0 && 
-            $queries['sort']   === 'newest' && 
+            $queries['search'] === false &&
+            $queries['page']   === 0 &&
+            $queries['sort']   === 'newest' &&
             $queries['status'] === false &&
-            $queries['date']   === false 
+            $queries['date']   === false
         );
     }
 
     /**
-     * Returns the requested GET queries with defaults
+     * Returns the requested GET queries with defaults.
      *
      * @access private
      * @return array
      */
     private function getQueries(): array
     {
-        # Get queries
+        // Get queries
         $queries = $this->Request->queries();
 
-        # Set defaults
+        // Set defaults
         if (!isset($queries['search']))   $queries['search']   = false;
         if (!isset($queries['page']))     $queries['page']     = 0;
         if (!isset($queries['sort']))     $queries['sort']     = 'newest';
@@ -285,19 +283,19 @@ class Orders extends BaseModel
     }
 
     /**
-     * Returns the list of orders for display
+     * Returns the list of orders for display.
      *
      * @access private
-     * @param  bool $checkMaxPages Count the max pages
+     * @param  bool      $checkMaxPages Count the max pages
      * @return array|int
      */
     private function loadOrders(bool $checkMaxPages = false)
     {
-        # Get queries
+        // Get queries
         $queries = $this->getQueries();
 
-        # Default operation values
-        $page         = ((int)$queries['page']);
+        // Default operation values
+        $page         = ((int) $queries['page']);
         $page         = $page === 1 || $page === 0 ? 0 : $page-1;
         $sort         = 'ASC';
         $sortKey      = 'transactions.date';
@@ -308,7 +306,7 @@ class Orders extends BaseModel
         $search       = $queries['search'];
         $date         = $queries['date'];
 
-        # Filter and sanitize the sort order
+        // Filter and sanitize the sort order
         if ($queries['sort'] === 'newest' || $queries['sort'] === 'shipped') $sort = 'DESC';
         if ($queries['sort'] === 'oldest' || $queries['sort'] === 'price' || $queries['sort'] === 'user') $sort = 'ASC';
 
@@ -316,82 +314,82 @@ class Orders extends BaseModel
         if ($queries['sort'] === 'user')    $sortKey = 'transactions.user_id';
         if ($queries['sort'] === 'shipped') $sortKey = 'transactions.shipped_date';
 
-        # Select the transactions
+        // Select the transactions
         $this->sql()->SELECT('transactions.*, users.name, users.email')->FROM('transactions');
-        
-        # Set the order
+
+        // Set the order
         $this->sql()->ORDER_BY($sortKey, $sort);
 
-        # Apply basic joins for queries
+        // Apply basic joins for queries
         $this->sql()->LEFT_JOIN_ON('users', 'users.id = transactions.user_id');
         $this->sql()->GROUP_BY('transactions.id');
 
-        # Filter status
+        // Filter status
         if ($status === 'received')
         {
             $this->sql()->AND_WHERE('transactions.status', '=', 'received');
         }
-        else if ($status === 'delivered')
+        elseif ($status === 'delivered')
         {
             $this->sql()->AND_WHERE('transactions.status', '=', 'delivered');
         }
-        else if ($status === 'shipped')
+        elseif ($status === 'shipped')
         {
             $this->sql()->AND_WHERE('transactions.status', '=', 'shipped')->OR_WHERE('transactions.shipped', '=', true);
         }
 
-        # Search by user name, user email, or transaction id
+        // Search by user name, user email, or transaction id
         if ($search)
         {
-            $this->sql()->AND_WHERE('users.email', 'like', '%'.$queries['search'].'%');
-            $this->sql()->OR_WHERE('users.name', 'like', '%'.$queries['search'].'%');
+            $this->sql()->AND_WHERE('users.email', 'like', '%' . $queries['search'] . '%');
+            $this->sql()->OR_WHERE('users.name', 'like', '%' . $queries['search'] . '%');
             $this->sql()->OR_WHERE('transactions.bt_transaction_id', '=', $queries['search']);
         }
 
-        # Filter by date ranges
+        // Filter by date ranges
         if ($date)
         {
             if ($date === 'today')
             {
                 $this->sql()->AND_WHERE('transactions.date', '>=', strtotime('today'));
             }
-            else if ($date === 'yesterday')
+            elseif ($date === 'yesterday')
             {
                 $this->sql()->AND_WHERE('transactions.date', '>=', strtotime('-1 day'));
                 $this->sql()->AND_WHERE('transactions.date', '<=', strtotime('today'));
             }
-            else if ($date === 'last_7_days')
+            elseif ($date === 'last_7_days')
             {
                 $this->sql()->AND_WHERE('transactions.date', '>=', strtotime('-7 days'));
             }
-            else if ($date === 'last_14_days')
+            elseif ($date === 'last_14_days')
             {
                 $this->sql()->AND_WHERE('transactions.date', '>=', strtotime('-14 days'));
             }
-            else if ($date === 'last_30_days')
+            elseif ($date === 'last_30_days')
             {
                 $this->sql()->AND_WHERE('transactions.date', '>=', strtotime('-30 days'));
             }
-            else if ($date === 'last_60_days')
+            elseif ($date === 'last_60_days')
             {
                 $this->sql()->AND_WHERE('transactions.date', '>=', strtotime('-60 days'));
             }
-            else if ($date === 'last_90_days')
+            elseif ($date === 'last_90_days')
             {
                 $this->sql()->AND_WHERE('transactions.date', '>=', strtotime('-90 days'));
             }
         }
 
-        # Set the limit - Only if we're returning the actual orders
+        // Set the limit - Only if we're returning the actual orders
         if (!$checkMaxPages)
         {
             $this->sql()->LIMIT($offset, $limit);
         }
 
-        # Find the orders
+        // Find the orders
         $rows = $this->sql()->FIND_ALL();
 
-        # Are we checking the pages ?
+        // Are we checking the pages ?
         if ($checkMaxPages)
         {
             return ceil(count($rows) / $perPage);

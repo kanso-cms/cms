@@ -7,15 +7,15 @@
 
 namespace kanso\cms\ecommerce;
 
+use Braintree\ClientToken;
 use Braintree\Configuration;
 use Braintree\Customer;
 use Braintree\PaymentMethod;
-use Braintree\ClientToken;
 use Braintree\Transaction;
 use Exception;
 
 /**
- * Coupon manager utility class
+ * Coupon manager utility class.
  *
  * @author Joe J. Howard
  */
@@ -29,21 +29,21 @@ class BrainTree extends UtilityBase
     private $btConfigured;
 
     /**
-     * Braintree customer object
+     * Braintree customer object.
      *
      * @var \Braintree_Customer
      */
     private $btCustomer;
 
     /**
-     * Generate and return a token for JS nonce
+     * Generate and return a token for JS nonce.
      *
      * @access public
      * @return string
      */
     public function token()
     {
-        # Configure BT
+        // Configure BT
         $this->configure();
 
         if ($this->Gatekeeper->isLoggedIn())
@@ -58,10 +58,10 @@ class BrainTree extends UtilityBase
     }
 
     /**
-     * Find an existing customer's card by id
+     * Find an existing customer's card by id.
      *
      * @access public
-     * @param  array  $sale Transaction configuration
+     * @param  array       $sale Transaction configuration
      * @return Transaction
      */
     public function transaction(array $sale)
@@ -72,11 +72,11 @@ class BrainTree extends UtilityBase
     }
 
     /**
-     * Find an existing customer's card by id
+     * Find an existing customer's card by id.
      *
      * @access public
-     * @param  int  $cardId The card id from our database
-     * @param  int  $userId The user id
+     * @param  int                 $cardId The card id from our database
+     * @param  int                 $userId The user id
      * @return PaymentMethod|false
      */
     public function findCustomerCard(int $cardId, int $userId)
@@ -84,14 +84,14 @@ class BrainTree extends UtilityBase
         $this->configure();
 
         $cardRow = $this->sql()->SELECT('*')->FROM('payment_tokens')->WHERE('id', '=', $cardId)->AND_WHERE('user_id', '=', $userId)->ROW();
-        
+
         if (!$cardRow)
         {
             return false;
         }
 
         $card = PaymentMethod::find($cardRow['token']);
-        
+
         if ($card)
         {
             return $card;
@@ -101,7 +101,7 @@ class BrainTree extends UtilityBase
     }
 
     /**
-     * Get logged in user's stored credit cards from BT
+     * Get logged in user's stored credit cards from BT.
      *
      * @access public
      * @return array
@@ -109,23 +109,23 @@ class BrainTree extends UtilityBase
     public function cards()
     {
         $this->configure();
-        
+
         $cards = [];
 
         if ($this->btCustomer)
         {
             $tokens = $this->sql()->SELECT('*')->FROM('payment_tokens')->WHERE('user_id', '=', $this->Gatekeeper->getUser()->id)->FIND_ALL();
-            
+
             if ($tokens)
             {
                 foreach ($tokens as $row)
                 {
                     $paymentMethod = PaymentMethod::find($row['token']);
-                    
+
                     if ($paymentMethod)
                     {
                         $paymentMethod->id = $row['id'];
-                        
+
                         $cards[] = $paymentMethod;
                     }
                 }
@@ -136,7 +136,7 @@ class BrainTree extends UtilityBase
     }
 
     /**
-     * Get the logged in customer
+     * Get the logged in customer.
      *
      * @access public
      * @return Customer|null
@@ -149,7 +149,7 @@ class BrainTree extends UtilityBase
     }
 
     /**
-     * Create New Braintree customer
+     * Create New Braintree customer.
      *
      * @access public
      * @return \Braintree_Customer|null
@@ -173,11 +173,11 @@ class BrainTree extends UtilityBase
             return $customer;
         }
 
-        throw new Exception("Error creating new customer. The customer could not be created.");
+        throw new Exception('Error creating new customer. The customer could not be created.');
     }
 
     /**
-     * Create New Braintree customer
+     * Create New Braintree customer.
      *
      * @access public
      * @return \PaymentMethod|false
@@ -188,13 +188,13 @@ class BrainTree extends UtilityBase
         {
             $this->configure();
 
-            # Save the card
+            // Save the card
             $paymentMethod = PaymentMethod::create([
                 'customerId'         => $this->Gatekeeper->getUser()->id,
                 'paymentMethodNonce' => $nonce,
             ]);
 
-            # Validate the method
+            // Validate the method
             if (!$paymentMethod->success)
             {
                 return false;
@@ -202,12 +202,12 @@ class BrainTree extends UtilityBase
 
             return $paymentMethod;
         }
-        
+
         return false;
     }
 
     /**
-     * Instantiate braintree
+     * Instantiate braintree.
      *
      * @access private
      */
@@ -215,9 +215,9 @@ class BrainTree extends UtilityBase
     {
         if (!$this->btConfigured)
         {
-            # Configure braintree
+            // Configure braintree
             $btConfig = $this->Config->get('ecommerce.braintree');
-            
+
             Configuration::environment($btConfig['environment']);
             Configuration::merchantId($btConfig['merchant_id']);
             Configuration::publicKey($btConfig['public_key']);
@@ -230,7 +230,7 @@ class BrainTree extends UtilityBase
     }
 
     /**
-     * Find braintree customer
+     * Find braintree customer.
      *
      * @access private
      * @return \Braintree_Customer|null

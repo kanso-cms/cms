@@ -7,27 +7,24 @@
 
 namespace kanso\cms\ecommerce;
 
-use kanso\cms\ecommerce\UtilityBase;
-use Exception;
-
 /**
- * Products utility 
+ * Products utility.
  *
  * @author Joe J. Howard
  */
 class Products extends UtilityBase
 {
     /**
-     * Get an offer from a product by id
+     * Get an offer from a product by id.
      *
      * @access private
-     * @param  int     $productId Product post_id
-     * @param  string  $offerId Offer id (sku)
+     * @param  int         $productId Product post_id
+     * @param  string      $offerId   Offer id (sku)
      * @return array|false
      */
     public function offer(int $productId, string $offerId)
     {
-        # Get all offers
+        // Get all offers
         $offers = $this->offers($productId);
 
         foreach ($offers as $offer)
@@ -42,10 +39,10 @@ class Products extends UtilityBase
     }
 
     /**
-     * Get all of a product's offers
+     * Get all of a product's offers.
      *
      * @access public
-     * @param  int     $productId Product post_id
+     * @param  int   $productId Product post_id
      * @return array
      */
     public function offers(int $productId): array
@@ -63,7 +60,7 @@ class Products extends UtilityBase
     }
 
     /**
-     * Get the related products
+     * Get the related products.
      *
      * @param  int   $productId Product post id
      * @param  int   $max       Max products to return (optional) (default 2)

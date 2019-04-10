@@ -96,7 +96,7 @@ class Ecommerce extends Model
         $this->addRoutes();
 
         $this->registerPostType();
-        
+
         $this->customizeAdminPanel();
     }
 
@@ -204,14 +204,14 @@ class Ecommerce extends Model
      */
     private function customizeAdminPanel()
     {
-        $this->Admin->addPage('E-commerce', 'e-commerce', 'shopping-basket', '\kanso\cms\admin\models\ecommerce\Orders', KANSO_DIR.'/cms/admin/views/dash-ecommerce-orders.php', null, true);
+        $this->Admin->addPage('E-commerce', 'e-commerce', 'shopping-basket', '\kanso\cms\admin\models\ecommerce\Orders', KANSO_DIR . '/cms/admin/views/dash-ecommerce-orders.php', null, true);
 
-        $this->Admin->addPage('Orders', 'orders', 'truck', '\kanso\cms\admin\models\ecommerce\Orders', KANSO_DIR.'/cms/admin/views/dash-ecommerce-orders.php', 'e-commerce', true);
+        $this->Admin->addPage('Orders', 'orders', 'truck', '\kanso\cms\admin\models\ecommerce\Orders', KANSO_DIR . '/cms/admin/views/dash-ecommerce-orders.php', 'e-commerce', true);
 
-        $this->Admin->addPage('Customers', 'customers', 'user', '\kanso\cms\admin\models\ecommerce\Customers', KANSO_DIR.'/cms/admin/views/dash-ecommerce-customers.php', 'e-commerce', true);
+        $this->Admin->addPage('Customers', 'customers', 'user', '\kanso\cms\admin\models\ecommerce\Customers', KANSO_DIR . '/cms/admin/views/dash-ecommerce-customers.php', 'e-commerce', true);
 
-        $this->Admin->addPage('Coupons', 'coupons', 'ticket', '\kanso\cms\admin\models\ecommerce\Coupons', KANSO_DIR.'/cms/admin/views/dash-ecommerce-coupons.php', 'e-commerce', true);
-        
+        $this->Admin->addPage('Coupons', 'coupons', 'ticket', '\kanso\cms\admin\models\ecommerce\Coupons', KANSO_DIR . '/cms/admin/views/dash-ecommerce-coupons.php', 'e-commerce', true);
+
         //$this->Admin->addPage('Configuration', 'configuration', 'cog', '\kanso\cms\admin\models\ecommerce\Config', KANSO_DIR.'/cms/admin/views/dash-ecommerce-config.php', 'e-commerce', true);
     }
 }
