@@ -12,13 +12,16 @@
      *
      * @var node
      */
-    var imgWrap = Helper.$('.js-author-avatar-img');
+    var imgWrap = Helper.$('.js-writer-form select[name="type"]');
 
+    console.log(imgWrap);
+    
     /**
      *
      * If the wrapper exists add listeners
      */
-    if (Helper.nodeExists(imgWrap)) {
+    if (Helper.nodeExists(imgWrap))
+    {
         initAvatarChooser();
     }
 

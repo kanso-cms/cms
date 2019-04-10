@@ -110,6 +110,10 @@ class Settings extends BaseModel
             {
                 return $this->submitAccessSettings();
             }
+            elseif ($formName === 'analytics_settings')
+            {
+                return $this->submitAnalyticsSettings();
+            }
             elseif ($formName === 'restore_kanso')
             {
                 return $this->submitRestoreKanso();
@@ -441,6 +445,58 @@ class Settings extends BaseModel
         $this->Config->save();
 
         return $this->postMessage('success', 'Security settings successfully updated!');
+    }
+
+    /**
+     * Parse and validate the Kanso settings from the POST request.
+     *
+     * @return array|false
+     */
+    private function submitAnalyticsSettings()
+    {
+        // Validate the user is an admin
+        if ($this->Gatekeeper->getUser()->role !== 'administrator')
+        {
+            return false;
+        }
+
+        $post  = $this->post;
+        $rules = [];
+        $filters =
+        [
+            'gAnalytics_enable'  => ['boolean'],
+            'gAdwords_enable'    => ['boolean'],
+            'fbPixel_enable'     => ['boolean'],
+            'gAnalytics_id'      => ['trim', 'string'],
+            'gAdwords_id'        => ['trim', 'string'],
+            'gAdwords_cnv_id'    => ['trim', 'string'],
+            'fbPixel_id'         => ['trim', 'string'],
+        ];
+
+        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
+
+        if (!$validator->isValid())
+        {
+            $errors = $validator->getErrors();
+
+            return $this->postMessage('warning', array_shift($errors));
+        }
+
+        $post = $validator->filter();
+
+        // Save settings
+        $this->Config->set('analytics.google.analytics.enabled', $post['gAnalytics_enable']);
+        $this->Config->set('analytics.google.adwords.enabled', $post['gAdwords_enable']);
+        $this->Config->set('analytics.facebook.enabled', $post['fbPixel_enable']);
+
+        $this->Config->set('analytics.google.analytics.id', $post['gAnalytics_id']);
+        $this->Config->set('analytics.google.adwords.id', $post['gAdwords_id']);
+        $this->Config->set('analytics.google.adwords.conversion', $post['gAdwords_cnv_id']);
+        $this->Config->set('analytics.facebook.pixel', $post['fbPixel_id']);
+ 
+        $this->Config->save();
+
+        return $this->postMessage('success', 'Analytics settings successfully updated!');
 
     }
 

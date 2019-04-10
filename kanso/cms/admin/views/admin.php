@@ -75,7 +75,8 @@ elseif (
 	$ADMIN_PAGE_TYPE === 'settingsKanso' ||
 	$ADMIN_PAGE_TYPE === 'settingsAccess' ||
 	$ADMIN_PAGE_TYPE === 'settingsUsers' ||
-	$ADMIN_PAGE_TYPE === 'settingsTools')
+	$ADMIN_PAGE_TYPE === 'settingsTools' ||
+	$ADMIN_PAGE_TYPE === 'settingsAnalytics')
 {
 	require_once('dash-settings.php');
 }

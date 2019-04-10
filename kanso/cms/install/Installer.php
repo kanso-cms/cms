@@ -215,6 +215,24 @@ class Installer
 
         $SQL->CREATE_TABLE('crm_visits', $KANSO_DEFAULTS_VISITS_TABLE);
 
+        $SQL->CREATE_TABLE('payment_tokens', $KANSO_DEFAULTS_PAYMENT_TOKENS_TABLE);
+
+        $SQL->CREATE_TABLE('shopping_cart_items', $KANSO_DEFAULTS_SHOPPING_CART_TABLE);
+        
+        $SQL->CREATE_TABLE('shipping_addresses', $KANSO_DEFAULTS_SHIPPING_ADDRESS_TABLE);
+        
+        $SQL->CREATE_TABLE('transactions', $KANSO_DEFAULTS_TRANSACTION_TABLE);
+
+        $SQL->CREATE_TABLE('loyalty_points', $KANSO_DEFAULTS_LOYALTY_POINTS_TABLE);
+
+        $SQL->CREATE_TABLE('loyalty_coupons', $KANSO_DEFAULTS_LOYALTY_COUPONS_TABLE);
+
+        $SQL->CREATE_TABLE('used_public_coupons', $KANSO_DEFAULTS_USED_PUBLIC_COUPONS);
+
+        $SQL->CREATE_TABLE('product_reviews', $KANSO_DEFAULTS_PRODUCT_REVIEWS_TABLE);
+
+        $SQL->CREATE_TABLE('product_review_votes', $KANSO_DEFAULTS_PRODUCT_REVIEW_VOTES_TABLE);
+
         $SQL->ALTER_TABLE('tags_to_posts')->MODIFY_COLUMN('post_id')->ADD_FOREIGN_KEY('posts', 'id');
         $SQL->ALTER_TABLE('tags_to_posts')->MODIFY_COLUMN('tag_id')->ADD_FOREIGN_KEY('tags', 'id');
 
@@ -254,6 +272,15 @@ class Installer
         // Default Articles
         foreach ($KANSO_DEFAULT_ARTICLES as $i => $article)
         {
+            if (isset($article['meta']))
+            {
+                $meta = $article['meta'];
+
+                unset($article['meta']);
+
+                $SQL->INSERT_INTO('post_meta')->VALUES(['post_id' => $i+1, 'content' => serialize($meta)])->QUERY();
+            }
+
             $SQL->INSERT_INTO('posts')->VALUES($article)->QUERY();
 
             foreach ($KANSO_DEFAULT_TAGS as $t => $tag)

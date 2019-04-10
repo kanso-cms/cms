@@ -211,6 +211,18 @@ class Dashboard extends BaseController
 	}
 
 	/**
+	 * Dispatch settingsAnalytics request.
+	 *
+	 * @access public
+	 */
+	public function settingsAnalytics()
+	{
+		$this->init('settingsAnalytics');
+
+		$this->dispatch();
+	}
+
+	/**
 	 * Dispatch errorLogs request.
 	 *
 	 * @access public

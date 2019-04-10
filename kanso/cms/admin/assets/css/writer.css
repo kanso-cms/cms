@@ -133,6 +133,20 @@
   display: inline-block;
 }
 
+.reviewer .tab-border>li a.active,
+.reviewer .tab-border>li a.active:hover {
+  border-bottom: 2px solid #f4f4f4;
+}
+
+.reviewer .product-options
+{
+  display: none;
+}
+.reviewer .product-options.active
+{
+  display: block;
+}
+
 /************************* FOOTER *************************/
 .writer-footer {
   position: fixed;

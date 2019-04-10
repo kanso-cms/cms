@@ -10,13 +10,14 @@
 
 	<!-- TAB NAV -->
 	<ul class="tab-nav tab-border">
-		<li><a href="/admin/settings/account/" <?php if ($active_tab === 'account') echo 'class="active"'; ?>>Account</a></li>
-	    <li><a href="/admin/settings/author/"  <?php if ($active_tab === 'author') echo 'class="active"'; ?>>Author</a></li>
+		<li><a href="/admin/settings/account/"   <?php if ($active_tab === 'account') echo 'class="active"'; ?>>Account</a></li>
+	    <li><a href="/admin/settings/author/"    <?php if ($active_tab === 'author') echo 'class="active"'; ?>>Author</a></li>
 	    <?php if ($USER->role === 'administrator') : ?>
-	    <li><a href="/admin/settings/kanso/"   <?php if ($active_tab === 'kanso') echo 'class="active"'; ?>>Kanso</a></li>
-	    <li><a href="/admin/settings/access/"  <?php if ($active_tab === 'access') echo 'class="active"'; ?>>Access &amp; Security</a></li>
-	    <li><a href="/admin/settings/users/"   <?php if ($active_tab === 'users') echo 'class="active"'; ?>>Users</a></li>
-	    <li><a href="/admin/settings/tools/"   <?php if ($active_tab === 'tools') echo 'class="active"'; ?>>Tools</a></li>
+	    <li><a href="/admin/settings/kanso/"     <?php if ($active_tab === 'kanso') echo 'class="active"'; ?>>Kanso</a></li>
+	    <li><a href="/admin/settings/access/"    <?php if ($active_tab === 'access') echo 'class="active"'; ?>>Access &amp; Security</a></li>
+	    <li><a href="/admin/settings/users/"     <?php if ($active_tab === 'users') echo 'class="active"'; ?>>Users</a></li>
+	    <li><a href="/admin/settings/analytics/" <?php if ($active_tab === 'analytics') echo 'class="active"'; ?>>Analytics</a></li>
+	    <li><a href="/admin/settings/tools/"     <?php if ($active_tab === 'tools') echo 'class="active"'; ?>>Tools</a></li>
 	   	<?php endif; ?>
 	</ul>
 
@@ -48,6 +49,10 @@
 	<?php elseif ($active_tab === 'tools') : ?>
 	    <!-- TOOLS -->
 	    <?php require_once($_TEMPLATES_DIR . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'tools.php'); ?>
+
+	<?php elseif ($active_tab === 'analytics') : ?>
+		<!-- ACCESS/SECURITY -->
+		<?php require_once($_TEMPLATES_DIR . DIRECTORY_SEPARATOR . 'settings' . DIRECTORY_SEPARATOR . 'analytics.php'); ?>
 	<?php endif; ?>
 
 </div>

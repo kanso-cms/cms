@@ -217,6 +217,9 @@ function admin_footer_scripts()
 	// Settings tools
 	$scripts[] = '<script type="text/javascript" src="' . admin_assets_url() . '/js/tools.min.js?v=' . admin_assets_version() . '"></script>';
 
+	// Ecommerce
+	$scripts[] = '<script type="text/javascript" src="' . admin_assets_url() . '/js/ecommerce.min.js?v=' . time() . '"></script>';
+
 	if (admin_page_name() === 'writer')
 	{
 		$scripts[] = '<script type="text/javascript" src="' . admin_assets_url() . '/js/vendor/offline.min.js?v=' . admin_assets_version() . '"></script>';
@@ -288,6 +291,23 @@ function admin_sirebar_links()
 				],
 			],
 		],
+		'settings' => [
+			'link'     => '/admin/settings/',
+			'text'     => 'Settings',
+			'icon'     => 'cog',
+			'children' => [
+				'settingsAccount' => [
+					'link'     => '/admin/settings/account/',
+					'text'     => 'Account',
+					'icon'     => 'user-circle-o',
+				],
+				'settingsAuthor' => [
+					'link'     => '/admin/settings/author/',
+					'text'     => 'Author',
+					'icon'     => 'address-card',
+				],
+			],
+		],
 		'crm' => [
 			'link'     => '/admin/leads/',
 			'text'     => 'CRM',
@@ -310,24 +330,6 @@ function admin_sirebar_links()
 				],
 			],
 		],
-
-		'settings' => [
-			'link'     => '/admin/settings/',
-			'text'     => 'Settings',
-			'icon'     => 'cog',
-			'children' => [
-				'settingsAccount' => [
-					'link'     => '/admin/settings/account/',
-					'text'     => 'Account',
-					'icon'     => 'user-circle-o',
-				],
-				'settingsAuthor' => [
-					'link'     => '/admin/settings/author/',
-					'text'     => 'Author',
-					'icon'     => 'address-card',
-				],
-			],
-		],
 	];
 
 	if (Kanso::instance()->Gatekeeper->getUser()->role === 'administrator')
@@ -346,6 +348,11 @@ function admin_sirebar_links()
 			'link'     => '/admin/settings/users/',
 			'text'     => 'Users',
 			'icon'     => 'users',
+		];
+		$links['settings']['children']['settingsAnalytics'] = [
+			'link'     => '/admin/settings/analytics/',
+			'text'     => 'Analytics',
+			'icon'     => 'bar-chart',
 		];
 		$links['settings']['children']['settingsTools'] = [
 			'link'     => '/admin/settings/tools/',

@@ -112,7 +112,7 @@ class Email
     }
 
     /**
-     * Load a present template.
+     * Load a preset template.
      *
      * @access public
      * @param  string $template Template name
