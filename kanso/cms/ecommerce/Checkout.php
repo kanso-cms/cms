@@ -7,22 +7,16 @@
 
 namespace kanso\cms\ecommerce;
 
-use kanso\framework\mvc\model\Model;
-use kanso\framework\database\query\Builder;
-use Braintree\Configuration;
-use Braintree\Customer;
-use Braintree\PaymentMethod;
-use Braintree\ClientToken;
-use Braintree\Transaction;
-use Exception;
+use kanso\cms\wrappers\managers\UserManager;
+use kanso\framework\utility\Str;
 use InvalidArgumentException;
 
 /**
- * Coupon manager utility class
+ * Checkout processing utility
  *
  * @author Joe J. Howard
  */
-class Checkout extends Model
+class Checkout extends UtilityBase
 {
     /**
      * Status code for user exists
@@ -74,10 +68,10 @@ class Checkout extends Model
         }
 
         # Get the coupon
-        $coupon = !empty($options['coupon']) && $options['applied_coupon'] === true ? $this->Coupons->discount($options['coupon']) : false;
+        $coupon = !empty($options['coupon']) && $options['apply_coupon'] === true ? $this->Ecommerce->coupons()->discount($options['coupon']) : false;
         
         # Get the shopping cart
-        $cart = $this->ShoppingCart->items();
+        $cart = $this->Ecommerce->cart()->items();
 
         # Figure out the amount to charge
         $prices = $this->getCheckoutPrice($cart, $coupon);
@@ -97,7 +91,7 @@ class Checkout extends Model
                 $user = $this->UserManager->createUser(
                     $options['shipping_email'],
                     Str::slug($options['shipping_email']),
-                    $_POST['password'],
+                    $options['password'],
                     $options['shipping_first_name'].' '.$options['shipping_last_name'],
                     'customer',
                     true,
@@ -121,7 +115,7 @@ class Checkout extends Model
         $userId = !$user ? null : $user->id;
 
         # Attempt the transaction with Braintree
-        $nonceOrToken = $options['billing_use_new_card'] === false ? $card->token : $_POST['billing_method_nonce'];
+        $nonceOrToken = $options['billing_use_new_card'] === false ? $card->token : $options['billing_method_nonce'];
         $transaction  = $this->processTransaction($nonceOrToken, $prices['total'], $options['billing_use_new_card'], !$this->Ecommerce->braintree()->customer(), $userId);
 
         # Validate the transaction
@@ -199,18 +193,18 @@ class Checkout extends Model
         # Log the client in if they created an account
         if ($createdUser)
         {
-            $this->Gatekeeper->login($options['shipping_email'], $_POST['password'], true);
+            $this->Gatekeeper->login($options['shipping_email'], $options['password'], true);
 
-            $this->CRM->login();
+            $this->Crm->login();
         }
 
         # Delete the items from the user's cart
-        $this->ShoppingCart->clear();
+        $this->Ecommerce->cart()->clear();
 
         # Set the coupon as used
         if ($coupon)
         {
-            $this->Coupons->setUsed($options['coupon'], $options['shipping_email']);
+            $this->Ecommerce->coupons()->setUsed($options['coupon'], $options['shipping_email']);
         }
 
         # Apply points to rewards based on transaction net price
@@ -234,7 +228,7 @@ class Checkout extends Model
         $this->sendAdminEmail($emailEmail, $transactionRow, $shippingRow, $emailOrder['items']);
 
         # Mark the visitor as having made a purchase
-        $visitor = $this->CRM->visitor();
+        $visitor = $this->Crm->visitor();
         $visitor->email = $emailEmail;
         $visitor->name = $emailName;
         $visitor->made_purchase = true;
@@ -282,7 +276,6 @@ class Checkout extends Model
 
         $content .= "\nShipping Details: \n";
         $content .= $shipping['first_name'].' '.$shipping['last_name']."\n";
-        $content .= $shipping['street_address_1'].' '.$shipping['street_address_2']."\n";
         $content .= $shipping['suburb'].' '.$shipping['state'].' '.$shipping['zip_code']."\n";
         $content .= "Telephone: ".$shipping['telephone']."\n";
 
@@ -335,7 +328,7 @@ class Checkout extends Model
             'first_name'       => ucfirst($options['shipping_first_name']),
             'last_name'        => ucfirst($options['shipping_last_name']),
             'street_address_1' => $options['shipping_address_1'],
-            'street_address_2' => $options['shipping_address_2'],
+            'street_address_2' => isset($options['shipping_address_2']) ? $options['shipping_address_2'] : '',
             'suburb'           => ucfirst($options['shipping_suburb']),
             'zip_code'         => $options['shipping_zip'],
             'state'            => $options['shipping_state'],
@@ -392,7 +385,7 @@ class Checkout extends Model
             $items[] = 
             [
                 'product_id' => $item['product'],
-                'offer_id'   => $item['offer']['id'],
+                'offer_id'   => $item['offer']['offer_id'],
                 'quantity'   => $item['quantity'],
                 'name'       => $this->Query->the_title($item['product']),
                 'offer'      => $item['offer']['name'],
@@ -426,9 +419,9 @@ class Checkout extends Model
      */
     private function getCheckoutPrice(array $cart, $coupon = false): array
     {
-        $subtotal     = $this->ShoppingCart->calcSubTotal($cart);
-        $shippingCost = $this->ShoppingCart->calcShippingCost($cart);
-        $GST          = $this->ShoppingCart->calcGST($cart);
+        $subtotal     = $this->Ecommerce->cart()->subTotal();
+        $shippingCost = $this->Ecommerce->cart()->shippingCost();
+        $GST          = $this->Ecommerce->cart()->gst();
         $priceTotal   = $subtotal + $shippingCost;
 
         $response =
@@ -546,7 +539,7 @@ class Checkout extends Model
             'shipping_use_new_address' => ['required'],
             'billing_save_card_info'   => ['required'],
             'shipping_save_address'    => ['required'],
-            'applied_coupon'           => ['required'],
+            'apply_coupon'             => ['required'],
         ];
         
         $filters =
@@ -555,7 +548,7 @@ class Checkout extends Model
             'shipping_use_new_address' => ['boolean'],
             'billing_save_card_info'   => ['boolean'],
             'shipping_save_address'    => ['boolean'],
-            'applied_coupon'           => ['boolean'],
+            'apply_coupon'             => ['boolean'],
             'coupon'                   => ['string', 'trim'],
         ];
 
@@ -616,7 +609,7 @@ class Checkout extends Model
 
             if ($this->Gatekeeper->isLoggedIn())
             {
-                unset($validation_rules['shipping_email']);   
+                unset($rules['shipping_email']);   
             }
         }
         else
@@ -639,12 +632,8 @@ class Checkout extends Model
         $options['shipping_use_new_address']  = Str::bool($options['shipping_use_new_address']);
         $options['billing_save_card_info']    = Str::bool($options['billing_save_card_info']);
         $options['shipping_save_address']     = Str::bool($options['shipping_save_address']);
-        $options['applied_coupon']            = Str::bool($options['applied_coupon']);
+        $options['apply_coupon']              = Str::bool($options['apply_coupon']);
         $options['create_account']            = isset($options['create_account']) ? Str::bool($options['create_account']) : false;
-        $options['shipping_existing_address'] = intval($options['shipping_existing_address']);
-        $options['billing_card_mm']           = intval($options['billing_card_mm']);
-        $options['billing_card_yy']           = intval($options['billing_card_yy']);
-        $options['billing_existing_card']     = intval($options['billing_existing_card']);
 
         # If the user is logged in the 'shipping_email'
         # will not be set. So we should add it from the user's object
@@ -729,12 +718,12 @@ class Checkout extends Model
         {
             if (!$this->Gatekeeper->isLoggedIn())
             {
-                throw new InvalidArgumentException('The user requested to use an existing address but is not logged in.');
+                throw new InvalidArgumentException('An existing address was requested but the user is not logged in.');
             }
             
             if (! $this->findShippingAddress($options['shipping_existing_address'], $this->Gatekeeper->getUser()->id))
             {
-                throw new InvalidArgumentException('The user requested to use an existing address but the address does not exist.');
+                throw new InvalidArgumentException('An existing address was requested but the address does not exist.');
             }
         }
     }
@@ -748,16 +737,16 @@ class Checkout extends Model
      */
     private function validateCouponOptions(array $options)
     {
-        if (!empty($options['coupon']) && $options['applied_coupon'] === true)
+        if (!empty($options['coupon']) && $options['apply_coupon'] === true)
         {
-            if (!$this->Coupons->exists($options['coupon']))
+            if (!$this->Ecommerce->coupons()->exists($options['coupon']))
             {
-                throw new InvalidArgumentException('The user requested to use a coupon but the coupon does not exist.');
+                throw new InvalidArgumentException('A coupon code was requested but the coupon does not exist.');
             }
 
-            if ($this->Coupons->used($options['coupon'], $options['shipping_email']))
+            if ($this->Ecommerce->coupons()->used($options['coupon'], $options['shipping_email']))
             {
-                throw new InvalidArgumentException('The user requested to use a coupon but the coupon is already used.');
+                throw new InvalidArgumentException('A coupon code was requested but the coupon is already used.');
             }
         }
     }
@@ -771,7 +760,7 @@ class Checkout extends Model
     private function validateCartOptions()
     {
         # Load the client's shopping cart
-        $cart = $this->ShoppingCart->items();
+        $cart = $this->Ecommerce->cart()->items();
         
         # Cart must not be empty
         if (!$cart || empty($cart))
@@ -812,6 +801,6 @@ class Checkout extends Model
         'DATE        : '.date('l jS \of F Y h:i:s A', time())."\n".
         'transaction : '.var_export($transaction, true)."\n\n\n";
 
-        Filesystem::appendContents(APP_DIR.'/storage/logs/transaction_errors.log', $msg);
+        $this->Filesystem->appendContents(APP_DIR.'/storage/logs/transaction_errors.log', $msg);
     }
 }

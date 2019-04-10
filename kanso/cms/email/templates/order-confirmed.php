@@ -340,7 +340,7 @@
                                                                             <td height="30"></td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#1d1d1d;font-size:12px;font-weight:500;text-transform: uppercase;letter-spacing:1px;line-height: 28px;"><?php echo $item['name']; ?> - <?php echo $kanso->Query->the_post_meta($item['product_id'])['type']; ?></td>
+                                                                            <td style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#1d1d1d;font-size:12px;font-weight:500;text-transform: uppercase;letter-spacing:1px;line-height: 28px;"><?php echo $item['name']; ?></td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td height="5"></td>

@@ -338,7 +338,7 @@ class Cart extends UtilityBase
         }
 
         # Does the item(s) offer free shipping ?
-        $freeShipping = $this->Config->get('ecommerce.free_shipping');
+        $freeShipping = $this->Config->get('ecommerce.free_shipping_products');
 
         foreach ($this->items() as $item)
         {

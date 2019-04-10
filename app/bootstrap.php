@@ -82,6 +82,8 @@ $autoloader->addPrefix('kanso', KANSO_DIR);
 
 $autoloader->addPrefix('app', APP_DIR);
 
+$autoloader->addPrefix('Braintree', dirname(KANSO_DIR) . '/vendor/braintree/braintree_php/lib/Braintree');
+
 $autoloader->register();
 
 /**

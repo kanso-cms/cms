@@ -7,8 +7,6 @@
 
 namespace kanso\cms\ecommerce;
 
-use kanso\framework\mvc\model\Model;
-use kanso\framework\database\query\Builder;
 use Braintree\Configuration;
 use Braintree\Customer;
 use Braintree\PaymentMethod;
@@ -21,7 +19,7 @@ use Exception;
  *
  * @author Joe J. Howard
  */
-class BrainTree extends Model
+class BrainTree extends UtilityBase
 {
     /**
      * Has braintree been configured ?
@@ -36,13 +34,6 @@ class BrainTree extends Model
      * @var \Braintree_Customer
      */
     private $btCustomer;
-
-	/**
-     * SQL query builder instance
-     *
-     * @var kanso\framework\database\query\Builder
-     */
-    private $SQL = null;
 
     /**
      * Generate and return a token for JS nonce
@@ -213,23 +204,6 @@ class BrainTree extends Model
         }
         
         return false;
-    }
-
-    /**
-     * Instantiate and/or return a query builder instance
-     *
-     * @access private
-     * @param  array $items $Cart items/offers by quantity
-     * @return int
-     */
-    private function SQL(): Builder
-    {
-        if (is_null($this->SQL))
-        {
-            $this->SQL = $this->Database->connection()->builder();
-        }
-
-        return $this->SQL;
     }
 
     /**

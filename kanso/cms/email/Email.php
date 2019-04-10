@@ -7,6 +7,7 @@
 
 namespace kanso\cms\email;
 
+use kanso\Kanso;
 use kanso\cms\email\phpmailer\PHPMailer;
 use kanso\framework\file\Filesystem;
 
@@ -122,6 +123,8 @@ class Email
     public function preset(string $template, array $vars = []): string
     {
         $variables = array_merge($this->theme, $vars);
+
+        $variables['kanso'] =  Kanso::instance();
 
         $filePath  = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $template . '.php';
 
