@@ -307,7 +307,7 @@ class Checkout extends UtilityBase
         $senderEmail  = 'orders@' . $domain;
         $emailSubject = 'Your Order Confirmation';
         $emailTo      = $email;
-        $emailContent = $this->Email->preset('order-confirmed', $emailData);
+        $emailContent = $this->Email->preset('order-confirmed', $emailData, true);
         
         $this->Email->send($emailTo, $senderName, $senderEmail, $emailSubject, $emailContent);
     }

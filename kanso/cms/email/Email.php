@@ -120,11 +120,14 @@ class Email
      * @param  array  $vars     Vars to send to the template
      * @return string
      */
-    public function preset(string $template, array $vars = []): string
+    public function preset(string $template, array $vars = [], bool $includeKanso = false): string
     {
         $variables = array_merge($this->theme, $vars);
 
-        $variables['kanso'] =  Kanso::instance();
+        if ($includeKanso)
+        {
+            $variables['kanso'] = Kanso::instance();
+        }
 
         $filePath  = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $template . '.php';
 
