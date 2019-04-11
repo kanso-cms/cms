@@ -5,9 +5,9 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace app\models\admin;
+namespace kanso\cms\admin\models\ecommerce;
 
-use kanso\framework\mvc\model\Model;
+use kanso\cms\admin\models\BaseModel;
 use kanso\framework\utility\Str;
 
 /**
@@ -15,12 +15,12 @@ use kanso\framework\utility\Str;
  *
  * @author Joe J. Howard
  */
-class Invoice extends Model
+class Invoice extends BaseModel
 {
     /**
      * {@inheritdoc}
      */
-    public function getInvoice()
+    public function onGET()
     {
         $transactionId = explode('/', Str::queryFilterUri($this->Request->environment()->REQUEST_URI));
         $transactionId = array_pop($transactionId);
@@ -48,5 +48,29 @@ class Invoice extends Model
             'customer' => $customer,
             'address'  => $address,
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function onPOST()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function onAJAX()
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getInvoice()
+    {
+
     }
 }

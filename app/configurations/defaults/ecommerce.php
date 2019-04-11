@@ -43,6 +43,16 @@ return
     'points_to_discount' => 10,
 
     /*
+     * URL to tracking website
+     */
+    'tracking_url' => 'https://auspost.com.au/mypost/track/#/search',
+
+    /*
+     * Address for invoices
+     */
+    'company_address' => '<strong>Powered By Kanso CMS</strong><br>1 City Road<br>Melbourne, VIC 3148<br>AUSTRALIA',
+
+    /*
      * Array of coupons - COUPON_CODE => Discount as percentage
      */
     'coupons' =>

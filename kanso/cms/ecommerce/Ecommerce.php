@@ -184,7 +184,7 @@ class Ecommerce extends Model
      */
     private function addRoutes()
     {
-        $this->Router->get('/admin/invoices/(:any)/', '\app\controllers\get\Admin@invoice', '\kanso\cms\admin\models\ecommerce\Invoice');
+        $this->Router->get('/admin/invoices/(:any)/', '\kanso\cms\admin\controllers\Dashboard@invoice', '\kanso\cms\admin\models\ecommerce\Invoice');
     }
 
     /**

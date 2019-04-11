@@ -259,6 +259,18 @@ class Dashboard extends BaseController
 	}
 
 	/**
+	 * Dispatch custom page.
+	 *
+	 * @access public
+	 */
+	public function invoice()
+	{
+		$this->init('invoice');
+
+		$this->dispatch();
+	}
+
+	/**
 	 * Dispatch emailPreview request.
 	 *
 	 * @access public
