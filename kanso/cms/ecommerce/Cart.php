@@ -328,10 +328,10 @@ class Cart extends UtilityBase
         // Calculate subtotal
         $subtotal = $this->subTotal();
 
-        if ($subtotal >= 99)
-        {
-            return 0.00;
-        }
+        // if ($subtotal >= $this->freeShippingThreshold)
+        // {
+        //     return 0.00;
+        // }
 
         // Does the item(s) offer free shipping ?
         $freeShipping = $this->Config->get('ecommerce.free_shipping_products');

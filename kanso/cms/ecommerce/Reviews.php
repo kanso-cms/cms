@@ -59,7 +59,7 @@ class Reviews extends UtilityBase
      * @param  int  $commentId Comment id
      * @return bool
      */
-    public function reccomends(int $commentId): bool
+    public function recommends(int $commentId): bool
     {
         $recommended = $this->sql()->SELECT('recommended')->FROM('product_reviews')->WHERE('comment_id', '=', $commentId)->ROW();
 
