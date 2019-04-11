@@ -66,12 +66,14 @@ class Config extends BaseModel
 
         $this->Config->set('ecommerce.braintree.environment', $this->post['bt_environment']);
         $this->Config->set('ecommerce.braintree.merchant_id', $this->post['bt_merchant_id']);
-        $this->Config->set('ecommerce.braintree.public_key',  $this->post['bt_public_key']);
+        $this->Config->set('ecommerce.braintree.public_key', $this->post['bt_public_key']);
         $this->Config->set('ecommerce.braintree.private_key', $this->post['bt_private_key']);
 
         $this->Config->set('ecommerce.confirmation_email', $this->post['confirmation_email']);
         $this->Config->set('ecommerce.shipping_price', $this->post['shipping_price']);
-        
+        $this->Config->set('ecommerce.company_address', $this->post['company_address']);
+        $this->Config->set('ecommerce.tracking_url', $this->post['tracking_url']);
+
         $this->Config->set('ecommerce.dollars_to_points', $this->post['dollars_to_points']);
         $this->Config->set('ecommerce.points_to_discount', $this->post['points_to_discount']);
 
@@ -112,6 +114,8 @@ class Config extends BaseModel
             'confirmation_email' => ['required'],
             'dollars_to_points'  => ['required'],
             'points_to_discount' => ['required'],
+            'tracking_url'       => ['required'],
+            'company_address'    => ['required'],
         ];
         $filters =
         [
@@ -124,6 +128,8 @@ class Config extends BaseModel
             'confirmation_email'     => ['trim', 'email'],
             'dollars_to_points'      => ['trim'],
             'points_to_discount'     => ['trim'],
+            'tracking_url'           => ['trim'],
+            'company_address'        => ['trim'],
         ];
 
         $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);

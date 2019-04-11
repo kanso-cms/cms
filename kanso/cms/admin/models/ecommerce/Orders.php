@@ -155,8 +155,9 @@ class Orders extends BaseModel
         ];
 
         // Email credentials
-        $senderName   = 'Vebena';
-        $senderEmail  = 'orders@vebena.com.au';
+        $domain       = $this->Request->environment()->DOMAIN_NAME;
+        $senderName   = $this->Config->get('cms.site_title');
+        $senderEmail  = 'orders@' . $domain;
         $emailSubject = 'Your Order Has Been Posted';
         $emailContent = $this->Email->preset('order-sent', $emailData, true);
         $emailTo      = $shippingRow['email'];

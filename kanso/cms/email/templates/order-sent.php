@@ -41,7 +41,7 @@
     a,
     a:hover
     {
-        color: #b5987e !important;
+        color: <?php echo $btn_bg; ?> !important;
         text-decoration: none !important;
     }
     .btn
@@ -58,7 +58,7 @@
     .footer-link a,
     .footer-link a:hover
     {
-        color:#9ea2a7 !important;
+        color:<?php echo $btn_bg; ?> !important;
     }
 
     @media only screen and (max-width: 510px)
@@ -107,45 +107,52 @@
                 <table align="center" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                         <td width="520" align="center">
-                            <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
+                            <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0" class="table-inner">
                                 <tr>
                                     <td height="50"></td>
                                 </tr>
                                 <tr>
                                     <td align="center" style="line-height: 0px;">
-                                        <img label="logo" src="https://vebena.com.au/app/public/themes/vebena/assets/img/email/vebena-logo.png" alt="vebena" width="100" height="100" style="display:block; line-height:0px; font-size:0px; border:0px;" />
+                                        <img style="display:block; line-height:0px; font-size:0px; border:0px;" width="100" height="100" src="<?php echo $logo_url; ?>" alt="<?php echo $kanso->Config->get('cms.site_title'); ?>" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td height="10"></td>
                                 </tr>
+
                                 <tr>
-                                    <td align="center" style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#a9abaf; font-size:9px; letter-spacing: 1px;line-height: 28px;text-transform: uppercase;">All Natural. Plant Based. Earth Grown.
-                                    </td>
+                                    <td align="center" style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#a9abaf; font-size:9px; letter-spacing: 1px;line-height: 28px;text-transform: uppercase;"><?php echo $kanso->Config->get('cms.site_description'); ?>.</td>
+                                </tr>
+                                <tr>
+                                    <td height="10"></td>
                                 </tr>
                             </table>
-                            
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-    <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#eceff3">
-        <tr>
-            <td align="center">
-                <table align="center" border="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td width="520" align="center">
-                            <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" class="table-inner">
+                            <table class="table-inner" width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
                                 <tr>
-                                    <td height="30"></td>
-                                </tr>
-                                <tr>
-                                    <td align="center" bgcolor="#eceff3" style="border-bottom:5px solid #b6997f; background-position:top; background-size:100%;border-top-left-radius:6px;border-top-right-radius:6px;" background="https://vebena.com.au/app/public/themes/vebena/assets/img/email/header-bg.png">
-                                        <table align="center" width="90%" border="0" cellspacing="0" cellpadding="0">
+                                    <td width="30" align="right" valign="bottom">
+                                        <table width="100%" border="0" align="right" cellpadding="0" cellspacing="0">
                                             <tr>
-                                                <td height="150"></td>
+                                                <td height="35"></td>
+                                            </tr>
+                                            <tr>
+                                                <td height="25" bgcolor="#FFFFFF" style="border-top-left-radius:6px;font-size:0px;">&nbsp;</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td rowspan="2" align="center" valign="bottom">
+                                        <table style="border-radius:6px;" width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="<?php echo $btn_bg; ?>">
+                                            <tr>
+                                                <td width="100%" height="50" align="center" style="padding-left: 15px;padding-right: 15px; font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#FFFFFF;font-size:12px;font-weight:400;text-transform: uppercase;letter-spacing:3px;">Order Confirmation</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td width="30" align="left" valign="bottom">
+                                        <table width="100%" border="0" align="left" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td height="35"></td>
+                                            </tr>
+                                            <tr>
+                                                <td height="25" bgcolor="#FFFFFF" style="border-top-right-radius:6px;font-size:0px;">&nbsp;</td>
                                             </tr>
                                         </table>
                                     </td>
@@ -164,18 +171,18 @@
                 <table align="center" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                         <td width="520" align="center">
-                            <table class="table-inner" bgcolor="#FFFFFF" width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
-                                <tr>
-                                    <td height="15"></td>
-                                </tr>
+                            <table bgcolor="#FFFFFF" class="table-inner" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td align="center">
-                                        <table class="table-inner" width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
-                                            
+                                        <table align="center" width="90%" border="0" cellspacing="0" cellpadding="0">
                                             <tr>
-                                                <td height="50" align="center" bgcolor="#FFFFFF" style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#1d1d1d;font-size:15px;font-weight:400;text-transform: uppercase;letter-spacing:3px;line-height: 30px;">
-                                                    YOUR ORDER HAS BEEN POSTED!
-                                                </td>
+                                                <td height="35"></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center" style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; font-size:18px;font-weight:400;line-height:40px;letter-spacing:3px; color:#1d1d1d; letter-spacing: 2px;text-transform: uppercase;">YOUR ORDER HAS BEEN POSTED</td>
+                                            </tr>
+                                            <tr>
+                                                <td height="25"></td>
                                             </tr>
                                         </table>
                                     </td>
@@ -204,9 +211,9 @@
                                             
                                             <tr>
                                                 <td align="left" style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#1d1d1d; font-size:14px; line-height: 28px;">
-                                                        Hi <?php echo $name;?><br>
+                                                        Hi <?php echo $name; ?><br>
                                                         Thank you for shopping with us. We thought you'd like to know that your order has now been posted and is on its way to you now.<br>
-                                                        Your order reference is <span style="font-weight: 500">#<?php echo strtoupper($orderRefernce) ;?></span><br>
+                                                        Your order reference is <span style="font-weight: 500">#<?php echo strtoupper($orderRefernce); ?></span><br>
                                                         Your tracking code is: <span style="font-weight: 500"><?php echo strtoupper($trackingCode); ?></span>
                                                 </td>
                                             </tr>
@@ -243,7 +250,7 @@
                                                                     <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#65d28d" class="btn" style="border-radius:3px;background-color:#65d28d;">
                                                                         <tr>
                                                                             <td height="45" align="center" style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#FFFFFF; font-size:13px;padding-left: 20px;padding-right: 20px;text-transform: uppercase;font-weight:500;">
-                                                                                <a href="https://auspost.com.au/mypost/track/#/details/<?php echo $trackingCode;?>">Track Your Order</a>
+                                                                                <a href="<?php echo $kanso->Config->get('ecommerce.tracking_url') . $trackingCode; ?>">Track Your Order</a>
                                                                             </td>
                                                                         </tr>
                                                                     </table>
@@ -285,7 +292,7 @@
                                                             <td height="15"></td>
                                                         </tr>
                                                         <tr>
-                                                            <td align="center" style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#7f8c8d; font-size:13px; line-height: 28px;">Orders are sent via Australia Post and are usually delivered within 3-5 business days of being sent. If your has not been delivered in the expected time please contact us directly. Our customer service team will help track down your order as soon as possible.
+                                                            <td align="center" style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#7f8c8d; font-size:13px; line-height: 28px;">Orders are usually delivered within 3-5 business days of being sent. If your has not been delivered in the expected time please contact us directly. Our customer service team will help track down your order as soon as possible.
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -336,127 +343,71 @@
         </tr>
     </table>
 
-    <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#eceff3">
-        <tr>
-            <td align="center">
-                <table align="center" border="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td width="520" align="center">
-                            <table class="table-inner" width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
-                                <tr>
-                                    <td align="center" width="600" bgcolor="#FFFFFF" style="border-bottom-left-radius:6px; border-bottom-right-radius: 6px;">
-                                        <table border="0" align="center" cellpadding="0" cellspacing="0">
+    <table align="center" bgcolor="#eceff3" width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tbody>
+            <tr>
+                <td align="center">
+                    <table align="center" border="0" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td width="520" align="center">
+                                    <table align="center" class="table-inner" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tbody>
                                             <tr>
-                                                <td dir="rtl" align="center" style="text-align:center;vertical-align:top;font-size:0;">
-                                                    <div style="display:inline-block; vertical-align:top;">
-                                                        <table align="center" border="0" cellpadding="0" cellspacing="0">
+                                                <td height="15" bgcolor="#FFFFFF"></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center" valign="top">
+                                                    <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                                                        <tbody>
                                                             <tr>
-                                                                <td align="center" width="250" class="mobile-full-width">
-                                                                    <table dir="ltr" width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
-                                                                        <tr>
-                                                                            <td align="center" style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#1d1d1d; font-size:14px;font-weight:500;text-transform: uppercase;letter-spacing: 3px;line-height: 30px;">
-                                                                                Join us on Social Media!
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td height="25"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="center" style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; font-size:14px; color:#1d1d1d;line-height:28px;">
-                                                                                For healthy tips, tricks, recipes inspiration and more!
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td height="25"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <table width="60%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#3498db" class="btn" style="border-radius:3px;background-color:#3498db;">
-                                                                                    <tbody>
-                                                                                        <tr>
-                                                                                            <td height="40" align="center">
-                                                                                                <table border="0" align="center" cellpadding="0" cellspacing="0">
-                                                                                                    <tbody>
-                                                                                                        <tr>
-                                                                                                            <td align="center" style="line-height: 0;">
-                                                                                                                <img src="https://vebena.com.au/app/public/themes/vebena/assets/img/email/fb-white.png" alt="facebook" width="16" style="display:block; line-height:0px; font-size:0px; border:0px;">
-                                                                                                            </td>
-                                                                                                            <td class="btn" align="center" style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#FFFFFF; font-size:14px; padding-left:5px;">
-                                                                                                                <a href="https://www.facebook.com/vebenaorganics/">FACEBOOK</a>
-                                                                                                            </td>
-                                                                                                        </tr>
-                                                                                                    </tbody>
-                                                                                                </table>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </tbody>
-                                                                                </table>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td height="15"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <table width="60%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#c0392b" class="btn" style="border-radius:3px;background-color:#c0392b;">
-                                                                                    <tbody>
-                                                                                        <tr>
-                                                                                            <td height="40" align="center">
-                                                                                                <table border="0" align="center" cellpadding="0" cellspacing="0">
-                                                                                                    <tbody>
-                                                                                                        <tr>
-                                                                                                            <td align="center" style="line-height: 0;">
-                                                                                                                <img src="https://vebena.com.au/app/public/themes/vebena/assets/img/email/in-white.png" alt="instagram" width="16" style="display:block; line-height:0px; font-size:0px; border:0px;">
-                                                                                                            </td>
-                                                                                                            <td class="btn" align="center" style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#FFFFFF; font-size:14px; padding-left:5px;">
-                                                                                                                <a href="https://www.instagram.com/vebena_organics/">INSTAGRAM</a>
-                                                                                                            </td>
-                                                                                                        </tr>
-                                                                                                    </tbody>
-                                                                                                </table>
-                                                                                            </td>
-                                                                                        </tr>
-                                                                                    </tbody>
-                                                                                </table>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td height="25"></td>
-                                                                        </tr>
+                                                                <td width="100%" align="center" valign="top">
+                                                                    <table width="100%" border="0" align="right" cellpadding="0" cellspacing="0">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td height="25" bgcolor="#FFFFFF" style="border-bottom-left-radius:6px;border-bottom-right-radius:6px; font-size:0px;"></td>
+                                                                            </tr>
+                                                                            
+                                                                        </tbody>
                                                                     </table>
                                                                 </td>
                                                             </tr>
-                                                        </table>
-                                                    </div>
-                                                    <div style="display:inline-block; vertical-align:bottom;">
-                                                        <table border="0" align="center" cellpadding="0" cellspacing="0">
-                                                            <tr>
-                                                                <td align="center" width="250" class="mobile-full-width">
-                                                                    <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
-                                                                        <tr>
-                                                                            <td height="25"></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td align="center" style="line-height:0px;">
-                                                                                <img label="social-img" src="https://vebena.com.au/app/public/themes/vebena/assets/img/email/iphone.png" alt="iphone" width="180" class="social-img" style="display:block; line-height:0px; font-size:0px; border:0px;width: 180px; height: auto;" />
-                                                                            </td>
-                                                                        </tr>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </div>
+                                                        </tbody>
+                                                    </table>
                                                 </td>
                                             </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
+                                            <tr>
+                                                <td height="20"></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center">
+                                                    <table border="0" align="center" cellpadding="0" cellspacing="0">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td align="center" style="line-height: 0px;">
+                                                                   
+                                                                </td>
+                                                                <td width="15"></td>
+                                                                <td align="center" style="line-height: 0px;">
+                                                                    
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td height="10"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
     </table>
     
     <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#eceff3">
@@ -464,7 +415,7 @@
             <td align="center">
                 <table align="center" border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td width="300" align="center">
+                        <td width="520" align="center">
                             <table align="center" width="90%" border="0" cellspacing="0" cellpadding="0">
                                 <tr>
                                     <td height="55"></td>

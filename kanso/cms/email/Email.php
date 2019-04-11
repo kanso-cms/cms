@@ -41,7 +41,7 @@ class Email
         'btn_size'        => '18px',
         'btn_font_size'   => '13px',
         'border_radius'   => '3px',
-        'logo_url'        => '',
+        'logo_url'        => 'https://kanso-cms.github.io/_media/logo.svg',
         'logo_link'       => 'http://kanso-cms.github.io/',
         'font_size_h1'    => '30px',
         'font_size_h2'    => '28px',

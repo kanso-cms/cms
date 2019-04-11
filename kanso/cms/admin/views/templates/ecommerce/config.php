@@ -7,6 +7,18 @@
         <p class="color-gray">Manage your shipping configuration options.</p>
 
         <div class="form-field row floor-sm">
+            <label for="company_address">Company Address</label>
+            <p class="color-gray">Your company address will appear on invoices.</p>
+            <input type="text" name="company_address" id="company_address" placeholder="<strong>Powered By Kanso CMS</strong><br>1 City Road<br>Melbourne, VIC 3148<br>AUSTRALIA" value="<?php echo $config['company_address']; ?>" data-js-required="true">
+        </div>
+
+        <div class="form-field row floor-sm">
+            <label for="tracking_url">Tracking URL</label>
+            <p class="color-gray">The base URL of your postal service tracking search. The tracking code will be appended and in the customer posted confirmation email.</p>
+            <input type="text" name="tracking_url" id="tracking_url" placeholder="https://postalservice/tracking/search/" value="<?php echo $config['tracking_url']; ?>" data-js-required="true">
+        </div>
+
+        <div class="form-field row floor-sm">
             <label for="shipping_price">Shipping Price</label>
             <p class="color-gray">Your flat rate shipping price on all orders.</p>
             <input type="text" name="shipping_price" id="shipping_price" placeholder="9.95" value="<?php echo $config['shipping_price']; ?>" data-js-required="true">

@@ -46,10 +46,7 @@
 		</div>
 		<div class="row">
 			 <address>
-	        	<strong>Vebena PTY LTD</strong><br>
-	        	PO Box 86<br>
-	        	Chadstone Shopping Centre, VIC 3148<br>
-	        	AUSTRALIA
+	        	<?php echo $kanso->Config->get('ecommerce.company_address'); ?>
 	        </address>
 		</div>
 		<div class="card pad-20" style="border: 1px dashed #BFBFBF;">

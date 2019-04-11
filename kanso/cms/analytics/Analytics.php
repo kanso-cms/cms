@@ -158,7 +158,7 @@ class Analytics extends Model
                 'items'        : [{
                     'id'       : '" . $this->Query->the_post_id() . "',
                     'name'     : '" . $this->Query->the_title() . "',
-                    'brand'    : 'Vebena',
+                    'brand'    : '" . $this->Config->get('cms.site_title') . "',
                     'category' : 'Products > " . $this->Query->the_categories_list(the_post_id(), ' > ') . "',
                     'price'    : '" . $offer['sale_price'] . "',
                     'variant'  : '" . $offer['name'] . "',
@@ -209,7 +209,7 @@ class Analytics extends Model
             [
                 'id'       => strval($item['product']->id),
                 'name'     => $item['product']->title,
-                'brand'    => 'Vebena',
+                'brand'    => $this->Config->get('cms.site_title'),
                 'category' => 'Products > ' . $this->Query->the_categories_list($item['product']->id, ' > '),
                 'price'    => strval($item['offer']['sale_price']),
                 'quantity' => $item['quantity'],
@@ -274,7 +274,7 @@ class Analytics extends Model
             [
                 'id'       => strval($item['product_id']),
                 'name'     => $item['name'],
-                'brand'    => 'Vebena',
+                'brand'    => $this->Config->get('cms.site_title'),
                 'category' => 'Products > ' . $this->Query->the_categories_list($item['product_id'], ' > '),
                 'price'    => strval($item['price']),
                 'quantity' => $item['quantity'],
