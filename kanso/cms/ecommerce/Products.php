@@ -58,32 +58,4 @@ class Products extends UtilityBase
 
         return [];
     }
-
-    /**
-     * Get the related products.
-     *
-     * @param  int   $productId Product post id
-     * @param  int   $max       Max products to return (optional) (default 2)
-     * @return array
-     */
-    public function related(int $productId, int $max = 2): array
-    {
-        $postMeta   = $this->Query->the_post_meta($productId);
-        $related    = [];
-
-        if (isset($postMeta['related_products']))
-        {
-            foreach ($postMeta['related_products'] as $i => $id)
-            {
-                if ($i >= $max)
-                {
-                    break;
-                }
-
-                $related[] = $this->PostManager->byId($id);
-            }
-        }
-
-        return $related;
-    }
 }
