@@ -46,6 +46,34 @@ class Checkout extends UtilityBase
      * @param  array                    $options Array of configuration options
      * @throws InvalidArgumentException
      * @return string|array|int
+     * @example 
+    ['shipping_use_new_address'  => false,
+    'shipping_save_address'     => false,
+    'shipping_existing_address' => '1',
+    'shipping_first_name'       => 'John',
+    'shipping_last_name'        => 'Doe',
+    'shipping_email'            => 'test@example.com',
+    'shipping_address_1'        => '300 City Rd',
+    'shipping_suburb'           => 'Melbourne',
+    'shipping_zip'              => '3000',
+    'shipping_state'            => 'Victoria',
+    'shipping_country'          => 'Australia',
+    'shipping_phone'            => '0400223243',
+
+    'create_account'            => false,
+    'password'                  => 'password1',
+    'apply_coupon'              => false,
+    'coupon'                    => 'SPECIAL_10',
+
+    'billing_use_new_card'      => false,
+    'billing_save_card_info'    => false,
+    'billing_existing_card'     => '1',
+    'billing_card_last_four'    => '4245',
+    'billing_card_type'         => 'visa',
+    'billing_card_name'         => 'John Doe',
+    'billing_card_mm'           => '04',
+    'billing_card_yy'           => '26',
+    'billing_method_nonce'      => 'fake-valid-nonce',]
      */
     public function payment(array $options)
     {
