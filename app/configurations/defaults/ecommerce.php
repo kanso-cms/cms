@@ -2,7 +2,7 @@
 
 return
 [
-	/*
+    /*
      * ---------------------------------------------------------
      * Braintree configurations
      * ---------------------------------------------------------
@@ -27,9 +27,9 @@ return
      */
     'confirmation_email' => 'info@example.com',
 
-	/*
-	 * The default shipping price to use
-	 */
+    /*
+     * The default shipping price to use
+     */
     'shipping_price' => 9.95,
 
     /*
@@ -43,18 +43,18 @@ return
     'points_to_discount' => 10,
 
     /*
-	 * Array of coupons - COUPON_CODE => Discount as percentage
-	 */
+     * Array of coupons - COUPON_CODE => Discount as percentage
+     */
     'coupons' =>
     [
-    	'SPECIAL_10' => 10,
-    	'SPECIAL_20' => 20,
-    	'SPECIAL_30' => 30,
+        'SPECIAL_10' => 10,
+        'SPECIAL_20' => 20,
+        'SPECIAL_30' => 30,
     ],
 
     /*
-	 * Array of product post_ids that have free shipping
-	 */
+     * Array of product post_ids that have free shipping
+     */
     'free_shipping_products' =>
     [
 

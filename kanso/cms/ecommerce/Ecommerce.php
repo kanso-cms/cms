@@ -212,6 +212,6 @@ class Ecommerce extends Model
 
         $this->Admin->addPage('Coupons', 'coupons', 'ticket', '\kanso\cms\admin\models\ecommerce\Coupons', KANSO_DIR . '/cms/admin/views/dash-ecommerce-coupons.php', 'e-commerce', true);
 
-        //$this->Admin->addPage('Configuration', 'configuration', 'cog', '\kanso\cms\admin\models\ecommerce\Config', KANSO_DIR.'/cms/admin/views/dash-ecommerce-config.php', 'e-commerce', true);
+        $this->Admin->addPage('Configuration', 'configuration', 'cog', '\kanso\cms\admin\models\ecommerce\Config', KANSO_DIR . '/cms/admin/views/dash-ecommerce-config.php', 'e-commerce', true);
     }
 }
