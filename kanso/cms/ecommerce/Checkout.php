@@ -19,7 +19,7 @@ use kanso\framework\utility\Str;
 class Checkout extends UtilityBase
 {
     /**
-     * Status code for empty cart
+     * Status code for empty cart.
      *
      * @var int
      */
@@ -33,7 +33,7 @@ class Checkout extends UtilityBase
     const USER_EXISTS = 200;
 
     /**
-     * Status code for non existent coupon. 
+     * Status code for non existent coupon.
      *
      * @var int
      */
@@ -75,14 +75,14 @@ class Checkout extends UtilityBase
     const SUCCESS = 800;
 
     /**
-     * Successful transaction id
+     * Successful transaction id.
      *
      * @var string|null
      */
     private $transactionId;
 
     /**
-     * Error message for failed transactions
+     * Error message for failed transactions.
      *
      * @var string|null
      */
@@ -95,7 +95,7 @@ class Checkout extends UtilityBase
      * @param  array                    $options Array of configuration options
      * @throws InvalidArgumentException
      * @return int
-     * @example 
+     * @example
     ['shipping_use_new_address' => false,
     'shipping_save_address'     => false,
     'shipping_existing_address' => '1',
@@ -138,7 +138,7 @@ class Checkout extends UtilityBase
         $this->validateAddressOptions($options);
 
         $couponValidation = $this->validateCouponOptions($options);
-        
+
         if ($couponValidation !== true)
         {
             return $couponValidation;
@@ -150,7 +150,6 @@ class Checkout extends UtilityBase
         {
             return $cartValidation;
         }
-        
 
         $this->validateAccountOptions($options);
 
@@ -565,7 +564,7 @@ class Checkout extends UtilityBase
      * @param  bool                                $createCustomer Create a new customer
      * @param  bool                                $useNonce       Pay using a new card
      * @param  int|null                            $userId         User id to create customer from (optional) (default null)
-     * @return string|false|\Braintree\Transaction
+     * @return int|\Braintree\Transaction
      */
     private function processTransaction($nonceOrToken, $amount, bool $createCustomer, $useNonce = false, int $userId = null)
     {
@@ -852,7 +851,7 @@ class Checkout extends UtilityBase
      * If a coupon is being used, validate it exists and is not used.
      *
      * @access private
-     * @param  array                    $options Array of configuration options
+     * @param  array    $options Array of configuration options
      * @return bool|int
      */
     private function validateCouponOptions(array $options)
@@ -924,9 +923,9 @@ class Checkout extends UtilityBase
      * Process and log error.
      *
      * @access private
-     * @param  int    $code        Error code
-     * @param  string $message     Error message
-     * @param  mixed  $transaction Braintree response object (optional)
+     * @param int    $code        Error code
+     * @param string $message     Error message
+     * @param mixed  $transaction Braintree response object (optional)
      */
     private function processError(int $code, string $message, $transaction = null)
     {
