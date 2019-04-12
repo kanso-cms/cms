@@ -19,25 +19,74 @@ use kanso\framework\utility\Str;
 class Checkout extends UtilityBase
 {
     /**
+     * Status code for empty cart
+     *
+     * @var int
+     */
+    const EMPTY_CART = 100;
+
+    /**
      * Status code for user exists.
      *
      * @var int
      */
-    const USER_EXISTS = 100;
+    const USER_EXISTS = 200;
+
+    /**
+     * Status code for non existent coupon. 
+     *
+     * @var int
+     */
+    const COUPON_INVALID = 300;
+
+    /**
+     * Status code for used coupon.
+     *
+     * @var int
+     */
+    const COUPON_USED = 400;
+
+    /**
+     * Status code for ambiguous gateway error.
+     *
+     * @var int
+     */
+    const GATEWAY_ERROR = 500;
 
     /**
      * Status code for credit card error.
      *
      * @var int
      */
-    const CARD_ERROR = 200;
+    const CARD_ERROR = 600;
 
     /**
      * Status code for credit card declined.
      *
      * @var int
      */
-    const CARD_DECLINED = 300;
+    const CARD_DECLINED = 700;
+
+    /**
+     * Status code for successful transaction exists.
+     *
+     * @var int
+     */
+    const SUCCESS = 800;
+
+    /**
+     * Successful transaction id
+     *
+     * @var string|null
+     */
+    private $transactionId;
+
+    /**
+     * Error message for failed transactions
+     *
+     * @var string|null
+     */
+    private $errorMessage;
 
     /**
      * Handle checkout.
@@ -45,9 +94,9 @@ class Checkout extends UtilityBase
      * @access public
      * @param  array                    $options Array of configuration options
      * @throws InvalidArgumentException
-     * @return string|array|int
+     * @return int
      * @example 
-    ['shipping_use_new_address'  => false,
+    ['shipping_use_new_address' => false,
     'shipping_save_address'     => false,
     'shipping_existing_address' => '1',
     'shipping_first_name'       => 'John',
@@ -77,6 +126,10 @@ class Checkout extends UtilityBase
      */
     public function payment(array $options)
     {
+        $this->transactionId = null;
+
+        $this->errorMessage = null;
+
         // Validate and sanitize the configuration options
         $options = $this->normaliseOptions($options);
 
@@ -84,14 +137,27 @@ class Checkout extends UtilityBase
 
         $this->validateAddressOptions($options);
 
-        $this->validateCouponOptions($options);
+        $couponValidation = $this->validateCouponOptions($options);
+        
+        if ($couponValidation !== true)
+        {
+            return $couponValidation;
+        }
 
-        $this->validateCartOptions();
+        $cartValidation = $this->validateCartOptions();
+
+        if ($cartValidation !== true)
+        {
+            return $cartValidation;
+        }
+        
 
         $this->validateAccountOptions($options);
 
         if (!$this->validateUserExists($options))
         {
+            $this->processError(self::USER_EXISTS, 'A user already exists under the provided email address.');
+
             return self::USER_EXISTS;
         }
 
@@ -129,6 +195,8 @@ class Checkout extends UtilityBase
                 // If it fails return user exists
                 if ($user === UserManager::USERNAME_EXISTS || $user === UserManager::SLUG_EXISTS || $user === UserManager::EMAIL_EXISTS)
                 {
+                    $this->processError(self::USER_EXISTS, 'A user already exists under the provided email address.');
+
                     return self::USER_EXISTS;
                 }
 
@@ -149,23 +217,14 @@ class Checkout extends UtilityBase
         // Validate the transaction
         // If the transaction fails for any reason, we need to delete the user
         // we created, if we created one
-        if ($transaction === 'processor_declined' || !$transaction)
+        if (!$transaction || is_int($transaction))
         {
             if ($createdUser && $user)
             {
                 $user->delete();
             }
 
-            return self::CARD_ERROR;
-        }
-        elseif ($transaction === 'settlement_declined')
-        {
-            if ($createdUser && $user)
-            {
-                $user->delete();
-            }
-
-           return self::CARD_DECLINED;
+            return $transaction;
         }
 
         // Prep the base row for the transaction
@@ -270,8 +329,33 @@ class Checkout extends UtilityBase
             $this->Session->put('checkout-token', $transaction->id);
         }
 
-        // Return the base url with the transaction
-        return ['transaction' => $transactionRow['bt_transaction_id']];
+        $this->transactionId = $transactionRow['bt_transaction_id'];
+
+        $this->errorMessage = null;
+
+        return self::SUCCESS;
+    }
+
+    /**
+     * Was the transaction successful?
+     *
+     * @access public
+     * @return bool
+     */
+    public function successful(): bool
+    {
+        return !is_null($this->transactionId);
+    }
+
+    /**
+     * Was the transaction successful?
+     *
+     * @access public
+     * @return string|null
+     */
+    public function errorMessage()
+    {
+        return $this->errorMessage;
     }
 
     /**
@@ -524,23 +608,29 @@ class Checkout extends UtilityBase
         }
         else
         {
-            $this->logError($result);
-
             if (!$result->transaction)
             {
-                return false;
+                $this->processError(self::GATEWAY_ERROR, $result->message, $result);
+
+                return self::GATEWAY_ERROR;
             }
             if ($result->transaction->status === 'processor_declined')
             {
-                return 'processor_declined';
+                $this->processError(self::CARD_ERROR, $result->message, $result);
+
+                return self::CARD_ERROR;
             }
             elseif ($result->transaction->status === 'settlement_declined')
             {
-                return 'settlement_declined';
+                $this->processError(self::CARD_DECLINED, $result->message, $result);
+
+                return self::CARD_DECLINED;
             }
         }
 
-        return false;
+        $this->processError(self::GATEWAY_ERROR, $result->message, $result);
+
+        return self::GATEWAY_ERROR;
     }
 
     /**
@@ -763,7 +853,7 @@ class Checkout extends UtilityBase
      *
      * @access private
      * @param  array                    $options Array of configuration options
-     * @throws InvalidArgumentException
+     * @return bool|int
      */
     private function validateCouponOptions(array $options)
     {
@@ -771,21 +861,27 @@ class Checkout extends UtilityBase
         {
             if (!$this->Ecommerce->coupons()->exists($options['coupon']))
             {
-                throw new InvalidArgumentException('A coupon code was requested but the coupon does not exist.');
+                $this->processError(self::COUPON_INVALID, 'The provided coupon does not exist.');
+
+                return self::COUPON_INVALID;
             }
 
             if ($this->Ecommerce->coupons()->used($options['coupon'], $options['shipping_email']))
             {
-                throw new InvalidArgumentException('A coupon code was requested but the coupon is already used.');
+                $this->processError(self::COUPON_USED, 'The provided coupon has already been used.');
+
+                return self::COUPON_USED;
             }
         }
+
+        return true;
     }
 
     /**
      * If a coupon is being used, validate it exists and is not used.
      *
      * @access private
-     * @throws InvalidArgumentException
+     *  @return bool|int
      */
     private function validateCartOptions()
     {
@@ -795,8 +891,12 @@ class Checkout extends UtilityBase
         // Cart must not be empty
         if (!$cart || empty($cart))
         {
-            throw new InvalidArgumentException('Cannot checkout an empty shipping cart.');
+            $this->processError(self::EMPTY_CART, 'The shopping cart is empty.');
+
+            return self::EMPTY_CART;
         }
+
+        return true;
     }
 
     /**
@@ -821,15 +921,45 @@ class Checkout extends UtilityBase
     }
 
     /**
+     * Process and log error.
+     *
+     * @access private
+     * @param  int    $code        Error code
+     * @param  string $message     Error message
+     * @param  mixed  $transaction Braintree response object (optional)
+     */
+    private function processError(int $code, string $message, $transaction = null)
+    {
+        if ($transaction)
+        {
+            $this->errorMessage = $transaction->message;
+
+            $this->logError($transaction);
+        }
+        else
+        {
+            $this->errorMessage = $message;
+
+            $msg =
+            'DATE     : ' . date('l jS \of F Y h:i:s A', time()) . "\n" .
+            'DATE     : ' . $code . "\n" .
+            'MESSAGE  : ' . $message . "\n\n\n";
+
+            $this->Filesystem->appendContents(APP_DIR . '/storage/logs/transaction_errors.log', $msg);
+        }
+    }
+
+    /**
      * Log a payment error.
      *
      * @access private
+     *  @param  mixed  $transaction Braintree response object
      */
     private function logError($transaction)
     {
         $msg =
         'DATE        : ' . date('l jS \of F Y h:i:s A', time()) . "\n" .
-        'transaction : ' . var_export($transaction, true) . "\n\n\n";
+        'TRANSACTION : ' . var_export($transaction, true) . "\n\n\n";
 
         $this->Filesystem->appendContents(APP_DIR . '/storage/logs/transaction_errors.log', $msg);
     }
