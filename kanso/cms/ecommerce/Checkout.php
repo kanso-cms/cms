@@ -559,11 +559,11 @@ class Checkout extends UtilityBase
      * Process the transaction with Braintree.
      *
      * @access private
-     * @param  string                              $nonceOrToken   A payment method nonce or existing card token
-     * @param  float                               $amount         The amount of the transaction
-     * @param  bool                                $createCustomer Create a new customer
-     * @param  bool                                $useNonce       Pay using a new card
-     * @param  int|null                            $userId         User id to create customer from (optional) (default null)
+     * @param  string                     $nonceOrToken   A payment method nonce or existing card token
+     * @param  float                      $amount         The amount of the transaction
+     * @param  bool                       $createCustomer Create a new customer
+     * @param  bool                       $useNonce       Pay using a new card
+     * @param  int|null                   $userId         User id to create customer from (optional) (default null)
      * @return int|\Braintree\Transaction
      */
     private function processTransaction($nonceOrToken, $amount, bool $createCustomer, $useNonce = false, int $userId = null)
