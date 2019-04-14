@@ -1,5 +1,24 @@
 --------------------------------------------------------
 
+### 4.0.0 <small> (15-04-2019)</small>
+
+Update using ```git fetch```.
+
+#### New
+* Added new `Ecommerce` service as default framework service `app/configurations/application.php`.
+* Added new `EcommerceService` to framework application services.
+* Added new `ecommerce` configuration file in `app/configurations/ecommerce.php`.
+* Added new `Analytics` service as default framework service `app/configurations/application.php`.
+* Added new `AnalyticsService` to framework application services.
+* Added new `analytics` configuration file in `app/configurations/analytics.php`.
+
+#### Changes
+* Bumped `Kanso::VERSION` number.
+
+#### Bugfixes
+
+--------------------------------------------------------
+
 ### 2.1.0 <small> (10-11-2018)</small>
 
 Update using ```git fetch```.
