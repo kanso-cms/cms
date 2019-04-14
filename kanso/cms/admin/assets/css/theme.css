@@ -622,3 +622,7 @@
   white-space: pre;
   padding-right: 20px;
 }
+hr.divider
+{
+  border-top: 1px solid #e3eaef;
+}

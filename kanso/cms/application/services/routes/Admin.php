@@ -95,6 +95,10 @@ $router->post('/admin/settings/users/', '\kanso\cms\admin\controllers\Dashboard@
 $router->get('/admin/settings/tools/', '\kanso\cms\admin\controllers\Dashboard@settingsTools', '\kanso\cms\admin\models\Settings');
 $router->post('/admin/settings/tools/', '\kanso\cms\admin\controllers\Dashboard@settingsTools', '\kanso\cms\admin\models\Settings');
 
+// Admin analytics
+$router->get('/admin/settings/analytics/', '\kanso\cms\admin\controllers\Dashboard@settingsAnalytics', '\kanso\cms\admin\models\Settings');
+$router->post('/admin/settings/analytics/', '\kanso\cms\admin\controllers\Dashboard@settingsAnalytics', '\kanso\cms\admin\models\Settings');
+
 // Admin writer
 $router->get('/admin/writer/', '\kanso\cms\admin\controllers\Dashboard@writer', '\kanso\cms\admin\models\Writer');
 $router->get('/admin/writer/(:all)', '\kanso\cms\admin\controllers\Dashboard@writer', '\kanso\cms\admin\models\Writer');

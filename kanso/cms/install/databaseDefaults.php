@@ -4,7 +4,8 @@
 $hashed = \kanso\Kanso::instance()->Crypto->password()->hash($this->config->get('cms.default_password'));
 
 // Default articles table
-$KANSO_DEFAULTS_POSTS_TABLE = [
+$KANSO_DEFAULTS_POSTS_TABLE =
+[
 	'id'          => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'created'     => 'INTEGER | UNSIGNED',
 	'modified'    => 'INTEGER | UNSIGNED',
@@ -19,14 +20,16 @@ $KANSO_DEFAULTS_POSTS_TABLE = [
 ];
 
 // Default post meta table
-$KANSO_DEFAULTS_POST_META_TABLE = [
+$KANSO_DEFAULTS_POST_META_TABLE =
+[
 	'id' 	   => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'content'  => 'TEXT',
 	'post_id'  => 'INTEGER | UNSIGNED',
 ];
 
 // Default tags table
-$KANSO_DEFAULTS_TAGS_TABLE = [
+$KANSO_DEFAULTS_TAGS_TABLE =
+[
 	'id'          => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'name'        => 'VARCHAR(255)',
 	'slug'        => 'VARCHAR(255)',
@@ -34,7 +37,8 @@ $KANSO_DEFAULTS_TAGS_TABLE = [
 ];
 
 // Default categories table
-$KANSO_DEFAULTS_CATEGORIES_TABLE = [
+$KANSO_DEFAULTS_CATEGORIES_TABLE =
+[
 	'id'          => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'name'        => 'VARCHAR(255)',
 	'slug'        => 'VARCHAR(255)',
@@ -43,7 +47,8 @@ $KANSO_DEFAULTS_CATEGORIES_TABLE = [
 ];
 
 // Default authors table
-$KANSO_DEFAULTS_USERS_TABLE = [
+$KANSO_DEFAULTS_USERS_TABLE =
+[
 	'id'           => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'username'     => 'VARCHAR(255)',
 	'visitor_id'   => 'VARCHAR(255)',
@@ -67,17 +72,20 @@ $KANSO_DEFAULTS_USERS_TABLE = [
 ];
 
 // Default CRM visitors table
-$KANSO_DEFAULTS_VISITORS_TABLE = [
-	'id'           => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
-	'visitor_id'   => 'VARCHAR(255)',
-	'ip_address'   => 'VARCHAR(255)',
-	'name'         => 'VARCHAR(255)',
-	'email'        => 'VARCHAR(255)',
-	'last_active'  => 'INTEGER | UNSIGNED | DEFAULT 0',
+$KANSO_DEFAULTS_VISITORS_TABLE =
+[
+	'id'            => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'visitor_id'    => 'VARCHAR(255)',
+	'ip_address'    => 'VARCHAR(255)',
+	'name'          => 'VARCHAR(255)',
+	'email'         => 'VARCHAR(255)',
+	'made_purchase' => 'BOOLEAN | DEFAULT FALSE',
+	'last_active'   => 'INTEGER | UNSIGNED | DEFAULT 0',
 ];
 
 // Default CRM visits table
-$KANSO_DEFAULTS_VISITS_TABLE = [
+$KANSO_DEFAULTS_VISITS_TABLE =
+[
 	'id'           => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'visitor_id'   => 'VARCHAR(255)',
 	'ip_address'   => 'VARCHAR(255)',
@@ -91,7 +99,8 @@ $KANSO_DEFAULTS_VISITS_TABLE = [
 ];
 
 // Default comments table
-$KANSO_DEFAULTS_COMMENTS_TABLE = [
+$KANSO_DEFAULTS_COMMENTS_TABLE =
+[
 	'id'           => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'parent'  	   => 'INTEGER | UNSIGNED | DEFAULT 0',
 	'post_id'      => 'INTEGER | UNSIGNED',
@@ -109,14 +118,16 @@ $KANSO_DEFAULTS_COMMENTS_TABLE = [
 ];
 
 // Default tags to posts table
-$KANSO_DEFAULTS_TAGS_TO_POSTS_TABLE = [
+$KANSO_DEFAULTS_TAGS_TO_POSTS_TABLE =
+[
 	'id' 	  => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'tag_id'  => 'INTEGER | UNSIGNED',
 	'post_id' => 'INTEGER | UNSIGNED',
 ];
 
 // Default tags to posts table
-$KANSO_DEFAULTS_CATEGORIES_TO_POSTS_TABLE = [
+$KANSO_DEFAULTS_CATEGORIES_TO_POSTS_TABLE =
+[
 	'id' 	      => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'category_id' => 'INTEGER | UNSIGNED',
 	'post_id'     => 'INTEGER | UNSIGNED',
@@ -125,14 +136,16 @@ $KANSO_DEFAULTS_CATEGORIES_TO_POSTS_TABLE = [
 // Default content to articles table
 // Note article content is stored seperately from the
 // article entry to improve database performance
-$KANSO_DEFAULTS_CONTENT_TO_POSTS_TABLE = [
+$KANSO_DEFAULTS_CONTENT_TO_POSTS_TABLE =
+[
 	'id' 	   => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'content'  => 'TEXT',
 	'post_id'  => 'INTEGER | UNSIGNED',
 ];
 
 // Default media table
-$KANSO_DEFAULTS_MEDIA_TABLE = [
+$KANSO_DEFAULTS_MEDIA_TABLE =
+[
 	'id'           => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'url'  	       => 'VARCHAR(255)',
 	'path'  	   => 'VARCHAR(255)',
@@ -144,8 +157,119 @@ $KANSO_DEFAULTS_MEDIA_TABLE = [
 	'uploader_id'  => 'INTEGER | UNSIGNED',
 ];
 
+// Default media table
+$KANSO_DEFAULTS_PAYMENT_TOKENS_TABLE =
+[
+	'id'           => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'user_id'  	   => 'INTEGER | UNSIGNED',
+	'token'  	   => 'VARCHAR(255)',
+];
+
+// Default shopping cart items
+$KANSO_DEFAULTS_SHOPPING_CART_TABLE =
+[
+	'id'           => 'INTEGER(11) | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'user_id'  	   => 'INTEGER(11) | UNSIGNED',
+	'product_id'   => 'INTEGER(11) | UNSIGNED',
+	'offer_id'     => 'VARCHAR(255)',
+	'quantity'     => 'INTEGER(11) | UNSIGNED',
+];
+
+// Shipping addresses
+$KANSO_DEFAULTS_SHIPPING_ADDRESS_TABLE =
+[
+	'id'               => 'INTEGER(11) | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'user_id'  	       => 'INTEGER(11) | UNSIGNED',
+	'email'            => 'VARCHAR(255)',
+	'first_name'       => 'VARCHAR(255)',
+	'last_name'        => 'VARCHAR(255)',
+	'street_address_1' => 'VARCHAR(255)',
+	'street_address_2' => 'VARCHAR(255)',
+	'suburb'           => 'VARCHAR(255)',
+	'zip_code'         => 'VARCHAR(255)',
+	'state'            => 'VARCHAR(255)',
+	'country'          => 'VARCHAR(255)',
+	'telephone'        => 'VARCHAR(255)',
+];
+
+// Transaction table
+$KANSO_DEFAULTS_TRANSACTION_TABLE =
+[
+	'id'                => 'INTEGER(11) | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'user_id'  	        => 'INTEGER(11) | UNSIGNED',
+	'bt_transaction_id' => 'VARCHAR(255)',
+	'shipping_id'       => 'INTEGER(11) | UNSIGNED',
+	'date'              => 'INTEGER(11) | UNSIGNED',
+	'status'            => 'VARCHAR(255)',
+	'shipped'           => 'BOOLEAN | DEFAULT FALSE',
+	'shipped_date'      => 'INTEGER(11) | UNSIGNED',
+	'tracking_code'     => 'VARCHAR(255)',
+	'eta'               => 'INTEGER(11) | UNSIGNED',
+	'card_type'         => 'VARCHAR(255)',
+	'card_last_four'    => 'INTEGER(11) | UNSIGNED',
+	'card_expiry'       => 'VARCHAR(255)',
+	'items'             => 'TEXT',
+	'sub_total'         => 'VARCHAR(255)',
+	'shipping_costs'    => 'VARCHAR(255)',
+	'coupon'            => 'VARCHAR(255)',
+	'total'             => 'VARCHAR(255)',
+];
+
+// Loyalty points table
+$KANSO_DEFAULTS_LOYALTY_POINTS_TABLE =
+[
+	'id'            => 'INTEGER(11) | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'user_id'  	    => 'INTEGER(11) | UNSIGNED',
+	'description'   => 'VARCHAR(255)',
+	'date'          => 'INTEGER(11) | UNSIGNED',
+	'points_add'    => 'INTEGER(11) | UNSIGNED',
+	'points_minus'  => 'INTEGER(11) | UNSIGNED',
+];
+
+// Loyalty coupons table
+$KANSO_DEFAULTS_LOYALTY_COUPONS_TABLE =
+[
+	'id'            => 'INTEGER(11) | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'user_id'  	    => 'INTEGER(11) | UNSIGNED',
+	'name'          => 'VARCHAR(255)',
+	'description'   => 'VARCHAR(255)',
+	'discount'      => 'INTEGER(11) | UNSIGNED',
+	'code'          => 'VARCHAR(255)',
+	'date'          => 'INTEGER(11) | UNSIGNED',
+	'used'          => 'BOOLEAN | DEFAULT FALSE',
+];
+
+// Product reviews table
+$KANSO_DEFAULTS_PRODUCT_REVIEWS_TABLE =
+[
+	'id'            => 'INTEGER(11) | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'comment_id'  	=> 'INTEGER(11) | UNSIGNED',
+	'product_id'  	=> 'INTEGER(11) | UNSIGNED',
+	'rating'        => 'INTEGER(11) | UNSIGNED',
+	'recommended'   => 'BOOLEAN | DEFAULT FALSE',
+];
+
+// Product review votes table
+$KANSO_DEFAULTS_PRODUCT_REVIEW_VOTES_TABLE =
+[
+	'id'          => 'INTEGER(11) | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'comment_id'  => 'INTEGER(11) | UNSIGNED',
+	'up_vote'     => 'BOOLEAN | DEFAULT FALSE',
+	'ip_address'  => 'VARCHAR(255)',
+];
+
+// Product review votes table
+$KANSO_DEFAULTS_USED_PUBLIC_COUPONS =
+[
+	'id'          => 'INTEGER(11) | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'user_id'     => 'INTEGER(11) | UNSIGNED',
+	'email'       => 'VARCHAR(255)',
+	'coupon_name' => 'VARCHAR(255)',
+];
+
 // The default user entry
-$KANSO_DEFAULT_USER = [
+$KANSO_DEFAULT_USER =
+[
 	'username'    		 => $this->config->get('cms.default_username'),
 	'email'       		 => $this->config->get('cms.default_email'),
 	'hashed_pass' 		 => utf8_encode($hashed),
@@ -163,7 +287,8 @@ $KANSO_DEFAULT_USER = [
 ];
 
 // The default tags entries
-$KANSO_DEFAULT_TAGS = [
+$KANSO_DEFAULT_TAGS =
+[
 	[
 		'name'        => 'Untagged',
 		'slug'        => 'untagged',
@@ -188,7 +313,8 @@ $KANSO_DEFAULT_TAGS = [
 ];
 
 // The default categories entries
-$KANSO_DEFAULT_CATEGORIES = [
+$KANSO_DEFAULT_CATEGORIES =
+[
 	[
 		'name'        => 'Uncategorized',
 		'slug'        => 'uncategorized',
@@ -212,7 +338,8 @@ $KANSO_DEFAULT_CATEGORIES = [
 ];
 
 // The default articles entries
-$KANSO_DEFAULT_ARTICLES = [
+$KANSO_DEFAULT_ARTICLES =
+[
 	[
 		'created'     => strtotime('-1 hour'),
 		'modified'    => time(),
@@ -249,17 +376,51 @@ $KANSO_DEFAULT_ARTICLES = [
 		'thumbnail_id'     => 4,
 		'comments_enabled' => true,
 	],
+	[
+		'created'     => strtotime('-2 months'),
+		'modified'    => time(),
+		'status'      => 'published',
+		'type'        => 'product',
+		'slug'        => 'products/html/example-product/',
+		'title'       => 'Elements',
+		'excerpt'     => 'This is an example product! Check it out',
+		'author_id'   => 1,
+		'thumbnail_id'     => 4,
+		'comments_enabled' => true,
+		'meta'        => [
+			'offers' =>
+			[
+				[
+					'offer_id'   => 'SKU3424',
+					'name'       => 'XXS',
+					'price'      => 19.95,
+					'sale_price' => 9.95,
+					'instock'    => true,
+				],
+				[
+					'offer_id'   => 'SKU3436',
+					'name'       => 'XXL',
+					'price'      => 19.95,
+					'sale_price' => 9.95,
+					'instock'    => true,
+				],
+			],
+		],
+	],
 ];
 
 // The default article content entries
-$KANSO_DEFAULT_ARTICLE_CONTENT = [
+$KANSO_DEFAULT_ARTICLE_CONTENT =
+[
 	file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'HelloWorld.md'),
 	file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'MarkdownBasics.md'),
 	file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'Elements.md'),
+	file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'Product.md'),
 ];
 
 // The default comments entries
-$KANSO_DEFAULT_COMMENTS = [
+$KANSO_DEFAULT_COMMENTS =
+[
 	[
 		'post_id'      => 1,
 		'date'         => strtotime('-1 hour'),
@@ -304,6 +465,20 @@ $KANSO_DEFAULT_COMMENTS = [
 		'email_thread' => false,
 		'rating'       => 2,
 	],
+	[
+		'post_id'      => 4,
+		'date'         => strtotime('-1 hour'),
+		'type'         => 'comment',
+		'status'       => 'approved',
+		'name'     	   => 'Tim Doe',
+		'email'    	   => 'TimDoe@example.com',
+		'content'  	   => 'This is a product review.',
+		'html_content' => '<p>This is a product review.<p>',
+		'ip_address'   => '192.168.1.3',
+		'email_reply'  => false,
+		'email_thread' => false,
+		'rating'       => 2,
+	],
 ];
 
 // The default media library entries
@@ -316,7 +491,8 @@ if (!strpos($_imagesUrl, 'http://') !== false)
     $_imagesUrl = 'http://' . $_imagesUrl;
 }
 
-$KANSO_DEFAULT_IMAGES = [
+$KANSO_DEFAULT_IMAGES =
+[
 	[
 		'url'  	       => $_imagesUrl . DIRECTORY_SEPARATOR . 'author_img.png',
 		'path'  	   => $_imgesDir . DIRECTORY_SEPARATOR . 'author_img.png',

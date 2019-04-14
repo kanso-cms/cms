@@ -8,7 +8,7 @@ return
 	'processor' => 'GD',
 
 	/*
-	 * Default compression level: from 0 (no compression) to 9
+	 * Default compression level: from 0 (no compression) to 9 (full compression)
 	 */
 	'compression' => 1,
 ];

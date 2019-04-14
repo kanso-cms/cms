@@ -40,7 +40,7 @@ return
      * site_description : The meta description.
      */
     'site_title'       => 'Kanso',
-    'site_description' => 'Kanso is a lightweight CMS written in PHP with a focus on simplicity, usability and writing.',
+    'site_description' => 'Kanso is a lightweight PHP CMS.',
 
     /*
      * ---------------------------------------------------------

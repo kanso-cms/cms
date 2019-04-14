@@ -129,6 +129,8 @@ return
 			'\kanso\cms\application\services\QueryService',
 			'\kanso\cms\application\services\EventService',
 			'\kanso\cms\application\services\AdminService',
+			'\kanso\cms\application\services\AnalyticsService',
+			'\kanso\cms\application\services\EcommerceService',
 			'\kanso\cms\application\services\BootService',
 		],
 

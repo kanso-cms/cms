@@ -66,7 +66,7 @@ class Admin
         // Add the menu to the sidebar
         $this->Filters->on('adminSidebar', function($sidebar) use ($title, $slug, $icon)
         {
-            return Arr::insertAt($sidebar,
+            $sidebar['content']['children'] = Arr::insertAt($sidebar['content']['children'] ,
                 ["$slug" =>
                     [
                         'link'     => '/admin/' . $slug . '/',
@@ -75,7 +75,9 @@ class Admin
                         'children' => [],
                     ],
                 ],
-            4);
+            2);
+
+            return $sidebar;
         });
 
         if ($isPage)

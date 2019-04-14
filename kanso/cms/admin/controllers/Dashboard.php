@@ -211,6 +211,18 @@ class Dashboard extends BaseController
 	}
 
 	/**
+	 * Dispatch settingsAnalytics request.
+	 *
+	 * @access public
+	 */
+	public function settingsAnalytics()
+	{
+		$this->init('settingsAnalytics');
+
+		$this->dispatch();
+	}
+
+	/**
 	 * Dispatch errorLogs request.
 	 *
 	 * @access public
@@ -242,6 +254,18 @@ class Dashboard extends BaseController
 	public function emailPreview()
 	{
 		$this->init('emailPreview');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch custom page.
+	 *
+	 * @access public
+	 */
+	public function invoice()
+	{
+		$this->init('invoice');
 
 		$this->dispatch();
 	}

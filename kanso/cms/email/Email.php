@@ -9,6 +9,7 @@ namespace kanso\cms\email;
 
 use kanso\cms\email\phpmailer\PHPMailer;
 use kanso\framework\file\Filesystem;
+use kanso\Kanso;
 
 /**
  * CMS email utility.
@@ -40,7 +41,7 @@ class Email
         'btn_size'        => '18px',
         'btn_font_size'   => '13px',
         'border_radius'   => '3px',
-        'logo_url'        => '',
+        'logo_url'        => 'https://kanso-cms.github.io/_media/logo.svg',
         'logo_link'       => 'http://kanso-cms.github.io/',
         'font_size_h1'    => '30px',
         'font_size_h2'    => '28px',
@@ -112,16 +113,21 @@ class Email
     }
 
     /**
-     * Load a present template.
+     * Load a preset template.
      *
      * @access public
      * @param  string $template Template name
      * @param  array  $vars     Vars to send to the template
      * @return string
      */
-    public function preset(string $template, array $vars = []): string
+    public function preset(string $template, array $vars = [], bool $includeKanso = false): string
     {
         $variables = array_merge($this->theme, $vars);
+
+        if ($includeKanso)
+        {
+            $variables['kanso'] = Kanso::instance();
+        }
 
         $filePath  = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $template . '.php';
 

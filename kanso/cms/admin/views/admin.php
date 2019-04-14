@@ -8,6 +8,14 @@ if ($ADMIN_PAGE_TYPE === 'emailPreview')
 	return;
 }
 
+// Special case for invoices
+if ($ADMIN_PAGE_TYPE === 'invoice')
+{
+	require_once('templates/ecommerce/invoice.php');
+
+	return;
+}
+
 $_TEMPLATES_DIR = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates';
 
 require_once('functions.php');
@@ -75,7 +83,8 @@ elseif (
 	$ADMIN_PAGE_TYPE === 'settingsKanso' ||
 	$ADMIN_PAGE_TYPE === 'settingsAccess' ||
 	$ADMIN_PAGE_TYPE === 'settingsUsers' ||
-	$ADMIN_PAGE_TYPE === 'settingsTools')
+	$ADMIN_PAGE_TYPE === 'settingsTools' ||
+	$ADMIN_PAGE_TYPE === 'settingsAnalytics')
 {
 	require_once('dash-settings.php');
 }

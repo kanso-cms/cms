@@ -329,6 +329,42 @@ class Writer extends BaseModel
             $response[trim($key, "'")] = trim($values[$i], "'");
         }
 
+        $offers = [];
+
+        $offerKeys =
+        [
+            'product_offer_X_id'         => 'offer_id',
+            'product_offer_X_name'       => 'name',
+            'product_offer_X_price'      => 'price',
+            'product_offer_X_sale_price' => 'sale_price',
+            'product_offer_X_instock'    => 'instock',
+        ];
+
+        for ($i=1; $i <= 20; $i++)
+        {
+            $offer = [];
+
+            foreach ($offerKeys as $postKey => $offerKey)
+            {
+                $postKey = str_replace('X', strval($i), $postKey);
+
+                if (isset($_POST[$postKey]))
+                {
+                    $offer[$offerKey] = $offerKey === 'instock' ? Str::bool($_POST[$postKey]) : trim($_POST[$postKey]);
+                }
+            }
+
+            if (!empty($offer))
+            {
+                $offers[] = $offer;
+            }
+        }
+
+        if (!empty($offers))
+        {
+            $response['offers'] = $offers;
+        }
+
         return $response;
     }
 }
