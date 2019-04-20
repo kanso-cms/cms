@@ -454,8 +454,8 @@
 .review-html .writer-media-wrapper .media-library .media-details-form .update-media,
 .writer-html .writer-media-wrapper .media-library .media-details-form .update-media
 {
-    width: 49%;
-    float: right;
+  width: 49%;
+  float: right;
 }
 
 
@@ -597,11 +597,11 @@
 {
   white-space: normal;
   max-height: 600px;
-    overflow: auto;
+  overflow: auto;
   border: 1px solid #e0e0e0;
-    border-radius: 3px;
-    padding: 0;
-    margin: 0;
+  border-radius: 3px;
+  padding: 0;
+  margin: 0;
 }
 .error-logs-list .line
 {
@@ -611,11 +611,11 @@
 .error-logs-list .lineno
 {
   border-right: 1px dotted #dcdcdc;
-    position: absolute;
-    left: 0;
-    top: 0;
-    padding: 0 10px 0 10px;
-    color: #c1c1c1;
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 0 10px 0 10px;
+  color: #c1c1c1;
 }
 .error-logs-list .linecode
 {
@@ -625,4 +625,90 @@
 hr.divider
 {
   border-top: 1px solid #e3eaef;
+}
+.cd-container
+{
+  margin: 0 auto;
+  position: relative;
+}
+.cd-container:after
+{
+  content: '';
+  display: table;
+  clear: both;
+}
+.cd-container:before
+{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 18px;
+  height: 100%;
+  width: 2px;
+  background: #DADADA;
+}
+.cd-timeline-block
+{
+  position: relative;
+  margin: 2em 0;
+}
+.cd-timeline-block::after {
+  clear: both;
+  content: "";
+  display: table;
+}
+.cd-timeline-block:first-child {
+  margin-top: 0;
+}
+.cd-timeline-block:last-child {
+  margin-bottom: 0;
+}
+
+.cd-timeline-dot
+{
+  position: absolute;
+  top: 8px;
+  left: 6px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 7px solid #fff;
+  background: #72c7bc;
+}
+.cd-timeline-content
+{
+  position: relative;
+  margin-left: 60px;
+}
+.cd-timeline-content::after
+{
+  clear: both;
+  content: "";
+  display: table;
+}
+.cd-timeline-content h2
+{
+  color: #303e49;
+}
+.cd-timeline-content .cd-read-more, .cd-timeline-content .cd-date
+{
+  display: inline-block;
+}
+
+.cd-timeline-content .cd-read-more
+{
+  float: right;
+  padding: .8em 1em;
+  background: #acb7c0;
+  color: #ffffff;
+  border-radius: 0.25em;
+}
+.no-touch .cd-timeline-content .cd-read-more:hover
+{
+  background-color: #bac4cb;
+}
+.cd-timeline-content .cd-date {
+  float: left;
+  padding: .8em 0;
+  opacity: .7;
 }

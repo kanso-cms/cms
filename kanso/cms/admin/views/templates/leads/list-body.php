@@ -11,11 +11,11 @@
 					<th>Email</th>
 					<th>Last Active</th>
 					<th>Status</th>
-					<th>Journey</th>
 					<th>Visit Count</th>
 					<th>Medium</th>
 					<th>Channel</th>
 					<th>Visits</th>
+					<th>Profile</th>
 				</tr>
 			</thead>
 			<tbody>

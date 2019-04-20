@@ -215,6 +215,8 @@ class Installer
 
         $SQL->CREATE_TABLE('crm_visits', $KANSO_DEFAULTS_VISITS_TABLE);
 
+        $SQL->CREATE_TABLE('crm_visit_actions', $KANSO_DEFAULTS_VISIT_ACTIONS_TABLE);
+
         $SQL->CREATE_TABLE('payment_tokens', $KANSO_DEFAULTS_PAYMENT_TOKENS_TABLE);
 
         $SQL->CREATE_TABLE('shopping_cart_items', $KANSO_DEFAULTS_SHOPPING_CART_TABLE);

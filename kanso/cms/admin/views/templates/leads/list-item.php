@@ -5,7 +5,6 @@
 	<th><?php echo $visitor->email; ?></th>
 	<th><?php echo kanso\framework\utility\Humanizer::timeAgo($visitor->last_active); ?> ago</th>
 	<th><?php echo $visitor->status; ?></th>
-	<th><?php echo $visitor->journey; ?></th>
 	<th><?php echo $visitor->countVisits(); ?></th>
 	<th><?php echo $visitor->medium(); ?></th>
 	<th><?php echo $visitor->channel(); ?></th>
@@ -13,6 +12,11 @@
 		<button type="button" class="btn btn-pure btn-xs btn-primary tooltipped tooltipped-n " data-tooltip="Show visits" onclick="document.getElementById('visits-view-<?php echo $visitor->id; ?>').classList.toggle('hidden');">
 			<span class="glyph-icon glyph-icon-eye icon-md"></span>
 		</button>
+	</th>
+	<th>
+		<a href="/admin/leads/<?php echo $visitor->visitor_id; ?>" class="btn btn-pure btn-primary tooltipped tooltipped-n " data-tooltip="View profile">
+			<span class="glyph-icon glyph-icon-vcard icon-md"></span>
+		</a>
 	</th>
 </tr>
 <tr class="hidden" id="visits-view-<?php echo $visitor->id; ?>" style="width:100%;">

@@ -84,6 +84,8 @@ $autoloader->addPrefix('app', APP_DIR);
 
 $autoloader->addPrefix('Braintree', dirname(KANSO_DIR) . '/vendor/braintree/braintree_php/lib/Braintree');
 
+$autoloader->addPrefix('Sinergi\BrowserDetector', dirname(KANSO_DIR) . '/vendor/sinergi/browser-detector/src');
+
 $autoloader->register();
 
 /**

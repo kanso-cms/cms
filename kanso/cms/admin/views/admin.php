@@ -76,6 +76,10 @@ elseif ($ADMIN_PAGE_TYPE === 'leads')
 {
 	require_once('dash-leads.php');
 }
+elseif ($ADMIN_PAGE_TYPE === 'lead')
+{
+	require_once('dash-lead.php');
+}
 elseif (
 	$ADMIN_PAGE_TYPE === 'settings' ||
 	$ADMIN_PAGE_TYPE === 'settingsAccount' ||

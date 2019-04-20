@@ -181,6 +181,7 @@ class Crm
             'campaign'     => isset($queries['cp']) ? $queries['cp'] : null,
             'keyword'      => isset($queries['kw']) ? $queries['kw'] : null,
             'creative'     => isset($queries['cr']) ? $queries['cr'] : null,
+            'browser'      => $this->Request->environment()->HTTP_USER_AGENT,
         ];
     }
 

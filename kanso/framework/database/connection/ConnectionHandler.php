@@ -158,6 +158,8 @@ class ConnectionHandler
 	 */
 	public function query(string $query, $params = [], int $fetchmode = PDO::FETCH_ASSOC)
 	{
+		$start = microtime(true);
+
 		if ($this->queryIsCachable($query))
 		{
 			$result = $this->loadQueryFromCache($query, array_merge($this->parameters, $params));
@@ -169,6 +171,10 @@ class ConnectionHandler
 				$result = $this->pdoStatement->fetchAll($fetchmode);
 
 				$this->cache->put($result);
+			}
+			else
+			{
+				$this->log($query, array_merge($this->parameters, $params), $start, true);
 			}
 		}
 		else
@@ -366,17 +372,18 @@ class ConnectionHandler
 	 * Adds a query to the query log.
 	 *
 	 * @access protected
-	 * @param string $query  SQL query
-	 * @param array  $params Query parameters
-	 * @param float  $start  Start time in microseconds
+	 * @param string $query     SQL query
+	 * @param array  $params    Query parameters
+	 * @param float  $start     Start time in microseconds
+	 * @param bool   $fromCache Was the query loaded from the cache?
 	 */
-	protected function log(string $query, array $params, float $start)
+	protected function log(string $query, array $params, float $start, bool $fromCache = false)
 	{
 		$time = microtime(true) - $start;
 
 		$query = $this->prepareQueryForLog($query, $params);
 
-		$this->log[] = ['query' => $query, 'time' => $time];
+		$this->log[] = ['query' => $query, 'time' => $time, 'from_cache' => $fromCache];
 	}
 
 	/**

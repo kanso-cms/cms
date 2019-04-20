@@ -52,13 +52,22 @@ class Visitor extends Wrapper
     }
 
     /**
-     * Adds the current visit.
+     * Adds the current visit. Ends the last one.
      *
      * @access public
      * @param array $row Visit row to save to the database
      */
     public function addVisit(array $row)
     {
+        $previousVisit = $this->previousVisit();
+
+        if ($previousVisit && (!$previousVisit->end || $previousVisit->end === 0))
+        {
+            $previousVisit->end = time();
+
+            $previousVisit->save();
+        }
+
         $this->visit = new Visit($this->SQL, $row);
 
         $this->visit->save();
@@ -169,12 +178,22 @@ class Visitor extends Wrapper
     }
 
     /**
+     * Mark visitor as still active on page.
      * Sets a visitor's last active to now.
      *
      * @access public
      */
     public function heartBeat()
     {
+        $previousVisit = $this->previousVisit();
+
+        if ($previousVisit && (!$previousVisit->end || $previousVisit->end === 0))
+        {
+            $previousVisit->end = time();
+
+            $previousVisit->save();
+        }
+
         $this->data['last_active'] = time();
 
         $this->save();

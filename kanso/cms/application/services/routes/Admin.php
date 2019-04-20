@@ -122,3 +122,6 @@ $router->get('/admin/email-preview/(:any)/', 'kanso\cms\admin\controllers\Dashbo
 
 // Admin leads
 $router->get('/admin/leads/', 'kanso\cms\admin\controllers\Dashboard@leads', '\kanso\cms\admin\models\Leads');
+
+// Admin lead
+$router->get('/admin/leads/(:any)', 'kanso\cms\admin\controllers\Dashboard@lead', '\kanso\cms\admin\models\Lead');

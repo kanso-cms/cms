@@ -91,11 +91,25 @@ $KANSO_DEFAULTS_VISITS_TABLE =
 	'ip_address'   => 'VARCHAR(255)',
 	'page'         => 'VARCHAR(255)',
 	'date'         => 'INTEGER | UNSIGNED | DEFAULT 0',
+	'end'          => 'INTEGER | UNSIGNED | DEFAULT 0',
 	'medium'       => 'VARCHAR(255)',
 	'channel'      => 'VARCHAR(255)',
 	'campaign'     => 'VARCHAR(255)',
 	'keyword'      => 'VARCHAR(255)',
 	'creative'     => 'VARCHAR(255)',
+	'browser'      => 'VARCHAR(255)',
+];
+
+// Default CRM visits table
+$KANSO_DEFAULTS_VISIT_ACTIONS_TABLE =
+[
+	'id'                 => 'INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
+	'visit_id'           => 'INTEGER | UNSIGNED',
+	'visitor_id'         => 'VARCHAR(255)',
+	'action_name'        => 'VARCHAR(255)',
+	'action_description' => 'VARCHAR(255)',
+	'page'               => 'VARCHAR(255)',
+	'date'               => 'INTEGER | UNSIGNED | DEFAULT 0',
 ];
 
 // Default comments table

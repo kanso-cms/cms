@@ -1,5 +1,29 @@
 --------------------------------------------------------
 
+### 4.1.0 <small> (20-04-2019)</small>
+
+Update using ```git fetch```.
+
+#### New
+* CMS now requires `sinergi/browser-detector` via composer.
+* Added `sinergi/browser-detector` to autoloader in `bootstrap.php`.
+* Added new `lead` profile page to admin panel.
+* Added new `lead` profile page to admin panel.
+* New column `end` in `crm_visit_actions` table.
+* New column `actions` method added to `Visit` wrapper.
+
+
+#### Changes
+* Bumped `Kanso::VERSION` number.
+* Bumped `Kanso::VERSION` number.
+* New column `end` in `crm_visits` table.
+* Updated `Visitor::heartBeat` & `Visitor::addVisit` methods to add end date to previous visit when creating a new one.
+* Database now logs cached queries.
+
+#### Bugfixes
+
+--------------------------------------------------------
+
 ### 4.0.0 <small> (15-04-2019)</small>
 
 Update using ```git fetch```.

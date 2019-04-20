@@ -271,13 +271,25 @@ class Dashboard extends BaseController
 	}
 
 	/**
-	 * Dispatch emailPreview request.
+	 * Dispatch leads request.
 	 *
 	 * @access public
 	 */
 	public function leads()
 	{
 		$this->init('leads');
+
+		$this->dispatch();
+	}
+
+	/**
+	 * Dispatch lead request.
+	 *
+	 * @access public
+	 */
+	public function lead()
+	{
+		$this->init('lead');
 
 		$this->dispatch();
 	}

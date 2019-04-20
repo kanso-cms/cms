@@ -26,7 +26,7 @@ class Invoice extends BaseModel
         $transactionId = array_pop($transactionId);
 
         // SQL Builder
-        $sql = $this->Database->connection()->builder();
+        $sql = $this->sql();
 
         // Find the transaction
         $transaction = $sql->SELECT('*')->FROM('transactions')->WHERE('bt_transaction_id', '=', $transactionId)->ROW();
