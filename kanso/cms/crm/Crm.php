@@ -93,6 +93,85 @@ class Crm
     }
 
     /**
+     * Links the logged in user with the current visitor.
+     *
+     * @access public
+     */
+    public function login()
+    {
+        if (!$this->Gatekeeper->isLoggedIn())
+        {
+            throw new Exception('Error logging in CRM visitor. The user is not logged in via the Gatekeeper.');
+        }
+
+        // Update the user with the visitor
+        $user = $this->Gatekeeper->getUser();
+
+        $user->visitor_id = $this->visitor->visitor_id;
+
+        $user->save();
+
+        // Update the visitor with the user
+        $this->visitor->email = $user->email;
+
+        $this->visitor->name = $user->name;
+
+        $this->visitor->save();
+
+        $this->Response->cookie()->put($this->cookieKey, $this->visitor->visitor_id);
+    }
+
+    /**
+     * After a visitor logs out, their cookie and sessions get wiped
+     * This function retains their original visitor id.
+     *
+     * @access public
+     */
+    public function logout()
+    {
+        // Add the crm visitor cookie again
+        $this->Response->cookie()->put($this->cookieKey, $this->visitor->visitor_id);
+    }
+
+    /**
+     * Merges the current visitor with another one
+     * 
+     * @access public
+     * @param  string $newVisitorId New visitor id
+     * @return bool
+     */
+    public function mergeVisitor(string $newVisitorId): bool
+    {
+        if ($newVisitorId !== $this->visitor->visitor_id)
+        {
+            $newVisitor = $this->sql()->SELECT('*')->FROM('crm_visitors')->WHERE('visitor_id', '=', $newVisitorId)->ROW();
+
+            if ($newVisitor)
+            {
+                if (isset($this->visitor->id))
+                {
+                    $this->sql()->DELETE_FROM('crm_visitors')->WHERE('id', '=', $this->visitor->id)->QUERY();
+
+                    $this->sql()->UPDATE('crm_visits')->SET(['visitor_id' => $newVisitorId])->WHERE('visitor_id', '=', $this->visitor->visitor_id)->QUERY();
+                }
+
+                foreach ($newVisitor as $key => $value)
+                {
+                    $this->visitor->$key = $value;
+                }
+
+                $this->Response->cookie()->set($this->cookieKey, $newVisitorId);
+
+                $this->visitor->save();
+                
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Find the current visitor.
      *
      * @access private
@@ -183,46 +262,5 @@ class Crm
             'creative'     => isset($queries['cr']) ? $queries['cr'] : null,
             'browser'      => $this->Request->environment()->HTTP_USER_AGENT,
         ];
-    }
-
-    /**
-     * Links the logged in user with the current visitor.
-     *
-     * @access public
-     */
-    public function login()
-    {
-        if (!$this->Gatekeeper->isLoggedIn())
-        {
-            throw new Exception('Error logging in CRM visitor. The user is not logged in via the Gatekeeper.');
-        }
-
-        // Update the user with the visitor
-        $user = $this->Gatekeeper->getUser();
-
-        $user->visitor_id = $this->visitor->visitor_id;
-
-        $user->save();
-
-        // Update the visitor with the user
-        $this->visitor->email = $user->email;
-
-        $this->visitor->name = $user->name;
-
-        $this->visitor->save();
-
-        $this->Response->cookie()->put($this->cookieKey, $this->visitor->visitor_id);
-    }
-
-    /**
-     * After a visitor logs out, their cookie and sessions get wiped
-     * This function retains their original visitor id.
-     *
-     * @access public
-     */
-    public function logout()
-    {
-        // Add the crm visitor cookie again
-        $this->Response->cookie()->put($this->cookieKey, $this->visitor->visitor_id);
     }
 }
