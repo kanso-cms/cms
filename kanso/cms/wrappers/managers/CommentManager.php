@@ -140,7 +140,7 @@ class CommentManager extends Manager
 
         $comment = $this->provider->create([
             'post_id'      => $postId,
-            'parent'       => $parentId,
+            'parent'       => !$parentId ? 0 : $parentId,
             'date'         => time(),
             'type'         => !$parentId ? 'comment' : 'reply',
             'status'       => $status,
