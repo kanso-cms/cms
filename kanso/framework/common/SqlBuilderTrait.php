@@ -17,15 +17,15 @@ use kanso\Kanso;
  */
 trait SqlBuilderTrait
 {
-	/**
-     * SQL query builder instance
+    /**
+     * SQL query builder instance.
      *
      * @var \kanso\framework\database\query\Builder|null
      */
     protected $sql = null;
 
     /**
-     * Instantiate and/or return a query builder instance
+     * Instantiate and/or return a query builder instance.
      *
      * @access protected
      * @return \kanso\framework\database\query\Builder

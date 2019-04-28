@@ -8,7 +8,7 @@
 namespace kanso\cms\query\helpers;
 
 use kanso\cms\query\Query;
-use kanso\framework\database\query\Builder;
+use kanso\framework\common\SqlBuilderTrait;
 use kanso\framework\ioc\Container;
 
 /**
@@ -18,12 +18,7 @@ use kanso\framework\ioc\Container;
  */
 abstract class Helper
 {
-    /**
-     * SQL query builder instance.
-     *
-     * @var \kanso\framework\database\query\Builder
-     */
-    protected $sql;
+    use SqlBuilderTrait;
 
     /**
      * IoC container instance.
@@ -59,21 +54,5 @@ abstract class Helper
     public function setParent(Query $query)
     {
         $this->parent = $query;
-    }
-
-    /**
-     * Returns query builder instance.
-     *
-     * @access public
-     * @return \kanso\framework\database\query\Builder
-     */
-    protected function sql(): Builder
-    {
-        if (is_null($this->sql))
-        {
-            $this->sql = $this->container->get('Database')->connection()->builder();
-        }
-
-        return $this->sql;
     }
 }

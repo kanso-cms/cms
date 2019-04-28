@@ -2,7 +2,7 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\framework\database\query\Builder;
+use kanso\framework\common\SqlBuilderTrait;
 use kanso\framework\mvc\model\Model;
 
 /**
@@ -12,19 +12,14 @@ use kanso\framework\mvc\model\Model;
  */
 abstract class BaseModel extends Model
 {
+	use SqlBuilderTrait;
+
 	/**
 	 * Identifying name of the requested page.
 	 *
 	 * @var string
 	 */
 	protected $requestName;
-
-	/**
-	 * Identifying name of the requested page.
-	 *
-	 * @var \kanso\framework\database\query\Builder
-	 */
-	protected $sql;
 
 	/**
 	 * POST variables.
@@ -64,22 +59,6 @@ abstract class BaseModel extends Model
 		$this->requestName = $requestName;
 
     	$this->post = $this->Request->fetch();
-	}
-
-	/**
-	 * Returns query builder instance.
-	 *
-	 * @access protected
-	 * @return \kanso\framework\database\query\Builder
-	 */
-	protected function sql(): Builder
-	{
-		if (is_null($this->sql))
-		{
-			$this->sql = $this->Database->connection()->builder();
-		}
-
-		return $this->sql;
 	}
 
 	/**

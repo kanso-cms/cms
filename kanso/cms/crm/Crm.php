@@ -10,7 +10,7 @@ namespace kanso\cms\crm;
 use Exception;
 use kanso\cms\wrappers\providers\LeadProvider;
 use kanso\cms\wrappers\Visitor;
-use kanso\framework\database\query\Builder;
+use kanso\framework\common\SqlBuilderTrait;
 use kanso\framework\ioc\ContainerAwareTrait;
 
 /**
@@ -21,6 +21,7 @@ use kanso\framework\ioc\ContainerAwareTrait;
 class Crm
 {
     use ContainerAwareTrait;
+    use SqlBuilderTrait;
 
     /**
      * The cookie key to be used to identify visitors.
@@ -57,17 +58,6 @@ class Crm
                 }
             }
         }
-    }
-
-    /**
-     * Return a new query builder instance.
-     *
-     * @access protected
-     * @return \kanso\framework\database\query\Builder
-     */
-    protected function sql(): Builder
-    {
-        return $this->Database->connection()->builder();
     }
 
     /**
@@ -134,8 +124,8 @@ class Crm
     }
 
     /**
-     * Merges the current visitor with another one
-     * 
+     * Merges the current visitor with another one.
+     *
      * @access public
      * @param  string $newVisitorId New visitor id
      * @return bool
@@ -163,7 +153,7 @@ class Crm
                 $this->Response->cookie()->set($this->cookieKey, $newVisitorId);
 
                 $this->visitor->save();
-                
+
                 return true;
             }
         }
