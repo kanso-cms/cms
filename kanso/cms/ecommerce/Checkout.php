@@ -352,6 +352,17 @@ class Checkout extends UtilityBase
      * @access public
      * @return string|null
      */
+    public function transactionId()
+    {
+        return $this->transactionId;
+    }
+
+    /**
+     * Was the transaction successful?
+     *
+     * @access public
+     * @return string|null
+     */
     public function errorMessage()
     {
         return $this->errorMessage;
@@ -644,12 +655,12 @@ class Checkout extends UtilityBase
     {
         if (!isset($options['billing_use_new_card']) || !isset($options['shipping_use_new_address']))
         {
-            throw new InvalidArgumentException('The payment options were incorrectly supplied. Please see documentation for details.');
+            throw new InvalidArgumentException('The "billing_use_new_card" and "shipping_use_new_address" fields are required.');
         }
 
         if (!$this->Gatekeeper->isLoggedIn() && !isset($options['create_account']))
         {
-            throw new InvalidArgumentException('The payment options were incorrectly supplied. Please see documentation for details.');
+            throw new InvalidArgumentException('If user is not logged in, the "create_account" field is required.');
         }
 
         $rules =
@@ -741,7 +752,7 @@ class Checkout extends UtilityBase
 
         if (!$validator->isValid())
         {
-            throw new InvalidArgumentException('The payment options were incorrectly supplied. Please see documentation for details.');
+            throw new InvalidArgumentException(implode(' ', $validator->getErrors()));
         }
 
         $options = $validator->filter();
