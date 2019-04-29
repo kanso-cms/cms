@@ -271,6 +271,11 @@ trait LoaderTrait
 			$waterfall[] = 'attachment-' . array_pop($urlParts);
 			$waterfall[] = 'attachment';
 		}
+		elseif ($pageType === 'products')
+		{
+			$waterfall[] = 'products';
+			$waterfall[] = 'index';
+		}
 
 		foreach ($waterfall as $name)
 		{
