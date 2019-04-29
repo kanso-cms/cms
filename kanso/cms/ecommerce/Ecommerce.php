@@ -93,9 +93,9 @@ class Ecommerce extends Model
 
         $this->reviews = $reviews;
 
-        $this->addRoutes();
-
         $this->registerPostType();
+
+        $this->addRoutes();
 
         $this->customizeAdminPanel();
     }
@@ -184,7 +184,15 @@ class Ecommerce extends Model
      */
     private function addRoutes()
     {
+        # Invoices for admin panel
         $this->Router->get('/admin/invoices/(:any)/', '\kanso\cms\admin\controllers\Dashboard@invoice', '\kanso\cms\admin\models\ecommerce\Invoice');
+        
+        # Products page
+        $this->Router->get('/products/feed/rss/', '\kanso\cms\application\Application::loadRssFeed', 'products');
+        $this->Router->get('/products/feed/atom/', '\kanso\cms\application\Application::loadRssFeed', 'products');
+        $this->Router->get('/products/feed/rdf/', '\kanso\cms\application\Application::loadRssFeed', 'products');
+        $this->Router->get('/products/feed/', '\kanso\cms\application\Application::loadRssFeed', 'products');
+        $this->Router->get('/products/', '\kanso\cms\application\Application::applyRoute', 'products');
     }
 
     /**

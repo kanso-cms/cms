@@ -154,6 +154,13 @@ class Filter extends Helper
                 return false;
             }
         }
+        elseif ($requestType === 'products')
+        {
+            if (!$this->filterProducts())
+            {
+                return false;
+            }
+        }
 
         // Set the_post so we're looking at the first item
         if (isset($this->parent->posts[0]))
@@ -548,6 +555,41 @@ class Filter extends Helper
         $this->parent->posts       = [$this->container->get('PostManager')->provider()->newPost($postRow)];
         $this->parent->postCount   = count($this->parent->posts);
         $this->parent->requestType = 'attachment';
+
+        return true;
+    }
+
+    /**
+     * Filter the posts based on a products request.
+     *
+     * @access private
+     * @return bool
+     */
+    private function filterProducts(): bool
+    {
+        $urlParts = explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI));
+        $isFeed   = in_array('feed', $urlParts);
+
+        // Remove /feed/rss
+        if ($isFeed)
+        {
+            $last = array_values(array_slice($urlParts, -1))[0];
+
+            if ($last === 'rss' || $last === 'rdf' || $last == 'atom')
+            {
+                array_pop($urlParts);
+                array_pop($urlParts);
+            }
+            else
+            {
+                array_pop($urlParts);
+            }
+        }
+
+        $this->parent->requestType  = 'products';
+        $this->parent->queryStr     = 'post_status = published : post_type = product : orderBy = post_created, DESC';
+        $this->parent->posts        = $this->parent->helper('parser')->parseQuery($this->parent->queryStr);
+        $this->parent->postCount    = count($this->parent->posts);
 
         return true;
     }

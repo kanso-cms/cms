@@ -174,7 +174,7 @@ abstract class QueryBase
      */
     public function create(string $queryStr = ''): Query
     {
-        $instance = clone $this;
+        $instance = new Query($this->container);
 
         $instance->applyQuery($queryStr);
 
