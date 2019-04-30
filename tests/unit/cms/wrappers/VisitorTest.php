@@ -356,7 +356,7 @@ class VisitorTest extends TestCase
 
         $sql->shouldReceive('LIMIT')->once()->andReturn($sql);
 
-        $sql->shouldReceive('FIND_ALL')->once()->andReturn([['id' => 3]]);
+        $sql->shouldReceive('ROW')->once()->andReturn(['id' => 3]);
 
         $visitor->previousVisit();
     }
@@ -386,7 +386,7 @@ class VisitorTest extends TestCase
 
         $sql->shouldReceive('LIMIT')->once()->andReturn($sql);
 
-        $sql->shouldReceive('FIND_ALL')->once()->andReturn([['id' => 3]]);
+        $sql->shouldReceive('ROW')->once()->andReturn(['id' => 3]);
 
         $visitor->timeSincePrevVisit();
     }
@@ -612,6 +612,18 @@ class VisitorTest extends TestCase
      */
     private function addVisit($sql)
     {
+        $sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);
+
+        $sql->shouldReceive('FROM')->with('crm_visits')->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('visitor_id', '=', '342fd')->once()->andReturn($sql);
+
+        $sql->shouldReceive('ORDER_BY')->with('date', 'DESC')->once()->andReturn($sql);
+
+        $sql->shouldReceive('LIMIT')->with(1, 1)->once()->andReturn($sql);
+
+        $sql->shouldReceive('ROW')->once()->andReturn(0);
+
         $sql->shouldReceive('UPDATE')->with('crm_visits')->once()->andReturn($sql);
 
         $sql->shouldReceive('SET')->with(['page' => 'foo'])->once()->andReturn($sql);
@@ -619,6 +631,5 @@ class VisitorTest extends TestCase
         $sql->shouldReceive('WHERE')->with('id', '=', 1)->once()->andReturn($sql);
 
         $sql->shouldReceive('QUERY')->once()->andReturn(true);
-
     }
 }

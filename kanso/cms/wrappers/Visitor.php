@@ -138,13 +138,16 @@ class Visitor extends Wrapper
      */
     public function previousVisit()
     {
-        $visit = $this->SQL->SELECT('*')->FROM('crm_visits')->WHERE('visitor_id', '=', $this->data['visitor_id'])->ORDER_BY('date', 'DESC')->LIMIT(1, 1)->ROW();
-
-        if ($visit)
+        if (isset($this->data['id']))
         {
-            return new Visit($this->SQL, $visit);
-        }
+            $visit = $this->SQL->SELECT('*')->FROM('crm_visits')->WHERE('visitor_id', '=', $this->data['visitor_id'])->ORDER_BY('date', 'DESC')->LIMIT(1, 1)->ROW();
 
+            if ($visit)
+            {
+                return new Visit($this->SQL, $visit);
+            }
+        }
+        
         return false;
     }
 
