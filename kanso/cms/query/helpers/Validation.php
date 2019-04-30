@@ -234,7 +234,7 @@ class Validation extends Helper
      */
     public function is_admin(): bool
     {
-        return  $this->parent->requestType === 'admin';
+        return $this->parent->is_page('/admin/(:all)/');
     }
 
     /**

@@ -52,7 +52,7 @@ class Crm
             // Only save current visit if this is a GET request
             if ($this->Request->isGet())
             {
-                if (!$this->Gatekeeper->isAdmin())
+                if (!$this->Query->is_admin())
                 {
                     $this->visitor->addVisit($this->newVisitRow());
                 }
