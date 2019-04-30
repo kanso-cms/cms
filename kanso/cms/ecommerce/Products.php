@@ -17,7 +17,7 @@ class Products extends UtilityBase
     /**
      * Get an offer from a product by id.
      *
-     * @access private
+     * @access public
      * @param  int         $productId Product post_id
      * @param  string      $offerId   Offer id (sku)
      * @return array|false

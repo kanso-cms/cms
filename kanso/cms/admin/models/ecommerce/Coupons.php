@@ -57,7 +57,7 @@ class Coupons extends BaseModel
      * @access private
      * @return array|false
      */
-    public function parsePost()
+    private function parsePost()
     {
         $validate = $this->validatePost();
 
