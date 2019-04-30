@@ -81,7 +81,7 @@ use Sinergi\BrowserDetector\Os;
 								    <dt style="text-align:left;">URL:</dt>
 								    <dd><a href="<?php echo $visit->page; ?>"><?php echo $visit->page; ?></a></dd>
 								    <dt style="text-align:left;">Duration:</dt>
-								    <dd><?php echo $visit->end !== 0 ? $visit->end - $visit->date . ' seconds' : 'Unknown'; ?></dd>
+								    <dd><?php echo $visit->end !== 0 ? Humanizer::timeElapsed($visit->end - $visit->date) : 'Unknown'; ?></dd>
 								    <dt style="text-align:left;">Interactions:</dt>
 								    <dd><?php echo count($visit->actions()); ?></dd>
 								    <dt style="text-align:left;">Channel:</dt>
@@ -100,7 +100,7 @@ use Sinergi\BrowserDetector\Os;
 								    <ul>
 								    	<?php foreach ($actions as $action) : ?>
 									    <li><?php echo $action['action_name']; ?><br>
-									    	<span class="color-gray"><?php echo $action['description']; ?></span>
+									    	<span class="color-gray"><?php echo $action['action_description']; ?></span>
 									    </li>
 										<?php endforeach; ?>
 									</ul>

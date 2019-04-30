@@ -18,7 +18,7 @@ use kanso\framework\utility\UUID;
  */
 class Visitor extends Wrapper
 {
-	use MagicArrayAccessTrait;
+    use MagicArrayAccessTrait;
 
     /**
      * Current visit.
@@ -138,11 +138,11 @@ class Visitor extends Wrapper
      */
     public function previousVisit()
     {
-        $visit = $this->SQL->SELECT('*')->FROM('crm_visits')->WHERE('visitor_id', '=', $this->data['visitor_id'])->ORDER_BY('date', 'DESC')->LIMIT(1, 1)->FIND_ALL();
+        $visit = $this->SQL->SELECT('*')->FROM('crm_visits')->WHERE('visitor_id', '=', $this->data['visitor_id'])->ORDER_BY('date', 'DESC')->LIMIT(1, 1)->ROW();
 
-        if (isset($visit[0]))
+        if ($visit)
         {
-            return new Visit($this->SQL, $visit[0]);
+            return new Visit($this->SQL, $visit);
         }
 
         return false;
@@ -187,7 +187,7 @@ class Visitor extends Wrapper
     {
         $previousVisit = $this->previousVisit();
 
-        if ($previousVisit && (!$previousVisit->end || $previousVisit->end === 0))
+        if ($previousVisit)
         {
             $previousVisit->end = time();
 
@@ -355,7 +355,7 @@ class Visitor extends Wrapper
      * {@inheritdoc}
      */
     public function save(): bool
-	{
+    {
         if (isset($this->data['id']))
         {
             $data = $this->data;
@@ -386,7 +386,7 @@ class Visitor extends Wrapper
 
             return true;
         }
-	}
+    }
 
     /**
      * {@inheritdoc}
