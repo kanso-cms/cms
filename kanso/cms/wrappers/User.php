@@ -45,14 +45,12 @@ class User extends Wrapper
      * {@inheritdoc}
      */
     public function save(): bool
-	{
+    {
         $saved = false;
 
-        $userExists = $this->SQL->SELECT('*')->FROM('users')->WHERE('email', '=', $this->data['email'])->ROW();
-
-        if ($userExists)
+        if (isset($this->data['id']))
         {
-            $saved = $this->SQL->UPDATE('users')->SET($this->data)->WHERE('id', '=', $userExists['id'])->QUERY();
+            $saved = $this->SQL->UPDATE('users')->SET($this->data)->WHERE('id', '=', $this->data['id'])->QUERY();
         }
         else
         {
@@ -70,13 +68,13 @@ class User extends Wrapper
         }
 
         return !$saved ? false : true;
-	}
+    }
 
     /**
      * {@inheritdoc}
      */
     public function delete(): bool
-	{
+    {
         if (isset($this->data['id']))
         {
             if ($this->data['id'] === 1)
@@ -97,7 +95,7 @@ class User extends Wrapper
         }
 
         return false;
-	}
+    }
 
     /**
      * Generate an access token for this user.
