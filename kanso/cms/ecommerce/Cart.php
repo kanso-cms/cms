@@ -314,7 +314,7 @@ class Cart extends UtilityBase
             $subtotal += ($item['quantity'] * $item['offer']['sale_price']);
         }
 
-        return number_format($subtotal, 2, '.', '');
+        return floatval($subtotal);
     }
 
     /**
@@ -328,17 +328,17 @@ class Cart extends UtilityBase
         // Calculate subtotal
         $subtotal = $this->subTotal();
 
-        // if ($subtotal >= $this->freeShippingThreshold)
-        // {
-        //     return 0.00;
-        // }
+        if ($subtotal >= $this->Config->get('ecommerce.free_shipping_threshold'))
+        {
+            return 0.00;
+        }
 
         // Does the item(s) offer free shipping ?
-        $freeShipping = $this->Config->get('ecommerce.free_shipping_products');
+        $freeShippingProducts = $this->Config->get('ecommerce.free_shipping_products');
 
         foreach ($this->items() as $item)
         {
-            if (!in_array($item['offer']['offer_id'], $freeShipping))
+            if (!in_array($item['offer']['offer_id'], $freeShippingProducts))
             {
                 return $this->Config->get('ecommerce.shipping_price');
             }

@@ -17,9 +17,9 @@ return
     'braintree' =>
     [
         'environment' => 'sandbox',
-        'merchant_id' => 'mfhqnkhjt853xprn',
-        'public_key'  => 'wyxtwdg72d823fwf',
-        'private_key' => '845ffbe44fba5930fb3504152f2027a0',
+        'merchant_id' => 'fdsfsdfs',
+        'public_key'  => 'YKFNR7U6YEfsdfs',
+        'private_key' => 'fdfkuryfdnlidusshsdKTKUFYKFNR7U6YEfsdfs',
     ],
 
     /*
@@ -31,6 +31,19 @@ return
      * The default shipping price to use
      */
     'shipping_price' => 9.95,
+
+    /*
+     * Array of product post_ids that have free shipping
+     */
+    'free_shipping_products' =>
+    [
+
+    ],
+
+    /*
+     * Threshold for free shipping
+     */
+    'free_shipping_threshold' => 99,
 
     /*
      * 1 Dollar = x loyalty points
@@ -62,11 +75,5 @@ return
         'SPECIAL_30' => 30,
     ],
 
-    /*
-     * Array of product post_ids that have free shipping
-     */
-    'free_shipping_products' =>
-    [
-
-    ],
+    
 ];
