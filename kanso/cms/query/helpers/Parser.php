@@ -186,7 +186,7 @@ class Parser extends Helper
 
             // if the query starts with keymap it is an andWhere()/orWhere() function
             // or group of functions
-            if (isset(self::$acceptedKeys[$query[0]]) && !count($query) % 2 == 0)
+            if (isset(self::$acceptedKeys[$query[0]]) && ! (count($query) % 2 == 0))
             {
                 $queries[] = $query;
             }

@@ -326,7 +326,7 @@ class Query extends QueryBase
 
     public function display_thumbnail($thumbnail, $size = 'original', $width = '', $height = '', string $classes = '', string $id = ''): string
     {
-        return $this->helper('post')->display_thumbnail($thumbnail, $size, $width, $height);
+        return $this->helper('post')->display_thumbnail($thumbnail, $size, $width, $height, $classes, $id);
     }
 
     public function all_static_pages(bool $published = true): array

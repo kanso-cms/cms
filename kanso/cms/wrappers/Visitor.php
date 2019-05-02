@@ -147,7 +147,7 @@ class Visitor extends Wrapper
                 return new Visit($this->SQL, $visit);
             }
         }
-        
+
         return false;
     }
 

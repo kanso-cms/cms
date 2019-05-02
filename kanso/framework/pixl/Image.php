@@ -35,10 +35,10 @@ class Image
      * Constructor.
      *
      * @access public
-     * @param string                                             $image     Absolute path to file (optional) (default '')
      * @param \kanso\framework\pixl\processor\ProcessorInterface $processor Image processor implementation
+     * @param string                                             $image     Absolute path to file (optional) (default '')
      */
-    public function __construct(string $image = '', ProcessorInterface $processor)
+    public function __construct(ProcessorInterface $processor, string $image = '')
     {
         $this->processor = $processor;
 

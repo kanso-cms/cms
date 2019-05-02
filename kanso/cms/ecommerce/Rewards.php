@@ -163,6 +163,7 @@ class Rewards extends UtilityBase
 	 * @param  string                   $description Description of event
 	 * @param  int|null                 $userId      user_id (optional) (default null)
 	 * @throws InvalidArgumentException If current user is not logged in and $userId is not provided
+	 * @return int
 	 */
 	public function addPoints(int $points, string $description, int $userId = null)
 	{
@@ -190,6 +191,7 @@ class Rewards extends UtilityBase
 	 * @param  string                   $description Description of event
 	 * @param  int|null                 $userId      user_id (optional) (default null)
 	 * @throws InvalidArgumentException If current user is not logged in and $userId is not provided
+	 * @return int
 	 */
 	public function minusPoints(int $points, string $description, int $userId = null)
 	{
@@ -221,7 +223,7 @@ class Rewards extends UtilityBase
 	 * @throws InvalidArgumentException If current user is not logged in and $userId is not provided
 	 * @return string
 	 */
-	public function createCoupon(string $name, string $description, int $discount, int $points, int $userId = null)
+	public function createCoupon(string $name, string $description, int $discount, int $points, int $userId = null): string
 	{
 		if (!$userId && !$this->Gatekeeper->isLoggedIn())
 		{

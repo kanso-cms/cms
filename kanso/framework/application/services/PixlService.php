@@ -25,7 +25,7 @@ class PixlService extends Service
 	{
 		$this->container->singleton('Pixl', function($container)
 		{
-			return new Image('', $this->getImageProcessor($container->Config->get('pixl')));
+			return new Image($this->getImageProcessor($container->Config->get('pixl')), '');
 		});
 	}
 
