@@ -314,7 +314,7 @@ class Cart extends UtilityBase
             $subtotal += ($item['quantity'] * $item['offer']['sale_price']);
         }
 
-        return floatval(number_format($subtotal, 2));
+        return number_format($subtotal, 2, '.', '');
     }
 
     /**
