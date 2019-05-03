@@ -17,6 +17,7 @@ use kanso\framework\database\query\Builder;
  */
 abstract class Wrapper
 {
+    
 	use MagicArrayAccessTrait;
 
     /**
