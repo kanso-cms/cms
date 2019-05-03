@@ -45,7 +45,7 @@ class User extends Wrapper
      * {@inheritdoc}
      */
     public function save(): bool
-    {
+	{
         $saved = false;
 
         if (isset($this->data['id']))
@@ -68,13 +68,13 @@ class User extends Wrapper
         }
 
         return !$saved ? false : true;
-    }
+	}
 
     /**
      * {@inheritdoc}
      */
     public function delete(): bool
-    {
+	{
         if (isset($this->data['id']))
         {
             if ($this->data['id'] === 1)
@@ -95,7 +95,7 @@ class User extends Wrapper
         }
 
         return false;
-    }
+	}
 
     /**
      * Generate an access token for this user.

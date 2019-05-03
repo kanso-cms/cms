@@ -180,16 +180,8 @@ class Checkout extends UtilityBase
         {
             if ($options['create_account'] === true)
             {
-                // Attempt to create the user,
-                $user = $this->UserManager->createUser(
-                    $options['shipping_email'],
-                    Str::slug($options['shipping_email']),
-                    $options['password'],
-                    $options['shipping_first_name'] . ' ' . $options['shipping_last_name'],
-                    'customer',
-                    true,
-                    false
-                );
+                // Attempt to create the user
+                $user = $this->UserManager->create($options['shipping_email'], Str::slug($options['shipping_email']), $options['password'], 'customer', true);
 
                 // If it fails return user exists
                 if ($user === UserManager::USERNAME_EXISTS || $user === UserManager::SLUG_EXISTS || $user === UserManager::EMAIL_EXISTS)
@@ -198,6 +190,10 @@ class Checkout extends UtilityBase
 
                     return self::USER_EXISTS;
                 }
+
+                $user->name = $options['shipping_first_name'] . ' ' . $options['shipping_last_name'];
+
+                $user->save();
 
                 $createdUser = true;
             }
@@ -316,7 +312,7 @@ class Checkout extends UtilityBase
         // Mark the visitor as having made a purchase
         $visitor = $this->Crm->visitor();
         $visitor->email = $emailEmail;
-        $visitor->name = $emailName;
+        $visitor->name  = $emailName;
         $visitor->made_purchase = true;
         $visitor->save();
 

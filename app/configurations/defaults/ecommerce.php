@@ -75,5 +75,4 @@ return
         'SPECIAL_30' => 30,
     ],
 
-    
 ];
