@@ -408,7 +408,7 @@ class Checkout extends UtilityBase
      * @param string $email User email
      * @param array  $order Order details
      */
-    private function sendConfirmationEmail($name, $email, $order)
+    private function sendConfirmationEmail(string $name, string $email, array $order)
     {
         $domain  = $this->Request->environment()->DOMAIN_NAME;
         $name    = ucfirst(explode(' ', trim($name))[0]);
