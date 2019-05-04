@@ -194,3 +194,90 @@
     }
 
 }());
+
+/**
+ * Coupon add/remove
+ * 
+ * @var obj
+ */
+(function() {
+
+    /**
+     * JS Helper
+     * 
+     * @var obj
+     */
+    var Helper = Modules.get('JSHelper');
+
+    /**
+     * If the wrapper exists add listeners
+     */
+    if (Helper.nodeExists(Helper.$('.js-add-coupon-btn')))
+    {
+        _initTriggers();
+    }
+
+    /**
+     * Loop and initialize triggers
+     *
+     */
+    function _initTriggers()
+    {
+        var addTrigger  = Helper.$('.js-add-coupon-btn');
+        var rmvTriggers = Helper.$All('.js-rmv-coupon-code');
+
+        for (var i = 0; i < rmvTriggers.length; i++)
+        {
+            Helper.addEventListener(rmvTriggers[i], 'click', _removeCouoponHandler);
+        }
+
+        Helper.addEventListener(addTrigger, 'click', _addCouponHandler);
+
+    }
+
+    /**
+     * Remove post meta key/value handler
+     *
+     * @param event e JavaScript click event
+     */
+    function _removeCouoponHandler(e)
+    {
+        e = e || window.event;
+
+        e.preventDefault();
+
+        Helper.removeFromDOM(Helper.parentUntillClass(this, 'js-coupon-row'));
+    }
+
+    /**
+     * Add new post meta key/value handler
+     *
+     * @param event e JavaScript click event
+     */
+    function _addCouponHandler(e)
+    {
+        e = e || window.event
+        
+        e.preventDefault();
+
+        var container = Helper.$('.js-coupon-entries');
+        var row       = document.createElement('DIV');
+        row.className = 'row roof-xs js-coupon-row';
+        row.innerHTML =
+        [
+           '<div class="form-field floor-xs">',
+                '<label>Key</label>',
+                '<input type="text" name="coupon_keys[]" value="" autocomplete="off" size="20">',
+           '</div>&nbsp;&nbsp;&nbsp;<div class="form-field floor-xs">',
+                '<label>Value</label>',
+                '<input type="text" name="coupon_values[]" value="" autocomplete="off" size="60">',
+           '</div>&nbsp;&nbsp;&nbsp;<button class="btn btn-danger js-rmv-coupon-code" type="button">Remove</button>',
+           '<div class="row clearfix"></div>',
+        ].join('');
+            
+        container.appendChild(row);
+
+        Helper.addEventListener(Helper.$('.js-rmv-coupon-code', row), 'click', _removeCouoponHandler);
+    }
+
+}());

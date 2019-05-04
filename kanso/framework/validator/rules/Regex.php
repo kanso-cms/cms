@@ -41,6 +41,6 @@ class Regex extends Rule implements RuleInterface, WithParametersInterface
 	 */
 	public function getErrorMessage(string $field): string
 	{
-		return sprintf('The value of the %1$s field does not match the required format.', $field);
+		return sprintf('The value of The "%1$s" field does not match the required format.', $field);
 	}
 }

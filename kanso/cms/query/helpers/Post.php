@@ -388,14 +388,14 @@ class Post extends Helper
         {
             $post = $this->parent->helper('cache')->getPostByID($post_id);
 
-            if ($post)
+            if ($post && $this->parent->has_post_thumbnail($post_id))
             {
                 return $this->parent->helper('cache')->getMediaById($post->thumbnail_id);
             }
 
             return null;
         }
-        elseif (!empty($this->parent->post))
+        elseif (!empty($this->parent->post) && $this->parent->has_post_thumbnail($this->parent->post->id))
         {
             return $this->parent->helper('cache')->getMediaById($this->parent->post->thumbnail_id);
         }
@@ -413,13 +413,13 @@ class Post extends Helper
      */
     public function the_post_thumbnail_src(int $post_id = null, string $size = 'original')
     {
-        $thumbnail = $this->parent->the_post_thumbnail($post_id);
-
-        if ($thumbnail)
+        if ($this->parent->has_post_thumbnail($post_id))
         {
+            $thumbnail = $this->parent->the_post_thumbnail($post_id);
+
             return $thumbnail->imgSize($size);
         }
-
+    
         return null;
     }
 

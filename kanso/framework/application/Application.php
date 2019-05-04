@@ -130,9 +130,9 @@ class Application
      */
     public function environment()
     {
-        if (defined('\KANSO_ENV'))
+        if (defined('KANSO_ENV'))
         {
-            constant('\KANSO_ENV');
+            return KANSO_ENV;
         }
 
         return null;

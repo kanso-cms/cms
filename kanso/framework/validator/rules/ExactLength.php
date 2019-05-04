@@ -41,6 +41,6 @@ class ExactLength extends Rule implements RuleInterface, WithParametersInterface
 	 */
 	public function getErrorMessage(string $field): string
 	{
-		return sprintf('The value of the %1$s field must be exactly %2$s characters long.', $field, $this->getParameter('length'));
+		return sprintf('The value of The "%1$s" field must be exactly %2$s characters long.', $field, $this->getParameter('length'));
 	}
 }

@@ -30,6 +30,6 @@ class URL extends Rule implements RuleInterface
 	 */
 	public function getErrorMessage(string $field): string
 	{
-		return sprintf('The %1$s field must contain a valid URL.', $field);
+		return sprintf('The "%1$s" field must contain a valid URL.', $field);
 	}
 }

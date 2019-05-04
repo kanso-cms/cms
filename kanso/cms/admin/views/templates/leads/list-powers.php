@@ -99,7 +99,6 @@
 						<li><a href="/admin/leads/?<?php echo "status=visitor&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['status'] === 'visitor') echo 'class="selected"'; ?>>Visitor</a></li>
 						<li><a href="/admin/leads/?<?php echo "status=lead&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['status'] === 'lead') echo 'class="selected"'; ?>>Lead</a></li>
 						<li><a href="/admin/leads/?<?php echo "status=sql&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['status'] === 'sql') echo 'class="selected"'; ?>>Sales Qualified Lead</a></li>
-      					<li><a href="/admin/leads/?<?php echo "status=opportunity&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['status'] === 'opportunity') echo 'class="selected"'; ?>>Opportunity</a></li>
       					<li><a href="/admin/leads/?<?php echo "status=customer&sort=$queries[sort]&action=$queries[action]&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['status'] === 'customer') echo 'class="selected"'; ?>>Customer</a></li>
 
 		            </ul>

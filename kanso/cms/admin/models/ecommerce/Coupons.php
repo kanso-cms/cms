@@ -77,7 +77,7 @@ class Coupons extends BaseModel
             $result[$key] = $value;
         }
 
-        $this->Config->set('coupons', $result);
+        $this->Config->set('ecommerce.coupons', $result);
 
         $this->Config->save();
 

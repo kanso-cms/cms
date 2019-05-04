@@ -30,6 +30,6 @@ class Integer extends Rule implements RuleInterface
 	 */
 	public function getErrorMessage(string $field): string
 	{
-		return sprintf('The %1$s field must contain an integer.', $field);
+		return sprintf('The "%1$s" field must contain an integer.', $field);
 	}
 }

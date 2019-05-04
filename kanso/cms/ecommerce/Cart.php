@@ -338,7 +338,7 @@ class Cart extends UtilityBase
 
         foreach ($this->items() as $item)
         {
-            if (!in_array($item['offer']['offer_id'], $freeShippingProducts))
+            if (!in_array($item['product'], $freeShippingProducts))
             {
                 return $this->Config->get('ecommerce.shipping_price');
             }

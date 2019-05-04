@@ -273,6 +273,7 @@ trait LoaderTrait
 		}
 		elseif ($pageType === 'products')
 		{
+			$waterfall[] = 'page-products';
 			$waterfall[] = 'products';
 			$waterfall[] = 'index';
 		}

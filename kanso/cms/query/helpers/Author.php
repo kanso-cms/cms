@@ -187,7 +187,7 @@ class Author extends Helper
         {
             $author = $this->parent->helper('cache')->getAuthorById($author_id);
 
-            if ($author)
+            if ($author && $this->parent->has_author_thumbnail($author_id))
             {
                 return $this->parent->helper('cache')->getMediaById($author->thumbnail_id);
             }
@@ -199,9 +199,8 @@ class Author extends Helper
         {
             $author = $this->parent->helper('cache')->getAuthorById($this->parent->post->author_id);
 
-            if ($author)
+            if ($author && $this->parent->has_author_thumbnail($author->id))
             {
-
                 return $this->parent->helper('cache')->getMediaById($author->thumbnail_id);
             }
 

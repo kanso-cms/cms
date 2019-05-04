@@ -30,6 +30,6 @@ class Email extends Rule implements RuleInterface
 	 */
 	public function getErrorMessage(string $field): string
 	{
-		return sprintf('The %1$s field must contain a valid e-mail address.', $field);
+		return sprintf('The "%1$s" field must contain a valid e-mail address.', $field);
 	}
 }

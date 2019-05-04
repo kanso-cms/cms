@@ -351,6 +351,11 @@ class Writer extends BaseModel
                 if (isset($_POST[$postKey]))
                 {
                     $offer[$offerKey] = $offerKey === 'instock' ? Str::bool($_POST[$postKey]) : trim($_POST[$postKey]);
+
+                    if ($offerKey === 'sale_price' || $offerKey === 'price')
+                    {
+                        $offer[$offerKey] = floatval($_POST[$postKey]);
+                    }
                 }
             }
 

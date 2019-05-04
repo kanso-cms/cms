@@ -122,6 +122,22 @@ class Shell
      * Cd into a directory.
      *
      * @access public
+     * @param  int $timeout Timeout to set
+     * @return \kanso\framework\shell\Shell
+     */
+    public function setTimeout(int $timeout)
+    {
+        $this->timeout = $timeout;
+
+        $this->process->setTimeout($this->timeout);
+
+        return $this;
+    }
+
+    /**
+     * Cd into a directory.
+     *
+     * @access public
      * @param  string                       $dir Directory to move to
      * @return \kanso\framework\shell\Shell
      */

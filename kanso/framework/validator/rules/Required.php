@@ -34,6 +34,6 @@ class Required extends Rule implements RuleInterface
 	 */
 	public function getErrorMessage(string $field): string
 	{
-		return sprintf('The %1$s field is required.', $field);
+		return sprintf('The "%1$s" field is required.', $field);
 	}
 }

@@ -148,7 +148,7 @@ class Analytics extends Model
     {
         $this->Query->rewind_posts();
 
-        $offer = $this->ShoppingCart->productOffers($this->Query->the_post())[0];
+        $offer = $this->Ecommerce->products()->offers($this->Query->the_post_id())[0];
 
         return $this->cleanWhiteSpace("
         <script type=\"text/javascript\">
@@ -186,7 +186,7 @@ class Analytics extends Model
                 content_category : 'Products > " . $this->Query->the_categories_list(the_post_id(), ' > ') . "',
                 content_ids      : ['" . $this->Query->the_post_id() . "'],
                 content_type     : 'product',
-                value            : " . $this->ShoppingCart->productOffers($this->Query->the_post())[0]['sale_price'] . ",
+                value            : " . $this->Ecommerce->products()->offers($this->Query->the_post_id())[0]['sale_price'] . ",
                 currency         : 'AUD',
                 userAgent        : '" . $this->Request->environment()->HTTP_USER_AGENT . "'
             });
@@ -207,10 +207,10 @@ class Analytics extends Model
         {
             $items[] =
             [
-                'id'       => strval($item['product']->id),
-                'name'     => $item['product']->title,
+                'id'       => strval($item['product']),
+                'name'     => $this->Query->the_title($item['product']),
                 'brand'    => $this->Config->get('cms.site_title'),
-                'category' => 'Products > ' . $this->Query->the_categories_list($item['product']->id, ' > '),
+                'category' => 'Products > ' . $this->Query->the_categories_list($item['product'], ' > '),
                 'price'    => strval($item['offer']['sale_price']),
                 'quantity' => $item['quantity'],
                 'variant'  => $item['offer']['name'],
@@ -241,7 +241,7 @@ class Analytics extends Model
         foreach($order['cart'] as $item)
         {
             $items     += intval($item['quantity']);
-            $itemIds[] = strval($item['product']->id);
+            $itemIds[]  = strval($item['product']);
         }
 
         return $this->cleanWhiteSpace("

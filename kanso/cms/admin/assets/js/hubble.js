@@ -4956,7 +4956,10 @@ JSHelper.prototype._removeListener = function(el, eventName, handler, useCapture
             }
             if (Helper.is_numeric(value))
             {
-            	value = parseInt(value);
+            	if (value.indexOf('.') === -1)
+            	{
+            		value = parseInt(value);
+            	}
             }
             if (name.indexOf('[]') > -1)
             {

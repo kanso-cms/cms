@@ -142,8 +142,6 @@ class Github implements WebhookInterface
     {
         $this->gitPull();
 
-        $this->composerUpdate();
-
         $this->response->format()->set('txt');
     }
 
@@ -166,27 +164,6 @@ class Github implements WebhookInterface
         }
 
         $this->response->body()->set("Git: \n" . $response);
-    }
-
-    /**
-     * Update any comoser dependancies.
-     *
-     * @throws Exception if 'composer update' was unsuccefull
-     */
-    private function composerUpdate()
-    {
-        $this->shell->cd($this->request->environment()->DOCUMENT_ROOT);
-
-        $this->shell->cmd('composer', 'update');
-
-        $response = $this->shell->run();
-
-        if (!$this->shell->is_successful())
-        {
-            throw new Exception('Error deploying via composer. ' . $response);
-        }
-
-        $this->response->body()->append("\n\nComposer: \n" . $response);
     }
 
     /**

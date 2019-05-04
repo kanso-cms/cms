@@ -84,7 +84,7 @@
 		<div class="row">
 			<div class="media">
 			    <div class="media-left">
-			    	<img width="60" src="<?php echo $kanso->Config->get('email.theme.logo_link'); ?>" alt="<?php echo $kanso->Config->get('cms.site_title'); ?>">
+			    	<img width="60" src="<?php echo $kanso->Config->get('email.theme.logo_url'); ?>" alt="<?php echo $kanso->Config->get('cms.site_title'); ?>">
 			    </div>
 			    <div class="media-body gutter-sm"></div>
 			    <div class="media-right text-right nowrap">

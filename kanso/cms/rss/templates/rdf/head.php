@@ -7,9 +7,9 @@
 	xmlns:content="http://purl.org/rss/1.0/modules/content/"
 	>
 	<channel rdf:about="<?php echo home_url(); ?>">
-		<title><?php echo website_title(); ?></title>
+		<title><?php echo htmlspecialchars(website_title()); ?></title>
 		<link><?php echo home_url(); ?></link>
-		<description><?php echo website_description(); ?></description>
+		<description><?php echo htmlspecialchars(website_description()); ?></description>
 		<dc:date><?php echo the_modified_time('c'); ?></dc:date>
 		<sy:updatePeriod>hourly</sy:updatePeriod>
 		<sy:updateFrequency>1</sy:updateFrequency>

@@ -41,6 +41,6 @@ class NotIn extends Rule implements RuleInterface, WithParametersInterface
 	 */
 	public function getErrorMessage(string $field): string
 	{
-		return sprintf('The %1$s field contains an invalid value.', $field);
+		return sprintf('The "%1$s" field contains an invalid value.', $field);
 	}
 }

@@ -30,6 +30,6 @@ class Alpha extends Rule implements RuleInterface
 	 */
 	public function getErrorMessage(string $field): string
 	{
-		return sprintf('The %1$s field must contain only letters.', $field);
+		return sprintf('The "%1$s" field must contain only letters.', $field);
 	}
 }

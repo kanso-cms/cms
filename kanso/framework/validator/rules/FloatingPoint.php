@@ -30,6 +30,6 @@ class FloatingPoint extends Rule implements RuleInterface
 	 */
 	public function getErrorMessage(string $field): string
 	{
-		return sprintf('The %1$s field must contain a float.', $field);
+		return sprintf('The "%1$s" field must contain a float.', $field);
 	}
 }

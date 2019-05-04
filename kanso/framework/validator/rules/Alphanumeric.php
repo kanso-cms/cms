@@ -31,6 +31,6 @@ class Alphanumeric extends Rule implements RuleInterface
 	 */
 	public function getErrorMessage(string $field): string
 	{
-		return sprintf('The %1$s field must contain only letters and numbers.', $field);
+		return sprintf('The "%1$s" field must contain only letters and numbers.', $field);
 	}
 }

@@ -323,6 +323,7 @@ class Visitor extends Wrapper
      * 1. Visitor
      * 2. Lead
      * 3. SQL
+     * 4. Customer
      *
      * @access public
      * @param  \kanso\cms\wrappers\Visitor|null $visitor      Visitor to grade (optional) (default null)
@@ -334,6 +335,12 @@ class Visitor extends Wrapper
         $visitor = !$visitor ? $this : $visitor;
 
         $visitCount = $visitor->countVisits();
+
+        // Visitor is a customer
+        if ($visitor->made_purchase)
+        {
+            return $returnString ? 'customer' : 4; 
+        }
 
         // Visitor is not a lead
         if (!$visitor->email)
@@ -403,6 +410,8 @@ class Visitor extends Wrapper
             $this->SQL->DELETE_FROM('crm_visitors')->WHERE('visitor_id', '=', $this->data['visitor_id'])->QUERY();
 
             $this->SQL->DELETE_FROM('crm_visits')->WHERE('visitor_id', '=', $this->data['visitor_id'])->QUERY();
+
+            $this->SQL->DELETE_FROM('crm_visit_actions')->WHERE('visitor_id', '=', $this->data['visitor_id'])->QUERY();
 
             return true;
         }
