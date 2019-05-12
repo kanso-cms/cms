@@ -24,69 +24,30 @@ class Cache
     private $data = [];
 
     /**
-     * SQL query parameters.
-     *
-     * @var array
-     */
-    private $params = [];
-
-    /**
-     * Current query string from connection.
-     *
-     * @var string
-     */
-    private $queryStr;
-
-    /**
-     * Current query parameters from connection.
-     *
-     * @var array
-     */
-    private $parameters;
-
-    /**
-     * Current table name from connection.
-     *
-     * @var string
-     */
-    private $tableName;
-
-    /**
-     * Current query type name from connection.
-     *
-     * @var string
-     */
-    private $queryType;
-
-    /**
-     * Current cache key for query.
-     *
-     * @var string
-     */
-    private $cacheKey;
-
-    /**
      * Is the cache enabled?
      *
      * @var bool
      */
-    private $enabled = true;
-
-	/**
-	 * Constructor.
-	 *
-	 * @access public
-	 */
-	public function __construct()
-	{
-	}
+    private $enabled;
 
     /**
-     * Enable the cache.
+     * Constructor.
      *
      * @access public
+     * @param bool $enabled Enable or disable the cahce
      */
-    public function enabled()
+    public function __construct(bool $enabled = true)
+    {
+        $this->enabled = $enabled;
+    }
+
+    /**
+     * Is the cache enabled?
+     *
+     * @access public
+     * @return bool
+     */
+    public function enabled(): bool
     {
         return $this->enabled;
     }
@@ -112,83 +73,65 @@ class Cache
     }
 
     /**
-     * Set the current query being executed.
+     * Is the query cached ?
      *
      * @access public
-     * @param string $queryStr SQL query string
-     * @param array  $params   SQL query parameters
+     * @param  string $queryStr SQL query string
+     * @param  array  $params   SQL query parameters
+     * @return bool
      */
-    public function setQuery(string $queryStr, array $params)
+    public function has(string $queryStr, array $params): bool
     {
-        $this->queryStr = $queryStr;
+        $tableName = $this->getTableName($queryStr);
+        $cacheKey  = $this->queryToKey($queryStr, $params);
 
-        $this->params = $params;
-
-        $this->queryType = $this->getQueryType($queryStr);
-
-        $this->tableName = $this->getTableName($queryStr);
-
-        $this->cacheKey = $this->queryToKey($queryStr, $params);
-
-        if ($this->queryType !== 'select')
-        {
-            $this->clear();
-        }
-    }
-
-	/**
-	 * Is the query cached ?
-	 *
-	 * @access public
-	 * @return bool
-	 */
-	public function has(): bool
-    {
         if (!$this->enabled)
         {
             return false;
         }
-
-        if ($this->queryType !== 'select')
+        elseif ($this->getQueryType($queryStr) !== 'select')
+        {
+            return false;
+        }
+        elseif (!isset($this->data[$tableName]))
         {
             return false;
         }
 
-        if (!isset($this->data[$this->tableName]))
-        {
-            return false;
-        }
-
-        return array_key_exists($this->cacheKey, $this->data[$this->tableName]);
+        return array_key_exists($cacheKey, $this->data[$tableName]);
     }
 
     /**
      * Get cached result.
      *
      * @access public
+     * @param  string $queryStr SQL query string
+     * @param  array  $params   SQL query parameters
      * @return mixed
      */
-    public function get()
+    public function get(string $queryStr, array $params)
     {
-        if ($this->has() && $this->enabled)
+        if ($this->has($queryStr, $params))
         {
-            return $this->data[$this->tableName][$this->cacheKey];
+            return $this->data[$this->getTableName($queryStr)][$this->queryToKey($queryStr, $params)];
         }
 
-        return null;
+        return false;
     }
 
     /**
      * Save a cached result.
      *
      * @access public
-     * @param mixed $result Data to cache
+     * @param string $queryStr SQL query string
+     * @param array  $params   SQL query parameters
+     * @param mixed  $result   Data to cache
      */
-    public function put($result)
+    public function put(string $queryStr, array $params, $result)
     {
         if ($this->enabled)
         {
-            $this->data[$this->tableName][$this->cacheKey] = $result;
+            $this->data[$this->getTableName($queryStr)][$this->queryToKey($queryStr, $params)] = $result;
         }
     }
 
@@ -197,11 +140,13 @@ class Cache
      *
      * @access public
      */
-    public function clear()
+    public function clear(string $queryStr)
     {
-        if (isset($this->data[$this->tableName]))
+        $tableName = $this->getTableName($queryStr);
+
+        if (isset($this->data[$tableName]))
         {
-            unset($this->data[$this->tableName]);
+            unset($this->data[$tableName]);
         }
     }
 
@@ -219,10 +164,23 @@ class Cache
 
         foreach ($params as $i => $value)
         {
+            if (is_null($value))
+            {
+                $value = 'NULL';
+            }
+            elseif (is_bool($value))
+            {
+                $value = $value === true ? 'TRUE' : 'FALSE';
+            }
+            elseif (is_array($value))
+            {
+                $value = implode('', $value);
+            }
+
             $key .= $value;
         }
 
-        return $key;
+        return md5($key);
     }
 
     /**
@@ -234,7 +192,7 @@ class Cache
      */
     private function getTableName(string $query): string
     {
-        if (in_array($this->queryType, ['drop', 'create', 'show', 'alter', 'start', 'stop']))
+        if (in_array($this->getQueryType($query), ['drop', 'create', 'show', 'alter', 'start', 'stop']))
         {
             return 'NULL';
         }
@@ -252,11 +210,11 @@ class Cache
     /**
      * Gets the query type from the query string.
      *
-     * @access protected
+     * @access private
      * @param  string $query SQL query
      * @return string
      */
-    protected function getQueryType(string $query): string
+    private function getQueryType(string $query): string
     {
         return strtolower(explode(' ', trim($query))[0]);
     }

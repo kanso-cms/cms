@@ -321,12 +321,12 @@ function admin_sirebar_links()
 				'comments' => [
 					'link'     => '/admin/comments/',
 					'text'     => 'Comments',
-					'icon'     => 'users',
+					'icon'     => 'comments',
 				],
 				'commentUsers' => [
 					'link'     => '/admin/comment-users/',
 					'text'     => 'Commenters',
-					'icon'     => 'users',
+					'icon'     => 'user-secret',
 				],
 			],
 		],

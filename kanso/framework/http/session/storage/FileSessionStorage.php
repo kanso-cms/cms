@@ -412,17 +412,22 @@ class FileSessionStorage implements StoreInterface
 
         foreach ($files as $file)
         {
+            $realPath = $this->storageDir . DIRECTORY_SEPARATOR . $file;
+
             if ($file === '.' || $file === '..' || $file[0] === '.' || $file === $this->GCFileName)
             {
                 continue;
             }
 
             // Sessions more than 12 hours are deleted
-            if (time() - filemtime($this->storageDir . DIRECTORY_SEPARATOR . $file) > 86400)
+            if ($this->filesystem->exists($realPath))
             {
-                $this->filesystem->delete($this->storageDir . DIRECTORY_SEPARATOR . $file);
+                if (time() - filemtime($realPath) > 86400)
+                {
+                    $this->filesystem->delete($realPath);
 
-                $deleted++;
+                    $deleted++;
+                }
             }
         }
 

@@ -419,7 +419,7 @@ class Post extends Helper
 
             return $thumbnail->imgSize($size);
         }
-    
+
         return null;
     }
 

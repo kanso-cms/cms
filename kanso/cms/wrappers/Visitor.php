@@ -339,7 +339,7 @@ class Visitor extends Wrapper
         // Visitor is a customer
         if ($visitor->made_purchase)
         {
-            return $returnString ? 'customer' : 4; 
+            return $returnString ? 'customer' : 4;
         }
 
         // Visitor is not a lead

@@ -21,14 +21,14 @@ class ConnectionHandler
 	 *
 	 * @var array
 	 */
-	protected $log = [];
+	private $log = [];
 
 	/**
 	 * Parameters for currently executing query statement.
 	 *
 	 * @var array
 	 */
-	protected $parameters = [];
+	private $parameters = [];
 
 	/**
 	 * PDO statement object returned from \PDO::prepare().
@@ -71,47 +71,55 @@ class ConnectionHandler
 	 * @access public
 	 * @return \kanso\framework\database\connection\Cache
 	 */
-	public function cache()
+	public function cache(): Cache
 	{
 		return $this->cache;
 	}
 
 	/**
-	 * All SQL queries pass through this method.
+	 *  Returns the last inserted id.
 	 *
-	 * @access private
-	 * @param string $query  SQL query statement
-	 * @param array  $params Array of parameters to bind (optional) (default [])
+	 * @access public
+	 * @return mixed
 	 */
-	private function parseQuery(string $query, array $params = [])
+	public function lastInsertId()
 	{
-		// Start time
-		$start = microtime(true);
-
-		// Prepare query
-		$this->pdoStatement = $this->connection->pdo()->prepare($query);
-
-		// Add parameters to the parameter array
-		$this->bindMore($params);
-
-		// Bind parameters
-		if (!empty($this->parameters))
-		{
-			foreach($this->parameters as $_params)
-			{
-				$this->pdoStatement->bindParam(':' . $_params[0], $_params[1]);
-			}
-		}
-
-		// Execute SQL
-		$this->pdoStatement->execute();
-
-		// Log
-		$this->log($query, $this->parameters, $start);
-
-		// Reset the parameters
-		$this->parameters = [];
+		return $this->connection->pdo()->lastInsertId();
 	}
+
+	/**
+	 * Returns the table prefix for the connection.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function tablePrefix(): string
+	{
+		return $this->connection->tablePrefix();
+	}
+
+	/**
+	 * Returns the connection query log.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function getLog(): array
+	{
+		return $this->log;
+	}
+
+    /**
+     * Safely format the query consistently.
+     *
+     * @access  public
+     * @param  string $sql SQL query statement
+     * @return string
+     */
+    public function cleanQuery(string $sql): string
+    {
+       return trim(preg_replace('/\s+/', ' ', $sql));
+    }
 
 	/**
 	 * Add the parameter to the parameter array.
@@ -156,51 +164,87 @@ class ConnectionHandler
 	 * @param  int    $fetchmode PHP PDO::ATTR_DEFAULT_FETCH_MODE constant or integer
 	 * @return mixed
 	 */
-	public function query(string $query, $params = [], int $fetchmode = PDO::FETCH_ASSOC)
+	public function query(string $query, array $params = [], int $fetchmode = PDO::FETCH_ASSOC)
 	{
 		$start = microtime(true);
 
+		$fromCache = false;
+
+		// Query is either SELECT or SHOW
 		if ($this->queryIsCachable($query))
 		{
-			$result = $this->loadQueryFromCache($query, array_merge($this->parameters, $params));
+			$cacheParams = array_merge($this->parameters, $params);
 
-			if ($result === false)
+			// Load from cache
+			if ($this->cache->has($query, $cacheParams))
+			{
+				$fromCache = true;
+
+				$result = $this->cache->get($query, $cacheParams);
+			}
+			// Execute query and cache the result
+			else
 			{
 				$this->parseQuery($query, $params);
 
 				$result = $this->pdoStatement->fetchAll($fetchmode);
 
-				$this->cache->put($result);
-			}
-			else
-			{
-				$this->log($query, array_merge($this->parameters, $params), $start, true);
+				$this->cache->put($query, $cacheParams, $result);
 			}
 		}
+		// Other queries e.g UPDATE, DELETE FROM, CREATE TABLE etc..
 		else
 		{
-			$queryType = $this->getQueryType($query);
-
 			$this->parseQuery($query, $params);
 
-			if ($queryType === 'select' || $queryType === 'show')
-			{
-				$result = $this->pdoStatement->fetchAll($fetchmode);
-			}
-			else
-			{
-				$result = $this->pdoStatement->rowCount();
+			$queryType = $this->getQueryType($query);
 
-				$this->cache->setQuery($query, array_merge($this->parameters, $params));
+			$result = $queryType === 'select' || $queryType === 'show' ? $this->pdoStatement->fetchAll($fetchmode) : $this->pdoStatement->rowCount();
 
-				$this->cache->clear();
+			if ($queryType === 'delete' || $queryType === 'update')
+			{
+				$this->cache->clear($query);
 			}
 		}
+
+		// Log query
+		$this->log($query, array_merge($this->parameters, $params), $start, $fromCache);
 
 		// Reset parameters incase "parseQuery" was not called
 		$this->parameters = [];
 
 		return $result;
+	}
+
+	/**
+	 * All SQL queries pass through this method.
+	 *
+	 * @access private
+	 * @param string $query  SQL query statement
+	 * @param array  $params Array of parameters to bind (optional) (default [])
+	 */
+	private function parseQuery(string $query, array $params = [])
+	{
+		// Prepare query
+		$this->pdoStatement = $this->connection->pdo()->prepare($query);
+
+		// Add parameters to the parameter array
+		$this->bindMore($params);
+
+		// Bind parameters
+		if (!empty($this->parameters))
+		{
+			foreach($this->parameters as $_params)
+			{
+				$this->pdoStatement->bindParam(':' . $_params[0], $_params[1]);
+			}
+		}
+
+		// Execute SQL
+		$this->pdoStatement->execute();
+
+		// Reset the parameters
+		$this->parameters = [];
 	}
 
 	/**
@@ -212,200 +256,31 @@ class ConnectionHandler
 	 */
 	private function queryIsCachable(string $query): bool
 	{
-		if (!$this->cache->enabled())
-		{
-			return false;
-		}
-
 		$queryType = $this->getQueryType($query);
 
 		return $queryType === 'select' || $queryType === 'show';
 	}
 
 	/**
-	 * Tries to load the current query from the cache.
-	 *
-	 * @access private
-	 * @param  string      $query The type of query being executed e.g 'select'|'delete'|'update'
-	 * @return array|false
-	 */
-	private function loadQueryFromCache(string $query, array $params)
-	{
-		$this->cache->setQuery($query, $params);
-
-		if ($this->cache->has())
-		{
-			return $this->cache->get();
-		}
-
-		return false;
-	}
-
-	/**
-	 * Returns an array which represents a column from the result set.
-	 *
-	 * @access public
-	 * @param  string $query  The query to execute
-	 * @param  array  $params Assoc array of parameters to bind (optional) (default [])
-	 * @return array
-	 */
-	public function column(string $query, array $params = [])
-	{
-		$this->parseQuery($query, $params);
-
-		$cols = $this->pdoStatement->fetchAll(PDO::FETCH_NUM);
-
-		$result = [];
-
-		foreach($cols as $cells)
-		{
-			$result[] = $cells[0];
-		}
-
-		return $result;
-	}
-
-	/**
-	 * Returns the table prefix for the connection.
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function tablePrefix(): string
-	{
-		return $this->connection->tablePrefix();
-	}
-
-	/**
-	 * Returns an array which represents a row from the result set.
-	 *
-	 * @access public
-	 * @param  string $query     The query to execute
-	 * @param  array  $params    Assoc array of parameters to bind (optional) (default [])
-	 * @param  int    $fetchmode PHP PDO::ATTR_DEFAULT_FETCH_MODE constant or integer
-	 * @return array
-	 */
-	public function row(string $query, array $params = [], $fetchmode = PDO::FETCH_ASSOC)
-	{
-		$this->parseQuery($query, $params);
-
-		return $this->pdoStatement->fetch($fetchmode);
-	}
-
-	/**
-	 * Returns the value of one single field/column.
-	 *
-	 * @access public
-	 * @param  string $query  The query to execute
-	 * @param  array  $params Assoc array of parameters to bind (optional) (default [])
-	 * @return string
-	 */
-	public function single(string $query, array $params = [])
-	{
-		$this->parseQuery($query, $params);
-
-		return $this->pdoStatement->fetchColumn();
-	}
-
-	/**
-	 *  Returns the last inserted id.
-	 *
-	 * @access public
-	 * @return mixed
-	 */
-	public function lastInsertId()
-	{
-		return $this->connection->pdo()->lastInsertId();
-	}
-
-	/**
-	 * Returns the connection query log.
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function getLog(): array
-	{
-		return $this->log;
-	}
-
-    /**
-     * Safely format the query consistently.
-     *
-     * @access  public
-     * @param  string $sql SQL query statement
-     * @return string
-     */
-    public function cleanQuery(string $sql): string
-    {
-       return trim(preg_replace('/\s+/', ' ', $sql));
-    }
-
-	/**
-	 * Prepares query for logging.
-	 *
-	 * @access protected
-	 * @param  string $query  SQL query
-	 * @param  array  $params Query paramaters
-	 * @return string
-	 */
-	protected function prepareQueryForLog(string $query, array $params): string
-	{
-		foreach (array_reverse($params) as $_params)
-		{
-			$k = $_params[0];
-
-			$v = $_params[1];
-
-			if ($v === null)
-			{
-				$v = 'NULL';
-			}
-
-			$query = str_replace(":$k", "'$v'", $query);
-		}
-
-		return $query;
-	}
-
-	/**
-	 * Adds a query to the query log.
-	 *
-	 * @access protected
-	 * @param string $query     SQL query
-	 * @param array  $params    Query parameters
-	 * @param float  $start     Start time in microseconds
-	 * @param bool   $fromCache Was the query loaded from the cache?
-	 */
-	protected function log(string $query, array $params, float $start, bool $fromCache = false)
-	{
-		$time = microtime(true) - $start;
-
-		$query = $this->prepareQueryForLog($query, $params);
-
-		$this->log[] = ['query' => $query, 'time' => $time, 'from_cache' => $fromCache];
-	}
-
-	/**
 	 * Gets the query type from the query string.
 	 *
-	 * @access protected
+	 * @access private
 	 * @param  string $query SQL query
 	 * @return string
 	 */
-	protected function getQueryType(string $query): string
+	private function getQueryType(string $query): string
 	{
 		return strtolower(explode(' ', trim($query))[0]);
 	}
 
 	/**
-	 * Gets the query type from the query string.
+	 * Sanitize a value.
 	 *
-	 * @access protected
+	 * @access private
 	 * @param  mixed $value A query value to sanitize
 	 * @return mixed
 	 */
-	protected function sanitizeValue($value)
+	private function sanitizeValue($value)
 	{
 		if (is_int($value))
 		{
@@ -425,5 +300,60 @@ class ConnectionHandler
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Adds a query to the query log.
+	 *
+	 * @access private
+	 * @param string $query     SQL query
+	 * @param array  $params    Query parameters
+	 * @param float  $start     Start time in microseconds
+	 * @param bool   $fromCache Was the query loaded from the cache?
+	 */
+	private function log(string $query, array $params, float $start, bool $fromCache = false)
+	{
+		$time = microtime(true) - $start;
+
+		$query = $this->prepareQueryForLog($query, $params);
+
+		$this->log[] = ['query' => $query, 'time' => $time, 'from_cache' => $fromCache];
+	}
+
+	/**
+	 * Prepares query for logging.
+	 *
+	 * @access private
+	 * @param  string $query  SQL query
+	 * @param  array  $params Query paramaters
+	 * @return string
+	 */
+	private function prepareQueryForLog(string $query, array $params): string
+	{
+		foreach (array_reverse($params) as $k => $v)
+		{
+			$parentesis = '';
+
+			if (is_null($v))
+			{
+				$v = 'NULL';
+			}
+			elseif (is_string($v))
+			{
+				$parentesis = '\'';
+			}
+			elseif (is_bool($v))
+			{
+				$v = $v === true ? 'TRUE' : 'FALSE';
+			}
+			elseif (is_array($v))
+			{
+				$v = implode('', $v);
+			}
+
+			$query = str_replace(":$k", $parentesis . $v . $parentesis, $query);
+		}
+
+		return $query;
 	}
 }
