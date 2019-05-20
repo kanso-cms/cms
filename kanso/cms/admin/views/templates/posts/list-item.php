@@ -1,5 +1,6 @@
 <?php
-	use kanso\framework\utility\Humanizer;
+
+use kanso\framework\utility\Humanizer;
 use kanso\framework\utility\Str;
 
 ?>
@@ -21,19 +22,21 @@ use kanso\framework\utility\Str;
 	        </div>
 
 	        <span class="color-gray">
-	        	<span>Slug:&nbsp;"<?php echo Str::getAfterLastChar(rtrim($article->slug, '/'), '/'); ?>"&nbsp;-&nbsp;</span>
-
+	        	<span>ID:<?php echo $article->id; ?></span>
+	        	<span class="p6">&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+	        	<span><?php echo Humanizer::timeAgo($article->created); ?> ago</span>
+	        	<span class="p6">&nbsp;&nbsp;•&nbsp;&nbsp;</span>
 	        	In <a class="color-gray text-underline" href="/admin/<?php echo $postSlug; ?>?category=<?php echo $article->category->id; ?>">
 					<?php echo $article->category->name; ?>
 				</a>
 				<span class="p6">&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-	        	<?php echo comments_number($article->id); ?> Comments
-	        	<span class="p6">&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-	        	<?php echo Humanizer::timeAgo($article->created); ?> ago
-	        	<span class="p6">&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-	        	By <a class="color-gray text-underline" href="/admin/<?php echo $postSlug; ?>?author=<?php echo $article->author_id; ?>">
+				<span>With <?php echo comments_number($article->id); ?> Comments</span>
+	        	<br>
+	        	<span>By <a class="color-gray text-underline" href="/admin/<?php echo $postSlug; ?>?author=<?php echo $article->author_id; ?>">
 					<?php echo $article->author->name; ?>
-				</a>
+				</a></span>
+				<span class="p6">&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+				<span>At&nbsp;<a class="color-gray text-underline" target="_blank" href="<?php echo the_permalink($article->id);?>">/<?php echo $article->slug; ?></a></span>
 	        </span>
 	        <div class="margin-xs-n">
 	        	<span class="glyph-icon glyph-icon-tags color-gray"></span>&nbsp;&nbsp;

@@ -369,7 +369,7 @@ class Post extends Helper
 
         if ($raw)
         {
-            return trim($content);
+            return Markdown::plainText(trim($content));
         }
 
         return Markdown::convert(trim($content));
