@@ -148,7 +148,7 @@ class Image
      */
     public function resizeToWidth(int $width, bool $allow_enlarge = false): Image
     {
-        $this->processor->resizeToHeight($width, $allow_enlarge);
+        $this->processor->resizeToWidth($width, $allow_enlarge);
 
         return $this;
     }

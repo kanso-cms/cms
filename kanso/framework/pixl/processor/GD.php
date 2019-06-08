@@ -266,9 +266,9 @@ class GD implements ProcessorInterface
      */
     public function resizeToHeight(int $height, bool $allow_enlarge = false)
     {
-        $ratio = $height / $this->source_h;
+        $ratio  = $this->source_h / $height;
 
-        $width = $this->source_w * $ratio;
+        $width = $this->source_w / $ratio;
 
         $this->resize($width, $height, $allow_enlarge);
 
@@ -280,9 +280,9 @@ class GD implements ProcessorInterface
      */
     public function resizeToWidth(int $width, bool $allow_enlarge = false)
     {
-        $ratio  = $width / $this->source_w;
+        $ratio  = $this->source_w / $width;
 
-        $height = $this->source_h * $ratio;
+        $height = $this->source_h / $ratio;
 
         $this->resize($width, $height, $allow_enlarge);
 
