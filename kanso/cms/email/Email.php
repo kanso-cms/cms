@@ -162,6 +162,7 @@ class Email
             $mail->Password   = $this->smtpSettings['password'];
             $mail->Subject     = $subject;
 
+            $mail->addReplyTo($senderEmail, $senderName);
             $mail->setFrom($senderEmail, $senderName);
             $mail->addAddress($toEmail);
 

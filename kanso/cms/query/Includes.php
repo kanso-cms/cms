@@ -461,6 +461,36 @@ function include_template($template_name, $data = [])
     echo Kanso::instance()->Query->include_template($template_name, $data);
 }
 
+function enqueue_script(string $src = '', string $ver = null, bool $inFooter = false)
+{
+    return Kanso::instance()->Query->enqueue_script($src, $ver, $inFooter);
+}
+
+function enqueue_style(string $src = '', string $ver = null, string $media = 'all')
+{
+    return Kanso::instance()->Query->enqueue_style($src, $ver, $media);
+}
+
+function enqueue_inline_style(string $css = '')
+{
+    return Kanso::instance()->Query->enqueue_inline_style($css);
+}
+
+function enqueue_inline_script(string $js = '', bool $inFooter = false)
+{
+    return Kanso::instance()->Query->enqueue_inline_script($js, $inFooter);
+}
+
+function kanso_head()
+{
+    echo Kanso::instance()->Query->kanso_head();
+}
+
+function kanso_footer()
+{
+    echo Kanso::instance()->Query->kanso_footer();
+}
+
 function themes_directory()
 {
     return Kanso::instance()->Query->themes_directory();

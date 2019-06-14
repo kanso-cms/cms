@@ -81,6 +81,8 @@ $KANSO_DEFAULTS_VISITORS_TABLE =
 	'email'         => 'VARCHAR(255)',
 	'made_purchase' => 'BOOLEAN | DEFAULT FALSE',
 	'last_active'   => 'INTEGER | UNSIGNED | DEFAULT 0',
+	'is_bot'        => 'BOOLEAN | DEFAULT FALSE',
+	'user_agent'    => 'VARCHAR(255)',
 ];
 
 // Default CRM visits table

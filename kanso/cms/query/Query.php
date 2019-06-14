@@ -454,6 +454,36 @@ class Query extends QueryBase
         return $this->helper('templates')->include_template($template_name, $data);
     }
 
+    public function enqueue_script(string $src = '', string $ver = null, bool $inFooter = false)
+    {
+        return $this->helper('scripts')->enqueue_script($src, $ver, $inFooter);
+    }
+
+    public function enqueue_style(string $src = '', string $ver = null, string $media = 'all')
+    {
+        return $this->helper('scripts')->enqueue_style($src, $ver, $media);
+    }
+
+    public function enqueue_inline_style(string $css = '')
+    {
+        return $this->helper('scripts')->enqueue_inline_style($css);
+    }
+
+    public function enqueue_inline_script(string $js = '', bool $inFooter = false)
+    {
+        return $this->helper('scripts')->enqueue_inline_script($js, $inFooter);
+    }
+
+    public function kanso_head()
+    {
+        return $this->helper('scripts')->kanso_head();
+    }
+
+    public function kanso_footer()
+    {
+        return $this->helper('scripts')->kanso_footer();
+    }
+
     public function themes_directory(): string
     {
         return $this->helper('urls')->themes_directory();

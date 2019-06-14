@@ -44,7 +44,7 @@ class Crm
      */
     public function __construct()
     {
-        // Only store data on humans
+        // Real humans
         if (!$this->UserAgent->isCrawler())
         {
             $this->findVisitor();
@@ -56,6 +56,17 @@ class Crm
                 {
                     $this->visitor->addVisit($this->newVisitRow());
                 }
+            }
+        }
+
+        // Crawlers/bots get merged by user agent rather than cookies
+        else
+        {
+            if ($this->Request->isGet())
+            {
+                $this->findCrawler();
+
+                $this->visitor->addVisit($this->newVisitRow());
             }
         }
     }
@@ -204,6 +215,34 @@ class Crm
     }
 
     /**
+     * Find the current bot visitor.
+     *
+     * @access private
+     * @return \kanso\cms\wrappers\Visitor
+     */
+    private function findCrawler(): Visitor
+    {
+        $this->visitor = $this->leadProvider()->byKey('user_agent', $this->Request->environment()->HTTP_USER_AGENT);
+
+        // If we couldn't find the bot by user_agent,
+        // try to find them by IP
+        if (!$this->visitor)
+        {
+            $this->visitor = $this->leadProvider()->byKey('ip_address', $this->Request->environment()->REMOTE_ADDR);
+        }
+
+        // Fallback to new visitor
+        if (!$this->visitor)
+        {
+            $this->visitor = $this->leadProvider()->create($this->newVisitorRow());
+        }
+
+        $this->Response->cookie()->put($this->cookieKey, $this->visitor->visitor_id);
+
+        return $this->visitor;
+    }
+
+    /**
      * Returns the base array for a new visitor.
      *
      * @access private
@@ -211,11 +250,14 @@ class Crm
      */
     private function newVisitorRow(): array
     {
-        return [
-            'ip_address'          => $this->Request->environment()->REMOTE_ADDR,
-            'name'                => '',
-            'email'               => '',
-            'last_active'         => time(),
+        return
+        [
+            'ip_address'  => $this->Request->environment()->REMOTE_ADDR,
+            'name'        => '',
+            'email'       => '',
+            'last_active' => time(),
+            'user_agent'  => $this->Request->environment()->HTTP_USER_AGENT,
+            'is_bot'      => $this->UserAgent->isCrawler(),
         ];
     }
 

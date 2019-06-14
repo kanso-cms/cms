@@ -36,7 +36,7 @@ use kanso\framework\utility\Str;
 					<?php echo $article->author->name; ?>
 				</a></span>
 				<span class="p6">&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-				<span>At&nbsp;<a class="color-gray text-underline" target="_blank" href="<?php echo the_permalink($article->id);?>">/<?php echo $article->slug; ?></a></span>
+				<span>At&nbsp;<a class="color-gray text-underline" target="_blank" href="<?php echo the_permalink($article->id); ?>">/<?php echo $article->slug; ?></a></span>
 	        </span>
 	        <div class="margin-xs-n">
 	        	<span class="glyph-icon glyph-icon-tags color-gray"></span>&nbsp;&nbsp;

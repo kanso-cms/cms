@@ -122,7 +122,7 @@ class Shell
      * Cd into a directory.
      *
      * @access public
-     * @param  int $timeout Timeout to set
+     * @param  int                          $timeout Timeout to set
      * @return \kanso\framework\shell\Shell
      */
     public function setTimeout(int $timeout)

@@ -20,6 +20,7 @@ use kanso\cms\query\helpers\Pagination;
 use kanso\cms\query\helpers\Parser;
 use kanso\cms\query\helpers\Post;
 use kanso\cms\query\helpers\PostIteration;
+use kanso\cms\query\helpers\Scripts;
 use kanso\cms\query\helpers\Search;
 use kanso\cms\query\helpers\Tag;
 use kanso\cms\query\helpers\Templates;
@@ -131,6 +132,7 @@ abstract class QueryBase
         'search'        => Search::class,
         'tag'           => Tag::class,
         'templates'     => Templates::class,
+        'scripts'       => Scripts::class,
         'urls'          => Urls::class,
         'validation'    => Validation::class,
         'parser'        => Parser::class,
@@ -142,6 +144,27 @@ abstract class QueryBase
      * @var array
      */
     public $helpers = [];
+
+    /**
+     * Header scripts.
+     *
+     * @var array
+     */
+    public $headerScripts = [];
+
+    /**
+     * Header scripts.
+     *
+     * @var array
+     */
+    public $headerStyles = [];
+
+    /**
+     * Footer scripts.
+     *
+     * @var array
+     */
+    public $footerScripts = [];
 
     /**
      * IoC container instance.

@@ -1,5 +1,33 @@
 --------------------------------------------------------
 
+### 4.2.0 <small> (20-04-2019)</small>
+
+Update using ```git fetch```.
+
+#### New
+* Added new `Query->enqueue_script` method.
+* Added new `Query->enqueue_style` method.
+* Added new `Query->enqueue_inline_style` method.
+* Added new `Query->enqueue_inline_script` method.
+* Added new `Query->kanso_head` method.
+* Added new `Query->kanso_footer` method.
+* Added new `enqueue_script` method to view scopes.
+* Added new `enqueue_style` method to view scopes.
+* Added new `enqueue_inline_style` method to view scopes.
+* Added new `enqueue_inline_script` method to view scopes.
+* Added new `kanso_head` method to view scopes.
+* Added new `kanso_footer` method to view scopes.
+
+
+#### Changes
+* `the_content($postid, $raw)` if raw is set to `TRUE`, post content is returned as plain text rather than markdown syntax.
+
+#### Bugfixes
+* Fixed `Pixl` GD resizing logic.
+
+
+--------------------------------------------------------
+
 ### 4.1.0 <small> (20-04-2019)</small>
 
 Update using ```git fetch```.

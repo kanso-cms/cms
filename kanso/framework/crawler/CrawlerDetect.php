@@ -7,7 +7,6 @@
 
 namespace kanso\framework\crawler;
 
-use kanso\framework\crawler\fixtures\Exclusions;
 use kanso\framework\crawler\fixtures\Inclusions;
 use kanso\framework\http\request\Headers;
 
@@ -28,13 +27,6 @@ class CrawlerDetect
     private $inclusions;
 
     /**
-     * Exclusions object.
-     *
-     * @var \kanso\framework\crawler\fixtures\Exclusions
-     */
-    private $exclusions;
-
-    /**
      * Store regex matches.
      *
      * @var array
@@ -49,50 +41,18 @@ class CrawlerDetect
     private $userAgent;
 
     /**
-     * The compiled regex string.
-     *
-     * @var string
-     */
-    private $compiledRegex;
-
-    /**
-     * The compiled exclusions regex string.
-     *
-     * @var string
-     */
-    private $compiledExclusions;
-
-    /**
      * Class constructor.
      *
      * @param \kanso\framework\http\request\Headers        $headers    HTTP request headers object
      * @param \kanso\framework\crawler\fixtures\Inclusions $inclusions Crawler inclusions
-     * @param \kanso\framework\crawler\fixtures\Exclusions $exclusions Crawler exclusions
      */
-    public function __construct(Headers $headers, Inclusions $inclusions, Exclusions $exclusions)
+    public function __construct(Headers $headers, Inclusions $inclusions)
     {
         $this->headers = $headers;
 
         $this->inclusions = $inclusions;
 
-        $this->exclusions = $exclusions;
-
-        $this->compiledRegex = $this->compileRegex($this->inclusions->asArray());
-
-        $this->compiledExclusions = $this->compileRegex($this->exclusions->asArray());
-
         $this->userAgent = $this->headers->HTTP_USER_AGENT;
-    }
-
-    /**
-     * Compile the regex patterns into one regex string.
-     *
-     * @param  array  $patterns Definition patterns
-     * @return string
-     */
-    public function compileRegex(array $patterns): string
-    {
-        return '(' . implode('|', $patterns) . ')';
     }
 
     /**
@@ -106,21 +66,26 @@ class CrawlerDetect
     {
         $agent = $userAgent ?: $this->userAgent;
 
-        $agent = preg_replace('/' . $this->compiledExclusions . '/i', '', $agent);
-
-        if (strlen(trim($agent)) == 0)
+        if (!$agent || !is_string($agent) || strlen(trim($agent)) == 0)
         {
             return false;
         }
 
-        $result = preg_match('/' . $this->compiledRegex . '/i', trim($agent), $matches);
+        $agent = trim($agent);
 
-        if ($matches)
+        foreach ($this->inclusions->asArray() as $inclusion)
         {
-            $this->matches = $matches;
+            preg_match('/' . $inclusion . '/i', trim($agent), $matches);
+
+            if ($matches)
+            {
+                $this->matches = $matches;
+
+                return true;
+            }
         }
 
-        return (bool) $result;
+        return false;
     }
 
     /**
