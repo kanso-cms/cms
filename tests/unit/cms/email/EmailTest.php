@@ -79,6 +79,7 @@ class EmailTest extends TestCase
 
 		$smtp->shouldReceive('isSMTP');
 		$smtp->shouldReceive('setFrom')->with('bar@foo.com', 'Foo Bar');
+		$smtp->shouldReceive('addReplyTo');
 		$smtp->shouldReceive('addAddress')->with('foo@bar.com');
 		$smtp->shouldReceive('isHTML')->with(true);
 		$smtp->shouldReceive('msgHTML')->with('html content');
@@ -102,6 +103,7 @@ class EmailTest extends TestCase
 		$smtp->shouldReceive('isSMTP');
 		$smtp->shouldReceive('setFrom')->with('bar@foo.com', 'Foo Bar');
 		$smtp->shouldReceive('addAddress')->with('foo@bar.com');
+		$smtp->shouldReceive('addReplyTo');
 		$smtp->shouldReceive('isHTML')->with(false);
 		$smtp->shouldReceive('send');
 		$log->shouldReceive('save');

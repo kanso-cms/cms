@@ -77,7 +77,7 @@ class Scripts extends Helper
         }
         else
         {
-            $this->parent->headerScripts[] = '<script type="text/javascript">' . $src . $ver . '</script>';
+            $this->parent->headerScripts[] = '<script type="text/javascript">' . $js . '</script>';
         }
     }
 

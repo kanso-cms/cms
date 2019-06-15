@@ -34,7 +34,7 @@ class ImageTest extends TestCase
 
 		$processor->shouldReceive('load')->with(__FILE__)->once();
 
-		$image = new Image(__FILE__, $processor);
+		$image = new Image($processor, __FILE__);
 	}
 
 	/**
@@ -44,7 +44,7 @@ class ImageTest extends TestCase
 	{
 		$processor = $this->getProcessor();
 
-		$image = new Image('foobar.png', $processor);
+		$image = new Image($processor, 'foobar.png');
 	}
 
 	/**
@@ -54,7 +54,7 @@ class ImageTest extends TestCase
 	{
 		$processor = $this->getProcessor();
 
-		$image = new Image('foobar.png', $processor);
+		$image = new Image($processor, 'foobar.png');
 
 		$image->save();
 	}
@@ -70,7 +70,7 @@ class ImageTest extends TestCase
 
 		$processor->shouldReceive('resize')->with(300, 300, false)->once();
 
-		$image = new Image(__FILE__, $processor);
+		$image = new Image($processor, __FILE__);
 
 		$image->resize(300, 300);
 	}
@@ -86,7 +86,7 @@ class ImageTest extends TestCase
 
 		$processor->shouldReceive('resize')->with(300, 300, true)->once();
 
-		$image = new Image(__FILE__, $processor);
+		$image = new Image($processor, __FILE__);
 
 		$image->resize(300, 300, true);
 	}
@@ -102,7 +102,7 @@ class ImageTest extends TestCase
 
 		$processor->shouldReceive('crop')->with(300, 300, false)->once();
 
-		$image = new Image(__FILE__, $processor);
+		$image = new Image($processor, __FILE__);
 
 		$image->crop(300, 300);
 	}
@@ -118,7 +118,7 @@ class ImageTest extends TestCase
 
 		$processor->shouldReceive('crop')->with(300, 300, true)->once();
 
-		$image = new Image(__FILE__, $processor);
+		$image = new Image($processor, __FILE__);
 
 		$image->crop(300, 300, true);
 	}
@@ -134,7 +134,7 @@ class ImageTest extends TestCase
 
 		$processor->shouldReceive('width')->once()->andReturn(10);
 
-		$image = new Image(__FILE__, $processor);
+		$image = new Image($processor, __FILE__);
 
 		$this->assertSame(10, $image->width());
 	}
@@ -150,7 +150,7 @@ class ImageTest extends TestCase
 
 		$processor->shouldReceive('height')->once()->andReturn(10);
 
-		$image = new Image(__FILE__, $processor);
+		$image = new Image($processor, __FILE__);
 
 		$this->assertSame(10, $image->height());
 	}
