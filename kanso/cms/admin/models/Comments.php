@@ -9,6 +9,7 @@ namespace kanso\cms\admin\models;
 
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
+use kanso\framework\utility\Markdown;
 use kanso\framework\utility\Str;
 
 /**
@@ -98,6 +99,12 @@ class Comments extends BaseModel
 
                 return $this->postMessage('success', 'Your comments were successfully deleted!');
             }
+            elseif ($this->post['bulk_action'] === 'update')
+            {
+                $this->update($commentIds[0], $this->post['content']);
+
+                return $this->postMessage('success', 'Your comment was successfully updated!');
+            }
             elseif (in_array($this->post['bulk_action'], ['spam', 'pending', 'approved']))
             {
                 $this->changeStatus($commentIds, $this->post['bulk_action']);
@@ -128,7 +135,7 @@ class Comments extends BaseModel
             throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
-        if (!in_array($this->post['bulk_action'], ['spam', 'delete', 'pending', 'approved']))
+        if (!in_array($this->post['bulk_action'], ['spam', 'delete', 'pending', 'approved', 'update']))
         {
             throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
@@ -157,6 +164,27 @@ class Comments extends BaseModel
             {
                 $comment->delete();
             }
+        }
+    }
+
+    /**
+     * Update comment content.
+     *
+     * @access private
+     * @param int    $id      Comment id to update
+     * @param string $content Content to set
+     */
+    private function update(int $id, string $content)
+    {
+        $comment = $this->CommentManager->byId($id);
+
+        if ($comment)
+        {
+            $comment->content = $content;
+
+            $comment->html_content = Markdown::convert($content);
+
+            $comment->save();
         }
     }
 

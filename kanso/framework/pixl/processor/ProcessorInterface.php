@@ -98,4 +98,15 @@ interface ProcessorInterface
      * @return \kanso\framework\pixl\processor\ProcessorInterface
      */
     public function crop(int $width, int $height, bool $allow_enlarge = false);
+
+    /**
+     * Add a background to the image.
+     *
+     * @param  int                                                $red   Red color value
+     * @param  int                                                $green Green color value
+     * @param  int                                                $blue  Blue color value
+     * @throws \RuntimeException                                  If file is not an image or not provided
+     * @return \kanso\framework\pixl\processor\ProcessorInterface
+     */
+    public function addBackground(int $red, int $green, int $blue);
 }

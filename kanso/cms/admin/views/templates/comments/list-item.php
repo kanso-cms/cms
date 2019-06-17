@@ -58,6 +58,21 @@ if ($comment->status === 'deleted') {
 	            	<?php echo $comment->content; ?>
 	            </div>
 	        </span>
+	        <div class="comment-edit-wrap collapsed" id="comment-edit-<?php echo $comment->id; ?>">
+				<form method="post" id="update-form-<?php echo $comment->id; ?>">
+					<div class="form-field col-8">
+				        <label for="content">Content</label>
+				        <textarea rows="5" name="content" id="content" style="resize: vertical;"><?php echo $comment->content; ?></textarea>
+				    </div>
+				    <div class="form-field row roof-xs">
+				    	<input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN; ?>">
+						<input type="hidden" name="comments[]"   value="<?php echo $comment->id; ?>">
+						<input type="hidden" name="bulk_action"  value="update">
+				    	<button type="button" class="btn js-collapse" data-collapse-target="comment-edit-<?php echo $comment->id; ?>">Cancel</button>
+				    	<button type="submit" class="btn btn-success">Update Comment</button>
+				    </div>
+				</form>
+			</div>
 		</div>
 
 		<div class="media-right nowrap">
@@ -72,6 +87,9 @@ if ($comment->status === 'deleted') {
 					<input type="hidden" name="comments[]"   value="<?php echo $comment->id; ?>">
 			    </div>
 			</form>
+			<a href="#" class="btn btn-pure btn-xs tooltipped tooltipped-n js-collapse" data-collapse-target="comment-edit-<?php echo $comment->id; ?>" data-tooltip="Quick edit">
+				<span class="glyph-icon glyph-icon-pencil icon-md"></span>
+			</a>
 			<a href="#" class="btn btn-pure btn-xs tooltipped tooltipped-n js-confirm-delete" data-item="comment" data-form="delete-form-<?php echo $comment->id; ?>" data-tooltip="Delete comment">
 				<span class="glyph-icon glyph-icon-trash-o icon-md"></span>
 			</a>
@@ -81,7 +99,7 @@ if ($comment->status === 'deleted') {
 				<input type="hidden" name="bulk_action"  value="delete">
 				<input type="hidden" name="comments[]"   value="<?php echo $comment->id; ?>">
 			</form>
-
 		</div>
+		
 	</div>
 </div>

@@ -33,42 +33,49 @@ class GD implements ProcessorInterface
     /**
      * Image source type.
      *
-     * @var int
+     * @var int|null
      */
     private $source_type;
 
     /**
-     * Image resource.
+     * Image source resource.
      *
-     * @var resource
+     * @var resource|null
      */
     private $source_image;
 
     /**
+     * Image destination resource.
+     *
+     * @var resource|null
+     */
+    private $dest_image;
+
+    /**
      * Original width in px.
      *
-     * @var int
+     * @var int|null
      */
     private $source_w;
 
     /**
      * Original height in px.
      *
-     * @var int
+     * @var int|null
      */
     private $source_h;
 
     /**
      * Source x-axis crop position in px.
      *
-     * @var int
+     * @var int|null
      */
     private $source_x;
 
     /**
      * Source y-axis crop position in px.
      *
-     * @var int
+     * @var int|null
      */
     private $source_y;
 
@@ -89,14 +96,14 @@ class GD implements ProcessorInterface
     /**
      * Destination width in px.
      *
-     * @var int
+     * @var int|null
      */
     private $dest_w;
 
     /**
      * Destination height in px.
      *
-     * @var int
+     * @var int|null
      */
     private $dest_h;
 
@@ -191,39 +198,47 @@ class GD implements ProcessorInterface
      */
     public function save(string $filename, int $image_type = null, int $quality = null, int $permissions = null)
     {
+        $addedbg    = true;
         $image_type = $image_type ?: $this->source_type;
 
-        $dest_image = imagecreatetruecolor($this->dest_w, $this->dest_h);
-
-        switch ($image_type)
+        if (!$this->dest_image)
         {
-            case IMAGETYPE_GIF:
-                $background = imagecolorallocatealpha($dest_image, 255, 255, 255, 1);
-                imagecolortransparent($dest_image, $background);
-                imagefill($dest_image, 0, 0, $background);
-                imagesavealpha($dest_image, true);
-            break;
+            $addedbg          = false;
+            $this->dest_image = imagecreatetruecolor($this->width(), $this->height());
+        }
 
-            case IMAGETYPE_JPEG:
-                $background = imagecolorallocate($dest_image, 255, 255, 255);
-                imagefilledrectangle($dest_image, 0, 0, $this->dest_w, $this->dest_h, $background);
-            break;
+        if (!$addedbg)
+        {
+            switch ($this->source_type)
+            {
+                case IMAGETYPE_GIF:
+                    $background = imagecolorallocatealpha($this->dest_image, 255, 255, 255, 1);
+                    imagecolortransparent($this->dest_image, $background);
+                    imagefill($this->dest_image, 0, 0, $background);
+                    imagesavealpha($this->dest_image, true);
+                break;
 
-            case IMAGETYPE_PNG:
-                imagealphablending($dest_image, false);
-                imagesavealpha($dest_image, true);
-            break;
+                case IMAGETYPE_JPEG:
+                    $background = imagecolorallocate($this->dest_image, 255, 255, 255);
+                    imagefilledrectangle($this->dest_image, 0, 0, $this->width(), $this->height(), $background);
+                break;
+
+                case IMAGETYPE_PNG:
+                    imagealphablending($this->dest_image, false);
+                    imagesavealpha($this->dest_image, true);
+                break;
+            }
         }
 
         imagecopyresampled(
-            $dest_image,
+            $this->dest_image,
             $this->source_image,
             $this->dest_x,
             $this->dest_y,
             $this->source_x,
             $this->source_y,
-            $this->dest_w,
-            $this->dest_h,
+            $this->width(),
+            $this->height(),
             $this->source_w,
             $this->source_h
         );
@@ -231,7 +246,7 @@ class GD implements ProcessorInterface
         switch ($image_type)
         {
             case IMAGETYPE_GIF:
-                imagegif($dest_image, $filename);
+                imagegif($this->dest_image, $filename);
             break;
 
             case IMAGETYPE_JPEG:
@@ -240,7 +255,7 @@ class GD implements ProcessorInterface
                     $quality = $this->quality_jpg;
                 }
 
-                imagejpeg($dest_image, $filename, $quality);
+                imagejpeg($this->dest_image, $filename, $quality);
             break;
 
             case IMAGETYPE_PNG:
@@ -249,7 +264,7 @@ class GD implements ProcessorInterface
                     $quality = $this->quality_png;
                 }
 
-                imagepng($dest_image, $filename, $quality);
+                imagepng($this->dest_image, $filename, $quality);
             break;
         }
 
@@ -257,6 +272,8 @@ class GD implements ProcessorInterface
         {
             chmod($filename, $permissions);
         }
+
+        $this->reset();
 
         return $this;
     }
@@ -268,7 +285,7 @@ class GD implements ProcessorInterface
     {
         $ratio  = $this->source_h / $height;
 
-        $width = $this->source_w / $ratio;
+        $width = $ratio === 0 ? $this->source_w : $this->source_w / $ratio;
 
         $this->resize($width, $height, $allow_enlarge);
 
@@ -282,7 +299,7 @@ class GD implements ProcessorInterface
     {
         $ratio  = $this->source_w / $width;
 
-        $height = $this->source_h / $ratio;
+        $height = $ratio === 0 ?  : $this->source_h / $ratio;
 
         $this->resize($width, $height, $allow_enlarge);
 
@@ -380,5 +397,60 @@ class GD implements ProcessorInterface
         }
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addBackground(int $red, int $green, int $blue)
+    {
+        if (!$this->dest_image)
+        {
+            $this->dest_image = imagecreatetruecolor($this->width(), $this->height());
+        }
+
+        switch ($this->source_type)
+        {
+            case IMAGETYPE_GIF:
+                $background = imagecolorallocate($this->dest_image, $red, $green, $blue);
+                imagefill($this->dest_image, 0, 0, $background);
+            break;
+
+            case IMAGETYPE_JPEG:
+                $background = imagecolorallocate($this->dest_image, $red, $green, $blue);
+                imagefill($this->dest_image, 0, 0, $background);
+            break;
+
+            case IMAGETYPE_PNG:
+                $background = imagecolorallocate($this->dest_image, $red, $green, $blue);
+                imagefill($this->dest_image, 0, 0, $background);
+            break;
+
+            default:
+                throw new RuntimeException('Error adding background to image. No image loaded in Pixl.');
+            break;
+        }
+
+        return $this;
+    }
+
+    /**
+     * Reset defaults after saving.
+     *
+     * @access private
+     */
+    private function reset()
+    {
+        $this->source_type  = null;
+        $this->source_image = null;
+        $this->dest_image   = null;
+        $this->source_w     = null;
+        $this->source_h     = null;
+        $this->source_x     = null;
+        $this->source_y     = null;
+        $this->dest_x       = 0;
+        $this->dest_y       = 0;
+        $this->dest_w       = null;
+        $this->dest_h       = null;
     }
 }

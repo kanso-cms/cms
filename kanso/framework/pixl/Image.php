@@ -156,6 +156,7 @@ class Image
     /**
      * Scale image by a percentage.
      *
+     * @access public
      * @param  int                         $scale Scale percentage
      * @return \kanso\framework\pixl\Image
      */
@@ -169,6 +170,7 @@ class Image
     /**
      * Resize image to height and width.
      *
+     * @access public
      * @param  int                         $width         Width in px
      * @param  int                         $height        Height in px
      * @param  bool                        $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
@@ -184,6 +186,7 @@ class Image
     /**
      * Crop to width and height.
      *
+     * @access public
      * @param  int                         $width         Width in px
      * @param  int                         $height        Height in px
      * @param  bool                        $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
@@ -192,6 +195,22 @@ class Image
     public function crop(int $width, int $height, bool $allow_enlarge = false): Image
     {
         $this->processor->crop($width, $height, $allow_enlarge);
+
+        return $this;
+    }
+
+    /**
+     * Add a background to the image.
+     *
+     * @access public
+     * @param  int                         $red   Red color value
+     * @param  int                         $green Green color value
+     * @param  int                         $blue  Blue color value
+     * @return \kanso\framework\pixl\Image
+     */
+    public function addBackground(int $red, int $green, int $blue): Image
+    {
+        $this->processor->addBackground($red, $green, $blue);
 
         return $this;
     }

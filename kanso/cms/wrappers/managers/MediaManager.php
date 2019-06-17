@@ -248,11 +248,6 @@ class MediaManager extends Manager
         }
         else
         {
-            // Grab our image processor
-            $pixl = $this->pixl;
-
-            $pixl->loadImage($FILE['tmp_name']);
-
             // Get the file extension from the mime type
             $ext = Mime::toExt($FILE['type']);
 
@@ -263,7 +258,12 @@ class MediaManager extends Manager
             $destPath = $this->uniqueName($this->uploadDir . DIRECTORY_SEPARATOR . $name . '.' . $ext);
 
             // Loop through config sizes, resize and upload
-            foreach ($this->thumbnailSizes as $suffix => $size) {
+            foreach ($this->thumbnailSizes as $suffix => $size)
+            {
+                // Grab our image processor
+                $pixl = $this->pixl;
+
+                $pixl->loadImage($FILE['tmp_name']);
 
                 // Set the destination
                 $dst = $this->uniqueName($this->uploadDir . DIRECTORY_SEPARATOR . $name . '_' . $suffix . '.' . $ext);

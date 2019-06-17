@@ -59,7 +59,7 @@ class Scripts extends Helper
      */
     public function enqueue_inline_style(string $css = '')
     {
-        $this->parent->headerStyles[] = '<style type="text/css">' . $css . '</style>';
+        $this->parent->headerStyles[] = '<style type="text/css">' . trim($css) . '</style>';
     }
 
     /**
@@ -73,11 +73,11 @@ class Scripts extends Helper
     {
         if ($inFooter)
         {
-            $this->parent->footerScripts[] = '<script type="text/javascript">' . $js . '</script>';
+            $this->parent->footerScripts[] = '<script type="text/javascript">' . trim($js) . '</script>';
         }
         else
         {
-            $this->parent->headerScripts[] = '<script type="text/javascript">' . $js . '</script>';
+            $this->parent->headerScripts[] = '<script type="text/javascript">' . trim($js) . '</script>';
         }
     }
 
