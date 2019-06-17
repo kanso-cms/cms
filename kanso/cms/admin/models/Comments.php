@@ -272,6 +272,7 @@ class Comments extends BaseModel
         // Filter and sanitize the sort order
         if ($queries['sort'] === 'name')  $sortKey   = 'name';
         if ($queries['sort'] === 'email') $sortKey   = 'email';
+        if ($queries['sort'] === 'post')  $sortKey   = 'post_id';
 
         $this->sql()->SELECT('id')->FROM('comments');
 

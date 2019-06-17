@@ -40,6 +40,7 @@
 		                <li><a href="/admin/comments/?<?php echo "&sort=newest&search=$queries[search]&status=$queries[status]"; ?>" <?php if ($queries['sort'] === 'newest') echo 'class="selected"'; ?>>Date</a></li>
 						<li><a href="/admin/comments/?<?php echo "&sort=name&search=$queries[search]&status=$queries[status]"; ?>" <?php if ($queries['sort'] === 'name') echo 'class="selected"'; ?>>Name</a></li>
 						<li><a href="/admin/comments/?<?php echo "&sort=email&search=$queries[search]&status=$queries[status]"; ?>" <?php if ($queries['sort'] === 'email') echo 'class="selected"'; ?>>Email</a></li>
+						<li><a href="/admin/comments/?<?php echo "&sort=post&search=$queries[search]&status=$queries[status]"; ?>" <?php if ($queries['sort'] === 'post') echo 'class="selected"'; ?>>Post</a></li>
 		        	</ul>
 		        </div>
 		    </div>
