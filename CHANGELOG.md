@@ -1,3 +1,23 @@
+### 4.4.0 <small> (12-07-2019)</small>
+
+Update using ```git fetch```.
+
+#### New
+* Added `visited-checkout` to the lead filters in the admin panel
+
+#### Changes
+* The CMS no longer routes all attachment sizes. Only the primary attachement is routed.
+* PHPDocBlock update on `Coupons::used` method.
+* Updated logic for listing leads in the admin panel for faster parsing.
+
+#### Bugfixes
+* Fixed on `Str::slug` method to properly filter slugs.
+* Fixed on `Pixl::crop` method to crop images from center correctly.
+* Fixed on `Post->author` magic method to set/get a new author when the author is changed on existing posts, before the post is resaved.
+* Fixed `Media::delete` method to remove thumbnail_id from posts when the media item is deleted.
+* Fixed the writer in the admin panel to set the correct author on existing posts.
+* `MediaLibrary::delete` checks if the attachement exists before deleting it in the admin panel
+
 --------------------------------------------------------
 
 ### 4.3.0 <small> (14-06-2019)</small>

@@ -192,12 +192,12 @@ class Leads extends BaseModel
         {
             $visitor = $this->Crm->leadProvider()->byKey('id', $row['id']);
 
-            $visitor->status = $visitor->grade(null, true);
-
             // Are we filtering the funnel status
             if ($status)
             {
-                if ($visitor->status === $status)
+                $_status = $visitor->grade(null, true);
+
+                if ($_status === $status)
                 {
                     $visitors[] = $visitor;
                 }
@@ -213,6 +213,13 @@ class Leads extends BaseModel
         {
             foreach ($visitors as $i => $visitor)
             {
+                if ($action === 'visited-checkout')
+                {
+                    if (!$this->SQL()->SELECT('id')->FROM('crm_visits')->WHERE('visitor_id', '=', $visitor->visitor_id)->AND_WHERE('page', 'like', '%checkout%')->ROW())
+                    {
+                        unset($visitors[$i]);
+                    }
+                }
                 if ($action === 'not-bounced')
                 {
                     if ($visitor->bounced())
@@ -272,7 +279,7 @@ class Leads extends BaseModel
         {
             usort($visitors, function($a, $b)
             {
-                return strcmp($a->status, $b->status);
+                return strcmp($a->grade(null, true), $b->grade(null, true));
             });
         }
 

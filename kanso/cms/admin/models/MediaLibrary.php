@@ -173,7 +173,10 @@ class MediaLibrary extends BaseModel
         {
             $attachment = $this->MediaManager->byId($id);
 
-            $attachment->delete();
+            if ($attachment)
+            {
+                $attachment->delete();
+            }
         }
 
         return 'valid';

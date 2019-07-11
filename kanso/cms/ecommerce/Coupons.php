@@ -54,6 +54,7 @@ class Coupons extends UtilityBase
      *
      * @access public
      * @param  string $couponName The coupon name or code
+     * @param  string $email      Check if a user has used this coupon by email address
      * @return bool
      */
     public function used(string $couponName, string $email = ''): bool

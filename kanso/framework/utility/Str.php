@@ -318,7 +318,7 @@ class Str
 	 */
 	public static function slug(string $str): string
 	{
-    	return preg_replace('/-+/', '-', urlencode(ltrim(rtrim(preg_replace('/[^a-z0-9_-]/', '', preg_replace('/[\s-]+/', '-', strtolower($str))), '-'), '-')));
+    	return preg_replace('/-+/', '-', urlencode(ltrim(rtrim(preg_replace('/[^a-z0-9_-]/', '', preg_replace('/[\s-]+/', '-', strtolower(html_entity_decode($str, ENT_QUOTES)))), '-'), '-')));
 	}
 
 	/**

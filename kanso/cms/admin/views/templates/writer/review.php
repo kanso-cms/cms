@@ -65,11 +65,22 @@
 				<p class="color-gray">Set the post author.</p>
 				<select name="author" id="author">
 					<?php foreach (all_the_authors() as $i => $author) : ?>
-						<option value="<?php echo $author->id; ?>" <?php echo $i === 0 ? 'selected' : ''; ?>>
+						<?php
+						$selected = false;
+
+						if ($the_post && $the_post->author_id === $author->id)
+						{
+							$selected = true;
+						}
+						elseif($author->id === 1)
+						{
+							$selected = true;
+						}
+						?>
+						<option value="<?php echo $author->id; ?>" <?php echo $selected ? 'selected' : ''; ?>>
 							<?php echo $author->name; ?>	
 						</option>
 					<?php endforeach; ?>
-					
 				</select>
 			</div>
 

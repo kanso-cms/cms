@@ -353,47 +353,60 @@ class GD implements ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function crop(int $width, int $height, bool $allow_enlarge = false)
+    public function crop(int $max_width, int $max_height, bool $allow_enlarge = false)
     {
-        if (!$allow_enlarge)
+        // If the origional image is already a square
+        // And the dest is a square
+        // Simply resize to width
+        if ($this->source_w === $this->source_h && $max_width === $max_height)
         {
-            // this logic is slightly different to resize(),
-            // it will only reset dimensions to the original
-            // if that particular dimenstion is larger
+            $this->resizeToWidth($max_width);
 
-            if ($width > $this->source_w)
-            {
-                $width  = $this->source_w;
-            }
-
-            if ($height > $this->source_h)
-            {
-                $height = $this->source_h;
-            }
+            return $this;
         }
 
-        $ratio_source = $this->source_w / $this->source_h;
-        $ratio_dest = $width / $height;
+        $new_width  = $this->source_h * $max_width / $max_height;
+        $new_height = $this->source_w * $max_height / $max_width;
 
-        if ($ratio_dest < $ratio_source)
+        //if the new width is greater than the actual width of the image, then the height is too large and the rest cut off, or vice versa
+        if($new_width > $this->source_w)
         {
-            $this->resizeToHeight($height, $allow_enlarge);
+            //cut point by height
+            $h_point = (($this->source_h - $new_height) / 2);
 
-            $excess_width = ($this->dest_w - $width) / $this->dest_w * $this->source_w;
+            $this->dest_x = 0;
 
-            $this->source_w = $this->source_w - $excess_width;
-            $this->source_x = $excess_width / 2;
+            $this->dest_y = 0;
 
-            $this->dest_w = $width;
-        } else {
-            $this->resizeToWidth($width, $allow_enlarge);
+            $this->source_x = 0;
 
-            $excess_height = ($this->dest_h - $height) / $this->dest_h * $this->source_h;
+            $this->source_y = $h_point;
 
-            $this->source_h = $this->source_h - $excess_height;
-            $this->source_y = $excess_height / 2;
+            $this->dest_w = $max_width;
 
-            $this->dest_h = $height;
+            $this->dest_h = $max_height;
+
+            $this->source_h = $new_height;
+        }
+        else
+        {
+            //cut point by width
+            $w_point = (($this->source_w - $new_width) / 2);
+
+            $this->dest_x = 0;
+
+            $this->dest_y = 0;
+
+            $this->source_x = $w_point;
+
+            $this->source_y = 0;
+
+            $this->dest_w = $max_width;
+
+            $this->dest_h = $max_height;
+
+            $this->source_w = $new_width;
+
         }
 
         return $this;

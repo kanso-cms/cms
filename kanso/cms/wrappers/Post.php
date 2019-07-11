@@ -222,7 +222,7 @@ class Post extends Wrapper
 		}
 		elseif ($key === 'author')
 		{
-			$this->setPending('author', $value);
+			$this->setPending('author_id', $value);
 		}
 		elseif ($key === 'excerpt')
 		{
@@ -369,10 +369,18 @@ class Post extends Wrapper
 			{
 				$this->data['author'] = $this->userProvider->byId($this->data['author_id']);
 			}
+			elseif ($this->data['author'] && $this->data['author']->id !== $this->data['author_id'])
+			{
+				$this->data['author'] = $this->userProvider->byId($this->data['author_id']);
+			}
 		}
-		else
+
+		// Fallback
+		if (empty($this->data['author']) || empty($this->data['author_id']))
 		{
 			$this->data['author'] = $this->userProvider->byId(1);
+
+			$this->data['author_id'] = 1;
 		}
 
 		return $this->data['author'];

@@ -42,8 +42,9 @@
 		                <li class="drop-header">Filter by:</li>
 		                <li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['action'] === false) echo 'class="selected"'; ?>>None</a></li>
 		                <li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=created-account&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['action'] === 'created-account') echo 'class="selected"'; ?>>Created Account</a></li>
-		                <li><a href="/admin/leads/?<?php echo "$queries[status]&sort=$queries[sort]&action=not-bounced&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['action'] === 'not-bounced') echo 'class="selected"'; ?>>Unbounced</a></li>
-		                <li><a href="/admin/leads/?<?php echo "$queries[status]&sort=$queries[sort]&action=bounced&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['action'] === 'bounced') echo 'class="selected"'; ?>>Bounced</a></li>
+		                <li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=not-bounced&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['action'] === 'not-bounced') echo 'class="selected"'; ?>>Unbounced</a></li>
+		                <li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=bounced&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['action'] === 'bounced') echo 'class="selected"'; ?>>Bounced</a></li>
+		            	<li><a href="/admin/leads/?<?php echo "status=$queries[status]&sort=$queries[sort]&action=visited-checkout&medium=$queries[medium]&channel=$queries[channel]&search=$queries[search]"; ?>" <?php if ($queries['action'] === 'visited-checkout') echo 'class="selected"'; ?>>Visited Checkout</a></li>
 		            </ul>
 		        </div>
 		    </div>

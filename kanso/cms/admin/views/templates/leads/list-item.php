@@ -4,7 +4,7 @@
 	<th><?php echo $visitor->name; ?></th>
 	<th><?php echo $visitor->email; ?></th>
 	<th><?php echo kanso\framework\utility\Humanizer::timeAgo($visitor->last_active); ?> ago</th>
-	<th><?php echo $visitor->status; ?></th>
+	<th><?php echo $visitor->grade(null, true); ?></th>
 	<th><?php echo $visitor->countVisits(); ?></th>
 	<th><?php echo $visitor->medium(); ?></th>
 	<th><?php echo $visitor->channel(); ?></th>

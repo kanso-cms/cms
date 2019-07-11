@@ -510,23 +510,6 @@ class Filter extends Helper
         $attachment      = $this->container->get('MediaManager')->provider()->byKey('url', $attachmentURL, true);
         $attachmentSize  = 'original';
 
-        // We may need to check if the attachment exists but we are requesting a sized version
-        if ($isImage && !$attachment)
-        {
-            foreach ($thumbnailSizes as $suffix)
-            {
-                if (Str::contains($attachmentSlug, '_' . $suffix))
-                {
-                    $attachmentURL = $uploadsUrl . '/' . Str::getBeforeLastWord($attachmentSlug, '_' . $suffix) . '.' . $attachemmentExt;
-                    $attachment    = $this->container->get('MediaManager')->provider()->byKey('url', $attachmentURL, true);
-                    if ($attachment)
-                    {
-                        $attachmentSize = $suffix;
-                    }
-                }
-            }
-        }
-
         // 404 If the attachment does not exist
         if (!$attachment)
         {

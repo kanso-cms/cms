@@ -102,6 +102,8 @@ class Media extends Wrapper
                 unlink($this->data['path']);
             }
 
+            $this->SQL->UPDATE('posts')->SET(['thumbnail_id' => NULL])->WHERE('thumbnail_id', '=', $this->data['id'])->QUERY();
+
             return $this->SQL->DELETE_FROM('media_uploads')->WHERE('id', '=', $this->data['id'])->QUERY() ? true : false;
         }
 
