@@ -695,6 +695,7 @@ class Inclusions
 	        'sitexy\.com',
 	        'SkypeUriPreview',
 	        'Slack\/',
+	        'SEMrushBot',
 	        'slider\.com',
 	        'slurp',
 	        'SMRF URL Expander',
