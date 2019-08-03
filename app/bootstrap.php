@@ -1,7 +1,17 @@
 <?php
 
-use kanso\framework\autoload\Autoloader;
 use kanso\Kanso;
+
+/*
+ * ---------------------------------------------------------
+ * PHP 7.3
+ * ---------------------------------------------------------
+ */
+
+if (strpos(phpversion(), '7.3') !== false)
+{
+	ini_set('pcre.jit', '0');
+}
 
 /*
  * ---------------------------------------------------------
@@ -48,7 +58,7 @@ if (!defined('APP_DIR'))
 	define('APP_DIR', dirname(__FILE__));
 }
 
-/**
+/*
  * Kanso uses a cascading file-system to load configuration
  * files. This means you can run Kanso under different 'environments',
  * by creating a new directory and placing any configuration files in
@@ -56,13 +66,11 @@ if (!defined('APP_DIR'))
  * @see https://github.com/phanan/cascading-config
  */
 
-// Uncomment this to add the sanbox config environment
-/*
-if (!defined('KANSO_ENV'))
+// Auto environment aware based on host
+/*if (!defined('KANSO_ENV'))
 {
 	define('KANSO_ENV', 'sandbox');
-}
-*/
+}*/
 
 /**
  * ---------------------------------------------------------
@@ -71,29 +79,11 @@ if (!defined('KANSO_ENV'))
  */
 
 /**
- * Register Kanso autoloader
- * If you are using composer's autoloader you should remove this.
- */
-require_once KANSO_DIR . '/framework/autoload/Autoloader.php';
-
-$autoloader = new Autoloader;
-
-$autoloader->addPrefix('kanso', KANSO_DIR);
-
-$autoloader->addPrefix('app', APP_DIR);
-
-$autoloader->addPrefix('Braintree', dirname(KANSO_DIR) . '/vendor/braintree/braintree_php/lib/Braintree');
-
-$autoloader->addPrefix('Sinergi\BrowserDetector', dirname(KANSO_DIR) . '/vendor/sinergi/browser-detector/src');
-
-$autoloader->register();
-
-/**
  * Composer autoloader
- * Use this if you are using composer and comment out the default
- * autoloader above.
+ * 
+ * You need to install composer to use the autoloader
  */
-// include dirname(__DIR__) . '/vendor/autoload.php';
+require_once(dirname(KANSO_DIR) . '/vendor/autoload.php');
 
 /**
  * ---------------------------------------------------------

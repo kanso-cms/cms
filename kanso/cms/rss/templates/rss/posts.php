@@ -10,6 +10,7 @@
 		<category><?php echo '<![CDATA[' . htmlspecialchars(the_category_name()) . ']]>'; ?></category>
 		<guid><?php echo the_permalink(); ?></guid>
 		<description><?php echo '<![CDATA[' . htmlspecialchars(the_excerpt()) . ']]>'; ?></description>
+		<content:encoded><?php echo '<![CDATA[' . htmlspecialchars(the_content()) . ']]>'; ?></content:encoded>
 		<wfw:commentRss><?php echo the_permalink(); ?>feed/</wfw:commentRss>
 		<slash:comments><?php echo comments_number(); ?></slash:comments>
 	</item>

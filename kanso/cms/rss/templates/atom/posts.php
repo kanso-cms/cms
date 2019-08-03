@@ -11,7 +11,8 @@
 		<updated><?php echo the_modified_time('c'); ?></updated>
 		<published><?php echo the_time('c'); ?></published>
 		<category scheme="<?php echo home_url(); ?>" term="<?php echo htmlspecialchars(the_category_name()); ?>" />
-		<summary type="html"><?php echo '<![CDATA[' . htmlspecialchars(the_excerpt()) . ']]>'; ?></summary>
+		<summary type="text"><?php echo htmlspecialchars(the_excerpt()); ?></summary>
+		<content type="html"><?php echo '<![CDATA[' . htmlspecialchars(the_content()) . ']]>'; ?></content>
 		<link rel="replies" type="text/html" href="<?php echo the_permalink(); ?>#comments" thr:count="<?php echo comments_number(); ?>"/>
 		<thr:total><?php echo comments_number(); ?></thr:total>
 	</entry>

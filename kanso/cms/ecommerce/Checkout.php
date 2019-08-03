@@ -378,7 +378,7 @@ class Checkout extends UtilityBase
         $domain      = $this->Request->environment()->DOMAIN_NAME;
         $toEmail     = $this->Config->get('ecommerce.confirmation_email');
         $senderName  = $this->Config->get('cms.site_title');
-        $senderEmail = 'orders@' . $domain;
+        $senderEmail = 'info@' . $domain;
         $subject     = 'Order Received';
         $content     = "A new order on $domain has been received.\n\n";
         $content    .= 'Date: ' . date('l jS F Y h:i:s A') . "\n";

@@ -218,6 +218,8 @@ class Gatekeeper
 
             $this->session->destroy();
 
+            $this->session->start();
+
             return false;
         }
 
@@ -464,7 +466,9 @@ class Gatekeeper
         // Create a fresh cookie
         $this->cookie->destroy();
 
+        // Create a fresh session
         $this->session->destroy();
+        $this->session->start();
 
         // Get the new access token
         $token = $this->session->token()->get();

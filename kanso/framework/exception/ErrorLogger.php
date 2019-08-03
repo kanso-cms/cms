@@ -98,6 +98,7 @@ class ErrorLogger
         'DATE    : ' . date('l jS \of F Y h:i:s A', time()) . "\n" .
         'TYPE    : ' . $this->errType() . ' [' . $this->exception->getCode() . "]\n" .
         'URL     : ' . $this->environment->REQUEST_URL . "\n" .
+        'METHOD  : ' . $this->environment->REQUEST_METHOD . "\n" .
         'REFERER : ' . $this->environment->REFERER . "\n" .
         'CLASS   : ' . $this->errClass() . "\n" .
         'FILE    : ' . $this->exception->getFile() . "\n" .

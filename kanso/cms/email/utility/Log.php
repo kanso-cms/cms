@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\cms\email;
+namespace kanso\cms\email\utility;
 
 use kanso\framework\file\Filesystem;
 use kanso\framework\utility\UUID;
@@ -49,14 +49,15 @@ class Log
      * Write email to log.
      *
      * @access public
-     * @param string $toEmail     The email address to send the email to
-     * @param string $senderName  The name of the sender
-     * @param string $senderEmail The email address of the sender
-     * @param string $subject     The subject of the email
-     * @param string $content     The message to be sent
-     * @param string $format      html or plain
+     * @param  string $toEmail     The email address to send the email to
+     * @param  string $senderName  The name of the sender
+     * @param  string $senderEmail The email address of the sender
+     * @param  string $subject     The subject of the email
+     * @param  string $content     The message to be sent
+     * @param  string $format      html or plain
+     * @return string
      */
-    public function save(string $toEmail, string $senderName, string $senderEmail, string $subject, string $content, string $format)
+    public function save(string $toEmail, string $senderName, string $senderEmail, string $subject, string $content, string $format): string
     {
         $id = UUID::v4();
 
@@ -73,5 +74,7 @@ class Log
         $this->filesystem->putContents($this->path . DIRECTORY_SEPARATOR . $id, serialize($data));
 
         $this->filesystem->putContents($this->path . DIRECTORY_SEPARATOR . $id . '_content', $content);
+
+        return $id;
     }
 }

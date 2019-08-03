@@ -18,6 +18,10 @@ return
      * secure        : Enable TLS encryption, `ssl` also accepted
      * username      : Username to use for SMTP authentication
      * password      : Encrypted password to use for SMTP authentication (using $kanso->Crypto->encrypt('foo'))
+     * auth_type     : if set to 'XOAUTH2' CMS uses XOAUTH2 via gmail to send emails
+     * client_id     : Gmail client id (required if auth_typ set to 'XOAUTH2')
+     * client_secret : Gmail client secret (required if auth_typ set to 'XOAUTH2')
+     * refresh_token : Gmail refresh token (required if auth_typ set to 'XOAUTH2')
      */
     'use_smtp'      => false,
     'smtp_settings' =>
@@ -29,6 +33,10 @@ return
         'secure'      => 'tls',
         'username'    => 'foobar@gmail.com',
         'hashed_pass' => 'hashedpassword',
+        'auth_type'      => 'XOAUTH2',
+        'client_id'      => 'fd562456467hfgdhdfu.apps.googleusercontent.com',
+        'client_secret'  => '42324sdr902h8g341r1',
+        'refresh_token'  => '1/4214545tjgdshgh78f98sdffas',
     ],
 
     /*
@@ -38,6 +46,16 @@ return
      *
      */
     'log_dir' => APP_DIR . '/storage/emails',
+
+    /*
+     * ---------------------------------------------------------
+     * Queue
+     * ---------------------------------------------------------
+     *
+     * If set to true, emails are not sent immediately, but held in
+     * a queue and must be sent via a cron job
+     */
+    'queue' => false,
 
     /*
      * ---------------------------------------------------------

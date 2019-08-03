@@ -41,13 +41,6 @@ class FileSessionStorage implements StoreInterface
     private $sent = false;
 
     /**
-     * Has the garbage been collected.
-     *
-     * @var bool
-     */
-    private $garbageColltected = false;
-
-    /**
      * Session cookie parameters.
      *
      * @var array
@@ -67,27 +60,6 @@ class FileSessionStorage implements StoreInterface
      * @var string
      */
     private $session_name = 'kanso_session';
-
-    /**
-     * Name of the garbage collection file.
-     *
-     * @var string
-     */
-    private $GCFileName = 'php_session_last_gc';
-
-    /**
-     * Garbage collection frequency.
-     *
-     * @var int
-     */
-    private $gCPeriod = 1800;
-
-    /**
-     * Is this a HTTP request ?
-     *
-     * @var bool
-     */
-    private $isHttpRequest = false;
 
     /**
      * Filesystem instance.
@@ -122,14 +94,7 @@ class FileSessionStorage implements StoreInterface
 
         $this->session_save_path($storageDir);
 
-        if (isset($_COOKIE))
-        {
-            $this->isHttpRequest = true;
-        }
-        else
-        {
-            $this->isHttpRequest = false;
-        }
+        $this->session_gc();
     }
 
     /**
@@ -157,39 +122,27 @@ class FileSessionStorage implements StoreInterface
      */
     public function session_start()
     {
-        if ($this->sent === true)
+        if ($this->sent || $this->started)
         {
             return;
         }
 
-        if (!$this->isHttpRequest && $this->cookieParams['httponly'] === true)
+        $this->started = true;
+
+        if (!isset($_COOKIE[$this->session_name]))
         {
-            return;
+            $this->generateId();
+        }
+        else
+        {
+            $this->id = $this->crypto->decrypt($_COOKIE[$this->session_name]);
+
+            if (!$this->sessionFileExists() || !UUID::validate($this->id))
+            {
+                $this->generateId();
+            }
         }
 
-        if (!$this->started)
-        {
-            $this->started = true;
-
-            if (!$this->garbageColltected)
-            {
-                $this->session_gc();
-            }
-
-            if (!isset($_COOKIE[$this->session_name()]))
-            {
-                $this->session_regenerate_id();
-            }
-            else
-            {
-                $this->id = $this->crypto->decrypt($_COOKIE[$this->session_name()]);
-
-                if (!$this->sessionFileExists() || !UUID::validate($this->id))
-                {
-                    $this->session_regenerate_id(true);
-                }
-            }
-        }
     }
 
     /**
@@ -205,7 +158,7 @@ class FileSessionStorage implements StoreInterface
 
             $this->started = false;
 
-            unset($_COOKIE[$this->session_name()]);
+            unset($_COOKIE[$this->session_name]);
         }
     }
 
@@ -227,9 +180,6 @@ class FileSessionStorage implements StoreInterface
             }
 
             $this->id = $id;
-
-            $_COOKIE[$this->session_name()] = $this->crypto->encrypt($this->id);
-
         }
 
         return $this->id;
@@ -276,8 +226,6 @@ class FileSessionStorage implements StoreInterface
         }
 
         $this->id = $newId;
-
-        $_COOKIE[$this->session_name()] = $this->crypto->encrypt($this->id);
     }
 
     /**
@@ -303,25 +251,29 @@ class FileSessionStorage implements StoreInterface
     {
         $deleted = false;
 
-        if (!$this->garbageColltected)
+        if (mt_rand(1, 100) === 100)
         {
-            $gc_time = $this->storageDir . DIRECTORY_SEPARATOR . $this->GCFileName;
+            // Max age in hours of now until a session expires
+            $maxAge = abs($this->cookieParams['expire'] - time()) / 3600;
 
-            if ($this->filesystem->exists($gc_time))
+            $files = scandir($this->storageDir);
+
+            foreach ($files as $file)
             {
-                if ($this->filesystem->lastModified($gc_time) < time() - $this->gCPeriod)
+                if ($file === '.' || $file === '..' || $file[0] === '.')
                 {
-                    $deleted = $this->deleteOldSessions();
+                    continue;
+                }
 
-                    $this->filesystem->touch($gc_time);
+                $realPath = $this->storageDir . DIRECTORY_SEPARATOR . $file;
+
+                if (strtotime('+' . $maxAge . ' hours', $this->filesystem->lastModified($realPath)) < time())
+                {
+                    $this->filesystem->delete($realPath);
+
+                    $deleted = true;
                 }
             }
-            else
-            {
-                $this->filesystem->touch($gc_time);
-            }
-
-            $this->garbageColltected = true;
         }
 
         return $deleted;
@@ -358,7 +310,7 @@ class FileSessionStorage implements StoreInterface
     {
         if ($this->started && !$this->sent)
         {
-            setcookie($this->session_name(), $this->crypto->encrypt($this->id), $this->cookieParams['expire'], $this->cookieParams['path'], $this->cookieParams['domain'], $this->cookieParams['secure'], $this->cookieParams['httponly']);
+            setcookie($this->session_name, $this->crypto->encrypt($this->id), $this->cookieParams['expire'], $this->cookieParams['path'], $this->cookieParams['domain'], $this->cookieParams['secure'], $this->cookieParams['httponly']);
 
             $this->sent = true;
         }
@@ -372,12 +324,17 @@ class FileSessionStorage implements StoreInterface
      */
     private function sessionFile()
     {
-        if (!empty($this->id))
-        {
-            return $this->storageDir . DIRECTORY_SEPARATOR . $this->id;
-        }
+        return !empty($this->id) ? $this->storageDir . DIRECTORY_SEPARATOR . $this->id : false;
+    }
 
-        return false;
+    /**
+     * Generate a session id.
+     *
+     * @access private
+     */
+    private function generateId()
+    {
+        $this->id = UUID::v4();
     }
 
     /**
@@ -396,41 +353,5 @@ class FileSessionStorage implements StoreInterface
         }
 
         return false;
-    }
-
-    /**
-     * Delete old session files.
-     *
-     * @access private
-     * @return int
-     */
-    private function deleteOldSessions(): int
-    {
-        $deleted = 0;
-
-        $files = scandir($this->storageDir);
-
-        foreach ($files as $file)
-        {
-            $realPath = $this->storageDir . DIRECTORY_SEPARATOR . $file;
-
-            if ($file === '.' || $file === '..' || $file[0] === '.' || $file === $this->GCFileName)
-            {
-                continue;
-            }
-
-            // Sessions more than 12 hours are deleted
-            if ($this->filesystem->exists($realPath))
-            {
-                if (time() - filemtime($realPath) > 86400)
-                {
-                    $this->filesystem->delete($realPath);
-
-                    $deleted++;
-                }
-            }
-        }
-
-        return $deleted;
     }
 }

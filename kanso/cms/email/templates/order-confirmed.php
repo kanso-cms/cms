@@ -128,7 +128,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td align="center" style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#a9abaf; font-size:9px; letter-spacing: 1px;line-height: 28px;text-transform: uppercase;"><?php echo $kanso->Config->get('cms.site_description'); ?>.</td>
+                                    <td align="center" style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#a9abaf; font-size:9px; letter-spacing: 1px;line-height: 28px;text-transform: uppercase;">All Natural. Plant Based. Earth Grown.</td>
                                 </tr>
                                 <tr>
                                     <td height="10"></td>

@@ -189,7 +189,7 @@ class EmailLogs extends BaseModel
         $filter       = $queries['filter'];
         $search       = $queries['search'];
         $path         = $this->Config->get('email.log_dir');
-        $files        = $this->Filesystem->list($path, ['..', '.', '.ds_store', '.DS_Store', '.gitignore']);
+        $files        = $this->Filesystem->list($path, ['..', '.', '.ds_store', '.DS_Store', '.gitignore', 'queue.txt']);
 
         // Remove contents files
         foreach ($files as $i => $file)

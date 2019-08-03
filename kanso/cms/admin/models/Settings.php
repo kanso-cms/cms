@@ -899,6 +899,8 @@ class Settings extends BaseModel
             {
                 $this->Response->session()->destroy();
 
+                $this->Response->session()->start();
+
                 $this->Response->cookie()->destroy();
 
                 $this->Response->redirect($this->Request->environment()->HTTP_HOST . '/admin/login/');

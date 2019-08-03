@@ -155,6 +155,9 @@ class Installer
 
         // destroy the session
         $response->session()->destroy();
+
+        // Start a new session
+        $response->session()->start();
     }
 
     /**

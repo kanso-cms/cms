@@ -198,6 +198,7 @@ class Session implements \IteratorAggregate
 
     /**
      * Clear the session.
+     *
      * @access public
      */
     public function destroy()
@@ -210,5 +211,15 @@ class Session implements \IteratorAggregate
 
         // Generate a new access token
         $this->token->regenerate();
+    }
+
+    /**
+     * Clear the session.
+     *
+     * @access public
+     */
+    public function start()
+    {
+        $this->store->session_start();
     }
 }

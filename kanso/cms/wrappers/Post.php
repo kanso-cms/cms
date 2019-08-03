@@ -226,7 +226,7 @@ class Post extends Wrapper
 		}
 		elseif ($key === 'excerpt')
 		{
-			$this->data['excerpt'] = Str::reduce(Markdown::plainText($value), 255);
+			$this->data['excerpt'] = Str::reduce(Markdown::plainText($value), 350);
 		}
 		elseif ($key === 'content')
 		{

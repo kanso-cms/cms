@@ -167,7 +167,7 @@ class Author extends Helper
             {
                 $prefix = !empty($this->parent->blog_location()) ? '/' . $this->parent->blog_location() . '/' : '/';
 
-                return $this->container->get('Request')->environment()->HTTP_HOST . $prefix . 'author/' . $author->slug  . '/';
+                return $this->container->get('Request')->environment()->HTTP_HOST . $prefix . 'author/' . $author->slug . '/';
             }
         }
 

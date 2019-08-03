@@ -285,7 +285,7 @@ class Crm
         [
             'visitor_id'   => $this->visitor->visitor_id,
             'ip_address'   => $this->Request->environment()->REMOTE_ADDR,
-            'page'         => $this->Request->environment()->REQUEST_URL,
+            'page'         => substr($this->Request->environment()->REQUEST_URL, 0, 255),
             'date'         => time(),
             'medium'       => isset($queries['md']) ? $queries['md'] : null,
             'channel'      => isset($queries['ch']) ? $queries['ch'] : 'direct',

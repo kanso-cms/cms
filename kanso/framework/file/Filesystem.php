@@ -179,7 +179,12 @@ class Filesystem
 	 */
 	public static function delete(string $file): bool
 	{
-		return unlink($file);
+		if (self::exists($file) && self::isFile($file))
+		{
+			return unlink($file);
+		}
+
+		return false;
 	}
 
 	/**

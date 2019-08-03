@@ -7,7 +7,9 @@
 
 namespace kanso\cms\email;
 
-use kanso\cms\email\phpmailer\PHPMailer;
+use kanso\cms\email\utility\Log;
+use kanso\cms\email\utility\Queue;
+use kanso\cms\email\utility\Sender;
 use kanso\framework\file\Filesystem;
 use kanso\Kanso;
 
@@ -59,57 +61,110 @@ class Email
     private $filesystem;
 
     /**
-     * SMTP mail utility.
+     * Filesystem instance.
      *
-     * @var \kanso\cms\email\phpmailer\PHPMailer
+     * @var \kanso\cms\email\utility\Sender
      */
-    private $smtpMailer;
-
-    /**
-     * Send mail via SMTP.
-     *
-     * @var bool
-     */
-    private $useStmp;
-
-    /**
-     * SMTP mail configuration.
-     *
-     * @var array
-     */
-    private $smtpSettings;
+    private $sender;
 
     /**
      * Mail logger.
      *
-     * @var \kanso\cms\email\Log
+     * @var \kanso\cms\email\utility\Log
      */
     private $log;
+
+     /**
+     * Mail logger.
+     *
+     * @var \kanso\cms\email\utility\Queue
+     */
+    private $queue;
 
     /**
      * Constructor.
      *
      * @access public
-     * @param \kanso\framework\file\Filesystem     $filesystem   Filesystem instance
-     * @param \kanso\cms\email\phpmailer\PHPMailer $smtpMailer   SMTP mail utility
-     * @param \kanso\cms\email\Log                 $log          Mail logging utility
-     * @param array                                $theme        Array of theme options (optional) (default [])
-     * @param bool                                 $useStmp      Use SMTP to send emails (optional) (default false)
-     * @param array                                $smtpSettings SMTP setings
+     * @param \kanso\framework\file\Filesystem $filesystem Filesystem instance
+     * @param \kanso\cms\email\utility\Log     $log        Mail logging utility
+     * @param \kanso\cms\email\utility\Sender  $sender     Email sender utility
+     * @param \kanso\cms\email\utility\Queue   $queue      Email queue utility
+     * @param array                            $theme      Array of theme options (optional) (default [])
      */
-    public function __construct(Filesystem $filesystem, PHPMailer $smtpMailer, Log $log, $theme = [], $useStmp = false, $smtpSettings = [])
+    public function __construct(Filesystem $filesystem, Log $log, Sender $sender, Queue $queue, $theme = [])
     {
         $this->filesystem = $filesystem;
 
-        $this->smtpMailer = $smtpMailer;
-
         $this->log = $log;
 
+        $this->sender = $sender;
+
+        $this->queue = $queue;
+
         $this->theme = array_merge($this->theme, $theme);
+    }
 
-        $this->useStmp = $useStmp;
+    /**
+     * Returns the email queue.
+     *
+     * @access public
+     * @return \kanso\cms\email\utility\Queue
+     */
+    public function queue(): Queue
+    {
+        return $this->queue;
+    }
 
-        $this->smtpSettings = $smtpSettings;
+    /**
+     * Returns the email loger.
+     *
+     * @access public
+     * @return \kanso\cms\email\utility\Log
+     */
+    public function log(): Log
+    {
+        return $this->log;
+    }
+
+    /**
+     * Returns the email Sender.
+     *
+     * @access public
+     * @return \kanso\cms\email\utility\Sender
+     */
+    public function sender(): Sender
+    {
+        return $this->sender;
+    }
+
+    /**
+     * Send an HTML or plain text email.
+     *
+     * @access public
+     * @param  string $toEmail     The email address to send the email to
+     * @param  string $senderName  The name of the sender
+     * @param  string $senderEmail The email address of the sender
+     * @param  string $subject     The subject of the email
+     * @param  string $content     The message to be sent
+     * @param  string $format      html or plain
+     * @return bool
+     */
+    public function send(string $toEmail, string $senderName, string $senderEmail, string $subject, string $content, string $format = 'html'): bool
+    {
+        // Save email to the log
+        $logId = $this->log->save($toEmail, $senderName, $senderEmail, $subject, $content, $format);
+
+        // If queuing is enabled add to queue
+        if ($this->queue->enabled())
+        {
+            $this->queue->add($logId);
+        }
+        else
+        {
+            $this->sender->send($toEmail, $senderName, $senderEmail, $subject, $content, $format);
+        }
+
+        return true;
     }
 
     /**
@@ -132,76 +187,6 @@ class Email
         $filePath  = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $template . '.php';
 
         return $this->filesystem->ob_read($filePath, $variables);
-    }
-
-    /**
-     * Send an HTML or plain text email.
-     *
-     * @access public
-     * @param  string $toEmail     The email address to send the email to
-     * @param  string $senderName  The name of the sender
-     * @param  string $senderEmail The email address of the sender
-     * @param  string $subject     The subject of the email
-     * @param  string $content     The message to be sent
-     * @param  string $format      html or plain
-     * @return bool
-     */
-    public function send(string $toEmail, string $senderName, string $senderEmail, string $subject, string $content, string $format = 'html'): bool
-    {
-
-        if ($this->useStmp === true && !empty($this->smtpSettings))
-        {
-            $mail = $this->smtpMailer;
-            $mail->isSMTP();
-            $mail->SMTPDebug  = $this->smtpSettings['debug'];
-            $mail->Host       = $this->smtpSettings['host'];
-            $mail->Port       = $this->smtpSettings['port'];
-            $mail->SMTPSecure = $this->smtpSettings['secure'];
-            $mail->SMTPAuth   = $this->smtpSettings['auth'];
-            $mail->Username   = $this->smtpSettings['username'];
-            $mail->Password   = $this->smtpSettings['password'];
-            $mail->Subject     = $subject;
-
-            $mail->addReplyTo($senderEmail, $senderName);
-            $mail->setFrom($senderEmail, $senderName);
-            $mail->addAddress($toEmail);
-
-            if ($format === 'html')
-            {
-                $mail->isHTML(true);
-                $mail->msgHTML($content);
-            }
-            else
-            {
-                $content = nl2br($content);
-                $mail->isHTML(false);
-                $mail->Body    = $content;
-                $mail->AltBody = $content;
-            }
-
-            $mail->send();
-
-            $this->log->save($toEmail, $senderName, $senderEmail, $subject, $content, $format);
-
-            return true;
-        }
-        else
-        {
-            if ($format === 'html')
-            {
-                $headers   = 'MIME-Version: 1.0' . "\r\n";
-                $headers  .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-                $headers  .= 'From: ' . $senderEmail . ' <' . $senderName . '>' . "\r\n";
-            }
-            else
-            {
-                $headers = 'From: ' . $senderEmail . ' <' . $senderName . '>' . "\r\n";
-            }
-
-            $this->log->save($toEmail, $senderName, $senderEmail, $subject, $content, $format);
-
-            return mail($toEmail, $subject, $content, $headers);
-        }
     }
 
     /**

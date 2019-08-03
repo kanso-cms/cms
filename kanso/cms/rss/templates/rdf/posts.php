@@ -6,5 +6,6 @@
 		<dc:creator><?php echo '<![CDATA[' . htmlspecialchars(the_author_name()) . ']]>'; ?></dc:creator>
 		<dc:subject><?php echo '<![CDATA[' . htmlspecialchars(the_category_name()) . ']]>'; ?></dc:subject>
 		<description><?php echo '<![CDATA[' . htmlspecialchars(the_excerpt()) . ']]>'; ?></description>
+		<content:encoded><?php echo '<![CDATA[' . htmlspecialchars(the_content()) . ']]>'; ?></content:encoded>
 	</item>
 <?php endwhile; endif; ?>
