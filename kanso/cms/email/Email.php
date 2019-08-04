@@ -74,7 +74,7 @@ class Email
      */
     private $log;
 
-     /**
+    /**
      * Mail logger.
      *
      * @var \kanso\cms\email\utility\Queue

@@ -8,7 +8,6 @@
 namespace kanso\cms\email\utility;
 
 use kanso\framework\file\Filesystem;
-use kanso\cms\email\utility\Sender;
 
 /**
  * CMS email queue.
@@ -56,10 +55,10 @@ class Queue
      * Constructor.
      *
      * @access public
-     * @param  \kanso\framework\file\Filesystem $filesystem Filesystem instance
-     * @param  \kanso\cms\email\utility\Sender  $sender     Email sender instance
-     * @param  string                           $logDir     Log directory
-     * @param  bool                             $enabled    Is email queuing enabled? (optional) (default false)
+     * @param \kanso\framework\file\Filesystem $filesystem Filesystem instance
+     * @param \kanso\cms\email\utility\Sender  $sender     Email sender instance
+     * @param string                           $logDir     Log directory
+     * @param bool                             $enabled    Is email queuing enabled? (optional) (default false)
      */
     public function __construct(Filesystem $filesystem, Sender $sender, string $logDir, bool $enabled = false)
     {

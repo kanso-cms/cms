@@ -79,8 +79,8 @@ if (!defined('APP_DIR'))
  */
 
 /**
- * Composer autoloader
- * 
+ * Composer autoloader.
+ *
  * You need to install composer to use the autoloader
  */
 require_once(dirname(KANSO_DIR) . '/vendor/autoload.php');

@@ -7,7 +7,7 @@
 
 namespace kanso\framework\shell;
 
-use kanso\framework\shell\process\Process;
+use Symfony\Component\Process\Process;
 
 /**
  * Shell interface utility class.
@@ -68,7 +68,7 @@ class Shell
     /**
      * Smyfony process.
      *
-     * @var \kanso\framework\shell\process\Process
+     * @var \Symfony\Component\Process\Process
      */
     private $process;
 
