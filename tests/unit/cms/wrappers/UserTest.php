@@ -154,14 +154,6 @@ class UserTest extends TestCase
 
 		$user = new User($sql, ['email' => 'foo@bar.com', 'access_token' => 'foobar']);
 
-		$sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);
-
-		$sql->shouldReceive('FROM')->with('users')->once()->andReturn($sql);
-
-		$sql->shouldReceive('WHERE')->with('email', '=', 'foo@bar.com')->once()->andReturn($sql);
-
-		$sql->shouldReceive('ROW')->andReturn([]);
-
 		$sql->shouldReceive('INSERT_INTO')->with('users')->once()->andReturn($sql);
 
 		$sql->shouldReceive('VALUES')->with(['email' => 'foo@bar.com', 'access_token' => 'foobar'])->once()->andReturn($sql);
@@ -187,14 +179,6 @@ class UserTest extends TestCase
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
 
 		$user = new User($sql, ['id' => 3, 'email' => 'foo@bar.com', 'access_token' => 'foobar']);
-
-		$sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);
-
-		$sql->shouldReceive('FROM')->with('users')->once()->andReturn($sql);
-
-		$sql->shouldReceive('WHERE')->with('email', '=', 'foo@bar.com')->once()->andReturn($sql);
-
-		$sql->shouldReceive('ROW')->andReturn(['id' => 3]);
 
 		$sql->shouldReceive('UPDATE')->with('users')->once()->andReturn($sql);
 

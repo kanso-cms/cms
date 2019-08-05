@@ -64,10 +64,6 @@ class FileStorageTest extends TestCase
 
 		$storage = new FileSessionStorage($crypto, $filesystem, $this->getSessionConfig(), $storageDir);
 
-		$filesystem->shouldReceive('exists')->with($storageDir . '/php_session_last_gc')->once()->andReturn(true);
-
-		$filesystem->shouldReceive('lastModified')->with($storageDir . '/php_session_last_gc')->once()->andReturn(strtotime('-10 seconds'));
-
 		$crypto->shouldReceive('decrypt')->with('encrypted session id')->once()->andReturn('7d5934e6-3984-4ee9-9e56-2555af59948f');
 
 		$filesystem->shouldReceive('exists')->with($storageDir . '/7d5934e6-3984-4ee9-9e56-2555af59948f')->once()->andReturn(true);
@@ -93,10 +89,6 @@ class FileStorageTest extends TestCase
 		$storageDir = sys_get_temp_dir();
 
 		$storage = new FileSessionStorage($crypto, $filesystem, $this->getSessionConfig(), $storageDir);
-
-		$filesystem->shouldReceive('exists')->with($storageDir . '/php_session_last_gc')->once()->andReturn(true);
-
-		$filesystem->shouldReceive('lastModified')->with($storageDir . '/php_session_last_gc')->once()->andReturn(strtotime('-10 seconds'));
 
 		$crypto->shouldReceive('decrypt')->with('encrypted session id')->once()->andReturn('7d5934e6-3984-4ee9-9e56-2555af59948f');
 
@@ -127,10 +119,6 @@ class FileStorageTest extends TestCase
 		$storageDir = sys_get_temp_dir();
 
 		$storage = new FileSessionStorage($crypto, $filesystem, $this->getSessionConfig(), $storageDir);
-
-		$filesystem->shouldReceive('exists')->with($storageDir . '/php_session_last_gc')->once()->andReturn(true);
-
-		$filesystem->shouldReceive('lastModified')->with($storageDir . '/php_session_last_gc')->once()->andReturn(strtotime('-10 seconds'));
 
 		$crypto->shouldReceive('decrypt')->with('encrypted session id')->once()->andReturn('7d5934e6-3984-4ee9-9e56-2555af59948f');
 
@@ -180,10 +168,6 @@ class FileStorageTest extends TestCase
 
 		$storage = new FileSessionStorage($crypto, $filesystem, $this->getSessionConfig(), $storageDir);
 
-		$filesystem->shouldReceive('exists')->with($storageDir . '/php_session_last_gc')->once()->andReturn(true);
-
-		$filesystem->shouldReceive('lastModified')->with($storageDir . '/php_session_last_gc')->once()->andReturn(strtotime('-10 seconds'));
-
 		$crypto->shouldReceive('decrypt')->with('encrypted session id')->once()->andReturn('7d5934e6-3984-4ee9-9e56-2555af59948f');
 
 		$filesystem->shouldReceive('exists')->with($storageDir . '/7d5934e6-3984-4ee9-9e56-2555af59948f')->once()->andReturn(true);
@@ -213,10 +197,6 @@ class FileStorageTest extends TestCase
 		$storageDir = sys_get_temp_dir();
 
 		$storage = new FileSessionStorage($crypto, $filesystem, $this->getSessionConfig(), $storageDir);
-
-		$filesystem->shouldReceive('exists')->with($storageDir . '/php_session_last_gc')->once()->andReturn(true);
-
-		$filesystem->shouldReceive('lastModified')->with($storageDir . '/php_session_last_gc')->once()->andReturn(strtotime('-10 seconds'));
 
 		$crypto->shouldReceive('decrypt')->with('encrypted session id')->once()->andReturn('7d5934e6-3984-4ee9-9e56-2555af59948f');
 
@@ -250,13 +230,7 @@ class FileStorageTest extends TestCase
 
 		$storage = new FileSessionStorage($crypto, $filesystem, $this->getSessionConfig(), $storageDir);
 
-		$filesystem->shouldReceive('exists')->with($storageDir . '/php_session_last_gc')->once()->andReturn(true);
-
-		$filesystem->shouldReceive('lastModified')->with($storageDir . '/php_session_last_gc')->once()->andReturn(strtotime('-10 seconds'));
-
-		$crypto->shouldReceive('decrypt')->with('encrypted session id')->once()->andReturn($newid);
-
-		$crypto->shouldReceive('encrypt')->with($newid)->once()->andReturn('encrypted session id');
+		$crypto->shouldReceive('decrypt')->once()->andReturn($newid);
 
 		$filesystem->shouldReceive('exists')->with($storageDir . '/' . $newid)->once()->andReturn(true);
 
@@ -283,10 +257,6 @@ class FileStorageTest extends TestCase
 		$storageDir = sys_get_temp_dir();
 
 		$storage = new FileSessionStorage($crypto, $filesystem, $this->getSessionConfig(), $storageDir);
-
-		$filesystem->shouldReceive('exists')->with($storageDir . '/php_session_last_gc')->once()->andReturn(true);
-
-		$filesystem->shouldReceive('lastModified')->with($storageDir . '/php_session_last_gc')->once()->andReturn(strtotime('-10 seconds'));
 
 		$crypto->shouldReceive('decrypt')->with('encrypted session id')->once()->andReturn('7d5934e6-3984-4ee9-9e56-2555af59948f');
 
@@ -316,9 +286,9 @@ class FileStorageTest extends TestCase
 
 		$storage = new FileSessionStorage($crypto, $filesystem, $this->getSessionConfig(), $storageDir);
 
-		$crypto->shouldReceive('encrypt')->once()->andReturn('encrypted session id');
-
 		$storage->session_regenerate_id();
+
+		$this->assertFalse($_COOKIE['kanso_session'] === $storage->session_id());
 
 		$_COOKIE = [];
 	}

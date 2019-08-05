@@ -26,14 +26,6 @@ class UserProviderTest extends TestCase
         $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
         $provider = new UserProvider($sql);
 
-        $sql->shouldReceive('SELECT')->with('*')->once()->andReturn($sql);
-
-        $sql->shouldReceive('FROM')->with('users')->once()->andReturn($sql);
-
-        $sql->shouldReceive('WHERE')->with('email', '=', 'foo@bar.com')->once()->andReturn($sql);
-
-        $sql->shouldReceive('ROW')->andReturn([]);
-
         $sql->shouldReceive('INSERT_INTO')->with('users')->once()->andReturn($sql);
 
         $sql->shouldReceive('VALUES')->with(['email' => 'foo@bar.com', 'access_token' => 'foobar'])->once()->andReturn($sql);

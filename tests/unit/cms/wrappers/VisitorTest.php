@@ -128,11 +128,13 @@ class VisitorTest extends TestCase
 
         $sql->shouldReceive('DELETE_FROM')->with('crm_visits')->once()->andReturn($sql);
 
+        $sql->shouldReceive('DELETE_FROM')->with('crm_visit_actions')->once()->andReturn($sql);
+
 		$sql->shouldReceive('WHERE')->with('id', '=', 2)->once()->andReturn($sql);
 
-        $sql->shouldReceive('WHERE')->with('visitor_id', '=', 'ggs3432')->twice()->andReturn($sql);
+        $sql->shouldReceive('WHERE')->with('visitor_id', '=', 'ggs3432')->times(3)->andReturn($sql);
 
-		$sql->shouldReceive('QUERY')->times(3)->andReturn(true);
+		$sql->shouldReceive('QUERY')->times(4)->andReturn(true);
 
         $this->assertTrue($visitor->delete());
     }

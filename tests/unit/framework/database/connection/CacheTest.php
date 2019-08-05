@@ -19,53 +19,97 @@ class CacheTest extends TestCase
     /**
      *
      */
-    public function testSet()
+    public function testConstructorEnabled()
     {
-    	$cache = new Cache;
+        $cache = new Cache(true);
 
-    	$cache->setQuery('SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key', ['column_key' => 'value']);
-
-		$cache->put(['foo' => 'bar', 'foo' => 'baz']);
-
-		$cache->setQuery('SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key', ['column_key' => 'value']);
-
-		$this->assertEquals(['foo' => 'bar', 'foo' => 'baz'], $cache->get());
+        $this->assertTrue($cache->enabled());
     }
 
     /**
      *
      */
-    public function testGet()
+    public function testConstructordisabled()
     {
-    	$cache = new Cache;
+        $cache = new Cache(false);
 
-    	$cache->setQuery('SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key', ['column_key' => 'value']);
-
-		$cache->put(['foo' => 'bar', 'foo' => 'baz']);
-
-		$cache->setQuery('SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key', ['column_key' => 'value']);
-
-		$this->assertEquals(['foo' => 'bar', 'foo' => 'baz'], $cache->get());
+        $this->assertFalse($cache->enabled());
     }
 
     /**
      *
      */
-    public function testHas()
+    public function testEnabledDisabled()
     {
-    	$cache = new Cache;
+        $cache = new Cache;
 
-    	$cache->setQuery('SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key', ['column_key' => 'value']);
+        $cache->enable();
 
-		$cache->put(['foo' => 'bar', 'foo' => 'baz']);
+        $this->assertTrue($cache->enabled());
 
-		$cache->setQuery('SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key', ['column_key' => 'value']);
+        $cache->disable();
 
-		$this->assertTrue($cache->has());
+        $this->assertFalse($cache->enabled());
+    }
 
-		$cache->setQuery('SELECT * FROM prefixed_foobar_table_name WHERE foo_column = :column_key', ['column_key' => 'value']);
+    /**
+     *
+     */
+    public function testGetTrue()
+    {
+    	$cache  = new Cache;
+        $query  = 'SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key';
+        $params = ['column_key' => 'value'];
+        $result = ['foo' => 'bar', 'foo' => 'baz'];
 
-		$this->assertFalse($cache->has());
+    	$cache->put($query, $params, $result);
+
+		$this->assertEquals($result, $cache->get($query, $params));
+    }
+
+    /**
+     *
+     */
+    public function testGetFalse()
+    {
+        $cache  = new Cache;
+        $query  = 'SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key';
+        $params = ['column_key' => 'value'];
+        $result = ['foo' => 'bar', 'foo' => 'baz'];
+
+        $cache->put($query, $params, $result);
+
+        $this->assertFalse($cache->get($query, ['column_key' => 'valu2']));
+    }
+
+    /**
+     *
+     */
+    public function testHasTrue()
+    {
+        $cache  = new Cache;
+        $query  = 'SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key';
+        $params = ['column_key' => 'value'];
+        $result = ['foo' => 'bar', 'foo' => 'baz'];
+
+        $cache->put($query, $params, $result);
+
+        $this->assertTrue($cache->has($query, $params));
+    }
+
+    /**
+     *
+     */
+    public function testHasFalse()
+    {
+        $cache  = new Cache;
+        $query  = 'SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key';
+        $params = ['column_key' => 'value'];
+        $result = ['foo' => 'bar', 'foo' => 'baz'];
+
+        $cache->put($query, $params, $result);
+
+        $this->assertFalse($cache->has($query, ['column_key' => 'valu2']));
     }
 
     /**
@@ -73,30 +117,15 @@ class CacheTest extends TestCase
      */
     public function testClear()
     {
-    	$cache = new Cache;
+        $cache  = new Cache;
+        $query  = 'SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key';
+        $params = ['column_key' => 'value'];
+        $result = ['foo' => 'bar', 'foo' => 'baz'];
 
-    	$cache->setQuery('SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key', ['column_key' => 'value']);
+        $cache->put($query, $params, $result);
 
-		$cache->put(['foo' => 'bar', 'foo' => 'baz']);
+        $cache->clear('DELETE * FROM prefixed_my_table_name WHERE foo_column = :column_key');
 
-		$cache->clear();
-
-		$this->assertFalse($cache->has());
-    }
-
-    /**
-     *
-     */
-    public function testDisable()
-    {
-    	$cache = new Cache;
-
-    	$cache->setQuery('SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key', ['column_key' => 'value']);
-
-		$cache->put(['foo' => 'bar', 'foo' => 'baz']);
-
-		$cache->disable();
-
-		$this->assertFalse($cache->has());
+        $this->assertFalse($cache->has($query, $params));
     }
 }

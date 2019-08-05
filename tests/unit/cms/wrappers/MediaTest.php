@@ -104,7 +104,7 @@ class MediaTest extends TestCase
      */
     public function testDeleteTrue()
     {
-        $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
 
         $media = new Media($sql, [], ['id' => 2, 'path' => '/foo/bar/foo.jpg']);
 
@@ -112,7 +112,13 @@ class MediaTest extends TestCase
 
         $sql->shouldReceive('WHERE')->with('id', '=', 2)->once()->andReturn($sql);
 
-        $sql->shouldReceive('QUERY')->once()->andReturn(true);
+        $sql->shouldReceive('UPDATE')->with('posts')->once()->andReturn($sql);
+
+        $sql->shouldReceive('SET')->with(['thumbnail_id' => null])->once()->andReturn($sql);
+
+        $sql->shouldReceive('WHERE')->with('thumbnail_id', '=', 2)->once()->andReturn($sql);
+
+        $sql->shouldReceive('QUERY')->twice()->andReturn(true);
 
         $this->assertTrue($media->delete());
     }

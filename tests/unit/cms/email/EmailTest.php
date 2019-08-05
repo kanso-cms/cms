@@ -20,12 +20,59 @@ class EmailTest extends TestCase
 	/**
 	 *
 	 */
+	public function testGetQueue()
+	{
+		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
+		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
+		$log        = Mockery::mock('\kanso\cms\email\utility\Log');
+		$queue      = Mockery::mock('\kanso\cms\email\utility\Queue');
+		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$email      = new Email($filesystem, $log, $sender, $queue);
+
+		$this->assertEquals($queue, $email->queue());
+	}
+
+	/**
+	 *
+	 */
+	public function testGetLog()
+	{
+		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
+		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
+		$log        = Mockery::mock('\kanso\cms\email\utility\Log');
+		$queue      = Mockery::mock('\kanso\cms\email\utility\Queue');
+		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$email      = new Email($filesystem, $log, $sender, $queue);
+
+		$this->assertEquals($log, $email->log());
+	}
+
+	/**
+	 *
+	 */
+	public function testGetSender()
+	{
+		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
+		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
+		$log        = Mockery::mock('\kanso\cms\email\utility\Log');
+		$queue      = Mockery::mock('\kanso\cms\email\utility\Queue');
+		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$email      = new Email($filesystem, $log, $sender, $queue);
+
+		$this->assertEquals($sender, $email->sender());
+	}
+
+	/**
+	 *
+	 */
 	public function testPresets()
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
-		$log        = Mockery::mock('\kanso\cms\email\Log');
-		$email      = new Email($filesystem, $smtp, $log);
+		$log        = Mockery::mock('\kanso\cms\email\utility\Log');
+		$queue      = Mockery::mock('\kanso\cms\email\utility\Queue');
+		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$email      = new Email($filesystem, $log, $sender, $queue);
 
 		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR . '/cms/email/templates/body.php', $email->theme())->once()->andReturn('foo');
 		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR . '/cms/email/templates/comment.php', $email->theme())->once()->andReturn('foo');
@@ -49,10 +96,11 @@ class EmailTest extends TestCase
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
-		$log        = Mockery::mock('\kanso\cms\email\Log');
-		$email      = new Email($filesystem, $smtp, $log);
-
-		$theme = $email->theme();
+		$log        = Mockery::mock('\kanso\cms\email\utility\Log');
+		$queue      = Mockery::mock('\kanso\cms\email\utility\Queue');
+		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$email      = new Email($filesystem, $log, $sender, $queue);
+		$theme      = $email->theme();
 
 		$vars = array_merge($theme,
 		[
@@ -69,22 +117,18 @@ class EmailTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSendSmtp()
+	public function testSendNoQueue()
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
-		$log        = Mockery::mock('\kanso\cms\email\Log');
-		$smtpConfig = $this->getSmtpSettings();
-		$email      = new Email($filesystem, $smtp, $log, [], true, $smtpConfig);
+		$log        = Mockery::mock('\kanso\cms\email\utility\Log');
+		$queue      = Mockery::mock('\kanso\cms\email\utility\Queue');
+		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$email      = new Email($filesystem, $log, $sender, $queue);
 
-		$smtp->shouldReceive('isSMTP');
-		$smtp->shouldReceive('setFrom')->with('bar@foo.com', 'Foo Bar');
-		$smtp->shouldReceive('addReplyTo');
-		$smtp->shouldReceive('addAddress')->with('foo@bar.com');
-		$smtp->shouldReceive('isHTML')->with(true);
-		$smtp->shouldReceive('msgHTML')->with('html content');
-		$smtp->shouldReceive('send');
-		$log->shouldReceive('save');
+		$log->shouldReceive('save')->with('foo@bar.com', 'Foo Bar', 'bar@foo.com', 'Foo Subject', 'html content', 'html');
+		$sender->shouldReceive('send')->with('foo@bar.com', 'Foo Bar', 'bar@foo.com', 'Foo Subject', 'html content', 'html');
+		$queue->shouldReceive('enabled')->andReturn(false);
 
 		$this->assertTrue($email->send('foo@bar.com', 'Foo Bar', 'bar@foo.com', 'Foo Subject', 'html content'));
 	}
@@ -92,39 +136,19 @@ class EmailTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSendSmtpPlainText()
+	public function testSendWithQue()
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
-		$log        = Mockery::mock('\kanso\cms\email\Log');
-		$smtpConfig = $this->getSmtpSettings();
-		$email      = new Email($filesystem, $smtp, $log, [], true, $smtpConfig);
+		$log        = Mockery::mock('\kanso\cms\email\utility\Log');
+		$queue      = Mockery::mock('\kanso\cms\email\utility\Queue');
+		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$email      = new Email($filesystem, $log, $sender, $queue);
 
-		$smtp->shouldReceive('isSMTP');
-		$smtp->shouldReceive('setFrom')->with('bar@foo.com', 'Foo Bar');
-		$smtp->shouldReceive('addAddress')->with('foo@bar.com');
-		$smtp->shouldReceive('addReplyTo');
-		$smtp->shouldReceive('isHTML')->with(false);
-		$smtp->shouldReceive('send');
-		$log->shouldReceive('save');
+		$log->shouldReceive('save')->with('foo@bar.com', 'Foo Bar', 'bar@foo.com', 'Foo Subject', 'html content', 'html');
+		$queue->shouldReceive('enabled')->andReturn(true);
+		$queue->shouldReceive('add');
 
-		$this->assertTrue($email->send('foo@bar.com', 'Foo Bar', 'bar@foo.com', 'Foo Subject', 'html content', false));
-	}
-
-	/**
-	 *
-	 */
-	private function getSmtpSettings()
-	{
-		return
-	    [
-	        'debug'       => 0,
-	        'host'        => 'smtp.gmail.com',
-	        'port'        => 587,
-	        'auth'        => true,
-	        'secure'      => 'tls',
-	        'username'    => 'foobar@gmail.com',
-	        'password'    => 'password',
-	    ];
+		$this->assertTrue($email->send('foo@bar.com', 'Foo Bar', 'bar@foo.com', 'Foo Subject', 'html content'));
 	}
 }

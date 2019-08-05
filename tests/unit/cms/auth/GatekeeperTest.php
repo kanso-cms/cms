@@ -95,6 +95,8 @@ class GatekeeperTest extends TestCase
 
 		$session->shouldReceive('destroy');
 
+		$session->shouldReceive('start');
+
 		$gatekeeper = new Gatekeeper($sql, $userProvider, $crypto, $cookie, $session, $email);
 	}
 
@@ -241,6 +243,8 @@ class GatekeeperTest extends TestCase
 		$cookie->shouldReceive('destroy');
 
 		$session->shouldReceive('destroy');
+
+		$session->shouldReceive('start');
 
 		$token->shouldReceive('get')->andReturn('foobar token')->once();
 
@@ -522,6 +526,8 @@ class GatekeeperTest extends TestCase
 		$cookie->shouldReceive('destroy');
 
 		$session->shouldReceive('destroy');
+
+		$session->shouldReceive('start');
 
 		$session->shouldReceive('token')->andReturn($token);
 

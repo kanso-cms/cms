@@ -18,7 +18,7 @@ use Mockery;
  * @group unit
  * @group framework
  */
-class DeploymentTest extends TestCase
+class GithubTest extends TestCase
 {
     /**
      *
@@ -316,21 +316,17 @@ class DeploymentTest extends TestCase
 
         $request->shouldReceive('environment')->andReturn($env);
 
-        $shell->shouldReceive('cd')->withArgs(['/foo/bar/public_html'])->twice();
+        $shell->shouldReceive('cd')->withArgs(['/foo/bar/public_html'])->once();
 
         $shell->shouldReceive('cmd')->withArgs(['git', 'pull'])->once();
 
-        $response->shouldReceive('body')->andReturn($body)->twice();
+        $response->shouldReceive('body')->andReturn($body)->once();
 
         $body->shouldReceive('set')->withArgs(["Git: \nshell response"]);
 
-        $shell->shouldReceive('run')->andReturn('shell response')->twice();
+        $shell->shouldReceive('run')->andReturn('shell response')->once();
 
-        $shell->shouldReceive('is_successful')->andReturn(true)->twice();
-
-        $shell->shouldReceive('cmd')->withArgs(['composer', 'update'])->once();
-
-        $body->shouldReceive('append')->withArgs(["\n\nComposer: \nshell response"]);
+        $shell->shouldReceive('is_successful')->andReturn(true)->once();
 
         $response->shouldReceive('format')->andReturn($format);
 
@@ -378,63 +374,6 @@ class DeploymentTest extends TestCase
         $shell->shouldReceive('cmd')->withArgs(['git', 'pull'])->once();
 
         $shell->shouldReceive('run')->andReturn('git failed')->once();
-
-        $shell->shouldReceive('is_successful')->andReturn(false)->once();
-
-        $this->expectException(Exception::class);
-
-        $github->validate();
-
-        $github->deploy();
-    }
-
-    /**
-     *
-     */
-    public function testDeployFailComposer()
-    {
-        $request        = Mockery::mock('\kanso\framework\http\request\Request');
-        $env            = Mockery::mock('\kanso\framework\http\request\Environment');
-        $headers        = Mockery::mock('\kanso\framework\http\request\Headers');
-        $response       = Mockery::mock('\kanso\framework\http\response\Response');
-        $body           = Mockery::mock('\kanso\framework\http\response\Body');
-        $format         = Mockery::mock('\kanso\framework\http\response\Format');
-        $shell          = Mockery::mock('\kanso\framework\shell\Shell');
-        $github         = new Github($request, $response, $shell, $this->secret);
-        $requestHeaders = $this->validHeaders();
-
-        foreach ($requestHeaders as $key => $value)
-        {
-            $headers->$key = $value;
-        }
-
-        $env->DOCUMENT_ROOT = '/foo/bar/public_html';
-
-        $github->_fileIn = dirname(__FILE__) . '/' . $this->inputFile;
-
-        $request->shouldReceive('fetch')->andReturn(['payload' => $this->validPayload]);
-
-        $request->shouldReceive('headers')->andReturn($headers);
-
-        $headers->shouldReceive('asArray')->andReturn($requestHeaders);
-
-        $request->shouldReceive('environment')->andReturn($env);
-
-        $shell->shouldReceive('cd')->withArgs(['/foo/bar/public_html'])->twice();
-
-        $shell->shouldReceive('cmd')->withArgs(['git', 'pull']);
-
-        $shell->shouldReceive('cmd')->withArgs(['composer', 'update']);
-
-        $shell->shouldReceive('run')->andReturn('git updated');
-
-        $shell->shouldReceive('is_successful')->andReturn(true)->once();
-
-        $response->shouldReceive('body')->andReturn($body)->once();
-
-        $body->shouldReceive('set')->withArgs(["Git: \ngit updated"]);
-
-        $shell->shouldReceive('run')->andReturn('composer failed');
 
         $shell->shouldReceive('is_successful')->andReturn(false)->once();
 
