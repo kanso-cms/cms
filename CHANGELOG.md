@@ -6,7 +6,6 @@ Update using ```git fetch```.
 * The framework and CMS must now be installed with composer.
 
 #### New
-* Added `visited-checkout` to the lead filters in the admin panel
 * Added new `Curl::get` method.
 * New `Session::start` method.
 
