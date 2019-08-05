@@ -1,3 +1,31 @@
+### 5.0.0 <small> (12-07-2019)</small>
+
+Update using ```git fetch```.
+
+#### Breaking Changes
+* The framework and CMS must now be installed with composer.
+
+#### New
+* Added `visited-checkout` to the lead filters in the admin panel
+* Added new `Curl::get` method.
+* New `Session::start` method.
+
+#### Changes
+* The `kanso\framework\autoload\Autoloader` has been deprecated.
+* `app/bootstrap` now uses composer's autoloader.
+* The CMS `Email` component has been updated and modularized to support XOAUTH2 from gmail.
+* Updates to the `app/configurations/email.php`
+	- Added the following options for SMTP OAUTH configuration `auth_type`, `client_id`, `client_secret`, `refresh_token`.
+	- Added a boolean value for `queue` which enables/disables the CMS email queue.
+* Bumped Kanso version number.
+* Error logs now log the `REQUEST_METHOD`.
+* `Gatekeeper` now class `session::start` on login/logout after `session::destroy` is called.
+
+#### Bugfixes
+* Fixed on `the_author_url` method add trailing slash that was previously missing.
+* Minor fixes to the CMS RSS feeds.
+* Minor bugfixes on `FileSessionStorage` file. 
+
 ### 4.4.0 <small> (12-07-2019)</small>
 
 Update using ```git fetch```.
