@@ -25,6 +25,8 @@ Update using ```git fetch```.
 * Minor fixes to the CMS RSS feeds.
 * Minor bugfixes on `FileSessionStorage` file. 
 
+--------------------------------------------------------
+
 ### 4.4.0 <small> (12-07-2019)</small>
 
 Update using ```git fetch```.
