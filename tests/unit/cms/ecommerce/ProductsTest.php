@@ -25,9 +25,9 @@ class ProductsTest extends TestCase
 		$postManager  = Mockery::mock('\kanso\cms\wrappers\managers\PostManager');
 		$product      = $this->fakeProduct();
 		$products     = new Products;
-		$meta         = 
+		$meta         =
 		[
-			'offers' => 
+			'offers' =>
 			[
 				[
 					'offer_id'   => 'foobar',
@@ -35,15 +35,15 @@ class ProductsTest extends TestCase
 					'price'      => 9.95,
 					'sale_price' => 4.95,
 					'instock'    => true,
-				]
-			]
+				],
+			],
 		];
 
 		$products->PostManager = $postManager;
-		$product->meta         = $meta; 
+		$product->meta         = $meta;
 
-		$postManager->shouldReceive('byId')->with(1)->andReturn($product);		
-		
+		$postManager->shouldReceive('byId')->with(1)->andReturn($product);
+
 		$this->assertEquals($meta['offers'][0], $products->offer(1, 'foobar'));
 	}
 
@@ -55,9 +55,9 @@ class ProductsTest extends TestCase
 		$postManager  = Mockery::mock('\kanso\cms\wrappers\managers\PostManager');
 		$product      = $this->fakeProduct();
 		$products     = new Products;
-		$meta         = 
+		$meta         =
 		[
-			'offers' => 
+			'offers' =>
 			[
 				[
 					'offer_id'   => 'foobar',
@@ -65,15 +65,15 @@ class ProductsTest extends TestCase
 					'price'      => 9.95,
 					'sale_price' => 4.95,
 					'instock'    => true,
-				]
-			]
+				],
+			],
 		];
 
 		$products->PostManager = $postManager;
-		$product->meta         = $meta; 
+		$product->meta         = $meta;
 
-		$postManager->shouldReceive('byId')->with(1)->andReturn($product);		
-		
+		$postManager->shouldReceive('byId')->with(1)->andReturn($product);
+
 		$this->assertEquals($meta['offers'], $products->offers(1));
 
 	}
@@ -88,5 +88,4 @@ class ProductsTest extends TestCase
 class fakeProduct
 {
 
-
-};
+}

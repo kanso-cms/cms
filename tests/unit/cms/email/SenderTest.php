@@ -44,7 +44,7 @@ class SenderTest extends TestCase
 	{
 		$mailer     = Mockery::mock('\PHPMailer\PHPMailer\PHPMailer');
 		$sender     = new Sender($mailer, true, $this->getSmtpSettings());
-		
+
 		$mailer->shouldReceive('isSMTP');
 		$mailer->shouldReceive('setFrom')->with('bar@foo.com', 'Foo Bar');
 		$mailer->shouldReceive('addReplyTo');
@@ -63,7 +63,7 @@ class SenderTest extends TestCase
 	{
 		$mailer     = Mockery::mock('\PHPMailer\PHPMailer\PHPMailer');
 		$sender     = new Sender($mailer, true, $this->getSmtpSettings());
-		
+
 		$mailer->shouldReceive('isSMTP');
 		$mailer->shouldReceive('setFrom')->with('bar@foo.com', 'Foo Bar');
 		$mailer->shouldReceive('addAddress')->with('foo@bar.com');
@@ -82,7 +82,7 @@ class SenderTest extends TestCase
 		$mailer     = Mockery::mock('\PHPMailer\PHPMailer\PHPMailer');
 		$config     = $this->getSmtpSettings();
 		$sender     = new Sender($mailer, true, $this->getSmtpOauthSettings());
-		
+
 		$mailer->shouldReceive('isSMTP');
 		$mailer->shouldReceive('AuthType')->with('XOAUTH2');
 		$mailer->shouldReceive('setOAuth');
@@ -104,7 +104,7 @@ class SenderTest extends TestCase
 		$mailer     = Mockery::mock('\PHPMailer\PHPMailer\PHPMailer');
 		$config     = $this->getSmtpSettings();
 		$sender     = new Sender($mailer, true, $this->getSmtpOauthSettings());
-		
+
 		$mailer->shouldReceive('isSMTP');
 		$mailer->shouldReceive('AuthType')->with('XOAUTH2');
 		$mailer->shouldReceive('setOAuth');

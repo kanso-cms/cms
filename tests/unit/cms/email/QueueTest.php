@@ -99,7 +99,7 @@ class QueueTest extends TestCase
 		$queue      = new Queue($filesystem, $sender, $logDir);
 
 		$queue->disable();
-		
+
 		$this->assertFalse($queue->enabled());
 	}
 
@@ -120,7 +120,7 @@ class QueueTest extends TestCase
 		$filesystem->shouldReceive('prependContents')->with('/foo/bar/queue.txt')->with('/foo/bar/queue.txt', "foobarid\n");
 
 		$queue->add('foobarid');
-		
+
 	}
 
 	/**
@@ -138,7 +138,7 @@ class QueueTest extends TestCase
 		$filesystem->shouldReceive('prependContents')->with('/foo/bar/queue.txt', "foobarid\n");
 
 		$queue->add('foobarid');
-		
+
 	}
 
 	/**
@@ -189,7 +189,7 @@ class QueueTest extends TestCase
 
 		$this->assertEquals([], $queue->get());
 	}
-	
+
 	/**
 	 *
 	 */
@@ -206,9 +206,8 @@ class QueueTest extends TestCase
 			'from_name'  => 'foo bar',
 			'from_email' => 'foo@bar.com',
 			'subject'    => 'foobar',
-			'format'     => 'html'
+			'format'     => 'html',
 		];
-
 
 		$filesystem->shouldReceive('exists')->with('/foo/bar/queue.txt')->andReturn(true);
 
@@ -245,15 +244,14 @@ class QueueTest extends TestCase
 			'from_name'  => 'foo bar',
 			'from_email' => 'foo@bar.com',
 			'subject'    => 'foobar',
-			'format'     => 'html'
+			'format'     => 'html',
 		];
-
 
 		$filesystem->shouldReceive('exists')->with('/foo/bar/queue.txt')->andReturn(true);
 
-		$filesystem->shouldReceive('getContents')->with('/foo/bar/queue.txt')->andReturn("");
+		$filesystem->shouldReceive('getContents')->with('/foo/bar/queue.txt')->andReturn('');
 
 		$queue->process();
 	}
-	
+
 }

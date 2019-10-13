@@ -36,3 +36,13 @@
  *
  * Define your custom application routes here
  */
+
+/**
+ * Default CRON setup.
+ */
+require_once '_cron.php';
+
+/**
+ * Setup for Gmail SMTP XOAUTH.
+ */
+require_once '_smtp-xoauth.php';

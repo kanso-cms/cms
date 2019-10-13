@@ -32,7 +32,7 @@ class LogTest extends TestCase
 			'from_name'  => 'foo bar',
 			'from_email' => 'foo@bar.com',
 			'subject'    => 'foobar',
-			'format'     => 'html'
+			'format'     => 'html',
 		];
 
 		$filesystem->shouldReceive('putContents')->andReturn(true);
