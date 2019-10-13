@@ -1,3 +1,20 @@
+### 5.1.0 <small> (14-10-2019)</small>
+
+Update using ```git fetch```.
+
+#### Changes
+* Updated how writer in admin panel sends/receives post meta
+* Added duplicate post option in admin panel
+* Updated invoice logo size
+* The CMS `Email` component is no longer a singleton
+* The CMS email `Sender` component clears recipients on each send when using SMTP
+
+#### Bugfixes
+* CMS `Post` wrapper not saving `content` when new post is created and saved
+* CMS `Post` wrapper passes `meta` through `Str::mysqlDecode` and `Str::mysqlEncode` before/after it is serialized and saved to DB
+
+--------------------------------------------------------
+
 ### 5.0.0 <small> (12-07-2019)</small>
 
 Update using ```git fetch```.
