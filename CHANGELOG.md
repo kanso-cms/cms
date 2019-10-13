@@ -2,6 +2,10 @@
 
 Update using ```git fetch```.
 
+#### New
+* Added `CRON` routes/controllers/models for database maintence and email queue
+* Added example `XOAUTH2` setup route for Gmail. 
+
 #### Changes
 * Updated how writer in admin panel sends/receives post meta
 * Added duplicate post option in admin panel
