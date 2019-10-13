@@ -1316,7 +1316,23 @@ KansoWriter.prototype._saveArticle = function(showNotification, isPublish)
         validator.append('status',  'published');        
     }
 
-    Ajax.post(_ajaxURL, validator.form(), function(success)
+    var form = validator.form();
+
+    if (form.hasOwnProperty("post-meta-values[]"))
+    {
+        form['post-meta-values'] = JSON.stringify(form['post-meta-values[]']);
+
+        delete form['post-meta-values[]'];
+    }
+
+    if (form.hasOwnProperty("post-meta-keys[]"))
+    {
+        form['post-meta-keys'] = JSON.stringify(form['post-meta-keys[]']);
+
+        delete form['post-meta-keys[]'];
+    }
+
+    Ajax.post(_ajaxURL, form, function(success)
     {
         var responseObj = Helper.isJSON(success);
 

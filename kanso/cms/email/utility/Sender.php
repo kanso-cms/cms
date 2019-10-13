@@ -74,6 +74,10 @@ class Sender
         {
             $mail = $this->configureSmtp();
 
+            $mail->clearAllRecipients();
+            $mail->clearAttachments();
+            $mail->clearCustomHeaders();
+
             $mail->Subject = $subject;
             $mail->addReplyTo($senderEmail, $senderName);
             $mail->setFrom($senderEmail, $senderName);

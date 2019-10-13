@@ -118,6 +118,12 @@ class Posts extends BaseModel
 
         if (!empty($postIds))
         {
+            if ($this->post['bulk_action'] === 'duplicate')
+            {
+                $this->duplicate($postIds[0]);
+
+                return $this->postMessage('success', 'Your posts were successfully duplicated!');
+            }
             if ($this->post['bulk_action'] === 'delete')
             {
                 $this->delete($postIds);
@@ -170,7 +176,7 @@ class Posts extends BaseModel
             throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
 
-        if (!in_array($this->post['bulk_action'], ['published', 'draft', 'delete', 'update']))
+        if (!in_array($this->post['bulk_action'], ['duplicate', 'published', 'draft', 'delete', 'update']))
         {
             throw new RequestException(500, 'Bad Admin Panel POST Request. The POST data was either not provided or was invalid.');
         }
@@ -228,6 +234,43 @@ class Posts extends BaseModel
         $post->excerpt = $excerpt;
         $post->save();
         $this->clearPostFromCache($post->id);
+
+        return true;
+    }
+
+    /**
+     * Duplicates a post.
+     *
+     * @access private
+     * @param  int  $id Single post id
+     * @return bool
+     */
+    private function duplicate(int $id): bool
+    {
+
+        $post = $this->PostManager->byId($id);
+
+        if (!$post)
+        {
+            return false;
+        }
+
+        $row =
+        [
+            'title'            => $post->title,
+            'categories'       => $post->category,
+            'tags'             => $post->tags,
+            'excerpt'          => $post->excerpt,
+            'thumbnail_id'     => $post->thumbnail_id,
+            'status'           => $post->status,
+            'type'             => $post->type,
+            'author_id'        => $post->author->id,
+            'content'          => $post->content,
+            'comments_enabled' => $post->comments_enabled,
+            'meta'             => $post->meta,
+        ];
+
+        $newpost = $this->PostManager->create($row);
 
         return true;
     }

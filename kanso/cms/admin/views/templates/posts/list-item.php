@@ -78,6 +78,9 @@ use kanso\framework\utility\Str;
 	       	</div>
 		</div>
 		<div class="media-right nowrap">
+			<button class="btn btn-pure btn-xs tooltipped tooltipped-n" data-tooltip="Duplicate <?php echo strtolower($postType); ?>" onclick="document.getElementById('duplicate-post-form-<?php echo $article->id; ?>').submit()">
+				<span class="glyph-icon glyph-icon-copy icon-md"></span>
+			</button>
 			<a href="#" class="btn btn-pure btn-xs tooltipped tooltipped-n js-collapse" data-collapse-target="post-edit-<?php echo $article->id; ?>" data-tooltip="Quick edit <?php echo strtolower($postType); ?>">
 				<span class="glyph-icon glyph-icon-pencil icon-md"></span>
 			</a>
@@ -93,6 +96,11 @@ use kanso\framework\utility\Str;
 	        <a href="#" class="btn btn-pure btn-xs btn-danger tooltipped tooltipped-n js-confirm-delete" data-item="post" data-form="delete-form-<?php echo $article->id; ?>" data-tooltip="Delete <?php echo $postType; ?>" style="margin-top: 6px;">
 				<span class="glyph-icon glyph-icon-trash-o icon-md"></span>
 			</a>
+			<form method="post" id="duplicate-post-form-<?php echo $article->id; ?>" style="display: none">
+				<input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN; ?>">
+				<input type="hidden" name="bulk_action"  value="duplicate">
+				<input type="hidden" name="posts[]"      value="<?php echo $article->id; ?>">
+			</form>
 			<form method="post" id="status-switch-form-<?php echo $article->id; ?>" style="display: none">
 				<input type="hidden" name="access_token" value="<?php echo $ACCESS_TOKEN; ?>">
 				<input type="hidden" name="bulk_action"  value="<?php echo ($article->status === 'published') ? 'draft' : 'published'; ?>">

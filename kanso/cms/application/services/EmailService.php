@@ -26,7 +26,7 @@ class EmailService extends Service
 	 */
 	public function register()
 	{
-		$this->container->singleton('Email', function($container)
+		$this->container->set('Email', function($container)
 		{
 			return new Email($container->Filesystem, $this->logger(), $this->sender(), $this->queue(), $container->Config->get('email.theme'));
 		});

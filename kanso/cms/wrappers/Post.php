@@ -336,7 +336,8 @@ class Post extends Wrapper
 				}
 			}
 		}
-		else
+
+		if (!isset($this->data['content']) || $this->data['content'] === null)
 		{
 			$this->data['content'] = '';
 		}
@@ -454,7 +455,7 @@ class Post extends Wrapper
 
 			if ($meta)
 			{
-				$this->data['meta'] = unserialize($meta['content']);
+				$this->data['meta'] = unserialize(Str::mysqlDecode($meta['content']));
 			}
 			else
 			{
@@ -576,7 +577,7 @@ class Post extends Wrapper
 		// Join the post meta
 		if (!empty($postMeta))
 		{
-			$this->SQL->INSERT_INTO('post_meta')->VALUES(['post_id' => $row['id'], 'content' => serialize($postMeta)])->QUERY();
+			$this->SQL->INSERT_INTO('post_meta')->VALUES(['post_id' => $row['id'], 'content' => Str::mysqlEncode(serialize($postMeta))])->QUERY();
 		}
 
 		$this->data = $row;

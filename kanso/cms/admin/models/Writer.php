@@ -306,27 +306,23 @@ class Writer extends BaseModel
         $values   = [];
         $response = [];
 
-        if (isset($_POST['post-meta-keys'][0]))
+        if (isset($_POST['post-meta-keys']))
         {
-            $keys = array_map('trim', explode(',', $_POST['post-meta-keys'][0]));
+            $keys = json_decode($_POST['post-meta-keys'], true);
         }
-        if (isset($_POST['post-meta-values'][0]))
+        if (isset($_POST['post-meta-values']))
         {
-            // Bugfix if a value contains a comma
-            $delimiter = ',';
-            $quote     = "'";
-            $regex = "(?:[^$delimiter$quote]|[$quote][^$quote]*[$quote])+";
-            preg_match_all('/' . str_replace('/', '\\/', $regex) . '/', $_POST['post-meta-values'][0], $matches);
-            $values = $matches[0];
+            $values = json_decode($_POST['post-meta-values'], true);
         }
+
         if (count($values) !== count($keys))
         {
             return false;
         }
 
-        foreach ($keys as $i => $key)
+        foreach ($keys as $i => $k)
         {
-            $response[trim($key, "'")] = trim($values[$i], "'");
+            $response[trim($k, '\'')] = trim($values[$i], '\'');
         }
 
         $offers = [];
