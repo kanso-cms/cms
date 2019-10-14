@@ -9,6 +9,7 @@ namespace kanso\tests\unit\cms\wrappers;
 
 use kanso\cms\wrappers\Post;
 use kanso\tests\TestCase;
+use kanso\framework\utility\Str;
 use Mockery;
 
 /**
@@ -427,7 +428,7 @@ class PostTest extends TestCase
         $sql->shouldReceive('QUERY')->once();
 
         $sql->shouldReceive('INSERT_INTO')->with('post_meta')->once()->andReturn($sql);
-        $sql->shouldReceive('VALUES')->with(['post_id' => 1, 'content' => serialize($meta)])->once()->andReturn($sql);
+        $sql->shouldReceive('VALUES')->with(['post_id' => 1, 'content' => Str::mysqlEncode(serialize($meta))])->once()->andReturn($sql);
         $sql->shouldReceive('QUERY')->once();
 
         $tagProvider->shouldReceive('byId')->with(1)->once();
@@ -524,15 +525,15 @@ class PostTest extends TestCase
     {
         return
         [
-            'id'          => 1,
-            'created'     => time(),
-            'modified'    => time(),
-            'status'      => 'published',
-            'type'        => 'post',
-            'slug'        =>  date('Y') . '/' . date('m') . '/foo-bar/',
-            'title'       => 'Foo Bar',
-            'excerpt'     => 'Hello foo bar',
-            'author_id'   => 1,
+            'id'               => 1,
+            'created'          => time(),
+            'modified'         => time(),
+            'status'           => 'published',
+            'type'             => 'post',
+            'slug'             =>  date('Y') . '/' . date('m') . '/foo-bar/',
+            'title'            => 'Foo Bar',
+            'excerpt'          => 'Hello foo bar',
+            'author_id'        => 1,
             'thumbnail_id'     => 1,
             'comments_enabled' => true,
         ];

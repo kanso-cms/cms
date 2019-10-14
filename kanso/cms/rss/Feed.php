@@ -68,9 +68,6 @@ class Feed
 		// Set appropriate content type header
         $this->response->format()->set(Mime::fromExt($this->format) . ', application/xml');
 
-        // Filter posts for feed
-        \kanso\Kanso::instance()->Filters->apply('RSS', $this);
-
         // Set the response body
         $this->response->body()->set($this->xml());
 

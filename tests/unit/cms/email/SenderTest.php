@@ -48,6 +48,9 @@ class SenderTest extends TestCase
 		$mailer->shouldReceive('isSMTP');
 		$mailer->shouldReceive('setFrom')->with('bar@foo.com', 'Foo Bar');
 		$mailer->shouldReceive('addReplyTo');
+		$mailer->shouldReceive('clearAllRecipients');
+		$mailer->shouldReceive('clearAttachments');
+		$mailer->shouldReceive('clearCustomHeaders');
 		$mailer->shouldReceive('addAddress')->with('foo@bar.com');
 		$mailer->shouldReceive('isHTML')->with(true);
 		$mailer->shouldReceive('msgHTML')->with('html content');
@@ -68,6 +71,9 @@ class SenderTest extends TestCase
 		$mailer->shouldReceive('setFrom')->with('bar@foo.com', 'Foo Bar');
 		$mailer->shouldReceive('addAddress')->with('foo@bar.com');
 		$mailer->shouldReceive('addReplyTo');
+		$mailer->shouldReceive('clearAllRecipients');
+		$mailer->shouldReceive('clearAttachments');
+		$mailer->shouldReceive('clearCustomHeaders');
 		$mailer->shouldReceive('isHTML')->with(false);
 		$mailer->shouldReceive('send');
 
@@ -88,6 +94,9 @@ class SenderTest extends TestCase
 		$mailer->shouldReceive('setOAuth');
 		$mailer->shouldReceive('setFrom')->with('bar@foo.com', 'Foo Bar');
 		$mailer->shouldReceive('addReplyTo');
+		$mailer->shouldReceive('clearAllRecipients');
+		$mailer->shouldReceive('clearAttachments');
+		$mailer->shouldReceive('clearCustomHeaders');
 		$mailer->shouldReceive('addAddress')->with('foo@bar.com');
 		$mailer->shouldReceive('isHTML')->with(true);
 		$mailer->shouldReceive('msgHTML')->with('html content');
@@ -108,6 +117,9 @@ class SenderTest extends TestCase
 		$mailer->shouldReceive('isSMTP');
 		$mailer->shouldReceive('AuthType')->with('XOAUTH2');
 		$mailer->shouldReceive('setOAuth');
+		$mailer->shouldReceive('clearAllRecipients');
+		$mailer->shouldReceive('clearAttachments');
+		$mailer->shouldReceive('clearCustomHeaders');
 		$mailer->shouldReceive('setFrom')->with('bar@foo.com', 'Foo Bar');
 		$mailer->shouldReceive('addReplyTo');
 		$mailer->shouldReceive('addAddress')->with('foo@bar.com');
