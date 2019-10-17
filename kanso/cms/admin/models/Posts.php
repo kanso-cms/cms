@@ -255,11 +255,9 @@ class Posts extends BaseModel
             return false;
         }
 
-        $row =
+        $newPost = $this->PostProvider->newPost(
         [
             'title'            => $post->title,
-            'categories'       => $post->category,
-            'tags'             => $post->tags,
             'excerpt'          => $post->excerpt,
             'thumbnail_id'     => $post->thumbnail_id,
             'status'           => $post->status,
@@ -268,9 +266,11 @@ class Posts extends BaseModel
             'content'          => $post->content,
             'comments_enabled' => $post->comments_enabled,
             'meta'             => $post->meta,
-        ];
+        ]);
 
-        $newpost = $this->PostManager->create($row);
+        $newPost->categories = $post->categories;
+        $newPost->tags = $post->tags;
+        $newPost->save();
 
         return true;
     }
