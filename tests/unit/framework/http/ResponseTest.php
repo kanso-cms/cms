@@ -130,6 +130,7 @@ class ResponseTest extends TestCase
 		$headers->shouldReceive('set')->withArgs(['Content-length', 6]);
 		$headers->shouldReceive('set')->withArgs(['HTTP', '200 OK']);
 		$headers->shouldReceive('set')->withArgs(['Content-Type', 'text/html;utf-8']);
+		$headers->shouldReceive('set')->withArgs(['Cache-Control', 'private, max-age=3600']);
 		$headers->shouldReceive('set')->withArgs(['ETag', $hash]);
 		$headers->shouldReceive('send');
 
