@@ -4,16 +4,6 @@ return
 [
 	/*
 	 * ---------------------------------------------------------
-	 * Enable/Disable HTTP caching
-	 * ---------------------------------------------------------
-	 *
-	 * Enable or disable using the HTTP Cache component.
-	 * HTTP caching is used to cache the HTTP response body over multiple requests.
-	 */
-	'http_cache_enabled' => false,
-
-	/*
-	 * ---------------------------------------------------------
 	 * Default
 	 * ---------------------------------------------------------
 	 *
@@ -28,7 +18,7 @@ return
 	 *
 	 * You can define as many caching configurations as you want.
 	 *
-	 * The supported session types are: "file".
+	 * The supported caching types are: "file".
 	 *
 	 * type   : The storage implementation to use.
 	 * expire : A valid unix timestamp of the max age of any item from now.
@@ -39,8 +29,19 @@ return
 		'file' =>
 		[
 			'type'   => 'file',
-			'expire' => strtotime('+1 week'),
+			'expire' => '+1 week',
 			'path'   => APP_DIR . '/storage/cache',
 		],
 	],
+
+	/*
+	 * ---------------------------------------------------------
+	 * Enable/Disable HTTP caching
+	 * ---------------------------------------------------------
+	 *
+	 * http_cache_enabled : Enable or disable using the HTTP Cache component.
+	 * http_max_age       : Max age in seconds you want to the client’s browser to cache a response
+	 */
+	'http_cache_enabled' => false,
+	'http_max_age'       => 3600,
 ];

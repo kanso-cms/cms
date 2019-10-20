@@ -106,7 +106,14 @@ class Response
      *
      * @var bool
      */
-    protected $responseCache = false;
+    private $responseCache = false;
+
+    /**
+     * Enable response cache?
+     *
+     * @var int
+     */
+    private $maxCacheAge;
 
     /**
      * Constructor.
@@ -122,8 +129,9 @@ class Response
      * @param \kanso\framework\mvc\view\View          $view
      * @param \kanso\framework\http\request\request   $request
      * @param bool                                    $responseCache
+     * @param @internal                               $maxCacheAge Max cache age in seconds (optional) (default 3600)
      */
-    public function __construct(Protocol $protocol, Format $format, Body $body, Status $status, Headers $headers, Cookie $cookie, Session $session, CDN $CDN, View $view, Request $request, bool $responseCache)
+    public function __construct(Protocol $protocol, Format $format, Body $body, Status $status, Headers $headers, Cookie $cookie, Session $session, CDN $CDN, View $view, Request $request, bool $responseCache, int $maxCacheAge = 3600)
     {
         $this->format = $format;
 
@@ -150,6 +158,8 @@ class Response
         $this->format->setEncoding('utf-8');
 
         $this->responseCache = $responseCache;
+
+        $this->maxCacheAge = $maxCacheAge;
     }
 
     /**
@@ -325,6 +335,8 @@ class Response
         {
             // ETag header and conditional GET check
             $hash = '"' . hash('sha256', $this->body->get()) . '"';
+
+            $this->headers->set('Cache-Control', 'private, max-age=' . $this->maxCacheAge);
 
             $this->headers->set('ETag', $hash);
 
