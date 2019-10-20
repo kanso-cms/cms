@@ -1,4 +1,4 @@
-### 5.1.0 <small> (21-10-2019)</small>
+### 5.2.0 <small> (21-10-2019)</small>
 
 Update using ```git fetch```.
 

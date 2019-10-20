@@ -299,9 +299,14 @@ class Response
             return false;
         }
 
-        if ($this->headers->get('Cache-Control') === 'no-store')
+        $cacheControl = $this->headers->get('Cache-Control');
+
+        if (is_string($cacheControl))
         {
-            return false;
+            if (strpos($cacheControl, 'no-store') !== false || strpos($cacheControl, 'no-cache') !== false)
+            {
+                return false;
+            }
         }
 
         return true;
