@@ -1,3 +1,23 @@
+### 5.1.0 <small> (21-10-2019)</small>
+
+Update using ```git fetch```.
+
+#### Breaking Changes
+* The framework response cache has been deprecated. The HTTP response cache is handled through Etag headers.
+
+#### New
+* Added new `kanso\framework\http\response\Response::enableCaching` function
+* Added new `kanso\framework\http\response\Response::disableCaching` function
+* Added new `kanso\framework\http\response\Response::isCacheable` function
+* Added new `http_max_age` option in `app/configurations/cache.php` file
+
+#### Changes
+* The `Cache` object has been removed from the `kanso\framework\http\response\Response` constructor.
+* The `kanso\framework\http\response\Response` constructor arguements have changed order/values.
+* The default headers sent by `kanso\framework\http\response\Response` have changed depeneding on if HTTP caching is enabled/disabled
+
+--------------------------------------------------------
+
 ### 5.1.0 <small> (14-10-2019)</small>
 
 Update using ```git fetch```.
