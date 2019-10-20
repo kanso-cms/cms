@@ -169,6 +169,17 @@ class Status {
     }
 
     /**
+     * Is the response not modified.
+     *
+     * @access public
+     * @return bool
+     */
+    public function isNotModified(): bool
+    {
+        return $this->code === 304;
+    }
+
+    /**
      * Is the response empty.
      *
      * @access public

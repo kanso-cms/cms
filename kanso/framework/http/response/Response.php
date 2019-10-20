@@ -8,6 +8,7 @@
 namespace kanso\framework\http\response;
 
 use kanso\framework\http\cookie\Cookie;
+use kanso\framework\http\request\Request;
 use kanso\framework\http\response\exceptions\ForbiddenException;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\MethodNotAllowedException;
@@ -73,25 +74,25 @@ class Response
     private $status;
 
     /**
-     * Response cache.
+     * CDN manager.
      *
-     * @var \kanso\framework\http\response\Cache
+     * @var \kanso\framework\http\response\CDN
      */
-    private $cache;
+    private $CDN;
 
-     /**
-      * CDN manager.
-      *
-      * @var \kanso\framework\http\response\CDN
-      */
-     private $CDN;
+    /**
+     * View renderer.
+     *
+     * @var \kanso\framework\mvc\view\View
+     */
+    private $view;
 
-     /**
-      * View renderer.
-      *
-      * @var \kanso\framework\mvc\view\View
-      */
-     private $view;
+    /**
+     * The HTTP request.
+     *
+     * @var \kanso\framework\http\request\request
+     */
+    private $request;
 
     /**
      * Has the response been sent ?
@@ -101,11 +102,11 @@ class Response
     private $sent = false;
 
     /**
-     * The HTTP request method.
+     * Enable response cache?
      *
-     * @var string
+     * @var bool
      */
-    private $requestMethod;
+    protected $responseCache = false;
 
     /**
      * Constructor.
@@ -117,12 +118,12 @@ class Response
      * @param \kanso\framework\http\response\Status   $status
      * @param \kanso\framework\http\response\Headers  $headers
      * @param \kanso\framework\http\session\Session   $session
-     * @param \kanso\framework\http\response\Cache    $cache
      * @param \kanso\framework\http\response\CDN      $CDN
      * @param \kanso\framework\mvc\view\View          $view
-     * @param string                                  $requestMethod
+     * @param \kanso\framework\http\request\request   $request
+     * @param bool                                    $responseCache
      */
-    public function __construct(Protocol $protocol, Format $format, Body $body, Status $status, Headers $headers, Cookie $cookie, Session $session, Cache $cache, CDN $CDN, View $view, string $requestMethod)
+    public function __construct(Protocol $protocol, Format $format, Body $body, Status $status, Headers $headers, Cookie $cookie, Session $session, CDN $CDN, View $view, Request $request, bool $responseCache)
     {
         $this->format = $format;
 
@@ -134,8 +135,6 @@ class Response
 
         $this->cookie = $cookie;
 
-        $this->cache = $cache;
-
         $this->session = $session;
 
         $this->protocol = $protocol;
@@ -144,11 +143,13 @@ class Response
 
         $this->view = $view;
 
-        $this->requestMethod = $requestMethod;
+        $this->request = $request;
 
         $this->format->set('text/html');
 
         $this->format->setEncoding('utf-8');
+
+        $this->responseCache = $responseCache;
     }
 
     /**
@@ -207,17 +208,6 @@ class Response
     }
 
     /**
-     * Get the cache object.
-     *
-     * @access public
-     * @return \kanso\framework\http\response\Cache
-     */
-    public function cache(): Cache
-    {
-        return $this->cache;
-    }
-
-    /**
      * Get the cookie manager.
      *
      * @access public
@@ -262,29 +252,96 @@ class Response
     }
 
     /**
+     * Enables ETag response cache.
+     */
+    public function enableCaching()
+    {
+        $this->responseCache = true;
+    }
+
+    /**
+     * Disables ETag response cache.
+     */
+    public function disableCaching()
+    {
+        $this->responseCache = false;
+    }
+
+    /**
+     * Is the response cacheable?
+     *
+     * @return bool
+     */
+    public function isCacheable(): bool
+    {
+        if ($this->responseCache === false)
+        {
+            return false;
+        }
+
+        if (in_array($this->status->get(), [200, 203, 204, 206, 300, 301, 404, 405, 410, 414, 501]) === false)
+        {
+            return false;
+        }
+
+        if (in_array(strtoupper($this->request->getMethod()), ['GET', 'HEAD']) === false)
+        {
+            return false;
+        }
+
+        if ($this->headers->get('Cache-Control') === 'no-store')
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Finalize all objects before sending the response.
      *
      * @access public
      */
     public function finalize()
     {
-        $this->headers->set('Status', $this->status->get());
+        $this->finalizeBody();
 
-        $this->headers->set('HTTP', $this->status->get() . ' ' . $this->status->message());
+        $this->finalizeHeaders();
+    }
+
+    /**
+     * Finalize the response headers/.
+     *
+     * @access private
+     */
+    private function finalizeHeaders()
+    {
+        $this->headers->set('Content-Type', $this->format->get() . ';' . $this->format->getEncoding());
 
         $this->headers->set('Content-length', $this->body->length());
 
-        $this->headers->set('Content-Type', $this->format->get() . ';' . $this->format->getEncoding());
+        // Cache-Control header
+        if ($this->isCacheable())
+        {
+            // ETag header and conditional GET check
+            $hash = '"' . hash('sha256', $this->body->get()) . '"';
 
-        $this->headers->set('Expires', gmdate('D, d M Y H:i:s') . ' GMT');
+            $this->headers->set('ETag', $hash);
 
-        $this->headers->set('Last-Modified', gmdate('D, d M Y H:i:s') . ' GMT');
+            if ($this->request->headers()->HTTP_IF_NONE_MATCH === $hash)
+            {
+                $this->status->set(304);
+            }
+        }
+        else
+        {
+            $this->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+        }
 
-        $this->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+        $this->headers->set('HTTP', $this->status->get() . ' ' . $this->status->message());
 
-        $this->headers->set('Pragma', 'no-cache');
-
-        if ($this->status->isRedirect() || $this->status->isEmpty())
+        // No body to send
+        if ($this->status->isRedirect() || $this->status->isEmpty() || $this->status->isNotModified())
         {
             $this->headers->remove('Content-Type');
 
@@ -292,8 +349,6 @@ class Response
 
             $this->body->clear();
         }
-
-        $this->finalizeBody();
     }
 
     /**
@@ -303,25 +358,7 @@ class Response
      */
     private function finalizeBody()
     {
-        if ($this->cache->enabled())
-        {
-            if ($this->cache->has())
-            {
-                $body = $this->cache()->get();
-            }
-            else
-            {
-                $body = $this->CDN->filter($this->body->get());
-
-                $this->cache->put($body);
-            }
-        }
-        else
-        {
-            $body = $this->CDN->filter($this->body->get());
-        }
-
-        $this->body->set($body);
+        $this->body->set($this->CDN->filter($this->body->get()));
     }
 
     /**
@@ -341,7 +378,7 @@ class Response
 
             $this->cookie->send();
 
-            if ($this->requestMethod !== 'HEAD')
+            if ($this->request->getMethod() !== 'HEAD')
             {
                 echo $this->body->get();
             }
@@ -360,7 +397,7 @@ class Response
      */
     public function redirect(string $url, int $status = 302)
     {
-        $this->cache->disable();
+        $this->responseCache = false;
 
         $this->status->set(302);
 

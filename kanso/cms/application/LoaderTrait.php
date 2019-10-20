@@ -54,10 +54,10 @@ trait LoaderTrait
 
 		$template = $_this->getTemplate($pageType);
 
-		// Disable cache for non page/single/custom post types
+		// Disable HTTP cache for non page/single/custom post types
 		if ($pageType !== 'page' && $pageType !== 'single' && Str::getBeforeFirstChar($pageType, '-') !== 'single')
 		{
-			$_this->container->Response->cache()->disable();
+			$_this->container->Response->disableCaching();
 		}
 
 		if ($response->status()->get() !== 404 && $template)
@@ -130,8 +130,6 @@ trait LoaderTrait
 
 		if (file_exists($template))
 		{
-			$_this->container->Response->cache()->disable();
-
 			$response->body()->set($response->view()->display($template));
 		}
 		else
@@ -170,8 +168,6 @@ trait LoaderTrait
 			if (file_exists($template) && !$this->container->Request->isAjax() && !$this->container->ErrorHandler->display_errors())
 			{
 				$this->container->Response->status()->set(404);
-
-				$this->container->Response->cache()->disable();
 
 				$this->container->Response->body()->set($this->container->View->display($template));
 

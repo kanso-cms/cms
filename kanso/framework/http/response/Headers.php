@@ -57,7 +57,7 @@ class Headers implements \IteratorAggregate
             {
                 $value = is_array($value) ? reset($value) : $value;
 
-                if (Str::contains($name, 'http'))
+                if (Str::contains($name, 'HTTP'))
                 {
                     header($name . '/1.1 ' . $value, true);
                 }

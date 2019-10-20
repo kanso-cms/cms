@@ -315,6 +315,11 @@ class Writer extends BaseModel
             $values = json_decode($_POST['post-meta-values'], true);
         }
 
+        if (!is_array($values) || !is_array($keys))
+        {
+            return false;
+        }
+
         if (count($values) !== count($keys))
         {
             return false;

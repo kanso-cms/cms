@@ -28,7 +28,6 @@ class SitemapTest extends TestCase
 		$body     = Mockery::mock('\kanso\framework\http\response\Body');
 		$view     = Mockery::mock('\kanso\framework\mvc\view\View');
 		$status   = Mockery::mock('\kanso\framework\http\response\Status');
-		$cache    = Mockery::mock('\kanso\framework\http\response\Cache');
 
 		$sitemap = new SiteMap($request, $response, true, true, true, true, ['foo']);
 
@@ -38,7 +37,7 @@ class SitemapTest extends TestCase
 
 		$response->shouldReceive('status')->once()->andReturn($status);
 
-		$response->shouldReceive('cache')->once()->andReturn($cache);
+		$response->shouldReceive('disableCaching');
 
 		$response->shouldReceive('view')->once()->andReturn($view)->times(9);
 
@@ -47,8 +46,6 @@ class SitemapTest extends TestCase
 		$body->shouldReceive('set')->once();
 
 		$status->shouldReceive('set')->once()->with(200);
-
-		$cache->shouldReceive('disable')->once();
 
 		$view->shouldReceive('display')->times(9);
 

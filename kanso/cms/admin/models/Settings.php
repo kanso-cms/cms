@@ -289,7 +289,6 @@ class Settings extends BaseModel
             'posts_per_page'     => ['required'],
             'thumbnail_quality'  => ['required', 'greater_than_or_equal_to(0)', 'less_than_or_equal_to(9)'],
             'cdn_url'            => ['url'],
-            'cache_life'         => [],
             'site_title'         => ['required'],
             'site_description'   => ['required'],
             'sitemap_url'        => ['required'],
@@ -305,11 +304,9 @@ class Settings extends BaseModel
             'enable_cache'       => ['boolean'],
             'enable_comments'    => ['boolean'],
             'enable_attachments' => ['boolean'],
-            'clear_cache'        => ['boolean'],
             'posts_per_page'     => ['integer'],
             'thumbnail_quality'  => ['integer'],
             'cdn_url'            => ['trim'],
-            'cache_life'         => ['trim'],
             'site_title'         => ['trim'],
             'site_description'   => ['trim'],
             'sitemap_url'        => ['trim'],
@@ -329,23 +326,10 @@ class Settings extends BaseModel
 
         $post = $validator->filter();
 
-        if ($post['clear_cache'] === true)
-        {
-            $this->Cache->clear();
-
-            return $this->postMessage('success', 'The application cache was successfully cleared.');
-        }
-
         // Validate the permalinks
         if (!$this->validatePermalinks($post['permalinks']))
         {
             return $this->postMessage('warning', 'The permalinks value you entered is invalid. Please ensure you enter a valid permalink structure - e.g. "year/month/postname/".');
-        }
-
-        // Validate cache life
-        if ($post['enable_cache'] && !$this->validateCacheLife($post['cache_life']))
-        {
-            return $this->postMessage('warning', 'The cache life value you entered is invalid. Please ensure you enter a cache lifetime - e.g. "1 month" or "3 days".');
         }
 
         // Validate the CDN URL
@@ -353,9 +337,6 @@ class Settings extends BaseModel
         {
             return $this->postMessage('warning', 'The CDN URL you entered is invalid. Please provide a valid URL.');
         }
-
-        // Filter the cache life
-        $post['cache_life'] = $this->filterCacheLife($post['cache_life']);
 
         // Filter the permalinks
         $permalinks = $this->filterPermalinks($post['permalinks']);
@@ -394,7 +375,6 @@ class Settings extends BaseModel
         $this->Config->set('cdn.host', $post['cdn_url']);
 
         $this->Config->set('cache.http_cache_enabled', $post['enable_cache']);
-        $this->Config->set('cache.configurations.' . $this->Config->get('cache.default') . '.expire', $post['cache_life']);
 
         $this->Config->save();
 
@@ -498,119 +478,6 @@ class Settings extends BaseModel
 
         return $this->postMessage('success', 'Analytics settings successfully updated!');
 
-    }
-
-    /**
-     * Validate cache lifetime.
-     *
-     * @access private
-     * @param  string $cacheLife A cache life - e.g '3 hours'
-     * @return bool
-     */
-    private function validateCacheLife(string $cacheLife): bool
-    {
-        if ($cacheLife === '')
-        {
-            return false;
-        }
-        elseif (is_numeric($cacheLife))
-        {
-            return true;
-        }
-        elseif (strtotime($cacheLife))
-        {
-            return true;
-        }
-
-        $times = [
-            'second' => true,
-            'minute' => true,
-            'hour'   => true,
-            'week'   => true,
-            'day'    => true,
-            'month'  => true,
-            'year'   => true,
-        ];
-
-        $life = array_map('trim', explode(' ', $cacheLife));
-
-        if (count($life) !== 2)
-        {
-            return false;
-        }
-        elseif (!is_numeric($life[0]))
-        {
-            return false;
-        }
-
-        $time = intval($life[0]);
-
-        $life = rtrim($life[1], 's');
-
-        if ($time == 0)
-        {
-            return false;
-        }
-
-        if (!isset($times[$life]))
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Filter the cache life to a valid timestamp.
-     *
-     * @access private
-     * @param  mixed  $cacheLife The url to be converted
-     * @return string
-     */
-    private function filterCacheLife($cacheLife): string
-    {
-        $default = '+1 day';
-
-        $times =
-        [
-            'second' => true,
-            'minute' => true,
-            'hour'   => true,
-            'week'   => true,
-            'day'    => true,
-            'month'  => true,
-            'year'   => true,
-        ];
-
-        if ($cacheLife[0] === '+')
-        {
-            $cacheLife = ltrim($cacheLife, '+');
-        }
-
-        $life = array_map('trim', explode(' ', $cacheLife));
-
-        if (count($life) !== 2)
-        {
-            return $default;
-        }
-
-        $time = intval($life[0]);
-
-        $life = rtrim($life[1], 's');
-
-        if ($time == 0)
-        {
-            return $default;
-        }
-
-        if (!isset($times[$life]))
-        {
-            return $default;
-        }
-
-        $life = $time > 1 ? $life . 's' : $life;
-
-        return '+' . $time . ' ' . $life;
     }
 
     /**

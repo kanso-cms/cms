@@ -248,8 +248,6 @@ class WebHandler
 
 		$this->response->status()->set($status);
 
-		$this->response->cache()->disable();
-
 		$this->response->send();
 
 		// Return false to stop further error handling

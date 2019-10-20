@@ -8,8 +8,8 @@
 namespace kanso\tests\unit\cms\wrappers;
 
 use kanso\cms\wrappers\Post;
-use kanso\tests\TestCase;
 use kanso\framework\utility\Str;
+use kanso\tests\TestCase;
 use Mockery;
 
 /**

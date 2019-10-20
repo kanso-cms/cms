@@ -108,7 +108,7 @@ class Shell
      */
     public function __construct(string $dir = null)
     {
-        $this->process = new Process('');
+        $this->process = new Process([]);
 
         $this->process->setTimeout($this->timeout);
 

@@ -70,7 +70,7 @@ abstract class BaseController extends Controller
 	protected function dispatch()
 	{
 		// Disabled HTTP caching
-		$this->Response->cache()->disable();
+		$this->Response->disableCaching();
 
 		// Disabled the CDN
 		$this->Response->CDN()->disable();

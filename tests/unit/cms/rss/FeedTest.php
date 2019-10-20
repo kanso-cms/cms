@@ -28,7 +28,6 @@ class FeedTest extends TestCase
 		$body     = Mockery::mock('\kanso\framework\http\response\Body');
 		$view     = Mockery::mock('\kanso\framework\mvc\view\View');
 		$status   = Mockery::mock('\kanso\framework\http\response\Status');
-		$cache    = Mockery::mock('\kanso\framework\http\response\Cache');
 
 		$feed = new Feed($request, $response, 'rss');
 
@@ -38,7 +37,7 @@ class FeedTest extends TestCase
 
 		$response->shouldReceive('status')->once()->andReturn($status);
 
-		$response->shouldReceive('cache')->once()->andReturn($cache);
+		$response->shouldReceive('disableCaching');
 
 		$response->shouldReceive('view')->once()->andReturn($view)->times(3);
 
@@ -47,8 +46,6 @@ class FeedTest extends TestCase
 		$body->shouldReceive('set')->once();
 
 		$status->shouldReceive('set')->once()->with(200);
-
-		$cache->shouldReceive('disable')->once();
 
 		$view->shouldReceive('display')->times(3);
 
@@ -66,7 +63,6 @@ class FeedTest extends TestCase
 		$body     = Mockery::mock('\kanso\framework\http\response\Body');
 		$view     = Mockery::mock('\kanso\framework\mvc\view\View');
 		$status   = Mockery::mock('\kanso\framework\http\response\Status');
-		$cache    = Mockery::mock('\kanso\framework\http\response\Cache');
 
 		$feed = new Feed($request, $response, 'atom');
 
@@ -76,7 +72,7 @@ class FeedTest extends TestCase
 
 		$response->shouldReceive('status')->once()->andReturn($status);
 
-		$response->shouldReceive('cache')->once()->andReturn($cache);
+		$response->shouldReceive('disableCaching');
 
 		$response->shouldReceive('view')->once()->andReturn($view)->times(3);
 
@@ -85,8 +81,6 @@ class FeedTest extends TestCase
 		$body->shouldReceive('set')->once();
 
 		$status->shouldReceive('set')->once()->with(200);
-
-		$cache->shouldReceive('disable')->once();
 
 		$view->shouldReceive('display')->times(3);
 
@@ -104,7 +98,6 @@ class FeedTest extends TestCase
 		$body     = Mockery::mock('\kanso\framework\http\response\Body');
 		$view     = Mockery::mock('\kanso\framework\mvc\view\View');
 		$status   = Mockery::mock('\kanso\framework\http\response\Status');
-		$cache    = Mockery::mock('\kanso\framework\http\response\Cache');
 
 		$feed = new Feed($request, $response, 'rdf');
 
@@ -114,7 +107,7 @@ class FeedTest extends TestCase
 
 		$response->shouldReceive('status')->once()->andReturn($status);
 
-		$response->shouldReceive('cache')->once()->andReturn($cache);
+		$response->shouldReceive('disableCaching');
 
 		$response->shouldReceive('view')->once()->andReturn($view)->times(3);
 
@@ -123,8 +116,6 @@ class FeedTest extends TestCase
 		$body->shouldReceive('set')->once();
 
 		$status->shouldReceive('set')->once()->with(200);
-
-		$cache->shouldReceive('disable')->once();
 
 		$view->shouldReceive('display')->times(3);
 

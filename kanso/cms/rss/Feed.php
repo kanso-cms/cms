@@ -75,7 +75,7 @@ class Feed
         $this->response->status()->set(200);
 
         // Disable the cache
-        $this->response->cache()->disable();
+        $this->response->disableCaching();
 	}
 
 	/**

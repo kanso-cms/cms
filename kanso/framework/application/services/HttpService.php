@@ -14,7 +14,6 @@ use kanso\framework\http\request\Files;
 use kanso\framework\http\request\Headers as RequestHeaders;
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Body;
-use kanso\framework\http\response\Cache;
 use kanso\framework\http\response\CDN;
 use kanso\framework\http\response\Format;
 use kanso\framework\http\response\Headers as ResponseHeaders;
@@ -27,7 +26,6 @@ use kanso\framework\http\session\Session;
 use kanso\framework\http\session\storage\FileSessionStorage;
 use kanso\framework\http\session\storage\NativeSessionStorage;
 use kanso\framework\http\session\Token;
-use kanso\framework\utility\Str;
 
 /**
  * HTTP services.
@@ -187,19 +185,6 @@ class HttpService extends Service
 	}
 
 	/**
-	 * Get the HTTP Response cache.
-	 *
-	 * @access private
-	 * @return \kanso\framework\http\response\Cache
-	 */
-	private function getCache(): Cache
-	{
-		$key = Str::alphaDash($this->container->Request->path());
-
-		return new Cache($this->container->Cache, $key, $this->container->Config->get('cache.http_cache_enabled'));
-	}
-
-	/**
 	 * Get the HTTP response CDN.
 	 *
 	 * @access private
@@ -230,7 +215,7 @@ class HttpService extends Service
 	{
 		$this->container->singleton('Response', function()
 		{
-			return new Response($this->getProtocol(), new Format, new Body, new Status, new ResponseHeaders, $this->container->Cookie, $this->container->Session, $this->getCache(), $this->getCDN(), $this->container->View, $this->container->Request->getMethod());
+			return new Response($this->getProtocol(), new Format, new Body, new Status, new ResponseHeaders, $this->container->Cookie, $this->container->Session, $this->getCDN(), $this->container->View, $this->container->Request, $this->container->Config->get('cache.http_cache_enabled'));
 		});
 	}
 

@@ -148,7 +148,7 @@ class Installer
         $response->status()->set(200);
 
         // Disable the cache
-        $response->cache()->disable();
+        $response->disableCaching();
 
         // destroy the cookie
         $response->cookie()->destroy();

@@ -147,43 +147,14 @@ $cdn_enabbled  = $kanso->Config->get('cdn.enabled');
         </div>
 
         <div class="form-field row floor-sm">
-            <label for="enable_cache">Cache</label>
+            <label for="enable_cache">HTTP Cache</label>
             <p class="color-gray">
-                Enabling caching will tell Kanso to save HTML output to files. When another request is made for the same page,
-                Kanso loads the HTML directly from the file without having to run a through variable processing, loops etc... 
-                This greatly improves Kanso's performance and load times.
+                Enable HTTP Etag caching
             </p>
-            <span class="checkbox checkbox-primary js-collapse" data-collapse-target="cache-details">
+            <span class="checkbox checkbox-primary">
                 <input type="checkbox" name="enable_cache" id="enable_cache" <?php echo ($cache_enabled ? 'checked' : ''); ?>  />
                 <label for="enable_cache">Enable Cache</label>
             </span>
-        </div>
-
-        <div class="<?php echo $cache_enabled ? 'hide-overflow' : 'hide-overflow collapsed'; ?> " id="cache-details" >
-            <div class="gutter-lg gutter-l">
-                <div class="form-field row floor-sm">
-                    <label for="cache_life">Cache lifetime</label>
-                    <p class="color-gray">
-                        How long should Kanso keep cached page versions before creating a new one. 
-                        e.g 1 minute, 2 hours, 1 week, 3 months.
-                    </p>
-                    <input type="text" name="cache_life" id="cache_life" value="<?php echo $kanso->Config->get('cache.configurations.' . $kanso->Config->get('cache.default') . '.expire'); ?>">
-                </div>
-                <div class="form-field row floor-sm">
-                    <p class="color-gray">
-                        Clear Kanso's entire cache library. This is useful when you've made changes to your templates
-                        or a large number of posts.
-                    </p>
-                    <script type="text/javascript">
-                        function cleaKansoCache() {
-                            var form = document.getElementById('kanso_form');
-                            form.innerHTML += '<input type="hidden" name="clear_cache" value="true">';
-                            form.submit();
-                        };
-                    </script>
-                    <button type="button" class="btn btn-danger" onclick="cleaKansoCache()">Clear cache</button>
-                </div>
-            </div>
         </div>
 
         <div class="form-field row floor-sm">
