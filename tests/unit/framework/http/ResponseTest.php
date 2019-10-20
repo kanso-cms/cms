@@ -78,14 +78,14 @@ class ResponseTest extends TestCase
 		$status->shouldReceive('isRedirect')->andReturn(false);
 		$status->shouldReceive('isEmpty')->andReturn(false);
 		$status->shouldReceive('isNotModified')->andReturn(false);
-		
+
 		$headers->shouldReceive('set')->withArgs(['Status', 200]);
 		$headers->shouldReceive('set')->withArgs(['Content-length', 0]);
 		$headers->shouldReceive('set')->withArgs(['HTTP', '200 OK']);
 		$headers->shouldReceive('set')->withArgs(['Content-Type', 'text/html;utf-8']);
 		$headers->shouldReceive('set')->withArgs(['Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0']);
 		$headers->shouldReceive('send');
-		
+
 		$body->shouldReceive('length')->andReturn(0);
 		$body->shouldReceive('set')->withArgs(['']);
 		$body->shouldReceive('get')->andReturn('');
@@ -124,7 +124,7 @@ class ResponseTest extends TestCase
 		$status->shouldReceive('isRedirect')->andReturn(false);
 		$status->shouldReceive('isEmpty')->andReturn(false);
 		$status->shouldReceive('isNotModified')->andReturn(false);
-		
+
 		$headers->shouldReceive('get')->withArgs(['Cache-Control'])->andReturn(false);
 		$headers->shouldReceive('set')->withArgs(['Status', 200]);
 		$headers->shouldReceive('set')->withArgs(['Content-length', 6]);
@@ -136,7 +136,7 @@ class ResponseTest extends TestCase
 
 		$request->shouldReceive('headers')->andReturn($rHeaders);
 		$rHeaders->HTTP_IF_NONE_MATCH = '3434r23rrfjf';
-		
+
 		$body->shouldReceive('length')->andReturn(6);
 		$body->shouldReceive('set')->withArgs(['foobar']);
 		$body->shouldReceive('get')->andReturn('foobar');

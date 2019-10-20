@@ -129,7 +129,7 @@ class Response
      * @param \kanso\framework\mvc\view\View          $view
      * @param \kanso\framework\http\request\request   $request
      * @param bool                                    $responseCache
-     * @param @internal                               $maxCacheAge Max cache age in seconds (optional) (default 3600)
+     * @param @internal                               $maxCacheAge   Max cache age in seconds (optional) (default 3600)
      */
     public function __construct(Protocol $protocol, Format $format, Body $body, Status $status, Headers $headers, Cookie $cookie, Session $session, CDN $CDN, View $view, Request $request, bool $responseCache, int $maxCacheAge = 3600)
     {
