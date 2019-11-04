@@ -44,9 +44,9 @@ class Application
     /**
      * Constructor.
      *
-     * @access protected
+     * @access public
      */
-    protected function __construct()
+    public function __construct()
     {
         $this->boot();
     }
@@ -87,6 +87,33 @@ class Application
     }
 
     /**
+     * Returns the IOC container
+     *
+     * @access public
+     * @return \kanso\framework\ioc\Container
+     */
+    public function container(): Container
+    {
+        return $this->container;
+    }
+
+    /**
+     * Returns the Kanso environment.
+     *
+     * @access public
+     * @return string|null
+     */
+    public function environment()
+    {
+        if (defined('KANSO_ENV'))
+        {
+            return KANSO_ENV;
+        }
+
+        return null;
+    }
+
+    /**
      * Boot the application dependencies.
      *
      * @access protected
@@ -109,44 +136,49 @@ class Application
      */
     protected function initialize()
     {
+        $this->registerContainer();
+
+        $this->registerConfig();
+
+        $this->registerFilesystem();
+    }
+
+    /**
+     * Register the IOC container
+     *
+     * @access protected
+     */
+    protected function registerContainer()
+    {
         $this->container = Container::instance();
 
+        $this->container->setInstance('Application', $this);
+    }
+
+    /**
+     * Register the Filesystem
+     *
+     * @access protected
+     */
+    protected function registerFilesystem()
+    {
         $this->container->singleton('Filesystem', function()
         {
             return new Filesystem;
         });
+    }
 
+    /**
+     * Register the config 
+     *
+     * @access protected
+     */
+    protected function registerConfig()
+    {
         $this->container->singleton('Config', function()
         {
             return $this->configFactory();
         });
-    }
-
-    /**
-     * Returns the Kanso environment.
-     *
-     * @access public
-     * @return string|null
-     */
-    public function environment()
-    {
-        if (defined('KANSO_ENV'))
-        {
-            return KANSO_ENV;
-        }
-
-        return null;
-    }
-
-    /**
-     * Returns the IoC container instance.
-     *
-     * @access public
-     * @return \kanso\framework\ioc\Container
-     */
-    public function container(): Container
-    {
-        return $this->container;
     }
 
     /**
@@ -175,7 +207,7 @@ class Application
      */
     protected function configFactory(): Config
     {
-        return new Config(new Loader($this->container->Filesystem, $this->configurationPath()), $this->environment());
+        return new Config(new Loader(new Filesystem, $this->configurationPath()), $this->environment());
     }
 
     /**
@@ -190,16 +222,73 @@ class Application
     }
 
     /**
+     * Is the application running in the CLI?
+     *
+     * @return bool
+     */
+    protected function isCommandLine(): bool
+    {
+        return PHP_SAPI === 'cli';
+    }
+
+    /**
      * Register required services.
      *
      * @access protected
      */
     protected function registerServices()
     {
+        if (!$this->isCommandLine())
+        {
+            $this->registerWebServices();
+        }
+        else
+        {
+            $this->registerClisServices();
+        }
+    }
+
+    /**
+     * Register default services.
+     *
+     * @access protected
+     */
+    protected function registerWebServices()
+    {
         foreach (array_keys($this->container->Config->get('application.services')) as $package)
         {
-            // Register the core services
-            $this->serviceRegistrar($package);
+            if ($package === 'cli')
+            {
+                continue;
+            }
+
+            $this->registerPackage($package);
+        }
+    }
+
+    /**
+     * Register cli services.
+     *
+     * @access protected
+     */
+    protected function registerClisServices()
+    {
+        $this->registerPackage('framework');
+
+        $this->registerPackage('cli');
+    }
+
+    /**
+     * Registers services in the IoC container.
+     *
+     * @access protected
+     * @param string $name Service name
+     */
+    protected function registerPackage(string $name)
+    {
+        foreach ($this->container->Config->get('application.services.' . $name) as $service)
+        {
+            $this->registerService($service);
         }
     }
 
@@ -207,14 +296,11 @@ class Application
      * Registers services in the IoC container.
      *
      * @access protected
-     * @param string $type Service type
+     * @param string $service Service name
      */
-    protected function serviceRegistrar(string $type)
+    protected function registerService(string $service)
     {
-        foreach ($this->container->Config->get('application.services.' . $type) as $service)
-        {
-            (new $service($this->container))->register();
-        }
+        (new $service($this->container))->register();
     }
 
     /**

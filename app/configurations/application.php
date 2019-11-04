@@ -111,7 +111,23 @@ return
             '\kanso\framework\application\services\PixlService',
             '\kanso\framework\application\services\CrawlerService',
             '\kanso\framework\application\services\DeploymentService',
-			'\kanso\framework\application\services\ErrorHandlerService',
+			
+		],
+
+		/*
+		 * Services required when the application is running in web mode
+		 */
+		'web' =>
+		[
+			'\kanso\framework\application\services\web\ErrorHandlerService',
+		],
+
+		/*
+		 * Services required when the application is running in CLI mode
+		 */
+		'cli' =>
+		[
+			'\kanso\framework\application\services\cli\ErrorHandlerService',
 		],
 
 		/*
@@ -142,6 +158,18 @@ return
 		[
 
 		],
+	],
+
+	/*
+	 * ---------------------------------------------------------
+	 * CLI Commands
+	 * ---------------------------------------------------------
+	 *
+	 * List of custom CLI command classes
+	 */
+	'commands' =>
+	[
+
 	],
 
 	/*

@@ -62,7 +62,7 @@ class Environment
         $env['SCRIPT_NAME'] = array_pop($scriptName);
 
         // Name of server host that is running the script
-        $env['SERVER_NAME'] = $server['SERVER_NAME'];
+        $env['SERVER_NAME'] =  isset($server['SERVER_NAME']) ? $server['SERVER_NAME'] : 'UNKNOWN';
 
         // Number of server port that is running the script
         $env['SERVER_PORT'] = isset($server['SERVER_PORT']) ? intval($server['SERVER_PORT']) : 80;
@@ -81,13 +81,13 @@ class Environment
         $env['DOCUMENT_ROOT'] = $server['DOCUMENT_ROOT'];
 
         // Http host
-        $env['HTTP_HOST'] = $env['HTTP_PROTOCOL'] . '://' . str_replace(['http://', 'https://'], ['', ''], $server['HTTP_HOST']);
+        $env['HTTP_HOST'] = isset($env['HTTP_HOST']) ? $env['HTTP_PROTOCOL'] . '://' . str_replace(['http://', 'https://'], ['', ''], $server['HTTP_HOST']) : 'UNKNOWN';
 
         // domain name
         $env['DOMAIN_NAME'] = str_replace('www.', '', str_replace($env['HTTP_PROTOCOL'] . '://', '', $env['HTTP_HOST']));
 
         // Request uri
-        $env['REQUEST_URI'] = $server['REQUEST_URI'];
+        $env['REQUEST_URI'] = isset($env['REQUEST_URI']) ? $server['REQUEST_URI'] : 'UNKNOWN';
 
         // Request full URL
         $env['REQUEST_URL'] = $env['HTTP_HOST'] . $env['REQUEST_URI'];

@@ -5,15 +5,16 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\framework\application\services;
+namespace kanso\framework\application\services\web;
 
 use kanso\framework\exception\ErrorHandler;
 use kanso\framework\exception\ErrorLogger;
 use kanso\framework\exception\handlers\WebHandler;
+use kanso\framework\application\services\Service;
 use Throwable;
 
 /**
- * Error handling service.
+ * Web error handling service.
  *
  * @author Joe J. Howard
  */

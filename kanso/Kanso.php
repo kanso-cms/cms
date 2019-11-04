@@ -70,17 +70,6 @@ class Kanso
 	 * Application run.
 	 *
 	 * @access public
-	 * @return \kanso\framework\application\Application
-	 */
-	public function application(): Application
-	{
-		return $this->application;
-	}
-
-	/**
-	 * Application run.
-	 *
-	 * @access public
 	 */
 	public function run()
 	{
