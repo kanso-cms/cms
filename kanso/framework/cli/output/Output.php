@@ -7,11 +7,10 @@
 
 namespace kanso\framework\cli\output;
 
-use kanso\framework\cli\output\Formatter;
 use kanso\framework\cli\Environment;
 
 /**
- * Output
+ * Output.
  *
  * @author Joe J. Howard
  */
@@ -24,8 +23,8 @@ class Output
 	 */
 	private $formatter;
 
-	/**
-     * Environment instance
+    /**
+     * Environment instance.
      *
      * @var \kanso\framework\cli\Environment
      */
@@ -34,8 +33,8 @@ class Output
 	/**
 	 * Constructor.
 	 *
-	 * @param  \kanso\framework\cli\output\Formatter $formatter   Formatter   instance
-	 * @param  \kanso\framework\cli\Environment      $environment Environment instance
+	 * @param \kanso\framework\cli\output\Formatter $formatter   Formatter   instance
+	 * @param \kanso\framework\cli\Environment      $environment Environment instance
 	 */
 	public function __construct(Formatter $formatter, Environment $environment)
 	{
@@ -44,8 +43,8 @@ class Output
 		$this->environment = $environment;
 	}
 
-	/**
-     * Returns the formatter
+    /**
+     * Returns the formatter.
      *
      * @access public
      * @return \\kanso\framework\cli\output\Formatter
@@ -54,9 +53,9 @@ class Output
     {
         return $this->formatter;
     }
-    
+
     /**
-     * Returns the environment
+     * Returns the environment.
      *
      * @access public
      * @return \kanso\framework\cli\Environment
@@ -93,11 +92,11 @@ class Output
 	{
 		$this->write($string . PHP_EOL);
 	}
-	
+
 	/**
 	 * Dumps a value to the output.
 	 *
-	 * @param mixed $value  Value
+	 * @param mixed $value Value
 	 */
 	public function dump($value): void
 	{
@@ -137,7 +136,7 @@ class Output
 		{
 			$this->hasAnsiSupport = PHP_OS_FAMILY !== 'Windows' || (getenv('ANSICON') !== false || getenv('ConEmuANSI') === 'ON');
 		}
-		
+
 		return $this->hasAnsiSupport;
 	}
 }

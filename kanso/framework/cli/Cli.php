@@ -9,7 +9,6 @@ namespace kanso\framework\cli;
 
 use kanso\framework\cli\input\Input;
 use kanso\framework\cli\output\Output;
-use kanso\framework\cli\Environment;
 
 /**
  * CLI utility.
@@ -18,22 +17,22 @@ use kanso\framework\cli\Environment;
  */
 class CLI
 {
-    /**
-     * Input instance.
-     *
-     * @var \kanso\framework\cli\input\Input
-     */
+	/**
+	 * Input instance.
+	 *
+	 * @var \kanso\framework\cli\input\Input
+	 */
 	private $input;
 
-    /**
-     * Output instance.
-     *
-     * @var \kanso\framework\cli\output\Output
-     */
+	/**
+	 * Output instance.
+	 *
+	 * @var \kanso\framework\cli\output\Output
+	 */
 	private $output;
 
     /**
-     * Environment instance
+     * Environment instance.
      *
      * @var \kanso\framework\cli\Environment
      */
@@ -43,9 +42,9 @@ class CLI
      * Constructor.
      *
      * @access public
-     * @param  \kanso\framework\cli\input\Input    $input       Input instance
-     * @param  \kanso\framework\cli\output\Output  $output      Output instance
-     * @param  \kanso\framework\cli\Environment    $environment Environment instance
+     * @param \kanso\framework\cli\input\Input   $input       Input instance
+     * @param \kanso\framework\cli\output\Output $output      Output instance
+     * @param \kanso\framework\cli\Environment   $environment Environment instance
      */
     public function __construct(Input $input, Output $output, Environment $environment)
     {
@@ -57,7 +56,7 @@ class CLI
     }
 
     /**
-     * Returns the input
+     * Returns the input.
      *
      * @access public
      * @return \kanso\framework\cli\input\Input
@@ -78,8 +77,8 @@ class CLI
         return $this->input;
     }
 
-     /**
-     * Returns the input
+    /**
+     * Returns the input.
      *
      * @access public
      * @return \kanso\framework\cli\Environment

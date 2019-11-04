@@ -8,13 +8,12 @@
 namespace kanso\framework\console;
 
 use kanso\framework\cli\input\Input;
-use kanso\framework\cli\output\Output;
 use kanso\framework\cli\output\helpers\Table;
+use kanso\framework\cli\output\Output;
 use kanso\framework\ioc\Container;
-use RuntimeException;
 
 /**
- * PHP Console
+ * PHP Console.
  *
  * @author Joe J. Howard
  */
@@ -51,8 +50,9 @@ class Console
 	/**
 	 * Constructor.
 	 *
-	 * @param \kanso\framework\cli\input\Input   $input Input
-	 * @param \kanso\framework\cli\output\Output $output Output
+	 * @access public
+	 * @param \kanso\framework\cli\input\Input   $input     Input
+	 * @param \kanso\framework\cli\output\Output $output    Output
 	 * @param \kanso\framework\ioc\Container     $container Container instance (optional) (default null)
 	 */
 	public function __construct(Input $input, Output $output, Container $container = null)
@@ -65,6 +65,7 @@ class Console
 	/**
 	 * Registers a command.
 	 *
+	 * @access public
 	 * @param string $command Command
 	 * @param string $class   Command class
 	 */
@@ -76,7 +77,7 @@ class Console
 	/**
 	 * Run the console.
 	 *
-	 * @return int
+	 * @access public
 	 */
 	public function run()
 	{
@@ -110,6 +111,7 @@ class Console
 	/**
 	 * Draws information table.
 	 *
+	 * @access private
 	 * @param string $heading Table heading
 	 * @param array  $headers Table headers
 	 * @param array  $rows    Table rows
@@ -137,6 +139,7 @@ class Console
 	/**
 	 * Draws an argument table.
 	 *
+	 * @access private
 	 * @param string $heading   Table heading
 	 * @param array  $arguments Arguments
 	 */
@@ -147,6 +150,8 @@ class Console
 
 	/**
 	 * Displays basic console information.
+	 *
+	 * @access private
 	 */
 	private function displayConsoleInfo(): void
 	{
@@ -162,6 +167,7 @@ class Console
 	/**
 	 * Returns an array of command information.
 	 *
+	 * @access private
 	 * @return array
 	 */
 	private function getCommands(): array
@@ -182,6 +188,8 @@ class Console
 
 	/**
 	 * Lists available commands if there are any.
+	 *
+	 * @access private
 	 */
 	private function listCommands(): void
 	{
@@ -192,6 +200,8 @@ class Console
 
 	/**
 	 * Displays console info and lists all available commands.
+	 *
+	 * @access private
 	 */
 	private function displayConsoleInfoAndCommandList()
 	{
@@ -203,6 +213,7 @@ class Console
 	/**
 	 * Returns TRUE if the command exists and FALSE if not.
 	 *
+	 * @access private
 	 * @param  string $command Command
 	 * @return bool
 	 */
@@ -214,7 +225,8 @@ class Console
 	/**
 	 * Displays error message for unknown commands.
 	 *
-	 * @param  string $command Command
+	 * @access private
+	 * @param string $command Command
 	 */
 	private function unknownCommand(string $command)
 	{
@@ -226,8 +238,9 @@ class Console
 	}
 
 	/**
-	 * Construct a command instance by name
+	 * Construct a command instance by name.
 	 *
+	 * @access private
 	 * @param  string $command Command
 	 * @return mixed
 	 */
@@ -241,7 +254,8 @@ class Console
 	/**
 	 * Displays information about the chosen command.
 	 *
-	 * @param  string $command Command
+	 * @access private
+	 * @param string $command Command
 	 */
 	private function displayCommandHelp(string $command)
 	{

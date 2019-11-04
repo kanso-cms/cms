@@ -16,7 +16,7 @@ use kanso\framework\ioc\Container;
  *
  * @author Joe J. Howard
  */
-abstract class Command 
+abstract class Command
 {
 	/**
 	 * Input.
@@ -63,8 +63,8 @@ abstract class Command
 	/**
 	 * Constructor.
 	 *
-	 * @param \kanso\framework\cli\input\Input   $input  Input
-	 * @param \kanso\framework\cli\output\Output $output Output
+	 * @param \kanso\framework\cli\input\Input   $input     Input
+	 * @param \kanso\framework\cli\output\Output $output    Output
 	 * @param \kanso\framework\ioc\Container     $container Container instance (optional) (default null)
 	 */
 	public function __construct(Input $input, Output $output, Container $container = null)
@@ -93,7 +93,7 @@ abstract class Command
 	}
 
 	/**
-	 * Executes the command
+	 * Executes the command.
 	 *
 	 * @access public
 	 */

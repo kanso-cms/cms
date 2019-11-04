@@ -87,7 +87,7 @@ class Application
     }
 
     /**
-     * Returns the IOC container
+     * Returns the IOC container.
      *
      * @access public
      * @return \kanso\framework\ioc\Container
@@ -144,7 +144,7 @@ class Application
     }
 
     /**
-     * Register the IOC container
+     * Register the IOC container.
      *
      * @access protected
      */
@@ -156,7 +156,7 @@ class Application
     }
 
     /**
-     * Register the Filesystem
+     * Register the Filesystem.
      *
      * @access protected
      */
@@ -169,7 +169,7 @@ class Application
     }
 
     /**
-     * Register the config 
+     * Register the config.
      *
      * @access protected
      */
@@ -273,9 +273,15 @@ class Application
      */
     protected function registerClisServices()
     {
-        $this->registerPackage('framework');
+        foreach (array_keys($this->container->Config->get('application.services')) as $package)
+        {
+            if ($package === 'web')
+            {
+                continue;
+            }
 
-        $this->registerPackage('cli');
+            $this->registerPackage($package);
+        }
     }
 
     /**

@@ -7,10 +7,10 @@
 
 namespace kanso\framework\application\services\web;
 
+use kanso\framework\application\services\Service;
 use kanso\framework\exception\ErrorHandler;
 use kanso\framework\exception\ErrorLogger;
 use kanso\framework\exception\handlers\WebHandler;
-use kanso\framework\application\services\Service;
 use Throwable;
 
 /**

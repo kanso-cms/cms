@@ -8,12 +8,12 @@
 namespace kanso\framework\application\cli;
 
 use kanso\framework\application\Application as BaseApplication;
-use kanso\framework\cli\input\Input;
-use kanso\framework\cli\output\Output;
-use kanso\framework\cli\output\Formatter;
-use kanso\framework\console\Console;
-use kanso\framework\cli\Environment;
 use kanso\framework\application\cli\commands\GenerateSecret;
+use kanso\framework\cli\Environment;
+use kanso\framework\cli\input\Input;
+use kanso\framework\cli\output\Formatter;
+use kanso\framework\cli\output\Output;
+use kanso\framework\console\Console;
 
 /**
  * Kanso framework main class file.
@@ -32,12 +32,12 @@ class Application extends BaseApplication
         parent::initialize();
 
         $this->container->singleton('Cli', function($container)
-        {            
+        {
             return new CLI($container->Input, $container->output, new Environment);
         });
 
         $this->container->singleton('Input', function()
-        {            
+        {
             return new Input($_SERVER['argv']);
         });
 
@@ -81,10 +81,10 @@ class Application extends BaseApplication
         [
             'generate_secret' => GenerateSecret::class,
         ];
-    
+
         // Add application commands
         $commands += $this->container->Config->get('application.commands');
-        
+
         // Return commands
         return $commands;
     }

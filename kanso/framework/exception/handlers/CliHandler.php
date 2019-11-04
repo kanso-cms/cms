@@ -7,11 +7,9 @@
 
 namespace kanso\framework\exception\handlers;
 
-use kanso\framework\exception\ExceptionLogicTrait;
-use kanso\framework\http\response\exceptions\MethodNotAllowedException;
-use kanso\framework\http\response\exceptions\RequestException;
 use kanso\framework\cli\output\helpers\OrderedList;
 use kanso\framework\cli\output\helpers\UnorderedList;
+use kanso\framework\exception\ExceptionLogicTrait;
 use Throwable;
 
 /**
@@ -56,7 +54,7 @@ class CliHandler
 	public function __construct(Throwable $exception, $input, $output)
 	{
 		$this->exception = $exception;
-		
+
 		$this->input = $input;
 
 		$this->output = $output;
@@ -73,7 +71,7 @@ class CliHandler
 	{
 		// Set the response body
 		if ($showDetails)
-		{	
+		{
 			$this->output->write($this->getDetailedError());
 		}
 		else
@@ -96,7 +94,7 @@ class CliHandler
 		if ($exception instanceof ErrorException)
 		{
 			$code = $exception->getCode();
-			
+
 			$codes =
 			[
 				E_ERROR             => 'Fatal Error',
@@ -113,7 +111,7 @@ class CliHandler
 				E_USER_ERROR        => 'Error',
 				E_USER_DEPRECATED   => 'Deprecated',
 			];
-			
+
 			return in_array($code, array_keys($codes)) ? $codes[$code] : 'ErrorException';
 		}
 
@@ -142,16 +140,16 @@ class CliHandler
 		$ul = new UnorderedList($this->output);
 		$ol = new OrderedList($this->output);
 
-		$error = 
+		$error =
 		[
-			'TYPE    : '  . $this->determineExceptionType($this->exception),
-			'MESSAGE : '  . $this->exception->getMessage(),
-			'CLASS   : '  . $this->errClass(),
-			'FILE    : '  . $this->exception->getFile(),
-			'LINE    : '  . intval($this->exception->getLine()),
+			'TYPE    : ' . $this->determineExceptionType($this->exception),
+			'MESSAGE : ' . $this->exception->getMessage(),
+			'CLASS   : ' . $this->errClass(),
+			'FILE    : ' . $this->exception->getFile(),
+			'LINE    : ' . intval($this->exception->getLine()),
 			'TRACE   : ',
 		];
 
-		return '<bg_red><white>' . $ul->render($error)  . $ol->render($this->errTrace()) . '</white></bg_red>';
+		return '<bg_red><white>' . $ul->render($error) . $ol->render($this->errTrace()) . '</white></bg_red>';
 	}
 }

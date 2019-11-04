@@ -8,7 +8,6 @@
 namespace kanso\framework\cli\Input;
 
 use kanso\framework\utility\Str;
-use RuntimeException;
 
 /**
  * CLI input parser.
@@ -17,39 +16,39 @@ use RuntimeException;
  */
 class Input
 {
-    /**
-     * Base command.
-     *
-     * @var str
-     */
+	/**
+	 * Base command.
+	 *
+	 * @var string
+	 */
 	private $command;
 
-    /**
-     * Sub command if it exists.
-     *
-     * @var str|null
-     */
+	/**
+	 * Sub command if it exists.
+	 *
+	 * @var string|null
+	 */
 	private $subCmd;
 
-    /**
-     * Option flags
-     *
-     * @var array
-     */
+	/**
+	 * Option flags.
+	 *
+	 * @var array
+	 */
 	private $options = [];
 
-    /**
-     * Option flags with values
-     *
-     * @var array
-     */
+	/**
+	 * Option flags with values.
+	 *
+	 * @var array
+	 */
 	private $params = [];
 
     /**
      * Constructor.
      *
      * @access public
-     * @param  array  $arguments Array of CLI input arguments
+     * @param array $arguments Array of CLI input arguments
      */
     public function __construct(array $arguments = [])
     {
@@ -94,7 +93,7 @@ class Input
     }
 
     /**
-     * Returns the option flags
+     * Returns the option flags.
      *
      * @access public
      * @return array
@@ -105,10 +104,10 @@ class Input
     }
 
     /**
-     * Sets the current command
+     * Sets the current command.
      *
      * @access private
-     * @param  array  $arguments Array of CLI input arguments
+     * @param array $arguments Array of CLI input arguments
      */
     private function setCommand(array $arguments): void
     {
@@ -116,10 +115,10 @@ class Input
     }
 
     /**
-     * Sets the current sub-command (if one was provided)
+     * Sets the current sub-command (if one was provided).
      *
      * @access private
-     * @param  array  $arguments Array of CLI input arguments
+     * @param array $arguments Array of CLI input arguments
      */
     private function setSubCommand(array $arguments): void
     {
@@ -133,10 +132,10 @@ class Input
     }
 
     /**
-     * Sanitizes the initial CLI args
-     * 
+     * Sanitizes the initial CLI args.
+     *
      * @access private
-     * @param  array  $arguments Array of CLI input arguments
+     * @param  array $arguments Array of CLI input arguments
      * @return array
      */
     private function sanitizeArgArray(array $args): array
@@ -153,15 +152,15 @@ class Input
         return array_values(array_filter(array_map('trim', $args)));
     }
 
-    /**
-     * Parses the initial CLI args
-     * 
-     * @access private
-     * @param  array  $arguments Sanitized Array of CLI input arguments
-     * @return array
-     */
+	/**
+	 * Parses the initial CLI args.
+	 *
+	 * @access private
+	 * @param  array $arguments Sanitized Array of CLI input arguments
+	 * @return array
+	 */
 	private function parseArgs(array $args): void
-	{        
+	{
 		foreach ($args as $i => $arg)
 		{
 			// "--" long form args
@@ -169,7 +168,7 @@ class Input
 			{
                 $arg = substr($arg, 2);
 
-				// contains "=" e.g '--foo=bar' 
+				// contains "=" e.g '--foo=bar'
 				if (Str::contains($arg, '='))
 				{
 					$option = explode('=', $arg);
@@ -177,7 +176,7 @@ class Input
 					$this->params[$this->sanitizeArgKey($option[0])] = $this->sanitizeArgValue($option[1]);
 				}
 
-				// Does not contain "=" e.g '--foo bar' 
+				// Does not contain "=" e.g '--foo bar'
 				elseif ($this->nextArgIsValue($args, $i))
 				{
                     $this->params[$this->sanitizeArgKey($arg)] = $this->sanitizeArgValue($args[$i+1]);
@@ -211,7 +210,7 @@ class Input
 					$this->params[trim($option[0])] = trim($option[1]);
 				}
 
-                // Does not contain "=" e.g '-f bar' 
+                // Does not contain "=" e.g '-f bar'
                 elseif ($this->nextArgIsValue($args, $i))
                 {
                     $this->params[$this->sanitizeArgKey($arg)] = $this->sanitizeArgValue($args[$i+1]);
@@ -229,10 +228,10 @@ class Input
 	}
 
     /**
-     * Sanitize an arg key/flag
-     * 
+     * Sanitize an arg key/flag.
+     *
      * @access private
-     * @param  string  $arg Raw arg
+     * @param  string $arg Raw arg
      * @return string
      */
     private function sanitizeArgKey(string $arg): string
@@ -241,10 +240,10 @@ class Input
     }
 
     /**
-     * Sanitize an arg value
-     * 
+     * Sanitize an arg value.
+     *
      * @access private
-     * @param  string  $arg Raw arg
+     * @param  string $arg Raw arg
      * @return string
      */
     private function sanitizeArgValue(string $arg): string
@@ -253,10 +252,10 @@ class Input
     }
 
     /**
-     * Checks if the arg was provided as a long form flag
-     * 
+     * Checks if the arg was provided as a long form flag.
+     *
      * @access private
-     * @param  string  $arg Raw arg
+     * @param  string $arg Raw arg
      * @return string
      */
     private function isLongFormArg(string $arg)
@@ -265,11 +264,11 @@ class Input
     }
 
     /**
-     * Checks if the next arg in the args array is a value
-     * 
+     * Checks if the next arg in the args array is a value.
+     *
      * @access private
-     * @param  array  $args    Args array
-     * @param  int    $current Current array pointer
+     * @param  array $args    Args array
+     * @param  int   $current Current array pointer
      * @return bool
      */
     private function nextArgIsValue(array $args, int $current): bool

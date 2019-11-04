@@ -7,10 +7,10 @@
 
 namespace kanso\framework\application\services\cli;
 
+use kanso\framework\application\services\Service;
 use kanso\framework\exception\ErrorHandler;
 use kanso\framework\exception\ErrorLogger;
 use kanso\framework\exception\handlers\CliHandler;
-use kanso\framework\application\services\Service;
 use Throwable;
 
 /**

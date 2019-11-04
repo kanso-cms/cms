@@ -111,7 +111,7 @@ return
             '\kanso\framework\application\services\PixlService',
             '\kanso\framework\application\services\CrawlerService',
             '\kanso\framework\application\services\DeploymentService',
-			
+
 		],
 
 		/*

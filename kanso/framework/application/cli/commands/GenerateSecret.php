@@ -7,12 +7,12 @@
 
 namespace kanso\framework\application\cli\commands;
 
+use kanso\framework\application\cli\Application;
 use kanso\framework\console\Command;
 use kanso\framework\security\crypto\Key;
-use kanso\framework\application\cli\Application;
 
 /**
- * Generate application secret
+ * Generate application secret.
  *
  * @author Joe J. Howard
  */
