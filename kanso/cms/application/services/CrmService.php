@@ -22,9 +22,6 @@ class CrmService extends Service
 	 */
 	public function register()
 	{
-		$this->container->singleton('Crm', function()
-		{
-			return new Crm;
-		});
+		$this->container->setInstance('Crm', new Crm);
 	}
 }

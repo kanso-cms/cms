@@ -17,9 +17,9 @@ $staticPages = $SQL->SELECT('slug')->FROM('posts')->WHERE('type', '=', 'page')->
 foreach ($staticPages as $page)
 {
 	$slug = trim($page['slug'], '/');
-	$router->get("/$slug/", '\kanso\cms\application\Application::applyRoute', 'page');
-	$router->get("/$slug/feed/", '\kanso\cms\application\Application::loadRssFeed', 'page');
-	$router->get("/$slug/feed/rss", '\kanso\cms\application\Application::loadRssFeed', 'page');
-	$router->get("/$slug/feed/atom", '\kanso\cms\application\Application::loadRssFeed', 'page');
-	$router->get("/$slug/feed/rdf", '\kanso\cms\application\Application::loadRssFeed', 'page');
+	$router->get("/$slug/", '\kanso\cms\query\Dispatcher@applyRoute', 'page');
+	$router->get("/$slug/feed/", '\kanso\cms\query\Dispatcher@loadRssFeed', 'page');
+	$router->get("/$slug/feed/rss", '\kanso\cms\query\Dispatcher@loadRssFeed', 'page');
+	$router->get("/$slug/feed/atom", '\kanso\cms\query\Dispatcher@loadRssFeed', 'page');
+	$router->get("/$slug/feed/rdf", '\kanso\cms\query\Dispatcher@loadRssFeed', 'page');
 }

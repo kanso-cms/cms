@@ -12,20 +12,20 @@
  */
 
 // Homepage
-$router->get('/', '\kanso\cms\application\Application::applyRoute', 'home');
-$router->get('/page/(:num)/', '\kanso\cms\application\Application::applyRoute', 'home');
-$router->get('/feed/', '\kanso\cms\application\Application::loadRssFeed', 'home');
-$router->get('/feed/rss/', '\kanso\cms\application\Application::loadRssFeed', 'home');
-$router->get('/feed/atom/', '\kanso\cms\application\Application::loadRssFeed', 'home');
-$router->get('/feed/rdf/', '\kanso\cms\application\Application::loadRssFeed', 'home');
+$router->get('/', '\kanso\cms\query\Dispatcher@applyRoute', 'home');
+$router->get('/page/(:num)/', '\kanso\cms\query\Dispatcher@applyRoute', 'home');
+$router->get('/feed/', '\kanso\cms\query\Dispatcher@loadRssFeed', 'home');
+$router->get('/feed/rss/', '\kanso\cms\query\Dispatcher@loadRssFeed', 'home');
+$router->get('/feed/atom/', '\kanso\cms\query\Dispatcher@loadRssFeed', 'home');
+$router->get('/feed/rdf/', '\kanso\cms\query\Dispatcher@loadRssFeed', 'home');
 
 // Blog Homepage
 if (!empty($blogPrefix))
 {
-	$router->get("$blogPrefix/", '\kanso\cms\application\Application::applyRoute', 'home-page');
-	$router->get("$blogPrefix/page/(:num)/", '\kanso\cms\application\Application::applyRoute', 'home-page');
-	$router->get("$blogPrefix/feed/", '\kanso\cms\application\Application::loadRssFeed', 'home-page');
-	$router->get("$blogPrefix/feed/rss/", '\kanso\cms\application\Application::loadRssFeed', 'home-page');
-	$router->get("$blogPrefix/feed/atom/", '\kanso\cms\application\Application::loadRssFeed', 'home-page');
-	$router->get("$blogPrefix/feed/rdf/", '\kanso\cms\application\Application::loadRssFeed', 'home-page');
+	$router->get("$blogPrefix/", '\kanso\cms\query\Dispatcher@applyRoute', 'home-page');
+	$router->get("$blogPrefix/page/(:num)/", '\kanso\cms\query\Dispatcher@applyRoute', 'home-page');
+	$router->get("$blogPrefix/feed/", '\kanso\cms\query\Dispatcher@loadRssFeed', 'home-page');
+	$router->get("$blogPrefix/feed/rss/", '\kanso\cms\query\Dispatcher@loadRssFeed', 'home-page');
+	$router->get("$blogPrefix/feed/atom/", '\kanso\cms\query\Dispatcher@loadRssFeed', 'home-page');
+	$router->get("$blogPrefix/feed/rdf/", '\kanso\cms\query\Dispatcher@loadRssFeed', 'home-page');
 }
