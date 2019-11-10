@@ -22,6 +22,20 @@ use kanso\framework\utility\Str;
 class Dispatcher
 {
 	/**
+	 * Request instance.
+	 *
+	 * @var \kanso\framework\http\request\Request 
+	 */
+	private $request;
+
+	/**
+	 * Response instance.
+	 *
+	 * @var \kanso\framework\http\response\Response
+	 */
+	private $response;
+
+	/**
 	 * IoC container instance.
 	 *
 	 * @var \kanso\framework\ioc\Container
@@ -54,11 +68,15 @@ class Dispatcher
      */
     public function __construct(Request $request, Response $response, Closure $next, Container $container, string $pageType = '')
     {
+    	$this->request   = $request;
+
+    	$this->response  = $response;
+    	
     	$this->container = $container;
 
-    	$this->themeDir = $this->container->Config->get('cms.themes_path') . '/' . $this->container->Config->get('cms.theme_name');
-
     	$this->pageType = $pagetype;
+
+    	$this->themeDir = $this->container->Config->get('cms.themes_path') . '/' . $this->container->Config->get('cms.theme_name');
     }
 
     /**
@@ -75,12 +93,12 @@ class Dispatcher
 		// Disable HTTP cache for non page/single/custom post types
 		if ($this->pageType !== 'page' && $this->pageType !== 'single' && Str::getBeforeFirstChar($this->pageType, '-') !== 'single')
 		{
-			$this->container->Response->disableCaching();
+			$this->response->disableCaching();
 		}
 
-		if ($response->status()->get() !== 404 && $template)
+		if ($this->response->status()->get() !== 404 && $template)
 		{
-			$response->body()->set($response->view()->display($template));
+			$this->response->body()->set($this->response->view()->display($template));
 		}
 		else
 		{
@@ -103,12 +121,12 @@ class Dispatcher
 		// Note this does not send a 404 straight away. If you have a custom route
 		// and wanted to display a template, you could still change the the status/response
 		// between now and when kanso sends a response.
-		if ($response->status()->get() !== 404)
+		if ($this->response->status()->get() !== 404)
 		{
-			$format = array_filter(explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI)));
+			$format = array_filter(explode('/', Str::queryFilterUri($this->request->environment()->REQUEST_URI)));
 
 			// Load the RSS module and render
-			$rss = new Feed($request, $response, array_pop($format));
+			$rss = new Feed($this->request, $this->response, array_pop($format));
 
 			$rss->render();
 		}
@@ -135,13 +153,13 @@ class Dispatcher
 
 		if (file_exists($template))
 		{
-			$response->body()->set($response->view()->display($template));
+			$this->response->body()->set($this->response->view()->display($template));
 		}
 		else
 		{
 			$sitemap = new SiteMap(
-				$request,
-				$response,
+				$this->request,
+				$this->response,
 				$this->container->Config->get('cms.route_tags'),
 				$this->container->Config->get('cms.route_categories'),
 				$this->container->Config->get('cms.route_authors'),
@@ -164,10 +182,10 @@ class Dispatcher
 		$waterfall =  [];
 
 		// Explode request url
-		$urlParts = array_filter(explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI)));
+		$urlParts = array_filter(explode('/', Str::queryFilterUri($this->request->environment()->REQUEST_URI)));
 
 		// 404s never get a template
-		if ($this->container->Response->status()->get() === 404)
+		if ($this->response->status()->get() === 404)
 		{
 			return false;
 		}
