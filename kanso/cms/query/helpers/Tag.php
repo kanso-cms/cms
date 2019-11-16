@@ -217,7 +217,7 @@ class Tag extends Helper
 
         $tags = [];
 
-        $rows = $this->sql()->SELECT('id')->FROM('tags')->FIND_ALL();
+        $rows = $this->sql()->SELECT('id')->FROM('tags')->ORDER_BY('name', 'ASC')->FIND_ALL();
 
         foreach ($rows as $row)
         {

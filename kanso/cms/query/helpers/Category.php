@@ -263,7 +263,7 @@ class Category extends Helper
 
         $categories = [];
 
-        $rows = $this->sql()->SELECT('id')->FROM('categories')->FIND_ALL();
+        $rows = $this->sql()->SELECT('id')->FROM('categories')->ORDER_BY('name', 'ASC')->FIND_ALL();
 
         foreach ($rows as $row)
         {

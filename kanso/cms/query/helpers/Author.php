@@ -399,7 +399,7 @@ class Author extends Helper
 
         $authors = [];
 
-        $rows = $this->sql()->SELECT('id, role')->FROM('users')->FIND_ALL();
+        $rows = $this->sql()->SELECT('id, role')->FROM('users')->ORDER_BY('name', 'ASC')->FIND_ALL();
 
         foreach ($rows as $row)
         {
