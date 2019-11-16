@@ -15,7 +15,7 @@ use kanso\framework\http\response\Response;
 use kanso\framework\utility\Str;
 
 /**
- * CMS Query Dispatcher
+ * CMS Query Dispatcher.
  *
  * @author Joe J. Howard
  */
@@ -24,7 +24,7 @@ class Dispatcher
 	/**
 	 * Request instance.
 	 *
-	 * @var \kanso\framework\http\request\Request 
+	 * @var \kanso\framework\http\request\Request
 	 */
 	private $request;
 
@@ -43,20 +43,20 @@ class Dispatcher
 	private $container;
 
 	/**
-	 * Path to theme directory
+	 * Path to theme directory.
 	 *
 	 * @var string
 	 */
 	private $themeDir;
 
 	/**
-	 * The page type being loaded
+	 * The page type being loaded.
 	 *
 	 * @var string
 	 */
 	private $pageType;
 
-	/**
+    /**
      * Constructor.
      *
      * @access public
@@ -71,7 +71,7 @@ class Dispatcher
     	$this->request   = $request;
 
     	$this->response  = $response;
-    	
+
     	$this->container = $container;
 
     	$this->pageType = $pagetype;

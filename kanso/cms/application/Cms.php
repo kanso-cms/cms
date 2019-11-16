@@ -23,7 +23,7 @@ class Cms
 	 */
 	private $container;
 
-	/**
+    /**
      * Constructor.
      *
      * @access public
@@ -111,7 +111,7 @@ class Cms
 		}
     }
 
-    /**
+	/**
 	 * Handle 404 not found on for the CMS.
 	 *
 	 * @access private

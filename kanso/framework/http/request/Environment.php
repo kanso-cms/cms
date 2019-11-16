@@ -19,7 +19,7 @@ class Environment
     use MagicArrayAccessTrait;
 
     /**
-     * $_SERVER
+     * $_SERVER.
      *
      * @var array
      */
@@ -29,12 +29,12 @@ class Environment
      * Constructor. Loads the properties internally.
      *
      * @access public
-     * @param  array $server Optional server overrides (optional) (default [])
+     * @param array $server Optional server overrides (optional) (default [])
      */
     public function __construct(array $server = [])
     {
         $this->server = empty($server) ? $_SERVER : $server;
-        
+
         $this->data = $this->extract();
     }
 
@@ -42,12 +42,12 @@ class Environment
      * Reload the environment properties.
      *
      * @access public
-     * @param  array $server Optional server overrides (optional) (default [])
+     * @param array $server Optional server overrides (optional) (default [])
      */
     public function reload(array $server  = [])
     {
          $this->server = empty($server) ? $_SERVER : $server;
-        
+
         $this->data = $this->extract();
     }
 
@@ -58,7 +58,7 @@ class Environment
      * @return array
      */
     private function extract(): array
-    {       
+    {
         return
         [
             'REQUEST_METHOD'     => $this->requestMethod(),
@@ -82,7 +82,7 @@ class Environment
     }
 
     /**
-     * Returns the REQUEST_METHOD
+     * Returns the REQUEST_METHOD.
      *
      * @access private
      * @return string
@@ -93,7 +93,7 @@ class Environment
     }
 
     /**
-     * Returns the SCRIPT_NAME
+     * Returns the SCRIPT_NAME.
      *
      * @access private
      * @return string
@@ -117,7 +117,7 @@ class Environment
     }
 
     /**
-     * Returns the SERVER_NAME
+     * Returns the SERVER_NAME.
      *
      * @access private
      * @return string
@@ -148,7 +148,7 @@ class Environment
     }
 
     /**
-     * Returns the SERVER_PORT
+     * Returns the SERVER_PORT.
      *
      * @access private
      * @return int
@@ -159,7 +159,7 @@ class Environment
     }
 
     /**
-     * Returns the HTTP_PROTOCOL
+     * Returns the HTTP_PROTOCOL.
      *
      * @access private
      * @return string
@@ -179,7 +179,7 @@ class Environment
     }
 
     /**
-     * Returns the DOCUMENT_ROOT
+     * Returns the DOCUMENT_ROOT.
      *
      * @access private
      * @return string
@@ -190,7 +190,7 @@ class Environment
     }
 
     /**
-     * Returns the HTTP_HOST
+     * Returns the HTTP_HOST.
      *
      * @access private
      * @return string
@@ -206,7 +206,7 @@ class Environment
     }
 
     /**
-     * Returns the DOMAIN_NAME
+     * Returns the DOMAIN_NAME.
      *
      * @access private
      * @return string
@@ -217,7 +217,7 @@ class Environment
     }
 
     /**
-     * Returns the REQUEST_URI
+     * Returns the REQUEST_URI.
      *
      * @access private
      * @return string
@@ -228,7 +228,7 @@ class Environment
     }
 
     /**
-     * Returns the REQUEST_URI without the query string
+     * Returns the REQUEST_URI without the query string.
      *
      * @access private
      * @return string
@@ -246,18 +246,18 @@ class Environment
     }
 
     /**
-     * Returns the REQUEST_URI
+     * Returns the REQUEST_URI.
      *
      * @access private
      * @return string
      */
     private function requestUrl(): string
     {
-        return $this->httpHost() . $this->requestUri();      
+        return $this->httpHost() . $this->requestUri();
     }
 
     /**
-     * Returns the QUERY_STRING
+     * Returns the QUERY_STRING.
      *
      * @access private
      * @return string
@@ -270,7 +270,7 @@ class Environment
     }
 
     /**
-     * Returns the REMOTE_ADDR
+     * Returns the REMOTE_ADDR.
      *
      * @access private
      * @return string
@@ -310,7 +310,7 @@ class Environment
     }
 
     /**
-     * Returns the HTTP_REFERER
+     * Returns the HTTP_REFERER.
      *
      * @access private
      * @return string
@@ -321,7 +321,7 @@ class Environment
     }
 
     /**
-     * Returns the HTTP_USER_AGENT
+     * Returns the HTTP_USER_AGENT.
      *
      * @access private
      * @return string
@@ -332,7 +332,7 @@ class Environment
     }
 
     /**
-     * Returns the REQUEST_TIME
+     * Returns the REQUEST_TIME.
      *
      * @access private
      * @return int
@@ -343,7 +343,7 @@ class Environment
     }
 
     /**
-     * Returns the REQUEST_TIME_FLOAT
+     * Returns the REQUEST_TIME_FLOAT.
      *
      * @access private
      * @return float
