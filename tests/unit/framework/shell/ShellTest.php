@@ -19,7 +19,7 @@ class ShellTest extends TestCase
 	/**
 	 *
 	 */
-	public function testBuiltIn()
+	public function testBuiltIn(): void
 	{
 		$cli = new Shell;
 
@@ -31,7 +31,7 @@ class ShellTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsSuccefull()
+	public function testIsSuccefull(): void
 	{
 		$cli = new Shell;
 
@@ -47,7 +47,7 @@ class ShellTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCustom()
+	public function testCustom(): void
 	{
 		$cli = new Shell;
 
@@ -59,7 +59,7 @@ class ShellTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCd()
+	public function testCd(): void
 	{
 		$cli = new Shell;
 
@@ -71,7 +71,7 @@ class ShellTest extends TestCase
 	/**
 	 *
 	 */
-	public function testInputOutput()
+	public function testInputOutput(): void
 	{
 		$cli = new Shell;
 

@@ -20,7 +20,7 @@ class SitemapTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRss()
+	public function testRss(): void
 	{
 		$request  = Mockery::mock('\kanso\framework\http\request\Request');
 		$response = Mockery::mock('\kanso\framework\http\response\Response');

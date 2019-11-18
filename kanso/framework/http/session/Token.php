@@ -23,8 +23,6 @@ class Token
 
     /**
      * Constructor.
-     *
-     * @access public
      */
     public function __construct()
     {
@@ -33,7 +31,6 @@ class Token
     /**
      * Regenerate the token.
      *
-     * @access public
      * @return string
      */
     public function get(): string
@@ -44,7 +41,6 @@ class Token
     /**
      * Set the token.
      *
-     * @access public
      * @return string
      */
     public function set(string $token)
@@ -55,7 +51,6 @@ class Token
     /**
      * Regenerate the token.
      *
-     * @access public
      * @return string
      */
     public function regenerate(): string
@@ -68,7 +63,6 @@ class Token
     /**
      * Verify a user's access token.
      *
-     * @access public
      * @param  string $token A token to make the comparison with
      * @return bool
      */

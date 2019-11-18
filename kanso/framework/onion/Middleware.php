@@ -36,7 +36,6 @@ class Middleware
     /**
      * Constructor.
      *
-     * @access public
      * @param mixed $callback Callback to use
      * @param mixed $args     Arguments to apply to callback (optional) (default null)
      */
@@ -50,7 +49,6 @@ class Middleware
     /**
      * Execute the callback.
      *
-     * @access public
      * @param \kanso\framework\http\request\Request   $request
      * @param \kanso\framework\http\response\Response $response
      * @param \Closure                                $next
@@ -65,7 +63,6 @@ class Middleware
     /**
      * Returns the callback.
      *
-     * @access public
      * @return closure|string
      */
     public function getCallback()
@@ -76,7 +73,6 @@ class Middleware
     /**
      * Returns the callback.
      *
-     * @access public
      * @return mixed
      */
     public function getArgs()

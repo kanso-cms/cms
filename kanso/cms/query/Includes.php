@@ -441,22 +441,22 @@ function all_custom_posts($type, $publihsed = true)
     return Kanso::instance()->Query->all_custom_posts($type, $publihsed);
 }
 
-function the_header()
+function the_header(): void
 {
     echo Kanso::instance()->Query->the_header();
 }
 
-function the_footer()
+function the_footer(): void
 {
     echo Kanso::instance()->Query->the_footer();
 }
 
-function the_sidebar()
+function the_sidebar(): void
 {
     echo Kanso::instance()->Query->the_sidebar();
 }
 
-function include_template($template_name, $data = [])
+function include_template($template_name, $data = []): void
 {
     echo Kanso::instance()->Query->include_template($template_name, $data);
 }
@@ -481,12 +481,12 @@ function enqueue_inline_script(string $js = '', bool $inFooter = false)
     return Kanso::instance()->Query->enqueue_inline_script($js, $inFooter);
 }
 
-function kanso_head()
+function kanso_head(): void
 {
     echo Kanso::instance()->Query->kanso_head();
 }
 
-function kanso_footer()
+function kanso_footer(): void
 {
     echo Kanso::instance()->Query->kanso_footer();
 }
@@ -606,7 +606,7 @@ function comments($postId = null)
     return Kanso::instance()->Query->get_comments($postId);
 }
 
-function display_comments($args = null, $postId = null)
+function display_comments($args = null, $postId = null): void
 {
     echo Kanso::instance()->Query->display_comments($args, $postId);
 }

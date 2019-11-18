@@ -19,7 +19,7 @@ class StatusTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSet()
+	public function testSet(): void
 	{
 		$status = new Status;
 
@@ -33,7 +33,7 @@ class StatusTest extends TestCase
 	/**
 	 *
 	 */
-	public function testMessage()
+	public function testMessage(): void
 	{
 		$status = new Status;
 
@@ -47,7 +47,7 @@ class StatusTest extends TestCase
 	/**
 	 *
 	 */
-	public function testHelpers()
+	public function testHelpers(): void
 	{
 		$status = new Status;
 

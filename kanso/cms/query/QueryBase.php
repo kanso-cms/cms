@@ -124,7 +124,6 @@ abstract class QueryBase
         'cache'         => Cache::class,
         'category'      => Category::class,
         'comment'       => Comment::class,
-        'filter'        => Filter::class,
         'meta'          => Meta::class,
         'pagination'    => Pagination::class,
         'post'          => Post::class,
@@ -176,14 +175,11 @@ abstract class QueryBase
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\ioc\Container $container IoC container
      */
     public function __construct(Container $container)
     {
         $this->container = $container;
-
-        $this->loadDependencies();
 
         $this->helper('filter')->fetchPageIndex();
     }
@@ -191,7 +187,6 @@ abstract class QueryBase
     /**
      * Create and return a new Query object.
      *
-     * @access public
      * @param  string                 $queryStr Query to filter posts
      * @return \kanso\cms\query\Query
      */
@@ -207,7 +202,6 @@ abstract class QueryBase
     /**
      * Retrieves and returns a helper class by name.
      *
-     * @access public
      * @param  string                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          $name Name of helper class
      * @throws \InvalidArgumentException                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       If class does not exist
      * @return \kanso\cms\query\helpers\Attachment|\kanso\cms\query\helpers\Author|\kanso\cms\query\helpers\Cache|\kanso\cms\query\helpers\Category|\kanso\cms\query\helpers\Comment|\kanso\cms\query\helpers\Filter|\kanso\cms\query\helpers\Helper|\kanso\cms\query\helpers\Meta|\kanso\cms\query\helpers\Pagination|\kanso\cms\query\helpers\Parser|\kanso\cms\query\helpers\Post|\kanso\cms\query\helpers\PostIteration|\kanso\cms\query\helpers\Search|\kanso\cms\query\helpers\Tag|\kanso\cms\query\helpers\Templates|\kanso\cms\query\helpers\Urls|\kanso\cms\query\helpers\Validation|\kanso\cms\query\helpers\Scripts
@@ -219,26 +213,20 @@ abstract class QueryBase
             return $this->helpers[$name];
         }
 
-        throw new InvalidArgumentException('Invalid helper class. Class "' . $name . '" does not exist.');
-    }
-
-    /**
-     * Loads dependencies.
-     *
-     * @access private
-     * @suppress PhanTypeMismatchArgument
-     */
-    private function loadDependencies()
-    {
         foreach ($this->helperClasses as $key => $class)
         {
-            $class = new $class($this->container);
+            if ($key === $name)
+            {
+                $class = new $class($this->container);
 
-            $class->setParent($this);
+                $class->setParent($this);
 
-            $this->helpers[$key] = $class;
+                $this->helpers[$key] = $class;
+
+                return $class;
+            }
         }
-    }
 
-    public abstract function applyQuery(string $queryStr);
+        throw new InvalidArgumentException('Invalid helper class. Class "' . $name . '" does not exist.');
+    }
 }

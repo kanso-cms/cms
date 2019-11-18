@@ -20,7 +20,7 @@ class QueueTest extends TestCase
 	/**
 	 *
 	 */
-	public function testEnabled()
+	public function testEnabled(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
@@ -34,7 +34,7 @@ class QueueTest extends TestCase
 	/**
 	 *
 	 */
-	public function testNotEnabled()
+	public function testNotEnabled(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
@@ -48,7 +48,7 @@ class QueueTest extends TestCase
 	/**
 	 *
 	 */
-	public function testDisabled()
+	public function testDisabled(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
@@ -62,7 +62,7 @@ class QueueTest extends TestCase
 	/**
 	 *
 	 */
-	public function testNotDisabled()
+	public function testNotDisabled(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
@@ -76,7 +76,7 @@ class QueueTest extends TestCase
 	/**
 	 *
 	 */
-	public function testEnable()
+	public function testEnable(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
@@ -91,7 +91,7 @@ class QueueTest extends TestCase
 	/**
 	 *
 	 */
-	public function testDisable()
+	public function testDisable(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
@@ -106,7 +106,7 @@ class QueueTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAddFirst()
+	public function testAddFirst(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
@@ -126,7 +126,7 @@ class QueueTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAddSecond()
+	public function testAddSecond(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
@@ -144,7 +144,7 @@ class QueueTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGet()
+	public function testGet(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
@@ -161,7 +161,7 @@ class QueueTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetEmpty()
+	public function testGetEmpty(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
@@ -178,7 +178,7 @@ class QueueTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetNoFile()
+	public function testGetNoFile(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
@@ -193,7 +193,7 @@ class QueueTest extends TestCase
 	/**
 	 *
 	 */
-	public function testProcess()
+	public function testProcess(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
@@ -231,7 +231,7 @@ class QueueTest extends TestCase
 	/**
 	 *
 	 */
-	public function testProcessEmpty()
+	public function testProcessEmpty(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');

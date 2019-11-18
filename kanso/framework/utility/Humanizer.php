@@ -17,7 +17,6 @@ class Humanizer
 	/**
 	 * Returns a human friendly file size.
 	 *
-	 * @access public
 	 * @param  int    $size   File size in bytes
 	 * @param  bool   $binary True to use binary suffixes and false to use decimal suffixes (optional) (default FALSE)
 	 * @return string
@@ -39,7 +38,7 @@ class Humanizer
 
 			$e = intval(floor(log($size, $base)));
 
-			$s = round($size / pow($base, $e), 2);
+			$s = round($size / $base** $e, 2);
 
 			return $s . ' ' . self::pluralize($terms[$e], intval($s));
 		}
@@ -52,7 +51,6 @@ class Humanizer
 	/**
 	 * Returns a time ago from a timestamp or strtotime string.
 	 *
-	 * @access public
 	 * @param  mixed  $time A valid UNIX timestamp or PHP valid "strtotime" parameter
 	 * @return string
 	 */
@@ -92,7 +90,6 @@ class Humanizer
 	/**
 	 * Returns a time elapsed.
 	 *
-	 * @access public
 	 * @param  mixed  $time A valid UNIX timestamp or PHP valid "strtotime" parameter
 	 * @return string
 	 */
@@ -131,7 +128,6 @@ class Humanizer
 	/**
 	 * Pluralize a word.
 	 *
-	 * @access  public
 	 * @param  string $word  The input word
 	 * @param  int    $count The amount of items (optional) (default 2)
 	 * @return string
@@ -144,7 +140,6 @@ class Humanizer
 	/**
 	 * Validate that a variable is a valid UNIX timestamp.
 	 *
-	 * @access  private
 	 * @param  mixed $timestamp A valid UNIX timestamp or PHP valid "strtotime" parameter
 	 * @return bool
 	 */

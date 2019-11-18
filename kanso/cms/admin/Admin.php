@@ -24,13 +24,12 @@ class Admin
     /**
      * Register a custom post type.
      *
-     * @access public
      * @param string $title Custom post type title
      * @param string $type  Custom post type
      * @param string $icon  Icon to be used in admin panel sidebar
      * @param string $route Route for front end
      */
-    public function registerPostType($title, $type, $icon, $route)
+    public function registerPostType($title, $type, $icon, $route): void
     {
         // Sanitize the type
         $slug = Str::slug($type);
@@ -120,7 +119,6 @@ class Admin
     /**
      * Adds a custom page to the Admin Panel.
      *
-     * @access public
      * @param string      $title     The page title
      * @param string      $slug      The page slug
      * @param string      $icon      The icon in the sidebar to use

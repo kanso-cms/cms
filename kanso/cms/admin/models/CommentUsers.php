@@ -56,7 +56,6 @@ class CommentUsers extends BaseModel
     /**
      * Parse the $_GET request variables and filter the articles for the requested page.
      *
-     * @access private
      * @return array
      */
     private function parseGet(): array
@@ -79,7 +78,6 @@ class CommentUsers extends BaseModel
     /**
      * Parse and validate the POST request from any submitted forms.
      *
-     * @access private
      * @return array|false
      */
     private function parsePost()
@@ -107,11 +105,10 @@ class CommentUsers extends BaseModel
     /**
      * Moderate a list of ip addresses.
      *
-     * @access private
      * @param array  $ips  Array of ip addresses to moderate
      * @param string $list The list to add them to
      */
-    private function moderateIps(array $ips, string $list)
+    private function moderateIps(array $ips, string $list): void
     {
         foreach ($ips as $ip) {
             if ($list === 'blacklist')
@@ -135,7 +132,6 @@ class CommentUsers extends BaseModel
     /**
      * Validates all POST variables are set.
      *
-     * @access private
      * @return bool
      */
     private function validatePost(): bool
@@ -167,7 +163,6 @@ class CommentUsers extends BaseModel
     /**
      * Check if the GET URL queries are either empty or set to defaults.
      *
-     * @access private
      * @return bool
      */
     private function emptyQueries(): bool
@@ -185,7 +180,6 @@ class CommentUsers extends BaseModel
     /**
      * Returns the requested GET queries with defaults.
      *
-     * @access private
      * @return array
      */
     private function getQueries(): array
@@ -205,7 +199,6 @@ class CommentUsers extends BaseModel
     /**
      * Returns the list of users for display.
      *
-     * @access private
      * @param  bool      $checkMaxPages Count the max pages
      * @return array|int
      */

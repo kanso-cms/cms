@@ -68,7 +68,6 @@ class Ecommerce extends Model
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\cms\ecommerce\BrainTree $braintree BrainTree utility
      * @param \kanso\cms\ecommerce\Checkout  $checkout  Checkout utility
      * @param \kanso\cms\ecommerce\Products  $products  Products utility
@@ -103,7 +102,6 @@ class Ecommerce extends Model
     /**
      * Returns braintree instance.
      *
-     * @access public
      * @return \kanso\cms\ecommerce\BrainTree
      */
     public function braintree(): BrainTree
@@ -114,7 +112,6 @@ class Ecommerce extends Model
     /**
      * Returns checkout instance.
      *
-     * @access public
      * @return \kanso\cms\ecommerce\Checkout
      */
     public function checkout(): Checkout
@@ -125,7 +122,6 @@ class Ecommerce extends Model
     /**
      * Returns products instance.
      *
-     * @access public
      * @return \kanso\cms\ecommerce\Products
      */
     public function products(): Products
@@ -136,7 +132,6 @@ class Ecommerce extends Model
     /**
      * Returns cart instance.
      *
-     * @access public
      * @return \kanso\cms\ecommerce\Cart
      */
     public function cart(): Cart
@@ -147,7 +142,6 @@ class Ecommerce extends Model
     /**
      * Returns rewards instance.
      *
-     * @access public
      * @return \kanso\cms\ecommerce\Rewards
      */
     public function rewards(): Rewards
@@ -158,7 +152,6 @@ class Ecommerce extends Model
     /**
      * Returns coupons instance.
      *
-     * @access public
      * @return \kanso\cms\ecommerce\Coupons
      */
     public function coupons(): Coupons
@@ -169,7 +162,6 @@ class Ecommerce extends Model
     /**
      * Returns reviews instance.
      *
-     * @access public
      * @return \kanso\cms\ecommerce\Reviews
      */
     public function reviews(): Reviews
@@ -179,10 +171,8 @@ class Ecommerce extends Model
 
     /**
      * Apply custom routes.
-     *
-     * @access private
      */
-    private function addRoutes()
+    private function addRoutes(): void
     {
         // Invoices for admin panel
         $this->Router->get('/admin/invoices/(:any)/', '\kanso\cms\admin\controllers\Dashboard@invoice', '\kanso\cms\admin\models\ecommerce\Invoice');
@@ -197,20 +187,16 @@ class Ecommerce extends Model
 
     /**
      * Registers product post type.
-     *
-     * @access private
      */
-    private function registerPostType()
+    private function registerPostType(): void
     {
         $this->Admin->registerPostType('Product', 'product', 'shopping-cart', '/products/(:category)/(:postname)/');
     }
 
     /**
      * Add e-commerce page.
-     *
-     * @access private
      */
-    private function customizeAdminPanel()
+    private function customizeAdminPanel(): void
     {
         $this->Admin->addPage('E-commerce', 'e-commerce', 'shopping-basket', '\kanso\cms\admin\models\ecommerce\Orders', KANSO_DIR . '/cms/admin/views/dash-ecommerce-orders.php', null, true);
 

@@ -17,13 +17,12 @@ class Comment extends Helper
     /**
      * Are comments (if enabled globally) enabled on the current post or a post by id.
      *
-     * @access public
      * @param  int|null $post_id Post id or null for current post (optional) (Default NULL)
      * @return bool
      */
     public function comments_open(int $post_id = null): bool
     {
-        if ($this->container->get('Config')->get('cms.enable_comments') === false)
+        if ($this->container->Config->get('cms.enable_comments') === false)
         {
             return false;
         }
@@ -51,7 +50,6 @@ class Comment extends Helper
     /**
      * Does the current post or a post by id have any comments ?
      *
-     * @access public
      * @param  int|null $post_id Post id or null for current post (optional) (Default NULL)
      * @return bool
      */
@@ -63,7 +61,6 @@ class Comment extends Helper
     /**
      * How many approved comments does the current post or a post by id have.
      *
-     * @access public
      * @param  int|null $post_id Post id or null for current post (optional) (Default NULL)
      * @return int
      */
@@ -75,19 +72,17 @@ class Comment extends Helper
     /**
      * Get a single comment row from the databse by id.
      *
-     * @access public
      * @param  int                              $comment_id Comment id
      * @return \kanso\cms\wrappers\Comment|null
      */
     public function get_comment(int $comment_id)
     {
-        return $this->container->get('CommentManager')->byId($comment_id);
+        return $this->container->CommentManager->byId($comment_id);
     }
 
     /**
      * Get all of the current post or a post by id's comments.
      *
-     * @access public
      * @param  int|null $post_id Post id or null for current post (optional) (Default NULL)
      * @return array
      */
@@ -116,7 +111,6 @@ class Comment extends Helper
     /**
      * Get the HTML that displays the comments of the current post or a post by id.
      *
-     * @access public
      * @param  array|null $args    (optional) (default NULL)
      * @param  int|null   $post_id Post id or null for comments of current post (optional) (Default NULL)
      * @return string
@@ -226,7 +220,6 @@ class Comment extends Helper
     /**
      * Get the HTML that displays the comment form of the current post or a post by id.
      *
-     * @access public
      * @param  array|null $args    (optional) (default NULL)
      * @param  int|null   $post_id Post id or null for comments of current post (optional) (Default NULL)
      * @return string
@@ -332,7 +325,6 @@ class Comment extends Helper
     /**
      * Retrieve the gravatar 'img' tag or src from an email address or md5 hash.
      *
-     * @access public
      * @param  string $email_or_md5 The email address or md5 of the current user (optional)
      * @param  int    $size         Image size in px
      * @param  bool   $srcOnly      Should we return only the img src (rather than the actual HTML tag)
@@ -344,7 +336,7 @@ class Comment extends Helper
 
         $isEmail = !filter_var($email_or_md5, FILTER_VALIDATE_EMAIL) === false;
 
-        $domain = $this->container->get('Request')->isSecure() ? 'https://secure.gravatar.com' : 'http://www.gravatar.com';
+        $domain = $this->container->Request->isSecure() ? 'https://secure.gravatar.com' : 'http://www.gravatar.com';
 
         // If there is an error with the emaill or md5 default to fallback
         // force a mystery man
@@ -377,7 +369,6 @@ class Comment extends Helper
     /**
      * Recursively build HTML comments (used internally).
      *
-     * @access private
      * @param  array  $comments  Recursive array of comment objects
      * @param  array  $options   Comment display options
      * @param  string $permalink URL to current post being displayed
@@ -470,7 +461,6 @@ class Comment extends Helper
     /**
      * is string a valid md5 hash ?
      *
-     * @access private
      * @param  string $md5 md5 hash
      * @return bool
      */

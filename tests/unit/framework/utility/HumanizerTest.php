@@ -19,7 +19,7 @@ class HumanizerTest extends TestCase
 	/**
 	 *
 	 */
-	public function testFileSize()
+	public function testFileSize(): void
 	{
 		// Bytes
 		$this->assertEquals('1 byte', Humanizer::fileSize(1));
@@ -41,7 +41,7 @@ class HumanizerTest extends TestCase
 	/**
 	 *
 	 */
-	public function testTimeAgo()
+	public function testTimeAgo(): void
 	{
 		$this->assertEquals('1 second', Humanizer::timeAgo(strtotime('-1 second')));
 		$this->assertEquals('30 minutes', Humanizer::timeAgo(strtotime('-30 minutes')));
@@ -58,7 +58,7 @@ class HumanizerTest extends TestCase
 	/**
 	 *
 	 */
-	public function testPluralize()
+	public function testPluralize(): void
 	{
 		// Regulars
 		$this->assertEquals('apples', Humanizer::pluralize('apple'));

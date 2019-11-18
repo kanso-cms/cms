@@ -20,7 +20,7 @@ class Category extends Wrapper
     /**
      * {@inheritdoc}
      */
-    public function __set(string $key, $value)
+    public function __set(string $key, $value): void
     {
         $this->data[$key] = $key === 'slug' ? Str::slug($value) : $value;
     }
@@ -90,7 +90,6 @@ class Category extends Wrapper
     /**
      * Clears all posts from the category.
      *
-     * @access public
      * @throws \InvalidArgumentException If this is category id 1
      * @return bool
      */
@@ -112,7 +111,6 @@ class Category extends Wrapper
     /**
      * Get the parent category if it is set.
      *
-     * @access public
      * @return Category|false
      */
     public function parent()
@@ -136,7 +134,6 @@ class Category extends Wrapper
     /**
      * Get children categories.
      *
-     * @access public
      * @return array
      */
     public function children(): array
@@ -159,7 +156,6 @@ class Category extends Wrapper
     /**
      * Create a category from a databse row.
      *
-     * @access private
      * @param  array    $data Category database row
      * @return Category
      */
@@ -171,7 +167,6 @@ class Category extends Wrapper
     /**
      * Unjoin all posts and reset to uncategorized if no categories left.
      *
-     * @access private
      * @return bool
      */
     private function removeAllJoins(): bool

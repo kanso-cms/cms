@@ -20,7 +20,7 @@ class AccessTest extends TestCase
 	/**
 	 *
 	 */
-	public function testEnabled()
+	public function testEnabled(): void
 	{
 		$request    = Mockery::mock('\kanso\framework\http\request\Request');
 		$response   = Mockery::mock('\kanso\framework\http\response\Response');
@@ -40,7 +40,7 @@ class AccessTest extends TestCase
 	/**
 	 *
 	 */
-	public function testDisabled()
+	public function testDisabled(): void
 	{
 		$request    = Mockery::mock('\kanso\framework\http\request\Request');
 		$response   = Mockery::mock('\kanso\framework\http\response\Response');
@@ -60,7 +60,7 @@ class AccessTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIpAllowed()
+	public function testIpAllowed(): void
 	{
 		$request    = Mockery::mock('\kanso\framework\http\request\Request');
 		$response   = Mockery::mock('\kanso\framework\http\response\Response');
@@ -82,7 +82,7 @@ class AccessTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIpNotAllowed()
+	public function testIpNotAllowed(): void
 	{
 		$request    = Mockery::mock('\kanso\framework\http\request\Request');
 		$response   = Mockery::mock('\kanso\framework\http\response\Response');
@@ -104,7 +104,7 @@ class AccessTest extends TestCase
 	/**
 	 * @expectedException \kanso\framework\http\response\exceptions\ForbiddenException
 	 */
-	public function testBlock()
+	public function testBlock(): void
 	{
 		$request    = Mockery::mock('\kanso\framework\http\request\Request');
 		$response   = Mockery::mock('\kanso\framework\http\response\Response');
@@ -126,7 +126,7 @@ class AccessTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSaveRobots()
+	public function testSaveRobots(): void
 	{
 		$request    = Mockery::mock('\kanso\framework\http\request\Request');
 		$response   = Mockery::mock('\kanso\framework\http\response\Response');
@@ -150,7 +150,7 @@ class AccessTest extends TestCase
 	/**
 	 *
 	 */
-	public function testDeleteRobots()
+	public function testDeleteRobots(): void
 	{
 		$request    = Mockery::mock('\kanso\framework\http\request\Request');
 		$response   = Mockery::mock('\kanso\framework\http\response\Response');

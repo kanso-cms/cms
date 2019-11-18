@@ -28,7 +28,6 @@ class CategoryManager extends Manager
 	/**
 	 * Creates a new category.
 	 *
-	 * @access public
 	 * @param  string      $name Category name
 	 * @param  string|null $slug Category slug (optional) (default null)
 	 * @return mixed
@@ -50,7 +49,6 @@ class CategoryManager extends Manager
 	/**
 	 * Gets a category by id.
 	 *
-	 * @access public
 	 * @param  int   $id Category id
 	 * @return mixed
 	 */
@@ -62,7 +60,6 @@ class CategoryManager extends Manager
 	/**
 	 * Gets a category by name.
 	 *
-	 * @access public
 	 * @param  string $name Category name
 	 * @return mixed
 	 */
@@ -74,7 +71,6 @@ class CategoryManager extends Manager
 	/**
 	 * Gets a category by slug.
 	 *
-	 * @access public
 	 * @param  string $slug Category slug
 	 * @return mixed
 	 */
@@ -86,7 +82,6 @@ class CategoryManager extends Manager
 	/**
 	 * Deletes a category by name id or slug.
 	 *
-	 * @access public
 	 * @param  string $nameIdOrSlug Category name id or slug
 	 * @return bool
 	 */
@@ -119,7 +114,6 @@ class CategoryManager extends Manager
 	/**
 	 * Clears a category by name id or slug.
 	 *
-	 * @access public
 	 * @param  string $nameIdOrSlug Category name id or slug
 	 * @return bool
 	 */

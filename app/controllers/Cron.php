@@ -18,8 +18,6 @@ class Cron extends Controller
 {
 	/**
 	 * Handle GET request to run database maintenance.
-	 *
-	 * @access public
 	 */
 	public function dbMaintenance()
 	{
@@ -35,8 +33,6 @@ class Cron extends Controller
 
 	/**
 	 * Handle GET request to process email queue.
-	 *
-	 * @access public
 	 */
 	public function emailQueue()
 	{

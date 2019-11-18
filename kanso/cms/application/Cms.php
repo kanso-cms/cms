@@ -26,7 +26,6 @@ class Cms
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\ioc\Container $container IoC container
      */
     public function __construct(Container $container)
@@ -38,10 +37,8 @@ class Cms
 
     /**
      * Boot the CMS.
-     *
-     * @access private
      */
-    private function boot()
+    private function boot(): void
     {
     	$this->precheckAccess();
 
@@ -59,10 +56,8 @@ class Cms
 
 	/**
 	 * Validate the incoming request with the access conditions.
-	 *
-	 * @access private
 	 */
-	private function precheckAccess()
+	private function precheckAccess(): void
 	{
 		if ($this->container->Access->ipBlockEnabled() && !$this->container->Access->isIpAllowed())
 		{
@@ -72,20 +67,16 @@ class Cms
 
 	/**
 	 * Apply the CMS routes.
-	 *
-	 * @access private
 	 */
-	private function applyRoutes()
+	private function applyRoutes(): void
 	{
 		include_once 'services/Routes.php';
 	}
 
     /**
      * Registers includes on all view renders.
-     *
-     * @access private
      */
-    private function registerViewIncludes()
+    private function registerViewIncludes(): void
     {
     	$this->container->View->includes(
     		[
@@ -97,10 +88,8 @@ class Cms
 
     /**
      * Boot the installer.
-     *
-     * @access private
      */
-    private function bootInstaller()
+    private function bootInstaller(): void
     {
     	// Make sure Kanso is installed
 		if (!$this->container->Installer->isInstalled())
@@ -113,13 +102,11 @@ class Cms
 
 	/**
 	 * Handle 404 not found on for the CMS.
-	 *
-	 * @access private
 	 */
-	private function notFoundHandling()
+	private function notFoundHandling(): void
 	{
 		// 404 get displayed the theme 404 template
-		$this->container->ErrorHandler->handle('\kanso\framework\http\response\exceptions\NotFoundException', function($exception)
+		$this->container->ErrorHandler->handle('\kanso\framework\http\response\exceptions\NotFoundException', function($exception): void
 		{
 			// Only show the template if it exists, not ajax request and not displaying errors
 			// Otherwise we fallback to applications default error handling

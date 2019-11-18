@@ -94,8 +94,6 @@ abstract class Command
 
 	/**
 	 * Executes the command.
-	 *
-	 * @access public
 	 */
 	abstract public function execute();
 

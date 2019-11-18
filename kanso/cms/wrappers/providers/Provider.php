@@ -26,7 +26,6 @@ abstract class Provider
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\database\query\Builder $SQL SQL query builder
      */
     public function __construct(Builder $SQL)
@@ -37,7 +36,6 @@ abstract class Provider
     /**
      * Create an item.
      *
-     * @access public
      * @return mixed
      */
     abstract public function create(array $row);
@@ -45,7 +43,6 @@ abstract class Provider
 	/**
 	 * Return an item by id.
 	 *
-	 * @access public
 	 * @param  int   $id Row id
 	 * @return mixed
 	 */
@@ -54,7 +51,6 @@ abstract class Provider
 	/**
 	 * Deletes the row item.
 	 *
-	 * @access public
 	 * @param  string $key   Column name
 	 * @param  mixed  $value Column value
 	 * @return mixed

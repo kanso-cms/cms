@@ -23,7 +23,6 @@ class ErrorHandlerService extends Service
 	/**
 	 * Return the error logger if we are logging errors.
 	 *
-	 * @access private
 	 * @param  \Throwable                                  $exception "caught" exception
 	 * @return \kanso\framework\exception\ErrorLogger|null
 	 */
@@ -40,7 +39,7 @@ class ErrorHandlerService extends Service
 	/**
 	 * {@inheritdoc}
 	 */
-	public function register()
+	public function register(): void
 	{
 		// Display errors
 		$display_errors = $this->container->Config->get('application.error_handler.display_errors');

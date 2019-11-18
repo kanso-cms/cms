@@ -24,7 +24,6 @@ trait MagicArrayAccessTrait
     /**
      * Return all properties.
      *
-     * @access public
      * @return array
      */
     public function asArray(): array
@@ -35,7 +34,6 @@ trait MagicArrayAccessTrait
     /**
      * Get a property by key.
      *
-     * @access public
      * @return mixed
      */
     public function __get(string $key)
@@ -50,10 +48,8 @@ trait MagicArrayAccessTrait
 
     /**
      * Set a property by key.
-     *
-     * @access public
      */
-    public function __set(string $key, $value)
+    public function __set(string $key, $value): void
     {
         $this->data[$key] = $value;
     }
@@ -61,7 +57,6 @@ trait MagicArrayAccessTrait
     /**
      * Check if a property by key exists.
      *
-     * @access public
      * @return bool
      */
     public function __isset(string $key): bool
@@ -71,10 +66,8 @@ trait MagicArrayAccessTrait
 
     /**
      * Unset a property by key.
-     *
-     * @access public
      */
-    public function __unset(string $key)
+    public function __unset(string $key): void
     {
         if (isset($this->data[$key]))
         {

@@ -17,29 +17,26 @@ class Urls extends Helper
     /**
      * Get the path to the theme directory that holds all the themes.
      *
-     * @access public
      * @return string
      */
     public function themes_directory(): string
     {
-        return $this->container->get('Config')->get('cms.themes_path');
+        return $this->container->Config->get('cms.themes_path');
     }
 
     /**
      * Get the path to the theme directory that holds all the theme folders.
      *
-     * @access public
      * @return string
      */
     public function theme_name(): string
     {
-        return $this->container->get('Config')->get('cms.theme_name');
+        return $this->container->Config->get('cms.theme_name');
     }
 
     /**
      * Get the path to the theme directory that holds the currently active theme.
      *
-     * @access public
      * @return string
      */
     public function theme_directory(): string
@@ -50,62 +47,56 @@ class Urls extends Helper
     /**
      * Get the URL to the theme directory that holds the currently active theme.
      *
-     * @access public
      * @return string
      */
     public function theme_url(): string
     {
-        return str_replace($this->container->get('Request')->environment()->DOCUMENT_ROOT, $this->container->get('Request')->environment()->HTTP_HOST, $this->parent->theme_directory());
+        return str_replace($this->container->Request->environment()->DOCUMENT_ROOT, $this->container->Request->environment()->HTTP_HOST, $this->parent->theme_directory());
     }
 
     /**
      * Get the homepage URL.
      *
-     * @access public
      * @return string
      */
     public function home_url(): string
     {
-        return $this->container->get('Request')->environment()->HTTP_HOST;
+        return $this->container->Request->environment()->HTTP_HOST;
     }
 
     /**
      * Get the homepage URL for the blog.
      *
-     * @access public
      * @return string
      */
     public function blog_url(): string
     {
-        return !empty($this->parent->blog_location()) ? $this->container->get('Request')->environment()->HTTP_HOST . '/' . $this->parent->blog_location() . '/' : $this->container->get('Request')->environment()->HTTP_HOST;
+        return !empty($this->parent->blog_location()) ? $this->container->Request->environment()->HTTP_HOST . '/' . $this->parent->blog_location() . '/' : $this->container->Request->environment()->HTTP_HOST;
     }
 
     /**
      * Returns the "blog_location" value.
      *
-     * @access public
      * @return string|null
      */
     public function blog_location()
     {
-        return $this->container->get('Config')->get('cms.blog_location');
+        return $this->container->Config->get('cms.blog_location');
     }
 
     /**
      * Returns the configured attachments upload directory.
      *
-     * @access public
      * @return string
      */
     public function the_attachments_url(): string
     {
-        return str_replace($this->container->get('Request')->environment()->DOCUMENT_ROOT, $this->container->get('Request')->environment()->HTTP_HOST, $this->container->get('Config')->get('cms.uploads.path'));
+        return str_replace($this->container->Request->environment()->DOCUMENT_ROOT, $this->container->Request->environment()->HTTP_HOST, $this->container->Config->get('cms.uploads.path'));
     }
 
     /**
      * Returns the base url.
      *
-     * @access public
      * @return string
      */
     public function base_url(): string
@@ -128,6 +119,6 @@ class Urls extends Helper
             $base     = $base . DIRECTORY_SEPARATOR . $taxonomy . DIRECTORY_SEPARATOR . $this->parent->taxonomySlug;
         }
 
-        return $this->container->get('Request')->environment()->HTTP_HOST . DIRECTORY_SEPARATOR . $base;
+        return $this->container->Request->environment()->HTTP_HOST . DIRECTORY_SEPARATOR . $base;
     }
 }

@@ -19,7 +19,7 @@ class SignerTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSigner()
+	public function testSigner(): void
 	{
 		$data = 'foobar!!$#$@::32342:#"$#@!$P:{';
 

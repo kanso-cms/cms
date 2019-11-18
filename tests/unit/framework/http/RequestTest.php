@@ -51,7 +51,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetMethod()
+	public function testGetMethod(): void
 	{
 		$server  = $this->getServerData();
 
@@ -69,7 +69,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsSecure()
+	public function testIsSecure(): void
 	{
 		$server  = $this->getServerData();
 
@@ -89,7 +89,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsGet()
+	public function testIsGet(): void
 	{
 		$server  = $this->getServerData();
 
@@ -107,7 +107,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsPost()
+	public function testIsPost(): void
 	{
 		$server  = $this->getServerData();
 
@@ -125,7 +125,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsPut()
+	public function testIsPut(): void
 	{
 		$server  = $this->getServerData();
 
@@ -143,7 +143,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsPatch()
+	public function testIsPatch(): void
 	{
 		$server  = $this->getServerData();
 
@@ -161,7 +161,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsDelete()
+	public function testIsDelete(): void
 	{
 		$server  = $this->getServerData();
 
@@ -179,7 +179,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsHead()
+	public function testIsHead(): void
 	{
 		$server  = $this->getServerData();
 
@@ -197,7 +197,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsOptions()
+	public function testIsOptions(): void
 	{
 		$server  = $this->getServerData();
 
@@ -215,7 +215,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsFileGet()
+	public function testIsFileGet(): void
 	{
 		$server  = $this->getServerData();
 
@@ -229,7 +229,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsAjax()
+	public function testIsAjax(): void
 	{
 		$server  = $this->getServerData();
 
@@ -251,7 +251,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testFetch()
+	public function testFetch(): void
 	{
 		$server  = $this->getServerData();
 
@@ -275,7 +275,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testQueries()
+	public function testQueries(): void
 	{
 		$server  = $this->getServerData();
 
@@ -297,7 +297,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testFile()
+	public function testFile(): void
 	{
 		$server = $this->getServerData();
 		$server['REQUEST_METHOD'] = 'POST';
@@ -327,7 +327,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testFileMultiUpload()
+	public function testFileMultiUpload(): void
 	{
 		$server = $this->getServerData();
 		$server['REQUEST_METHOD'] = 'POST';
@@ -365,7 +365,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testFileNone()
+	public function testFileNone(): void
 	{
 		$server = $this->getServerData();
 
@@ -381,7 +381,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testMimeType()
+	public function testMimeType(): void
 	{
 		$server  = $this->getServerData();
 
@@ -399,7 +399,7 @@ class RequestTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsBot()
+	public function testIsBot(): void
 	{
 		$server  = $this->getServerData();
 

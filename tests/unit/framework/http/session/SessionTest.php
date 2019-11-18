@@ -59,7 +59,7 @@ class SessionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testConstructor()
+	public function testConstructor(): void
 	{
 		$this->mockSession();
 	}
@@ -67,7 +67,7 @@ class SessionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIteration()
+	public function testIteration(): void
 	{
 		$session = $this->mockSession();
 
@@ -86,7 +86,7 @@ class SessionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSet()
+	public function testSet(): void
 	{
 		$session = $this->mockSession();
 
@@ -98,7 +98,7 @@ class SessionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSetMultiple()
+	public function testSetMultiple(): void
 	{
 		$session = $this->mockSession();
 
@@ -115,7 +115,7 @@ class SessionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testHas()
+	public function testHas(): void
 	{
 		$session = $this->mockSession();
 
@@ -127,7 +127,7 @@ class SessionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testHasNot()
+	public function testHasNot(): void
 	{
 		$session = $this->mockSession();
 
@@ -139,7 +139,7 @@ class SessionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGet()
+	public function testGet(): void
 	{
 		$session = $this->mockSession();
 
@@ -153,7 +153,7 @@ class SessionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetAll()
+	public function testGetAll(): void
 	{
 		$session = $this->mockSession();
 
@@ -167,7 +167,7 @@ class SessionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAsArray()
+	public function testAsArray(): void
 	{
 		$session = $this->mockSession();
 
@@ -181,7 +181,7 @@ class SessionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRemove()
+	public function testRemove(): void
 	{
 		$session = $this->mockSession();
 
@@ -195,7 +195,7 @@ class SessionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testClear()
+	public function testClear(): void
 	{
 		$session = $this->mockSession();
 
@@ -209,7 +209,7 @@ class SessionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSave()
+	public function testSave(): void
 	{
 		$token = Mockery::mock('kanso\framework\http\session\Token');
 
@@ -251,7 +251,7 @@ class SessionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testConfigure()
+	public function testConfigure(): void
 	{
 		$token = Mockery::mock('kanso\framework\http\session\Token');
 
@@ -287,7 +287,7 @@ class SessionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testDestroy()
+	public function testDestroy(): void
 	{
 		$token = Mockery::mock('kanso\framework\http\session\Token');
 

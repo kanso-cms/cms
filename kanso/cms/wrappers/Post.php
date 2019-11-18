@@ -104,8 +104,6 @@ class Post extends Wrapper
 
     /**
      * Override inherited constructor.
-     *
-     * @access public
      */
     public function __construct(Builder $SQL, Config $config, TagProvider $tagProvider, CategoryProvider $categoryProvider, MediaProvider $mediaProvider, CommentProvider $commentProvider, UserProvider $userProvider, array $data = [])
     {
@@ -206,11 +204,10 @@ class Post extends Wrapper
 	/**
 	 * Set a value by key.
 	 *
-	 * @access public
 	 * @param string $key   Key to save value to
 	 * @param mixed  $value Value to save
 	 */
-	public function __set(string $key, $value)
+	public function __set(string $key, $value): void
 	{
 		if ($key === 'tags')
 		{
@@ -241,11 +238,10 @@ class Post extends Wrapper
 	/**
 	 * Set a pending key/value on a join table that needs to be saved.
 	 *
-	 * @access private
 	 * @param string $key   Key to set
 	 * @param mixed  $value Value to save
 	 */
-	private function setPending(string $key, $value)
+	private function setPending(string $key, $value): void
 	{
 		$this->pending[$key] = $value;
 	}
@@ -253,7 +249,6 @@ class Post extends Wrapper
 	/**
 	 *  Get the array of category objects.
 	 *
-	 * @access private
 	 * @return array
 	 */
 	private function getTheCategories(): array
@@ -284,7 +279,6 @@ class Post extends Wrapper
 	/**
 	 * Get the array of tag objects.
 	 *
-	 * @access private
 	 * @return array
 	 */
 	private function getTheTags(): array
@@ -315,7 +309,6 @@ class Post extends Wrapper
 	/**
 	 * Get the post content.
 	 *
-	 * @access private
 	 * @return string
 	 */
 	private function getTheContent(): string
@@ -348,7 +341,6 @@ class Post extends Wrapper
 	/**
 	 * Get the post excerpt.
 	 *
-	 * @access private
 	 * @return string
 	 */
 	private function getTheExceprt(): string
@@ -359,7 +351,6 @@ class Post extends Wrapper
 	/**
 	 * Get the post author.
 	 *
-	 * @access private
 	 * @return \kanso\cms\wrappers\User|null
 	 */
 	private function getTheAuthor()
@@ -390,7 +381,6 @@ class Post extends Wrapper
 	/**
 	 * Get the post comments.
 	 *
-	 * @access private
 	 * @return array
 	 */
 	private function getTheComments(): array
@@ -420,7 +410,6 @@ class Post extends Wrapper
 	/**
 	 * Get the post thumbnail.
 	 *
-	 * @access private
 	 * @return mixed
 	 */
 	private function getTheThumbnail()
@@ -439,7 +428,6 @@ class Post extends Wrapper
 	/**
 	 * Get the post meta.
 	 *
-	 * @access private
 	 * @return array
 	 */
 	private function getPostMeta(): array
@@ -616,7 +604,6 @@ class Post extends Wrapper
 	/**
 	 * Creates categories if they don't already exist.
 	 *
-	 * @access private
 	 * @param  mixed $cats categories names, or category wrapper
 	 * @return array
 	 */
@@ -675,7 +662,6 @@ class Post extends Wrapper
 	/**
 	 * Creates tags if they don't already exist.
 	 *
-	 * @access private
 	 * @param  mixed $tags tag names, array of Tags, or array of tag names
 	 * @return array
 	 */
@@ -734,8 +720,6 @@ class Post extends Wrapper
 
 	/**
 	 * Create a title that - append a number to end if it exist already.
-	 *
-	 * @access private
 	 */
 	private function uniqueBaseTitle($title)
 	{
@@ -873,7 +857,6 @@ class Post extends Wrapper
     /**
      * Returns the category slug with nested.
      *
-     * @access  public
      * @param  \kanso\cms\wrappers\Category|null $category Category wrapper
      * @return string
      */

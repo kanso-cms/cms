@@ -27,7 +27,6 @@ trait SqlBuilderTrait
     /**
      * Instantiate and/or return a query builder instance.
      *
-     * @access protected
      * @return \kanso\framework\database\query\Builder
      */
     protected function sql(): Builder

@@ -45,7 +45,6 @@ class ErrorLogger
     /**
      * Constructor.
      *
-     * @access public
      * @param \Throwable                                $exception   Throwable
      * @param \kanso\framework\file\Filesystem          $filesystem  Filesystem instance
      * @param \kanso\framework\http\request\Environment $environment HttpEnv instance for logging details
@@ -64,10 +63,8 @@ class ErrorLogger
 
     /**
      * Write the current exception to file.
-     *
-     * @access public
      */
-    public function write()
+    public function write(): void
     {
         $msg = $this->logMsg();
 
@@ -78,10 +75,8 @@ class ErrorLogger
 
     /**
      * Set the error logs directory.
-     *
-     * @access public
      */
-    public function setPath(string $path)
+    public function setPath(string $path): void
     {
         $this->path = $path;
     }
@@ -89,7 +84,6 @@ class ErrorLogger
     /**
      * Build and return the log text.
      *
-     * @access private
      * @return string
      */
     private function logMsg(): string
@@ -112,7 +106,6 @@ class ErrorLogger
     /**
      * Get the path to generic error log file.
      *
-     * @access private
      * @return string
      */
     private function genericPath(): string
@@ -123,7 +116,6 @@ class ErrorLogger
     /**
      * Get the path to the specific error log file for current error.
      *
-     * @access private
      * @return string
      */
     private function errnoPath(): string
@@ -134,7 +126,6 @@ class ErrorLogger
     /**
      * Convert the error code to the log file name.
      *
-     * @access private
      * @return string
      */
     private function errnoToFile(): string

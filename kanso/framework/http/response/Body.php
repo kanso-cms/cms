@@ -23,8 +23,6 @@ class Body
 
     /**
      * Constructor.
-     *
-     * @access public
      */
     public function __construct()
     {
@@ -33,7 +31,6 @@ class Body
     /**
      * Get the body.
      *
-     * @access public
      * @return string
      */
     public function get(): string
@@ -44,10 +41,9 @@ class Body
     /**
      * Set the body.
      *
-     * @access public
      * @param string $str Output to set
      */
-    public function set(string $str)
+    public function set(string $str): void
     {
         $this->str = $str;
     }
@@ -55,28 +51,23 @@ class Body
     /**
      * Append output to the body.
      *
-     * @access public
      * @param string $str Output to append
      */
-    public function append(string $str)
+    public function append(string $str): void
     {
        $this->str .= $str;
     }
 
     /**
      * Clear the body.
-     *
-     * @access public
      */
-    public function clear()
+    public function clear(): void
     {
         $this->str = '';
     }
 
     /**
      * Get the body length.
-     *
-     * @access public
      */
     public function length()
     {

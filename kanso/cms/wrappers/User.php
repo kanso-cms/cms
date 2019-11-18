@@ -21,11 +21,10 @@ class User extends Wrapper
     /**
      * Override the set method.
      *
-     * @access public
      * @param string $key   Key to set
      * @param mixed  $value Value to set
      */
-    public function __set(string $key, $value)
+    public function __set(string $key, $value): void
     {
         if ($key === 'slug')
         {

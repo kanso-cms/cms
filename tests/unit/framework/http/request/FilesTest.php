@@ -53,7 +53,7 @@ class FilesTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCountSet()
+	public function testCountSet(): void
 	{
 		$files = new Files($this->getSingleUpload());
 
@@ -66,7 +66,7 @@ class FilesTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAdd()
+	public function testAdd(): void
 	{
 		$files = new Files;
 
@@ -77,7 +77,7 @@ class FilesTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGet()
+	public function testGet(): void
 	{
 		$files = new Files($this->getSingleUpload());
 

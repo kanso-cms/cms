@@ -52,8 +52,6 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
 
     /**
      * Constructor.
-     *
-     * @access protected
      */
     protected function __construct()
     {
@@ -62,7 +60,6 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
     /**
      * Get the global Container instance.
      *
-     * @access public
      * @return \kanso\framework\ioc\Container
      */
     public static function instance(): Container
@@ -95,7 +92,7 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
      * @param string $key   The data key
      * @param mixed  $value The data value
      */
-    public function set($key, $value)
+    public function set($key, $value): void
     {
         $this->data[$this->normalizeKey($key)] = $value;
     }
@@ -121,7 +118,7 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
      * Add data to set.
      * @param array $items Key-value array of data to append to this set
      */
-    public function replace($items)
+    public function replace($items): void
     {
         foreach ($items as $key => $value) {
             $this->set($key, $value); // Ensure keys are normalized
@@ -160,7 +157,7 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
      * Remove value with key from this set.
      * @param string $key The data key
      */
-    public function remove($key)
+    public function remove($key): void
     {
         unset($this->data[$this->normalizeKey($key)]);
     }
@@ -173,7 +170,7 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
         return $this->get($key);
     }
 
-    public function __set($key, $value)
+    public function __set($key, $value): void
     {
         $this->set($key, $value);
     }
@@ -183,7 +180,7 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
         return $this->has($key);
     }
 
-    public function __unset($key)
+    public function __unset($key): void
     {
         $this->remove($key);
     }
@@ -191,7 +188,7 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
     /**
      * Clear all values.
      */
-    public function clear()
+    public function clear(): void
     {
         $this->data = [];
     }
@@ -209,12 +206,12 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
         return $this->get($offset);
     }
 
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->set($offset, $value);
     }
 
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         $this->remove($offset);
     }
@@ -264,7 +261,7 @@ class Container implements \ArrayAccess, \Countable, \IteratorAggregate
      * @param string $key    The value or object name
      * @param object $object The closure that defines the object
      */
-    public function setInstance($key, $object)
+    public function setInstance($key, $object): void
     {
         $this->set($key, function() use ($object)
         {

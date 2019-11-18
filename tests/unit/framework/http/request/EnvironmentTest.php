@@ -40,7 +40,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testEnvironment()
+	public function testEnvironment(): void
 	{
 		$server = $this->getServerData();
 
@@ -58,7 +58,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRequestMethod()
+	public function testRequestMethod(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -68,7 +68,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testScriptName()
+	public function testScriptName(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -78,7 +78,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testServerName()
+	public function testServerName(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -89,7 +89,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testServerPort()
+	public function testServerPort(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -100,7 +100,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testProtocol()
+	public function testProtocol(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -118,7 +118,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testDocRoot()
+	public function testDocRoot(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -128,7 +128,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testHttpHost()
+	public function testHttpHost(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -138,7 +138,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testDomainName()
+	public function testDomainName(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -148,7 +148,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRequestUri()
+	public function testRequestUri(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -158,7 +158,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRequestUrl()
+	public function testRequestUrl(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -168,7 +168,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testQueryStr()
+	public function testQueryStr(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -178,7 +178,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRemoteAdd()
+	public function testRemoteAdd(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -188,7 +188,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testUserAgent()
+	public function testUserAgent(): void
 	{
 		$env = new Environment($this->getServerData());
 

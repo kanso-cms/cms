@@ -20,7 +20,7 @@ class LogTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSave()
+	public function testSave(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$logDir     = '/foo/bar';

@@ -59,7 +59,7 @@ class ResponseTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSend()
+	public function testSend(): void
 	{
 		$responseArr = $this->mockResponse();
 
@@ -101,7 +101,7 @@ class ResponseTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSendCacheEnabled()
+	public function testSendCacheEnabled(): void
 	{
 		ob_start();
 

@@ -614,16 +614,6 @@ class Query extends QueryBase
         return $this->helper('validation')->is_not_found();
     }
 
-    public function fetchPageIndex()
-    {
-        return $this->helper('filter')->fetchPageIndex();
-    }
-
-    public function reset()
-    {
-        return $this->helper('filter')->reset();
-    }
-
     public function filterPosts(string $requestType)
     {
         return $this->helper('filter')->filterPosts($requestType);

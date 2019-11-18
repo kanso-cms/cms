@@ -19,7 +19,7 @@ class CacheTest extends TestCase
     /**
      *
      */
-    public function testConstructorEnabled()
+    public function testConstructorEnabled(): void
     {
         $cache = new Cache(true);
 
@@ -29,7 +29,7 @@ class CacheTest extends TestCase
     /**
      *
      */
-    public function testConstructordisabled()
+    public function testConstructordisabled(): void
     {
         $cache = new Cache(false);
 
@@ -39,7 +39,7 @@ class CacheTest extends TestCase
     /**
      *
      */
-    public function testEnabledDisabled()
+    public function testEnabledDisabled(): void
     {
         $cache = new Cache;
 
@@ -55,7 +55,7 @@ class CacheTest extends TestCase
     /**
      *
      */
-    public function testGetTrue()
+    public function testGetTrue(): void
     {
     	$cache  = new Cache;
         $query  = 'SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key';
@@ -70,7 +70,7 @@ class CacheTest extends TestCase
     /**
      *
      */
-    public function testGetFalse()
+    public function testGetFalse(): void
     {
         $cache  = new Cache;
         $query  = 'SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key';
@@ -85,7 +85,7 @@ class CacheTest extends TestCase
     /**
      *
      */
-    public function testHasTrue()
+    public function testHasTrue(): void
     {
         $cache  = new Cache;
         $query  = 'SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key';
@@ -100,7 +100,7 @@ class CacheTest extends TestCase
     /**
      *
      */
-    public function testHasFalse()
+    public function testHasFalse(): void
     {
         $cache  = new Cache;
         $query  = 'SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key';
@@ -115,7 +115,7 @@ class CacheTest extends TestCase
     /**
      *
      */
-    public function testClear()
+    public function testClear(): void
     {
         $cache  = new Cache;
         $query  = 'SELECT * FROM prefixed_my_table_name WHERE foo_column = :column_key';

@@ -19,7 +19,7 @@ class GibberishTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGibberish()
+	public function testGibberish(): void
 	{
 		$gibberish = new Gibberish(dirname(__FILE__) . '/Gibberish.txt');
 

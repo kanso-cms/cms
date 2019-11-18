@@ -17,7 +17,6 @@ class Search extends Helper
     /**
      * Returns the searched query for search result requests.
      *
-     * @access public
      * @return string|null
      */
     public function search_query()
@@ -33,7 +32,6 @@ class Search extends Helper
     /**
      * Return the HTML for the search form.
      *
-     * @access public
      * @return string
      */
     public function get_search_form(): string

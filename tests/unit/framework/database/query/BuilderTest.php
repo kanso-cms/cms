@@ -21,7 +21,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testCreateTable()
+    public function testCreateTable(): void
     {
         $tableConfig =
         [
@@ -52,7 +52,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testDropTable()
+    public function testDropTable(): void
     {
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
 
@@ -73,7 +73,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testTruncateTable()
+    public function testTruncateTable(): void
     {
         $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
 
@@ -94,7 +94,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testDelete()
+    public function testDelete(): void
     {
         $query = 'DELETE FROM prefixed_my_table_name WHERE foo = :prefixedmytablenameandfoobar';
 
@@ -119,7 +119,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $query = 'UPDATE prefixed_my_table_name SET column = :column WHERE foo = :prefixedmytablenameandfoobar';
 
@@ -144,7 +144,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testInsertInto()
+    public function testInsertInto(): void
     {
         $query = 'INSERT INTO prefixed_my_table_name (column1, column2) VALUES(:column1, :column2)';
 
@@ -169,7 +169,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testSelectAll()
+    public function testSelectAll(): void
     {
         $query = 'SELECT * FROM prefixed_my_table_name';
 
@@ -192,7 +192,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testSelectColumns()
+    public function testSelectColumns(): void
     {
         $query = 'SELECT id, name FROM prefixed_my_table_name';
 
@@ -215,7 +215,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testSelectRow()
+    public function testSelectRow(): void
     {
         $query = 'SELECT * FROM prefixed_my_table_name LIMIT 1';
 
@@ -238,7 +238,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testSelectFind()
+    public function testSelectFind(): void
     {
         $query = 'SELECT * FROM prefixed_my_table_name LIMIT 1';
 
@@ -261,7 +261,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testWhere()
+    public function testWhere(): void
     {
         $query = 'SELECT * FROM prefixed_my_table_name WHERE foo = :prefixedmytablenameandfoobar';
 
@@ -286,7 +286,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testOrWhere()
+    public function testOrWhere(): void
     {
         $query = 'SELECT * FROM prefixed_my_table_name WHERE foo = :prefixedmytablenameandfoobar OR bar = :prefixedmytablenameorbarfoo';
 
@@ -311,7 +311,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testAndWhere()
+    public function testAndWhere(): void
     {
         $query = 'SELECT * FROM prefixed_my_table_name WHERE foo = :prefixedmytablenameandfoobar AND bar = :prefixedmytablenameandbarfoo';
 
@@ -336,7 +336,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testNestedOrWhere()
+    public function testNestedOrWhere(): void
     {
         $query = 'SELECT * FROM prefixed_my_table_name WHERE (foo = :prefixedmytablenameandfoofoo OR foo = :prefixedmytablenameandfoobar OR foo = :prefixedmytablenameandfoofoobaz)';
 
@@ -361,7 +361,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testJoinOn()
+    public function testJoinOn(): void
     {
         $query = 'SELECT * FROM prefixed_my_table_name INNER JOIN prefixed_foo_table ON prefixed_table1.column_name = prefixed_table2.column_name';
 
@@ -384,7 +384,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testInnerJoinOn()
+    public function testInnerJoinOn(): void
     {
         $query = 'SELECT * FROM prefixed_my_table_name INNER JOIN prefixed_foo_table ON prefixed_table1.column_name = prefixed_table2.column_name';
 
@@ -407,7 +407,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testLeftJoinOn()
+    public function testLeftJoinOn(): void
     {
         $query = 'SELECT * FROM prefixed_my_table_name LEFT JOIN prefixed_foo_table ON prefixed_table1.column_name = prefixed_table2.column_name';
 
@@ -430,7 +430,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testRightJoinOn()
+    public function testRightJoinOn(): void
     {
         $query = 'SELECT * FROM prefixed_my_table_name RIGHT JOIN prefixed_foo_table ON prefixed_table1.column_name = prefixed_table2.column_name';
 
@@ -453,7 +453,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testOutJoinOn()
+    public function testOutJoinOn(): void
     {
         $query = 'SELECT * FROM prefixed_my_table_name FULL OUTER JOIN prefixed_foo_table ON prefixed_table1.column_name = prefixed_table2.column_name';
 
@@ -476,7 +476,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testOrder()
+    public function testOrder(): void
     {
         $query = 'SELECT * FROM prefixed_my_table_name ORDER BY foo DESC';
 
@@ -499,7 +499,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testOrderAsc()
+    public function testOrderAsc(): void
     {
         $query = 'SELECT * FROM prefixed_my_table_name ORDER BY foo ASC';
 
@@ -522,7 +522,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testGroupBy()
+    public function testGroupBy(): void
     {
         $query = 'SELECT * FROM prefixed_my_table_name GROUP BY foo';
 
@@ -545,7 +545,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testGroupConcat()
+    public function testGroupConcat(): void
     {
         $query = 'SELECT *, GROUP_CONCAT(foo) AS bar FROM prefixed_my_table_name';
 
@@ -568,7 +568,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testLimit()
+    public function testLimit(): void
     {
         $query = 'SELECT * FROM prefixed_my_table_name LIMIT 1';
 
@@ -591,7 +591,7 @@ class BuilderTest extends TestCase
     /**
      *
      */
-    public function testOffset()
+    public function testOffset(): void
     {
         $query = 'SELECT * FROM prefixed_my_table_name LIMIT 0, 3';
 

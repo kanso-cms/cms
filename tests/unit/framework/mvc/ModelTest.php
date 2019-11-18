@@ -27,7 +27,7 @@ class ModelTest extends TestCase
     /**
      *
      */
-    public function testInstantiate()
+    public function testInstantiate(): void
     {
         $model = new TestModelCase;
 

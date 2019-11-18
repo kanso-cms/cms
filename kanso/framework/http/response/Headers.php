@@ -29,8 +29,6 @@ class Headers implements \IteratorAggregate
 
     /**
      * Constructor.
-     *
-     * @access public
      */
     public function __construct()
     {
@@ -46,10 +44,8 @@ class Headers implements \IteratorAggregate
 
     /**
      * Send the headers.
-     *
-     * @access public
      */
-    public function send()
+    public function send(): void
     {
         if (!$this->sent())
         {
@@ -73,8 +69,6 @@ class Headers implements \IteratorAggregate
 
     /**
      * Are the headers sent ?
-     *
-     * @access public
      */
     public function sent(): bool
     {

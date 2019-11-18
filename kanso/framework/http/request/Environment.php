@@ -28,7 +28,6 @@ class Environment
     /**
      * Constructor. Loads the properties internally.
      *
-     * @access public
      * @param array $server Optional server overrides (optional) (default [])
      */
     public function __construct(array $server = [])
@@ -41,10 +40,9 @@ class Environment
     /**
      * Reload the environment properties.
      *
-     * @access public
      * @param array $server Optional server overrides (optional) (default [])
      */
-    public function reload(array $server  = [])
+    public function reload(array $server  = []): void
     {
          $this->server = empty($server) ? $_SERVER : $server;
 
@@ -54,7 +52,6 @@ class Environment
     /**
      * Returns a fresh copy of the environment properties.
      *
-     * @access private
      * @return array
      */
     private function extract(): array
@@ -84,7 +81,6 @@ class Environment
     /**
      * Returns the REQUEST_METHOD.
      *
-     * @access private
      * @return string
      */
     private function requestMethod(): string
@@ -95,7 +91,6 @@ class Environment
     /**
      * Returns the SCRIPT_NAME.
      *
-     * @access private
      * @return string
      */
     private function scriptName(): string
@@ -119,7 +114,6 @@ class Environment
     /**
      * Returns the SERVER_NAME.
      *
-     * @access private
      * @return string
      */
     private function serverName(): string
@@ -150,7 +144,6 @@ class Environment
     /**
      * Returns the SERVER_PORT.
      *
-     * @access private
      * @return int
      */
     private function serverPort(): int
@@ -161,7 +154,6 @@ class Environment
     /**
      * Returns the HTTP_PROTOCOL.
      *
-     * @access private
      * @return string
      */
     private function httpProtocol(): string
@@ -181,18 +173,16 @@ class Environment
     /**
      * Returns the DOCUMENT_ROOT.
      *
-     * @access private
      * @return string
      */
     private function documentRoot(): string
     {
-        return isset($this->server['DOCUMENT_ROOT']) ? $this->server['DOCUMENT_ROOT'] : dirname(dirname(dirname(dirname(dirname(__FILE__)))));
+        return isset($this->server['DOCUMENT_ROOT']) ? $this->server['DOCUMENT_ROOT'] : dirname(__FILE__, 5);
     }
 
     /**
      * Returns the HTTP_HOST.
      *
-     * @access private
      * @return string
      */
     private function httpHost(): string
@@ -208,7 +198,6 @@ class Environment
     /**
      * Returns the DOMAIN_NAME.
      *
-     * @access private
      * @return string
      */
     private function domainName(): string
@@ -219,7 +208,6 @@ class Environment
     /**
      * Returns the REQUEST_URI.
      *
-     * @access private
      * @return string
      */
     private function requestUri(): string
@@ -230,7 +218,6 @@ class Environment
     /**
      * Returns the REQUEST_URI without the query string.
      *
-     * @access private
      * @return string
      */
     private function requestPath(): string
@@ -248,7 +235,6 @@ class Environment
     /**
      * Returns the REQUEST_URI.
      *
-     * @access private
      * @return string
      */
     private function requestUrl(): string
@@ -259,7 +245,6 @@ class Environment
     /**
      * Returns the QUERY_STRING.
      *
-     * @access private
      * @return string
      */
     private function queryString(): string
@@ -272,7 +257,6 @@ class Environment
     /**
      * Returns the REMOTE_ADDR.
      *
-     * @access private
      * @return string
      */
     private function remoteAddr(): string
@@ -312,7 +296,6 @@ class Environment
     /**
      * Returns the HTTP_REFERER.
      *
-     * @access private
      * @return string
      */
     private function referer(): string
@@ -323,7 +306,6 @@ class Environment
     /**
      * Returns the HTTP_USER_AGENT.
      *
-     * @access private
      * @return string
      */
     private function httpUserAgent()
@@ -334,7 +316,6 @@ class Environment
     /**
      * Returns the REQUEST_TIME.
      *
-     * @access private
      * @return int
      */
     private function requestTime(): int
@@ -345,7 +326,6 @@ class Environment
     /**
      * Returns the REQUEST_TIME_FLOAT.
      *
-     * @access private
      * @return float
      */
     private function requestTimeFloat(): float

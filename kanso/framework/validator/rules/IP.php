@@ -7,10 +7,10 @@
 
 namespace kanso\framework\validator\rules;
 
-use function filter_var;
 use kanso\framework\validator\rules\traits\WithParametersTrait;
-
 use RuntimeException;
+
+use function filter_var;
 use function sprintf;
 use function vsprintf;
 

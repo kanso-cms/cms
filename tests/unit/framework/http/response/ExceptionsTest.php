@@ -24,7 +24,7 @@ class ExceptionTest extends TestCase
 	/**
 	 * @expectedException \kanso\framework\http\response\exceptions\RequestException
 	 */
-	public function testRequest()
+	public function testRequest(): void
 	{
 		throw new RequestException(500, 'foobar message');
 	}
@@ -32,7 +32,7 @@ class ExceptionTest extends TestCase
 	/**
 	 * @expectedException \kanso\framework\http\response\exceptions\InvalidTokenException
 	 */
-	public function testToken()
+	public function testToken(): void
 	{
 		throw new InvalidTokenException('foobar message');
 	}
@@ -40,7 +40,7 @@ class ExceptionTest extends TestCase
 	/**
 	 * @expectedException \kanso\framework\http\response\exceptions\NotFoundException
 	 */
-	public function testNotFound()
+	public function testNotFound(): void
 	{
 		throw new NotFoundException('foobar message');
 	}
@@ -48,7 +48,7 @@ class ExceptionTest extends TestCase
 	/**
 	 * @expectedException \kanso\framework\http\response\exceptions\MethodNotAllowedException
 	 */
-	public function testMethod()
+	public function testMethod(): void
 	{
 		throw new MethodNotAllowedException(['POST', 'GET'], 'foobar message');
 	}
@@ -56,7 +56,7 @@ class ExceptionTest extends TestCase
 	/**
 	 * @expectedException \kanso\framework\http\response\exceptions\ForbiddenException
 	 */
-	public function testForbidden()
+	public function testForbidden(): void
 	{
 		throw new ForbiddenException('foobar message');
 	}
@@ -64,7 +64,7 @@ class ExceptionTest extends TestCase
 	/**
 	 * @expectedException \kanso\framework\http\response\exceptions\Stop
 	 */
-	public function testStop()
+	public function testStop(): void
 	{
 		throw new Stop;
 	}

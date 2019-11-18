@@ -21,7 +21,7 @@ class CrawlerTest extends TestCase
 	/**
 	 *
 	 */
-	public function testNonBot()
+	public function testNonBot(): void
 	{
 		$headers = Mockery::mock('\kanso\framework\http\request\Headers');
 
@@ -35,7 +35,7 @@ class CrawlerTest extends TestCase
 	/**
 	 *
 	 */
-	public function testBot()
+	public function testBot(): void
 	{
 		$headers = Mockery::mock('\kanso\framework\http\request\Headers');
 

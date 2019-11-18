@@ -50,7 +50,7 @@ class FileStorageTest extends TestCase
 	/**
 	 *
 	 */
-	public function testStart()
+	public function testStart(): void
 	{
 		$_COOKIE = [];
 
@@ -76,7 +76,7 @@ class FileStorageTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRead()
+	public function testRead(): void
 	{
 		$_COOKIE = [];
 
@@ -106,7 +106,7 @@ class FileStorageTest extends TestCase
 	/**
 	 *
 	 */
-	public function testWrite()
+	public function testWrite(): void
 	{
 		$_COOKIE = [];
 
@@ -136,7 +136,7 @@ class FileStorageTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSavePath()
+	public function testSavePath(): void
 	{
 		$crypto = $this->mockCrypto();
 
@@ -154,7 +154,7 @@ class FileStorageTest extends TestCase
 	/**
 	 *
 	 */
-	public function testDestroy()
+	public function testDestroy(): void
 	{
 		$_COOKIE = [];
 
@@ -184,7 +184,7 @@ class FileStorageTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetSessionId()
+	public function testGetSessionId(): void
 	{
 		$_COOKIE = [];
 
@@ -214,7 +214,7 @@ class FileStorageTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSetSessionId()
+	public function testSetSessionId(): void
 	{
 		$_COOKIE = [];
 
@@ -244,7 +244,7 @@ class FileStorageTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSetSessionName()
+	public function testSetSessionName(): void
 	{
 		$_COOKIE = [];
 
@@ -272,7 +272,7 @@ class FileStorageTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRegenerateId()
+	public function testRegenerateId(): void
 	{
 		$_COOKIE = [];
 

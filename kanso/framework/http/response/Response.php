@@ -118,7 +118,6 @@ class Response
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\http\response\Protocol $protocol
      * @param \kanso\framework\http\response\Format   $format
      * @param \kanso\framework\http\response\Body     $body
@@ -165,7 +164,6 @@ class Response
     /**
      * Get the protocol object.
      *
-     * @access public
      * @return \kanso\framework\http\response\Protocol
      */
     public function protocol(): Protocol
@@ -176,7 +174,6 @@ class Response
     /**
      * Get the body object.
      *
-     * @access public
      * @return \kanso\framework\http\response\Body
      */
     public function body(): Body
@@ -187,7 +184,6 @@ class Response
     /**
      * Get the format object.
      *
-     * @access public
      * @return \kanso\framework\http\response\Format
      */
     public function format(): Format
@@ -198,7 +194,6 @@ class Response
     /**
      * Get the status object.
      *
-     * @access public
      * @return \kanso\framework\http\response\Status
      */
     public function status(): Status
@@ -209,7 +204,6 @@ class Response
     /**
      * Get the headers object.
      *
-     * @access public
      * @return \kanso\framework\http\response\Headers
      */
     public function headers(): Headers
@@ -220,7 +214,6 @@ class Response
     /**
      * Get the cookie manager.
      *
-     * @access public
      * @return \kanso\framework\http\cookie\Cookie
      */
     public function cookie(): Cookie
@@ -231,7 +224,6 @@ class Response
     /**
      * Get the session manager.
      *
-     * @access public
      * @return \kanso\framework\http\session\Session
      */
     public function session(): Session
@@ -242,7 +234,6 @@ class Response
     /**
      * Get the CDN object.
      *
-     * @access public
      * @return \kanso\framework\http\response\CDN
      */
     public function CDN(): CDN
@@ -253,7 +244,6 @@ class Response
     /**
      * Get the view object.
      *
-     * @access public
      * @return \kanso\framework\mvc\view\View
      */
     public function view(): View
@@ -264,7 +254,7 @@ class Response
     /**
      * Enables ETag response cache.
      */
-    public function enableCaching()
+    public function enableCaching(): void
     {
         $this->responseCache = true;
     }
@@ -272,7 +262,7 @@ class Response
     /**
      * Disables ETag response cache.
      */
-    public function disableCaching()
+    public function disableCaching(): void
     {
         $this->responseCache = false;
     }
@@ -314,10 +304,8 @@ class Response
 
     /**
      * Finalize all objects before sending the response.
-     *
-     * @access public
      */
-    public function finalize()
+    public function finalize(): void
     {
         $this->finalizeBody();
 
@@ -326,10 +314,8 @@ class Response
 
     /**
      * Finalize the response headers/.
-     *
-     * @access private
      */
-    private function finalizeHeaders()
+    private function finalizeHeaders(): void
     {
         $this->headers->set('Content-Type', $this->format->get() . ';' . $this->format->getEncoding());
 
@@ -370,20 +356,16 @@ class Response
 
     /**
      * Finalize the body from the cache and CDN.
-     *
-     * @access private
      */
-    private function finalizeBody()
+    private function finalizeBody(): void
     {
         $this->body->set($this->CDN->filter($this->body->get()));
     }
 
     /**
      * Send the HTTP response.
-     *
-     * @access public
      */
-    public function send()
+    public function send(): void
     {
         if (!$this->sent)
         {
@@ -407,12 +389,11 @@ class Response
     /**
      * Immediately send a redirect response.
      *
-     * @access public
      * @param  string                                         $url    The absolute URL to redirect to
      * @param  int                                            $status The redirect status (optional) (default 302)
      * @throws \kanso\framework\http\response\exceptions\Stop
      */
-    public function redirect(string $url, int $status = 302)
+    public function redirect(string $url, int $status = 302): void
     {
         $this->responseCache = false;
 
@@ -430,10 +411,9 @@ class Response
     /**
      * Send a not found response.
      *
-     * @access public
      * @throws \kanso\framework\http\response\exceptions\NotFoundException
      */
-    public function notFound()
+    public function notFound(): void
     {
         throw new NotFoundException();
     }
@@ -441,10 +421,9 @@ class Response
     /**
      * Send a forbidden response.
      *
-     * @access public
      * @throws \kanso\framework\http\response\exceptions\ForbiddenException
      */
-    public function forbidden()
+    public function forbidden(): void
     {
         throw new ForbiddenException();
     }
@@ -452,10 +431,9 @@ class Response
     /**
      * Send a invalid token response.
      *
-     * @access public
      * @throws \kanso\framework\http\response\exceptions\InvalidTokenException
      */
-    public function invalidToken()
+    public function invalidToken(): void
     {
         throw new InvalidTokenException();
     }
@@ -463,10 +441,9 @@ class Response
     /**
      * Send a invalid token response.
      *
-     * @access public
      * @throws \kanso\framework\http\response\exceptions\MethodNotAllowedException
      */
-    public function methodNotAllowed()
+    public function methodNotAllowed(): void
     {
         throw new MethodNotAllowedException();
     }

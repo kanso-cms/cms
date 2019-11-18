@@ -102,7 +102,6 @@ class Gatekeeper
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\database\query\Builder    $SQL          Query builder instance
      * @param \kanso\cms\wrappers\providers\UserProvider $provider     User provider instance
      * @param \kanso\framework\security\Crypto           $crypto       Encryption manager
@@ -130,7 +129,6 @@ class Gatekeeper
     /**
      * Returns the current HTTP user if they are logged in.
      *
-     * @access public
      * @return mixed
      */
     public function getUser()
@@ -156,10 +154,8 @@ class Gatekeeper
 
     /**
      * Reload the current user's data from the database.
-     *
-     * @access public
      */
-    public function refreshUser()
+    public function refreshUser(): void
     {
         if ($this->isLoggedIn())
         {
@@ -170,7 +166,6 @@ class Gatekeeper
     /**
      * Returns the CSRF token.
      *
-     * @access public
      * @return string
      */
     public function token()
@@ -188,7 +183,6 @@ class Gatekeeper
     /**
      * Validate the current HTTP client is logged in.
      *
-     * @access public
      * @param  bool $runFresh Don't use the cached result
      * @return bool
      */
@@ -229,7 +223,6 @@ class Gatekeeper
     /**
      * Is the current user a guest - i.e not allowed inside the admin panel.
      *
-     * @access public
      * @return bool
      */
     public function isGuest(): bool
@@ -246,7 +239,6 @@ class Gatekeeper
     /**
      * Is the user a an admin (i.e allowed into the admin panel).
      *
-     * @access public
      * @return bool
      */
     public function isAdmin(): bool
@@ -265,7 +257,6 @@ class Gatekeeper
      * Checks if the user's token matches the one in the
      * cookie as well as the DB.
      *
-     * @access public
      * @param  string $token User's access token
      * @return bool
      */
@@ -287,7 +278,6 @@ class Gatekeeper
     /**
      * Try to log the current user in by email and password.
      *
-     * @access public
      * @param  string   $username Username or email address
      * @param  string   $password Raw passowrd
      * @param  bool     $force    Login a user without their password needed (optional) (default false)
@@ -353,10 +343,8 @@ class Gatekeeper
 
     /**
      * Log the current user out.
-     *
-     * @access public
      */
-    public function logout()
+    public function logout(): void
     {
         // Keep the cookie but set as not logged in
         $this->cookie->logout();
@@ -368,7 +356,6 @@ class Gatekeeper
     /**
      * Forgot password.
      *
-     * @access public
      * @param  string $username  Username or email address for user to reset password
      * @param  bool   $sendEamil Send the user an email (optional) (default true)
      * @return bool
@@ -405,7 +392,6 @@ class Gatekeeper
     /**
      * Reset password.
      *
-     * @access public
      * @param  string $password  New password
      * @param  string $token     Reset token from the database
      * @param  bool   $sendEamil Reset token from the database
@@ -436,7 +422,6 @@ class Gatekeeper
     /**
      * Forgot username.
      *
-     * @access public
      * @param  string $email Email for user reminder to be sent
      * @return bool
      */
@@ -458,10 +443,9 @@ class Gatekeeper
     /**
      * Log client in.
      *
-     * @access private
      * @param array $_user Row from database
      */
-    private function logClientIn(array $_user)
+    private function logClientIn(array $_user): void
     {
         // Create a fresh cookie
         $this->cookie->destroy();

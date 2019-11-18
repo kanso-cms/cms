@@ -24,10 +24,8 @@ class Application extends BaseApplication
 {
     /**
      * Sets up the framework core.
-     *
-     * @access protected
      */
-    protected function initialize()
+    protected function initialize(): void
     {
         parent::initialize();
 
@@ -54,10 +52,8 @@ class Application extends BaseApplication
 
     /**
      * Run the application.
-     *
-     * @access public
      */
-    public function run()
+    public function run(): void
     {
         // Register reactor commands
         foreach($this->getCommands() as $command => $class)

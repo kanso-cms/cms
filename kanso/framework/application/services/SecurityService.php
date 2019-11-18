@@ -26,7 +26,7 @@ class SecurityService extends Service
 	/**
 	 * {@inheritdoc}
 	 */
-	public function register()
+	public function register(): void
 	{
 		$this->container->singleton('Crypto', function($container)
 		{
@@ -47,7 +47,6 @@ class SecurityService extends Service
 	/**
 	 * Returns the encryption signer.
 	 *
-	 * @access private
 	 * @return \kanso\framework\security\crypto\Signer
 	 */
 	private function getSinger(): Signer
@@ -58,7 +57,6 @@ class SecurityService extends Service
 	/**
 	 * Returns the encryption library.
 	 *
-	 * @access protected
 	 * @return mixed
 	 */
 	protected function getEncrypter()
@@ -76,7 +74,6 @@ class SecurityService extends Service
 	/**
 	 * Returns the the Open SSL Encrypter/Decrypter implementation.
 	 *
-	 * @access protected
 	 * @param  array                                               $configuration Encryption configuration
 	 * @return \kanso\framework\security\crypto\encrypters\OpenSSL
 	 */
@@ -88,7 +85,6 @@ class SecurityService extends Service
 	/**
 	 * Returns the password hashing library.
 	 *
-	 * @access protected
 	 * @return mixed
 	 */
 	protected function getPassword()
@@ -106,7 +102,6 @@ class SecurityService extends Service
 	/**
 	 * Returns the the native PHP password hasher.
 	 *
-	 * @access protected
 	 * @param  array                                                   $passwordConfiguration Configuration to pass to constructor
 	 * @return \kanso\framework\security\password\encrypters\NativePHP
 	 */
@@ -118,7 +113,6 @@ class SecurityService extends Service
 	/**
 	 * Returns the gibberish detector.
 	 *
-	 * @access protected
 	 * @return \kanso\framework\security\spam\gibberish\Gibberish
 	 */
 	protected function getGibberish(): Gibberish

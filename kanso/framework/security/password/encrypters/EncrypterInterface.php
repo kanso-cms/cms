@@ -17,7 +17,6 @@ interface EncrypterInterface
 	/**
 	 * Hashes a password.
 	 *
-	 * @access public
 	 * @param  string $string String to encrypt
 	 * @return string
 	 */
@@ -26,7 +25,6 @@ interface EncrypterInterface
 	/**
 	 * Verifies a hashed password with an unhashed one.
 	 *
-	 * @access public
 	 * @param  string $string String to decrypt
 	 * @return bool
 	 */

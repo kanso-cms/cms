@@ -20,7 +20,7 @@ class BootService extends Service
 	/**
 	 * {@inheritdoc}
 	 */
-	public function register()
+	public function register(): void
 	{
 		$this->container->setInstance('CMS', new Cms($this->container));
 	}

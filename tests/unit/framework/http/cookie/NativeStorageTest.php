@@ -33,7 +33,7 @@ class NativeStorageTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testRead()
+	public function testRead(): void
 	{
 		$_COOKIE = [];
 
@@ -51,7 +51,7 @@ class NativeStorageTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testReadInvalid()
+	public function testReadInvalid(): void
 	{
 		$_COOKIE = [];
 
@@ -67,7 +67,7 @@ class NativeStorageTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testWrite()
+	public function testWrite(): void
 	{
 		$_COOKIE = [];
 

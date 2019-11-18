@@ -18,7 +18,6 @@ class PostIteration extends Helper
      * Increment the internal pointer by 1 and return the current post
      * or just return a single post by id.
      *
-     * @access public
      * @param  int|null                      $post_id Post id or null for next post in loop (optional) (Default NULL)
      * @return \kanso\cms\wrappers\Post|null
      */
@@ -35,7 +34,6 @@ class PostIteration extends Helper
     /**
      * Get all the posts from the current query.
      *
-     * @access public
      * @return array
      */
     public function the_posts(): array
@@ -46,7 +44,6 @@ class PostIteration extends Helper
     /**
      * Returns the post count of the current page of results for the current request.
      *
-     * @access public
      * @return int
      */
     public function the_posts_count(): int
@@ -57,18 +54,16 @@ class PostIteration extends Helper
     /**
      * Returns the posts per page value from the config.
      *
-     * @access public
      * @return int
      */
     public function posts_per_page(): int
     {
-        return $this->container->get('Config')->get('cms.posts_per_page');
+        return $this->container->Config->get('cms.posts_per_page');
     }
 
     /**
      * Do we have posts in the loop? or does a post by id exist ?
      *
-     * @access  public
      * @param  int|null $post_id Post id or null for current loop (optional) (Default NULL)
      * @return bool
      */
@@ -84,10 +79,8 @@ class PostIteration extends Helper
 
     /**
      * Rewind the internal pointer to the '-1'.
-     *
-     * @access public
      */
-    public function rewind_posts()
+    public function rewind_posts(): void
     {
         $this->parent->postIndex = -1;
 
@@ -100,7 +93,6 @@ class PostIteration extends Helper
     /**
      * Iterate to the next post and return the post object if it exists.
      *
-     * @access public
      * @return \kanso\cms\wrappers\Post|null
      */
     public function _next()
@@ -122,7 +114,6 @@ class PostIteration extends Helper
     /**
      * Iterate to the previous post.
      *
-     * @access public
      * @return \kanso\cms\wrappers\Post|null
      */
     public function _previous()

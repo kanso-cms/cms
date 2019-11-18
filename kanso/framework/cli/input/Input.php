@@ -47,7 +47,6 @@ class Input
     /**
      * Constructor.
      *
-     * @access public
      * @param array $arguments Array of CLI input arguments
      */
     public function __construct(array $arguments = [])
@@ -62,7 +61,6 @@ class Input
     /**
      * Returns the parameters.
      *
-     * @access public
      * @return array
      */
     public function command(): string
@@ -73,7 +71,6 @@ class Input
     /**
      * Returns the sub-command (if it exists).
      *
-     * @access public
      * @return string|null
      */
     public function subCommand()
@@ -84,7 +81,6 @@ class Input
     /**
      * Returns the parameters.
      *
-     * @access public
      * @return array
      */
     public function parameters(): array
@@ -95,7 +91,6 @@ class Input
     /**
      * Returns the option flags.
      *
-     * @access public
      * @return array
      */
     public function options(): array
@@ -106,7 +101,6 @@ class Input
     /**
      * Sets the current command.
      *
-     * @access private
      * @param array $arguments Array of CLI input arguments
      */
     private function setCommand(array $arguments): void
@@ -117,7 +111,6 @@ class Input
     /**
      * Sets the current sub-command (if one was provided).
      *
-     * @access private
      * @param array $arguments Array of CLI input arguments
      */
     private function setSubCommand(array $arguments): void
@@ -134,7 +127,6 @@ class Input
     /**
      * Sanitizes the initial CLI args.
      *
-     * @access private
      * @param  array $arguments Array of CLI input arguments
      * @return array
      */
@@ -155,7 +147,6 @@ class Input
 	/**
 	 * Parses the initial CLI args.
 	 *
-	 * @access private
 	 * @param  array $arguments Sanitized Array of CLI input arguments
 	 * @return array
 	 */
@@ -230,7 +221,6 @@ class Input
     /**
      * Sanitize an arg key/flag.
      *
-     * @access private
      * @param  string $arg Raw arg
      * @return string
      */
@@ -242,7 +232,6 @@ class Input
     /**
      * Sanitize an arg value.
      *
-     * @access private
      * @param  string $arg Raw arg
      * @return string
      */
@@ -254,7 +243,6 @@ class Input
     /**
      * Checks if the arg was provided as a long form flag.
      *
-     * @access private
      * @param  string $arg Raw arg
      * @return string
      */
@@ -266,7 +254,6 @@ class Input
     /**
      * Checks if the next arg in the args array is a value.
      *
-     * @access private
      * @param  array $args    Args array
      * @param  int   $current Current array pointer
      * @return bool

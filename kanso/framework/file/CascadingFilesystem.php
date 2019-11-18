@@ -40,7 +40,6 @@ trait CascadingFilesystem
     /**
      * Sets the default path.
      *
-     * @access public
      * @param string|null $path Path
      */
     public function __construct(string $path = null)
@@ -51,10 +50,9 @@ trait CascadingFilesystem
     /**
      * Sets the default path.
      *
-     * @access public
      * @param string $path Path
      */
-    public function setPath(string $path)
+    public function setPath(string $path): void
     {
         $this->path = $path;
     }
@@ -62,10 +60,9 @@ trait CascadingFilesystem
     /**
      * Sets the extension.
      *
-     * @access public
      * @param string $extension Extension
      */
-    public function setExtension(string $extension)
+    public function setExtension(string $extension): void
     {
         $this->extension = $extension;
     }
@@ -73,11 +70,10 @@ trait CascadingFilesystem
     /**
      * Registers a namespace.
      *
-     * @access public
      * @param string $namespace Namespace name
      * @param string $path      Namespace path
      */
-    public function registerNamespace(string $namespace, string $path)
+    public function registerNamespace(string $namespace, string $path): void
     {
         $this->namespaces[$namespace] = $path;
     }
@@ -85,7 +81,6 @@ trait CascadingFilesystem
     /**
      * Returns the path to the file.
      *
-     * @access protected
      * @param  string      $file      File name
      * @param  string|null $extension File extension (optional) (default null)
      * @param  string|null $suffix    Path suffix (optional) (default null)
@@ -103,11 +98,11 @@ trait CascadingFilesystem
         {
             // The file is namespaced so we'll use the namespace path
 
-            list($namespace, $file) = explode('::', $file, 2);
+            [$namespace, $file] = explode('::', $file, 2);
 
             if(!isset($this->namespaces[$namespace]))
             {
-                throw new RuntimeException(vsprintf('%s(): The [ %s ] namespace does not exist.', [__METHOD__, $namespace]));
+                throw new RuntimeException(vsprintf('%s(): The [ %s ] namespace does not exist.', [__METHOD__, $namespace]));
             }
 
             $path = $this->namespaces[$namespace];
@@ -128,7 +123,6 @@ trait CascadingFilesystem
     /**
      * Returns an array of cascading file paths.
      *
-     * @access protected
      * @param  string      $file      File name
      * @param  string|null $extension File extension (optional) (default null)
      * @param  string|null $suffix    Path suffix (optional) (default null)
@@ -152,7 +146,7 @@ trait CascadingFilesystem
 
             // Prepend the cascading file
 
-            list($package, $file) = explode('::', $file);
+            [$package, $file] = explode('::', $file);
 
             $suffix = 'packages' . DIRECTORY_SEPARATOR . $package . (($suffix !== null) ? DIRECTORY_SEPARATOR . $suffix : '');
 

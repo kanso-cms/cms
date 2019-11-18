@@ -71,7 +71,7 @@ class CallbackTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCallbacks()
+	public function testCallbacks(): void
 	{
 		$this->assertEquals('foo', Callback::apply('\kanso\tests\unit\framework\utility\CallbackTester@testMethod', 'foo'));
 

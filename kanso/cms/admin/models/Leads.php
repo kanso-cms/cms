@@ -49,7 +49,6 @@ class Leads extends BaseModel
     /**
      * Parse the $_GET request variables and filter the leads for the requested page.
      *
-     * @access private
      * @return array
      */
     private function parseGet(): array
@@ -77,7 +76,6 @@ class Leads extends BaseModel
     /**
      * Check if the GET URL queries are either empty or set to defaults.
      *
-     * @access private
      * @return bool
      */
     private function emptyQueries(): bool
@@ -98,7 +96,6 @@ class Leads extends BaseModel
     /**
      * Returns the requested GET queries with defaults.
      *
-     * @access private
      * @return array
      */
     private function getQueries(): array
@@ -121,7 +118,6 @@ class Leads extends BaseModel
     /**
      * Returns the list of leads for display.
      *
-     * @access private
      * @param  bool      $checkMaxPages Count the max pages
      * @return array|int
      */

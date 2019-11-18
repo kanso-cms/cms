@@ -38,7 +38,7 @@ class ContainerAwareTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetFromContainer()
+	public function testGetFromContainer(): void
 	{
 		$container = Container::instance();
 
@@ -60,7 +60,7 @@ class ContainerAwareTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetPrivate()
+	public function testGetPrivate(): void
 	{
 		$container = Container::instance();
 
@@ -76,7 +76,7 @@ class ContainerAwareTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetPublic()
+	public function testGetPublic(): void
 	{
 		$container = Container::instance();
 

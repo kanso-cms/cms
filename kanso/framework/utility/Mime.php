@@ -133,7 +133,6 @@ class Mime
     /**
      * Convert a file extension to a valid MIME-type.
      *
-     * @access public
      * @param  string       $ext File extension
      * @return string|false
      */
@@ -157,7 +156,6 @@ class Mime
     /**
      * Convert a valid MIME-type to a file extension.
      *
-     * @access public
      * @param  string       $mime File extension
      * @return string|false
      */

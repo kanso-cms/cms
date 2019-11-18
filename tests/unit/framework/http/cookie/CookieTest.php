@@ -20,7 +20,7 @@ class CookieTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testConstructor()
+	public function testConstructor(): void
 	{
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
@@ -34,7 +34,7 @@ class CookieTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testIsLoggedIn()
+	public function testIsLoggedIn(): void
 	{
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
@@ -50,7 +50,7 @@ class CookieTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testLogin()
+	public function testLogin(): void
 	{
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
@@ -68,7 +68,7 @@ class CookieTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testLogout()
+	public function testLogout(): void
 	{
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
@@ -86,7 +86,7 @@ class CookieTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testSend()
+	public function testSend(): void
 	{
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
@@ -106,7 +106,7 @@ class CookieTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testExpired()
+	public function testExpired(): void
 	{
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
@@ -126,7 +126,7 @@ class CookieTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testSent()
+	public function testSent(): void
 	{
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
@@ -150,7 +150,7 @@ class CookieTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testDestroy()
+	public function testDestroy(): void
 	{
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
@@ -172,7 +172,7 @@ class CookieTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testSet()
+	public function testSet(): void
 	{
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
@@ -190,7 +190,7 @@ class CookieTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testSetMultiple()
+	public function testSetMultiple(): void
 	{
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
@@ -210,7 +210,7 @@ class CookieTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testGetAll()
+	public function testGetAll(): void
 	{
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
@@ -228,7 +228,7 @@ class CookieTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testHas()
+	public function testHas(): void
 	{
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
@@ -248,7 +248,7 @@ class CookieTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testRemove()
+	public function testRemove(): void
 	{
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
@@ -270,7 +270,7 @@ class CookieTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testClear()
+	public function testClear(): void
 	{
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
@@ -288,7 +288,7 @@ class CookieTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testAsArray()
+	public function testAsArray(): void
 	{
 
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
@@ -305,7 +305,7 @@ class CookieTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testIterator()
+	public function testIterator(): void
 	{
 		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 

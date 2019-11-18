@@ -37,7 +37,7 @@ class ArrayAccessTraitTest extends TestCase
     /**
      *
      */
-    public function testInstantiate()
+    public function testInstantiate(): void
     {
         $arrayAccess = new TestArrayAccess(['foo' => 'bar']);
 
@@ -47,7 +47,7 @@ class ArrayAccessTraitTest extends TestCase
     /**
      *
      */
-    public function testSetGet()
+    public function testSetGet(): void
     {
         $arrayAccess = new TestArrayAccess;
 
@@ -59,7 +59,7 @@ class ArrayAccessTraitTest extends TestCase
     /**
      *
      */
-    public function testSetGetNested()
+    public function testSetGetNested(): void
     {
         $arrayAccess = new TestArrayAccess;
 
@@ -77,7 +77,7 @@ class ArrayAccessTraitTest extends TestCase
     /**
      *
      */
-    public function testSetGetMultiple()
+    public function testSetGetMultiple(): void
     {
         $arrayAccess = new TestArrayAccess;
 
@@ -93,7 +93,7 @@ class ArrayAccessTraitTest extends TestCase
     /**
      *
      */
-    public function testHas()
+    public function testHas(): void
     {
         $arrayAccess = new TestArrayAccess;
 
@@ -107,7 +107,7 @@ class ArrayAccessTraitTest extends TestCase
     /**
      *
      */
-    public function testHasNested()
+    public function testHasNested(): void
     {
         $arrayAccess = new TestArrayAccess;
 
@@ -125,7 +125,7 @@ class ArrayAccessTraitTest extends TestCase
     /**
      *
      */
-    public function testRemove()
+    public function testRemove(): void
     {
         $arrayAccess = new TestArrayAccess;
 
@@ -141,7 +141,7 @@ class ArrayAccessTraitTest extends TestCase
     /**
      *
      */
-    public function testClear()
+    public function testClear(): void
     {
         $arrayAccess = new TestArrayAccess;
 
@@ -155,7 +155,7 @@ class ArrayAccessTraitTest extends TestCase
     /**
      *
      */
-    public function testAsArray()
+    public function testAsArray(): void
     {
         $arrayAccess = new TestArrayAccess;
 

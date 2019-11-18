@@ -37,7 +37,7 @@ class HttpService extends Service
 	/**
 	 * {@inheritdoc}
 	 */
-	public function register()
+	public function register(): void
 	{
 		$this->registerRequest();
 
@@ -52,10 +52,8 @@ class HttpService extends Service
 
 	/**
 	 * Registers the Request object.
-	 *
-	 * @access private
 	 */
-	private function registerRequest()
+	private function registerRequest(): void
 	{
 		$this->container->singleton('Request', function()
 		{
@@ -65,10 +63,8 @@ class HttpService extends Service
 
 	/**
 	 * Registers the cookie object.
-	 *
-	 * @access private
 	 */
-	private function registerCookie()
+	private function registerCookie(): void
 	{
 		$this->container->singleton('Cookie', function()
 		{
@@ -88,7 +84,6 @@ class HttpService extends Service
 	/**
 	 * Loads the cookie storage implementation.
 	 *
-	 * @access private
 	 * @param  array $cookieConfiguration Cookie configuration to use
 	 * @return mixed
 	 */
@@ -105,7 +100,6 @@ class HttpService extends Service
 	/**
 	 * Loads the cookie storage implementation.
 	 *
-	 * @access private
 	 * @param  array                                                    $storeConfig         Configuration for the storage
 	 * @param  array                                                    $cookieConfiguration Configuration for cookie sending/reading
 	 * @return \kanso\framework\http\cookie\storage\NativeCookieStorage
@@ -117,10 +111,8 @@ class HttpService extends Service
 
 	/**
 	 * Registers the session object.
-	 *
-	 * @access private
 	 */
-	private function registerSession()
+	private function registerSession(): void
 	{
 		$this->container->singleton('Session', function()
 		{
@@ -140,7 +132,6 @@ class HttpService extends Service
 	/**
 	 * Loads the session storage implementation.
 	 *
-	 * @access private
 	 * @param  array $cookieConfiguration Cookie configuration to use
 	 * @return mixed
 	 */
@@ -161,7 +152,6 @@ class HttpService extends Service
 	/**
 	 * Loads the native session storage implementation.
 	 *
-	 * @access private
 	 * @param  array                                                      $storeConfig         Configuration for the storage
 	 * @param  array                                                      $cookieConfiguration Configuration for session sending/reading
 	 * @return \kanso\framework\http\session\storage\NativeSessionStorage
@@ -174,7 +164,6 @@ class HttpService extends Service
 	/**
 	 * Loads the file session storage implementation.
 	 *
-	 * @access private
 	 * @param  array                                                    $storeConfig         Configuration for the storage
 	 * @param  array                                                    $cookieConfiguration Configuration for session sending/reading
 	 * @return \kanso\framework\http\session\storage\FileSessionStorage
@@ -187,7 +176,6 @@ class HttpService extends Service
 	/**
 	 * Get the HTTP response CDN.
 	 *
-	 * @access private
 	 * @return \kanso\framework\http\response\CDN
 	 */
 	private function getCDN(): CDN
@@ -198,7 +186,6 @@ class HttpService extends Service
 	/**
 	 * Get the HTTP response protocol.
 	 *
-	 * @access private
 	 * @return \kanso\framework\http\response\Protocol
 	 */
 	private function getProtocol(): Protocol
@@ -208,10 +195,8 @@ class HttpService extends Service
 
 	/**
 	 * Registers the response object.
-	 *
-	 * @access private
 	 */
-	private function registerResponse()
+	private function registerResponse(): void
 	{
 		$this->container->singleton('Response', function()
 		{
@@ -221,10 +206,8 @@ class HttpService extends Service
 
 	/**
 	 * Registers the router object.
-	 *
-	 * @access private
 	 */
-	private function registerRouter()
+	private function registerRouter(): void
 	{
 		$this->container->singleton('Router', function($container)
 		{

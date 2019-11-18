@@ -147,7 +147,7 @@ class QueryIncludesTest extends TestCase
 	/**
 	 *
 	 */
-	public function testMethodsExist()
+	public function testMethodsExist(): void
 	{
 		require_once KANSO_DIR . '/cms/query/Includes.php';
 

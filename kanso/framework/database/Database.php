@@ -42,7 +42,6 @@ class Database
 	/**
 	 * Constructor.
 	 *
-	 * @access public
 	 * @param array $configurations Array of configuration options
 	 */
 	public function __construct(array $configurations)
@@ -55,7 +54,6 @@ class Database
 	/**
 	 * Create a new database from the config.
 	 *
-	 * @access public
 	 * @param  string|null                                     $connectionName Name of the connection (optional) (default null)
 	 * @throws \RuntimeException
 	 * @return \kanso\framework\database\connection\Connection
@@ -90,7 +88,6 @@ class Database
 	/**
 	 * Get a database connection by name.
 	 *
-	 * @access public
 	 * @param  string|null                                     $connectionName Name of the connection (optional) (default null)
 	 * @return \kanso\framework\database\connection\Connection
 	 */
@@ -104,7 +101,6 @@ class Database
 	/**
 	 * Connect to a database by name.
 	 *
-	 * @access private
 	 * @param  string                                          $connectionName Name of the connection
 	 * @throws \RuntimeException
 	 * @return \kanso\framework\database\connection\Connection
@@ -129,7 +125,6 @@ class Database
 	/**
 	 * Get a database builder by connection name.
 	 *
-	 * @access public
 	 * @param  string                                  $connectionName Name of the connection
 	 * @return \kanso\framework\database\query\Builder
 	 */
@@ -141,7 +136,6 @@ class Database
 	/**
 	 * Get all database connection.
 	 *
-	 * @access public
 	 * @return array
 	 */
 	public function connections(): array

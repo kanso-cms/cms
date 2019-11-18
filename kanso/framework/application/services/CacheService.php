@@ -20,7 +20,7 @@ class CacheService extends Service
 	/**
 	 * {@inheritdoc}
 	 */
-	public function register()
+	public function register(): void
 	{
 		$this->container->singleton('Cache', function()
 		{
@@ -38,7 +38,6 @@ class CacheService extends Service
 	/**
 	 * Get the cache store.
 	 *
-	 * @access private
 	 * @param  array $cacheConfiguration Configuration options for the cache
 	 * @return mixed
 	 */
@@ -55,7 +54,6 @@ class CacheService extends Service
 	/**
 	 * Returns the file storage implementation.
 	 *
-	 * @access private
 	 * @param  string                                  $path Directory to store cached files
 	 * @return \kanso\framework\cache\stores\FileStore
 	 */

@@ -28,7 +28,7 @@ class CacheTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGet()
+	public function testGet(): void
 	{
 		$store = $this->getStore();
 
@@ -42,7 +42,7 @@ class CacheTest extends TestCase
 	/**
 	 *
 	 */
-	public function testPut()
+	public function testPut(): void
 	{
 		$store = $this->getStore();
 
@@ -60,7 +60,7 @@ class CacheTest extends TestCase
 	/**
 	 *
 	 */
-	public function testHas()
+	public function testHas(): void
 	{
 		$store = $this->getStore();
 
@@ -82,7 +82,7 @@ class CacheTest extends TestCase
 	/**
 	 *
 	 */
-	public function testDelete()
+	public function testDelete(): void
 	{
 		$store = $this->getStore();
 
@@ -104,7 +104,7 @@ class CacheTest extends TestCase
 	/**
 	 *
 	 */
-	public function testExpired()
+	public function testExpired(): void
 	{
 		$store = $this->getStore();
 
@@ -118,7 +118,7 @@ class CacheTest extends TestCase
 	/**
 	 *
 	 */
-	public function testClear()
+	public function testClear(): void
 	{
 		$store = $this->getStore();
 

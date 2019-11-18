@@ -20,7 +20,7 @@ class LeadProviderTest extends TestCase
     /**
      *
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
         $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
@@ -44,7 +44,7 @@ class LeadProviderTest extends TestCase
     /**
      *
      */
-    public function testById()
+    public function testById(): void
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
 
@@ -64,7 +64,7 @@ class LeadProviderTest extends TestCase
     /**
      *
      */
-    public function testByKey()
+    public function testByKey(): void
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
 
@@ -84,7 +84,7 @@ class LeadProviderTest extends TestCase
     /**
      *
      */
-    public function testByKeys()
+    public function testByKeys(): void
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
 

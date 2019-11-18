@@ -55,7 +55,7 @@ class FileStore implements StoreInterface
     /**
      * {@inheritdoc}
      */
-    public function put(string $key, string $data)
+    public function put(string $key, string $data): void
     {
         $this->filesystem->putContents($this->keyToFile($key), $data);
     }
@@ -71,7 +71,7 @@ class FileStore implements StoreInterface
     /**
      * {@inheritdoc}
      */
-    public function delete(string $key)
+    public function delete(string $key): void
     {
         if ($this->has($key))
         {
@@ -98,7 +98,7 @@ class FileStore implements StoreInterface
     /**
      * {@inheritdoc}
      */
-    public function clear()
+    public function clear(): void
     {
         $files = $this->filesystem->list($this->path);
 
@@ -116,7 +116,6 @@ class FileStore implements StoreInterface
     /**
      * Converts a key to the file path.
      *
-     * @access private
      * @param string $key Key to convert
      */
     private function keyToFile(string $key): string

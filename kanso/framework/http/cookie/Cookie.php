@@ -32,7 +32,7 @@ class Cookie implements \IteratorAggregate
      *
      * @var object
      */
-    private  $store;
+    private $store;
 
     /**
      * The cookie name.
@@ -58,7 +58,6 @@ class Cookie implements \IteratorAggregate
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\http\cookie\storage\StoreInterface $store         Cookie storage implementation
      * @param string                                              $cookieName    Name of the cookie
      * @param int                                                 $cookieExpires Date the cookie will expire (unix timestamp)
@@ -86,10 +85,8 @@ class Cookie implements \IteratorAggregate
 
     /**
      * Read the cookie sent from the browser.
-     *
-     * @access private
      */
-    private function readCookie()
+    private function readCookie(): void
     {
         $data = $this->store->read($this->cookieName);
 
@@ -108,10 +105,8 @@ class Cookie implements \IteratorAggregate
 
     /**
      * Checks if the cookie is expired - destroys it if it is.
-     *
-     * @access private
      */
-    private function validateExpiry()
+    private function validateExpiry(): void
     {
         if ((($this->cookieExpires - time()) + $this->get('last_active')) < time())
         {
@@ -126,7 +121,6 @@ class Cookie implements \IteratorAggregate
     /**
      * Is the user currently logged in.
      *
-     * @access public
      * @return bool
      */
     public function isLoggedIn(): bool
@@ -136,10 +130,8 @@ class Cookie implements \IteratorAggregate
 
     /**
      * Log the client in.
-     *
-     * @access public
      */
-    public function login()
+    public function login(): void
     {
         // Set as logged in
         $this->login = 'yes';
@@ -147,10 +139,8 @@ class Cookie implements \IteratorAggregate
 
     /**
      * Log the client in.
-     *
-     * @access public
      */
-    public function logout()
+    public function logout(): void
     {
         // Set as logged in
         $this->login = 'no';
@@ -158,10 +148,8 @@ class Cookie implements \IteratorAggregate
 
     /**
      * Send the cookies.
-     *
-     * @access public
      */
-    public function send()
+    public function send(): void
     {
         if (!$this->sent())
         {
@@ -175,8 +163,6 @@ class Cookie implements \IteratorAggregate
 
     /**
      * Send the cookies.
-     *
-     * @access public
      */
     public function sent(): bool
     {
@@ -185,10 +171,8 @@ class Cookie implements \IteratorAggregate
 
     /**
      * Destroy the cookie.
-     *
-     * @access public
      */
-    public function destroy()
+    public function destroy(): void
     {
         $this->clear();
 

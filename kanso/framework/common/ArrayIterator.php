@@ -24,7 +24,6 @@ class ArrayIterator implements \Iterator
     /**
      * Constructor.
      *
-     * @access public
      * @param array $data Array to iterate (optional) (default [])
      */
     public function __construct(array $data = [])
@@ -35,7 +34,7 @@ class ArrayIterator implements \Iterator
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         reset($this->data);
     }

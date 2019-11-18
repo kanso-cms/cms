@@ -107,7 +107,6 @@ class Accounts extends BaseModel
     /**
      * Parse a login request via POST.
      *
-     * @access private
      * @return array
      */
     private function processLoginPOST(): array
@@ -123,7 +122,7 @@ class Accounts extends BaseModel
             'password' => ['trim'],
         ];
 
-        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
+        $validator = $this->container->Validator->create($this->post, $rules, $filters);
 
         if (!$validator->isValid())
         {
@@ -165,7 +164,6 @@ class Accounts extends BaseModel
     /**
      * Parse a forgot password request via POST.
      *
-     * @access private
      * @return array
      */
     private function processForgotPassowordPOST(): array
@@ -180,7 +178,7 @@ class Accounts extends BaseModel
             'username' => ['trim', 'string'],
         ];
 
-        $validator = $this->container->get('Validator')->create($post, $rules, $filters);
+        $validator = $this->container->Validator->create($post, $rules, $filters);
 
         $post = $validator->filter();
 
@@ -200,7 +198,6 @@ class Accounts extends BaseModel
     /**
      * Parse a forgot password request via POST.
      *
-     * @access private
      * @return array
      */
     private function processForgotUsernamePOST(): array
@@ -214,7 +211,7 @@ class Accounts extends BaseModel
             'email' => ['trim', 'email'],
         ];
 
-        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
+        $validator = $this->container->Validator->create($this->post, $rules, $filters);
 
         $post = $validator->filter();
 
@@ -234,7 +231,6 @@ class Accounts extends BaseModel
     /**
      * Validate a GET request to reset password page.
      *
-     * @access private
      * @return bool
      */
     private function validateResetPasswordGET(): bool
@@ -274,7 +270,6 @@ class Accounts extends BaseModel
     /**
      * Parse a reset password POST request.
      *
-     * @access private
      * @return array
      */
     private function processResetpasswordPOST()
@@ -289,7 +284,7 @@ class Accounts extends BaseModel
             'password' => ['trim'],
         ];
 
-        $validator = $this->container->get('Validator')->create($post, $rules, $filters);
+        $validator = $this->container->Validator->create($post, $rules, $filters);
 
         if (!$validator->isValid())
         {
@@ -328,10 +323,8 @@ class Accounts extends BaseModel
 
     /**
      * Parse a logout GET request.
-     *
-     * @access private
      */
-    private function processLogoutGET()
+    private function processLogoutGET(): void
     {
         $this->Gatekeeper->logout();
 

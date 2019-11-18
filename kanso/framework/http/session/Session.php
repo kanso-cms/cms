@@ -65,7 +65,6 @@ class Session implements \IteratorAggregate
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\http\session\Token                  $token Token wrapper
      * @param \kanso\framework\http\session\Flash                  $flash Flash wrapper
      * @param \kanso\framework\http\session\storage\StoreInterface $store Store implementation
@@ -94,10 +93,9 @@ class Session implements \IteratorAggregate
     /**
      * Set cookie the configuration.
      *
-     * @access public
      * @param  $configuration array Array of configuration options
      */
-    public function configure(array $configuration)
+    public function configure(array $configuration): void
     {
         $this->store->session_name($configuration['cookie_name']);
 
@@ -106,10 +104,8 @@ class Session implements \IteratorAggregate
 
     /**
      * Save the session so PHP can send it.
-     *
-     * @access public
      */
-    public function save()
+    public function save(): void
     {
         $data =
         [
@@ -127,10 +123,8 @@ class Session implements \IteratorAggregate
 
     /**
      * Initialize the session.
-     *
-     * @access private
      */
-    private function initializeSession()
+    private function initializeSession(): void
     {
         $this->store->session_start();
 
@@ -146,10 +140,8 @@ class Session implements \IteratorAggregate
 
     /**
      * Load the data from the session.
-     *
-     * @access private
      */
-    private function loadData()
+    private function loadData(): void
     {
         $data = $this->store->read();
 
@@ -177,7 +169,6 @@ class Session implements \IteratorAggregate
     /**
      * Get the access token.
      *
-     * @access public
      * @return \kanso\framework\http\session\Token
      */
     public function token(): Token
@@ -188,7 +179,6 @@ class Session implements \IteratorAggregate
     /**
      * Get the access token.
      *
-     * @access public
      * @return \kanso\framework\http\session\Flash
      */
     public function flash(): Flash
@@ -198,10 +188,8 @@ class Session implements \IteratorAggregate
 
     /**
      * Clear the session.
-     *
-     * @access public
      */
-    public function destroy()
+    public function destroy(): void
     {
         // Clear the internal session data
         $this->clear();
@@ -215,10 +203,8 @@ class Session implements \IteratorAggregate
 
     /**
      * Clear the session.
-     *
-     * @access public
      */
-    public function start()
+    public function start(): void
     {
         $this->store->session_start();
     }

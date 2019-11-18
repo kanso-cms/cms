@@ -28,7 +28,6 @@ class TagManager extends Manager
 	/**
 	 * Creates a new tag.
 	 *
-	 * @access public
 	 * @param  string      $name Tag name
 	 * @param  string|null $slug Tag slug (optional) (default null)
 	 * @return mixed
@@ -50,7 +49,6 @@ class TagManager extends Manager
 	/**
 	 * Gets a tag by id.
 	 *
-	 * @access public
 	 * @param  int   $id Tag id
 	 * @return mixed
 	 */
@@ -62,7 +60,6 @@ class TagManager extends Manager
 	/**
 	 * Gets a tag by name.
 	 *
-	 * @access public
 	 * @param  string $name Tag name
 	 * @return mixed
 	 */
@@ -74,7 +71,6 @@ class TagManager extends Manager
 	/**
 	 * Gets a tag by slug.
 	 *
-	 * @access public
 	 * @param  string $slug Tag slug
 	 * @return mixed
 	 */
@@ -86,7 +82,6 @@ class TagManager extends Manager
 	/**
 	 * Deletes a tag by name id or slug.
 	 *
-	 * @access public
 	 * @param  string $nameIdOrSlug Tag name id or slug
 	 * @return bool
 	 */
@@ -119,7 +114,6 @@ class TagManager extends Manager
 	/**
 	 * Clears a tag by name id or slug.
 	 *
-	 * @access public
 	 * @param  string $nameIdOrSlug Tag name id or slug
 	 * @return bool
 	 */

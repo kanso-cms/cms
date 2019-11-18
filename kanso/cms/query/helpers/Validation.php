@@ -19,40 +19,36 @@ class Validation extends Helper
     /**
      * Get the currently logged in Kanso user (if any).
      *
-     * @access public
      * @return \kanso\cms\wrappers\User|false
      */
     public function user()
     {
-        return $this->container->get('Gatekeeper')->getUser();
+        return $this->container->Gatekeeper->getUser();
     }
 
     /**
      * Is the current user (if any) logged in.
      *
-     * @access public
      * @return bool
      */
     public function is_loggedIn(): bool
     {
-        return $this->container->get('Gatekeeper')->isLoggedIn();
+        return $this->container->Gatekeeper->isLoggedIn();
     }
 
     /**
      * Is the current user (if any) allowed to access the admin panel.
      *
-     * @access public
      * @return bool
      */
     public function user_is_admin(): bool
     {
-        return $this->container->get('Gatekeeper')->isAdmin();
+        return $this->container->Gatekeeper->isAdmin();
     }
 
     /**
      * Get the current page type.
      *
-     * @access public
      * @return string
      */
     public function the_page_type(): string
@@ -68,7 +64,6 @@ class Validation extends Helper
     /**
      * Is this a single request.
      *
-     * @access public
      * @return bool
      */
     public function is_single(): bool
@@ -79,7 +74,6 @@ class Validation extends Helper
     /**
      * Is this a custom post request.
      *
-     * @access public
      * @return bool
      */
     public function is_custom_post(): bool
@@ -95,7 +89,6 @@ class Validation extends Helper
     /**
      * Is this a request for the homepage.
      *
-     * @access public
      * @return bool
      */
     public function is_home(): bool
@@ -106,7 +99,6 @@ class Validation extends Helper
     /**
      * is this a request for the blog location ?
      *
-     * @access public
      * @return bool
      */
     public function is_blog_location(): bool
@@ -117,10 +109,9 @@ class Validation extends Helper
     /**
      * Is this the first page of a paginated set of posts ?
      *
-     * @access public
      * @return bool
      */
-    function is_front_page(): bool
+    public function is_front_page(): bool
     {
        return $this->parent->pageIndex === 0;
     }
@@ -128,7 +119,6 @@ class Validation extends Helper
     /**
      * Is this a static page request ?
      *
-     * @access public
      * @param  string $slug Requested page slug (optional) (default null)
      * @return bool
      */
@@ -136,7 +126,7 @@ class Validation extends Helper
     {
         if ($slug)
         {
-            $uri = strtolower(Str::queryFilterUri($this->container->get('Request')->environment()->REQUEST_URI));
+            $uri = strtolower(Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI));
 
             $slug = strtolower(trim($slug, '/'));
 
@@ -185,7 +175,6 @@ class Validation extends Helper
     /**
      * Is this a search results request ?
      *
-     * @access public
      * @return bool
      */
     public function is_search(): bool
@@ -196,7 +185,6 @@ class Validation extends Helper
     /**
      * Is this a tag request ?
      *
-     * @access public
      * @return bool
      */
     public function is_tag(): bool
@@ -207,7 +195,6 @@ class Validation extends Helper
     /**
      * Is this a category request ?
      *
-     * @access public
      * @return bool
      */
     public function is_category(): bool
@@ -218,7 +205,6 @@ class Validation extends Helper
     /**
      * Is this an author request ?
      *
-     * @access public
      * @return bool
      */
     public function is_author(): bool
@@ -229,7 +215,6 @@ class Validation extends Helper
     /**
      * Is this an admin request ?
      *
-     * @access public
      * @return bool
      */
     public function is_admin(): bool
@@ -240,7 +225,6 @@ class Validation extends Helper
     /**
      * Is this an attachment request ?
      *
-     * @access public
      * @return bool
      */
     public function is_attachment(): bool
@@ -251,11 +235,10 @@ class Validation extends Helper
     /**
      * Is this a 404 request/response ?
      *
-     * @access public
      * @return bool
      */
     public function is_not_found(): bool
     {
-        return $this->container->get('Response')->status()->get() === 404;
+        return $this->container->Response->status()->get() === 404;
     }
 }

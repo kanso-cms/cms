@@ -12,6 +12,7 @@ use kanso\cms\rss\Feed;
 use kanso\cms\sitemap\SiteMap;
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
+use kanso\framework\ioc\Container;
 use kanso\framework\utility\Str;
 
 /**
@@ -56,35 +57,37 @@ class Dispatcher
 	 */
 	private $pageType;
 
+	/**
+	 * Next middleware layer.
+	 *
+	 * @var \Closure
+	 */
+	private $next;
+
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\http\request\Request   $request   Framework Request instance
      * @param \kanso\framework\http\response\Response $response  Framework Response instance
      * @param \Closure                                $next      Next middleware layer
      * @param \kanso\framework\ioc\Container          $container IoC container
-     * @param string|null                             $pageType  The page type being loaded
+     * @param string                                  $pagetype  The page type being loaded
      */
-    public function __construct(Request $request, Response $response, Closure $next, Container $container, string $pageType = '')
+    public function __construct(Request $request, Response $response, Closure $next, Container $container, string $pagetype = '')
     {
-    	$this->request   = $request;
-
-    	$this->response  = $response;
-
     	$this->container = $container;
 
     	$this->pageType = $pagetype;
+
+    	$this->next = $next;
 
     	$this->themeDir = $this->container->Config->get('cms.themes_path') . '/' . $this->container->Config->get('cms.theme_name');
     }
 
     /**
      * Apply route to filter posts and load theme templates.
-     *
-     * @access public
      */
-    public function applyRoute()
+    public function applyRoute(): void
     {
 		$this->container->Query->filterPosts($this->pageType);
 
@@ -104,16 +107,14 @@ class Dispatcher
 		{
 			$this->container->Query->reset();
 
-			$next();
+			$this->next();
 		}
     }
 
 	/**
 	 * Load an RSS feed.
-	 *
-	 * @access public
 	 */
-	public function loadRssFeed()
+	public function loadRssFeed(): void
 	{
 		$this->container->Query->filterPosts($this->pageType);
 
@@ -134,16 +135,14 @@ class Dispatcher
 		{
 			$this->container->Query->reset();
 
-			$next();
+			$this->next();
 		}
 	}
 
 	/**
 	 * Load and render the XML sitemap.
-	 *
-	 * @access public
 	 */
-	public function loadSiteMap()
+	public function loadSiteMap(): void
 	{
 		// Current theme dir
 		$template = $this->container->Config->get('cms.themes_path') . '/' . $this->container->Config->get('cms.theme_name') . '/sitemap.php';
@@ -172,9 +171,17 @@ class Dispatcher
 	}
 
 	/**
+	 * Invoke the next middleware layer.
+	 */
+	private function next(): void
+	{
+		$next = $this->next;
+
+		$next();
+	}
+
+	/**
 	 * Determine what template to use.
-	 *
-	 * @access private
 	 */
 	private function getTemplate()
 	{

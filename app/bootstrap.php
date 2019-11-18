@@ -8,7 +8,7 @@ use kanso\Kanso;
  * ---------------------------------------------------------
  */
 
-if (strpos(phpversion(), '7.3') !== false)
+if (strpos(PHP_VERSION, '7.3') !== false)
 {
 	ini_set('pcre.jit', '0');
 }
@@ -45,7 +45,7 @@ set_error_handler(function($code, $message, $file, $line)
  */
 if (!defined('KANSO_DIR'))
 {
-	define('KANSO_DIR', dirname(dirname(__FILE__)) . '/kanso');
+	define('KANSO_DIR', dirname(__FILE__, 2) . '/kanso');
 }
 
 /*

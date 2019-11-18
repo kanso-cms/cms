@@ -21,7 +21,7 @@ class ConnectionHandlerTest extends TestCase
     /**
      *
      */
-    public function testBind()
+    public function testBind(): void
     {
     	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
 
@@ -53,7 +53,7 @@ class ConnectionHandlerTest extends TestCase
     /**
      *
      */
-    public function testBindAgain()
+    public function testBindAgain(): void
     {
     	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
 
@@ -89,7 +89,7 @@ class ConnectionHandlerTest extends TestCase
     /**
      *
      */
-    public function testBindMore()
+    public function testBindMore(): void
     {
     	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
 
@@ -123,7 +123,7 @@ class ConnectionHandlerTest extends TestCase
     /**
      *
      */
-    public function testBindFromQueryArgs()
+    public function testBindFromQueryArgs(): void
     {
     	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
 
@@ -155,7 +155,7 @@ class ConnectionHandlerTest extends TestCase
     /**
      *
      */
-    public function testAllBindings()
+    public function testAllBindings(): void
     {
     	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
 
@@ -189,7 +189,7 @@ class ConnectionHandlerTest extends TestCase
     /**
      *
      */
-    public function testWithCaching()
+    public function testWithCaching(): void
     {
     	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
 
@@ -219,7 +219,7 @@ class ConnectionHandlerTest extends TestCase
     /**
      *
      */
-    public function testClearCaching()
+    public function testClearCaching(): void
     {
     	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
 
@@ -257,7 +257,7 @@ class ConnectionHandlerTest extends TestCase
     /**
      *
      */
-    public function testClearCachingDifferentTable()
+    public function testClearCachingDifferentTable(): void
     {
     	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
 
@@ -295,7 +295,7 @@ class ConnectionHandlerTest extends TestCase
     /**
      *
      */
-    public function testLastInsertedId()
+    public function testLastInsertedId(): void
     {
     	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
 

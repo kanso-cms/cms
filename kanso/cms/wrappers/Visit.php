@@ -67,7 +67,6 @@ class Visit extends Wrapper
     /**
      * Returns all visit actions.
      *
-     * @access public
      * @return array
      */
     public function actions(): array
@@ -83,7 +82,6 @@ class Visit extends Wrapper
     /**
      * Adds a new action.
      *
-     * @access public
      * @param  string $action      The action type
      * @param  string $description The action description
      * @return bool

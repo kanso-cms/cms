@@ -26,7 +26,7 @@ class GenerateSecret extends Command
 	/**
 	 * {@inheritdoc}
 	 */
-	public function execute()
+	public function execute(): void
 	{
 		$secret = Key::generateEncoded();
 

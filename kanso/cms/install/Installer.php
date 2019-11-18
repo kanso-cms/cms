@@ -61,7 +61,6 @@ class Installer
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\config\Config     $config   Config manager
      * @param \kanso\framework\database\Database $database Database manager
      * @param \kanso\cms\access\Access           $access   Access module
@@ -87,7 +86,6 @@ class Installer
     /**
      * Returns TRUE if Kanso is installed or FALSE if it is not.
      *
-     * @access public
      * @return bool
      */
     public function isInstalled(): bool
@@ -103,12 +101,11 @@ class Installer
     /**
      * Install the CMS.
      *
-     * @access public
      * @param \kanso\framework\http\request\Request   $request  Framework Request instance
      * @param \kanso\framework\http\response\Response $response Framework Response instance
      * @param \Closure                                $next     Next middleware layer
      */
-    public function run(Request $request, Response $response, Closure $next)
+    public function run(Request $request, Response $response, Closure $next): void
     {
         // Validate installation
         if ($this->isInstalled)
@@ -131,12 +128,11 @@ class Installer
     /**
      * Show the install splash.
      *
-     * @access public
      * @param \kanso\framework\http\request\Request   $request  Framework Request instance
      * @param \kanso\framework\http\response\Response $response Framework Response instance
      * @param \Closure                                $next     Next middleware layer
      */
-    public function display(Request $request, Response $response, Closure $next)
+    public function display(Request $request, Response $response, Closure $next): void
     {
         // Set appropriate content type header
         $response->format()->set('text/html');
@@ -162,8 +158,6 @@ class Installer
 
     /**
      * Reinstall Kanso to defaults but keep database and admin panel login credentials.
-     *
-     * @access public
      */
     public function reInstall()
     {
@@ -179,10 +173,9 @@ class Installer
     /**
      * Install the Kanso database.
      *
-     * @access   private
      * @suppress PhanUndeclaredVariable
      */
-    private function installDB()
+    private function installDB(): void
     {
     	// Save the database name
         $dbname = $this->config->get('database.configurations.' . $this->config->get('database.default') . '.name');
@@ -322,10 +315,8 @@ class Installer
 
     /**
      * Create the robots.txt file.
-     *
-     * @access private
      */
-    private function installRobots()
+    private function installRobots(): void
     {
         $enabled = $this->config->get('cms.security.enable_robots');
         $content = $this->config->get('cms.security.robots_text_content');

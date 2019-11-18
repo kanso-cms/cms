@@ -55,7 +55,6 @@ class WebHandler
 	/**
 	 * Constructor.
 	 *
-	 * @access public
 	 * @param \Throwable                              $exception Throwable
 	 * @param \kanso\framework\http\request\Request   $request   Request instance
 	 * @param \kanso\framework\http\response\Response $response  Response instance
@@ -75,7 +74,6 @@ class WebHandler
 	/**
 	 * Should we return the error as JSON?
 	 *
-	 * @access protected
 	 * @return bool
 	 */
 	protected function returnAsJson(): bool
@@ -93,7 +91,6 @@ class WebHandler
 	/**
 	 * Returns a detailed error page.
 	 *
-	 * @access protected
 	 * @param  bool   $returnAsJson Should we return JSON?
 	 * @param  bool   $isBot        Is the user-agent a bot?
 	 * @return string
@@ -137,7 +134,6 @@ class WebHandler
 	/**
 	 * Returns a generic error page.
 	 *
-	 * @access protected
 	 * @param  bool   $returnAsJson Should we return JSON?
 	 * @param  bool   $isBot        Is the user-agent a bot?
 	 * @return string
@@ -205,7 +201,6 @@ class WebHandler
 	/**
 	 * Display an error page to end user.
 	 *
-	 * @access protected
 	 * @param  bool  $showDetails Should we show a detailed error page
 	 * @return false
 	 */

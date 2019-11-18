@@ -17,7 +17,6 @@ class Products extends UtilityBase
     /**
      * Get an offer from a product by id.
      *
-     * @access public
      * @param  int         $productId Product post_id
      * @param  string      $offerId   Offer id (sku)
      * @return array|false
@@ -41,7 +40,6 @@ class Products extends UtilityBase
     /**
      * Get all of a product's offers.
      *
-     * @access public
      * @param  int   $productId Product post_id
      * @return array
      */

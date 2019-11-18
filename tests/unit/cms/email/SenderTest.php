@@ -20,7 +20,7 @@ class SenderTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSendNormal()
+	public function testSendNormal(): void
 	{
 		$mailer     = Mockery::mock('\PHPMailer\PHPMailer\PHPMailer');
 		$sender     = new Sender($mailer, false);
@@ -30,7 +30,7 @@ class SenderTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSendNormalPlainTxt()
+	public function testSendNormalPlainTxt(): void
 	{
 		$mailer     = Mockery::mock('\PHPMailer\PHPMailer\PHPMailer');
 		$sender     = new Sender($mailer, false);
@@ -40,7 +40,7 @@ class SenderTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSendSmtpHtml()
+	public function testSendSmtpHtml(): void
 	{
 		$mailer     = Mockery::mock('\PHPMailer\PHPMailer\PHPMailer');
 		$sender     = new Sender($mailer, true, $this->getSmtpSettings());
@@ -62,7 +62,7 @@ class SenderTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSendSmtpPlainText()
+	public function testSendSmtpPlainText(): void
 	{
 		$mailer     = Mockery::mock('\PHPMailer\PHPMailer\PHPMailer');
 		$sender     = new Sender($mailer, true, $this->getSmtpSettings());
@@ -83,7 +83,7 @@ class SenderTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSendSmtpOAuthHtml()
+	public function testSendSmtpOAuthHtml(): void
 	{
 		$mailer     = Mockery::mock('\PHPMailer\PHPMailer\PHPMailer');
 		$config     = $this->getSmtpSettings();
@@ -108,7 +108,7 @@ class SenderTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSendSmtpOAutPlainText()
+	public function testSendSmtpOAutPlainText(): void
 	{
 		$mailer     = Mockery::mock('\PHPMailer\PHPMailer\PHPMailer');
 		$config     = $this->getSmtpSettings();

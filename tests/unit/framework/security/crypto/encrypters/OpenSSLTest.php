@@ -19,7 +19,7 @@ class OpenSSLTest extends TestCase
 	/**
 	 *
 	 */
-	public function testEncryptDecrypt()
+	public function testEncryptDecrypt(): void
 	{
 		$data = 'foobar!!$#$@#"$#@!$P:{';
 
@@ -33,7 +33,7 @@ class OpenSSLTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCyphers()
+	public function testCyphers(): void
 	{
 		$data = 'foobar!!$#$@#"$#@!$P:{';
 

@@ -92,7 +92,6 @@ class UserManager extends Manager
     /**
      * Override inherited constructor.
      *
-     * @access public
      * @param \kanso\framework\database\query\Builder    $SQL         Query builder instance
      * @param \kanso\cms\wrappers\providers\UserProvider $provider    User provider instance
      * @param \kanso\framework\security\Crypto           $crypto      Encryption manager
@@ -124,7 +123,6 @@ class UserManager extends Manager
     /**
      * Creates a new user.
      *
-     * @access public
      * @param  string $email    User email address
      * @param  string $username User username
      * @param  string $password User password
@@ -177,7 +175,6 @@ class UserManager extends Manager
     /**
      * Registers a new admin user for the CMS.
      *
-     * @access public
      * @param  string $email     Valid email address
      * @param  string $role      'administrator' or 'writer'
      * @param  bool   $sendEamil Should we send the user an email with username and password ? (optional) (default true)
@@ -229,7 +226,6 @@ class UserManager extends Manager
     /**
      * Create a new regular user.
      *
-     * @access public
      * @param  string $email     Valid email address
      * @param  string $password  Password string (optional) (default '')
      * @param  string $name      Users name  (optional) (default '')
@@ -298,7 +294,6 @@ class UserManager extends Manager
     /**
      * Activate an existing user.
      *
-     * @access public
      * @param  string $token Verification token from DB
      * @return bool
      */
@@ -325,7 +320,6 @@ class UserManager extends Manager
 	/**
 	 * Deletes an existing user.
 	 *
-	 * @access public
 	 * @param  mixed $usernameIdorEmail Username, id or email
 	 * @return bool
 	 */
@@ -365,7 +359,6 @@ class UserManager extends Manager
 	/**
 	 * Gets a user by id.
 	 *
-	 * @access public
 	 * @param  int   $id Tag id
 	 * @return mixed
 	 */
@@ -377,7 +370,6 @@ class UserManager extends Manager
 	/**
 	 * Gets a user by email.
 	 *
-	 * @access public
 	 * @param  string $email User email
 	 * @return mixed
 	 */
@@ -389,7 +381,6 @@ class UserManager extends Manager
 	/**
 	 * Gets a user by username.
 	 *
-	 * @access public
 	 * @param  string $username Username
 	 * @return mixed
 	 */
@@ -401,7 +392,6 @@ class UserManager extends Manager
 	/**
 	 * Gets a user by access token.
 	 *
-	 * @access public
 	 * @param  string $token User access token
 	 * @return mixed
 	 */
@@ -413,7 +403,6 @@ class UserManager extends Manager
     /**
      * Create a unique username.
      *
-     * @access private
      * @param  string $username The username
      * @return string
      */

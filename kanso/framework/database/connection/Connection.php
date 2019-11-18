@@ -86,7 +86,6 @@ class Connection
 	/**
 	 * Constructor.
 	 *
-	 * @access public
 	 * @param  array            $config Connection configuration
 	 * @throws RuntimeException If connection type is not supported
 	 */
@@ -131,7 +130,6 @@ class Connection
 	/**
 	 * Creates a PDO instance.
 	 *
-	 * @access protected
 	 * @return PDO
 	 */
 	protected function connect(): PDO
@@ -150,8 +148,6 @@ class Connection
 
 	/**
 	 * Creates a new PDO instance.
-	 *
-	 * @access public
 	 */
 	public function isConnected()
 	{
@@ -160,8 +156,6 @@ class Connection
 
 	/**
 	 * Creates a new PDO instance.
-	 *
-	 * @access public
 	 */
 	public function reconnect()
 	{
@@ -172,8 +166,6 @@ class Connection
 
 	/**
 	 * Creates a new PDO instance.
-	 *
-	 * @access public
 	 */
 	public function pdo()
 	{
@@ -187,8 +179,6 @@ class Connection
 
 	/**
 	 * Get the table prefix.
-	 *
-	 * @access public
 	 */
 	public function tablePrefix()
 	{
@@ -198,7 +188,6 @@ class Connection
 	/**
 	 * Checks if the connection is alive.
 	 *
-	 * @access public
 	 * @return bool
 	 */
 	public function isAlive(): bool
@@ -217,10 +206,8 @@ class Connection
 
  	/**
  	 * Close the current connection.
- 	 *
- 	 * @access public
  	 */
- 	public function close()
+ 	public function close(): void
  	{
  		$this->pdo = null;
  	}
@@ -253,7 +240,6 @@ class Connection
 	/**
 	 * Returns the connection options.
 	 *
-	 * @access protected
 	 * @return array
 	 */
 	protected function getConnectionOptions(): array

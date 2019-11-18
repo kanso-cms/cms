@@ -17,12 +17,11 @@ class Scripts extends Helper
     /**
      * Enqueue a JS script tag.
      *
-     * @access public
      * @param string      $src      The script src URL
      * @param string|null $ver      The script version (optional) (default null)
      * @param bool        $inFooter Load the script in the footer (optional) (default false)
      */
-    public function enqueue_script(string $src = '', string $ver = null, bool $inFooter = false)
+    public function enqueue_script(string $src = '', string $ver = null, bool $inFooter = false): void
     {
         $ver = !$ver ? '' : '?v=' . $ver;
 
@@ -39,12 +38,11 @@ class Scripts extends Helper
     /**
      * Enqueue a CSS stylesheet.
      *
-     * @access public
      * @param string      $src   The stylesheet src URL
      * @param string|null $ver   The stylesheet version (default null)
      * @param string      $media The media for which this stylesheet has been defined
      */
-    public function enqueue_style(string $src = '', string $ver = null, string $media = 'all')
+    public function enqueue_style(string $src = '', string $ver = null, string $media = 'all'): void
     {
         $ver = !$ver ? '' : '?v=' . $ver;
 
@@ -54,10 +52,9 @@ class Scripts extends Helper
     /**
      * Enqueue an inline style tag.
      *
-     * @access public
      * @param string $css The CSS to enqueue
      */
-    public function enqueue_inline_style(string $css = '')
+    public function enqueue_inline_style(string $css = ''): void
     {
         $this->parent->headerStyles[] = '<style type="text/css">' . trim($css) . '</style>';
     }
@@ -65,11 +62,10 @@ class Scripts extends Helper
     /**
      * Enqueue an inline style tag.
      *
-     * @access public
      * @param string $js       The JS to enqueue
      * @param bool   $inFooter Load the script in the footer (optional) (default false)
      */
-    public function enqueue_inline_script(string $js = '', bool $inFooter = false)
+    public function enqueue_inline_script(string $js = '', bool $inFooter = false): void
     {
         if ($inFooter)
         {
@@ -84,7 +80,6 @@ class Scripts extends Helper
     /**
      * Get the kanso head.
      *
-     * @access public
      * @return string
      */
     public function kanso_head(): string
@@ -101,7 +96,6 @@ class Scripts extends Helper
     /**
      * Get the kanso head.
      *
-     * @access public
      * @return string
      */
     public function kanso_footer(): string

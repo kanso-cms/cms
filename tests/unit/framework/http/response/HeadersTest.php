@@ -19,7 +19,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSet()
+	public function testSet(): void
 	{
 		$headers = new Headers;
 
@@ -31,7 +31,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSetMultiple()
+	public function testSetMultiple(): void
 	{
 		$headers = new Headers;
 
@@ -46,7 +46,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function TestHas()
+	public function TestHas(): void
 	{
 		$headers = new Headers;
 
@@ -61,7 +61,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRemove()
+	public function testRemove(): void
 	{
 		$headers = new Headers;
 
@@ -78,7 +78,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testClear()
+	public function testClear(): void
 	{
 		$headers = new Headers;
 
@@ -97,7 +97,7 @@ class HeadersTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testSend()
+	public function testSend(): void
 	{
 		$headers = new Headers;
 
@@ -116,7 +116,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIteration()
+	public function testIteration(): void
 	{
 		$headers = new Headers;
 

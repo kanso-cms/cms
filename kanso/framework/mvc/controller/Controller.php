@@ -38,7 +38,6 @@ abstract class Controller
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\http\request\Request   $request    Request instance
      * @param \kanso\framework\http\response\Response $response   Response instance
      * @param \Closure                                $next       Next middleware closure
@@ -54,10 +53,9 @@ abstract class Controller
     /**
      * Loads and instantiates the model.
      *
-     * @access private
      * @param string $className Full namespaced class name of the model
      */
-    private function loadModel(string $className)
+    private function loadModel(string $className): void
 	{
 		$this->model = $this->instantiateModel($className);
 	}
@@ -65,7 +63,6 @@ abstract class Controller
 	/**
 	 * Instantiates and returns the model instance.
 	 *
-	 * @access private
 	 * @param  string $class Full namespaced class name of the model
 	 * @return object
 	 */

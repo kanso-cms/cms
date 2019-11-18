@@ -20,7 +20,7 @@ class SpamProtectorTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIpUnWhitelist()
+	public function testIpUnWhitelist(): void
 	{
 		$gibberish = Mockery::mock('\kanso\framework\security\spam\gibberish\Gibberish');
 
@@ -38,7 +38,7 @@ class SpamProtectorTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIpWhitelist()
+	public function testIpWhitelist(): void
 	{
 		$gibberish = Mockery::mock('\kanso\framework\security\spam\gibberish\Gibberish');
 
@@ -56,7 +56,7 @@ class SpamProtectorTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIpUnBlacklist()
+	public function testIpUnBlacklist(): void
 	{
 		$gibberish = Mockery::mock('\kanso\framework\security\spam\gibberish\Gibberish');
 
@@ -74,7 +74,7 @@ class SpamProtectorTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIpBlacklist()
+	public function testIpBlacklist(): void
 	{
 		$gibberish = Mockery::mock('\kanso\framework\security\spam\gibberish\Gibberish');
 
@@ -92,7 +92,7 @@ class SpamProtectorTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsIpBlacklisted()
+	public function testIsIpBlacklisted(): void
 	{
 		$gibberish = Mockery::mock('\kanso\framework\security\spam\gibberish\Gibberish');
 
@@ -110,7 +110,7 @@ class SpamProtectorTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsIpWhitelisted()
+	public function testIsIpWhitelisted(): void
 	{
 		$gibberish = Mockery::mock('\kanso\framework\security\spam\gibberish\Gibberish');
 
@@ -128,7 +128,7 @@ class SpamProtectorTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsSpam()
+	public function testIsSpam(): void
 	{
 		$gibberish = Mockery::mock('\kanso\framework\security\spam\gibberish\Gibberish');
 
@@ -164,7 +164,7 @@ class SpamProtectorTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRating()
+	public function testRating(): void
 	{
 		$gibberish = Mockery::mock('\kanso\framework\security\spam\gibberish\Gibberish');
 

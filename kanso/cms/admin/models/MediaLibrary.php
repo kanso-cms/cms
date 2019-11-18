@@ -104,7 +104,6 @@ class MediaLibrary extends BaseModel
     /**
      * Load images for the media library.
      *
-     * @access private
      * @return array|false
      */
     private function loadMedia()
@@ -151,7 +150,6 @@ class MediaLibrary extends BaseModel
     /**
      * Delete images by ids.
      *
-     * @access private
      * @return string|false
      */
     private function deleteMedia()
@@ -185,7 +183,6 @@ class MediaLibrary extends BaseModel
     /**
      * Update an attachment info.
      *
-     * @access private
      * @return string|false
      */
     private function updateMediaInfo()
@@ -227,7 +224,6 @@ class MediaLibrary extends BaseModel
     /**
      * Upload file or files.
      *
-     * @access private
      * @return array|false
      */
     private function uploadMedia()

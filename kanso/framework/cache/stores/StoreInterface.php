@@ -17,7 +17,6 @@ interface StoreInterface
     /**
      * Load a key value.
      *
-     * @access public
      * @param string $key Key to load
      */
     public function get(string $key);
@@ -25,7 +24,6 @@ interface StoreInterface
     /**
      * Save a key value.
      *
-     * @access public
      * @param string $key  Key to save the output
      * @param string $data Data to store
      */
@@ -34,7 +32,6 @@ interface StoreInterface
     /**
      * Check if a key is stored.
      *
-     * @access public
      * @param string $key Key to check
      */
     public function has(string $key): bool;
@@ -42,7 +39,6 @@ interface StoreInterface
     /**
      * Remove a key value.
      *
-     * @access public
      * @param string $key Key to delete
      */
     public function delete(string $key);
@@ -50,7 +46,6 @@ interface StoreInterface
     /**
      * Checks is key value is expired.
      *
-     * @access public
      * @param string $key    Key to check
      * @param int    $maxAge Unix timestamp of max expiry
      */
@@ -58,8 +53,6 @@ interface StoreInterface
 
     /**
      * Clear the entire cache.
-     *
-     * @access public
      */
     public function clear();
 }

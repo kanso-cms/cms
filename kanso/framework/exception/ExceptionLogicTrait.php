@@ -31,10 +31,9 @@ trait ExceptionLogicTrait
 	/**
 	 * Set the exception object.
 	 *
-	 * @access protected
 	 * @param \Throwable $exception Throwable
 	 */
-	protected function setException(Throwable $exception)
+	protected function setException(Throwable $exception): void
 	{
 		$this->exception = $exception;
 	}
@@ -42,7 +41,6 @@ trait ExceptionLogicTrait
 	/**
 	 * Get text version of PHP error constant.
 	 *
-	 * @access protected
 	 * @see    http://php.net/manual/en/errorfunc.constants.php
 	 * @return string
 	 */
@@ -82,7 +80,6 @@ trait ExceptionLogicTrait
 	/**
 	 * Get the current exception class without namespace.
 	 *
-	 * @access protected
 	 * @return string
 	 */
 	protected function exceptionClassName(): string
@@ -95,7 +92,6 @@ trait ExceptionLogicTrait
 	/**
 	 * Get the current exception's parent class without namespace.
 	 *
-	 * @access protected
 	 * @return string
 	 */
 	protected function exceptionParentName(): string
@@ -108,7 +104,6 @@ trait ExceptionLogicTrait
 	/**
 	 * Convert PHP error code to pretty name.
 	 *
-	 * @access protected
 	 * @see    http://php.net/manual/en/errorfunc.constants.php
 	 * @return string
 	 */
@@ -148,7 +143,6 @@ trait ExceptionLogicTrait
     /**
      * Get the exception call trace.
      *
-     * @access protected
      * @return array
      */
     protected function errTrace(): array
@@ -174,7 +168,6 @@ trait ExceptionLogicTrait
 	/**
 	 * Get source code of error line context.
 	 *
-	 * @access protected
 	 * @return array
 	 */
 	protected function errSource(): array
@@ -213,7 +206,6 @@ trait ExceptionLogicTrait
 	/**
 	 * Get the classname of the error file.
 	 *
-	 * @access protected
 	 * @return string
 	 */
 	protected function errClass(): string

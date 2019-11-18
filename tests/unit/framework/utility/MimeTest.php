@@ -19,7 +19,7 @@ class MimeTest extends TestCase
 	/**
 	 *
 	 */
-	public function testFromExt()
+	public function testFromExt(): void
 	{
 		foreach (Mime::$mimeMap as $ext => $mime)
 		{
@@ -32,7 +32,7 @@ class MimeTest extends TestCase
 	/**
 	 *
 	 */
-	public function testToExt()
+	public function testToExt(): void
 	{
 		foreach (Mime::$mimeMap as $ext => $mime)
 		{

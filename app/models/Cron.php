@@ -7,7 +7,6 @@
 
 namespace app\models;
 
-use app\models\utility\Emails;
 use kanso\framework\common\SqlBuilderTrait;
 use kanso\framework\mvc\model\Model;
 
@@ -23,7 +22,6 @@ class Cron extends Model
     /**
      * Validates the URL key provided the application secret.
      *
-     * @access public
      * @return bool
      */
     public function validate(): bool
@@ -33,10 +31,8 @@ class Cron extends Model
 
     /**
      * Handles abandoned cart emails.
-     *
-     * @access public
      */
-    public function dbMaintenance()
+    public function dbMaintenance(): void
     {
         ini_set('max_execution_time', '120');
 
@@ -80,10 +76,8 @@ class Cron extends Model
 
     /**
      * Handles email queue processing.
-     *
-     * @access public
      */
-    public function emailQueue()
+    public function emailQueue(): void
     {
         $this->Email->queue()->process();
 

@@ -46,7 +46,6 @@ class Output
     /**
      * Returns the formatter.
      *
-     * @access public
      * @return \\kanso\framework\cli\output\Formatter
      */
     public function formatter(): Formatter
@@ -57,7 +56,6 @@ class Output
     /**
      * Returns the environment.
      *
-     * @access public
      * @return \kanso\framework\cli\Environment
      */
     public function environment(): environment

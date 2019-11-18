@@ -7,9 +7,6 @@
 
 namespace kanso\framework\validator;
 
-use function array_unique;
-use function compact;
-use function in_array;
 use kanso\framework\ioc\Container;
 use kanso\framework\utility\Arr;
 use kanso\framework\utility\Str;
@@ -35,10 +32,10 @@ use kanso\framework\validator\rules\AlphanumericDash;
 use kanso\framework\validator\rules\AlphaSpace;
 use kanso\framework\validator\rules\Email;
 use kanso\framework\validator\rules\ExactLength;
-
 use kanso\framework\validator\rules\FloatingPoint;
 use kanso\framework\validator\rules\GreaterThan;
 use kanso\framework\validator\rules\GreaterThanOrEqualTo;
+
 use kanso\framework\validator\rules\In;
 use kanso\framework\validator\rules\Integer;
 use kanso\framework\validator\rules\IP;
@@ -52,10 +49,13 @@ use kanso\framework\validator\rules\NotIn;
 use kanso\framework\validator\rules\Regex;
 use kanso\framework\validator\rules\Required;
 use kanso\framework\validator\rules\RuleInterface;
-
 use kanso\framework\validator\rules\URL;
 use kanso\framework\validator\rules\WithParametersInterface;
 use RuntimeException;
+
+use function array_unique;
+use function compact;
+use function in_array;
 use function vsprintf;
 
 /**
@@ -191,13 +191,12 @@ class Validator
 	/**
 	 * Returns true if all rules passed and false if validation failed.
 	 *
-	 * @access public
 	 * @param  array|null &$errors If $errors is provided, then it is filled with all the error messages
 	 * @return bool
 	 */
 	public function isValid(array &$errors = null): bool
 	{
-		list($isValid, $errors) = $this->process();
+		[$isValid, $errors] = $this->process();
 
 		return $isValid === true;
 	}
@@ -205,13 +204,12 @@ class Validator
 	/**
 	 * Returns false if all rules passed and true if validation failed.
 	 *
-	 * @access public
 	 * @param  array|null &$errors If $errors is provided, then it is filled with all the error messages
 	 * @return bool
 	 */
 	public function isInvalid(array &$errors = null): bool
 	{
-		list($isValid, $errors) = $this->process();
+		[$isValid, $errors] = $this->process();
 
 		return $isValid === false;
 	}
@@ -219,7 +217,6 @@ class Validator
 	/**
 	 * Returns the validation errors.
 	 *
-	 * @access public
 	 * @return array
 	 */
 	public function getErrors(): array
@@ -230,7 +227,6 @@ class Validator
 	/**
 	 * Filters the input.
 	 *
-	 * @access public
 	 * @return array
 	 */
 	public function filter(): array
@@ -263,7 +259,6 @@ class Validator
 	/**
 	 * Filters the input.
 	 *
-	 * @access private
 	 * @param  mixed  $value Field value
 	 * @param  string $name  Filter name to use
 	 * @return mixed
@@ -278,7 +273,6 @@ class Validator
 	/**
 	 * Creates a filter instance.
 	 *
-	 * @access private
 	 * @param  string                                             $name Rule name
 	 * @return \kanso\framework\validator\filters\FilterInterface
 	 */
@@ -297,7 +291,6 @@ class Validator
 	/**
 	 * Returns the filter class name.
 	 *
-	 * @access private
 	 * @param  string $name Filter name
 	 * @return string
 	 */
@@ -314,11 +307,10 @@ class Validator
 	/**
 	 * Saves original field name along with the expanded field name.
 	 *
-	 * @access private
 	 * @param array  $fields Expanded field names
 	 * @param string $field  Original field name
 	 */
-	private function saveOriginalFieldNames(array $fields, string $field)
+	private function saveOriginalFieldNames(array $fields, string $field): void
 	{
 		foreach($fields as $expanded)
 		{
@@ -329,7 +321,6 @@ class Validator
 	/**
 	 * Returns the original field name.
 	 *
-	 * @access private
 	 * @param  string $field Field name
 	 * @return string
 	 */
@@ -341,13 +332,12 @@ class Validator
 	/**
 	 * Parses the rule.
 	 *
-	 * @access private
 	 * @param  string $rule Rule
 	 * @return object
 	 */
 	private function parseRule(string $rule)
 	{
-		list($name, $parameters) = $this->parseRuleParams($rule);
+		[$name, $parameters] = $this->parseRuleParams($rule);
 
 		return (object) compact('name', 'parameters');
 	}
@@ -355,7 +345,6 @@ class Validator
 	/**
 	 * Parses the rule parameters.
 	 *
-	 * @access private
 	 * @param  string $rule Rule
 	 * @return array
 	 */
@@ -386,7 +375,6 @@ class Validator
 	/**
 	 * Returns the rule class name.
 	 *
-	 * @access private
 	 * @param  string $name Rule name
 	 * @return string
 	 */
@@ -403,7 +391,6 @@ class Validator
 	/**
 	 * Creates a rule instance.
 	 *
-	 * @access private
 	 * @param  string                                         $name Rule name
 	 * @return \kanso\framework\validator\rules\RuleInterface
 	 */
@@ -425,7 +412,6 @@ class Validator
 	/**
 	 * Returns true if the input field is considered empty and false if not.
 	 *
-	 * @access private
 	 * @param  mixed $value Value
 	 * @return bool
 	 */
@@ -437,7 +423,6 @@ class Validator
 	/**
 	 * Returns the error message.
 	 *
-	 * @access private
 	 * @param  \kanso\framework\validator\rules\RuleInterface $rule       Rule
 	 * @param  string                                         $field      Field name
 	 * @param  object                                         $parsedRule Parsed rule
@@ -453,7 +438,6 @@ class Validator
 	/**
 	 * Validates the field using the specified rule.
 	 *
-	 * @access private
 	 * @param  string $field Field name
 	 * @param  string $rule  Rule
 	 * @return bool
@@ -494,7 +478,6 @@ class Validator
 	 * Processes all validation rules and returns an array containing
 	 * the validation status and potential error messages.
 	 *
-	 * @access private
 	 * @return array
 	 */
 	private function process(): array

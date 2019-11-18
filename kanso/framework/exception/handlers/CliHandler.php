@@ -45,7 +45,6 @@ class CliHandler
 	/**
 	 * Constructor.
 	 *
-	 * @access public
 	 * @param \Throwable                              $exception Throwable
 	 * @param \kanso\framework\http\request\Request   $request   Request instance
 	 * @param \kanso\framework\http\response\Response $response  Response instance
@@ -63,7 +62,6 @@ class CliHandler
 	/**
 	 * Display an error page to end user.
 	 *
-	 * @access private
 	 * @param  bool  $showDetails Should we show a detailed error page
 	 * @return false
 	 */
@@ -132,7 +130,6 @@ class CliHandler
 	/**
 	 * Returns a detailed error page.
 	 *
-	 * @access private
 	 * @return string
 	 */
 	private function getDetailedError(): string

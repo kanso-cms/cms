@@ -17,7 +17,6 @@ interface StoreInterface
 	/**
 	 * Decrypts and reads a cookie by name.
 	 *
-	 * @access public
 	 * @param  string $key key to read from
 	 * @return mixed
 	 */
@@ -26,7 +25,6 @@ interface StoreInterface
 	/**
 	 * Encypts and writes a cookie by name.
 	 *
-	 * @access public
 	 * @param string $key   key to read from
 	 * @param mixed  $value Value to save
 	 */

@@ -17,12 +17,11 @@ class Arr
 	/**
 	 * Sets an array value using "dot notation".
 	 *
-	 * @access public
 	 * @param array  $array Array you want to modify
 	 * @param string $path  Array path
 	 * @param mixed  $value Value to set
 	 */
-	public static function set(array &$array, string $path, $value)
+	public static function set(array &$array, string $path, $value): void
 	{
 		$segments = explode('.', $path);
 
@@ -44,7 +43,6 @@ class Arr
 	/**
 	 * Search for an array value using "dot notation". Returns TRUE if the array key exists and FALSE if not.
 	 *
-	 * @access public
 	 * @param  array  $array Array we're goint to search
 	 * @param  string $path  Path
 	 * @return bool
@@ -69,7 +67,6 @@ class Arr
 	/**
 	 * Returns value from array using "dot notation".
 	 *
-	 * @access public
 	 * @param  array      $array   Array we're going to search
 	 * @param  string     $path    Array path
 	 * @param  null|mixed $default Default return value
@@ -95,7 +92,6 @@ class Arr
 	/**
 	 * Deletes an array value using "dot notation".
 	 *
-	 * @access public
 	 * @param  array  $array Array you want to modify
 	 * @param  string $path  Array path
 	 * @return bool
@@ -124,7 +120,6 @@ class Arr
 	/**
 	 * Returns a random value from an array.
 	 *
-	 * @access public
 	 * @param  array $array Array you want to pick a random value from
 	 * @return mixed
 	 */
@@ -136,7 +131,6 @@ class Arr
 	/**
 	 * Returns TRUE if the array is associative and FALSE if not.
 	 *
-	 * @access public
 	 * @param  array $array Array to check
 	 * @return bool
 	 */
@@ -148,7 +142,6 @@ class Arr
 	/**
 	 * Returns TRUE if the array is multi-dimensional and FALSE if not.
 	 *
-	 * @access public
 	 * @param  array $array Array to check
 	 * @return bool
 	 */
@@ -168,7 +161,6 @@ class Arr
 	/**
 	 * Returns the values from a single column of the input array, identified by the key.
 	 *
-	 * @access public
 	 * @param  array  $array Array to pluck from
 	 * @param  string $key   Array key
 	 * @return array
@@ -184,7 +176,6 @@ class Arr
 	/**
 	 * Insert into an associative array at a specific index.
 	 *
-	 * @access public
 	 * @param  array $array Array to use
 	 * @param  mixed $item  Item to insert
 	 * @param  int   $index Index to insert item at
@@ -236,7 +227,6 @@ class Arr
 	/**
 	 * Returns TRUE if all needles exist in target array and FALSE if not.
 	 *
-	 * @access public
 	 * @param  array $needles  Array of needles
 	 * @param  array $haystack Array to check
 	 * @return bool
@@ -253,7 +243,6 @@ class Arr
 	/**
 	 * Unsets an array of needles from a target array.
 	 *
-	 * @access public
 	 * @param  array $needles  Array of needles
 	 * @param  array $haystack Array to modify
 	 * @return array
@@ -273,7 +262,6 @@ class Arr
 	/**
 	 * Sort a multi-dimensional array by key.
 	 *
-	 * @access public
 	 * @param  array  $array     Array to sort
 	 * @param  string $key       Key to sort by
 	 * @param  string $direction Direction to sort 'ASC'|'DESC' (optional) (default 'ASC')
@@ -347,7 +335,6 @@ class Arr
 	/**
 	 * Get a value from an array or object.
 	 *
-	 * @access public
 	 * @param  string $key   Key to use
 	 * @param  mixed  $mixed Array or object
 	 * @return mixed
@@ -368,7 +355,6 @@ class Arr
     /**
      * Implode an associative array by key.
      *
-     * @access public
      * @param  string $key   Key to explode by
      * @param  array  $array Target array to use
      * @param  string $glue  String between pieces (optional) (default '')
@@ -399,7 +385,6 @@ class Arr
 	/**
 	 * Recursively check if a value is in a multi-dimensional array.
 	 *
-	 * @access public
 	 * @param  string $needle   The value to search for
 	 * @param  array  $haystack The array to search in
 	 * @param  bool   $strict   Applies strict compassions between values (optional) (default FALSE)
@@ -421,7 +406,6 @@ class Arr
 	/**
 	 * Paginate an array. Returns FALSE if current page is more than max pages.
 	 *
-	 * @access public
 	 * @param  array       $list  Array of data to paginated
 	 * @param  int         $page  The current page to return
 	 * @param  int         $limit How many items per page

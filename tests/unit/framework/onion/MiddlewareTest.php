@@ -20,12 +20,12 @@ class MiddleWareCallbackTest
     	$this->var = $arg1 . $arg2;
     }
 
-    public function normalMethod()
+    public function normalMethod(): void
     {
     	echo $this->var;
     }
 
-	public static function staticFunc(Request $request, Response $response, Closure $next, $arg1, $arg2)
+	public static function staticFunc(Request $request, Response $response, Closure $next, $arg1, $arg2): void
 	{
 		echo $arg1 . $arg2;
 	}
@@ -39,7 +39,7 @@ class MiddlewareTest
 	/**
 	 *
 	 */
-	public function testNonStaticClassMethod()
+	public function testNonStaticClassMethod(): void
 	{
 		ob_start();
 
@@ -49,7 +49,7 @@ class MiddlewareTest
 
 		$layer = new Middleware('\tests\unit\framework\onion\MiddleWareCallbackTest@normalMethod', ['foo', 'bar']);
 
-		$next = function()
+		$next = function(): void
 		{
 
 		};
@@ -62,7 +62,7 @@ class MiddlewareTest
 	/**
 	 *
 	 */
-	public function testStaticClassMethod()
+	public function testStaticClassMethod(): void
 	{
 		ob_start();
 
@@ -72,7 +72,7 @@ class MiddlewareTest
 
 		$layer = new Middleware('\tests\unit\framework\onion\MiddleWareCallbackTest::staticFunc', ['foo', 'bar']);
 
-		$next = function()
+		$next = function(): void
 		{
 
 		};
@@ -85,11 +85,11 @@ class MiddlewareTest
 	/**
 	 *
 	 */
-	public function testColsure()
+	public function testColsure(): void
 	{
 		ob_start();
 
-		$callback = function(Request $request, Response $response, $next, $foo)
+		$callback = function(Request $request, Response $response, $next, $foo): void
 		{
 			echo $foo;
 		};
@@ -108,7 +108,7 @@ class MiddlewareTest
 	/**
 	 *
 	 */
-	public function testGetCallback()
+	public function testGetCallback(): void
 	{
 		$layer = new Middleware('\tests\unit\framework\onion\MiddleWareCallbackTest::staticFunc', ['foo', 'bar']);
 
@@ -118,7 +118,7 @@ class MiddlewareTest
 	/**
 	 *
 	 */
-	public function testGetArgs()
+	public function testGetArgs(): void
 	{
 		$layer = new Middleware('\tests\unit\framework\onion\MiddleWareCallbackTest::staticFunc', ['foo', 'bar']);
 

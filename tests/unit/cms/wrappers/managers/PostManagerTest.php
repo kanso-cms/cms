@@ -20,7 +20,7 @@ class PostManagerTest extends TestCase
     /**
      *
      */
-    public function testById()
+    public function testById(): void
     {
         $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
         $provider = Mockery::mock('\kanso\cms\wrappers\providers\PostProvider');
@@ -35,7 +35,7 @@ class PostManagerTest extends TestCase
     /**
      *
      */
-    public function testDelete()
+    public function testDelete(): void
     {
         $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
         $provider = Mockery::mock('\kanso\cms\wrappers\providers\PostProvider');
@@ -52,7 +52,7 @@ class PostManagerTest extends TestCase
     /**
      *
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
         $provider = Mockery::mock('\kanso\cms\wrappers\providers\PostProvider');

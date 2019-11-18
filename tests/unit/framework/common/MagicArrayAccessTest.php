@@ -37,7 +37,7 @@ class MagicArrayAccessTest extends TestCase
     /**
      *
      */
-    public function testInstantiate()
+    public function testInstantiate(): void
     {
         $arrayAccess = new TestMagicArrayAccess(['foo' => 'bar']);
 
@@ -47,7 +47,7 @@ class MagicArrayAccessTest extends TestCase
     /**
      *
      */
-    public function testSetGet()
+    public function testSetGet(): void
     {
         $arrayAccess = new TestMagicArrayAccess;
 
@@ -59,7 +59,7 @@ class MagicArrayAccessTest extends TestCase
     /**
      *
      */
-    public function testSetGetNested()
+    public function testSetGetNested(): void
     {
         $arrayAccess = new TestMagicArrayAccess;
 
@@ -71,7 +71,7 @@ class MagicArrayAccessTest extends TestCase
     /**
      *
      */
-    public function testHas()
+    public function testHas(): void
     {
         $arrayAccess = new TestMagicArrayAccess;
 
@@ -85,7 +85,7 @@ class MagicArrayAccessTest extends TestCase
     /**
      *
      */
-    public function testHasNested()
+    public function testHasNested(): void
     {
         $arrayAccess = new TestMagicArrayAccess;
 
@@ -103,7 +103,7 @@ class MagicArrayAccessTest extends TestCase
     /**
      *
      */
-    public function testRemove()
+    public function testRemove(): void
     {
         $arrayAccess = new TestMagicArrayAccess;
 
@@ -117,7 +117,7 @@ class MagicArrayAccessTest extends TestCase
     /**
      *
      */
-    public function testAsArray()
+    public function testAsArray(): void
     {
         $arrayAccess = new TestMagicArrayAccess;
 

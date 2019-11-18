@@ -24,7 +24,6 @@ trait ContainerAwareTrait
 	/**
 	 * Sets and or gets the container.
 	 *
-	 * @access public
 	 * @return \kanso\framework\ioc\Container
 	 */
 	public function container(): Container
@@ -40,7 +39,6 @@ trait ContainerAwareTrait
 	/**
 	 * Resolves item from the container using overloading.
 	 *
-	 * @access public
 	 * @param  string $key Key
 	 * @return mixed
 	 */

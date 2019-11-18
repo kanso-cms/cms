@@ -19,7 +19,7 @@ class StrTest extends TestCase
 	 /**
 	  *
 	  */
-	 public function testNl2br()
+	 public function testNl2br(): void
 	{
 	 	$this->assertEquals('Hello<br>World!', Str::nl2br("Hello\nWorld!"));
 	 	$this->assertEquals('Hello<br>World!', Str::nl2br("Hello\rWorld!"));
@@ -34,7 +34,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testBr2nl()
+	public function testBr2nl(): void
 	{
 	 	$this->assertEquals("Hello\nWorld!", Str::br2nl('Hello<br>World!'));
 	 	$this->assertEquals("Hello\nWorld!", Str::br2nl('Hello<br/>World!'));
@@ -44,7 +44,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCamel2underscored()
+	public function testCamel2underscored(): void
 	{
 	 	$this->assertEquals('camel_cased', Str::camel2underscored('CamelCased'));
 
@@ -58,7 +58,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCamel2case()
+	public function testCamel2case(): void
 	{
 	 	$this->assertEquals('Camel Cased', Str::camel2case('CamelCased'));
 
@@ -68,7 +68,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testUnderscored2camel()
+	public function testUnderscored2camel(): void
 	{
 	 	$this->assertEquals('camelCased', Str::underscored2camel('camel_cased'));
 
@@ -80,7 +80,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testReduce()
+	public function testReduce(): void
 	{
 	 	$this->assertEquals('This', Str::reduce('This is some text', 4));
 
@@ -98,7 +98,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testContains()
+	public function testContains(): void
 	{
 		$this->assertEquals(true, Str::contains('This is some text', 'some'));
 
@@ -112,7 +112,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetAfterLastChar()
+	public function testGetAfterLastChar(): void
 	{
 		$this->assertEquals(' some text', Str::getAfterLastChar('This * is * some text', '*'));
 	}
@@ -120,7 +120,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetBeforeLastChar()
+	public function testGetBeforeLastChar(): void
 	{
 		$this->assertEquals('This * is ', Str::getBeforeLastChar('This * is * some text', '*'));
 	}
@@ -128,7 +128,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetAfterFirstChar()
+	public function testGetAfterFirstChar(): void
 	{
 		$this->assertEquals(' is * some text', Str::getAfterFirstChar('This * is * some text', '*'));
 	}
@@ -136,7 +136,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetBeforeFirstChar()
+	public function testGetBeforeFirstChar(): void
 	{
 		$this->assertEquals('This ', Str::getBeforeFirstChar('This * is * some text', '*'));
 	}
@@ -144,7 +144,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetAfterLastWord()
+	public function testGetAfterLastWord(): void
 	{
 		$this->assertEquals(' test', Str::getAfterLastWord('This text is some text test', 'text'));
 	}
@@ -152,7 +152,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetBeforeLastWord()
+	public function testGetBeforeLastWord(): void
 	{
 		$this->assertEquals('This text is some ', Str::getBeforeLastWord('This text is some text test', 'text'));
 	}
@@ -160,7 +160,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRandom()
+	public function testRandom(): void
 	{
 		$this->assertEquals(20, strlen(Str::random(20)));
 
@@ -176,7 +176,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCompareNumeric()
+	public function testCompareNumeric(): void
 	{
 		$this->assertTrue(Str::compareNumeric('1.3', '1.3'));
 
@@ -188,7 +188,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSlug()
+	public function testSlug(): void
 	{
 		$this->assertEquals('name-of-slug-test-123', Str::slug('name of slug test 123'));
 
@@ -200,7 +200,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAlpha()
+	public function testAlpha(): void
 	{
 		$this->assertEquals('OnlyAllowAlpha', Str::alpha('Only Allow $$#@$# Alpha 123'));
 	}
@@ -208,7 +208,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAlphaDash()
+	public function testAlphaDash(): void
 	{
 		$this->assertEquals('Only-Allow-Alpha', Str::alphaDash('Only Allow $$#@$# Alpha 123 $# $#$@#'));
 	}
@@ -216,7 +216,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAlphaNum()
+	public function testAlphaNum(): void
 	{
 		$this->assertEquals('OnlyAllowAlpha123Numbers', Str::alphaNum('Only Allow $$#@$# Alpha 123 $# $#$@# Numbers'));
 	}
@@ -224,7 +224,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAlphaNumDash()
+	public function testAlphaNumDash(): void
 	{
 		$this->assertEquals('Only-Allow-Alpha-123-Numbers', Str::alphaNumDash('Only Allow $$#@$# Alpha 123 $# $#$@# Numbers'));
 	}
@@ -232,7 +232,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testMysqlEncode()
+	public function testMysqlEncode(): void
 	{
 		$this->assertEquals('This has been&#039;s encoded', Str::mysqlEncode('This has been\'s encoded'));
 	}
@@ -240,7 +240,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testMysqlDecode()
+	public function testMysqlDecode(): void
 	{
 		$this->assertEquals('This has been\'s encoded', Str::mysqlDecode('This has been&#039;s encoded'));
 	}
@@ -248,7 +248,7 @@ class StrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testBool()
+	public function testBool(): void
 	{
 		$this->assertTrue(Str::bool('true'));
 		$this->assertTrue(Str::bool('yes'));

@@ -17,7 +17,6 @@ class NativeSessionStorage implements StoreInterface
     /**
      * Constructor.
      *
-     * @access public
      * @param array  $cookieParams Assoc array of cookie configurations
      * @param string $path         Where to save the cookie files to
      */
@@ -50,7 +49,7 @@ class NativeSessionStorage implements StoreInterface
     /**
      * {@inheritdoc}
      */
-    public function session_start()
+    public function session_start(): void
     {
         if (session_status() == PHP_SESSION_NONE)
         {
@@ -61,7 +60,7 @@ class NativeSessionStorage implements StoreInterface
     /**
      * {@inheritdoc}
      */
-    public function session_destroy()
+    public function session_destroy(): void
     {
         session_destroy();
 
@@ -97,7 +96,7 @@ class NativeSessionStorage implements StoreInterface
     /**
      * {@inheritdoc}
      */
-    public function session_regenerate_id(bool $deleteOldSession = false)
+    public function session_regenerate_id(bool $deleteOldSession = false): void
     {
         session_regenerate_id();
     }
@@ -105,7 +104,7 @@ class NativeSessionStorage implements StoreInterface
     /**
      * {@inheritdoc}
      */
-    public function session_set_cookie_params(array $params)
+    public function session_set_cookie_params(array $params): void
     {
         session_set_cookie_params(
             $params['expire'],
@@ -119,7 +118,6 @@ class NativeSessionStorage implements StoreInterface
     /**
      * Get the cookie parameters.
      *
-     * @access public
      * @return array
      */
     public function session_get_cookie_params()
@@ -129,8 +127,6 @@ class NativeSessionStorage implements StoreInterface
 
     /**
      * Collect garbage (delete expired sessions).
-     *
-     * @access public
      */
     public function session_gc()
     {
@@ -145,7 +141,6 @@ class NativeSessionStorage implements StoreInterface
     /**
      * Read and return the session data.
      *
-     * @access public
      * @return array|null
      */
     public function read()
@@ -161,20 +156,17 @@ class NativeSessionStorage implements StoreInterface
     /**
      * Write the session data.
      *
-     * @access public
      * @param array $data Data to write to session
      */
-    public function write(array $data)
+    public function write(array $data): void
     {
         $_SESSION[$this->session_name()] = $data;
     }
 
     /**
      * Send the session cookie.
-     *
-     * @access public
      */
-    public function send()
+    public function send(): void
     {
 
     }

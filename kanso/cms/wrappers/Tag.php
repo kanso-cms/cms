@@ -20,7 +20,7 @@ class Tag extends Wrapper
     /**
      * {@inheritdoc}
      */
-    public function __set(string $key, $value)
+    public function __set(string $key, $value): void
     {
         $this->data[$key] = $key === 'slug' ? Str::slug($value) : $value;
     }
@@ -90,7 +90,6 @@ class Tag extends Wrapper
     /**
      * Clears all posts from the tag.
      *
-     * @access public
      * @throws \InvalidArgumentException If this is tag id 1
      * @return bool
      */
@@ -112,7 +111,6 @@ class Tag extends Wrapper
     /**
      * Unjoin all posts and reset to untagged if no tags left.
      *
-     * @access private
      * @return bool
      */
     private function removeAllJoins(): bool

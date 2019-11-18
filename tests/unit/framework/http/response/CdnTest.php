@@ -19,7 +19,7 @@ class CdnTest extends TestCase
 	/**
 	 *
 	 */
-	public function testFilter()
+	public function testFilter(): void
 	{
 		$cdn = new CDN('https://foo.com', 'https://cdn.foo.com');
 
@@ -50,7 +50,7 @@ class CdnTest extends TestCase
 	/**
 	 *
 	 */
-	public function testDisabled()
+	public function testDisabled(): void
 	{
 		$cdn = new CDN('https://foo.com', 'https://cdn.foo.com');
 

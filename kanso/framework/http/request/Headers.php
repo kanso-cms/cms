@@ -70,7 +70,6 @@ class Headers
     /**
      * Constructor. Loads the properties internally.
      *
-     * @access public
      * @param array $server Optional server overrides (optional) (default [])
      */
     public function __construct(array $server = [])
@@ -81,10 +80,9 @@ class Headers
     /**
      * Reload the headers.
      *
-     * @access public
      * @param array $server Optional server overrides (optional) (default [])
      */
-    public function reload(array $server = [])
+    public function reload(array $server = []): void
     {
         $this->data = $this->extract($server);
     }
@@ -92,7 +90,6 @@ class Headers
     /**
      * Returns a fresh copy of the headers.
      *
-     * @access private
      * @param  array $server Optional server overrides (optional) (default [])
      * @return array
      */
@@ -153,7 +150,7 @@ class Headers
             if(strpos($accept, ';'))
             {
                 // We have a quality so we need to split some more
-                list($accept, $quality) = explode(';', $accept, 2);
+                [$accept, $quality] = explode(';', $accept, 2);
                 // Strip the "q=" part so that we're left with only the numeric value
                 $quality = substr(trim($quality), 2);
             }
@@ -232,7 +229,6 @@ class Headers
     /**
      * Return all properties.
      *
-     * @access public
      * @return array
      */
     public function asArray(): array
@@ -243,7 +239,6 @@ class Headers
     /**
      * Get a property by key.
      *
-     * @access public
      * @return string|null
      */
     public function __get(string $key)
@@ -258,10 +253,8 @@ class Headers
 
     /**
      * Set a property by key.
-     *
-     * @access public
      */
-    public function __set(string $key, $value)
+    public function __set(string $key, $value): void
     {
         $this->data[$this->normalizeKey($key)] = $value;
     }
@@ -269,7 +262,6 @@ class Headers
     /**
      * Check if a property by key exists.
      *
-     * @access public
      * @return bool
      */
     public function __isset(string $key): bool
@@ -279,10 +271,8 @@ class Headers
 
     /**
      * Unset a property by key.
-     *
-     * @access public
      */
-    public function __unset(string $key)
+    public function __unset(string $key): void
     {
         if (isset($this->data[$this->normalizeKey($key)]))
         {

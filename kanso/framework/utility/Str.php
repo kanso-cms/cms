@@ -52,7 +52,6 @@ class Str
 	/**
 	 * Replaces newline with <br> or <br />.
 	 *
-	 * @access public
 	 * @param  string $string The input string
 	 * @param  bool   $xhtml  Should we return XHTML?
 	 * @return string
@@ -65,7 +64,6 @@ class Str
 	/**
 	 * Replaces <br> and <br /> with newline.
 	 *
-	 * @access public
 	 * @param  string $string The input string
 	 * @return string
 	 */
@@ -77,7 +75,6 @@ class Str
 	/**
 	 * Converts camel case to underscored.
 	 *
-	 * @access public
 	 * @param  string $string The input string
 	 * @return string
 	 */
@@ -89,7 +86,6 @@ class Str
 	/**
 	 * Converts camel case to space.
 	 *
-	 * @access public
 	 * @param  string $string The input string
 	 * @return string
 	 */
@@ -124,7 +120,6 @@ class Str
 	/**
 	 * Converts underscored to camel case.
 	 *
-	 * @access public
 	 * @param  string $string The input string
 	 * @param  bool   $upper  Return upper case camelCase?
 	 * @return string
@@ -137,7 +132,6 @@ class Str
 	/**
 	 * Reduce a string to n characters or words.
 	 *
-	 * @access public
 	 * @param  string $string The target string
 	 * @param  int    $length The length to reduce it to
 	 * @param  string $suffix A suffix to add (optional) (default '')
@@ -158,7 +152,6 @@ class Str
 	/**
 	 * Check if a string contains another string.
 	 *
-	 * @access public
 	 * @param  string $string The target string
 	 * @param  string $query  The query to check for
 	 * @return bool
@@ -171,7 +164,6 @@ class Str
 	/**
 	 * Get characters after last occurrence of string in a target string.
 	 *
-	 * @access public
 	 * @param  string $string The target string
 	 * @param  string $query  The query to check for
 	 * @return string
@@ -186,7 +178,6 @@ class Str
 	/**
 	 * Get characters before last occurrence of character.
 	 *
-	 * @access public
 	 * @param  string $string The target string
 	 * @param  string $query  The query to check for
 	 * @return string
@@ -201,7 +192,6 @@ class Str
 	/**
 	 * Get characters after first occurrence of character.
 	 *
-	 * @access public
 	 * @param  string $string The target string
 	 * @param  string $query  The query to check for
 	 * @return string
@@ -216,7 +206,6 @@ class Str
 	/**
 	 * Get characters before first occurrence of character.
 	 *
-	 * @access public
 	 * @param  string $string The target string
 	 * @param  string $query  The query to check for
 	 * @return string
@@ -231,7 +220,6 @@ class Str
 	/**
 	 * Get characters after last occurrence of word.
 	 *
-	 * @access public
 	 * @param  string $string The target string
 	 * @param  string $query  The query to check for
 	 * @return string
@@ -251,7 +239,6 @@ class Str
 	/**
 	 * Get characters before last occurance of word.
 	 *
-	 * @access public
 	 * @param  string $string The target string
 	 * @param  string $query  The query to check for
 	 * @return string
@@ -273,7 +260,6 @@ class Str
 	/**
 	 * Returns a random string of the selected type and length.
 	 *
-	 * @access public
 	 * @param  int    $length Desired string length
 	 * @param  string $pool   Character pool to use
 	 * @return string
@@ -295,7 +281,6 @@ class Str
 	/**
 	 * Compare two numerical strings.
 	 *
-	 * @access public
 	 * @param  string $a
 	 * @param  string $b
 	 * @return bool
@@ -312,7 +297,6 @@ class Str
 	/**
 	 * Creates a URL friendly string.
 	 *
-	 * @access public
 	 * @param  string $str The input string
 	 * @return string
 	 */
@@ -324,7 +308,6 @@ class Str
 	/**
 	 * Filters a a string to alpha characters.
 	 *
-	 * @access public
 	 * @param  string $str The input string
 	 * @return string
 	 */
@@ -336,7 +319,6 @@ class Str
 	/**
 	 * Filters a a string to alpha characters with dashes.
 	 *
-	 * @access public
 	 * @param  string $str The input string
 	 * @return string
 	 */
@@ -348,7 +330,6 @@ class Str
 	/**
 	 * Filters a a string to alpha-numeric characters.
 	 *
-	 * @access public
 	 * @param  string $str The input string
 	 * @return string
 	 */
@@ -360,7 +341,6 @@ class Str
 	/**
 	 * Filters a a string to alpha-numeric characters with dashes.
 	 *
-	 * @access public
 	 * @param  string $str The input string
 	 * @return string
 	 */
@@ -372,7 +352,6 @@ class Str
 	/**
 	 * Escapes text for entry into mySQL.
 	 *
-	 * @access public
 	 * @param  string $str The input string
 	 * @return string
 	 */
@@ -384,7 +363,6 @@ class Str
 	/**
 	 * Un-escapes text from entry into mySQL.
 	 *
-	 * @access public
 	 * @param  string $str The input string
 	 * @return string
 	 */
@@ -396,7 +374,6 @@ class Str
 	/**
 	 * Create a boolean value from a mixed variable.
 	 *
-	 * @access public
 	 * @param  mixed $mixedVar Mixed variable to convert
 	 * @return bool
 	 */
@@ -438,7 +415,6 @@ class Str
 	/**
 	 * Remove the query string and santize a uri.
 	 *
-	 * @access public
 	 * @param  string $uri REQUEST_URI
 	 * @return string
 	 */
@@ -450,7 +426,6 @@ class Str
 	/**
 	 * Remove a specific HTML tag from a string.
 	 *
-	 * @access public
 	 * @param  string $str String
 	 * @param  string $tag HTML tag name
 	 * @return string

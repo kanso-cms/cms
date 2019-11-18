@@ -38,7 +38,6 @@ class CDN
 	/**
 	 * Constructor.
 	 *
-	 * @access public
 	 * @param string $currHost HTTP host of current server
 	 * @param string $cdnHost  Http host of CDN
 	 * @param bool   $enabled  Is the CDN enabled ? (optional) (default false)
@@ -54,28 +53,22 @@ class CDN
 
     /**
      * Disable CDN.
-     *
-     * @access public
      */
-    public function disable()
+    public function disable(): void
     {
         $this->enabled = false;
     }
 
     /**
      * Enable CDN.
-     *
-     * @access public
      */
-    public function enable()
+    public function enable(): void
     {
         $this->enabled = true;
     }
 
     /**
      * Is CDN enabled ?
-     *
-     * @access public
      */
     public function enabled(): bool
     {
@@ -85,7 +78,6 @@ class CDN
     /**
      * Filter HTML via the CDN.
      *
-     * @access public
      * @param  string $html HTML to filter
      * @return string
      */

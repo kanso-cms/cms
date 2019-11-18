@@ -20,7 +20,6 @@ class Markdown
 	/**
 	 * Convert markdown to HTML.
 	 *
-	 * @access public
 	 * @see    https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet
 	 * @param  string $text  Text in markdown
 	 * @param  bool   $extra Convert with markdown extra
@@ -36,7 +35,6 @@ class Markdown
     /**
      * Converts markdown to plain text.
      *
-     * @access public
      * @param  string $str The input string
      * @return string
      */

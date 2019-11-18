@@ -20,7 +20,7 @@ class CrmService extends Service
 	/**
 	 * {@inheritdoc}
 	 */
-	public function register()
+	public function register(): void
 	{
 		$this->container->setInstance('Crm', new Crm);
 	}

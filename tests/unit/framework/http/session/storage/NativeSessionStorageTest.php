@@ -40,7 +40,7 @@ class NativeStorageTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testSavePath()
+	public function testSavePath(): void
 	{
 		$storage = $this->mockStorage();
 
@@ -54,7 +54,7 @@ class NativeStorageTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testWrite()
+	public function testWrite(): void
 	{
 		$storage = $this->mockStorage();
 
@@ -68,7 +68,7 @@ class NativeStorageTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testRead()
+	public function testRead(): void
 	{
 		$storage = $this->mockStorage();
 
@@ -82,7 +82,7 @@ class NativeStorageTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testDestroy()
+	public function testDestroy(): void
 	{
 		$storage = $this->mockStorage();
 
@@ -98,7 +98,7 @@ class NativeStorageTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testSessionId()
+	public function testSessionId(): void
 	{
 		$storage = $this->mockStorage();
 
@@ -110,7 +110,7 @@ class NativeStorageTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testSessionName()
+	public function testSessionName(): void
 	{
 		$storage = $this->mockStorage();
 
@@ -122,7 +122,7 @@ class NativeStorageTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testRegenId()
+	public function testRegenId(): void
 	{
 		$storage = $this->mockStorage();
 
@@ -138,7 +138,7 @@ class NativeStorageTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testSessionParams()
+	public function testSessionParams(): void
 	{
 		$storage = $this->mockStorage();
 
@@ -161,7 +161,7 @@ class NativeStorageTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testGc()
+	public function testGc(): void
 	{
 		$storage = $this->mockStorage();
 

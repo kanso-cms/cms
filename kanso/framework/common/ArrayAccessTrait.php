@@ -26,7 +26,6 @@ trait ArrayAccessTrait
 	/**
 	 * Save a key to the array using dot notation.
 	 *
-	 * @access public
 	 * @param string $key   Key to use
 	 * @param mixed  $value Value to save
 	 */
@@ -40,7 +39,6 @@ trait ArrayAccessTrait
 	/**
 	 * Alias for set.
 	 *
-	 * @access public
 	 * @param string $key   Key to use
 	 * @param mixed  $value Value to save
 	 */
@@ -52,10 +50,9 @@ trait ArrayAccessTrait
 	/**
 	 * Save an array of key values using dot notation.
 	 *
-	 * @access public
 	 * @param array $data Associative array to add
 	 */
-	public function setMultiple(array $data)
+	public function setMultiple(array $data): void
 	{
 		foreach ($data as $key => $value)
 		{
@@ -73,7 +70,6 @@ trait ArrayAccessTrait
 	/**
 	 * Check if the internal array has a value using dot notation.
 	 *
-	 * @access public
 	 * @param  string $key Key to use
 	 * @return bool
 	 */
@@ -85,7 +81,6 @@ trait ArrayAccessTrait
 	/**
 	 * Get a key/value from the internal array using dot notation.
 	 *
-	 * @access public
 	 * @param  string|null $key Key to use (optional) (default null)
 	 * @return mixed
 	 */
@@ -102,20 +97,17 @@ trait ArrayAccessTrait
 	/**
 	 * Remove a key/value from the internal array using dot notation.
 	 *
-	 * @access public
 	 * @param string $key Key to use
 	 */
-	public function remove(string $key)
+	public function remove(string $key): void
 	{
 		Arr::delete($this->data, $key);
 	}
 
 	/**
 	 * Empty the internal array.
-	 *
-	 * @access public
 	 */
-	public function clear()
+	public function clear(): void
 	{
 		$this->data = [];
 	}
@@ -123,10 +115,9 @@ trait ArrayAccessTrait
 	/**
 	 * Overwrite the internal array with a new one.
 	 *
-	 * @access public
 	 * @param array $data Array to overwrite the internal array with
 	 */
-	public function overwrite(array $data)
+	public function overwrite(array $data): void
 	{
 		$this->data = [];
 
@@ -136,7 +127,6 @@ trait ArrayAccessTrait
 	/**
 	 * Alias for get.
 	 *
-	 * @access public
 	 * @return array
 	 */
 	public function asArray(): array

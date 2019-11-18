@@ -27,7 +27,7 @@ class ParsedownExtra extends Parsedown
 
     // ~
 
-    function __construct()
+    public function __construct()
     {
         if (parent::version < '1.5.0')
         {
@@ -47,7 +47,7 @@ class ParsedownExtra extends Parsedown
     //
     // ~
 
-    function text($text)
+    public function text($text)
     {
         $markup = parent::text($text);
 
@@ -107,7 +107,7 @@ class ParsedownExtra extends Parsedown
 
     protected function blockFootnoteContinue($Line, $Block)
     {
-        if ($Line['text'][0] === '[' and preg_match('/^\[\^(.+?)\]:/', $Line['text']))
+        if ($Line['text'][0] === '[' && preg_match('/^\[\^(.+?)\]:/', $Line['text']))
         {
             return;
         }
@@ -145,7 +145,7 @@ class ParsedownExtra extends Parsedown
 
     protected function blockDefinitionList($Line, $Block)
     {
-        if (! isset($Block) or isset($Block['type']))
+        if (! isset($Block) || isset($Block['type']))
         {
             return;
         }
@@ -184,7 +184,7 @@ class ParsedownExtra extends Parsedown
         }
         else
         {
-            if (isset($Block['interrupted']) and $Line['indent'] === 0)
+            if (isset($Block['interrupted']) && $Line['indent'] === 0)
             {
                 return;
             }
@@ -497,7 +497,7 @@ class ParsedownExtra extends Parsedown
             {
                 $nodeMarkup = $DOMDocument->saveHTML($Node);
 
-                if ($Node instanceof DOMElement and ! in_array($Node->nodeName, $this->textLevelElements))
+                if ($Node instanceof DOMElement && ! in_array($Node->nodeName, $this->textLevelElements))
                 {
                     $elementText .= $this->processTag($nodeMarkup);
                 }

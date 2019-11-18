@@ -19,7 +19,7 @@ class PluralizeTest extends TestCase
 	/**
 	 *
 	 */
-	public function testPluralize()
+	public function testPluralize(): void
 	{
 		// Regulars
 		$this->assertEquals('apples', Pluralize::convert('apple'));

@@ -21,7 +21,7 @@ class AlterTest extends TestCase
     /**
      *
      */
-    public function testAddColumn()
+    public function testAddColumn(): void
     {
         $query = 'ALTER TABLE `prefixed_my_table_name` ADD `thumbnail_id` INTEGER | UNSIGNED';
 
@@ -58,7 +58,7 @@ class AlterTest extends TestCase
     /**
      *
      */
-    public function testDropColumn()
+    public function testDropColumn(): void
     {
         $query = 'ALTER TABLE `prefixed_my_table_name` DROP `id`';
 
@@ -95,7 +95,7 @@ class AlterTest extends TestCase
     /**
      *
      */
-    public function testModifyColumn()
+    public function testModifyColumn(): void
     {
         $query = 'ALTER TABLE `prefixed_my_table_name` MODIFY COLUMN `id` INTEGER | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT';
 
@@ -132,7 +132,7 @@ class AlterTest extends TestCase
     /**
      *
      */
-    public function testAddPrimaryKey()
+    public function testAddPrimaryKey(): void
     {
         $columns =
         [
@@ -171,7 +171,7 @@ class AlterTest extends TestCase
     /**
      *
      */
-    public function testDropPrimaryKey()
+    public function testDropPrimaryKey(): void
     {
         $columns =
         [
@@ -208,7 +208,7 @@ class AlterTest extends TestCase
     /**
      *
      */
-    public function testAddNotNull()
+    public function testAddNotNull(): void
     {
         $columns =
         [
@@ -247,7 +247,7 @@ class AlterTest extends TestCase
     /**
      *
      */
-    public function testDropNotNull()
+    public function testDropNotNull(): void
     {
         $columns =
         [
@@ -284,7 +284,7 @@ class AlterTest extends TestCase
     /**
      *
      */
-    public function testAddUnsigned()
+    public function testAddUnsigned(): void
     {
         $columns =
         [
@@ -321,7 +321,7 @@ class AlterTest extends TestCase
     /**
      *
      */
-    public function testDropUnsigned()
+    public function testDropUnsigned(): void
     {
         $columns =
         [
@@ -358,7 +358,7 @@ class AlterTest extends TestCase
     /**
      *
      */
-    public function testSetAutoIncrement()
+    public function testSetAutoIncrement(): void
     {
         $columns =
         [
@@ -395,7 +395,7 @@ class AlterTest extends TestCase
     /**
      *
      */
-    public function testDropAutoIncrement()
+    public function testDropAutoIncrement(): void
     {
         $columns =
         [
@@ -432,7 +432,7 @@ class AlterTest extends TestCase
     /**
      *
      */
-    public function testSetSetDefault()
+    public function testSetSetDefault(): void
     {
         $columns =
         [
@@ -467,7 +467,7 @@ class AlterTest extends TestCase
     /**
      *
      */
-    public function testDropSetDefault()
+    public function testDropSetDefault(): void
     {
         $columns =
         [
@@ -502,7 +502,7 @@ class AlterTest extends TestCase
     /**
      *
      */
-    public function testAddUnique()
+    public function testAddUnique(): void
     {
          $columns =
         [
@@ -537,7 +537,7 @@ class AlterTest extends TestCase
     /**
      *
      */
-    public function testAddFrogeinKey()
+    public function testAddFrogeinKey(): void
     {
         $columns =
         [
@@ -572,7 +572,7 @@ class AlterTest extends TestCase
     /**
      *
      */
-    public function testDropFrogeinKey()
+    public function testDropFrogeinKey(): void
     {
         $columns =
         [
@@ -607,7 +607,7 @@ class AlterTest extends TestCase
     /**
      *
      */
-    public function testChainable()
+    public function testChainable(): void
     {
         $columns =
         [

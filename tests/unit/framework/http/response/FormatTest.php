@@ -19,7 +19,7 @@ class FormatTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSet()
+	public function testSet(): void
 	{
 		$format = new Format;
 
@@ -31,7 +31,7 @@ class FormatTest extends TestCase
 	/**
 	 *
 	 */
-	public function testExt()
+	public function testExt(): void
 	{
 		$format = new Format;
 
@@ -51,7 +51,7 @@ class FormatTest extends TestCase
 	/**
 	 *
 	 */
-	public function testEncoding()
+	public function testEncoding(): void
 	{
 		$format = new Format;
 

@@ -32,8 +32,6 @@ class Filters
 
     /**
      * Private constructor.
-     *
-     * @access private
      */
     private function __construct()
     {
@@ -44,7 +42,6 @@ class Filters
      *
      * This creates and/or returns an Filters instance (singleton)
      *
-     * @access public
      * @return \kanso\cms\event\Filters
      */
     public static function instance(): Filters
@@ -60,11 +57,10 @@ class Filters
     /**
      * Hook into an filter.
      *
-     * @access public
      * @param string $eventName The name of the filter
      * @param mixed  $callback  Callback to apply
      */
-    public function on(string $eventName, $callback)
+    public function on(string $eventName, $callback): void
     {
         self::$callbacks[$eventName][] = $callback;
     }

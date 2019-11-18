@@ -21,7 +21,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    public function testInstantiate()
+    public function testInstantiate(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -41,7 +41,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    public function testSetGet()
+    public function testSetGet(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -61,7 +61,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    public function testHas()
+    public function testHas(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -83,7 +83,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    public function testRemove()
+    public function testRemove(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -105,7 +105,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    public function testInstantiateExisting()
+    public function testInstantiateExisting(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -127,7 +127,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    public function testGetCategories()
+    public function testGetCategories(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -155,7 +155,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    public function testGetTags()
+    public function testGetTags(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -183,7 +183,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    public function testGetAuthor()
+    public function testGetAuthor(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -207,7 +207,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    public function testGetContent()
+    public function testGetContent(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -233,7 +233,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    public function testGetComments()
+    public function testGetComments(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -259,7 +259,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    public function testGetThumbnail()
+    public function testGetThumbnail(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -285,7 +285,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    public function testGetExcerpt()
+    public function testGetExcerpt(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -309,7 +309,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    public function testGetMeta()
+    public function testGetMeta(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -335,7 +335,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    public function testDelete()
+    public function testDelete(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -371,7 +371,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    public function testSaveExisting()
+    public function testSaveExisting(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -441,7 +441,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    public function testSaveNew()
+    public function testSaveNew(): void
     {
         $cHandler         = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
@@ -542,7 +542,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    private function getTheContent($sql)
+    private function getTheContent($sql): void
     {
         $sql->shouldReceive('SELECT')->with('content')->once()->andReturn($sql);
 
@@ -586,7 +586,7 @@ class PostTest extends TestCase
     /**
      *
      */
-    private function getTheComments($sql, $commentProvider)
+    private function getTheComments($sql, $commentProvider): void
     {
         $sql->shouldReceive('SELECT')->with('id')->once()->andReturn($sql);
 

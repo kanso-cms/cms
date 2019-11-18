@@ -41,7 +41,6 @@ class CLI
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\cli\input\Input   $input       Input instance
      * @param \kanso\framework\cli\output\Output $output      Output instance
      * @param \kanso\framework\cli\Environment   $environment Environment instance
@@ -58,7 +57,6 @@ class CLI
     /**
      * Returns the input.
      *
-     * @access public
      * @return \kanso\framework\cli\input\Input
      */
     public function input(): Input
@@ -69,7 +67,6 @@ class CLI
     /**
      * Returns the output.
      *
-     * @access public
      * @return \kanso\framework\cli\output\Output
      */
     public function output(): Output
@@ -80,7 +77,6 @@ class CLI
     /**
      * Returns the input.
      *
-     * @access public
      * @return \kanso\framework\cli\Environment
      */
     public function environment(): environment

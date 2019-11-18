@@ -43,8 +43,6 @@ class Application
 
     /**
      * Constructor.
-     *
-     * @access public
      */
     public function __construct()
     {
@@ -54,7 +52,6 @@ class Application
     /**
      * Starts the application and returns a singleton instance of the application.
      *
-     * @access public
      * @return \kanso\framework\application\Application
      */
     public static function instance()
@@ -69,10 +66,8 @@ class Application
 
     /**
      * Run the application.
-     *
-     * @access public
      */
-    public function run()
+    public function run(): void
     {
         $this->container->Router->dispatch();
 
@@ -89,7 +84,6 @@ class Application
     /**
      * Returns the IOC container.
      *
-     * @access public
      * @return \kanso\framework\ioc\Container
      */
     public function container(): Container
@@ -100,7 +94,6 @@ class Application
     /**
      * Returns the Kanso environment.
      *
-     * @access public
      * @return string|null
      */
     public function environment()
@@ -115,10 +108,8 @@ class Application
 
     /**
      * Boot the application dependencies.
-     *
-     * @access protected
      */
-    protected function boot()
+    protected function boot(): void
     {
         $this->initialize();
 
@@ -131,10 +122,8 @@ class Application
 
     /**
      * Sets up the framework core.
-     *
-     * @access protected
      */
-    protected function initialize()
+    protected function initialize(): void
     {
         $this->registerContainer();
 
@@ -145,10 +134,8 @@ class Application
 
     /**
      * Register the IOC container.
-     *
-     * @access protected
      */
-    protected function registerContainer()
+    protected function registerContainer(): void
     {
         $this->container = Container::instance();
 
@@ -157,10 +144,8 @@ class Application
 
     /**
      * Register the Filesystem.
-     *
-     * @access protected
      */
-    protected function registerFilesystem()
+    protected function registerFilesystem(): void
     {
         $this->container->singleton('Filesystem', function()
         {
@@ -170,10 +155,8 @@ class Application
 
     /**
      * Register the config.
-     *
-     * @access protected
      */
-    protected function registerConfig()
+    protected function registerConfig(): void
     {
         $this->container->singleton('Config', function()
         {
@@ -183,10 +166,8 @@ class Application
 
     /**
      * Configure application basics.
-     *
-     * @access protected
      */
-    protected function configure()
+    protected function configure(): void
     {
         mb_language('uni');
 
@@ -202,7 +183,6 @@ class Application
     /**
      * Builds a configuration instance.
      *
-     * @access protected
      * @return \kanso\framework\config\Config
      */
     protected function configFactory(): Config
@@ -213,7 +193,6 @@ class Application
     /**
      * Returns the configuration path.
      *
-     * @access protected
      * @return string
      */
     protected function configurationPath(): string
@@ -233,10 +212,8 @@ class Application
 
     /**
      * Register required services.
-     *
-     * @access protected
      */
-    protected function registerServices()
+    protected function registerServices(): void
     {
         if (!$this->isCommandLine())
         {
@@ -250,10 +227,8 @@ class Application
 
     /**
      * Register default services.
-     *
-     * @access protected
      */
-    protected function registerWebServices()
+    protected function registerWebServices(): void
     {
         foreach (array_keys($this->container->Config->get('application.services')) as $package)
         {
@@ -268,10 +243,8 @@ class Application
 
     /**
      * Register cli services.
-     *
-     * @access protected
      */
-    protected function registerClisServices()
+    protected function registerClisServices(): void
     {
         $this->registerPackage('framework');
 
@@ -281,10 +254,9 @@ class Application
     /**
      * Registers services in the IoC container.
      *
-     * @access protected
      * @param string $name Service name
      */
-    protected function registerPackage(string $name)
+    protected function registerPackage(string $name): void
     {
         foreach ($this->container->Config->get('application.services.' . $name) as $service)
         {
@@ -295,20 +267,17 @@ class Application
     /**
      * Registers services in the IoC container.
      *
-     * @access protected
      * @param string $service Service name
      */
-    protected function registerService(string $service)
+    protected function registerService(string $service): void
     {
         (new $service($this->container))->register();
     }
 
     /**
      * Registers class aliases.
-     *
-     * @access protected
      */
-    protected function registerClassAliases()
+    protected function registerClassAliases(): void
     {
         $aliases = $this->container->Config->get('application.class_aliases');
 

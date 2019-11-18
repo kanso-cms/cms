@@ -28,7 +28,7 @@ class LoaderTest extends TestCase
     /**
      *
      */
-    public function testLoad()
+    public function testLoad(): void
     {
         $fileSystem = $this->getFilesystem();
 
@@ -44,7 +44,7 @@ class LoaderTest extends TestCase
     /**
      * @expectedException \RuntimeException
      */
-    public function testLoadNonExistingFile()
+    public function testLoadNonExistingFile(): void
     {
         $fileSystem = $this->getFilesystem();
 
@@ -58,7 +58,7 @@ class LoaderTest extends TestCase
     /**
      *
      */
-    public function testLoadPackage()
+    public function testLoadPackage(): void
     {
         $fileSystem = $this->getFilesystem();
 
@@ -78,7 +78,7 @@ class LoaderTest extends TestCase
     /**
      *
      */
-    public function testLoadPackageOverride()
+    public function testLoadPackageOverride(): void
     {
         $fileSystem = $this->getFilesystem();
 
@@ -100,7 +100,7 @@ class LoaderTest extends TestCase
     /**
      *
      */
-    public function testLoadEvironmentOverride()
+    public function testLoadEvironmentOverride(): void
     {
         $fileSystem = $this->getFilesystem();
 

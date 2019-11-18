@@ -21,12 +21,12 @@ class OnionCallbackTest
     	$this->var = $arg1 . $arg2;
     }
 
-    public function normalMethod()
+    public function normalMethod(): void
     {
     	echo $this->var;
     }
 
-	public static function staticFunc(Request $request, Response $response, Closure $next, $arg1, $arg2)
+	public static function staticFunc(Request $request, Response $response, Closure $next, $arg1, $arg2): void
 	{
 		echo $arg1 . $arg2;
 	}
@@ -41,7 +41,7 @@ class OnionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAddLayer()
+	public function testAddLayer(): void
 	{
 		$callback = '\directory\ClassName::method';
 
@@ -61,7 +61,7 @@ class OnionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAddLayerInner()
+	public function testAddLayerInner(): void
 	{
 		$callbackOne = '\directory\ClassName::method';
 
@@ -83,7 +83,7 @@ class OnionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testStaticLayer()
+	public function testStaticLayer(): void
 	{
 		ob_start();
 
@@ -105,7 +105,7 @@ class OnionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testNonStaticLayer()
+	public function testNonStaticLayer(): void
 	{
 		ob_start();
 
@@ -127,11 +127,11 @@ class OnionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testClosure()
+	public function testClosure(): void
 	{
 		ob_start();
 
-		$callback = function(Request $request, Response $response, $next, $foo)
+		$callback = function(Request $request, Response $response, $next, $foo): void
 		{
 			echo $foo;
 		};
@@ -152,18 +152,18 @@ class OnionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCallNext()
+	public function testCallNext(): void
 	{
 		ob_start();
 
-		$callbackOne = function(Request $request, Response $response, $next, $foo)
+		$callbackOne = function(Request $request, Response $response, $next, $foo): void
 		{
 			echo $foo;
 
 			$next();
 		};
 
-		$callbackTwo = function(Request $request, Response $response, $next, $bar)
+		$callbackTwo = function(Request $request, Response $response, $next, $bar): void
 		{
 			echo $bar;
 		};
@@ -186,9 +186,9 @@ class OnionTest extends TestCase
 	/**
 	 *
 	 */
-	public function testPeeledEmpty()
+	public function testPeeledEmpty(): void
 	{
-		$callback = function(Request $request, Response $response, $next, $foo)
+		$callback = function(Request $request, Response $response, $next, $foo): void
 		{
 			$next();
 		};

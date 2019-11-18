@@ -110,7 +110,6 @@ class GD implements ProcessorInterface
     /**
      * Constructor.
      *
-     * @access public
      * @param string|null $filename     Absolute path to file (optional) (default null)
      * @param int|null    $imageQuality Default image quality to use (optional) (default null)
      */
@@ -132,7 +131,7 @@ class GD implements ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function load(string $filename)
+    public function load(string $filename): void
     {
         $image_info = getimagesize($filename);
 
@@ -141,11 +140,11 @@ class GD implements ProcessorInterface
             throw new RuntimeException("$filename : The provided file path is not an image.");
         }
 
-        list (
+         [
             $this->source_w,
             $this->source_h,
             $this->source_type
-        ) = $image_info;
+        ] = $image_info;
 
         switch ($this->source_type)
         {
@@ -449,10 +448,8 @@ class GD implements ProcessorInterface
 
     /**
      * Reset defaults after saving.
-     *
-     * @access private
      */
-    private function reset()
+    private function reset(): void
     {
         $this->source_type  = null;
         $this->source_image = null;

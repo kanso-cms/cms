@@ -20,7 +20,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testConstructor()
+	public function testConstructor(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -39,7 +39,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testConstructorLoggedIn()
+	public function testConstructorLoggedIn(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -68,7 +68,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testConstructorExpiredCSRF()
+	public function testConstructorExpiredCSRF(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -103,7 +103,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsLoggedInTrue()
+	public function testIsLoggedInTrue(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -134,7 +134,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsLoggedInFalse()
+	public function testIsLoggedInFalse(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -155,7 +155,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetUserTrue()
+	public function testGetUserTrue(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -186,7 +186,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetUserFalse()
+	public function testGetUserFalse(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -207,7 +207,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRefreshUser()
+	public function testRefreshUser(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -273,7 +273,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetTokenLoggenIn()
+	public function testGetTokenLoggenIn(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -304,7 +304,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetTokenLoggenOut()
+	public function testGetTokenLoggenOut(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -330,7 +330,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsGuestTrue()
+	public function testIsGuestTrue(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -351,7 +351,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsGuestFalse()
+	public function testIsGuestFalse(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -392,7 +392,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsAdmin()
+	public function testIsAdmin(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -433,7 +433,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testverifyTokenLoggedIn()
+	public function testverifyTokenLoggedIn(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -465,7 +465,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testverifyTokenLoggedOut()
+	public function testverifyTokenLoggedOut(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -493,7 +493,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testLogin()
+	public function testLogin(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -558,7 +558,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testLoginIncorrectPass()
+	public function testLoginIncorrectPass(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -594,7 +594,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testLoginPending()
+	public function testLoginPending(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -626,7 +626,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testLoginBanned()
+	public function testLoginBanned(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -658,7 +658,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testLoginLocked()
+	public function testLoginLocked(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -690,7 +690,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testLoginDoesntExist()
+	public function testLoginDoesntExist(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -722,7 +722,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testLoginByUsername()
+	public function testLoginByUsername(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -754,7 +754,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testLogout()
+	public function testLogout(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -791,7 +791,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testForgotPassowrd()
+	public function testForgotPassowrd(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -821,7 +821,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testForgotPassowrdByUsername()
+	public function testForgotPassowrdByUsername(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -851,7 +851,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testForgotPassowrdWithEmail()
+	public function testForgotPassowrdWithEmail(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -883,7 +883,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testResetPassword()
+	public function testResetPassword(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
@@ -917,7 +917,7 @@ class GatekeeperTest extends TestCase
 	/**
 	 *
 	 */
-	public function testForgotUsername()
+	public function testForgotUsername(): void
 	{
 		$sql          = Mockery::mock('\kanso\framework\database\query\Builder');
 		$userProvider = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');

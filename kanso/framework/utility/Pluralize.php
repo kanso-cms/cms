@@ -73,7 +73,6 @@ class Pluralize
     /**
      * Pluralize a word.
      *
-     * @access public
      * @param  string $word  The input word
      * @param  int    $count The amount of items (optional) (default 2)
      * @return string
@@ -156,7 +155,6 @@ class Pluralize
     /**
      * Is the word irregular and uncountable (e.g fish).
      *
-     * @access private
      * @return bool
      */
     private static function isUncountable(): bool
@@ -204,7 +202,6 @@ class Pluralize
     /**
      * Returns plural version of iregular words or FALSE if it is not irregular.
      *
-     * @access private
      * @return string|bool
      */
     private static function isIrregular()
@@ -340,7 +337,6 @@ class Pluralize
     /**
      * Return an array with an index of where to cut off the ending and a suffix or FALSE.
      *
-     * @access private
      * @return array|false
      */
     private static function autoSuffix()
@@ -382,7 +378,6 @@ class Pluralize
     /**
      * Get provided casing of word.
      *
-     * @access private
      * @return string
      */
     private static function getCasing(): string
@@ -397,7 +392,6 @@ class Pluralize
     /**
      * Convert word to a casing.
      *
-     * @access private
      * @param  string $word   The word to convert
      * @param  string $casing The casing format to convert to
      * @return string
@@ -422,7 +416,6 @@ class Pluralize
     /**
      * Strip end off a word at a given char index and return the end part.
      *
-     * @access private
      * @param  string $word  The word to convert
      * @param  int    $count The index to split at
      * @return string
@@ -435,7 +428,6 @@ class Pluralize
     /**
      * Strip end off a word at a given char index and return the start part.
      *
-     * @access private
      * @param  string $word  The word to convert
      * @param  int    $count The index to split at
      * @return string
@@ -448,7 +440,6 @@ class Pluralize
     /**
      * Get the nth last character of a string.
      *
-     * @access private
      * @param  string $word  The word to convert
      * @param  int    $count The index to get
      * @return string

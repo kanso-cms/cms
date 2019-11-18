@@ -17,7 +17,6 @@ class Tag extends Helper
     /**
      * Checks whether a given tag exists by the tag name or id.
      *
-     * @access  public
      * @param  string|int $tag_name Tag name or id
      * @return bool
      */
@@ -27,13 +26,12 @@ class Tag extends Helper
 
         $tag_name = is_numeric($tag_name) ? intval($tag_name) : $tag_name;
 
-        return !empty($this->container->get('TagManager')->provider()->byKey($index, $tag_name));
+        return !empty($this->container->TagManager->provider()->byKey($index, $tag_name));
     }
 
     /**
      * Gets an array of tag objects of the current post or a post by id.
      *
-     * @access  public
      * @param  int|null $post_id Post id or null for tags of current post (optional) (Default NULL)
      * @return array
      */
@@ -59,7 +57,6 @@ class Tag extends Helper
     /**
      * Get a comma separated list of the tag names of the current post or a post by id.
      *
-     * @access public
      * @param  int|null $post_id Post id or null for tags of current post (optional) (Default NULL)
      * @param  string   $glue    Glue to separate tag names
      * @return string
@@ -86,7 +83,6 @@ class Tag extends Helper
     /**
      * Implode tag names.
      *
-     * @access private
      * @param  array  $tags Array of tag objects
      * @param  string $glue Glue to separate tag names
      * @return string
@@ -108,7 +104,6 @@ class Tag extends Helper
     /**
      * Get the slug of a tag by id or the current post's tag.
      *
-     * @access  public
      * @param  int|null    $tag_id Tag id or null for tag of current post (optional) (Default NULL)
      * @return string|null
      */
@@ -139,7 +134,6 @@ class Tag extends Helper
     /**
      * Get the full URL of a tag by id or current post's tag.
      *
-     * @access  public
      * @param  int|null    $tag_id Tag id or null for tag of current post (optional) (Default NULL)
      * @return string|null
      */
@@ -163,7 +157,7 @@ class Tag extends Helper
         {
             $prefix = !empty($this->parent->blog_location()) ? '/' . $this->parent->blog_location() . '/' : '/';
 
-            return $this->container->get('Request')->environment()->HTTP_HOST . $prefix . 'tag/' . $tag->slug . '/';
+            return $this->container->Request->environment()->HTTP_HOST . $prefix . 'tag/' . $tag->slug . '/';
         }
 
         return null;
@@ -172,7 +166,6 @@ class Tag extends Helper
     /**
      * If the request is for a tag, category or author returns the object of that request.
      *
-     * @access public
      * @return mixed
      */
     public function the_taxonomy()
@@ -186,15 +179,15 @@ class Tag extends Helper
 
         if ($this->parent->requestType === 'category')
         {
-            return $this->parent->helper('cache')->set($key, $this->container->get('CategoryManager')->provider()->byKey('slug', $this->parent->taxonomySlug, true));
+            return $this->parent->helper('cache')->set($key, $this->container->CategoryManager->provider()->byKey('slug', $this->parent->taxonomySlug, true));
         }
         elseif ($this->parent->requestType === 'tag')
         {
-            return $this->parent->helper('cache')->set($key, $this->container->get('TagManager')->provider()->byKey('slug', $this->parent->taxonomySlug, true));
+            return $this->parent->helper('cache')->set($key, $this->container->TagManager->provider()->byKey('slug', $this->parent->taxonomySlug, true));
         }
         elseif ($this->parent->requestType === 'author')
         {
-            return $this->parent->helper('cache')->set($key, $this->container->get('UserManager')->provider()->byKey('slug', $this->parent->taxonomySlug, true));
+            return $this->parent->helper('cache')->set($key, $this->container->UserManager->provider()->byKey('slug', $this->parent->taxonomySlug, true));
         }
 
         return null;
@@ -203,7 +196,6 @@ class Tag extends Helper
     /**
      * Get an array of all the tag objects.
      *
-     * @access  public
      * @return array
      */
     public function all_the_tags(): array
@@ -221,7 +213,7 @@ class Tag extends Helper
 
         foreach ($rows as $row)
         {
-            $tags[] = $this->container->get('TagManager')->byId($row['id']);
+            $tags[] = $this->container->TagManager->byId($row['id']);
         }
 
         return $this->parent->helper('cache')->set($key, $tags);
@@ -230,7 +222,6 @@ class Tag extends Helper
     /**
      * Is the current post or a post by id untagged ?
      *
-     * @access  public
      * @param  int|null $post_id Post id or null for tag of current post (optional) (Default NULL)
      * @return bool
      */
@@ -288,7 +279,7 @@ class Tag extends Helper
 
         if ($this->parent->tag_exists($tag_id))
         {
-            return $this->parent->helper('cache')->set($key, $this->container->get('PostManager')->provider()->byKey('tags.id', $tag_id, false, $published));
+            return $this->parent->helper('cache')->set($key, $this->container->PostManager->provider()->byKey('tags.id', $tag_id, false, $published));
         }
 
         return $this->parent->helper('cache')->set($key, []);

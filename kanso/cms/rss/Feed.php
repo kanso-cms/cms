@@ -42,7 +42,6 @@ class Feed
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\http\request\Request   $request  Request object
      * @param \kanso\framework\http\response\Response $response Response object
      * @param string                                  $format   RSS format 'rss'||'atom'||'rdf' (optional) (default 'rss')
@@ -60,10 +59,8 @@ class Feed
 
 	/**
 	 * Render the XML into the HTPP response.
-	 *
-	 * @access public
 	 */
-	public function render()
+	public function render(): void
 	{
 		// Set appropriate content type header
         $this->response->format()->set(Mime::fromExt($this->format) . ', application/xml');
@@ -81,7 +78,6 @@ class Feed
 	/**
 	 * Load an RSS XML feed.
 	 *
-	 * @access private
 	 * @return string
 	 */
 	private function xml(): string

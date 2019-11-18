@@ -56,7 +56,6 @@ class Tags extends BaseModel
     /**
      * Parse the $_GET request variables and filter the articles for the requested page.
      *
-     * @access private
      * @return array
      */
     private function parseGet(): array
@@ -79,7 +78,6 @@ class Tags extends BaseModel
     /**
      * Parse and validate the POST request from any submitted forms.
      *
-     * @access private
      * @return array|false
      */
     private function parsePost()
@@ -129,7 +127,6 @@ class Tags extends BaseModel
     /**
      * Validates all POST variables are set.
      *
-     * @access private
      * @return bool
      */
     private function validatePost(): bool
@@ -161,7 +158,6 @@ class Tags extends BaseModel
     /**
      * Updates a tag.
      *
-     * @access private
      * @param  int         $id Single tag id
      * @return bool|string
      */
@@ -209,10 +205,9 @@ class Tags extends BaseModel
     /**
      * Delete articles by id.
      *
-     * @access private
      * @param array $ids List of post ids
      */
-    private function delete(array $ids)
+    private function delete(array $ids): void
     {
         foreach ($ids as $id)
         {
@@ -228,10 +223,9 @@ class Tags extends BaseModel
     /**
      * Clear tags of articles.
      *
-     * @access private
      * @param array $ids List of post ids
      */
-    private function clear(array $ids)
+    private function clear(array $ids): void
     {
         foreach ($ids as $id)
         {
@@ -247,7 +241,6 @@ class Tags extends BaseModel
     /**
      * Check if the GET URL queries are either empty or set to defaults.
      *
-     * @access private
      * @return bool
      */
     private function emptyQueries(): bool
@@ -264,7 +257,6 @@ class Tags extends BaseModel
     /**
      * Returns the requested GET queries with defaults.
      *
-     * @access private
      * @return array
      */
     private function getQueries(): array
@@ -283,7 +275,6 @@ class Tags extends BaseModel
     /**
      * Returns the list of tags for display.
      *
-     * @access private
      * @param  bool      $checkMaxPages Count the max pages
      * @return array|int
      */

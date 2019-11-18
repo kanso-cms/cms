@@ -42,8 +42,6 @@ class Kanso
 
 	/**
 	 * Constructor. Boots application.
-	 *
-	 * @access protected
 	 */
 	protected function __construct()
 	{
@@ -53,7 +51,6 @@ class Kanso
 	/**
 	 * Get the global Kanso instance.
 	 *
-	 * @access public
 	 * @return \kanso\Kanso
 	 */
 	public static function instance(): Kanso
@@ -68,10 +65,8 @@ class Kanso
 
 	/**
 	 * Application run.
-	 *
-	 * @access public
 	 */
-	public function run()
+	public function run(): void
 	{
 		$this->application->run();
 	}

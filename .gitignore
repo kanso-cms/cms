@@ -15,7 +15,6 @@ Thumbs.db
 
 # Dev Generated Files
 /.phan/*
-/bin/*
 /analysis.txt
 
 # Kanso Specific

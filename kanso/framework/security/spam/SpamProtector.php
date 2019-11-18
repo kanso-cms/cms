@@ -35,7 +35,6 @@ class SpamProtector
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\security\spam\gibberish\Gibberish $gibberish Gibberish detector
      * @param \kanso\framework\config\Config                     $config    Config loader
      */
@@ -49,7 +48,6 @@ class SpamProtector
     /**
      * Checks if text is SPAM.
      *
-     * @access public
      * @param  string $text Text to check
      * @return bool
      */
@@ -82,7 +80,6 @@ class SpamProtector
     /**
      * Gets a SPAM rating.
      *
-     * @access public
      * @param  string $text Text to check
      * @return int
      */
@@ -110,7 +107,6 @@ class SpamProtector
     /**
      * Checks if an IP address is whitelisted.
      *
-     * @access public
      * @param  string $ipAddresses The IP address to check
      * @return bool
      */
@@ -122,7 +118,6 @@ class SpamProtector
     /**
      * Checks if an IP address is blacklisted.
      *
-     * @access public
      * @param  string $ipAddresses The IP address to check
      * @return bool
      */
@@ -134,10 +129,9 @@ class SpamProtector
     /**
      * Blacklists an ip address.
      *
-     * @access public
      * @param string $ipAddresses The IP to blacklist
      */
-    public function blacklistIpAddress(string $ipAddresses)
+    public function blacklistIpAddress(string $ipAddresses): void
     {
         $this->config->set('spam.blacklist.ipaddresses', $this->addToList($ipAddresses, $this->config->get('spam.blacklist.ipaddresses')));
 
@@ -147,10 +141,9 @@ class SpamProtector
     /**
      * Remove an ip address from the blacklist.
      *
-     * @access public
      * @param string $ipAddresses The IP to remove
      */
-    public function unBlacklistIpAddress(string $ipAddresses)
+    public function unBlacklistIpAddress(string $ipAddresses): void
     {
         $this->config->set('spam.blacklist.ipaddresses', $this->removeFromList($ipAddresses, $this->config->get('spam.blacklist.ipaddresses')));
 
@@ -160,10 +153,9 @@ class SpamProtector
     /**
      * whitelists an ip address.
      *
-     * @access public
      * @param string $ipAddresses The IP to whitelist
      */
-    public function whitelistIpAddress(string $ipAddresses)
+    public function whitelistIpAddress(string $ipAddresses): void
     {
         $this->config->set('spam.whitelist.ipaddresses', $this->addToList($ipAddresses, $this->config->get('spam.whitelist.ipaddresses')));
 
@@ -173,10 +165,9 @@ class SpamProtector
     /**
      * Remove an ip address from the whitelist.
      *
-     * @access public
      * @param string $ipAddresses The IP to remove
      */
-    public function unWhitelistIpAddress(string $ipAddresses)
+    public function unWhitelistIpAddress(string $ipAddresses): void
     {
         $this->config->set('spam.whitelist.ipaddresses', $this->removeFromList($ipAddresses, $this->config->get('spam.whitelist.ipaddresses')));
 
@@ -186,7 +177,6 @@ class SpamProtector
     /**
      * Check if a list contains a word.
      *
-     * @access private
      * @param  array  $list The array to check in
      * @param  string $term The term to check for
      * @return bool
@@ -211,7 +201,6 @@ class SpamProtector
     /**
      * Add an item to a list.
      *
-     * @access private
      * @param  string $item The item to add to the list
      * @param  array  $list The array to alter
      * @return array
@@ -230,7 +219,6 @@ class SpamProtector
     /**
      * Remove an item from a list.
      *
-     * @access private
      * @param  string $item The item to add to the list
      * @param  array  $list The array to alter
      * @return array
@@ -257,7 +245,6 @@ class SpamProtector
     /**
      * Counts how many links are in text.
      *
-     * @access private
      * @param  string $text Text to check
      * @return int
      */
@@ -285,7 +272,6 @@ class SpamProtector
     /**
      * Count how many graylisted words are in a string of text.
      *
-     * @access private
      * @param  string $text Text to check
      * @return int
      */

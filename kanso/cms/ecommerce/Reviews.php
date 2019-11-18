@@ -17,7 +17,6 @@ class Reviews extends UtilityBase
     /**
      * Get product reviews sorted the upvotes (most relevant) from a product review.
      *
-     * @access public
      * @param  int   $productId Product post id
      * @return array
      */
@@ -36,7 +35,6 @@ class Reviews extends UtilityBase
     /**
      * Get product review rating number.
      *
-     * @access public
      * @param  int $commentId Comment id
      * @return int
      */
@@ -55,7 +53,6 @@ class Reviews extends UtilityBase
     /**
      * Get product review recommended value.
      *
-     * @access public
      * @param  int  $commentId Comment id
      * @return bool
      */
@@ -74,7 +71,6 @@ class Reviews extends UtilityBase
     /**
      * Get the upvotes from a product review.
      *
-     * @access public
      * @param  int $commentId Comment id
      * @return int
      */
@@ -86,7 +82,6 @@ class Reviews extends UtilityBase
     /**
      * Get the downvotes from a product review.
      *
-     * @access public
      * @param  int $commentId Comment id
      * @return int
      */
@@ -98,7 +93,6 @@ class Reviews extends UtilityBase
     /**
      * Get the downvotes from a product review.
      *
-     * @access public
      * @param  int $commentId Comment id
      * @return int
      */
@@ -117,7 +111,6 @@ class Reviews extends UtilityBase
     /**
      * Get the downvotes from a product review.
      *
-     * @access public
      * @param  int $commentId Comment id
      * @return int
      */
@@ -136,11 +129,10 @@ class Reviews extends UtilityBase
     /**
      * Get a product's ratings data.
      *
-     * @access public
      * @param  int   $productId Product post id
      * @return array
      */
-    function ratings(int $productId): array
+    public function ratings(int $productId): array
     {
         $total   = 0;
         $avg     = 0;

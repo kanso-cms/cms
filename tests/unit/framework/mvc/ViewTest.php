@@ -55,7 +55,7 @@ class ViewTest extends TestCase
     /**
      *
      */
-    public function testDisplay()
+    public function testDisplay(): void
     {
         $view = new View;
 
@@ -67,7 +67,7 @@ class ViewTest extends TestCase
     /**
      *
      */
-    public function testInclude()
+    public function testInclude(): void
     {
         $view = new View;
 
@@ -81,7 +81,7 @@ class ViewTest extends TestCase
     /**
      *
      */
-    public function testArrayAccess()
+    public function testArrayAccess(): void
     {
         $view = new View;
 

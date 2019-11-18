@@ -20,7 +20,7 @@ class EmailTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetQueue()
+	public function testGetQueue(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
@@ -35,7 +35,7 @@ class EmailTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetLog()
+	public function testGetLog(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
@@ -50,7 +50,7 @@ class EmailTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetSender()
+	public function testGetSender(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
@@ -65,7 +65,7 @@ class EmailTest extends TestCase
 	/**
 	 *
 	 */
-	public function testPresets()
+	public function testPresets(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
@@ -92,7 +92,7 @@ class EmailTest extends TestCase
 	/**
 	 *
 	 */
-	public function testHtml()
+	public function testHtml(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
@@ -117,7 +117,7 @@ class EmailTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSendNoQueue()
+	public function testSendNoQueue(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
@@ -136,7 +136,7 @@ class EmailTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSendWithQue()
+	public function testSendWithQue(): void
 	{
 		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
 		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');

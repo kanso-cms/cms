@@ -28,7 +28,7 @@ class View extends ViewBase implements ViewInterface
      *
      * @param bool $toggle Enable/disable local kanso instance (optional) (default true)
      */
-    public function includeKanso(bool $toggle = true)
+    public function includeKanso(bool $toggle = true): void
     {
         $this->includeKanso = $toggle;
     }
@@ -36,7 +36,7 @@ class View extends ViewBase implements ViewInterface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function include(string $file)
+	public function include(string $file): void
 	{
 		$this->includes[$file] = $file;
 	}
@@ -44,7 +44,7 @@ class View extends ViewBase implements ViewInterface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function includes(array $files)
+	public function includes(array $files): void
 	{
 		foreach ($files as $path)
 		{

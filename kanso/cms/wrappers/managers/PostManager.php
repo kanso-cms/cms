@@ -27,7 +27,6 @@ class PostManager extends Manager
     /**
      * Creates a new post.
      *
-     * @access public
      * @param  array $row Entry row
      * @return mixed
      */
@@ -39,7 +38,6 @@ class PostManager extends Manager
 	/**
 	 * Gets a post by id.
 	 *
-	 * @access public
 	 * @param  int   $id Tag id
 	 * @return mixed
 	 */
@@ -51,7 +49,6 @@ class PostManager extends Manager
     /**
      * Deletes a post by id.
      *
-     * @access public
      * @param  int  $id Post id
      * @return bool
      */
