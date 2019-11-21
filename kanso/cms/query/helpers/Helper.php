@@ -38,19 +38,12 @@ abstract class Helper
      * Constructor.
      *
      * @param \kanso\framework\ioc\Container $container IoC container
+     * @param \kanso\cms\query\Query         $query     CMS query instance
      */
-    public function __construct(Container $container)
+    public function __construct(Container $container, Query $query)
     {
         $this->container = $container;
-    }
 
-    /**
-     * Returns query builder instance.
-     *
-     * @param \kanso\cms\query\Query $query Query instance
-     */
-    public function setParent(Query $query): void
-    {
         $this->parent = $query;
     }
 }

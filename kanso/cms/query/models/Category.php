@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\cms\query\filters;
+namespace kanso\cms\query\models;
 
 /**
  * Filter category request.
@@ -20,34 +20,46 @@ class Category extends FilterBase implements FilterInterface
     public function filter(): bool
     {
         // Get url parts
-        $urlParts = $this->filterUrlParts();
-        $lastCat  = $this->container->CategoryManager->provider()->byKey('slug', array_slice($urlParts, -1)[0], true);
+        $urlParts  = $this->filterUrlParts();
+        $category  = $this->CategoryManager->provider()->byKey('slug', array_slice($urlParts, -1)[0], true);
 
         // Make sure the category exists
-        if (!$lastCat)
+        if (!$category)
         {
             return false;
         }
 
         // Make sure the path to a nested category is correct
-        if (!$this->parent->the_category_slug($lastCat->id) === implode('/', $urlParts))
+        if (!$this->Query->the_category_slug($category->id) === implode('/', $urlParts))
         {
             return false;
         }
 
-        $this->parent->requestType  = 'category';
-        $this->parent->taxonomySlug = $lastCat;
-        $this->parent->queryStr     = 'post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = ' . $this->parent->taxonomySlug . " : limit = {$this->offset}, {$this->perPage}";
-        $this->parent->posts        = $this->parent->helper('parser')->parseQuery($this->parent->queryStr);
-        $this->parent->postCount    = count($this->parent->posts);
+        $queryStr  = "post_status = published : post_type = post : orderBy = post_created, DESC : category_slug = {$category->slug} : limit = {$this->offset}, {$this->perPage}";
+        $posts     = $this->parseQueryStr($queryStr);
+        $postCount = count($posts);
 
         // If there are no posts and the page is more than 2 return false
-        if ($this->parent->postCount === 0 && $this->parent->pageIndex >= 1)
+        if ($this->Query->postCount === 0 && $this->Query->pageIndex >= 1)
         {
             return false;
         }
 
+        $this->Query->requestType  = $this->requestType();
+        $this->Query->taxonomySlug = $category->slug;
+        $this->Query->queryStr     = $queryStr;
+        $this->Query->posts        = $posts;
+        $this->Query->postCount    = $postCount;
+
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function requestType(): string
+    {
+        return 'category';
     }
 
     /**
@@ -57,13 +69,12 @@ class Category extends FilterBase implements FilterInterface
      */
     private function filterUrlParts(): array
     {
-        $blogPrefix   = $this->container->Config->get('cms.blog_location');
-        $urlParts     = explode('/', $this->container->Request->environment()->REQUEST_PATH);
+        $urlParts     = $this->urlParts;
         $isPage       = in_array('page', $urlParts);
         $isFeed       = in_array('feed', $urlParts);
 
         // Remove the blog prefix
-        if ($blogPrefix)
+        if (!empty($this->blogLocation))
         {
             array_shift($urlParts);
         }

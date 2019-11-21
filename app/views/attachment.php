@@ -191,7 +191,7 @@ use kanso\framework\utility\Str;
 			<div class="content">
 				<h1><?php echo the_title(); ?></h1>
 				<?php if (the_attachment()->isImage() || the_attachment()->ext() === 'svg') : ?>
-				<img class="attachment" height="<?php echo the_attachment()->height(the_attachment_size()); ?>" width="<?php echo the_attachment()->width(the_attachment_size()); ?>" src="<?php echo the_post_thumbnail_src(null, the_attachment_size()); ?>" alt="<?php echo the_attachment()->alt; ?>" title="<?php echo the_attachment()->title; ?>" />
+				<img class="attachment" height="<?php echo the_attachment()->height(); ?>" width="<?php echo the_attachment()->width(); ?>" src="<?php echo the_attachment_url(); ?>" alt="<?php echo the_attachment()->alt; ?>" title="<?php echo the_attachment()->title; ?>" />
 				<?php else : ?>
 					<img class="attachment" height="300" width="300" src="<?php echo the_attachments_url(); ?>/no-preview-available.jpg" alt="No preivew available" title="<?php echo the_attachment()->title; ?>" />
 				<?php endif; ?>
@@ -210,7 +210,7 @@ use kanso\framework\utility\Str;
 					    
 					    <?php if (the_attachment()->isImage()) : ?>
 					    <dt>Full Size:</dt>
-					    <dd><a title="View This Image At Full Resolution" href="<?php echo the_attachment_url(); ?>"><?php echo the_attachment_url(); ?></a></dd>
+					    <dd><a target="_blank" title="View This Image At Full Resolution" href="<?php echo the_attachment_url(); ?>"><?php echo the_attachment_url(); ?></a></dd>
 					    <?php endif; ?>
 
 					    <dt>Uploaded:</dt>
@@ -224,7 +224,7 @@ use kanso\framework\utility\Str;
 
 					    <?php if (the_attachment()->isImage() || the_attachment()->ext() === 'svg') : ?>
 					    <dt>Dimensions:</dt>
-					    <dd><?php echo the_attachment()->height(the_attachment_size()); ?> x <?php echo the_attachment()->width(the_attachment_size()); ?></dd>
+					    <dd><?php echo the_attachment()->height(); ?> x <?php echo the_attachment()->width(); ?></dd>
 						<?php endif; ?>
 
 						<?php if (the_attachment()->isImage()) : ?>
@@ -235,7 +235,7 @@ use kanso\framework\utility\Str;
 					    	<?php
 					    	$sizes = array_reverse($kanso->Config->get('cms.uploads.thumbnail_sizes'));
 					    	foreach ($sizes as $name => $size) : ?>
-							<a href="<?php echo the_post_thumbnail_src(null, $name); ?>"><?php echo is_array($size) ? $size[0] . ' x ' . $size[1] : $size; ?></a>
+							<a target="_blank" href="<?php echo the_attachment()->imgSize($name); ?>"><?php echo the_attachment()->height($name) . ' x ' . the_attachment()->width($name); ?></a>
 							<?php echo ($size === end($sizes)) ? '' : '&nbsp;•&nbsp;'; ?>
 							<?php endforeach; ?>
 					    </dd>

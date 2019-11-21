@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @copyright Joe J. Howard
+ * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
+ */
+
+namespace kanso\cms\query\models;
+
+/**
+ * Filter posts on the homepage.
+ *
+ * @author Joe J. Howard
+ */
+class Home extends FilterBase implements FilterInterface
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function filter(): bool
+    {
+        $queryStr  = "post_status = published : post_type = post : orderBy = post_created, DESC : limit = {$this->offset}, {$this->perPage}";
+        $posts     = $this->parseQueryStr($queryStr);
+        $postCount = count($posts);
+
+        if ($postCount === 0)
+        {
+            return false;
+        }
+
+        $this->Query->requestType = $this->requestType();
+        $this->Query->queryStr    = $queryStr;
+        $this->Query->posts       = $posts;
+        $this->Query->postCount   = $postCount;
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function requestType(): string
+    {
+        return 'home';
+    }
+}

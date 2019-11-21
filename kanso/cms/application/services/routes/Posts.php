@@ -12,8 +12,8 @@
  */
 
 // Posts
-$router->get($blogPrefix . '/' . $config->get('cms.permalinks_route') . 'feed/rss/', '\kanso\cms\query\Dispatcher@loadRssFeed', 'single');
-$router->get($blogPrefix . '/' . $config->get('cms.permalinks_route') . 'feed/atom/', '\kanso\cms\query\Dispatcher@loadRssFeed', 'single');
-$router->get($blogPrefix . '/' . $config->get('cms.permalinks_route') . 'feed/rdf/', '\kanso\cms\query\Dispatcher@loadRssFeed', 'single');
-$router->get($blogPrefix . '/' . $config->get('cms.permalinks_route') . 'feed/', '\kanso\cms\query\Dispatcher@loadRssFeed', 'single');
-$router->get($blogPrefix . '/' . $config->get('cms.permalinks_route'), '\kanso\cms\query\Dispatcher@applyRoute', 'single');
+$router->get($blogPrefix . '/' . $config->get('cms.permalinks_route') . 'feed/rss/', '\kanso\cms\query\controllers\Rss@load', '\kanso\cms\query\models\Single');
+$router->get($blogPrefix . '/' . $config->get('cms.permalinks_route') . 'feed/atom/', '\kanso\cms\query\controllers\Rss@load', '\kanso\cms\query\models\Single');
+$router->get($blogPrefix . '/' . $config->get('cms.permalinks_route') . 'feed/rdf/', '\kanso\cms\query\controllers\Rss@load', '\kanso\cms\query\models\Single');
+$router->get($blogPrefix . '/' . $config->get('cms.permalinks_route') . 'feed/', '\kanso\cms\query\controllers\Rss@load', '\kanso\cms\query\models\Single');
+$router->get($blogPrefix . '/' . $config->get('cms.permalinks_route'), '\kanso\cms\query\controllers\Content@apply', '\kanso\cms\query\models\Single');

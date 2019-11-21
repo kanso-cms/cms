@@ -12,4 +12,4 @@
  */
 
 // Sitemap
-$router->get('/' . $config->get('cms.sitemap_route'), '\kanso\cms\query\Dispatcher@loadSiteMap');
+$router->get('/' . $config->get('cms.sitemap_route'), '\kanso\cms\query\controllers\Sitemap@load', '\kanso\cms\query\models\Sitemap');

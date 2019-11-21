@@ -1,3 +1,0 @@
-queryFilterUri
-
-$this->container->Response

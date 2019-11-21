@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\cms\query\filters;
+namespace kanso\cms\query\models;
 
 /**
  * Query filter interface.
@@ -20,4 +20,11 @@ interface FilterInterface
 	 * @return bool
 	 */
 	public function filter(): bool;
+
+	/**
+	 * Get the request Type.
+	 *
+	 * @return string
+	 */
+	public function requestType(): string;
 }

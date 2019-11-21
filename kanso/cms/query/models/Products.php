@@ -5,10 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\cms\query\filters;
+namespace kanso\cms\query\models;
 
 /**
- * Filter search request.
+ * Filter products page as category.
  *
  * @author Joe J. Howard
  */
@@ -19,13 +19,13 @@ class Products extends FilterBase implements FilterInterface
      */
     public function filter(): bool
     {
-        $urlParts = explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI));
+        $urlParts = $this->urlParts;
         $isFeed   = in_array('feed', $urlParts);
 
         // Remove /feed/rss
         if ($isFeed)
         {
-            $last = array_values(array_slice($urlParts, -1))[0];
+            $last = array_slice($urlParts, -1)[0];
 
             if ($last === 'rss' || $last === 'rdf' || $last == 'atom')
             {
@@ -38,11 +38,19 @@ class Products extends FilterBase implements FilterInterface
             }
         }
 
-        $this->parent->requestType  = 'products';
-        $this->parent->queryStr     = 'post_status = published : post_type = product : orderBy = post_created, DESC';
-        $this->parent->posts        = $this->parent->helper('parser')->parseQuery($this->parent->queryStr);
-        $this->parent->postCount    = count($this->parent->posts);
+        $this->Query->requestType  = $this->requestType();
+        $this->Query->queryStr     = 'post_status = published : post_type = product : orderBy = post_created, DESC';
+        $this->Query->posts        = $this->parseQueryStr($this->Query->queryStr);
+        $this->Query->postCount    = count($this->Query->posts);
 
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function requestType(): string
+    {
+        return 'products';
     }
 }

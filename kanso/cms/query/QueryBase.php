@@ -13,7 +13,6 @@ use kanso\cms\query\helpers\Author;
 use kanso\cms\query\helpers\Cache;
 use kanso\cms\query\helpers\Category;
 use kanso\cms\query\helpers\Comment;
-use kanso\cms\query\helpers\Filter;
 use kanso\cms\query\helpers\Helper;
 use kanso\cms\query\helpers\Meta;
 use kanso\cms\query\helpers\Pagination;
@@ -113,38 +112,6 @@ abstract class QueryBase
     public $searchQuery;
 
     /**
-     * Helper classes.
-     *
-     * @var array
-     */
-    public $helperClasses =
-    [
-        'attachment'    => Attachment::class,
-        'author'        => Author::class,
-        'cache'         => Cache::class,
-        'category'      => Category::class,
-        'comment'       => Comment::class,
-        'meta'          => Meta::class,
-        'pagination'    => Pagination::class,
-        'post'          => Post::class,
-        'postIteration' => PostIteration::class,
-        'search'        => Search::class,
-        'tag'           => Tag::class,
-        'templates'     => Templates::class,
-        'scripts'       => Scripts::class,
-        'urls'          => Urls::class,
-        'validation'    => Validation::class,
-        'parser'        => Parser::class,
-    ];
-
-    /**
-     * Helper classes.
-     *
-     * @var array
-     */
-    public $helpers = [];
-
-    /**
      * Header scripts.
      *
      * @var array
@@ -173,6 +140,38 @@ abstract class QueryBase
     protected $container;
 
     /**
+     * Helper classes.
+     *
+     * @var array
+     */
+    protected $helperClasses =
+    [
+        'attachment'    => Attachment::class,
+        'author'        => Author::class,
+        'cache'         => Cache::class,
+        'category'      => Category::class,
+        'comment'       => Comment::class,
+        'meta'          => Meta::class,
+        'pagination'    => Pagination::class,
+        'post'          => Post::class,
+        'postIteration' => PostIteration::class,
+        'search'        => Search::class,
+        'tag'           => Tag::class,
+        'templates'     => Templates::class,
+        'scripts'       => Scripts::class,
+        'urls'          => Urls::class,
+        'validation'    => Validation::class,
+        'parser'        => Parser::class,
+    ];
+
+    /**
+     * Helper classes.
+     *
+     * @var array
+     */
+    protected $helpers = [];
+
+    /**
      * Constructor.
      *
      * @param \kanso\framework\ioc\Container $container IoC container
@@ -181,7 +180,7 @@ abstract class QueryBase
     {
         $this->container = $container;
 
-        $this->helper('filter')->fetchPageIndex();
+        $this->pageIndex = $this->fetchPageIndex();
     }
 
     /**
@@ -217,9 +216,7 @@ abstract class QueryBase
         {
             if ($key === $name)
             {
-                $class = new $class($this->container);
-
-                $class->setParent($this);
+                $class = new $class($this->container, $this);
 
                 $this->helpers[$key] = $class;
 
@@ -228,5 +225,58 @@ abstract class QueryBase
         }
 
         throw new InvalidArgumentException('Invalid helper class. Class "' . $name . '" does not exist.');
+    }
+
+    /**
+     * Apply a query for a custom string.
+     *
+     * @param string $queryStr    Query string to parse
+     * @param string $requestType Request type (optional) (default 'custom')
+     */
+    public function applyQuery(string $queryStr, $requestType = 'custom'): void
+    {
+        $this->reset();
+
+        $this->queryStr = trim($queryStr);
+
+        $this->posts = $this->helper('parser')->parseQuery($this->queryStr);
+
+        $this->postCount = count($this->posts);
+
+        $this->requestType = $requestType;
+
+        if (isset($this->posts[0]))
+        {
+            $this->post = $this->posts[0];
+        }
+    }
+
+    /**
+     * Reset the internal properties to default.
+     */
+    public function reset(): void
+    {
+        $this->pageIndex    = 0;
+        $this->postIndex    = -1;
+        $this->postCount    = 0;
+        $this->posts        = [];
+        $this->requestType  = null;
+        $this->queryStr     = null;
+        $this->post         = null;
+        $this->taxonomySlug = null;
+        $this->searchQuery  = null;
+        $this->pageIndex    = $this->fetchPageIndex();
+    }
+
+    /**
+     * Fetch and set the currently requested page.
+     *
+     * @return int
+     */
+    private function fetchPageIndex(): int
+    {
+        $pageIndex = $this->container->Request->fetch('page');
+
+        return $pageIndex === 1 || $pageIndex === 0 ? 0 : $pageIndex-1;
     }
 }

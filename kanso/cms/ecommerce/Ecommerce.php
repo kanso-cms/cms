@@ -178,11 +178,11 @@ class Ecommerce extends Model
         $this->Router->get('/admin/invoices/(:any)/', '\kanso\cms\admin\controllers\Dashboard@invoice', '\kanso\cms\admin\models\ecommerce\Invoice');
 
         // Products page
-        $this->Router->get('/products/feed/rss/', '\kanso\cms\application\Application::loadRssFeed', 'products');
-        $this->Router->get('/products/feed/atom/', '\kanso\cms\application\Application::loadRssFeed', 'products');
-        $this->Router->get('/products/feed/rdf/', '\kanso\cms\application\Application::loadRssFeed', 'products');
-        $this->Router->get('/products/feed/', '\kanso\cms\application\Application::loadRssFeed', 'products');
-        $this->Router->get('/products/', '\kanso\cms\application\Application::applyRoute', 'products');
+        $this->Router->get('/products/feed/rss/', '\kanso\cms\query\controllers\Content@rssFeed', '\kanso\cms\query\models\Products');
+        $this->Router->get('/products/feed/atom/', '\kanso\cms\query\controllers\Content@rssFeed', '\kanso\cms\query\models\Products');
+        $this->Router->get('/products/feed/rdf/', '\kanso\cms\query\controllers\Content@rssFeed', '\kanso\cms\query\models\Products');
+        $this->Router->get('/products/feed/', '\kanso\cms\query\controllers\Content@rssFeed', '\kanso\cms\query\models\Products');
+        $this->Router->get('/products/', '\kanso\cms\query\controllers\Content@apply', '\kanso\cms\query\models\Products');
     }
 
     /**
