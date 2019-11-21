@@ -32,8 +32,6 @@ class Rss extends Controller
         }
         else
         {
-            $this->Response->status()->set(404);
-
             $this->nextMiddleware();
         }
     }

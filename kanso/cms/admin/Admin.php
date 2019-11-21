@@ -39,7 +39,7 @@ class Admin
 
         // Is this page being requested in the admin panel ?
         // Is this page being requested ?
-        $requestSlug = Str::getAfterLastChar(Str::queryFilterUri($this->Request->environment()->REQUEST_URI), '/');
+        $requestSlug = Str::getAfterLastChar($this->Request->environment()->REQUEST_PATH, '/');
         $isPage      = $slug === $requestSlug;
 
         // Add the admin panel route
@@ -49,11 +49,11 @@ class Admin
         $this->Router->post("/admin/$slug/(:all)", '\kanso\cms\admin\controllers\Dashboard@customPostType', '\kanso\cms\admin\models\Posts');
 
         // Add the front-end routes
-        $this->Router->get('/' . $route . '/feed/rss/', '\kanso\cms\application\Application::loadRssFeed', 'single-' . $slug);
-        $this->Router->get('/' . $route . '/feed/atom/', '\kanso\cms\application\Application::loadRssFeed', 'single-' . $slug);
-        $this->Router->get('/' . $route . '/feed/rdf/', '\kanso\cms\application\Application::loadRssFeed', 'single-' . $slug);
-        $this->Router->get('/' . $route . '/feed/', '\kanso\cms\application\Application::loadRssFeed', 'single-' . $slug);
-        $this->Router->get('/' . $route, '\kanso\cms\application\Application::applyRoute', 'single-' . $slug);
+        $this->Router->get('/' . $route . '/feed/rss/', '\kanso\cms\query\controllers\CustomPost@rss', 'single-' . $slug);
+        $this->Router->get('/' . $route . '/feed/atom/', '\kanso\cms\query\controllers\CustomPost@rss', 'single-' . $slug);
+        $this->Router->get('/' . $route . '/feed/rdf/', '\kanso\cms\query\controllers\CustomPost@rss', 'single-' . $slug);
+        $this->Router->get('/' . $route . '/feed/', '\kanso\cms\query\controllers\CustomPost@rss', 'single-' . $slug);
+        $this->Router->get('/' . $route, '\kanso\cms\query\controllers\CustomPost@load', 'single-' . $slug);
 
         // Add the custom post type to the config
         // So that when the post is saved, the CMS knows what permalink structure to use

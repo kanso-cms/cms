@@ -7,7 +7,6 @@
 
 namespace kanso\cms\query\controllers;
 
-use kanso\cms\rss\Feed;
 use kanso\framework\mvc\controller\Controller;
 use kanso\framework\utility\Str;
 
@@ -29,7 +28,7 @@ class Content extends Controller
 
 		if ($filter && $template)
 		{
-			if ($requestType !== 'page' && $requestType !== 'single' && Str::getBeforeFirstChar($requestType, '-') !== 'single')
+			if ($requestType !== 'page' && $requestType !== 'single')
 			{
 				$this->Response->disableCaching();
 			}
@@ -46,35 +45,14 @@ class Content extends Controller
 		{
 			$this->Query->reset();
 
-			$this->Response->status()->set(404);
-
 			$this->nextMiddleware();
 		}
     }
 
-    /**
-     * Loads an RSS route.
-     */
-    public function rssFeed(): void
-    {
-    	if ($this->model->filter())
-    	{
-    		$format = explode('/', $this->Request->environment()->REQUEST_PATH);
-
-			$rss = new Feed($this->Request, $this->Response, array_pop($format));
-
-			$rss->render();
-    	}
-    	else
-    	{
-    		$this->Response->status()->set(404);
-
-    		$this->nextMiddleware();
-    	}
-    }
-
 	/**
 	 * Determine what template to use.
+	 *
+	 * @return string|false
 	 */
 	private function getTemplate(string $requestType)
 	{
