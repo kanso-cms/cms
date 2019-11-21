@@ -86,17 +86,6 @@ class Content extends Controller
 			$waterfall[] = 'page-' . array_shift($urlParts);
 			$waterfall[] = 'page';
 		}
-		elseif (Str::getBeforeFirstChar($requestType, '-') === 'single')
-		{
-			$waterfall[] = 'single-' . array_pop($urlParts);
-
-			if ($this->Query->have_posts())
-			{
-				$waterfall[] = 'single-' . $this->Query->the_post_type();
-			}
-
-			$waterfall[] = 'single';
-		}
 		elseif ($requestType === 'single')
 		{
 			$waterfall[] = 'single-' . array_pop($urlParts);
