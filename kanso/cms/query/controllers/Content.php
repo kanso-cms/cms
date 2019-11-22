@@ -8,7 +8,6 @@
 namespace kanso\cms\query\controllers;
 
 use kanso\framework\mvc\controller\Controller;
-use kanso\framework\utility\Str;
 
 /**
  * CMS Query Dispatcher.

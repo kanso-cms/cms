@@ -67,7 +67,6 @@ class Output
 	 * Writes string to output.
 	 *
 	 * @param string $string String to write
-	 * @param int    $writer Output type
 	 */
 	public function write(string $string): void
 	{
@@ -121,20 +120,5 @@ class Output
 		{
 			$this->write("\r\33[2K");
 		}
-	}
-
-	/**
-	 * Do we have ANSI support?
-	 *
-	 * @return bool
-	 */
-	public function hasAnsiSupport(): bool
-	{
-		if($this->hasAnsiSupport === null)
-		{
-			$this->hasAnsiSupport = PHP_OS_FAMILY !== 'Windows' || (getenv('ANSICON') !== false || getenv('ConEmuANSI') === 'ON');
-		}
-
-		return $this->hasAnsiSupport;
 	}
 }

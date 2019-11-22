@@ -7,12 +7,11 @@
 
 namespace kanso\cms\query\models;
 
-use kanso\cms\query\Query;
 use kanso\framework\common\SqlBuilderTrait;
 use kanso\framework\ioc\ContainerAwareTrait;
 
 /**
- * CMS Query object.
+ * CMS query filter base.
  *
  * @author Joe J. Howard
  */

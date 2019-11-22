@@ -50,15 +50,17 @@ class Console
 	/**
 	 * Constructor.
 	 *
-	 * @param \kanso\framework\cli\input\Input   $input     Input
-	 * @param \kanso\framework\cli\output\Output $output    Output
-	 * @param \kanso\framework\ioc\Container     $container Container instance (optional) (default null)
+	 * @param \kanso\framework\cli\input\Input    $input     Input
+	 * @param \kanso\framework\cli\output\Output  $output    Output
+	 * @param \kanso\framework\ioc\Container|null $container Container instance (optional) (default null)
 	 */
 	public function __construct(Input $input, Output $output, Container $container = null)
 	{
 		$this->input = $input;
 
 		$this->output = $output;
+
+		$this->container = $container;
 	}
 
 	/**

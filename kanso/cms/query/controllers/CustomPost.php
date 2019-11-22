@@ -26,25 +26,25 @@ class CustomPost extends Controller
      *
      * @var string
      */
-    private $postType;
+    private $requestType;
 
     /**
      * Constructor.
      *
-     * @param \kanso\framework\http\request\Request   $request  Request instance
-     * @param \kanso\framework\http\response\Response $response Response instance
-     * @param \Closure                                $next     Next middleware closure
-     * @param string                                  $postType The custom post type
+     * @param \kanso\framework\http\request\Request   $request     Request instance
+     * @param \kanso\framework\http\response\Response $response    Response instance
+     * @param \Closure                                $next        Next middleware closure
+     * @param string                                  $requestType The custom post type
      */
-    public function __construct(Request $request, Response $response, Closure $next, string $postType)
+    public function __construct(Request $request, Response $response, Closure $next, string $requestType)
     {
         $this->nextMiddleware = $next;
 
-        $this->postType = $postType;
+        $this->requestType = $requestType;
 
         $this->model = new SingleCustom;
 
-        $this->model->setRequestType($postType);
+        $this->model->setRequestType($requestType);
     }
 
     /**
@@ -103,14 +103,13 @@ class CustomPost extends Controller
     {
         $themeDir  = $this->Config->get('cms.themes_path') . '/' . $this->Config->get('cms.theme_name');
         $urlParts  = explode('/', $this->Request->environment()->REQUEST_PATH);
-        $waterfall = ['single-' . array_pop($urlParts)];
+        $waterfall =
+        [
+            'single-' . array_pop($urlParts),
+            $this->requestType,
+            'single',
 
-        if ($this->Query->have_posts())
-        {
-            $waterfall[] = 'single-' . $this->Query->the_post_type();
-        }
-
-        $waterfall[] = 'single';
+        ];
 
         foreach ($waterfall as $name)
         {
@@ -120,11 +119,6 @@ class CustomPost extends Controller
             {
                 return $template;
             }
-        }
-
-        if ($this->Filesystem->exists("{$themeDir}/$requestType.php"))
-        {
-            return "{$themeDir}/$requestType.php";
         }
 
         return false;

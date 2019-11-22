@@ -61,7 +61,7 @@ class Input
     /**
      * Returns the parameters.
      *
-     * @return array
+     * @return string
      */
     public function command(): string
     {
@@ -127,7 +127,7 @@ class Input
     /**
      * Sanitizes the initial CLI args.
      *
-     * @param  array $arguments Array of CLI input arguments
+     * @param  array $args Array of CLI input arguments
      * @return array
      */
     private function sanitizeArgArray(array $args): array
@@ -147,8 +147,7 @@ class Input
 	/**
 	 * Parses the initial CLI args.
 	 *
-	 * @param  array $arguments Sanitized Array of CLI input arguments
-	 * @return array
+	 * @param array $args Sanitized Array of CLI input arguments
 	 */
 	private function parseArgs(array $args): void
 	{
@@ -244,9 +243,9 @@ class Input
      * Checks if the arg was provided as a long form flag.
      *
      * @param  string $arg Raw arg
-     * @return string
+     * @return bool
      */
-    private function isLongFormArg(string $arg)
+    private function isLongFormArg(string $arg): bool
     {
         return isset($arg[0]) && isset($arg[1]) && $arg[0] === '-' && $arg[1] === '-';
     }

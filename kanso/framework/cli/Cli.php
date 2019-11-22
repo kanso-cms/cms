@@ -15,7 +15,7 @@ use kanso\framework\cli\output\Output;
  *
  * @author Joe J. Howard
  */
-class CLI
+class Cli
 {
 	/**
 	 * Input instance.
@@ -71,7 +71,7 @@ class CLI
      */
     public function output(): Output
     {
-        return $this->input;
+        return $this->output;
     }
 
     /**

@@ -9,6 +9,7 @@ namespace kanso\framework\application\cli;
 
 use kanso\framework\application\Application as BaseApplication;
 use kanso\framework\application\cli\commands\GenerateSecret;
+use kanso\framework\cli\Cli;
 use kanso\framework\cli\Environment;
 use kanso\framework\cli\input\Input;
 use kanso\framework\cli\output\Formatter;
@@ -31,7 +32,7 @@ class Application extends BaseApplication
 
         $this->container->singleton('Cli', function($container)
         {
-            return new CLI($container->Input, $container->output, new Environment);
+            return new Cli($container->Input, $container->output, new Environment);
         });
 
         $this->container->singleton('Input', function()

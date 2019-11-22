@@ -7,8 +7,11 @@
 
 namespace kanso\framework\exception\handlers;
 
+use ErrorException;
+use kanso\framework\cli\input\Input;
 use kanso\framework\cli\output\helpers\OrderedList;
 use kanso\framework\cli\output\helpers\UnorderedList;
+use kanso\framework\cli\output\Output;
 use kanso\framework\exception\ExceptionLogicTrait;
 use Throwable;
 
@@ -31,26 +34,25 @@ class CliHandler
 	/**
 	 * Response instance.
 	 *
-	 * @var \kanso\framework\http\response\Response
+	 * @var \kanso\framework\cli\output\Output
 	 */
 	private $output;
 
 	/**
 	 * View instance.
 	 *
-	 * @var \kanso\framework\mvc\view\View
+	 * @var \kanso\framework\cli\input\Input
 	 */
 	private $input;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param \Throwable                              $exception Throwable
-	 * @param \kanso\framework\http\request\Request   $request   Request instance
-	 * @param \kanso\framework\http\response\Response $response  Response instance
-	 * @param \kanso\framework\mvc\view\View          $view      View instance
+	 * @param \Throwable                         $exception Exception being thrown
+	 * @param \kanso\framework\cli\input\Input   $input     Input
+	 * @param \kanso\framework\cli\output\Output $output    Output
 	 */
-	public function __construct(Throwable $exception, $input, $output)
+	public function __construct(Throwable $exception, Input $input, Output $output)
 	{
 		$this->exception = $exception;
 

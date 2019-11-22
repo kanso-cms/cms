@@ -7,6 +7,8 @@
 
 namespace kanso\framework\cli\output;
 
+use Exception;
+
 /**
  * Formatter.
  *
