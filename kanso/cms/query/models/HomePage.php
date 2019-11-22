@@ -15,6 +15,13 @@ namespace kanso\cms\query\models;
 class HomePage extends FilterBase implements FilterInterface
 {
     /**
+     * The request type
+     *
+     * @var string
+     */
+    protected $requestType = 'home-page';
+
+    /**
      * {@inheritdoc}
      */
     public function filter(): bool
@@ -34,13 +41,5 @@ class HomePage extends FilterBase implements FilterInterface
         $this->Query->postCount   = $postCount;
 
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function requestType(): string
-    {
-        return 'home-page';
     }
 }

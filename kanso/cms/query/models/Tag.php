@@ -15,6 +15,13 @@ namespace kanso\cms\query\models;
 class Tag extends FilterBase implements FilterInterface
 {
     /**
+     * The request type
+     *
+     * @var string
+     */
+    protected $requestType = 'tag';
+
+    /**
      * {@inheritdoc}
      */
     public function filter(): bool
@@ -45,13 +52,5 @@ class Tag extends FilterBase implements FilterInterface
         $this->Query->postCount    = $postCount;
 
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function requestType(): string
-    {
-        return 'tag';
     }
 }

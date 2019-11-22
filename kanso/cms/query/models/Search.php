@@ -15,6 +15,13 @@ namespace kanso\cms\query\models;
 class Search extends FilterBase implements FilterInterface
 {
     /**
+     * The request type
+     *
+     * @var string
+     */
+    protected $requestType = 'search';
+
+    /**
      * {@inheritdoc}
      */
     public function filter(): bool
@@ -46,14 +53,6 @@ class Search extends FilterBase implements FilterInterface
         $this->Query->requestType = $this->requestType();
 
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function requestType(): string
-    {
-        return 'search';
     }
 
     /**

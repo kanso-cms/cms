@@ -15,6 +15,13 @@ namespace kanso\cms\query\models;
 class Category extends FilterBase implements FilterInterface
 {
     /**
+     * The request type
+     *
+     * @var string
+     */
+    protected $requestType = 'category';
+
+    /**
      * {@inheritdoc}
      */
     public function filter(): bool
@@ -53,15 +60,7 @@ class Category extends FilterBase implements FilterInterface
 
         return true;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function requestType(): string
-    {
-        return 'category';
-    }
-
+    
     /**
      * Filters and sanitizes URL into pieces.
      *

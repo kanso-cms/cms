@@ -17,13 +17,6 @@ use kanso\framework\utility\Str;
 class SingleCustom extends FilterBase implements FilterInterface
 {
     /**
-     * Post type.
-     *
-     * @var string
-     */
-    private $requestType;
-
-    /**
      * {@inheritdoc}
      */
     public function filter(): bool
@@ -45,22 +38,6 @@ class SingleCustom extends FilterBase implements FilterInterface
         $this->Query->postCount    = $postCount;
 
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function requestType(): string
-    {
-        return $this->requestType;
-    }
-
-    /**
-     * Set post type.
-     */
-    public function setRequestType(string $type): void
-    {
-        $this->requestType = $type;
     }
 
     /**

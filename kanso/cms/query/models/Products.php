@@ -15,6 +15,13 @@ namespace kanso\cms\query\models;
 class Products extends FilterBase implements FilterInterface
 {
     /**
+     * The request type
+     *
+     * @var string
+     */
+    protected $requestType = 'products';
+
+    /**
      * {@inheritdoc}
      */
     public function filter(): bool
@@ -44,13 +51,5 @@ class Products extends FilterBase implements FilterInterface
         $this->Query->postCount    = count($this->Query->posts);
 
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function requestType(): string
-    {
-        return 'products';
     }
 }

@@ -7,12 +7,11 @@
 
 namespace kanso\cms\query\controllers;
 
-use Closure;
-use kanso\cms\query\models\SingleCustom;
-use kanso\cms\rss\Feed;
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
 use kanso\framework\mvc\controller\Controller;
+use kanso\cms\rss\Feed;
+use Closure;
 
 /**
  * Custom posts controller.
@@ -35,15 +34,16 @@ class CustomPost extends Controller
      * @param \kanso\framework\http\response\Response $response    Response instance
      * @param \Closure                                $next        Next middleware closure
      * @param string                                  $requestType The custom post type
+     * @param string                                  $modelClass  The model class to load
      */
-    public function __construct(Request $request, Response $response, Closure $next, string $requestType)
+    public function __construct(Request $request, Response $response, Closure $next, string $requestType, string $modelClass)
     {
         $this->nextMiddleware = $next;
 
         $this->requestType = $requestType;
 
-        $this->model = new SingleCustom;
-
+        $this->loadModel($modelClass);
+        
         $this->model->setRequestType($requestType);
     }
 

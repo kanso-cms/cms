@@ -55,7 +55,7 @@ abstract class Controller
      *
      * @param string $className Full namespaced class name of the model
      */
-    private function loadModel(string $className): void
+    protected function loadModel(string $className): void
 	{
 		$this->model = $this->instantiateModel($className);
 	}

@@ -15,6 +15,13 @@ namespace kanso\cms\query\models;
 class Author extends FilterBase implements FilterInterface
 {
     /**
+     * The request type
+     *
+     * @var string
+     */
+    protected $requestType = 'author';
+
+    /**
      * {@inheritdoc}
      */
     public function filter(): bool
@@ -37,14 +44,6 @@ class Author extends FilterBase implements FilterInterface
         $this->Query->postCount    = $postCount;
 
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function requestType(): string
-    {
-        return 'author';
     }
 
     /**

@@ -49,6 +49,13 @@ abstract class FilterBase
     protected $offset;
 
     /**
+     * The request type
+     *
+     * @var string
+     */
+    protected $requestType = '';
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -60,6 +67,24 @@ abstract class FilterBase
         $this->perPage = $this->Config->get('cms.posts_per_page');
 
         $this->offset = $this->Query->pageIndex * $this->perPage;
+    }
+
+    /**
+     * Returns the request type
+     * 
+     * @return string
+     */
+    public function requestType(): string
+    {
+        return $this->requestType;
+    }
+
+    /**
+     * Set request type.
+     */
+    public function setRequestType(string $type): void
+    {
+        $this->requestType = $type;
     }
 
     /**

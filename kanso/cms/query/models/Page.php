@@ -17,6 +17,13 @@ use kanso\framework\utility\Str;
 class Page extends FilterBase implements FilterInterface
 {
     /**
+     * The request type
+     *
+     * @var string
+     */
+    protected $requestType = 'page';
+
+    /**
      * {@inheritdoc}
      */
     public function filter(): bool
@@ -38,13 +45,5 @@ class Page extends FilterBase implements FilterInterface
         $this->Query->postCount   = $postCount;
 
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function requestType(): string
-    {
-        return 'page';
     }
 }
