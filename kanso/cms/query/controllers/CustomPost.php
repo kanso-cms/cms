@@ -7,11 +7,11 @@
 
 namespace kanso\cms\query\controllers;
 
+use Closure;
+use kanso\cms\rss\Feed;
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
 use kanso\framework\mvc\controller\Controller;
-use kanso\cms\rss\Feed;
-use Closure;
 
 /**
  * Custom posts controller.
@@ -43,7 +43,7 @@ class CustomPost extends Controller
         $this->requestType = $requestType;
 
         $this->loadModel($modelClass);
-        
+
         $this->model->setRequestType($requestType);
     }
 

@@ -15,7 +15,7 @@ namespace kanso\cms\query\models;
 class Home extends FilterBase implements FilterInterface
 {
     /**
-     * The request type
+     * The request type.
      *
      * @var string
      */

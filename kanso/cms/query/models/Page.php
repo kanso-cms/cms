@@ -17,7 +17,7 @@ use kanso\framework\utility\Str;
 class Page extends FilterBase implements FilterInterface
 {
     /**
-     * The request type
+     * The request type.
      *
      * @var string
      */

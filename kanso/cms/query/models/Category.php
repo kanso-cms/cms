@@ -15,7 +15,7 @@ namespace kanso\cms\query\models;
 class Category extends FilterBase implements FilterInterface
 {
     /**
-     * The request type
+     * The request type.
      *
      * @var string
      */
@@ -60,7 +60,7 @@ class Category extends FilterBase implements FilterInterface
 
         return true;
     }
-    
+
     /**
      * Filters and sanitizes URL into pieces.
      *

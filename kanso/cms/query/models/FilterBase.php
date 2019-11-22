@@ -49,7 +49,7 @@ abstract class FilterBase
     protected $offset;
 
     /**
-     * The request type
+     * The request type.
      *
      * @var string
      */
@@ -70,8 +70,8 @@ abstract class FilterBase
     }
 
     /**
-     * Returns the request type
-     * 
+     * Returns the request type.
+     *
      * @return string
      */
     public function requestType(): string

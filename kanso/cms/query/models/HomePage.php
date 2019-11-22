@@ -8,14 +8,14 @@
 namespace kanso\cms\query\models;
 
 /**
- * Filter posts on the homepage.
+ * Filter posts on the blog homepage.
  *
  * @author Joe J. Howard
  */
 class HomePage extends FilterBase implements FilterInterface
 {
     /**
-     * The request type
+     * The request type.
      *
      * @var string
      */

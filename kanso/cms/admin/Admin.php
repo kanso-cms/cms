@@ -43,10 +43,10 @@ class Admin
         $isPage      = $slug === $requestSlug;
 
         // Add the admin panel route
-        $this->Router->get("/admin/$slug/", '\kanso\cms\admin\controllers\Dashboard@customPostType', '\kanso\cms\admin\models\Posts');
-        $this->Router->get("/admin/$slug/(:all)", '\kanso\cms\admin\controllers\Dashboard@customPostType', '\kanso\cms\admin\models\Posts');
-        $this->Router->post("/admin/$slug/", '\kanso\cms\admin\controllers\Dashboard@customPostType', '\kanso\cms\admin\models\Posts');
-        $this->Router->post("/admin/$slug/(:all)", '\kanso\cms\admin\controllers\Dashboard@customPostType', '\kanso\cms\admin\models\Posts');
+        $this->Router->get("/admin/{$slug}/", '\kanso\cms\admin\controllers\Dashboard@customPostType', '\kanso\cms\admin\models\Posts');
+        $this->Router->get("/admin/{$slug}/(:all)", '\kanso\cms\admin\controllers\Dashboard@customPostType', '\kanso\cms\admin\models\Posts');
+        $this->Router->post("/admin/{$slug}/", '\kanso\cms\admin\controllers\Dashboard@customPostType', '\kanso\cms\admin\models\Posts');
+        $this->Router->post("/admin/{$slug}/(:all)", '\kanso\cms\admin\controllers\Dashboard@customPostType', '\kanso\cms\admin\models\Posts');
 
         // Add the front-end routes
         $this->Router->get('/' . $route . '/feed/rss/', '\kanso\cms\query\controllers\CustomPost@rss', ["single-{$slug}", 'kanso\cms\query\models\SingleCustom']);
@@ -87,14 +87,6 @@ class Admin
                 return Humanizer::pluralize(ucfirst($title)) . ' | Kanso';
             });
             // Add the custom post type to the model
-            $this->Filters->on('adminCustomPostType', function() use ($isPage, $slug)
-            {
-                return $slug;
-            });
-            $this->Filters->on('adminPageTitle', function($_title) use ($title, $isPage)
-            {
-                return Humanizer::pluralize(ucfirst($title)) . ' | Kanso';
-            });
             $this->Filters->on('adminCustomPostType', function() use ($isPage, $slug)
             {
                 return $slug;
@@ -147,10 +139,10 @@ class Admin
         }
 
         // Add the route only if the current user is logged as admin
-        $this->Router->get("/admin/$slug/", '\kanso\cms\admin\controllers\Dashboard@blankPage', $model);
-        $this->Router->get("/admin/$slug/(:all)", '\kanso\cms\admin\controllers\Dashboard@blankPage', $model);
-        $this->Router->post("/admin/$slug/", '\kanso\cms\admin\controllers\Dashboard@blankPage', $model);
-        $this->Router->post("/admin/$slug/(:all)", '\kanso\cms\admin\controllers\Dashboard@blankPage', $model);
+        $this->Router->get("/admin/{$slug}/", '\kanso\cms\admin\controllers\Dashboard@blankPage', $model);
+        $this->Router->get("/admin/{$slug}/(:all)", '\kanso\cms\admin\controllers\Dashboard@blankPage', $model);
+        $this->Router->post("/admin/{$slug}/", '\kanso\cms\admin\controllers\Dashboard@blankPage', $model);
+        $this->Router->post("/admin/{$slug}/(:all)", '\kanso\cms\admin\controllers\Dashboard@blankPage', $model);
 
         // If this is a child menu item is this page being requested ?
         if ($parent)

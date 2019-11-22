@@ -15,7 +15,7 @@ namespace kanso\cms\query\models;
 class Tag extends FilterBase implements FilterInterface
 {
     /**
-     * The request type
+     * The request type.
      *
      * @var string
      */

@@ -15,7 +15,7 @@ namespace kanso\cms\query\models;
 class Products extends FilterBase implements FilterInterface
 {
     /**
-     * The request type
+     * The request type.
      *
      * @var string
      */

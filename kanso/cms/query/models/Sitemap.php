@@ -8,14 +8,14 @@
 namespace kanso\cms\query\models;
 
 /**
- * Filter search request.
+ * Filter sitemap request.
  *
  * @author Joe J. Howard
  */
 class Sitemap extends FilterBase implements FilterInterface
 {
     /**
-     * The request type
+     * The request type.
      *
      * @var string
      */

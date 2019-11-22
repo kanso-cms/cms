@@ -10,14 +10,14 @@ namespace kanso\cms\query\models;
 use kanso\framework\utility\Str;
 
 /**
- * Filter search request.
+ * Filter attachment request.
  *
  * @author Joe J. Howard
  */
 class Attachment extends FilterBase implements FilterInterface
 {
     /**
-     * The request type
+     * The request type.
      *
      * @var string
      */
