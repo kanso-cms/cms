@@ -1,6 +1,7 @@
 vendor/bin/phan --config-file .bin/phan-config  --progress-bar -o analysis.txt
 
+vendor/bin/phpunit
+
 .bin/phpcs
 
 .bin/precommit
-
