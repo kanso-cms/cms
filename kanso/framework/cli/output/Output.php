@@ -19,7 +19,7 @@ class Output
 	/**
 	 * Output buffer stream.
 	 *
-	 * @var recourse
+	 * @var resource
 	 */
 	private $stdout;
 
