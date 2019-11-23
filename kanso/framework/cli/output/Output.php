@@ -17,6 +17,13 @@ use kanso\framework\cli\Environment;
 class Output
 {
 	/**
+	 * Output buffer stream
+	 *
+	 * @var recourse
+	 */
+	private $stdout;
+
+	/**
 	 * Formatter.
 	 *
 	 * @var \kanso\framework\cli\output\Formatter
@@ -33,14 +40,17 @@ class Output
 	/**
 	 * Constructor.
 	 *
-	 * @param \kanso\framework\cli\output\Formatter $formatter   Formatter   instance
-	 * @param \kanso\framework\cli\Environment      $environment Environment instance
+	 * @param \kanso\framework\cli\output\Formatter $formatter    Formatter   instance
+	 * @param \kanso\framework\cli\Environment      $environment  Environment instance
+	 * @param resource|null                         $stdout       Output buffer instance (optional) (default null)
 	 */
-	public function __construct(Formatter $formatter, Environment $environment)
+	public function __construct(Formatter $formatter, Environment $environment, $stdout = null)
 	{
 		$this->formatter = $formatter;
 
 		$this->environment = $environment;
+
+		$this->stdout = !$stdout ? STDOUT : $stdout;
 	}
 
     /**
@@ -77,7 +87,7 @@ class Output
 
 		$string = $this->formatter->format($string);
 
-		fwrite(STDOUT, $string);
+		fwrite($this->stdout, $string);
 	}
 
 	/**
@@ -97,7 +107,7 @@ class Output
 	 */
 	public function dump($value): void
 	{
-		$this->write(var_export($value, true) . PHP_EOL);
+		$this->writeLn(var_export($value, true));
 	}
 
 	/**

@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\tests\unit\framework\http\response;
+namespace kanso\tests\unit\framework\http\request;
 
 use kanso\framework\http\request\Environment;
 use kanso\tests\TestCase;
@@ -46,13 +46,13 @@ class EnvironmentTest extends TestCase
 
 		$env = new Environment($server);
 
-		$this->assertEquals('index.php', $env->SCRIPT_NAME);
+		$this->assertEquals('/index.php', $env->SCRIPT_NAME);
 
 		$server['SCRIPT_NAME'] = '/var/www/app.php';
 
 		$env->reload($server);
 
-		$this->assertEquals('app.php', $env->SCRIPT_NAME);
+		$this->assertEquals('/app.php', $env->SCRIPT_NAME);
 	}
 
 	/**
@@ -72,7 +72,7 @@ class EnvironmentTest extends TestCase
 	{
 		$env = new Environment($this->getServerData());
 
-		$this->assertEquals('index.php', $env->SCRIPT_NAME);
+		$this->assertEquals('/index.php', $env->SCRIPT_NAME);
 	}
 
 	/**
@@ -163,6 +163,20 @@ class EnvironmentTest extends TestCase
 		$env = new Environment($this->getServerData());
 
 		$this->assertEquals('http://localhost:8888/foobar?foo=bar', $env->REQUEST_URL);
+	}
+
+	/**
+	 *
+	 */
+	public function testRequestPath(): void
+	{
+		$data = $this->getServerData();
+
+		$data['REQUEST_URI'] = '/foo/bar/?foo=bar';
+
+		$env = new Environment($data);
+
+		$this->assertEquals('foo/bar', $env->REQUEST_PATH);
 	}
 
 	/**
