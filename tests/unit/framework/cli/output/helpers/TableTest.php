@@ -7,9 +7,9 @@
 
 namespace kanso\tests\unit\framework\cli\output\helpers;
 
-use kanso\framework\cli\output\Output;
 use kanso\framework\cli\output\Formatter;
 use kanso\framework\cli\output\helpers\Table;
+use kanso\framework\cli\output\Output;
 use kanso\tests\TestCase;
 use Mockery;
 

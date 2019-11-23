@@ -20,7 +20,7 @@ class CliTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCli()
+	public function testCli(): void
 	{
 		$input  = Mockery::mock('\kanso\framework\cli\input\Input');
 		$output = Mockery::mock('\kanso\framework\cli\output\Output');

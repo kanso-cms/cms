@@ -41,14 +41,14 @@ class OutputTest extends TestCase
 		$handle = tmpfile();
         $path   = stream_get_meta_data($handle)['uri'];
         fclose($handle);
-      
+
        	return $path;
 	}
 
 	/**
 	 *
 	 */
-	public function testGetEnvironment()
+	public function testGetEnvironment(): void
 	{
 		$formatter   = $this->getFormatter();
 		$environment = $this->getEnvironment();
@@ -66,10 +66,10 @@ class OutputTest extends TestCase
 		$formatter   = $this->getFormatter();
 		$environment = $this->getEnvironment();
 		$output      = new Output($formatter, $environment, $handle);
-		
+
 		$formatter->shouldReceive('format')->once()->with('hello, world!')->andReturn('hello, world!');
 		$environment->shouldReceive('hasAnsiSupport')->once()->andReturn(true);
-		
+
 		$output->write('hello, world!');
 
 		$this->assertSame('hello, world!', file_get_contents($path));
@@ -86,10 +86,10 @@ class OutputTest extends TestCase
 		$environment = $this->getEnvironment();
 		$output      = new Output($formatter, $environment, $handle);
 		$response    = 'hello, world!' . PHP_EOL;
-		
+
 		$formatter->shouldReceive('format')->once()->with($response)->andReturn($response);
 		$environment->shouldReceive('hasAnsiSupport')->once()->andReturn(true);
-		
+
 		$output->writeLn('hello, world!');
 
 		$this->assertSame($response, file_get_contents($path));
@@ -106,10 +106,10 @@ class OutputTest extends TestCase
 		$environment = $this->getEnvironment();
 		$output      = new Output($formatter, $environment, $handle);
 		$response    = var_export('hello, world!', true) . PHP_EOL;
-		
+
 		$formatter->shouldReceive('format')->once()->with($response)->andReturn($response);
 		$environment->shouldReceive('hasAnsiSupport')->once()->andReturn(true);
-		
+
 		$output->dump('hello, world!');
 
 		$this->assertSame($response, file_get_contents($path));
@@ -125,12 +125,11 @@ class OutputTest extends TestCase
 		$formatter   = $this->getFormatter();
 		$environment = $this->getEnvironment();
 		$output      = new Output($formatter, $environment, $handle);
-		
 
 		$formatter->shouldReceive('stripTags')->once()->with('<red>hello, world!</red>')->andReturn('hello, world!');
 		$formatter->shouldReceive('format')->once()->with('hello, world!')->andReturn('hello, world!');
 		$environment->shouldReceive('hasAnsiSupport')->once()->andReturn(false);
-		
+
 		$output->write('<red>hello, world!</red>');
 
 		$this->assertSame('hello, world!', file_get_contents($path));

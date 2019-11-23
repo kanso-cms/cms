@@ -7,9 +7,9 @@
 
 namespace kanso\tests\unit\framework\cli\output\helpers;
 
-use kanso\framework\cli\output\Output;
 use kanso\framework\cli\output\Formatter;
 use kanso\framework\cli\output\helpers\OrderedList;
+use kanso\framework\cli\output\Output;
 use kanso\tests\TestCase;
 use Mockery;
 
@@ -22,7 +22,7 @@ class OrderedListTest extends TestCase
 	/**
 	 *
 	 */
-	public function testBasicList()
+	public function testBasicList(): void
 	{
 		$formatter = new Formatter;
 		$output    = Mockery::mock(Output::class);
@@ -37,7 +37,7 @@ class OrderedListTest extends TestCase
 	/**
 	 *
 	 */
-	public function testNestedLists()
+	public function testNestedLists(): void
 	{
 		$formatter = new Formatter;
 		$output    = Mockery::mock(Output::class);
@@ -56,7 +56,7 @@ class OrderedListTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCustomMarker()
+	public function testCustomMarker(): void
 	{
 		$formatter = new Formatter;
 		$output    = Mockery::mock(Output::class);

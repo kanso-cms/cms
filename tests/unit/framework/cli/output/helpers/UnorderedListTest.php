@@ -7,8 +7,8 @@
 
 namespace kanso\tests\unit\framework\cli\output\helpers;
 
-use kanso\framework\cli\output\Output;
 use kanso\framework\cli\output\helpers\UnorderedList;
+use kanso\framework\cli\output\Output;
 use kanso\tests\TestCase;
 use Mockery;
 

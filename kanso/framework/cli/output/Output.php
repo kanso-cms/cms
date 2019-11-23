@@ -17,7 +17,7 @@ use kanso\framework\cli\Environment;
 class Output
 {
 	/**
-	 * Output buffer stream
+	 * Output buffer stream.
 	 *
 	 * @var recourse
 	 */
@@ -40,9 +40,9 @@ class Output
 	/**
 	 * Constructor.
 	 *
-	 * @param \kanso\framework\cli\output\Formatter $formatter    Formatter   instance
-	 * @param \kanso\framework\cli\Environment      $environment  Environment instance
-	 * @param resource|null                         $stdout       Output buffer instance (optional) (default null)
+	 * @param \kanso\framework\cli\output\Formatter $formatter   Formatter   instance
+	 * @param \kanso\framework\cli\Environment      $environment Environment instance
+	 * @param resource|null                         $stdout      Output buffer instance (optional) (default null)
 	 */
 	public function __construct(Formatter $formatter, Environment $environment, $stdout = null)
 	{

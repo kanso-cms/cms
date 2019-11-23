@@ -9,7 +9,6 @@ namespace kanso\tests\unit\framework\cli\output;
 
 use kanso\framework\cli\output\Formatter;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -20,7 +19,7 @@ class FormatterTest extends TestCase
 	/**
 	 *
 	 */
-	public function testBasicFormatter()
+	public function testBasicFormatter(): void
 	{
 		$formatter = new Formatter();
 
@@ -32,7 +31,7 @@ class FormatterTest extends TestCase
 	/**
 	 *
 	 */
-	public function testTagEscaping()
+	public function testTagEscaping(): void
 	{
 		$formatter = new Formatter();
 
@@ -42,7 +41,7 @@ class FormatterTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCustomStyle()
+	public function testCustomStyle(): void
 	{
 		$formatter = new Formatter();
 
@@ -54,7 +53,7 @@ class FormatterTest extends TestCase
 	/**
 	 *
 	 */
-	public function testEscape()
+	public function testEscape(): void
 	{
 		$formatter = new Formatter();
 
@@ -64,7 +63,7 @@ class FormatterTest extends TestCase
 	/**
 	 *
 	 */
-	public function testStripTags()
+	public function testStripTags(): void
 	{
 		$formatter = new Formatter();
 
@@ -76,7 +75,7 @@ class FormatterTest extends TestCase
 	/**
 	 *
 	 */
-	public function testStripSGR()
+	public function testStripSGR(): void
 	{
 		$formatter = new Formatter();
 
@@ -86,7 +85,7 @@ class FormatterTest extends TestCase
 	/**
 	 *
 	 */
-	public function testUndefinedTagException()
+	public function testUndefinedTagException(): void
 	{
 		$this->expectException(\Exception::class);
 
@@ -100,7 +99,7 @@ class FormatterTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIncorrectTagNestingException()
+	public function testIncorrectTagNestingException(): void
 	{
 		$this->expectException(\Exception::class);
 
@@ -114,7 +113,7 @@ class FormatterTest extends TestCase
 	/**
 	 *
 	 */
-	public function testMissingCloseTagException()
+	public function testMissingCloseTagException(): void
 	{
 		$this->expectException(\Exception::class);
 

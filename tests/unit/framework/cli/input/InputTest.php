@@ -9,7 +9,6 @@ namespace kanso\tests\unit\framework\cli\input;
 
 use kanso\framework\cli\input\Input;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -32,7 +31,7 @@ class InputTest extends TestCase
 			'-fbs',
 			'--fooz',
 			'-l=bar',
-			'-b'
+			'-b',
 		];
 	}
 
@@ -45,7 +44,7 @@ class InputTest extends TestCase
 		[
 			'foo' => 'bar',
 			'bar' => 'foo',
-			'l'   => 'bar'
+			'l'   => 'bar',
 		];
 	}
 
@@ -60,14 +59,14 @@ class InputTest extends TestCase
 			'b',
 			's',
 			'fooz',
-			'b'
+			'b',
 		];
 	}
 
 	/**
 	 *
 	 */
-	public function testCommand()
+	public function testCommand(): void
 	{
 		$input= new Input($this->inputArgs());
 
@@ -77,7 +76,7 @@ class InputTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSubCommand()
+	public function testSubCommand(): void
 	{
 		$input= new Input($this->inputArgs());
 
@@ -87,7 +86,7 @@ class InputTest extends TestCase
 	/**
 	 *
 	 */
-	public function testParameters()
+	public function testParameters(): void
 	{
 		$input= new Input($this->inputArgs());
 
@@ -97,7 +96,7 @@ class InputTest extends TestCase
 	/**
 	 *
 	 */
-	public function testOptions()
+	public function testOptions(): void
 	{
 		$input= new Input($this->inputArgs());
 

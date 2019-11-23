@@ -8,10 +8,10 @@
 namespace kanso\tests\unit\framework\console;
 
 use kanso\framework\cli\input\Input;
-use kanso\framework\cli\output\Output;
-use kanso\framework\console\Console;
-use kanso\framework\console\Command;
 use kanso\framework\cli\output\Formatter;
+use kanso\framework\cli\output\Output;
+use kanso\framework\console\Command;
+use kanso\framework\console\Console;
 use kanso\framework\ioc\Container;
 use kanso\tests\TestCase;
 use Mockery;
@@ -25,7 +25,7 @@ class CommandTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRunCommand()
+	public function testRunCommand(): void
 	{
 		$container = Mockery::mock(Container::class);
 		$input     = Mockery::mock(Input::class);
@@ -55,9 +55,8 @@ class Foobar extends Command
 	/**
 	 * {@inheritdoc}
 	 */
-	public function execute()
+	public function execute(): void
 	{
 		$this->output->writeLn('<green>Success: The command was executed.</green>');
 	}
 }
-
