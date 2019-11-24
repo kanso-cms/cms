@@ -11,14 +11,16 @@ Thumbs.db
 # Composer
 /composer.phar
 /composer.lock
-/vendor/*
+/vendor
 
 # Dev Generated Files
 /analysis.txt
+/api
 
 # Kanso Specific
 /robots.txt
 /app/public/themes/*
+!/app/public/themes/kanso
 /app/services/*
 /app/storage/cache/*
 /app/storage/emails/*
