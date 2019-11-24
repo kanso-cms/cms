@@ -30,7 +30,6 @@ class Loader
 	/**
 	 * Constructor.
 	 *
-	 * @access public
 	 * @param \kanso\framework\file\Filesystem $filesystem File system instance
 	 * @param string                           $path       Default path
 	 */
@@ -44,7 +43,6 @@ class Loader
 	/**
 	 * Loads the configuration file.
 	 *
-	 * @access public
 	 * @param  string      $file        File name
 	 * @param  null|string $environment Environment
 	 * @return array
@@ -65,7 +63,7 @@ class Loader
 		// Validate
 		if (!isset($config))
 		{
-			throw new RuntimeException(vsprintf('%s(): The [ %s ] config file does not exist.', [__METHOD__, $file]));
+			throw new RuntimeException(vsprintf('%s(): The [ %s ] config file does not exist.', [__METHOD__, $file]));
 		}
 
 		// Merge environment specific configuration
@@ -93,7 +91,6 @@ class Loader
 	/**
 	 * Saves the configuration data.
 	 *
-	 * @access public
 	 * @param  array       $data        Data to save
 	 * @param  null|string $environment Environment
 	 * @return bool
@@ -113,7 +110,6 @@ class Loader
 	/**
 	 * Pretty Print "var_export".
 	 *
-	 * @access private
 	 * @param  mixed  $data Data to save
 	 * @param  array  $opts Print options (optional) (default [])
 	 * @return string

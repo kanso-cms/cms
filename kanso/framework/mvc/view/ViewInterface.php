@@ -16,22 +16,17 @@ interface ViewInterface
 {
 	/**
 	 * Add a file to include when rendering.
-	 *
-	 * @access public
 	 */
 	public function include(string $file);
 
 	/**
 	 * Add multiple files to include when rendering.
-	 *
-	 * @access public
 	 */
 	public function includes(array $files);
 
 	/**
 	 * Render the view and return the output.
 	 *
-	 * @access public
 	 * @param string $file Absolute path to file to render
 	 * @param array  $data Array of variables to extract
 	 */

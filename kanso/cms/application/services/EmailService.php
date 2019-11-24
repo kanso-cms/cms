@@ -24,7 +24,7 @@ class EmailService extends Service
 	/**
 	 * {@inheritdoc}
 	 */
-	public function register()
+	public function register(): void
 	{
 		$this->container->set('Email', function($container)
 		{
@@ -35,7 +35,6 @@ class EmailService extends Service
 	/**
 	 * Loads the email queue.
 	 *
-	 * @access private
 	 * @return \kanso\cms\email\utility\Queue
 	 */
 	private function queue(): Queue
@@ -46,7 +45,6 @@ class EmailService extends Service
 	/**
 	 * Loads the email logger.
 	 *
-	 * @access private
 	 * @return \kanso\cms\email\utility\Log
 	 */
 	private function logger(): Log
@@ -57,7 +55,6 @@ class EmailService extends Service
 	/**
 	 * Loads the email sender.
 	 *
-	 * @access private
 	 * @return \kanso\cms\email\utility\Sender
 	 */
 	private function sender(): Sender

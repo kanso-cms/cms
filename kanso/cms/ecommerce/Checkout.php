@@ -91,7 +91,6 @@ class Checkout extends UtilityBase
     /**
      * Handle checkout.
      *
-     * @access public
      * @param  array                    $options Array of configuration options
      * @throws InvalidArgumentException
      * @return int
@@ -334,7 +333,6 @@ class Checkout extends UtilityBase
     /**
      * Was the transaction successful?
      *
-     * @access public
      * @return bool
      */
     public function successful(): bool
@@ -345,7 +343,6 @@ class Checkout extends UtilityBase
     /**
      * Was the transaction successful?
      *
-     * @access public
      * @return string|null
      */
     public function transactionId()
@@ -356,7 +353,6 @@ class Checkout extends UtilityBase
     /**
      * Was the transaction successful?
      *
-     * @access public
      * @return string|null
      */
     public function errorMessage()
@@ -367,13 +363,12 @@ class Checkout extends UtilityBase
     /**
      * Send order confirmation to admin.
      *
-     * @access private
      * @param string $userEmail]  Email address of user that made order
      * @param array  $transaction Transaction row from database
      * @param array  $shipping    Shipping row from databse
      * @param array  $items       Array Of order items
      */
-    private function sendAdminEmail(string $userEmail, array $transaction, array $shipping, array $items)
+    private function sendAdminEmail(string $userEmail, array $transaction, array $shipping, array $items): void
     {
         $domain      = $this->Request->environment()->DOMAIN_NAME;
         $toEmail     = $this->Config->get('ecommerce.confirmation_email');
@@ -403,12 +398,11 @@ class Checkout extends UtilityBase
     /**
      * Send newly registered users their order confirmation.
      *
-     * @access private
      * @param string $name  User name
      * @param string $email User email
      * @param array  $order Order details
      */
-    private function sendConfirmationEmail(string $name, string $email, array $order)
+    private function sendConfirmationEmail(string $name, string $email, array $order): void
     {
         $domain  = $this->Request->environment()->DOMAIN_NAME;
         $name    = ucfirst(explode(' ', trim($name))[0]);
@@ -433,7 +427,6 @@ class Checkout extends UtilityBase
     /**
      * Get the base shipping row to insert into the DB.
      *
-     * @access private
      * @param  array       $options POST shipping details
      * @param  int|null    $userId  Current user id (optional) (default null)
      * @return array|false
@@ -458,7 +451,6 @@ class Checkout extends UtilityBase
     /**
      * Get the base transaction row to insert into the DB.
      *
-     * @access private
      * @param array    $options       Array with credit card details
      * @param array    $items         Cart item descriptions to serialize
      * @param string   $transactionId Braintree transaction id
@@ -493,7 +485,6 @@ class Checkout extends UtilityBase
     /**
      * Find an existing customer's card by id.
      *
-     * @access private
      * @param  array $cart Cart items
      * @return array
      */
@@ -520,7 +511,6 @@ class Checkout extends UtilityBase
     /**
      * Find an existing customer's card by id.
      *
-     * @access private
      * @param  int   $addressId The address id from our database
      * @param  int   $userId    The user id
      * @return array
@@ -533,7 +523,6 @@ class Checkout extends UtilityBase
     /**
      * Get the price to checkout.
      *
-     * @access private
      * @param  float|int|false $coupon The amount of the transaction
      * @return array
      */
@@ -565,7 +554,6 @@ class Checkout extends UtilityBase
     /**
      * Process the transaction with Braintree.
      *
-     * @access private
      * @param  string                     $nonceOrToken   A payment method nonce or existing card token
      * @param  float                      $amount         The amount of the transaction
      * @param  bool                       $createCustomer Create a new customer
@@ -642,7 +630,6 @@ class Checkout extends UtilityBase
     /**
      * Validate and sanitize checkout options.
      *
-     * @access private
      * @param  array                    $options Array of configuration options
      * @throws InvalidArgumentException
      * @return array
@@ -775,7 +762,6 @@ class Checkout extends UtilityBase
      * If the user is not logged in and is creating an account
      * validate that the email address they entered does not already exist.
      *
-     * @access private
      * @param  array $options Array of configuration options
      * @return bool
      */
@@ -798,11 +784,10 @@ class Checkout extends UtilityBase
      * If the user is not logged in and is creating an account
      * validate that the email address they entered does not already exist.
      *
-     * @access private
      * @param  array                    $options Array of configuration options
      * @throws InvalidArgumentException
      */
-    private function validateCreditCardOptions(array $options)
+    private function validateCreditCardOptions(array $options): void
     {
         // If the user is using an existing card,
         // validate it exists and belongs to them
@@ -834,11 +819,10 @@ class Checkout extends UtilityBase
      * If the user is not logged in and using an
      * existing address validate it exists and belongs to them.
      *
-     * @access private
      * @param  array                    $options Array of configuration options
      * @throws InvalidArgumentException
      */
-    private function validateAddressOptions(array $options)
+    private function validateAddressOptions(array $options): void
     {
         if ($options['shipping_use_new_address'] === false)
         {
@@ -857,7 +841,6 @@ class Checkout extends UtilityBase
     /**
      * If a coupon is being used, validate it exists and is not used.
      *
-     * @access private
      * @param  array    $options Array of configuration options
      * @return bool|int
      */
@@ -886,7 +869,6 @@ class Checkout extends UtilityBase
     /**
      * If a coupon is being used, validate it exists and is not used.
      *
-     * @access private
      *  @return bool|int
      */
     private function validateCartOptions()
@@ -908,10 +890,9 @@ class Checkout extends UtilityBase
     /**
      * Validate creating an account options are correct.
      *
-     * @access private
      * @throws InvalidArgumentException
      */
-    private function validateAccountOptions(array $options)
+    private function validateAccountOptions(array $options): void
     {
         // If the user is creating an account, they must provide a password
         if ($options['create_account'] === true && (!isset($options['password']) || empty($options['password'])))
@@ -929,12 +910,11 @@ class Checkout extends UtilityBase
     /**
      * Process and log error.
      *
-     * @access private
      * @param int    $code        Error code
      * @param string $message     Error message
      * @param mixed  $transaction Braintree response object (optional)
      */
-    private function processError(int $code, string $message, $transaction = null)
+    private function processError(int $code, string $message, $transaction = null): void
     {
         if ($transaction)
         {
@@ -958,10 +938,9 @@ class Checkout extends UtilityBase
     /**
      * Log a payment error.
      *
-     * @access private
      *  @param  mixed  $transaction Braintree response object
      */
-    private function logError($transaction)
+    private function logError($transaction): void
     {
         $msg =
         'DATE        : ' . date('l jS \of F Y h:i:s A', time()) . "\n" .

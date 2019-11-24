@@ -42,7 +42,6 @@ class Sender
     /**
      * Constructor.
      *
-     * @access public
      * @param \PHPMailer\PHPMailer\PHPMailer $smtpMailer   SMTP mail utility
      * @param bool                           $useStmp      Use SMTP to send emails (optional) (default false)
      * @param array                          $smtpSettings SMTP setings
@@ -59,7 +58,6 @@ class Sender
     /**
      * Send an HTML or plain text email.
      *
-     * @access public
      * @param  string $toEmail     The email address to send the email to
      * @param  string $senderName  The name of the sender
      * @param  string $senderEmail The email address of the sender
@@ -147,7 +145,6 @@ class Sender
     /**
      * Get STMP Oauth.
      *
-     * @access private
      * @return \PHPMailer\PHPMailer\OAuth
      */
     private function getSmtpOauth(): OAuth
@@ -167,7 +164,6 @@ class Sender
     /**
      * Get Google OAuth Wrapper.
      *
-     * @access private
      * @return \League\OAuth2\Client\Provider\Google
      */
     private function getGoogleOAuth(): Google

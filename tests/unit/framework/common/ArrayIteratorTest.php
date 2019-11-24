@@ -41,7 +41,7 @@ class ArrayIteratorTest extends TestCase
 	/**
 	 * @runInSeparateProcess
 	 */
-	public function testIterator()
+	public function testIterator(): void
 	{
 		$objectArray = new TestArrayIteratorTrait(['foo', 'bar', 'baz']);
 

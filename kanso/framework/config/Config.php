@@ -40,7 +40,6 @@ class Config
 	/**
 	 * Constructor.
 	 *
-	 * @access public
 	 * @param \kanso\framework\config\Loader $loader Config file reader
 	 */
 	public function __construct(Loader $loader, string $environment = null)
@@ -63,7 +62,6 @@ class Config
 	/**
 	 * Returns the currently loaded configuration.
 	 *
-	 * @access public
 	 * @return array
 	 */
 	public function getLoadedConfiguration(): array
@@ -74,10 +72,9 @@ class Config
 	/**
 	 * Sets the environment.
 	 *
-	 * @access public
 	 * @param string $environment Environment name
 	 */
-	public function setEnvironment(string $environment)
+	public function setEnvironment(string $environment): void
 	{
 		$this->environment = $environment;
 	}
@@ -85,7 +82,6 @@ class Config
 	/**
 	 * Parses the language key.
 	 *
-	 * @access protected
 	 * @param  string $key Language key
 	 * @return array
 	 */
@@ -97,10 +93,9 @@ class Config
 	/**
 	 * Loads the configuration file.
 	 *
-	 * @access protected
 	 * @param string $file File name
 	 */
-	protected function load(string $file)
+	protected function load(string $file): void
 	{
 		$this->configuration[$file] = $this->loader->load($file, $this->environment);
 	}
@@ -108,14 +103,13 @@ class Config
 	/**
 	 * Returns config value or entire config array from a file.
 	 *
-	 * @access public
 	 * @param  string     $key     Config key
 	 * @param  null|mixed $default Default value to return if config value doesn't exist
 	 * @return null|mixed
 	 */
 	public function get(string $key, $default = null)
 	{
-		list($file, $path) = $this->parseKey($key);
+		[$file, $path] = $this->parseKey($key);
 
 		if(!isset($this->configuration[$file]))
 		{
@@ -128,13 +122,12 @@ class Config
 	/**
 	 * Get a default setting - bypass the environment.
 	 *
-	 * @access public
 	 * @param  string     $key Config key
 	 * @return null|mixed
 	 */
 	public function getDefault(string $key)
 	{
-		list($file, $path) = $this->parseKey($key);
+		[$file, $path] = $this->parseKey($key);
 
 		$data = $this->loader->load($file, 'defaults');
 
@@ -144,13 +137,12 @@ class Config
 	/**
 	 * Sets a config value.
 	 *
-	 * @access public
 	 * @param string $key   Config key
 	 * @param mixed  $value Config value
 	 */
-	public function set(string $key, $value)
+	public function set(string $key, $value): void
 	{
-		list($file, $path) = $this->parseKey($key);
+		[$file, $path] = $this->parseKey($key);
 
 		if(!isset($this->configuration[$file]))
 		{
@@ -163,7 +155,6 @@ class Config
 	/**
 	 * Removes a value from the configuration.
 	 *
-	 * @access public
 	 * @param  string $key Config key
 	 * @return bool
 	 */
@@ -175,7 +166,6 @@ class Config
 	/**
 	 * Save the configuration.
 	 *
-	 * @access public
 	 * @return bool
 	 */
 	public function save(): bool

@@ -28,7 +28,6 @@ abstract class ViewBase
     /**
      * Constructor.
      *
-     * @access public
      * @param array $data Assoc array of variables to pass to the template
      */
     public function __construct(array $data = [])

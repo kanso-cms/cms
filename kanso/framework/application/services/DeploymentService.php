@@ -22,7 +22,7 @@ class DeploymentService extends Service
 	/**
 	 * {@inheritdoc}
 	 */
-	public function register()
+	public function register(): void
 	{
 		$this->container->singleton('Deployment', function()
 		{
@@ -33,7 +33,6 @@ class DeploymentService extends Service
 	/**
 	 * Returns the deployment implementation.
 	 *
-	 * @access private
 	 * @return \kanso\framework\deployment\webhooks\WebhookInterface
 	 */
 	private function webhookInterface(): WebhookInterface

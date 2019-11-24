@@ -17,40 +17,36 @@ class Templates extends Helper
     /**
      * Display the contents of header.php.
      *
-     * @access  public
      * @return string
      */
     public function the_header(): string
     {
-        return $this->container->get('Response')->view()->display($this->parent->theme_directory() . DIRECTORY_SEPARATOR . 'header.php');
+        return $this->container->Response->view()->display($this->parent->theme_directory() . DIRECTORY_SEPARATOR . 'header.php');
     }
 
     /**
      * Display the contents of footer.php.
      *
-     * @access public
      * @return string
      */
     public function the_footer(): string
     {
-        return $this->container->get('Response')->view()->display($this->parent->theme_directory() . DIRECTORY_SEPARATOR . 'footer.php');
+        return $this->container->Response->view()->display($this->parent->theme_directory() . DIRECTORY_SEPARATOR . 'footer.php');
     }
 
     /**
      * Display the contents of sidebar.php.
      *
-     * @access public
      * @return string
      */
     public function the_sidebar(): string
     {
-        return $this->container->get('Response')->view()->display($this->parent->theme_directory() . DIRECTORY_SEPARATOR . 'sidebar.php');
+        return $this->container->Response->view()->display($this->parent->theme_directory() . DIRECTORY_SEPARATOR . 'sidebar.php');
     }
 
     /**
      * Display the contents of any template file relative to the theme's base directory.
      *
-     * @access public
      * @param  string $template_name Template file name/path without .php extension
      * @param  array  $data          Array of variables to make available within file scope (optional) (default [])
      * @return string
@@ -61,7 +57,7 @@ class Templates extends Helper
 
         if (file_exists($template))
         {
-            return $this->container->get('Response')->view()->display($template, $data);
+            return $this->container->Response->view()->display($template, $data);
         }
 
         return '';

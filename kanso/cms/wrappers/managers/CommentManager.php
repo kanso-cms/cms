@@ -69,7 +69,6 @@ class CommentManager extends Manager
     /**
      * Override inherited constructor.
      *
-     * @access public
      * @param \kanso\framework\database\query\Builder       $SQL           SQL query builder
      * @param \kanso\cms\wrappers\providers\CommentProvider $provider      Comment provider
      * @param \kanso\framework\security\spam\SpamProtector  $spamProtector SPAM protector
@@ -103,7 +102,6 @@ class CommentManager extends Manager
     /**
      * Creates a new category.
      *
-     * @access public
      * @param  string   $content          Comment name
      * @param  string   $name             Name of the commentor
      * @param  string   $email            Email address of the commentor
@@ -165,7 +163,6 @@ class CommentManager extends Manager
     /**
      * Deletes a comment by id.
      *
-     * @access public
      * @param  int  $id Comment id
      * @return bool
      */
@@ -184,7 +181,6 @@ class CommentManager extends Manager
     /**
      * Gets a comment by id.
      *
-     * @access public
      * @param  int   $id Comment id
      * @return mixed
      */
@@ -196,7 +192,6 @@ class CommentManager extends Manager
     /**
      * Returns a comment rating.
      *
-     * @access private
      * @param  string $content Comment content
      * @param  bool   $check   Skip the spam protector
      * @return int
@@ -227,7 +222,6 @@ class CommentManager extends Manager
     /**
      * Returns a comment status based on rating.
      *
-     * @access private
      * @param  int    $rating Comment rating
      * @return string
      */
@@ -246,7 +240,7 @@ class CommentManager extends Manager
         return 'approved';
     }
 
-    private function sendCommentEmails(Comment $comment)
+    private function sendCommentEmails(Comment $comment): void
     {
         $sent   = [];
         $emails = $this->adminEmails();
@@ -294,7 +288,6 @@ class CommentManager extends Manager
     /**
      * Get all the administrator email addresses.
      *
-     * @access private
      * @return array
      */
     private function adminEmails(): array
@@ -314,7 +307,6 @@ class CommentManager extends Manager
     /**
      * Get all email addresses that are subscribed to receive emails.
      *
-     * @access private
      * @param  int   $postId Post id
      * @return array
      */
@@ -338,7 +330,6 @@ class CommentManager extends Manager
     /**
      * Get all email addresses that are subscribed to receive reply emails.
      *
-     * @access private
      * @param  int   $parentId  Post id
      * @param  int   $commentId The current comment to skip
      * @return array

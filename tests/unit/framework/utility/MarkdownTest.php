@@ -19,7 +19,7 @@ class MarkdownTest extends TestCase
 	/**
 	 *
 	 */
-	public function testMarkdown()
+	public function testMarkdown(): void
 	{
 		$this->assertEquals('<h1>Hello World!</h1>', Markdown::convert('# Hello World!'));
 		$this->assertEquals('<h1>Hello World!</h1>', Markdown::convert('# Hello World!', false));

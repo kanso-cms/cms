@@ -23,7 +23,7 @@ class ErrorHandlerTest extends TestCase
     /**
      * @runInSeparateProcess
      */
-    public function testWebHandler()
+    public function testWebHandler(): void
     {
         $handler    = new ErrorHandler(true, E_ALL | E_STRICT);
         $logger     = Mockery::mock('\kanso\framework\exception\ErrorLogger');
@@ -48,7 +48,7 @@ class ErrorHandlerTest extends TestCase
     /**
      * @runInSeparateProcess
      */
-    public function testDifferentError()
+    public function testDifferentError(): void
     {
         $handler    = new ErrorHandler(true, E_ALL | E_STRICT);
         $logger     = Mockery::mock('\kanso\framework\exception\ErrorLogger');
@@ -73,7 +73,7 @@ class ErrorHandlerTest extends TestCase
     /**
      * @runInSeparateProcess
      */
-    public function testDisableLogging()
+    public function testDisableLogging(): void
     {
         $handler    = new ErrorHandler(true, E_ALL | E_STRICT);
         $logger     = Mockery::mock('\kanso\framework\exception\ErrorLogger');
@@ -96,7 +96,7 @@ class ErrorHandlerTest extends TestCase
     /**
      * @runInSeparateProcess
      */
-    public function testDisplayErrors()
+    public function testDisplayErrors(): void
     {
         $handler    = new ErrorHandler(false, E_ALL | E_STRICT);
         $logger     = Mockery::mock('\kanso\framework\exception\ErrorLogger');

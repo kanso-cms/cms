@@ -19,7 +19,6 @@ class ForbiddenException extends RequestException
 	/**
 	 * Constructor.
 	 *
-	 * @access public
 	 * @param string|null     $message  Exception message
 	 * @param \Throwable|null $previous Previous exception
 	 */

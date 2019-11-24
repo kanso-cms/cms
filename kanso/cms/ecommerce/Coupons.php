@@ -17,7 +17,6 @@ class Coupons extends UtilityBase
 	/**
 	 * Check if a coupon exists.
 	 *
-	 * @access public
 	 * @param  string $couponName The coupon name or code
 	 * @return bool
 	 */
@@ -52,7 +51,6 @@ class Coupons extends UtilityBase
     /**
      * Check if a coupon exists and is used.
      *
-     * @access public
      * @param  string $couponName The coupon name or code
      * @param  string $email      Check if a user has used this coupon by email address
      * @return bool
@@ -109,7 +107,6 @@ class Coupons extends UtilityBase
 	/**
 	 * Get a coupon's discount value.
 	 *
-	 * @access public
 	 * @param  string          $couponName The coupon name or code
 	 * @return int|float|false
 	 */
@@ -146,7 +143,6 @@ class Coupons extends UtilityBase
 	/**
 	 * Set a coupon as used.
 	 *
-	 * @access public
 	 * @param string $couponName The coupon name or code
 	 */
 	public function setUsed(string $couponName = '', string $email = '')

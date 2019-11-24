@@ -101,7 +101,6 @@ class MediaManager extends Manager
     /**
      * Override inherited constructor.
      *
-     * @access public
      * @param \kanso\framework\database\query\Builder     $SQL            SQL query builder
      * @param \kanso\cms\wrappers\providers\MediaProvider $provider       Provider manager
      * @param \kanso\framework\http\request\Environment   $environment    Request environment
@@ -141,7 +140,6 @@ class MediaManager extends Manager
     /**
      * Creates a new media entry.
      *
-     * @access public
      * @param  string $path  Path to file
      * @param  string $title Attachment title (optional) (default '')
      * @param  string $alt   Attachment alt text (optional) (default '')
@@ -157,7 +155,7 @@ class MediaManager extends Manager
 
         if ($isImage)
         {
-            list($width, $height, $type, $attr) = getimagesize($path);
+            [$width, $height, $type, $attr] = getimagesize($path);
 
             $dimensions = "$width x $height";
         }
@@ -182,7 +180,6 @@ class MediaManager extends Manager
 	/**
 	 * Gets a media item by id.
 	 *
-	 * @access public
 	 * @param  int   $id Media id
 	 * @return mixed
 	 */

@@ -33,10 +33,9 @@ abstract class BaseController extends Controller
 	/**
 	 * Initialize the admin panel.
 	 *
-	 * @access protected
 	 * @param string $name Identifying name of the requested page
 	 */
-	protected function init(string $name)
+	protected function init(string $name): void
 	{
 		// Save the request name
 		$this->requestName = $name;
@@ -54,7 +53,6 @@ abstract class BaseController extends Controller
 	/**
 	 * Check if the client is logged in.
 	 *
-	 * @access protected
 	 * @return bool
 	 */
 	protected function isLoggedIn(): bool
@@ -64,8 +62,6 @@ abstract class BaseController extends Controller
 
 	/**
 	 * Dispatch the request.
-	 *
-	 * @access protected
 	 */
 	protected function dispatch()
 	{
@@ -140,10 +136,8 @@ abstract class BaseController extends Controller
 
     /**
      * Render the admin panel.
-     *
-     * @access protected
      */
-    protected function render()
+    protected function render(): void
     {
     	$vars = $this->viewVars;
 

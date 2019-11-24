@@ -27,12 +27,12 @@ class EventsCallbackTester
 		$this->_this = $_this;
 	}
 
-	public static function testStaticMethod($_this, $var)
+	public static function testStaticMethod($_this, $var): void
 	{
 		$_this->assertEquals('bar', $var);
 	}
 
-	public function testMethod()
+	public function testMethod(): void
 	{
 		$this->_this->assertEquals('bar', $this->var);
 	}
@@ -51,7 +51,7 @@ class EventsTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCallbacks()
+	public function testCallbacks(): void
 	{
 		$_this = $this;
 
@@ -61,7 +61,7 @@ class EventsTest extends TestCase
 
 		$events->on('foo2', '\kanso\tests\unit\cms\event\EventsCallbackTester::testStaticMethod');
 
-		$events->on('foo3', function($_this, $foo)
+		$events->on('foo3', function($_this, $foo): void
 		{
 			$_this->assertEquals('bar', $foo);
 

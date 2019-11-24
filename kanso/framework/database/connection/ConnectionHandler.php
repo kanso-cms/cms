@@ -54,7 +54,6 @@ class ConnectionHandler
 	/**
 	 * Constructor.
 	 *
-	 * @access public
 	 * @param \kanso\framework\database\connection\Connection $connection PDO connection
 	 * @param \kanso\framework\database\connection\Cache      $cache      Connection cache
 	 */
@@ -68,7 +67,6 @@ class ConnectionHandler
 	/**
 	 * Returns the cache.
 	 *
-	 * @access public
 	 * @return \kanso\framework\database\connection\Cache
 	 */
 	public function cache(): Cache
@@ -79,7 +77,6 @@ class ConnectionHandler
 	/**
 	 *  Returns the last inserted id.
 	 *
-	 * @access public
 	 * @return mixed
 	 */
 	public function lastInsertId()
@@ -90,7 +87,6 @@ class ConnectionHandler
 	/**
 	 * Returns the table prefix for the connection.
 	 *
-	 * @access public
 	 * @return string
 	 */
 	public function tablePrefix(): string
@@ -101,7 +97,6 @@ class ConnectionHandler
 	/**
 	 * Returns the connection query log.
 	 *
-	 * @access public
 	 * @return array
 	 */
 	public function getLog(): array
@@ -112,7 +107,6 @@ class ConnectionHandler
     /**
      * Safely format the query consistently.
      *
-     * @access  public
      * @param  string $sql SQL query statement
      * @return string
      */
@@ -124,11 +118,10 @@ class ConnectionHandler
 	/**
 	 * Add the parameter to the parameter array.
 	 *
-	 * @access public
 	 * @param string $column Column key name
 	 * @param string $value  Value to bind
 	 */
-	public function bind(string $column, $value)
+	public function bind(string $column, $value): void
 	{
 		$this->parameters[] = [$column, $this->sanitizeValue($value)];
 	}
@@ -136,10 +129,9 @@ class ConnectionHandler
 	/**
 	 * Add more parameters to the parameter array.
 	 *
-	 * @access public
 	 * @param array $parray Array of column => value
 	 */
-	public function bindMore(array $parray = [])
+	public function bindMore(array $parray = []): void
 	{
 		if (empty($this->parameters) && is_array($parray) && !empty($parray))
 		{
@@ -158,7 +150,6 @@ class ConnectionHandler
 	 * If the SQL statement is a DELETE, INSERT, or UPDATE statement
 	 * it returns the number of affected rows.
 	 *
-	 * @access public
 	 * @param  string $query     The query to execute
 	 * @param  array  $params    Assoc array of parameters to bind (optional) (default [])
 	 * @param  int    $fetchmode PHP PDO::ATTR_DEFAULT_FETCH_MODE constant or integer
@@ -219,11 +210,10 @@ class ConnectionHandler
 	/**
 	 * All SQL queries pass through this method.
 	 *
-	 * @access private
 	 * @param string $query  SQL query statement
 	 * @param array  $params Array of parameters to bind (optional) (default [])
 	 */
-	private function parseQuery(string $query, array $params = [])
+	private function parseQuery(string $query, array $params = []): void
 	{
 		// Prepare query
 		$this->pdoStatement = $this->connection->pdo()->prepare($query);
@@ -250,7 +240,6 @@ class ConnectionHandler
 	/**
 	 * Tries to load the current query from the cache.
 	 *
-	 * @access private
 	 * @param  string $query The type of query being executed e.g 'select'|'delete'|'update'
 	 * @return bool
 	 */
@@ -264,7 +253,6 @@ class ConnectionHandler
 	/**
 	 * Gets the query type from the query string.
 	 *
-	 * @access private
 	 * @param  string $query SQL query
 	 * @return string
 	 */
@@ -276,7 +264,6 @@ class ConnectionHandler
 	/**
 	 * Sanitize a value.
 	 *
-	 * @access private
 	 * @param  mixed $value A query value to sanitize
 	 * @return mixed
 	 */
@@ -305,13 +292,12 @@ class ConnectionHandler
 	/**
 	 * Adds a query to the query log.
 	 *
-	 * @access private
 	 * @param string $query     SQL query
 	 * @param array  $params    Query parameters
 	 * @param float  $start     Start time in microseconds
 	 * @param bool   $fromCache Was the query loaded from the cache?
 	 */
-	private function log(string $query, array $params, float $start, bool $fromCache = false)
+	private function log(string $query, array $params, float $start, bool $fromCache = false): void
 	{
 		$time = microtime(true) - $start;
 
@@ -323,7 +309,6 @@ class ConnectionHandler
 	/**
 	 * Prepares query for logging.
 	 *
-	 * @access private
 	 * @param  string $query  SQL query
 	 * @param  array  $params Query paramaters
 	 * @return string

@@ -52,7 +52,6 @@ class Customers extends BaseModel
     /**
      * Parse and validate the POST request from any submitted forms.
      *
-     * @access private
      * @return array|false
      */
     private function parsePost()
@@ -88,10 +87,9 @@ class Customers extends BaseModel
     /**
      * Delete an order.
      *
-     * @access private
      * @param array $ids List of post ids
      */
-    private function delete(array $ids)
+    private function delete(array $ids): void
     {
         foreach ($ids as $id)
         {
@@ -102,11 +100,10 @@ class Customers extends BaseModel
     /**
      * Change order status.
      *
-     * @access private
      * @param array  $ids    List of post ids
      * @param string $status Post status to change to
      */
-    private function changeStatus(array $ids, string $status)
+    private function changeStatus(array $ids, string $status): void
     {
         foreach ($ids as $id)
         {
@@ -117,7 +114,6 @@ class Customers extends BaseModel
     /**
      * Validates all POST variables are set.
      *
-     * @access private
      * @return bool|array
      */
     private function validatePost()
@@ -149,7 +145,6 @@ class Customers extends BaseModel
     /**
      * Parse the $_GET request variables and filter the customers for the requested page.
      *
-     * @access private
      * @return array
      */
     private function parseGet(): array
@@ -177,7 +172,6 @@ class Customers extends BaseModel
     /**
      * Check if the GET URL queries are either empty or set to defaults.
      *
-     * @access private
      * @return bool
      */
     private function emptyQueries(): bool
@@ -195,7 +189,6 @@ class Customers extends BaseModel
     /**
      * Returns the requested GET queries with defaults.
      *
-     * @access private
      * @return array
      */
     private function getQueries(): array
@@ -215,7 +208,6 @@ class Customers extends BaseModel
     /**
      * Returns the list of customers for display.
      *
-     * @access private
      * @param  bool      $checkMaxPages Count the max pages
      * @return array|int
      */

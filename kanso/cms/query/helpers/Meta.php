@@ -19,40 +19,36 @@ class Meta extends Helper
     /**
      * Get the website title from the config.
      *
-     * @access public
      * @return string
      */
     public function website_title(): string
     {
-        return $this->container->get('Config')->get('cms.site_title');
+        return $this->container->Config->get('cms.site_title');
     }
 
     /**
      * Get the website description from the config.
      *
-     * @access public
      * @return string
      */
     public function website_description(): string
     {
-        return $this->container->get('Config')->get('cms.site_description');
+        return $this->container->Config->get('cms.site_description');
     }
 
     /**
      * Get the website's domain name (e.g "example.com").
      *
-     * @access public
      * @return string
      */
     public function domain_name(): string
     {
-        return $this->container->get('Request')->environment()->DOMAIN_NAME;
+        return $this->container->Request->environment()->DOMAIN_NAME;
     }
 
     /**
      * Get the meta description to display in the website's head.
      *
-     * @access public
      * @return string
      */
     public function the_meta_description(): string
@@ -88,12 +84,11 @@ class Meta extends Helper
     /**
      * Get the meta title to display in the website's head.
      *
-     * @access public
      * @return string
      */
     public function the_meta_title(): string
     {
-        $uri        = explode('/', Str::queryFilterUri($this->container->get('Request')->environment()->REQUEST_URI));
+        $uri        = explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI));
         $titleBase  = $this->parent->website_title();
         $titlePage  = $this->parent->pageIndex > 0 ? 'Page ' . ($this->parent->pageIndex+1) . ' | ' : '';
         $titleTitle = '';
@@ -125,12 +120,11 @@ class Meta extends Helper
     /**
      * Get the canonical URL to display in the website's head.
      *
-     * @access public
      * @return string
      */
     public function the_canonical_url(): string
     {
-        $urlParts = array_filter(explode('/', Str::queryFilterUri($this->container->get('Request')->environment()->REQUEST_URI)));
+        $urlParts = array_filter(explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI)));
         $last     = isset($urlParts[0]) ? array_values(array_slice($urlParts, -1))[0] : false;
 
         if (!$last || is_home())
@@ -148,14 +142,13 @@ class Meta extends Helper
             array_pop($urlParts);
         }
 
-        return $this->container->get('Request')->environment()->HTTP_HOST . '/' . implode('/', $urlParts) . '/';
+        return $this->container->Request->environment()->HTTP_HOST . '/' . implode('/', $urlParts) . '/';
     }
 
     /**
      * Get the title of the next page or post.
      * Works on single, home, author, tag, category requests.
      *
-     * @access public
      * @return string|false
      */
     public function the_previous_page_title()
@@ -174,7 +167,6 @@ class Meta extends Helper
      * Get the title of the next page or post.
      * Works on single, home, author, tag, category requests.
      *
-     * @access public
      * @return string|false
      */
     public function the_next_page_title()
@@ -194,7 +186,6 @@ class Meta extends Helper
      * Get the full URL of the next page or post.
      * Works on single, home, author, tag, category requests.
      *
-     * @access public
      * @return string|false
      */
     public function the_next_page_url()
@@ -203,7 +194,7 @@ class Meta extends Helper
 
         if ($next_page && isset($next_page['slug']))
         {
-            return $this->container->get('Request')->environment()->HTTP_HOST . '/' . $next_page['slug'];
+            return $this->container->Request->environment()->HTTP_HOST . '/' . $next_page['slug'];
         }
 
         return false;
@@ -213,7 +204,6 @@ class Meta extends Helper
      * Get the full URL of the previous page or post.
      * Works on single, home, author, tag, category requests.
      *
-     * @access public
      * @return string|false
      */
     public function the_previous_page_url()
@@ -222,7 +212,7 @@ class Meta extends Helper
 
         if ($prev_page && isset($prev_page['slug']))
         {
-            return $this->container->get('Request')->environment()->HTTP_HOST . '/' . $prev_page['slug'];
+            return $this->container->Request->environment()->HTTP_HOST . '/' . $prev_page['slug'];
         }
 
         return false;
@@ -232,7 +222,6 @@ class Meta extends Helper
      * Gets an array for the previous page or post returning its title and slug.
      * Works on single, home, author, tag, category requests.
      *
-     * @access public
      * @return array|false
      */
     public function the_previous_page()
@@ -268,7 +257,7 @@ class Meta extends Helper
         // Get the current page + posts per page and check if there is a page before that
         if ($this->parent->pageIndex > 0)
         {
-            $perPage  = $this->container->get('Config')->get('cms.posts_per_page');
+            $perPage  = $this->container->Config->get('cms.posts_per_page');
             $page     = $this->parent->pageIndex - 1;
             $offset   = $page * $perPage;
             $limit    = 1;
@@ -284,7 +273,7 @@ class Meta extends Helper
         if (!empty($posts))
         {
             $prevpage   = $this->parent->pageIndex;
-            $uri        = explode('/', Str::queryFilterUri($this->container->get('Request')->environment()->REQUEST_URI));
+            $uri        = explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI));
 
             $titleBase  = $this->parent->website_title();
             $titlePage  = $prevpage > 1 ? 'Page ' . $prevpage . ' | ' : '';
@@ -330,7 +319,6 @@ class Meta extends Helper
      * Gets an array for the next page returning its title and slug.
      * Works on single, home, author, tag, category requests.
      *
-     * @access public
      * @return array|false
      */
     public function the_next_page()
@@ -364,7 +352,7 @@ class Meta extends Helper
 
         // This must now be a paginated page - tag, category, author or homepage listing
         // Get the current page + posts per page and check if there is a page after that
-        $perPage  = $this->container->get('Config')->get('cms.posts_per_page');
+        $perPage  = $this->container->Config->get('cms.posts_per_page');
         $page     = $this->parent->pageIndex + 1;
         $offset   = $page * $perPage;
         $limit    = 1;
@@ -375,7 +363,7 @@ class Meta extends Helper
         if (!empty($posts))
         {
             $nextPage   = $this->parent->pageIndex + 2;
-            $uri        = explode('/', Str::queryFilterUri($this->container->get('Request')->environment()->REQUEST_URI));
+            $uri        = explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI));
             $titleBase  = $this->parent->website_title();
             $titlePage  = $nextPage > 1 ? 'Page ' . $nextPage . ' | ' : '';
             $titleTitle = '';
@@ -419,7 +407,6 @@ class Meta extends Helper
     /**
      * Find the next post (used internally).
      *
-     * @access private
      * @param  \Kanso\cms\wrappers\Post|null $post Current post (if it exists)
      * @return array|false
      */
@@ -454,7 +441,6 @@ class Meta extends Helper
     /**
      * Find the previous post (used internally).
      *
-     * @access private
      * @param  \Kanso\cms\wrappers\Post|null $post Current post (if it exists)
      * @return array|false
      */

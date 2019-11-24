@@ -20,7 +20,7 @@ class FeedTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRss()
+	public function testRss(): void
 	{
 		$request  = Mockery::mock('\kanso\framework\http\request\Request');
 		$response = Mockery::mock('\kanso\framework\http\response\Response');
@@ -55,7 +55,7 @@ class FeedTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAtom()
+	public function testAtom(): void
 	{
 		$request  = Mockery::mock('\kanso\framework\http\request\Request');
 		$response = Mockery::mock('\kanso\framework\http\response\Response');
@@ -90,7 +90,7 @@ class FeedTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRdf()
+	public function testRdf(): void
 	{
 		$request  = Mockery::mock('\kanso\framework\http\request\Request');
 		$response = Mockery::mock('\kanso\framework\http\response\Response');

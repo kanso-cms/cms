@@ -19,7 +19,6 @@ class Filesystem
 	/**
 	 * Returns TRUE if a file exists and FALSE if not.
 	 *
-	 * @access  public
 	 * @param  string $file Path to file
 	 * @return bool
 	 */
@@ -31,7 +30,6 @@ class Filesystem
 	/**
 	 * Returns TRUE if the provided path is a file and FALSE if not.
 	 *
-	 * @access  public
 	 * @param  string $file Path to file
 	 * @return bool
 	 */
@@ -43,7 +41,6 @@ class Filesystem
 	/**
 	 * Returns TRUE if the provided path is a directory and FALSE if not.
 	 *
-	 * @access  public
 	 * @param  string $directory Path to directory
 	 * @return bool
 	 */
@@ -55,7 +52,6 @@ class Filesystem
 	/**
 	 * Returns TRUE if a directory is empty and FALSE if not.
 	 *
-	 * @access  public
 	 * @param  string $path Path to directory
 	 * @return bool
 	 */
@@ -77,7 +73,6 @@ class Filesystem
 	/**
 	 * Returns TRUE if the file is readable and FALSE if not.
 	 *
-	 * @access  public
 	 * @param  string $file Path to file
 	 * @return bool
 	 */
@@ -89,7 +84,6 @@ class Filesystem
 	/**
 	 * Returns TRUE if the file or directory is writable and FALSE if not.
 	 *
-	 * @access  public
 	 * @param  string $file Path to file
 	 * @return bool
 	 */
@@ -101,7 +95,6 @@ class Filesystem
 	/**
 	 * Returns the time (unix timestamp) the file was last modified.
 	 *
-	 * @access  public
 	 * @param  string $file Path to file
 	 * @return int
 	 */
@@ -113,7 +106,6 @@ class Filesystem
 	/**
 	 * Returns the fize of the file in bytes.
 	 *
-	 * @access  public
 	 * @param  string $file Path to file
 	 * @return int
 	 */
@@ -125,7 +117,6 @@ class Filesystem
 	/**
 	 * Returns the extention of the file.
 	 *
-	 * @access  public
 	 * @param  string $file Path to file
 	 * @return string
 	 */
@@ -137,7 +128,6 @@ class Filesystem
 	/**
 	 * Returns the mime type of the file.
 	 *
-	 * @access  public
 	 * @param  string      $file  Path to file
 	 * @param  bool        $guess Guess mime type if finfo_open doesn't exist? (optional) (default TRUE)
 	 * @return string|bool
@@ -173,7 +163,6 @@ class Filesystem
 	/**
 	 * Deletes the file from disk.
 	 *
-	 * @access  public
 	 * @param  string $file Path to file
 	 * @return bool
 	 */
@@ -190,7 +179,6 @@ class Filesystem
 	/**
 	 * Renames a file.
 	 *
-	 * @access  public
 	 * @param  string $src Path to old file
 	 * @param  string $dst Path to new file
 	 * @return bool
@@ -203,7 +191,6 @@ class Filesystem
 	/**
 	 * Creates a new empty file.
 	 *
-	 * @access  public
 	 * @param  string $path Path to old file
 	 * @return bool
 	 */
@@ -215,7 +202,6 @@ class Filesystem
 	/**
 	 * Deletes a directory and its contents from disk.
 	 *
-	 * @access  public
 	 * @param  string $path Path to directory
 	 * @return bool
 	 */
@@ -241,7 +227,6 @@ class Filesystem
 	/**
 	 * Deletes a directory contents from disk.
 	 *
-	 * @access  public
 	 * @param  string $path Path to directory
 	 * @return null
 	 */
@@ -265,7 +250,6 @@ class Filesystem
 	/**
 	 * Returns an array of pathnames matching the provided pattern.
 	 *
-	 * @access  public
 	 * @param  string      $pattern Patern
 	 * @param  int         $flags   Flags
 	 * @return array|false
@@ -278,7 +262,6 @@ class Filesystem
 	/**
 	 * Returns an array of pathnames from a directory.
 	 *
-	 * @access  public
 	 * @param  string $dir      Directory to list
 	 * @param  array  $excludes File names to exclude
 	 * @return array
@@ -291,7 +274,6 @@ class Filesystem
 	/**
 	 * Returns the contents of the file.
 	 *
-	 * @access public
 	 * @param  string      $file File path
 	 * @return string|bool
 	 */
@@ -303,7 +285,6 @@ class Filesystem
 	/**
 	 * Writes the supplied data to a file.
 	 *
-	 * @access  public
 	 * @param  string   $file File path
 	 * @param  string   $data File data
 	 * @param  bool     $lock Acquire an exclusive write lock? (optional) (default FALSE)
@@ -317,7 +298,6 @@ class Filesystem
 	/**
 	 * Prepends the supplied data to a file.
 	 *
-	 * @access  public
 	 * @param  string   $file File path
 	 * @param  string   $data File data
 	 * @param  bool     $lock Acquire an exclusive write lock? (optional) (default FALSE)
@@ -331,7 +311,6 @@ class Filesystem
 	/**
 	 * Appends the supplied data to a file.
 	 *
-	 * @access  public
 	 * @param  string   $file File path
 	 * @param  string   $data File data
 	 * @param  bool     $lock Acquire an exclusive write lock? (optional) (default FALSE)
@@ -345,7 +324,6 @@ class Filesystem
 	/**
 	 * Truncates a file.
 	 *
-	 * @access  public
 	 * @param  string   $file File path
 	 * @param  bool     $lock Acquire an exclusive write lock? (optional) (default FALSE)
 	 * @return int|bool
@@ -358,7 +336,6 @@ class Filesystem
 	/**
 	 *  Creates a directory.
 	 *
-	 *  @access  public
 	 *  @param   string   $path       Path to directory
 	 *  @param   int      $mode       Mode (optional) (default 0777)
 	 *  @param   bool  $recursive  Recursive (optional) (default FALSE)
@@ -372,7 +349,6 @@ class Filesystem
 	/**
 	 * Includes a file.
 	 *
-	 * @access  public
 	 * @param  string $file Path to file
 	 * @return mixed
 	 */
@@ -384,7 +360,6 @@ class Filesystem
 	/**
 	 * Includes a file it hasn't already been included.
 	 *
-	 * @access  public
 	 * @param  string $file Path to file
 	 * @return mixed
 	 */
@@ -396,7 +371,6 @@ class Filesystem
 	/**
 	 * Requires a file.
 	 *
-	 * @access  public
 	 * @param  string $file Path to file
 	 * @return mixed
 	 */
@@ -408,7 +382,6 @@ class Filesystem
 	/**
 	 * Requires a file if it hasn't already been required.
 	 *
-	 * @access  public
 	 * @param  string $file Path to file
 	 * @return mixed
 	 */
@@ -420,7 +393,6 @@ class Filesystem
 	/**
 	 * Returns a SplFileObject.
 	 *
-	 * @access  public
 	 * @param  string         $file           Path to file
 	 * @param  string         $openMode       Open mode
 	 * @param  bool           $useIncludePath Use include path? (optional) (default FALSE)
@@ -434,7 +406,6 @@ class Filesystem
 	/**
 	 * Creates a temporary file and returns the handle.
 	 *
-	 * @access  public
 	 * @return resource
 	 */
 	public static function tmpfile()
@@ -445,7 +416,6 @@ class Filesystem
 	/**
 	 * Read and return the contents of a php file.
 	 *
-	 * @access  public
 	 * @param  string      $file Path to file
 	 * @param  array       $vars Array of variables to extract
 	 * @return string|null

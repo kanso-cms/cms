@@ -5,7 +5,7 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\tests\unit\framework\http\response;
+namespace kanso\tests\unit\framework\http\request;
 
 use kanso\framework\http\request\Environment;
 use kanso\tests\TestCase;
@@ -40,25 +40,25 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testEnvironment()
+	public function testEnvironment(): void
 	{
 		$server = $this->getServerData();
 
 		$env = new Environment($server);
 
-		$this->assertEquals('index.php', $env->SCRIPT_NAME);
+		$this->assertEquals('/index.php', $env->SCRIPT_NAME);
 
 		$server['SCRIPT_NAME'] = '/var/www/app.php';
 
 		$env->reload($server);
 
-		$this->assertEquals('app.php', $env->SCRIPT_NAME);
+		$this->assertEquals('/app.php', $env->SCRIPT_NAME);
 	}
 
 	/**
 	 *
 	 */
-	public function testRequestMethod()
+	public function testRequestMethod(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -68,17 +68,17 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testScriptName()
+	public function testScriptName(): void
 	{
 		$env = new Environment($this->getServerData());
 
-		$this->assertEquals('index.php', $env->SCRIPT_NAME);
+		$this->assertEquals('/index.php', $env->SCRIPT_NAME);
 	}
 
 	/**
 	 *
 	 */
-	public function testServerName()
+	public function testServerName(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -89,7 +89,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testServerPort()
+	public function testServerPort(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -100,7 +100,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testProtocol()
+	public function testProtocol(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -118,7 +118,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testDocRoot()
+	public function testDocRoot(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -128,7 +128,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testHttpHost()
+	public function testHttpHost(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -138,7 +138,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testDomainName()
+	public function testDomainName(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -148,7 +148,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRequestUri()
+	public function testRequestUri(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -158,7 +158,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRequestUrl()
+	public function testRequestUrl(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -168,7 +168,21 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testQueryStr()
+	public function testRequestPath(): void
+	{
+		$data = $this->getServerData();
+
+		$data['REQUEST_URI'] = '/foo/bar/?foo=bar';
+
+		$env = new Environment($data);
+
+		$this->assertEquals('foo/bar', $env->REQUEST_PATH);
+	}
+
+	/**
+	 *
+	 */
+	public function testQueryStr(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -178,7 +192,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRemoteAdd()
+	public function testRemoteAdd(): void
 	{
 		$env = new Environment($this->getServerData());
 
@@ -188,7 +202,7 @@ class EnvironmentTest extends TestCase
 	/**
 	 *
 	 */
-	public function testUserAgent()
+	public function testUserAgent(): void
 	{
 		$env = new Environment($this->getServerData());
 

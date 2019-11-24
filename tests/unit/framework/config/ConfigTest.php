@@ -28,7 +28,7 @@ class ConfigTest extends TestCase
 	/**
 	 *
 	 */
-	public function testBasic()
+	public function testBasic(): void
 	{
 		$loader = $this->getLoader();
 
@@ -48,7 +48,7 @@ class ConfigTest extends TestCase
 	/**
 	 *
 	 */
-	public function testBasicWithEnvironment()
+	public function testBasicWithEnvironment(): void
 	{
 		$loader = $this->getLoader();
 
@@ -68,7 +68,7 @@ class ConfigTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSet()
+	public function testSet(): void
 	{
 		$loader = $this->getLoader();
 
@@ -86,7 +86,7 @@ class ConfigTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRemove()
+	public function testRemove(): void
 	{
 		$loader = $this->getLoader();
 
@@ -104,7 +104,7 @@ class ConfigTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetLoader()
+	public function testGetLoader(): void
 	{
 		$loader = $this->getLoader();
 

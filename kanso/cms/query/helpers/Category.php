@@ -17,7 +17,6 @@ class Category extends Helper
     /**
      * Checks whether a given category exists by the category name or id.
      *
-     * @access  public
      * @param  string|int $category_name Category name or id
      * @return bool
      */
@@ -27,13 +26,12 @@ class Category extends Helper
 
         $category_name = is_numeric($category_name) ? intval($category_name) : $category_name;
 
-        return !empty($this->container->get('CategoryManager')->provider()->byKey($index, $category_name));
+        return !empty($this->container->CategoryManager->provider()->byKey($index, $category_name));
     }
 
     /**
      * Gets the first category of the current post or a post by id.
      *
-     * @access public
      * @param  int|null                          $post_id Post id or null for category of current post (optional) (Default NULL)
      * @return \kanso\cms\wrappers\Category|null
      */
@@ -60,7 +58,6 @@ class Category extends Helper
     /**
      * Gets the first category name of the current post or a post by id.
      *
-     * @access  public
      * @param  int|null    $post_id Post id or null for category of current post (optional) (Default NULL)
      * @return string|null
      */
@@ -79,7 +76,6 @@ class Category extends Helper
     /**
      * Get an array of categories of the current post or a post by id.
      *
-     * @access  public
      * @param  int|null $post_id Post id or null for category of current post (optional) (Default NULL)
      * @return array
      */
@@ -130,7 +126,6 @@ class Category extends Helper
     /**
      * Get a comma separated list of the category names of the current post or a post by id.
      *
-     * @access public
      * @param  int|null $post_id Post id or null for category of current post (optional) (Default NULL)
      * @param  string   $glue    Glue to separate category names
      * @return string
@@ -157,7 +152,6 @@ class Category extends Helper
     /**
      * Implode category names.
      *
-     * @access private
      * @param  array  $categories Array of category objects
      * @param  string $glue       Glue to separate category names
      * @return string
@@ -179,7 +173,6 @@ class Category extends Helper
     /**
      * Get the slug of a category by id or the current post's first category.
      *
-     * @access  public
      * @param  int|null    $category_id Category id or null for category of current post (optional) (Default NULL)
      * @return string|null
      */
@@ -228,7 +221,6 @@ class Category extends Helper
     /**
      * Get the full URL of a category by id or current post's first category.
      *
-     * @access  public
      * @param  int|null    $category_id Category id or null for category of current post (optional) (Default NULL)
      * @return string|null
      */
@@ -240,7 +232,7 @@ class Category extends Helper
         {
             $prefix = !empty($this->parent->blog_location()) ? '/' . $this->parent->blog_location() . '/' : '/';
 
-            return $this->container->get('Request')->environment()->HTTP_HOST . $prefix . 'category/' . $slug . '/';
+            return $this->container->Request->environment()->HTTP_HOST . $prefix . 'category/' . $slug . '/';
         }
 
         return null;
@@ -249,7 +241,6 @@ class Category extends Helper
     /**
      * Get an array of all the Category objects.
      *
-     * @access  public
      * @return array
      */
     public function all_the_categories(): array
@@ -263,11 +254,11 @@ class Category extends Helper
 
         $categories = [];
 
-        $rows = $this->sql()->SELECT('id')->FROM('categories')->FIND_ALL();
+        $rows = $this->sql()->SELECT('id')->FROM('categories')->ORDER_BY('name', 'ASC')->FIND_ALL();
 
         foreach ($rows as $row)
         {
-            $categories[] = $this->container->get('CategoryManager')->byId($row['id']);
+            $categories[] = $this->container->CategoryManager->byId($row['id']);
         }
 
         return $this->parent->helper('cache')->set($key, $categories);
@@ -276,7 +267,6 @@ class Category extends Helper
     /**
      * Is the current post or a post by id uncategorized ?
      *
-     * @access  public
      * @param  int|null $post_id Post id or null for category of current post (optional) (Default NULL)
      * @return bool
      */

@@ -16,7 +16,7 @@ use kanso\framework\mvc\controller\Controller;
  */
 class Example extends Controller
 {
-	public function welcome()
+	public function welcome(): void
 	{
 		if ($this->model->validate())
 		{

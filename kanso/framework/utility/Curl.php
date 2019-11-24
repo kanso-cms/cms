@@ -17,7 +17,6 @@ class Curl
 	/**
 	 * Send a CURL request to a url.
 	 *
-	 * @access public
 	 * @param  string      $url         The url to request to
 	 * @param  array       $headers     Any additional headers to send (optional) (default [])
 	 * @param  array       $postData    POST fields (optional) (default [])
@@ -83,7 +82,6 @@ class Curl
 	/**
 	 * Send a CURL request to a url.
 	 *
-	 * @access public
 	 * @param  string       $url         The url to request to
 	 * @param  array        $_options    Any additional options to use (optional) (default [])
 	 * @param  array        $headers     Any additional headers to send (optional) (default [])

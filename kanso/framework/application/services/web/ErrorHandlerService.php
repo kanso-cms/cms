@@ -5,15 +5,16 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\framework\application\services;
+namespace kanso\framework\application\services\web;
 
+use kanso\framework\application\services\Service;
 use kanso\framework\exception\ErrorHandler;
 use kanso\framework\exception\ErrorLogger;
 use kanso\framework\exception\handlers\WebHandler;
 use Throwable;
 
 /**
- * Error handling service.
+ * Web error handling service.
  *
  * @author Joe J. Howard
  */
@@ -22,7 +23,6 @@ class ErrorHandlerService extends Service
 	/**
 	 * Return the error logger if we are logging errors.
 	 *
-	 * @access private
 	 * @param  \Throwable                                  $exception "caught" exception
 	 * @return \kanso\framework\exception\ErrorLogger|null
 	 */
@@ -39,7 +39,7 @@ class ErrorHandlerService extends Service
 	/**
 	 * {@inheritdoc}
 	 */
-	public function register()
+	public function register(): void
 	{
 		// Display errors
 		$display_errors = $this->container->Config->get('application.error_handler.display_errors');

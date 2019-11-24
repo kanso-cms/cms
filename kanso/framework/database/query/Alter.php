@@ -49,7 +49,6 @@ class Alter
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\database\connection\ConnectionHandler $connectionHandler The database connection handler to use
      * @param string                                                 $tableName         The table name we are altering
      */
@@ -72,7 +71,6 @@ class Alter
     /**
      * Add a new column to the current table.
      *
-     * @access public
      * @param  string                                $column
      * @param  string                                $dataType The column parameters
      * @throws PDOException                          If the column already exists
@@ -102,7 +100,6 @@ class Alter
     /**
      * Drop an existing column from the current table.
      *
-     * @access public
      * @param  string                                $column The column name to drop
      * @throws PDOException                          If the column does not exist
      * @return \kanso\framework\database\query\Alter
@@ -135,7 +132,6 @@ class Alter
      * Note this function must be called before using
      * any of the configuration/constraint methods below
      *
-     * @access public
      * @param  string                                $column
      * @param  string|null                           $dataType (optional) (default null)
      * @throws PDOException                          If the column does not exist
@@ -174,7 +170,6 @@ class Alter
     /**
      * Add a primary key to the current column.
      *
-     * @access public
      * @return \kanso\framework\database\query\Alter
      */
     public function ADD_PRIMARY_KEY(): Alter
@@ -209,7 +204,6 @@ class Alter
     /**
      * Drop the table's current primary key.
      *
-     * @access public
      * @return \kanso\framework\database\query\Alter
      */
     public function DROP_PRIMARY_KEY(): Alter
@@ -233,7 +227,6 @@ class Alter
     /**
      * Add not null to a column.
      *
-     * @access public
      * @param  $notNull mixed Value to set null values to (optional) (default 0)
      * @return \kanso\framework\database\query\Alter
      */
@@ -272,7 +265,6 @@ class Alter
     /**
      * Drop "not null" on a column.
      *
-     * @access public
      * @return \kanso\framework\database\query\Alter
      */
     public function DROP_NOT_NULL(): Alter
@@ -300,7 +292,6 @@ class Alter
     /**
      * Add unsinged to an integer or number based column.
      *
-     * @access public
      * @return \kanso\framework\database\query\Alter
      */
     public function ADD_UNSIGNED(): Alter
@@ -331,7 +322,6 @@ class Alter
     /**
      * Drop unsigned on an integer or number based column.
      *
-     * @access public
      * @return \kanso\framework\database\query\Alter
      */
     public function DROP_UNSIGNED(): Alter
@@ -360,7 +350,6 @@ class Alter
     /**
      * Add auto increment to an integer primary key column.
      *
-     * @access public
      * @return \kanso\framework\database\query\Alter
      */
     public function SET_AUTO_INCREMENT(): Alter
@@ -402,7 +391,6 @@ class Alter
     /**
      * DROP auto increment on an integer primary key column.
      *
-     * @access public
      * @return \kanso\framework\database\query\Alter
      */
     public function DROP_AUTO_INCREMENT(): Alter
@@ -426,7 +414,6 @@ class Alter
     /**
      * Set default value for column.
      *
-     * @access public
      * @return \kanso\framework\database\query\Alter
      */
     public function SET_DEFAULT($value = 'NULL'): Alter
@@ -444,7 +431,6 @@ class Alter
     /**
      * Drop default value for column.
      *
-     * @access public
      * @return \kanso\framework\database\query\Alter
      */
     public function DROP_DEFAULT(): Alter
@@ -465,7 +451,6 @@ class Alter
     /**
      * Add unique contraint on column.
      *
-     * @access public
      * @return \kanso\framework\database\query\Alter
      */
     public function ADD_UNIQUE(): Alter
@@ -492,7 +477,6 @@ class Alter
     /**
      * Drop unique contraint on column.
      *
-     * @access public
      * @return \kanso\framework\database\query\Alter
      */
     public function DROP_UNIQUE(): Alter
@@ -517,7 +501,6 @@ class Alter
     /**
      * Add a foreign key constraint to a column.
      *
-     * @access public
      * @param  string                                $referenceTable The name of the reference table
      * @param  string                                $referenceKey   The name of the column on the reference table
      * @param  string|null                           $constraint     The constraint name to add (optional) (default null)
@@ -547,7 +530,6 @@ class Alter
     /**
      * Drop a foreign key constraint to a column.
      *
-     * @access public
      * @param  string                                $referenceTable The name of the reference table
      * @param  string                                $referenceKey   The name of the column on the reference table
      * @param  string                                $constraint     The constraint name to remove (optional) (default null)
@@ -580,10 +562,8 @@ class Alter
 
     /**
      * Load the current table's columns and column parameters.
-     *
-     * @access private
      */
-    private function loadColumns()
+    private function loadColumns(): void
     {
         $columns = [];
 
@@ -600,7 +580,6 @@ class Alter
     /**
      * Validate a column exists.
      *
-     * @access private
      * @param  string $column The column name
      * @return bool
      */
@@ -612,7 +591,6 @@ class Alter
     /**
      * Get the table's PRIMARY KEY column name.
      *
-     * @access private
      * @return string|false
      */
     private function getPrimaryKey()
@@ -657,7 +635,6 @@ class Alter
     /**
      * Set a key/value pair on a column or the current column configuration.
      *
-     * @access private
      * @param  string      $key    The configuration key
      * @param  string      $value  The configuration value for the column
      * @param  string|null $column The column name (optional) (default null)
@@ -691,7 +668,6 @@ class Alter
     /**
      * Filter a column or table name to valid SQL.
      *
-     * @access  private
      * @param  string $str
      * @return string
      */
@@ -703,7 +679,6 @@ class Alter
     /**
      * Safely format the query consistently.
      *
-     * @access  private
      * @param  string $sql SQL query statement
      * @return string
      */

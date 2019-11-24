@@ -19,7 +19,7 @@ class RouterTest extends TestCase
 	/**
 	 *
 	 */
-	public function testHash()
+	public function testHash(): void
 	{
 		$password = new NativePHP;
 
@@ -31,7 +31,7 @@ class RouterTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAlgos()
+	public function testAlgos(): void
 	{
 		$algos =
 		[

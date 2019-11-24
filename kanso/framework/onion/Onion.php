@@ -50,7 +50,6 @@ class Onion
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\http\request\Request   $request  Request object
      * @param \kanso\framework\http\response\Response $response Response object
      */
@@ -64,7 +63,6 @@ class Onion
     /**
      * Add a layer to the onion.
      *
-     * @access public
      * @param  mixed            $callback   Callback when layer is peeled
      * @param  mixed            $parameters Arguments to apply to callback
      * @param  bool             $inner      Add layer to the inner most layer (optional) (default false)\
@@ -84,20 +82,16 @@ class Onion
 
     /**
      * Peel the onion.
-     *
-     * @access public
      */
-    public function peel()
+    public function peel(): void
     {
         $this->peelLayer();
     }
 
     /**
      * Peel The next layer.
-     *
-     * @access private
      */
-    private function peelLayer()
+    private function peelLayer(): void
     {
         if (!empty($this->layers))
         {
@@ -116,7 +110,6 @@ class Onion
     /**
      * Return a closure for executing the next middleware layer.
      *
-     * @access private
      * @throws \kanso\framework\http\response\exceptions\NotFoundException If the onion is finished peeling and the response is a 404
      * @return Closure
      */
@@ -124,13 +117,13 @@ class Onion
     {
         if (!empty($this->layers))
         {
-            return function()
+            return function(): void
             {
                 $this->peelLayer();
             };
         }
 
-        return function()
+        return function(): void
         {
             $response = $this->peeled();
 
@@ -144,7 +137,6 @@ class Onion
     /**
      * When the onion is completely peeled return the response.
      *
-     * @access public
      * @throws \kanso\framework\http\response\exceptions\NotFoundException
      */
     public function peeled(): Response
@@ -154,8 +146,6 @@ class Onion
 
     /**
      * Get middleware layers.
-     *
-     * @access public
      */
     public function layers(): array
     {

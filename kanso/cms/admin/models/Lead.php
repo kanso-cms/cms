@@ -51,7 +51,6 @@ class Lead extends BaseModel
     /**
      * Parse get request to find lead info.
      *
-     * @access private
      * @return array|false
      */
     private function parseGet()
@@ -78,7 +77,6 @@ class Lead extends BaseModel
     /**
      * Get location details from visitor IP address.
      *
-     * @access private
      * @param  \kanso\cms\wrappers\Visitor $visitor Visitor object
      * @return array|false
      */
@@ -143,7 +141,6 @@ class Lead extends BaseModel
     /**
      * Determines visitor's most used browser.
      *
-     * @access private
      * @param  \kanso\cms\wrappers\Visitor $visitor Visitor object
      * @return string
      */
@@ -161,7 +158,6 @@ class Lead extends BaseModel
     /**
      * Determines visitor's most used browser.
      *
-     * @access private
      * @param  \kanso\cms\wrappers\Visitor $visitor Visitor object
      * @return string
      */

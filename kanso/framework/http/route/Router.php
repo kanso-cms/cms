@@ -92,7 +92,6 @@ class Router
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\http\request\Request $request       Request instance
      * @param \kanso\framework\onion\Onion          $onion         Onion instance
      * @param bool                                  $throwNotFound Throw not found error if route not matched (optional) (default true)
@@ -130,7 +129,6 @@ class Router
     /**
      * Add a http POST route.
      *
-     * @access public
      * @param  string                             $uri      URI to apply
      * @param  mixed                              $callback Callback to apply
      * @param  mixed                              $args     Args to add (optional) (default null)
@@ -144,7 +142,6 @@ class Router
     /**
      * Add a http GET route.
      *
-     * @access public
      * @param  string                             $uri      URI to apply
      * @param  mixed                              $callback Callback to apply
      * @param  mixed                              $args     Args to add (optional) (default null)
@@ -160,7 +157,6 @@ class Router
     /**
      * Add a http HEAD route.
      *
-     * @access public
      * @param  string                             $uri      URI to apply
      * @param  mixed                              $callback Callback to apply
      * @param  mixed                              $args     Args to add (optional) (default null)
@@ -174,7 +170,6 @@ class Router
     /**
      * Add a http PUT route.
      *
-     * @access public
      * @param  string                             $uri      URI to apply
      * @param  mixed                              $callback Callback to apply
      * @param  mixed                              $args     Args to add (optional) (default null)
@@ -188,7 +183,6 @@ class Router
     /**
      * Add a http PATCH route.
      *
-     * @access public
      * @param  string                             $uri      URI to apply
      * @param  mixed                              $callback Callback to apply
      * @param  mixed                              $args     Args to add (optional) (default null)
@@ -202,7 +196,6 @@ class Router
     /**
      * Add a http DELETE route.
      *
-     * @access public
      * @param  string                             $uri      URI to apply
      * @param  mixed                              $callback Callback to apply
      * @param  mixed                              $args     Args to add (optional) (default null)
@@ -216,7 +209,6 @@ class Router
     /**
      * Add a http OPTIONS route.
      *
-     * @access public
      * @param  string                             $uri      URI to apply
      * @param  mixed                              $callback Callback to apply
      * @param  mixed                              $args     Args to add (optional) (default null)
@@ -230,7 +222,6 @@ class Router
     /**
      * Map the route to internal arrays.
      *
-     * @access private
      * @param  string                             $method   http request method
      * @param  string                             $uri      URI to apply
      * @param  mixed                              $callback Callback to apply
@@ -252,10 +243,8 @@ class Router
 
     /**
      * Loop the routes/methods to match request.
-     *
-     * @access public
      */
-    public function dispatch()
+    public function dispatch(): void
     {
         $requestMethod = $this->request->getMethod();
 

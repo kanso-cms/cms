@@ -72,7 +72,6 @@ class Request
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\http\request\Environment $environment Environment wrapper
      * @param \kanso\framework\http\request\Headers     $headers     Headers wrapper
      * @param \kanso\framework\http\request\Files       $files       Files wrapper
@@ -89,7 +88,6 @@ class Request
     /**
      * Trimmed request path.
      *
-     * @access public
      * @return string
      */
     public function path(): string
@@ -107,7 +105,6 @@ class Request
     /**
      * Environment access.
      *
-     * @access public
      * @return \kanso\framework\http\request\Environment
      */
     public function environment(): Environment
@@ -118,7 +115,6 @@ class Request
     /**
      * Headers access.
      *
-     * @access public
      * @return \kanso\framework\http\request\Headers
      */
     public function headers(): Headers
@@ -129,7 +125,6 @@ class Request
     /**
      * Returns uploaded files wrapper.
      *
-     * @access public
      * @return \kanso\framework\http\request\Files
      */
     public function files(): Files
@@ -150,7 +145,6 @@ class Request
     /**
      * Is this a secure request ?
      *
-     * @access public
      * @return bool
      */
     public function isSecure(): bool
@@ -161,7 +155,6 @@ class Request
     /**
      * Is this a GET request?
      *
-     * @access public
      * @return bool
      */
     public function isGet(): bool
@@ -172,7 +165,6 @@ class Request
     /**
      * Is this a POST request?
      *
-     * @access public
      * @return bool
      */
     public function isPost(): bool
@@ -183,7 +175,6 @@ class Request
     /**
      * Is this a PUT request?
      *
-     * @access public
      * @return bool
      */
     public function isPut(): bool
@@ -194,7 +185,6 @@ class Request
     /**
      * Is this a PATCH request?
      *
-     * @access public
      * @return bool
      */
     public function isPatch(): bool
@@ -205,7 +195,6 @@ class Request
     /**
      * Is this a DELETE request?
      *
-     * @access public
      * @return bool
      */
     public function isDelete(): bool
@@ -216,7 +205,6 @@ class Request
     /**
      * Is this a HEAD request?
      *
-     * @access public
      * @return bool
      */
     public function isHead(): bool
@@ -227,7 +215,6 @@ class Request
     /**
      * Is this an OPTIONS request?
      *
-     * @access public
      * @return bool
      */
     public function isOptions(): bool
@@ -238,7 +225,6 @@ class Request
     /**
      * Is this an Ajax request?
      *
-     * @access public
      * @return bool
      */
     public function isAjax(): bool
@@ -273,7 +259,6 @@ class Request
     /**
      * Is this a GET request for file ?
      *
-     * @access public
      * @return bool
      */
     public function isFileGet(): bool
@@ -295,7 +280,6 @@ class Request
      * This method returns a union of GET and POST data as a key-value array, or the value
      * of the array key if requested; if the array key does not exist, false is returned.
      *
-     * @access public
      * @param  string|null $key (optional) (default null)
      * @return mixed
      */
@@ -353,7 +337,6 @@ class Request
      * This method fetches and parses url queries
      * eg example.com?foo=bar -> ['foo' => 'bar'];
      *
-     * @access public
      * @param  string|null $_key (optional) (default null)
      * @return mixed
      */
@@ -403,7 +386,6 @@ class Request
     /**
      * Get MIME Type (type/subtype within Content Type header).
      *
-     * @access public
      * @return string|false
      */
     public function mimeType()
@@ -421,7 +403,6 @@ class Request
     /**
      * Is the user-agent a bot?
      *
-     * @access public
      * @return bool
      */
     public function isBot(): bool

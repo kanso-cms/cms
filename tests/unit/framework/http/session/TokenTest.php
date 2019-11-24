@@ -19,7 +19,7 @@ class TokenTest extends TestCase
 	/**
 	 *
 	 */
-	public function testDefault()
+	public function testDefault(): void
 	{
 		$token = new Token;
 
@@ -29,7 +29,7 @@ class TokenTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSet()
+	public function testSet(): void
 	{
 		$token = new Token;
 
@@ -41,7 +41,7 @@ class TokenTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRegenerate()
+	public function testRegenerate(): void
 	{
 		$token = new Token;
 
@@ -57,7 +57,7 @@ class TokenTest extends TestCase
 	/**
 	 *
 	 */
-	public function testVerify()
+	public function testVerify(): void
 	{
 		$token = new Token;
 

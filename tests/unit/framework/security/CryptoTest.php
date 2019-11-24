@@ -20,7 +20,7 @@ class CryptoTest extends TestCase
 	/**
 	 *
 	 */
-	public function testEncrypt()
+	public function testEncrypt(): void
 	{
 		$data = 'foobar!!$#$@#"$#@!$P:{';
 
@@ -42,7 +42,7 @@ class CryptoTest extends TestCase
 	/**
 	 *
 	 */
-	public function testDecrypt()
+	public function testDecrypt(): void
 	{
 		$signer = Mockery::mock('\kanso\framework\security\crypto\Signer');
 

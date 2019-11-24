@@ -33,7 +33,6 @@ class Cache
     /**
      * Constructor.
      *
-     * @access public
      * @param bool $enabled Enable or disable the cahce
      */
     public function __construct(bool $enabled = true)
@@ -44,7 +43,6 @@ class Cache
     /**
      * Is the cache enabled?
      *
-     * @access public
      * @return bool
      */
     public function enabled(): bool
@@ -54,20 +52,16 @@ class Cache
 
     /**
      * Enable the cache.
-     *
-     * @access public
      */
-    public function enable()
+    public function enable(): void
     {
         $this->enabled = true;
     }
 
     /**
      * Disable the cache.
-     *
-     * @access public
      */
-    public function disable()
+    public function disable(): void
     {
         $this->enabled = false;
     }
@@ -75,7 +69,6 @@ class Cache
     /**
      * Is the query cached ?
      *
-     * @access public
      * @param  string $queryStr SQL query string
      * @param  array  $params   SQL query parameters
      * @return bool
@@ -104,7 +97,6 @@ class Cache
     /**
      * Get cached result.
      *
-     * @access public
      * @param  string $queryStr SQL query string
      * @param  array  $params   SQL query parameters
      * @return mixed
@@ -122,12 +114,11 @@ class Cache
     /**
      * Save a cached result.
      *
-     * @access public
      * @param string $queryStr SQL query string
      * @param array  $params   SQL query parameters
      * @param mixed  $result   Data to cache
      */
-    public function put(string $queryStr, array $params, $result)
+    public function put(string $queryStr, array $params, $result): void
     {
         if ($this->enabled)
         {
@@ -137,10 +128,8 @@ class Cache
 
     /**
      * Clear current table from results.
-     *
-     * @access public
      */
-    public function clear(string $queryStr)
+    public function clear(string $queryStr): void
     {
         $tableName = $this->getTableName($queryStr);
 
@@ -153,7 +142,6 @@ class Cache
     /**
      * Returns the cache key based on query and params.
      *
-     * @access private
      * @param  string $query  SQL query string
      * @param  array  $params SQL query parameters
      * @return string
@@ -186,7 +174,6 @@ class Cache
     /**
      * Gets the table name based on the query string.
      *
-     * @access private
      * @param  string $query SQL query string
      * @return string
      */
@@ -210,7 +197,6 @@ class Cache
     /**
      * Gets the query type from the query string.
      *
-     * @access private
      * @param  string $query SQL query
      * @return string
      */

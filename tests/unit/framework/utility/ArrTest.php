@@ -37,7 +37,7 @@ class ArrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSet()
+	public function testSet(): void
 	{
 		$arr = [];
 
@@ -53,7 +53,7 @@ class ArrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testHas()
+	public function testHas(): void
 	{
 		$arr = ['foo' => '123', 'bar' => ['baz' => '456', 'bax' => ['789']]];
 
@@ -69,7 +69,7 @@ class ArrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGet()
+	public function testGet(): void
 	{
 		$arr = ['foo' => '123', 'bar' => ['baz' => '456', 'bax' => ['789']]];
 
@@ -85,7 +85,7 @@ class ArrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testDelete()
+	public function testDelete(): void
 	{
 	 	$arr = ['foo' => '123', 'bar' => ['baz' => '456', 'bax' => ['789']]];
 
@@ -103,7 +103,7 @@ class ArrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testPluck()
+	public function testPluck(): void
 	{
 	 	$arr = [['foo' => 'bar'], ['foo' => 'baz']];
 
@@ -127,7 +127,7 @@ class ArrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRandom()
+	public function testRandom(): void
 	{
 	 	$arr = ['foo', 'bar', 'baz'];
 
@@ -137,7 +137,7 @@ class ArrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsAssoc()
+	public function testIsAssoc(): void
 	{
 		$this->assertTrue(Arr::isAssoc(['foo' => 0, 'bar' => 1]));
 
@@ -149,7 +149,7 @@ class ArrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsMulti()
+	public function testIsMulti(): void
 	{
 	 	$this->assertTrue(Arr::isMulti(['foo' => ['bar']]));
 
@@ -163,7 +163,7 @@ class ArrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testInsertAt()
+	public function testInsertAt(): void
 	{
 		$sample1 = ['apple', 'orange', 'pear'];
 		$result1 = ['apple', 'orange', 'inserted', 'pear'];
@@ -182,7 +182,7 @@ class ArrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIssets()
+	public function testIssets(): void
 	{
 		$this->assertEquals(true, Arr::issets(['needle1', 'needle2'], ['needle1' => 'foo', 'needle2' => 'foo', 'needle3' => 'foo']));
 
@@ -192,7 +192,7 @@ class ArrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testUnsets()
+	public function testUnsets(): void
 	{
 		$this->assertEquals(['needle3' => 'foo'], Arr::unsets(['needle1', 'needle2'], ['needle1' => 'foo', 'needle2' => 'foo', 'needle3' => 'foo']));
 
@@ -202,7 +202,7 @@ class ArrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSortMulti()
+	public function testSortMulti(): void
 	{
 		$this->assertEquals([['test_key' => 'a'], ['test_key' => 'b'], ['test_key' => 'c']], Arr::sortMulti([['test_key' => 'a'], ['test_key' => 'b'], ['test_key' => 'c']], 'test_key'));
 
@@ -222,7 +222,7 @@ class ArrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testArrayAccess()
+	public function testArrayAccess(): void
 	{
 		$this->assertEquals(1, Arr::arrayLikeAccess('test_key', new fooArrayAccess(1)));
 	}
@@ -230,7 +230,7 @@ class ArrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testImplode()
+	public function testImplode(): void
 	{
 		$this->assertEquals('foobar', Arr::implodeByKey('test_key', [['test_key' => 'foo'], ['test_key' => 'bar']]));
 
@@ -240,7 +240,7 @@ class ArrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testInMulti()
+	public function testInMulti(): void
 	{
 		$this->assertEquals(true, Arr::inMulti('foobar', [['test_key' => 'foobar'], ['test_key' => 'bar']]));
 
@@ -252,7 +252,7 @@ class ArrTest extends TestCase
 	/**
 	 *
 	 */
-	public function testPaginate()
+	public function testPaginate(): void
 	{
 		$input = ['test1', 'test2', 'test3', 'test4', 'test5', 'test6'];
 		$result =

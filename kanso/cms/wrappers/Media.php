@@ -40,7 +40,6 @@ class Media extends Wrapper
     /**
      * Override inherited constructor.
      *
-     * @access public
      * @param \kanso\framework\database\query\Builder $SQL            SQL query builder
      * @param array                                   $thumbnailSizes Assoc array of thumbnail sizes
      * @param array                                   $data           Array row from Database
@@ -113,7 +112,6 @@ class Media extends Wrapper
     /**
      * Checks if this is an image.
      *
-     * @access public
      * @return bool
      */
     public function isImage(): bool
@@ -124,7 +122,6 @@ class Media extends Wrapper
     /**
      * Returns the img width in px if this is an image.
      *
-     * @access public
      * @param  string $size Image size suffix (optional) (default 'original')
      * @return int
      */
@@ -152,7 +149,7 @@ class Media extends Wrapper
 
             if (file_exists($path))
             {
-                list($width, $height) = getimagesize($path);
+                [$width, $height] = getimagesize($path);
             }
         }
 
@@ -162,7 +159,6 @@ class Media extends Wrapper
     /**
      * Returns the img height in px if this is an image.
      *
-     * @access public
      * @param  string $size Image size suffix (optional) (default 'original')
      * @return int
      */
@@ -191,7 +187,7 @@ class Media extends Wrapper
 
             if (file_exists($path))
             {
-                list($width, $height) = getimagesize($path);
+                [$width, $height] = getimagesize($path);
             }
         }
 
@@ -201,7 +197,6 @@ class Media extends Wrapper
     /**
      * Returns the img width if this is an image.
      *
-     * @access public
      * @return string
      */
     public function ext(): string
@@ -212,7 +207,6 @@ class Media extends Wrapper
     /**
      * If the current file is an image, return the image url of a different size.
      *
-     * @access public
      * @param  string $size Image size suffix (optional) (default 'original')
      * @return string
      */
@@ -235,7 +229,6 @@ class Media extends Wrapper
     /**
      * If the current file is an image, return the image path of a different size.
      *
-     * @access public
      * @param  string $size Image size suffix (optional) (default 'original')
      * @return string
      */

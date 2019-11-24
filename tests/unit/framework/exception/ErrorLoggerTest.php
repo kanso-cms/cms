@@ -21,7 +21,7 @@ class ErrorLoggerTest extends TestCase
     /**
      *
      */
-    public function testWebHandler()
+    public function testWebHandler(): void
     {
         $path        = dirname(__FILE__);
         $environment = Mockery::mock('\kanso\framework\http\request\Environment');

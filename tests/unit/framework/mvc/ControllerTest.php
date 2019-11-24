@@ -33,13 +33,13 @@ class ControllerTest extends TestCase
     /**
      *
      */
-    public function testInstantiate()
+    public function testInstantiate(): void
     {
         $request = Mockery::mock('\kanso\framework\http\request\Request');
 
         $response = Mockery::mock('\kanso\framework\http\response\Response');
 
-        $next = function()
+        $next = function(): void
         {
 
         };

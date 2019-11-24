@@ -19,7 +19,7 @@ class BodyTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSet()
+	public function testSet(): void
 	{
 		$body = new Body;
 
@@ -31,7 +31,7 @@ class BodyTest extends TestCase
 	/**
 	 *
 	 */
-	public function testClear()
+	public function testClear(): void
 	{
 		$body = new Body;
 
@@ -45,7 +45,7 @@ class BodyTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAppend()
+	public function testAppend(): void
 	{
 		$body = new Body;
 
@@ -59,7 +59,7 @@ class BodyTest extends TestCase
 	/**
 	 *
 	 */
-	public function testLength()
+	public function testLength(): void
 	{
 		$body = new Body;
 

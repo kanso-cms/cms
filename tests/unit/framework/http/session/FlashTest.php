@@ -19,7 +19,7 @@ class FlashTest extends TestCase
     /**
      *
      */
-    public function testDefault()
+    public function testDefault(): void
     {
         $flash = new Flash;
 
@@ -29,7 +29,7 @@ class FlashTest extends TestCase
     /**
      *
      */
-    public function testSet()
+    public function testSet(): void
     {
         $flash = new Flash;
 
@@ -41,7 +41,7 @@ class FlashTest extends TestCase
     /**
      *
      */
-    public function testSetMultiple()
+    public function testSetMultiple(): void
     {
         $flash = new Flash;
 
@@ -57,7 +57,7 @@ class FlashTest extends TestCase
     /**
      *
      */
-    public function testGet()
+    public function testGet(): void
     {
         $flash = new Flash;
 
@@ -74,7 +74,7 @@ class FlashTest extends TestCase
     /**
      *
      */
-    public function testHas()
+    public function testHas(): void
     {
         $flash = new Flash;
 
@@ -92,7 +92,7 @@ class FlashTest extends TestCase
     /**
      *
      */
-    public function testRemove()
+    public function testRemove(): void
     {
         $flash = new Flash;
 
@@ -114,7 +114,7 @@ class FlashTest extends TestCase
     /**
      *
      */
-    public function testClear()
+    public function testClear(): void
     {
         $flash = new Flash;
 
@@ -131,7 +131,7 @@ class FlashTest extends TestCase
     /**
      *
      */
-    public function testExpire()
+    public function testExpire(): void
     {
         $flash = new Flash;
 
@@ -152,7 +152,7 @@ class FlashTest extends TestCase
     /**
      *
      */
-    public function testPutRaw()
+    public function testPutRaw(): void
     {
         $raw =
         [
@@ -176,7 +176,7 @@ class FlashTest extends TestCase
     /**
      *
      */
-    public function testGetRaw()
+    public function testGetRaw(): void
     {
         $raw =
         [
@@ -194,7 +194,7 @@ class FlashTest extends TestCase
     /**
      *
      */
-    public function testIteration()
+    public function testIteration(): void
     {
         $flash = new Flash;
 

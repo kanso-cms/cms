@@ -62,8 +62,6 @@ class ErrorHandler
 
     /**
      * Constructor.
-     *
-     * @access public
      */
     public function __construct(bool $displayErrors, int $errorReporting)
     {
@@ -94,13 +92,11 @@ class ErrorHandler
 
 	/**
 	 * Registers the exception handler.
-	 *
-	 * @access protected
 	 */
-	protected function register()
+	protected function register(): void
 	{
 		// Allows us to handle "fatal" errors
-		register_shutdown_function(function()
+		register_shutdown_function(function(): void
 		{
 			$e = error_get_last();
 
@@ -119,10 +115,9 @@ class ErrorHandler
 	/**
 	 * Set logger instance.
 	 *
-	 * @access public
 	 * @param \kanso\framework\exception\ErrorLogger $logger Error logger
 	 */
-	public function setLogger(ErrorLogger $logger)
+	public function setLogger(ErrorLogger $logger): void
 	{
 		$this->logger = $logger;
 	}
@@ -130,20 +125,17 @@ class ErrorHandler
 	/**
 	 * Disables logging for an exception type.
 	 *
-	 * @access public
 	 * @param string|array $exceptionType Exception type or array of exception types
 	 */
-	public function disableLoggingFor($exceptionType)
+	public function disableLoggingFor($exceptionType): void
 	{
 		$this->disableLoggingFor = array_unique(array_merge($this->disableLoggingFor, (array) $exceptionType));
 	}
 
 	/**
 	 * Disables the shutdown handler.
-	 *
-	 * @access public
 	 */
-	public function disableShutdownHandler()
+	public function disableShutdownHandler(): void
 	{
 		$this->disableShutdownHandler = true;
 	}
@@ -151,11 +143,10 @@ class ErrorHandler
 	/**
 	 * Prepends an exception handler to the stack.
 	 *
-	 * @access public
 	 * @param string   $exceptionType Exception type
 	 * @param \Closure $handler       Exception handler
 	 */
-	public function handle(string $exceptionType, Closure $handler)
+	public function handle(string $exceptionType, Closure $handler): void
 	{
 		array_unshift($this->handlers, ['exceptionType' => $exceptionType, 'handler' => $handler]);
 	}
@@ -163,10 +154,9 @@ class ErrorHandler
 	/**
 	 * Clears all error handlers for an exception type.
 	 *
-	 * @access public
 	 * @param string $exceptionType Exception type
 	 */
-	public function clearHandlers(string $exceptionType)
+	public function clearHandlers(string $exceptionType): void
 	{
 		foreach($this->handlers as $key => $handler)
 		{
@@ -180,11 +170,10 @@ class ErrorHandler
 	/**
 	 * Replaces all error handlers for an exception type with a new one.
 	 *
-	 * @access public
 	 * @param string   $exceptionType Exception type
 	 * @param \Closure $handler       Exception handler
 	 */
-	public function replaceHandlers(string $exceptionType, Closure $handler)
+	public function replaceHandlers(string $exceptionType, Closure $handler): void
 	{
 		$this->clearHandlers($exceptionType);
 
@@ -193,10 +182,8 @@ class ErrorHandler
 
     /**
      * Restore the default error handler.
-     *
-     * @access public
      */
-    public function restore()
+    public function restore(): void
     {
         $this->display_errors($this->defaultDisplayErrors);
 
@@ -209,10 +196,8 @@ class ErrorHandler
 
 	/**
 	 * Clear output buffers.
-	 *
-	 * @access protected
 	 */
-	protected function clearOutputBuffers()
+	protected function clearOutputBuffers(): void
 	{
 		while(ob_get_level() > 0) ob_end_clean();
 	}
@@ -220,7 +205,6 @@ class ErrorHandler
 	/**
 	 * Should the exception be logged?
 	 *
-	 * @access protected
 	 * @param  \Throwable $exception An exception object
 	 * @return bool
 	 */
@@ -255,10 +239,9 @@ class ErrorHandler
 	/**
 	 * Handles uncaught exceptions.
 	 *
-	 * @access public
 	 * @param \Throwable $exception An exception object
 	 */
-	public function handler(Throwable $exception)
+	public function handler(Throwable $exception): void
 	{
 		try
 		{
@@ -302,7 +285,6 @@ class ErrorHandler
     /**
      * Set or get the Kanso error reporting level.
      *
-     * @access public
      * @param  int|null $errorReporting (optional) (default NULL)
      * @return int
      */
@@ -321,7 +303,6 @@ class ErrorHandler
     /**
      * Set or get the Kanso "display_errors" value.
      *
-     * @access public
      * @param  bool|null $display_errors (optional) (default NULL)
      * @return bool
      */

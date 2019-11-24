@@ -27,7 +27,7 @@ class EcommerceService extends Service
 	/**
 	 * {@inheritdoc}
 	 */
-	public function register()
+	public function register(): void
 	{
 		$this->container->setInstance('Ecommerce', new Ecommerce($this->getBrainTree(), $this->getCheckout(), $this->getProducts(), $this->getShoppingCart(), $this->getRewards(), $this->getCoupons(), $this->getReviews()));
 	}
@@ -35,7 +35,6 @@ class EcommerceService extends Service
     /**
      * Create and return new checkout utility instance.
      *
-     * @access private
      * @return \kanso\cms\ecommerce\BrainTree
      */
     private function getBrainTree(): BrainTree
@@ -46,7 +45,6 @@ class EcommerceService extends Service
     /**
      * Create and return new checkout utility instance.
      *
-     * @access private
      * @return \kanso\cms\ecommerce\Checkout
      */
     private function getCheckout(): Checkout
@@ -57,7 +55,6 @@ class EcommerceService extends Service
     /**
      * Create and return new products utility instance.
      *
-     * @access private
      * @return \kanso\cms\ecommerce\Products
      */
     private function getProducts(): Products
@@ -68,7 +65,6 @@ class EcommerceService extends Service
     /**
      * Create and return new shopping cart utility instance.
      *
-     * @access private
      * @return \kanso\cms\ecommerce\Cart
      */
     private function getShoppingCart(): Cart
@@ -79,7 +75,6 @@ class EcommerceService extends Service
     /**
      * Create and return new rewards utility instance.
      *
-     * @access private
      * @return \kanso\cms\ecommerce\Rewards
      */
     private function getRewards(): Rewards
@@ -92,7 +87,6 @@ class EcommerceService extends Service
     /**
      * Create and return new Coupons utility instance.
      *
-     * @access private
      * @return \kanso\cms\ecommerce\Coupons
      */
     private function getCoupons(): Coupons
@@ -103,7 +97,6 @@ class EcommerceService extends Service
     /**
      * Create and return new reviews utility instance.
      *
-     * @access private
      * @return \kanso\cms\ecommerce\Reviews
      */
     private function getReviews(): Reviews

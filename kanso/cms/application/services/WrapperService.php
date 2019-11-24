@@ -33,7 +33,7 @@ class WrapperService extends Service
 	/**
 	 * {@inheritdoc}
 	 */
-	public function register()
+	public function register(): void
 	{
 		$this->registerProviders();
 
@@ -42,10 +42,8 @@ class WrapperService extends Service
 
 	/**
 	 * Registers the provider managers.
-	 *
-	 * @access private
 	 */
-	private function registerManagers()
+	private function registerManagers(): void
 	{
 		$this->container->singleton('CategoryManager', function($container)
 		{
@@ -113,10 +111,8 @@ class WrapperService extends Service
 
 	/**
 	 * Registers the wrapper providers.
-	 *
-	 * @access private
 	 */
-	private function registerProviders()
+	private function registerProviders(): void
 	{
 		$this->container->singleton('MediaProvider', function($container)
 		{

@@ -15,7 +15,7 @@ use League\OAuth2\Client\Provider\Google;
  *
  * Sends GET requests to
  */
-$kanso->Router->get('/get-oauth-token/', function($request, $response, $next, $config)
+$kanso->Router->get('/get-oauth-token/', function($request, $response, $next, $config): void
 {
 	$queries  = $request->queries();
 	$provider = new Google([

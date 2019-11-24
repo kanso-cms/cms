@@ -63,7 +63,6 @@ class PostProvider extends Provider
     /**
      * Override inherited constructor.
      *
-     * @access public
      * @param \kanso\framework\database\query\Builder        $SQL              SQL query builder
      * @param \kanso\framework\config\Config                 $config           Configuration instance
      * @param \kanso\cms\wrappers\providers\TagProvider      $tagProvider      Tag provider instance
@@ -91,7 +90,6 @@ class PostProvider extends Provider
     /**
      * Create and return new post wrapper around a database entry.
      *
-     * @access public
      * @param  array                    $row Row from the database
      * @return \kanso\cms\wrappers\Post
      */

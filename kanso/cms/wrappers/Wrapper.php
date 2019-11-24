@@ -29,7 +29,6 @@ abstract class Wrapper
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\database\query\Builder $SQL  SQL query builder
      * @param array                                   $data Array row from Database
      */
@@ -43,7 +42,6 @@ abstract class Wrapper
 	/**
 	 * Saves the row item.
 	 *
-	 * @access public
 	 * @return bool
 	 */
 	abstract public function save(): bool;
@@ -51,7 +49,6 @@ abstract class Wrapper
 	/**
 	 * Deletes the row item.
 	 *
-	 * @access public
 	 * @return bool
 	 */
 	abstract public function delete(): bool;

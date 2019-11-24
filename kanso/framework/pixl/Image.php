@@ -34,7 +34,6 @@ class Image
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\pixl\processor\ProcessorInterface $processor Image processor implementation
      * @param string                                             $image     Absolute path to file (optional) (default '')
      */
@@ -51,11 +50,10 @@ class Image
     /**
      * Load an image file into the processor.
      *
-     * @access public
      * @param  string           $image Absolute path to file (optional) (default '')
      * @throws RuntimeException If image file doesn't exist
      */
-    public function loadImage(string $image)
+    public function loadImage(string $image): void
     {
         if (!file_exists($image))
         {
@@ -70,7 +68,6 @@ class Image
     /**
      * Get the image width in px.
      *
-     * @access public
      * @return int
      */
     public function width(): int
@@ -81,7 +78,6 @@ class Image
     /**
      * Get the image height in px.
      *
-     * @access public
      * @return int
      */
     public function height(): int
@@ -92,7 +88,6 @@ class Image
     /**
      * Save the new file to disk.
      *
-     * @access public
      * @param  string|null $image       Absolute path to file (optional) (default NULL)
      * @param  int|null    $image_type  PHP image type constant (optional) (default NULL)
      * @param  int|null    $quality     Quality of image to save (optional)
@@ -126,7 +121,6 @@ class Image
     /**
      * Resize to height.
      *
-     * @access public
      * @param  int                         $height        Height in px
      * @param  bool                        $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
      * @return \kanso\framework\pixl\Image
@@ -141,7 +135,6 @@ class Image
     /**
      * Resize to width.
      *
-     * @access public
      * @param  int                         $width         Width in px
      * @param  bool                        $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
      * @return \kanso\framework\pixl\Image
@@ -156,7 +149,6 @@ class Image
     /**
      * Scale image by a percentage.
      *
-     * @access public
      * @param  int                         $scale Scale percentage
      * @return \kanso\framework\pixl\Image
      */
@@ -170,7 +162,6 @@ class Image
     /**
      * Resize image to height and width.
      *
-     * @access public
      * @param  int                         $width         Width in px
      * @param  int                         $height        Height in px
      * @param  bool                        $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
@@ -186,7 +177,6 @@ class Image
     /**
      * Crop to width and height.
      *
-     * @access public
      * @param  int                         $width         Width in px
      * @param  int                         $height        Height in px
      * @param  bool                        $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
@@ -202,7 +192,6 @@ class Image
     /**
      * Add a background to the image.
      *
-     * @access public
      * @param  int                         $red   Red color value
      * @param  int                         $green Green color value
      * @param  int                         $blue  Blue color value

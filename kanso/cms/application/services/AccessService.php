@@ -20,7 +20,7 @@ class AccessService extends Service
 	/**
 	 * {@inheritdoc}
 	 */
-	public function register()
+	public function register(): void
 	{
 		$this->container->singleton('Access', function($container)
 		{

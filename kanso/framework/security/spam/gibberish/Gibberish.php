@@ -32,7 +32,6 @@ class Gibberish
     /**
      * Constructor.
      *
-     * @access public
      * @param string $lib_path Path to library
      */
     public function __construct(string $lib_path)

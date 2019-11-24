@@ -10,62 +10,35 @@ namespace kanso\cms\application;
 use kanso\framework\ioc\Container;
 
 /**
- * CMS main class.
+ * CMS initializer.
  *
  * @author Joe J. Howard
  */
-class Application
+class Cms
 {
-	use LoaderTrait;
-
 	/**
 	 * IoC container instance.
 	 *
 	 * @var \kanso\framework\ioc\Container
 	 */
-	protected $container;
-
-	/**
-	 * Instance of self.
-	 *
-	 * @var \kanso\cms\application\Application
-	 */
-	protected static $instance;
+	private $container;
 
     /**
      * Constructor.
      *
-     * @access private
      * @param \kanso\framework\ioc\Container $container IoC container
      */
-    private function __construct(Container $container)
+    public function __construct(Container $container)
     {
     	$this->container = $container;
+
+    	$this->boot();
     }
-
-	/**
-	 * Starts and/or returns the instance of the application.
-	 *
-	 * @access public
-	 * @param  \kanso\framework\ioc\Container|null $container IoC container (optional) (default null)
-	 * @return \kanso\cms\application\Application
-	 */
-	public static function instance(Container $container = null): Application
-	{
-		if (is_null(static::$instance))
-		{
-			static::$instance = new static($container);
-		}
-
-		return static::$instance;
-	}
 
     /**
      * Boot the CMS.
-     *
-     * @access public
      */
-    public function boot()
+    private function boot(): void
     {
     	$this->precheckAccess();
 
@@ -77,18 +50,14 @@ class Application
 
 		if ($this->container->Installer->isInstalled())
 		{
-			$this->container->Crm;
-
 			$this->applyRoutes();
 		}
     }
 
 	/**
 	 * Validate the incoming request with the access conditions.
-	 *
-	 * @access private
 	 */
-	private function precheckAccess()
+	private function precheckAccess(): void
 	{
 		if ($this->container->Access->ipBlockEnabled() && !$this->container->Access->isIpAllowed())
 		{
@@ -98,20 +67,16 @@ class Application
 
 	/**
 	 * Apply the CMS routes.
-	 *
-	 * @access private
 	 */
-	private function applyRoutes()
+	private function applyRoutes(): void
 	{
 		include_once 'services/Routes.php';
 	}
 
     /**
      * Registers includes on all view renders.
-     *
-     * @access private
      */
-    private function registerViewIncludes()
+    private function registerViewIncludes(): void
     {
     	$this->container->View->includes(
     		[
@@ -123,10 +88,8 @@ class Application
 
     /**
      * Boot the installer.
-     *
-     * @access private
      */
-    private function bootInstaller()
+    private function bootInstaller(): void
     {
     	// Make sure Kanso is installed
 		if (!$this->container->Installer->isInstalled())
@@ -136,4 +99,31 @@ class Application
 			$this->container->Router->get('/', [&$this->container->Installer, 'display']);
 		}
     }
+
+	/**
+	 * Handle 404 not found on for the CMS.
+	 */
+	private function notFoundHandling(): void
+	{
+		// 404 get displayed the theme 404 template
+		$this->container->ErrorHandler->handle('\kanso\framework\http\response\exceptions\NotFoundException', function($exception): void
+		{
+			// Only show the template if it exists, not ajax request and not displaying errors
+			// Otherwise we fallback to applications default error handling
+			$template = $this->container->Config->get('cms.themes_path') . DIRECTORY_SEPARATOR . $this->container->Config->get('cms.theme_name') . DIRECTORY_SEPARATOR . '404.php';
+
+			if (file_exists($template) && !$this->container->Request->isAjax() && !$this->container->ErrorHandler->display_errors())
+			{
+				$this->container->Response->status()->set(404);
+
+				$this->container->Response->body()->set($this->container->View->display($template));
+
+				$this->container->Response->send();
+
+				// Stop handling this error
+				// return false;
+			}
+
+		});
+	}
 }

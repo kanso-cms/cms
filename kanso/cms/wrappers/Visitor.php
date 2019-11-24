@@ -30,7 +30,6 @@ class Visitor extends Wrapper
     /**
      * Regenerates a unique visitor id and returns it.
      *
-     * @access public
      * @return string
      */
     public function regenerateId(): string
@@ -43,7 +42,6 @@ class Visitor extends Wrapper
     /**
      * Gets the current visit.
      *
-     * @access public
      * @return \kanso\cms\wrappers\Visit
      */
     public function visit(): Visit
@@ -54,10 +52,9 @@ class Visitor extends Wrapper
     /**
      * Adds the current visit. Ends the last one.
      *
-     * @access public
      * @param array $row Visit row to save to the database
      */
-    public function addVisit(array $row)
+    public function addVisit(array $row): void
     {
         $previousVisit = $this->previousVisit();
 
@@ -80,7 +77,6 @@ class Visitor extends Wrapper
     /**
      * Is this visitor a lead?
      *
-     * @access public
      * @return bool
      */
     public function isLead(): bool
@@ -91,7 +87,6 @@ class Visitor extends Wrapper
     /**
      * Checks if this is the first visit.
      *
-     * @access public
      * @return bool
      */
     public function isFirstVisit(): bool
@@ -102,7 +97,6 @@ class Visitor extends Wrapper
     /**
      * Get all visits (newest first).
      *
-     * @access public
      * @return array
      */
     public function visits(): array
@@ -122,7 +116,6 @@ class Visitor extends Wrapper
     /**
      * Count number of visits.
      *
-     * @access public
      * @return int
      */
     public function countVisits(): int
@@ -133,7 +126,6 @@ class Visitor extends Wrapper
     /**
      * Gets a visitor's most recent visit (excluding the current one).
      *
-     * @access public
      * @return \kanso\cms\wrappers\Visit|false
      */
     public function previousVisit()
@@ -154,7 +146,6 @@ class Visitor extends Wrapper
     /**
      * Calculates the time since their previous visit.
      *
-     * @access public
      * @return int
      */
     public function timeSincePrevVisit(): int
@@ -172,7 +163,6 @@ class Visitor extends Wrapper
     /**
      * Gets a their first visit.
      *
-     * @access public
      * @return \kanso\cms\wrappers\Visit
      */
     public function firstVisit(): Visit
@@ -183,10 +173,8 @@ class Visitor extends Wrapper
     /**
      * Mark visitor as still active on page.
      * Sets a visitor's last active to now.
-     *
-     * @access public
      */
-    public function heartBeat()
+    public function heartBeat(): void
     {
         $previousVisit = $this->previousVisit();
 
@@ -205,7 +193,6 @@ class Visitor extends Wrapper
     /**
      * Makes visitor a lead.
      *
-     * @access public
      * @param  string $email Email address to subscribe
      * @param  string $name  Persons name (optional) (default '')
      * @return bool
@@ -227,7 +214,6 @@ class Visitor extends Wrapper
     /**
      * Did this visitor bounce?
      *
-     * @access public
      * @return bool
      */
     public function bounced(): bool
@@ -238,7 +224,6 @@ class Visitor extends Wrapper
     /**
      * What is the visitor's initial channel entry.
      *
-     * @access public
      * @return string
      */
     public function channel(): string
@@ -279,7 +264,6 @@ class Visitor extends Wrapper
     /**
      * What is the visitor's initial medium entry.
      *
-     * @access public
      * @return string
      */
     public function medium(): string
@@ -325,7 +309,6 @@ class Visitor extends Wrapper
      * 3. SQL
      * 4. Customer
      *
-     * @access public
      * @param  \kanso\cms\wrappers\Visitor|null $visitor      Visitor to grade (optional) (default null)
      * @param  bool                             $returnString Return score as string (optional) (default false)
      * @return string|int

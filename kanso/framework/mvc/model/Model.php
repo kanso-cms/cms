@@ -20,8 +20,6 @@ abstract class Model
 
     /**
      * Constructor.
-     *
-     * @access public
      */
     public function __construct()
     {

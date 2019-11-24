@@ -34,7 +34,6 @@ class Log
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\file\Filesystem $filesystem Filesystem instance
      * @param string                           $path       Directory to log files
      */
@@ -48,7 +47,6 @@ class Log
     /**
      * Write email to log.
      *
-     * @access public
      * @param  string $toEmail     The email address to send the email to
      * @param  string $senderName  The name of the sender
      * @param  string $senderEmail The email address of the sender

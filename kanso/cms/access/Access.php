@@ -64,7 +64,6 @@ class Access
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\http\request\Request   $request     Request object
      * @param \kanso\framework\http\response\Response $response    Response object
      * @param \kanso\framework\file\Filesystem        $filesystem  Filesystem instancea
@@ -89,7 +88,6 @@ class Access
 	/**
 	 * Is ip blocking enabled ?
 	 *
-	 * @access public
 	 * @return bool
 	 */
 	public function ipBlockEnabled(): bool
@@ -100,7 +98,6 @@ class Access
 	/**
 	 * Is ip address allowed.
 	 *
-	 * @access public
 	 * @return bool
 	 */
 	public function isIpAllowed(): bool
@@ -122,10 +119,8 @@ class Access
 
 	/**
 	 * Block the current request.
-	 *
-	 * @access public
 	 */
-	public function block()
+	public function block(): void
 	{
 		throw new ForbiddenException('Blocked IP Address. The CMS has IP address blocking enabled - blocked ip: "' . $this->request->environment()->REMOTE_ADDR . '" from access.');
 	}
@@ -133,7 +128,6 @@ class Access
 	/**
 	 * Returns the default robots.txt file contents.
 	 *
-	 * @access public
 	 * @return string
 	 */
 	public function defaultRobotsText(): string
@@ -144,7 +138,6 @@ class Access
 	/**
 	 * Returns the block all robots.txt file contents.
 	 *
-	 * @access public
 	 * @return string
 	 */
 	public function blockAllRobotsText(): string
@@ -155,20 +148,17 @@ class Access
 	/**
 	 * Save the robots.txt file.
 	 *
-	 * @access public
 	 * @param string $content Content to put into the file
 	 */
-	public function saveRobots(string $content = '')
+	public function saveRobots(string $content = ''): void
 	{
 		$this->filesystem->putContents($this->robotsPath, $content);
 	}
 
 	/**
 	 * Save the robots.txt file.
-	 *
-	 * @access public
 	 */
-	public function deleteRobots()
+	public function deleteRobots(): void
 	{
 		if ($this->filesystem->exists($this->robotsPath))
 		{

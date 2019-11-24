@@ -18,7 +18,6 @@ class Cart extends UtilityBase
      * Get products and offers from cart
      * organized by quantity.
      *
-     * @access public
      * @return array
      */
     public function items(): array
@@ -83,7 +82,6 @@ class Cart extends UtilityBase
     /**
      * Is the shopping cart empty ?
      *
-     * @access public
      * @return bool
      */
     public function isEmpty(): bool
@@ -104,7 +102,6 @@ class Cart extends UtilityBase
     /**
      * Calculate the count of total items in the cart.
      *
-     * @access public
      * @return int
      */
     public function count(): int
@@ -137,7 +134,6 @@ class Cart extends UtilityBase
     /**
      * Clear the user's cart.
      *
-     * @access public
      * @return bool
      */
     public function clear(): bool
@@ -155,11 +151,10 @@ class Cart extends UtilityBase
     /**
      * Add a product offer to the user's db/session.
      *
-     * @access public
      * @param int    $productId Product post id
      * @param string $offerId   Product offer id
      */
-    public function add(int $productId, string $offerId)
+    public function add(int $productId, string $offerId): void
     {
         $row =
         [
@@ -212,11 +207,10 @@ class Cart extends UtilityBase
     /**
      * Remove a product offer from the user's db/session.
      *
-     * @access public
      * @param int    $productId Product post id
      * @param string $offerId   Product offer id (sku)
      */
-    public function remove(int $productId, string $offerId)
+    public function remove(int $productId, string $offerId): void
     {
         if ($this->Gatekeeper->isLoggedIn())
         {
@@ -242,11 +236,10 @@ class Cart extends UtilityBase
     /**
      * Minus a product quantity from the user's cart.
      *
-     * @access public
      * @param int    $productId Product post id
      * @param string $offerId   Product offer id (sku)
      */
-    public function minus(int $productId, string $offerId)
+    public function minus(int $productId, string $offerId): void
     {
         $row =
         [
@@ -300,7 +293,6 @@ class Cart extends UtilityBase
     /**
      * Calculate the cart subtotal.
      *
-     * @access public
      * @return float
      */
     public function subTotal(): float
@@ -320,7 +312,6 @@ class Cart extends UtilityBase
     /**
      * Calculate the shipping cost.
      *
-     * @access public
      * @return float
      */
     public function shippingCost(): float
@@ -350,7 +341,6 @@ class Cart extends UtilityBase
     /**
      * Calculate the inclusive GST.
      *
-     * @access public
      * @return float
      */
     public function gst(): float
@@ -361,7 +351,6 @@ class Cart extends UtilityBase
     /**
      * Get logged in user's stored shipping addresses.
      *
-     * @access public
      * @return array
      */
     public function addresses(): array
@@ -377,7 +366,6 @@ class Cart extends UtilityBase
     /**
      * Get logged in user's stored credit cards from BT.
      *
-     * @access public
      * @return array
      */
     public function cards(): array

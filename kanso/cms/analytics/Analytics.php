@@ -68,7 +68,6 @@ class Analytics extends Model
     /**
      * Constructor.
      *
-     * @access public
      * @param bool   $gAnalyticsEnabled Enable or disable google analytics
      * @param string $gAnalyticsId      Google analytics tracking id
      * @param bool   $adwordsEnabled    Enable or disable google adwords
@@ -97,7 +96,6 @@ class Analytics extends Model
     /**
      * Get the main Google Analytics tracking code.
      *
-     * @access public
      * @return string
      */
     public function googleTrackingCode(): string
@@ -118,7 +116,6 @@ class Analytics extends Model
     /**
      * Get the main Facebook tracking code.
      *
-     * @access public
      * @return string
      */
     public function facebookTrackingCode(): string
@@ -141,7 +138,6 @@ class Analytics extends Model
     /**
      * Track a product view for Google Analytics.
      *
-     * @access public
      * @return string
      */
     public function googleTrackingProductView(): string
@@ -171,7 +167,6 @@ class Analytics extends Model
     /**
      * Track a product view for Facebook.
      *
-     * @access public
      * @return string
      */
     public function facebookTrackingProductView(): string
@@ -196,7 +191,6 @@ class Analytics extends Model
     /**
      * Track a checkout started event for Google Analytics.
      *
-     * @access public
      * @return string
      */
     public function googleTrackingStartCheckout(array $order): string
@@ -231,7 +225,6 @@ class Analytics extends Model
     /**
      * Track a checkout started event for Facebook Analytics.
      *
-     * @access public
      * @return string
      */
     public function facebookTrackingStartCheckout(array $order): string
@@ -260,7 +253,6 @@ class Analytics extends Model
     /**
      * Track a checkout complete for Google Analytics.
      *
-     * @access public
      * @param  array  $order Order variables
      * @return string
      */
@@ -308,7 +300,6 @@ class Analytics extends Model
     /**
      * Track a checkout complete for Facebook.
      *
-     * @access public
      * @param  array  $order Order variables
      * @return string
      */
@@ -342,7 +333,6 @@ class Analytics extends Model
     /**
      * Get google user id.
      *
-     * @access private
      * @return string
      */
     private function googleUserData(): string
@@ -358,7 +348,6 @@ class Analytics extends Model
     /**
      * Get facebook user data.
      *
-     * @access private
      * @return string
      */
     private function facebookUserData(): string
@@ -387,7 +376,6 @@ class Analytics extends Model
     /**
      * Format HTML nicely.
      *
-     * @access private
      * @param  string $html HTML to format
      * @return string
      */

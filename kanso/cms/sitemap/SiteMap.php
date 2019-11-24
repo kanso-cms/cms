@@ -69,7 +69,6 @@ class SiteMap
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\http\request\Request   $request  Request object
      * @param \kanso\framework\http\response\Response $response Response object
      */
@@ -92,10 +91,8 @@ class SiteMap
 
     /**
      * Outputs the sitemap to the response.
-     *
-     * @access public
      */
-    public function display()
+    public function display(): void
     {
 		// Set appropriate content type header
         $this->response->format()->set('xml');
@@ -113,7 +110,6 @@ class SiteMap
 	/**
 	 * Returns the sitemap XML.
 	 *
-	 * @access private
 	 * @return string
 	 */
 	private function build(): string

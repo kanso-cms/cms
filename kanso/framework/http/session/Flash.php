@@ -25,8 +25,6 @@ class Flash implements \Iterator
 
     /**
      * Constructor.
-     *
-     * @access public
      */
     public function __construct()
     {
@@ -35,7 +33,7 @@ class Flash implements \Iterator
     /**
      * {@inheritdoc}
      */
-    public function rewind()
+    public function rewind(): void
     {
         reset($this->data);
     }
@@ -79,7 +77,6 @@ class Flash implements \Iterator
     /**
      * Get the raw data including the iterators.
      *
-     * @access public
      * @return array
      */
     public function getRaw(): array
@@ -89,10 +86,8 @@ class Flash implements \Iterator
 
     /**
      * Set the raw data including the iterators.
-     *
-     * @access public
      */
-    public function putRaw(array $data)
+    public function putRaw(array $data): void
     {
         $result = [];
 
@@ -114,7 +109,6 @@ class Flash implements \Iterator
     /**
      * Get a key from the flash data or the entire flash data.
      *
-     * @access public
      * @param  string|null $key The key to use for the value (optional) (default null)
      * @return mixed
      */
@@ -143,7 +137,6 @@ class Flash implements \Iterator
     /**
      * Check if a key-value exists in the flash data.
      *
-     * @access public
      * @param  string $key The key to use for the value
      * @return bool
      */
@@ -155,11 +148,10 @@ class Flash implements \Iterator
     /**
      * Save a key/value pair to the flash data.
      *
-     * @access public
      * @param string $key   The key to use for the value
      * @param mixed  $value The value to store
      */
-    public function put(string $key, $value)
+    public function put(string $key, $value): void
     {
         Arr::set($this->data, $key, ['key' => $value, 'count' => 0]);
     }
@@ -167,10 +159,9 @@ class Flash implements \Iterator
     /**
      * Save a key/value pair to the flash data.
      *
-     * @access public
      * @param array $data Array of data to save
      */
-    public function putMultiple(array $data)
+    public function putMultiple(array $data): void
     {
         foreach ($data as $key => $value)
         {
@@ -181,30 +172,25 @@ class Flash implements \Iterator
     /**
      * Remove a key-value from the flash data.
      *
-     * @access public
      * @param string $key They key to remove the value with
      */
-    public function remove(string $key)
+    public function remove(string $key): void
     {
         Arr::delete($this->data, $key);
     }
 
     /**
      * Clear the sessions flash data.
-     *
-     * @access public
      */
-    public function clear()
+    public function clear(): void
     {
         $this->data = [];
     }
 
     /**
      * Loop over the flash data and remove old data.
-     *
-     * @access public
      */
-    public function iterate()
+    public function iterate(): void
     {
         foreach ($this->data as $key => $value)
         {

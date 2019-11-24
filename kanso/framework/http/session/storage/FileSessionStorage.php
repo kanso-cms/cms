@@ -78,7 +78,6 @@ class FileSessionStorage implements StoreInterface
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\security\Crypto $crypto       Crypto instance
      * @param \kanso\framework\file\Filesystem $filesystem   Filesystem instance
      * @param array                            $cookieParams Assoc array of cookie configurations
@@ -120,7 +119,7 @@ class FileSessionStorage implements StoreInterface
     /**
      * {@inheritdoc}
      */
-    public function session_start()
+    public function session_start(): void
     {
         if ($this->sent || $this->started)
         {
@@ -148,7 +147,7 @@ class FileSessionStorage implements StoreInterface
     /**
      * {@inheritdoc}
      */
-    public function session_destroy()
+    public function session_destroy(): void
     {
         if ($this->started && !$this->sent)
         {
@@ -206,7 +205,7 @@ class FileSessionStorage implements StoreInterface
     /**
      * {@inheritdoc}
      */
-    public function session_regenerate_id(bool $deleteOldSession = false)
+    public function session_regenerate_id(bool $deleteOldSession = false): void
     {
         $newId = UUID::v4();
 
@@ -231,7 +230,7 @@ class FileSessionStorage implements StoreInterface
     /**
      * {@inheritdoc}
      */
-    public function session_set_cookie_params(array $params)
+    public function session_set_cookie_params(array $params): void
     {
         $this->cookieParams = $params;
     }
@@ -295,7 +294,7 @@ class FileSessionStorage implements StoreInterface
     /**
      * {@inheritdoc}
      */
-    public function write(array $data)
+    public function write(array $data): void
     {
         if ($this->started)
         {
@@ -306,7 +305,7 @@ class FileSessionStorage implements StoreInterface
     /**
      * {@inheritdoc}
      */
-    public function send()
+    public function send(): void
     {
         if ($this->started && !$this->sent)
         {
@@ -319,7 +318,6 @@ class FileSessionStorage implements StoreInterface
     /**
      * Get the path to the current session file.
      *
-     * @access private
      * @return string|false
      */
     private function sessionFile()
@@ -329,10 +327,8 @@ class FileSessionStorage implements StoreInterface
 
     /**
      * Generate a session id.
-     *
-     * @access private
      */
-    private function generateId()
+    private function generateId(): void
     {
         $this->id = UUID::v4();
     }
@@ -340,7 +336,6 @@ class FileSessionStorage implements StoreInterface
     /**
      * Get the path to the current session file.
      *
-     * @access private
      * @return bool
      */
     private function sessionFileExists(): bool

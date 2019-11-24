@@ -60,7 +60,6 @@ class Settings extends BaseModel
     /**
      * Parse the $_GET request variables and filter the articles for the requested page.
      *
-     * @access private
      * @return array
      */
     private function parseGet(): array
@@ -85,7 +84,6 @@ class Settings extends BaseModel
     /**
      * Parse and validate the POST request from any submitted forms.
      *
-     * @access private
      * @return array|false
      */
     private function parsePost()
@@ -136,7 +134,6 @@ class Settings extends BaseModel
     /**
      * Parse, validate and process the account settings form.
      *
-     * @access private
      * @return array|false
      */
     private function submitAccountSettings()
@@ -155,7 +152,7 @@ class Settings extends BaseModel
             'email_notifications' => ['trim', 'boolean'],
         ];
 
-        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
+        $validator = $this->container->Validator->create($this->post, $rules, $filters);
 
         if (!$validator->isValid())
         {
@@ -212,7 +209,6 @@ class Settings extends BaseModel
     /**
      * Parse, validate and process the author settings form.
      *
-     * @access private
      * @return array|false
      */
     private function submitAuthorSettings()
@@ -239,7 +235,7 @@ class Settings extends BaseModel
             'thumbnail_id' => ['trim', 'integer'],
         ];
 
-        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
+        $validator = $this->container->Validator->create($this->post, $rules, $filters);
 
         if (!$validator->isValid())
         {
@@ -315,7 +311,7 @@ class Settings extends BaseModel
             'blog_location'      => ['trim'],
         ];
 
-        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
+        $validator = $this->container->Validator->create($this->post, $rules, $filters);
 
         if (!$validator->isValid())
         {
@@ -453,7 +449,7 @@ class Settings extends BaseModel
             'fbPixel_id'         => ['trim', 'string'],
         ];
 
-        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
+        $validator = $this->container->Validator->create($this->post, $rules, $filters);
 
         if (!$validator->isValid())
         {
@@ -483,7 +479,6 @@ class Settings extends BaseModel
     /**
      * Validate a permalink value.
      *
-     * @access private
      * @param  string $url The url to be converted
      * @return bool
      */
@@ -571,7 +566,6 @@ class Settings extends BaseModel
     /**
      * Parse, validate and process the add new user form.
      *
-     * @access private
      * @return array|false
      */
     private function submitInviteUser()
@@ -592,7 +586,7 @@ class Settings extends BaseModel
             'username' => ['trim', 'email'],
         ];
 
-        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
+        $validator = $this->container->Validator->create($this->post, $rules, $filters);
 
         if (!$validator->isValid())
         {
@@ -631,7 +625,6 @@ class Settings extends BaseModel
     /**
      * Parse, validate and process the delete user form.
      *
-     * @access private
      * @return array|false
      */
     private function submitDeleteUser()
@@ -651,7 +644,7 @@ class Settings extends BaseModel
             'user_id' => ['trim', 'integer'],
         ];
 
-        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
+        $validator = $this->container->Validator->create($this->post, $rules, $filters);
 
         if (!$validator->isValid())
         {
@@ -682,7 +675,6 @@ class Settings extends BaseModel
     /**
      * Parse, validate and process the change user role form.
      *
-     * @access private
      * @return array|false
      */
     private function submitChangeUserRole()
@@ -703,7 +695,7 @@ class Settings extends BaseModel
             'user_id' => ['trim', 'integer'],
         ];
 
-        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
+        $validator = $this->container->Validator->create($this->post, $rules, $filters);
 
         if (!$validator->isValid())
         {
@@ -735,10 +727,8 @@ class Settings extends BaseModel
 
     /**
      * Update and reset post slugs when permalinks have changed.
-     *
-     * @access private
      */
-    private function resetPostSlugs()
+    private function resetPostSlugs(): void
     {
         // Select the posts
         $posts = $this->sql()->SELECT('posts.id')->FROM('posts')->FIND_ALL();
@@ -754,7 +744,6 @@ class Settings extends BaseModel
     /**
      * Parse, validate and process the restore kanso form.
      *
-     * @access private
      * @return array|null
      */
     private function submitRestoreKanso()

@@ -62,7 +62,6 @@ class EmailAdapter
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\cms\email\Email $email      Email utility
      * @param string                 $httpHost   HTTP_HOST
      * @param string                 $domainName Current domain name (e.g 'example.com')
@@ -85,7 +84,6 @@ class EmailAdapter
     /**
      * Forgot password.
      *
-     * @access public
      * @param  \kanso\cms\wrappers\User $user User to run request on
      * @return bool
      */
@@ -121,7 +119,6 @@ class EmailAdapter
     /**
      * Reset password.
      *
-     * @access public
      * @param  \kanso\cms\wrappers\User $user User to run request on
      * @return bool
      */
@@ -157,7 +154,6 @@ class EmailAdapter
     /**
      * Forgot username.
      *
-     * @access public
      * @param  \kanso\cms\wrappers\User $user User to run request on
      * @return bool
      */

@@ -84,7 +84,6 @@ class Email
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\file\Filesystem $filesystem Filesystem instance
      * @param \kanso\cms\email\utility\Log     $log        Mail logging utility
      * @param \kanso\cms\email\utility\Sender  $sender     Email sender utility
@@ -107,7 +106,6 @@ class Email
     /**
      * Returns the email queue.
      *
-     * @access public
      * @return \kanso\cms\email\utility\Queue
      */
     public function queue(): Queue
@@ -118,7 +116,6 @@ class Email
     /**
      * Returns the email loger.
      *
-     * @access public
      * @return \kanso\cms\email\utility\Log
      */
     public function log(): Log
@@ -129,7 +126,6 @@ class Email
     /**
      * Returns the email Sender.
      *
-     * @access public
      * @return \kanso\cms\email\utility\Sender
      */
     public function sender(): Sender
@@ -140,7 +136,6 @@ class Email
     /**
      * Send an HTML or plain text email.
      *
-     * @access public
      * @param  string $toEmail     The email address to send the email to
      * @param  string $senderName  The name of the sender
      * @param  string $senderEmail The email address of the sender
@@ -170,7 +165,6 @@ class Email
     /**
      * Load a preset template.
      *
-     * @access public
      * @param  string $template Template name
      * @param  array  $vars     Vars to send to the template
      * @return string
@@ -192,7 +186,6 @@ class Email
     /**
      * Load the Kanso HTML email template with a custom msg.
      *
-     * @access public
      * @param  string $subject The subject of the email
      * @param  string $content The message to be sent
      * @return string
@@ -216,7 +209,6 @@ class Email
     /**
      * Set or get the theme variables.
      *
-     * @access public
      * @param  array $theme Assoc array of theme variables (optional) (default [])
      * @return array
      */
@@ -230,7 +222,6 @@ class Email
     /**
      * Get a button.
      *
-     * @access  public
      * @param  string $href URL for the link
      * @param  string $text Text inside the button
      * @param  string $size 'xs'|'sm'|'md'|'lg'|'xl'

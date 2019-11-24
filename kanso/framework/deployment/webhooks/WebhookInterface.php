@@ -23,8 +23,6 @@ interface WebhookInterface
 
     /**
      * Update the framework.
-     *
-     * @access public
      */
     public function deploy();
 

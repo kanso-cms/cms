@@ -20,11 +20,8 @@ class CrmService extends Service
 	/**
 	 * {@inheritdoc}
 	 */
-	public function register()
+	public function register(): void
 	{
-		$this->container->singleton('Crm', function()
-		{
-			return new Crm;
-		});
+		$this->container->setInstance('Crm', new Crm);
 	}
 }

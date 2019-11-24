@@ -19,126 +19,317 @@ class Environment
     use MagicArrayAccessTrait;
 
     /**
+     * $_SERVER.
+     *
+     * @var array
+     */
+    private $server;
+
+    /**
      * Constructor. Loads the properties internally.
      *
-     * @access public
      * @param array $server Optional server overrides (optional) (default [])
      */
     public function __construct(array $server = [])
     {
-        $this->data = $this->extract($server);
+        $this->server = empty($server) ? $_SERVER : $server;
+
+        $this->data = $this->extract();
     }
 
     /**
      * Reload the environment properties.
      *
-     * @access public
      * @param array $server Optional server overrides (optional) (default [])
      */
-    public function reload(array $server = [])
+    public function reload(array $server  = []): void
     {
-        $this->data = $this->extract($server);
+         $this->server = empty($server) ? $_SERVER : $server;
+
+        $this->data = $this->extract();
     }
 
     /**
      * Returns a fresh copy of the environment properties.
      *
-     * @access private
      * @return array
      */
-    private function extract(array $server): array
+    private function extract(): array
     {
-        $server = empty($server) ? $_SERVER : $server;
+        return
+        [
+            'REQUEST_METHOD'     => $this->requestMethod(),
+            'SCRIPT_NAME'        => $this->scriptName(),
+            'SERVER_NAME'        => $this->serverName(),
+            'SERVER_PORT'        => $this->serverPort(),
+            'HTTP_PROTOCOL'      => $this->httpProtocol(),
+            'DOCUMENT_ROOT'      => $this->documentRoot(),
+            'HTTP_HOST'          => $this->httpHost(),
+            'DOMAIN_NAME'        => $this->domainName(),
+            'REQUEST_URI'        => $this->requestUri(),
+            'REQUEST_PATH'       => $this->requestPath(),
+            'REQUEST_URL'        => $this->requestUrl(),
+            'QUERY_STRING'       => $this->queryString(),
+            'REMOTE_ADDR'        => $this->remoteAddr(),
+            'REFERER'            => $this->referer(),
+            'HTTP_USER_AGENT'    => $this->httpUserAgent(),
+            'REQUEST_TIME'       => $this->requestTime(),
+            'REQUEST_TIME_FLOAT' => $this->requestTimeFloat(),
+        ];
+    }
 
-        // Array of config variables
-        $env = [];
+    /**
+     * Returns the REQUEST_METHOD.
+     *
+     * @return string
+     */
+    private function requestMethod(): string
+    {
+        return !isset($this->server['REQUEST_METHOD']) ? 'CLI' : $this->server['REQUEST_METHOD'];
+    }
 
-        // The HTTP request method
-        $env['REQUEST_METHOD'] = !isset($server['REQUEST_METHOD']) ? 'CLI' : $server['REQUEST_METHOD'];
-
-        // Script Name
-        $scriptName  = isset($server['SCRIPT_NAME']) && !empty($server['SCRIPT_NAME']) ? $server['SCRIPT_NAME'] : substr($server['PHP_SELF'], strrpos($server['PHP_SELF'], '/') + 1);
-        $scriptName  = explode('/', trim($scriptName, '/'));
-        $env['SCRIPT_NAME'] = array_pop($scriptName);
-
-        // Name of server host that is running the script
-        $env['SERVER_NAME'] = $server['SERVER_NAME'];
-
-        // Number of server port that is running the script
-        $env['SERVER_PORT'] = isset($server['SERVER_PORT']) ? intval($server['SERVER_PORT']) : 80;
-
-        // Is the application running under HTTPS or HTTP protocol?
-        if ((isset($server['HTTPS']) && $env['SERVER_PORT'] === 443) && ($server['HTTPS'] === 1 || $server['HTTPS'] === 'on'))
+    /**
+     * Returns the SCRIPT_NAME.
+     *
+     * @return string
+     */
+    private function scriptName(): string
+    {
+        if (isset($this->server['SCRIPT_NAME']) && !empty($this->server['SCRIPT_NAME']))
         {
-            $env['HTTP_PROTOCOL'] = 'https';
+            $scripts = explode('/', trim($this->server['SCRIPT_NAME'], '/'));
+        }
+        elseif (isset($this->server['PHP_SELF']) && !empty($this->server['PHP_SELF']))
+        {
+            $scripts = explode('/', trim(substr($this->server['PHP_SELF'], strrpos($this->server['PHP_SELF'], '/') + 1), '/'));
         }
         else
         {
-            $env['HTTP_PROTOCOL'] = 'http';
+            return '/index.php';
         }
 
-        // Document root
-        $env['DOCUMENT_ROOT'] = $server['DOCUMENT_ROOT'];
+        return '/' . array_pop($scripts);
+    }
 
-        // Http host
-        $env['HTTP_HOST'] = $env['HTTP_PROTOCOL'] . '://' . str_replace(['http://', 'https://'], ['', ''], $server['HTTP_HOST']);
-
-        // domain name
-        $env['DOMAIN_NAME'] = str_replace('www.', '', str_replace($env['HTTP_PROTOCOL'] . '://', '', $env['HTTP_HOST']));
-
-        // Request uri
-        $env['REQUEST_URI'] = $server['REQUEST_URI'];
-
-        // Request full URL
-        $env['REQUEST_URL'] = $env['HTTP_HOST'] . $env['REQUEST_URI'];
-
-        // Query string (without leading "?")
-        $queryString         = isset($server['REQUEST_URI']) && !empty($server['REQUEST_URI']) ? $server['REQUEST_URI'] : '';
-        $env['QUERY_STRING'] = (strpos($queryString, '?') !== false) ? substr($queryString, strrpos($queryString, '?') + 1) : '';
-
-        // Save the clients IP address
-        if (isset($server['HTTP_CLIENT_IP']))
+    /**
+     * Returns the SERVER_NAME.
+     *
+     * @return string
+     */
+    private function serverName(): string
+    {
+        if (isset($this->server['SERVER_NAME']))
         {
-            $ipaddress = $server['HTTP_CLIENT_IP'];
+            return $this->server['SERVER_NAME'];
         }
-        elseif (isset($server['HTTP_X_FORWARDED_FOR']))
+        elseif (isset($this->server['HTTP_HOST']))
         {
-            $ipaddress = $server['HTTP_X_FORWARDED_FOR'];
+            if (strpos($this->server['HTTP_HOST'], ':') !== false)
+            {
+                $name = explode(':', $this->server['HTTP_HOST']);
+
+                return trim($name[0]);
+            }
+            elseif (strpos($this->server['HTTP_HOST'], '.') !== false)
+            {
+                $name = explode('.', $this->server['HTTP_HOST']);
+
+                return trim($name[0]);
+            }
         }
-        elseif (isset($server['HTTP_X_FORWARDED']))
+
+        return 'UNKNOWN';
+    }
+
+    /**
+     * Returns the SERVER_PORT.
+     *
+     * @return int
+     */
+    private function serverPort(): int
+    {
+        return isset($this->server['SERVER_PORT']) ? intval($this->server['SERVER_PORT']) : 80;
+    }
+
+    /**
+     * Returns the HTTP_PROTOCOL.
+     *
+     * @return string
+     */
+    private function httpProtocol(): string
+    {
+        if (isset($this->server['SERVER_PORT']) && $this->server['SERVER_PORT'] === 443)
         {
-            $ipaddress = $server['HTTP_X_FORWARDED'];
+            return 'https';
         }
-        elseif (isset($server['HTTP_FORWARDED_FOR']))
+        elseif (isset($this->server['HTTPS']) && ($this->server['HTTPS'] === 1 || $this->server['HTTPS'] === 'on'))
         {
-            $ipaddress = $server['HTTP_FORWARDED_FOR'];
+            return 'https';
         }
-        elseif (isset($server['HTTP_FORWARDED']))
+
+        return 'http';
+    }
+
+    /**
+     * Returns the DOCUMENT_ROOT.
+     *
+     * @return string
+     */
+    private function documentRoot(): string
+    {
+        return isset($this->server['DOCUMENT_ROOT']) ? $this->server['DOCUMENT_ROOT'] : dirname(__FILE__, 5);
+    }
+
+    /**
+     * Returns the HTTP_HOST.
+     *
+     * @return string
+     */
+    private function httpHost(): string
+    {
+        if (isset($this->server['HTTP_HOST']))
         {
-            $ipaddress = $server['HTTP_FORWARDED'];
+            return $this->httpProtocol() . '://' . str_replace(['http://', 'https://'], ['', ''], $this->server['HTTP_HOST']);
         }
-        elseif (isset($server['REMOTE_ADDR']))
+
+        return '';
+    }
+
+    /**
+     * Returns the DOMAIN_NAME.
+     *
+     * @return string
+     */
+    private function domainName(): string
+    {
+        return str_replace('www.', '', str_replace($this->httpProtocol() . '://', '', $this->httpHost()));
+    }
+
+    /**
+     * Returns the REQUEST_URI.
+     *
+     * @return string
+     */
+    private function requestUri(): string
+    {
+        return isset($this->server['REQUEST_URI']) ? $this->server['REQUEST_URI'] : '/';
+    }
+
+    /**
+     * Returns the REQUEST_URI without the query string.
+     *
+     * @return string
+     */
+    private function requestPath(): string
+    {
+        $uri = $this->requestUri();
+
+        if (strpos($uri, '?') !== false)
         {
-            $ipaddress = $server['REMOTE_ADDR'];
+            $uri = substr($uri, 0, strpos($uri, '?'));
+        }
+
+        return ltrim(rtrim($uri, '/'), '/');
+    }
+
+    /**
+     * Returns the REQUEST_URI.
+     *
+     * @return string
+     */
+    private function requestUrl(): string
+    {
+        return $this->httpHost() . $this->requestUri();
+    }
+
+    /**
+     * Returns the QUERY_STRING.
+     *
+     * @return string
+     */
+    private function queryString(): string
+    {
+        $uri = $this->requestUri();
+
+        return strpos($uri, '?') !== false ? substr($uri, strrpos($uri, '?') + 1) : '';
+    }
+
+    /**
+     * Returns the REMOTE_ADDR.
+     *
+     * @return string
+     */
+    private function remoteAddr(): string
+    {
+        if (isset($this->server['HTTP_CLIENT_IP']))
+        {
+            $ipaddress = $this->server['HTTP_CLIENT_IP'];
+        }
+        elseif (isset($this->server['HTTP_X_FORWARDED_FOR']))
+        {
+            $ipaddress = $this->server['HTTP_X_FORWARDED_FOR'];
+        }
+        elseif (isset($this->server['HTTP_X_FORWARDED']))
+        {
+            $ipaddress = $this->server['HTTP_X_FORWARDED'];
+        }
+        elseif (isset($this->server['HTTP_FORWARDED_FOR']))
+        {
+            $ipaddress = $this->server['HTTP_FORWARDED_FOR'];
+        }
+        elseif (isset($this->server['HTTP_FORWARDED']))
+        {
+            $ipaddress = $this->server['HTTP_FORWARDED'];
+        }
+        elseif (isset($this->server['REMOTE_ADDR']))
+        {
+            $ipaddress = $this->server['REMOTE_ADDR'];
         }
         else
         {
             $ipaddress = 'UNKNOWN';
         }
 
-        $env['REMOTE_ADDR'] = $ipaddress;
+        return $ipaddress;
+    }
 
-        // Save the referrer
-        $env['REFERER'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
+    /**
+     * Returns the HTTP_REFERER.
+     *
+     * @return string
+     */
+    private function referer(): string
+    {
+        return isset($this->server['HTTP_REFERER']) ? $this->server['HTTP_REFERER'] : '';
+    }
 
-        // Save the browser user agent
-        $env['HTTP_USER_AGENT'] = isset($server['HTTP_USER_AGENT']) ? $server['HTTP_USER_AGENT'] : 'UNKNOWN';
+    /**
+     * Returns the HTTP_USER_AGENT.
+     *
+     * @return string
+     */
+    private function httpUserAgent()
+    {
+        return isset($this->server['HTTP_USER_AGENT']) ? $this->server['HTTP_USER_AGENT'] : '';
+    }
 
-        // Save request times
-        $env['REQUEST_TIME'] = isset($server['REQUEST_TIME']) ? $server['REQUEST_TIME'] : time();
+    /**
+     * Returns the REQUEST_TIME.
+     *
+     * @return int
+     */
+    private function requestTime(): int
+    {
+       return isset($this->server['REQUEST_TIME']) ? $this->server['REQUEST_TIME'] : time();
+    }
 
-        $env['REQUEST_TIME_FLOAT'] = isset($server['REQUEST_TIME_FLOAT']) ? $server['REQUEST_TIME_FLOAT'] : microtime(true);
-
-        return $env;
+    /**
+     * Returns the REQUEST_TIME_FLOAT.
+     *
+     * @return float
+     */
+    private function requestTimeFloat(): float
+    {
+        return isset($this->server['REQUEST_TIME_FLOAT']) ? $this->server['REQUEST_TIME_FLOAT'] : microtime(true);
     }
 }

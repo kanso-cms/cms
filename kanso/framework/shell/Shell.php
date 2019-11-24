@@ -103,7 +103,6 @@ class Shell
     /**
      * Constructor.
      *
-     * @access public
      * @param string|null $dir Directory to run command on (optional) (default null)
      */
     public function __construct(string $dir = null)
@@ -121,7 +120,6 @@ class Shell
     /**
      * Cd into a directory.
      *
-     * @access public
      * @param  int                          $timeout Timeout to set
      * @return \kanso\framework\shell\Shell
      */
@@ -137,7 +135,6 @@ class Shell
     /**
      * Cd into a directory.
      *
-     * @access public
      * @param  string                       $dir Directory to move to
      * @return \kanso\framework\shell\Shell
      */
@@ -151,7 +148,6 @@ class Shell
     /**
      * Run a command and optional sub command.
      *
-     * @access public
      * @param  string                       $cmd    Command name
      * @param  string|null                  $subCmd sub command name (optional) (default null)
      * @return \kanso\framework\shell\Shell
@@ -171,7 +167,6 @@ class Shell
     /**
      * Add an option or flag to the current command.
      *
-     * @access public
      * @param  string                       $flag  Option key or flag
      * @param  string|null                  $value Option value (optional) (default null)
      * @return \kanso\framework\shell\Shell
@@ -204,7 +199,6 @@ class Shell
     /**
      * Add an array of flags and options.
      *
-     * @access public
      * @param  array                        $options Array of options with flags
      * @return \kanso\framework\shell\Shell
      */
@@ -228,7 +222,6 @@ class Shell
     /**
      * Add parameter to the current command.
      *
-     * @access public
      * @param  string                       $param Parameter to add
      * @return \kanso\framework\shell\Shell
      */
@@ -247,7 +240,6 @@ class Shell
     /**
      * Add an array of parameters to the current command.
      *
-     * @access public
      * @param  array                        $params Array of parameters to add
      * @return \kanso\framework\shell\Shell
      */
@@ -264,7 +256,6 @@ class Shell
     /**
      * Add an input argument to the command.
      *
-     * @access public
      * @param  string                       $path Path to command input
      * @return \kanso\framework\shell\Shell
      */
@@ -278,7 +269,6 @@ class Shell
     /**
      * Add an output argument to the command.
      *
-     * @access public
      * @param  string                       $path Path to command output
      * @return \kanso\framework\shell\Shell
      */
@@ -292,7 +282,6 @@ class Shell
     /**
      * Run the command.
      *
-     * @access public
      * @param  bool  $showErrors Return errors or output
      * @return mixed
      */
@@ -386,7 +375,6 @@ class Shell
     /**
      * Was the command successful?
      *
-     * @access public
      * @return bool
      */
     public function is_successful(): bool
@@ -397,10 +385,9 @@ class Shell
     /**
      * Reset the shell.
      *
-     * @access public
      * @param bool $hard_reset If set to true the working directory, output and result are reset (optional) (default false)
      */
-    public function reset($hard_reset = false)
+    public function reset($hard_reset = false): void
     {
         $this->options = [];
         $this->params  = [];
@@ -421,7 +408,6 @@ class Shell
     /**
      *  Makes sure than the binary for the cmd being run exists.
      *
-     * @access private
      * @param  string $cmd The command to check
      * @return string
      */

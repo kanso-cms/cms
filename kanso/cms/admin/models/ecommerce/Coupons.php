@@ -54,7 +54,6 @@ class Coupons extends BaseModel
     /**
      * Parse and validate the POST request from the submitted form.
      *
-     * @access private
      * @return array|false
      */
     private function parsePost()
@@ -87,7 +86,6 @@ class Coupons extends BaseModel
     /**
      * Validates all POST variables are set.
      *
-     * @access private
      * @return bool
      */
     private function validatePost(): bool

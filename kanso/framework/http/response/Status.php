@@ -122,8 +122,6 @@ class Status {
 
     /**
      * Constructor.
-     *
-     * @access public
      */
     public function __construct(int $code = 200)
     {
@@ -133,10 +131,9 @@ class Status {
     /**
      * Set the code.
      *
-     * @access public
      * @param int $code The response code to set
      */
-    public function set(int $code)
+    public function set(int $code): void
     {
         $this->code = $code;
     }
@@ -144,7 +141,6 @@ class Status {
     /**
      * Get the code.
      *
-     * @access public
      * @return int
      */
     public function get(): int
@@ -155,7 +151,6 @@ class Status {
     /**
      * Get the message for the current code.
      *
-     * @access public
      * @return string|null
      */
     public function message()
@@ -171,7 +166,6 @@ class Status {
     /**
      * Is the response not modified.
      *
-     * @access public
      * @return bool
      */
     public function isNotModified(): bool
@@ -182,7 +176,6 @@ class Status {
     /**
      * Is the response empty.
      *
-     * @access public
      * @return bool
      */
     public function isEmpty(): bool
@@ -193,7 +186,6 @@ class Status {
     /**
      * Is this an informational response.
      *
-     * @access public
      * @return bool
      */
     public function isInformational(): bool
@@ -204,7 +196,6 @@ class Status {
     /**
      * Is the response ok 200?
      *
-     * @access public
      * @return bool
      */
     public function isOk(): bool
@@ -215,7 +206,6 @@ class Status {
     /**
      * Is the response successful ?
      *
-     * @access public
      * @return bool
      */
     public function isSuccessful(): bool
@@ -226,7 +216,6 @@ class Status {
     /**
      * Is the response a redirect ?
      *
-     * @access public
      * @return bool
      */
     public function isRedirect(): bool
@@ -237,7 +226,6 @@ class Status {
     /**
      * Is the response forbidden ?
      *
-     * @access public
      * @return bool
      */
     public function isForbidden(): bool
@@ -248,7 +236,6 @@ class Status {
     /**
      * Is the response 404 not found ?
      *
-     * @access public
      * @return bool
      */
     public function isNotFound(): bool
@@ -259,7 +246,6 @@ class Status {
     /**
      * Is this a client error ?
      *
-     * @access public
      * @return bool
      */
     public function isClientError(): bool
@@ -270,7 +256,6 @@ class Status {
     /**
      * Is this a server error ?
      *
-     * @access public
      * @return bool
      */
     public function isServerError(): bool

@@ -19,7 +19,6 @@ class Callback
 	/**
 	 * Call a callback closure or class method.
 	 *
-	 * @access public
 	 * @param  mixed $callback The callback to call
 	 * @param  mixed $args     The args to call the callback with
 	 * @return mixed
@@ -67,7 +66,6 @@ class Callback
     /**
      * Returns a new class object by name with args.
      *
-     * @access public
      * @param  string $class The class name to instantiate
      * @param  array  $args  Array of args to apply to class constructor
      * @return object
@@ -80,7 +78,6 @@ class Callback
     /**
      * Converts args to array.
      *
-     * @access public
      * @param  mixed $args The args to call the callback with
      * @return array
      */

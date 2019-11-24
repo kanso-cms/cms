@@ -28,7 +28,7 @@ class ImageTest extends TestCase
 	/**
 	 *
 	 */
-	public function testConstructor()
+	public function testConstructor(): void
 	{
 		$processor = $this->getProcessor();
 
@@ -40,7 +40,7 @@ class ImageTest extends TestCase
 	/**
 	 * @expectedException \RuntimeException
 	 */
-	public function testConstructorWithNonExistingFile()
+	public function testConstructorWithNonExistingFile(): void
 	{
 		$processor = $this->getProcessor();
 
@@ -50,7 +50,7 @@ class ImageTest extends TestCase
 	/**
 	 * @expectedException \RuntimeException
 	 */
-	public function testSave()
+	public function testSave(): void
 	{
 		$processor = $this->getProcessor();
 
@@ -62,7 +62,7 @@ class ImageTest extends TestCase
 	/**
 	 *
 	 */
-	public function testResizeToPixelSize()
+	public function testResizeToPixelSize(): void
 	{
 		$processor = $this->getProcessor();
 
@@ -78,7 +78,7 @@ class ImageTest extends TestCase
 	/**
 	 *
 	 */
-	public function testResizeToPixelWithoutRestriction()
+	public function testResizeToPixelWithoutRestriction(): void
 	{
 		$processor = $this->getProcessor();
 
@@ -94,7 +94,7 @@ class ImageTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCrop()
+	public function testCrop(): void
 	{
 		$processor = $this->getProcessor();
 
@@ -110,7 +110,7 @@ class ImageTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCropWithEnlarge()
+	public function testCropWithEnlarge(): void
 	{
 		$processor = $this->getProcessor();
 
@@ -126,7 +126,7 @@ class ImageTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetWidth()
+	public function testGetWidth(): void
 	{
 		$processor = $this->getProcessor();
 
@@ -142,7 +142,7 @@ class ImageTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetHeight()
+	public function testGetHeight(): void
 	{
 		$processor = $this->getProcessor();
 

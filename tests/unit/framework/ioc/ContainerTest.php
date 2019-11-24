@@ -18,7 +18,7 @@ class ContainerCallbackTest
     {
     }
 
-    public function setVar($var)
+    public function setVar($var): void
    	{
    		$this->var = $var;
    	}
@@ -38,7 +38,7 @@ class ContainerTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSet()
+	public function testSet(): void
 	{
 		$container = Container::instance();
 
@@ -54,7 +54,7 @@ class ContainerTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSetClass()
+	public function testSetClass(): void
 	{
 		$container = Container::instance();
 
@@ -76,7 +76,7 @@ class ContainerTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSetReturnClass()
+	public function testSetReturnClass(): void
 	{
 		$container = Container::instance();
 
@@ -103,7 +103,7 @@ class ContainerTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSingleton()
+	public function testSingleton(): void
 	{
 		$container = Container::instance();
 
@@ -130,7 +130,7 @@ class ContainerTest extends TestCase
 	/**
 	 *
 	 */
-	public function testInstance()
+	public function testInstance(): void
 	{
 		$container = Container::instance();
 
@@ -154,7 +154,7 @@ class ContainerTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIteration()
+	public function testIteration(): void
 	{
 		$container = Container::instance();
 
@@ -184,7 +184,7 @@ class ContainerTest extends TestCase
 	/**
 	 *
 	 */
-	public function testArrayAccess()
+	public function testArrayAccess(): void
 	{
 		$container = Container::instance();
 
@@ -198,7 +198,7 @@ class ContainerTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCount()
+	public function testCount(): void
 	{
 		$container = Container::instance();
 

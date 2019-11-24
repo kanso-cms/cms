@@ -63,7 +63,6 @@ class ErrorLogs extends BaseModel
     /**
      * Parse and validate the POST request from any submitted forms.
      *
-     * @access private
      * @return array|false
      */
     private function parsePost()
@@ -87,10 +86,8 @@ class ErrorLogs extends BaseModel
 
     /**
      * Clear all error logs.
-     *
-     * @access private
      */
-    private function clearErrorLogs()
+    private function clearErrorLogs(): void
     {
         $logDir = $this->Config->get('application.error_handler.log_path');
 
@@ -107,7 +104,6 @@ class ErrorLogs extends BaseModel
     /**
      * Validates all POST variables are set.
      *
-     * @access private
      * @return bool
      */
     private function validatePost(): bool
@@ -135,7 +131,6 @@ class ErrorLogs extends BaseModel
     /**
      * Parse the $_GET request variables and filter the orders for the requested page.
      *
-     * @access private
      * @return array
      */
     private function parseGet(): array
@@ -162,7 +157,6 @@ class ErrorLogs extends BaseModel
     /**
      * Check if the GET URL queries are either empty or set to defaults.
      *
-     * @access private
      * @return bool
      */
     private function emptyQueries(): bool
@@ -180,7 +174,6 @@ class ErrorLogs extends BaseModel
     /**
      * Returns the requested GET queries with defaults.
      *
-     * @access private
      * @return array
      */
     private function getQueries(): array
@@ -200,7 +193,6 @@ class ErrorLogs extends BaseModel
     /**
      * Returns the list of orders for display.
      *
-     * @access private
      * @param  bool      $checkMaxPages Count the max pages
      * @return array|int
      */

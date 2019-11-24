@@ -29,10 +29,9 @@ class Posts extends BaseModel
     /**
      * Set the post type to filter.
      *
-     * @access public
      * @param string $postType Post tyype
      */
-    public function setPostType(string $postType)
+    public function setPostType(string $postType): void
     {
         $this->postType = $postType;
     }
@@ -74,7 +73,6 @@ class Posts extends BaseModel
     /**
      * Parse the $_GET request variables and filter the posts for the requested page.
      *
-     * @access private
      * @return array
      */
     private function parseGet(): array
@@ -104,7 +102,6 @@ class Posts extends BaseModel
     /**
      * Parse and validate the POST request from any submitted forms.
      *
-     * @access private
      * @return array|false
      */
     private function parsePost()
@@ -160,7 +157,6 @@ class Posts extends BaseModel
     /**
      * Validates all POST variables are set.
      *
-     * @access private
      * @return bool
      */
     private function validatePost(): bool
@@ -192,7 +188,6 @@ class Posts extends BaseModel
     /**
      * Updates a post.
      *
-     * @access private
      * @param  int         $id Single post id
      * @return bool|string
      */
@@ -241,7 +236,6 @@ class Posts extends BaseModel
     /**
      * Duplicates a post.
      *
-     * @access private
      * @param  int  $id Single post id
      * @return bool
      */
@@ -278,10 +272,9 @@ class Posts extends BaseModel
     /**
      * Delete articles by id.
      *
-     * @access private
      * @param array $ids List of post ids
      */
-    private function delete(array $ids)
+    private function delete(array $ids): void
     {
         foreach ($ids as $id)
         {
@@ -298,11 +291,10 @@ class Posts extends BaseModel
     /**
      * Change articles status.
      *
-     * @access private
      * @param array  $ids    List of post ids
      * @param string $status Post status to change to
      */
-    private function changeStatus(array $ids, string $status)
+    private function changeStatus(array $ids, string $status): void
     {
         foreach ($ids as $id)
         {
@@ -322,7 +314,6 @@ class Posts extends BaseModel
     /**
      * Check if the GET URL queries are either empty or set to defaults.
      *
-     * @access private
      * @return bool
      */
     private function emptyQueries(): bool
@@ -343,7 +334,6 @@ class Posts extends BaseModel
     /**
      * Returns the requested GET queries with defaults.
      *
-     * @access private
      * @return array
      */
     private function getQueries(): array
@@ -366,7 +356,6 @@ class Posts extends BaseModel
     /**
      * Returns the list of articles for display.
      *
-     * @access private
      * @param  bool      $checkMaxPages Count the max pages
      * @return array|int
      */
@@ -477,10 +466,9 @@ class Posts extends BaseModel
     /**
      * Clears a post from the cache.
      *
-     * @access private
      * @param int $postId Post id to clear
      */
-    private function clearPostFromCache(int $postId)
+    private function clearPostFromCache(int $postId): void
     {
         if ($this->Config->get('cache.http_cache_enabled') === true)
         {

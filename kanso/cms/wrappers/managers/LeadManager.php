@@ -27,7 +27,6 @@ class LeadManager extends Manager
 	/**
 	 * Creates a new tag.
 	 *
-	 * @access public
 	 * @param  string $name  Visitor name
 	 * @param  string $email Visitor email
 	 * @return mixed
@@ -40,7 +39,6 @@ class LeadManager extends Manager
 	/**
 	 * Gets a visitor by id.
 	 *
-	 * @access public
 	 * @param  int   $id Visitor id
 	 * @return mixed
 	 */
@@ -52,7 +50,6 @@ class LeadManager extends Manager
 	/**
 	 * Gets a visitor by email.
 	 *
-	 * @access public
 	 * @param  string $email Visitor email
 	 * @return mixed
 	 */

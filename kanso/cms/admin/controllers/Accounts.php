@@ -16,10 +16,8 @@ class Accounts extends BaseController
 {
 	/**
 	 * Dispatch login request.
-	 *
-	 * @access public
 	 */
-	public function login()
+	public function login(): void
 	{
 		$this->init('login');
 
@@ -28,10 +26,8 @@ class Accounts extends BaseController
 
 	/**
 	 * Dispatch logout request.
-	 *
-	 * @access public
 	 */
-	public function logout()
+	public function logout(): void
 	{
 		$this->init('logout');
 
@@ -40,10 +36,8 @@ class Accounts extends BaseController
 
 	/**
 	 * Dispatch forgotpassword request.
-	 *
-	 * @access public
 	 */
-	public function forgotPassword()
+	public function forgotPassword(): void
 	{
 		$this->init('forgotpassword');
 
@@ -52,10 +46,8 @@ class Accounts extends BaseController
 
 	/**
 	 * Dispatch forgotUsername request.
-	 *
-	 * @access public
 	 */
-	public function forgotUsername()
+	public function forgotUsername(): void
 	{
 		$this->init('forgotusername');
 
@@ -64,10 +56,8 @@ class Accounts extends BaseController
 
 	/**
 	 * Dispatch resetPassword request.
-	 *
-	 * @access public
 	 */
-	public function resetPassword()
+	public function resetPassword(): void
 	{
 		$this->init('resetpassword');
 

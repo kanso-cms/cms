@@ -21,7 +21,6 @@ trait ControllerHelperTrait
 	/**
 	 *  Loads the next middleware layer.
 	 *
-	 * @access protected
 	 * @return mixed
 	 */
 	protected function nextMiddleware()
@@ -34,13 +33,12 @@ trait ControllerHelperTrait
 	/**
 	 * Sets a file content response.
 	 *
-	 * @access public
 	 * @param string $file     Absolute path to file
 	 * @param array  $data     Data to send to view (optional) (default [])
 	 * @param string $format   Format to send the response in (optional) (default 'text/html')
 	 * @param string $encoding Encoding for response (optional) (default 'utf-8')
 	 */
-	protected function fileResponse(string $file, array $data = [], string $format = 'text/html', string $encoding = 'utf-8')
+	protected function fileResponse(string $file, array $data = [], string $format = 'text/html', string $encoding = 'utf-8'): void
 	{
 		$this->Response->format()->set($format);
 
@@ -52,10 +50,9 @@ trait ControllerHelperTrait
 	/**
 	 *  Sets a JSON content response.
 	 *
-	 * @access protected
 	 * @param array $data Data to send as json
 	 */
-	protected function jsonResponse(array $data)
+	protected function jsonResponse(array $data): void
 	{
 		$this->Response->format()->set('json');
 
@@ -65,20 +62,17 @@ trait ControllerHelperTrait
 	/**
 	 * Sends a temporary redirect response immediately.
 	 *
-	 * @access protected
 	 * @param string $location Relative location to redirect to
 	 */
-	protected function redirectResponse(string $location)
+	protected function redirectResponse(string $location): void
 	{
 		$this->Response->redirect($this->Request->environment()->HTTP_HOST . '/' . ltrim($location, '/'));
 	}
 
 	/**
 	 * Sends a 404 response immediately.
-	 *
-	 * @access protected
 	 */
-	protected function notFoundResponse()
+	protected function notFoundResponse(): void
 	{
 		$this->Response->notFound();
 	}

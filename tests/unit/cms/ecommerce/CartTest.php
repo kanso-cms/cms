@@ -19,7 +19,7 @@ class CartTest extends TestCase
 	/**
 	 *
 	 */
-	public function testNotEmptySession()
+	public function testNotEmptySession(): void
 	{
 		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
 		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
@@ -36,7 +36,7 @@ class CartTest extends TestCase
 	/**
 	 *
 	 */
-	public function testEmptySession()
+	public function testEmptySession(): void
 	{
 		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
 		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
@@ -53,7 +53,7 @@ class CartTest extends TestCase
 	/**
 	 *
 	 */
-	public function testNotEmptyDB()
+	public function testNotEmptyDB(): void
 	{
 		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
 		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
@@ -83,7 +83,7 @@ class CartTest extends TestCase
 	/**
 	 *
 	 */
-	public function testEmptyDb()
+	public function testEmptyDb(): void
 	{
 		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
 		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
@@ -113,7 +113,7 @@ class CartTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCountSession()
+	public function testCountSession(): void
 	{
 		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
 		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
@@ -130,7 +130,7 @@ class CartTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCountSessionEmpty()
+	public function testCountSessionEmpty(): void
 	{
 		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
 		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
@@ -147,7 +147,7 @@ class CartTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCountDb()
+	public function testCountDb(): void
 	{
 		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
 		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
@@ -177,7 +177,7 @@ class CartTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCountDbEmpty()
+	public function testCountDbEmpty(): void
 	{
 		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
 		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
@@ -207,7 +207,7 @@ class CartTest extends TestCase
 	/**
 	 *
 	 */
-	public function testClearSession()
+	public function testClearSession(): void
 	{
 		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
 		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
@@ -225,7 +225,7 @@ class CartTest extends TestCase
 	/**
 	 *
 	 */
-	public function testClearDB()
+	public function testClearDB(): void
 	{
 		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
 		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');

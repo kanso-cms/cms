@@ -19,7 +19,7 @@ class UUIDTest extends TestCase
 	/**
 	 *
 	 */
-	public function testNamespaces()
+	public function testNamespaces(): void
 	{
 		$this->assertEquals('6ba7b810-9dad-11d1-80b4-00c04fd430c8', UUID::DNS);
 
@@ -33,7 +33,7 @@ class UUIDTest extends TestCase
 	/**
 	 *
 	 */
-	public function testValidate()
+	public function testValidate(): void
 	{
 		$this->assertTrue(UUID::validate('6ba7b814-9dad-11d1-80b4-00c04fd430c8'));
 
@@ -43,7 +43,7 @@ class UUIDTest extends TestCase
 	/**
 	 *
 	 */
-	public function testV3()
+	public function testV3(): void
 	{
 		$this->assertEquals(3, substr(UUID::v3(UUID::DNS, 'hello'), 14, 1));
 
@@ -61,7 +61,7 @@ class UUIDTest extends TestCase
 	/**
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testV3WithInvalidNamespace()
+	public function testV3WithInvalidNamespace(): void
 	{
 		UUID::v3('nope', 'foobar');
 	}
@@ -69,7 +69,7 @@ class UUIDTest extends TestCase
 	/**
 	 *
 	 */
-	public function testV4()
+	public function testV4(): void
 	{
 		$this->assertEquals(4, substr(UUID::v4(), 14, 1));
 
@@ -81,7 +81,7 @@ class UUIDTest extends TestCase
 	/**
 	 *
 	 */
-	public function testV5()
+	public function testV5(): void
 	{
 		$this->assertEquals(5, substr(UUID::v5(UUID::DNS, 'hello'), 14, 1));
 
@@ -99,7 +99,7 @@ class UUIDTest extends TestCase
 	/**
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testV5WithInvalidNamespace()
+	public function testV5WithInvalidNamespace(): void
 	{
 		UUID::v5('nope', 'foobar');
 	}

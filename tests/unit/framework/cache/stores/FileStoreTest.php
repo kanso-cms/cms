@@ -28,7 +28,7 @@ class FileStoreTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGet()
+	public function testGet(): void
 	{
 		$filesystem = $this->getFilesystem();
 
@@ -44,7 +44,7 @@ class FileStoreTest extends TestCase
 	/**
 	 *
 	 */
-	public function testPut()
+	public function testPut(): void
 	{
 		$filesystem = $this->getFilesystem();
 
@@ -58,7 +58,7 @@ class FileStoreTest extends TestCase
 	/**
 	 *
 	 */
-	public function testHas()
+	public function testHas(): void
 	{
 		$filesystem = $this->getFilesystem();
 
@@ -76,7 +76,7 @@ class FileStoreTest extends TestCase
 	/**
 	 *
 	 */
-	public function testDelete()
+	public function testDelete(): void
 	{
 		$filesystem = $this->getFilesystem();
 
@@ -96,7 +96,7 @@ class FileStoreTest extends TestCase
 	/**
 	 *
 	 */
-	public function testExpired()
+	public function testExpired(): void
 	{
 		$filesystem = $this->getFilesystem();
 
@@ -118,7 +118,7 @@ class FileStoreTest extends TestCase
 	/**
 	 *
 	 */
-	public function testClear()
+	public function testClear(): void
 	{
 		$filesystem = $this->getFilesystem();
 

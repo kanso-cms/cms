@@ -39,8 +39,6 @@ class Crm
 
     /**
      * Constructor.
-     *
-     * @access public
      */
     public function __construct()
     {
@@ -74,7 +72,6 @@ class Crm
     /**
      * Finds/and/or returns the current visitor.
      *
-     * @access public
      * @return \kanso\cms\wrappers\Visitor
      */
     public function visitor(): Visitor
@@ -85,7 +82,6 @@ class Crm
     /**
      * Get the visitor provider.
      *
-     * @access public
      * @return \kanso\cms\wrappers\providers\LeadProvider
      */
     public function leadProvider(): LeadProvider
@@ -95,10 +91,8 @@ class Crm
 
     /**
      * Links the logged in user with the current visitor.
-     *
-     * @access public
      */
-    public function login()
+    public function login(): void
     {
         if (!$this->Gatekeeper->isLoggedIn())
         {
@@ -125,10 +119,8 @@ class Crm
     /**
      * After a visitor logs out, their cookie and sessions get wiped
      * This function retains their original visitor id.
-     *
-     * @access public
      */
-    public function logout()
+    public function logout(): void
     {
         // Add the crm visitor cookie again
         $this->Response->cookie()->put($this->cookieKey, $this->visitor->visitor_id);
@@ -137,7 +129,6 @@ class Crm
     /**
      * Merges the current visitor with another one.
      *
-     * @access public
      * @param  string $newVisitorId New visitor id
      * @return bool
      */
@@ -175,7 +166,6 @@ class Crm
     /**
      * Find the current visitor.
      *
-     * @access private
      * @return \kanso\cms\wrappers\Visitor
      */
     private function findVisitor(): Visitor
@@ -217,7 +207,6 @@ class Crm
     /**
      * Find the current bot visitor.
      *
-     * @access private
      * @return \kanso\cms\wrappers\Visitor
      */
     private function findCrawler(): Visitor
@@ -245,7 +234,6 @@ class Crm
     /**
      * Returns the base array for a new visitor.
      *
-     * @access private
      * @return array
      */
     private function newVisitorRow(): array
@@ -274,7 +262,6 @@ class Crm
      * medium =>  The medium
      *             'facebook', 'instagram', 'google', 'outlook' etc..
      *
-     * @access private
      * @return array
      */
     private function newVisitRow(): array

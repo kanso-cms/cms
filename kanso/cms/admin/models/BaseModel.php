@@ -30,31 +30,23 @@ abstract class BaseModel extends Model
 
 	/**
 	 * On HTTP POST.
-	 *
-	 * @access protected
 	 */
 	abstract public function onPOST();
 
 	/**
 	 * On HTTP AJAX.
-	 *
-	 * @access protected
 	 */
 	abstract public function onAJAX();
 
 	/**
 	 * On HTTP GET.
-	 *
-	 * @access protected
 	 */
 	abstract public function onGET();
 
 	/**
 	 * Initialize internal vars.
-	 *
-	 * @access public
 	 */
-	public function init(string $requestName)
+	public function init(string $requestName): void
 	{
 		$this->requestName = $requestName;
 
@@ -64,7 +56,6 @@ abstract class BaseModel extends Model
 	/**
 	 * Is the current client logged in ?
 	 *
-	 * @access protected
 	 * @return bool
 	 */
 	protected function isLoggedIn(): bool
@@ -76,7 +67,6 @@ abstract class BaseModel extends Model
 	 * Returns the values required to display a POST
 	 * response message.
 	 *
-	 * @access protected
 	 * @param  string $class HTML message classname
 	 * @param  string $msg   Text to go inside the message element
 	 * @return array

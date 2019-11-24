@@ -99,7 +99,6 @@ class Parser extends Helper
     /**
      * Parse a query and return the posts.
      *
-     * @access public
      * @param  $queryStr The query string to parse
      * @return array
      */
@@ -128,7 +127,6 @@ class Parser extends Helper
     /**
      * Parse the provided query string into an array of callable functions.
      *
-     * @access private
      * @throws InvalidArgumentException if the provided query is invalid, empty, or cannot be parsed
      * @return bool
      */
@@ -264,7 +262,6 @@ class Parser extends Helper
     /**
      * Execute the current query.
      *
-     * @access   private
      * @return array
      * @suppress PhanTypeInvalidDimOffset
      */
@@ -346,7 +343,7 @@ class Parser extends Helper
         {
             foreach ($articles as $row)
             {
-                $aticleObjs[] = $this->container->get('PostManager')->provider()->byId($row['id']);
+                $aticleObjs[] = $this->container->PostManager->provider()->byId($row['id']);
             }
         }
 
@@ -356,7 +353,6 @@ class Parser extends Helper
     /**
      * Returns all the post id's from the query.
      *
-     * @access public
      * @param  string $queryStr Query string to parse
      * @return array
      * @suppress PhanTypeInvalidDimOffset
@@ -438,10 +434,8 @@ class Parser extends Helper
 
     /**
      * Append a a group of queries to the methods.
-     *
-     * @access private
      */
-    private function appendMethods($method)
+    private function appendMethods($method): void
     {
         $call = $method[0];
         $op   = '=';
@@ -472,7 +466,6 @@ class Parser extends Helper
     /**
      * Validates a query group.
      *
-     * @access private
      * @return bool
      */
     private function appendQueries($queryGroup): bool
@@ -563,7 +556,6 @@ class Parser extends Helper
     /**
      * Recursively get category children.
      *
-     * @access private
      * @param  int   $parent_id  Category parent id
      * @param  array $categories Recursevily stored results array (optional) (default [])
      * @return array

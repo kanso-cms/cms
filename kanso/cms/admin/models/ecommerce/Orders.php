@@ -52,7 +52,6 @@ class Orders extends BaseModel
     /**
      * Parse and validate the POST request from any submitted forms.
      *
-     * @access private
      * @return array|false
      */
     private function parsePost()
@@ -88,10 +87,9 @@ class Orders extends BaseModel
     /**
      * Delete an order.
      *
-     * @access private
      * @param array $ids List of post ids
      */
-    private function delete(array $ids)
+    private function delete(array $ids): void
     {
         foreach ($ids as $id)
         {
@@ -102,11 +100,10 @@ class Orders extends BaseModel
     /**
      * Change order status.
      *
-     * @access private
      * @param array  $ids    List of post ids
      * @param string $status Post status to change to
      */
-    private function changeStatus(array $ids, string $status)
+    private function changeStatus(array $ids, string $status): void
     {
         foreach ($ids as $id)
         {
@@ -138,11 +135,10 @@ class Orders extends BaseModel
     /**
      * Email customer their tracking code.
      *
-     * @access private
      * @param string $trakingCode   Tracking code
      * @param int    $transactionId Transaction row id
      */
-    private function emailTrackingCode(string $trakingCode, int $transactionId)
+    private function emailTrackingCode(string $trakingCode, int $transactionId): void
     {
         $transationRow = $this->sql()->SELECT('*')->FROM('transactions')->WHERE('id', '=', $transactionId)->ROW();
         $shippingRow   = $this->sql()->SELECT('*')->FROM('shipping_addresses')->WHERE('id', '=', $transationRow['shipping_id'])->ROW();
@@ -168,7 +164,6 @@ class Orders extends BaseModel
     /**
      * Validates all POST variables are set.
      *
-     * @access private
      * @return bool|array
      */
     private function validatePost()
@@ -211,7 +206,6 @@ class Orders extends BaseModel
     /**
      * Parse the $_GET request variables and filter the orders for the requested page.
      *
-     * @access private
      * @return array
      */
     private function parseGet(): array
@@ -244,7 +238,6 @@ class Orders extends BaseModel
     /**
      * Check if the GET URL queries are either empty or set to defaults.
      *
-     * @access private
      * @return bool
      */
     private function emptyQueries(): bool
@@ -263,7 +256,6 @@ class Orders extends BaseModel
     /**
      * Returns the requested GET queries with defaults.
      *
-     * @access private
      * @return array
      */
     private function getQueries(): array
@@ -284,7 +276,6 @@ class Orders extends BaseModel
     /**
      * Returns the list of orders for display.
      *
-     * @access private
      * @param  bool      $checkMaxPages Count the max pages
      * @return array|int
      */

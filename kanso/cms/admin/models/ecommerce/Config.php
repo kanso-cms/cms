@@ -52,7 +52,6 @@ class Config extends BaseModel
     /**
      * Parse and validate the POST request from the submitted form.
      *
-     * @access private
      * @return array|false
      */
     private function parsePost()
@@ -92,7 +91,6 @@ class Config extends BaseModel
     /**
      * Validates all POST variables are set.
      *
-     * @access private
      * @return bool|array
      */
     private function validatePost()
@@ -132,7 +130,7 @@ class Config extends BaseModel
             'company_address'        => ['trim'],
         ];
 
-        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
+        $validator = $this->container->Validator->create($this->post, $rules, $filters);
 
         if (!$validator->isValid())
         {

@@ -32,8 +32,6 @@ class Format
 
     /**
      * Constructor.
-     *
-     * @access public
      */
     public function __construct()
     {
@@ -42,10 +40,9 @@ class Format
     /**
      * Set the mime type.
      *
-     * @access public
      * @param string $type Mime type or extension of file format
      */
-    public function set(string $type)
+    public function set(string $type): void
     {
         $fromExt = Mime::fromExt($type);
 
@@ -62,11 +59,10 @@ class Format
     /**
      * Set the mime type.
      *
-     * @access public
      * @param string $encoding A valid encoding format
      * @see    http://php.net/manual/en/mbstring.supported-encodings.php
      */
-    public function setEncoding(string $encoding)
+    public function setEncoding(string $encoding): void
     {
         $this->encoding = $encoding;
     }
@@ -74,7 +70,6 @@ class Format
     /**
      * Get the mime type.
      *
-     * @access public
      * @return string
      */
     public function get()
@@ -85,7 +80,6 @@ class Format
     /**
      * Get the encoding.
      *
-     * @access public
      * @return string
      */
     public function getEncoding()

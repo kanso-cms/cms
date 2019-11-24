@@ -19,7 +19,6 @@ class Post extends Helper
     /**
      * Get the current post id.
      *
-     * @access public
      * @return int|null
      */
     public function the_post_id()
@@ -35,7 +34,6 @@ class Post extends Helper
     /**
      * Get the excerpt of the current post or a post by id.
      *
-     * @access  public
      * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @return string|null
      */
@@ -64,7 +62,6 @@ class Post extends Helper
     /**
      * Get the status of the current post or post by id.
      *
-     * @access  public
      * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @return string|null
      */
@@ -93,7 +90,6 @@ class Post extends Helper
     /**
      * Get the type of the current post or post by id.
      *
-     * @access  public
      * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @return string|null
      */
@@ -122,7 +118,6 @@ class Post extends Helper
     /**
      * Get the meta for the current post or post by id.
      *
-     * @access  public
      * @param  int|null $post_id Post id or null for current post (optional) (Default NULL)
      * @return array
      */
@@ -151,7 +146,6 @@ class Post extends Helper
     /**
      * Get the created time of the current post or a post by id.
      *
-     * @access public
      * @param  string      $format  PHP date() string format (optional) (Default 'U')
      * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @return string|null
@@ -181,7 +175,6 @@ class Post extends Helper
     /**
      * Get the last modified time of the current post or a post by id.
      *
-     * @access public
      * @param  string      $format  PHP date() string format (optional) (Default 'U')
      * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @return string|null
@@ -211,7 +204,6 @@ class Post extends Helper
     /**
      * Does the current post or a post by id have a thumbnail attachment.
      *
-     * @access public
      * @param  int|null $post_id Post id or null for current post (optional) (Default NULL)
      * @return bool
      */
@@ -240,7 +232,6 @@ class Post extends Helper
     /**
      * Get the title of the current post or a post by id.
      *
-     * @access public
      * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @return string|null
      */
@@ -274,7 +265,6 @@ class Post extends Helper
     /**
      * Get the full URL of the current post or a post by id.
      *
-     * @access public
      * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @return string|null
      */
@@ -288,7 +278,7 @@ class Post extends Helper
             {
                 $prefix = !empty($this->parent->blog_location()) && $post->type === 'post' ? '/' . $this->parent->blog_location() . '/' : '/';
 
-                return $this->container->get('Request')->environment()->HTTP_HOST . $prefix . trim($post->slug, '/') . '/';
+                return $this->container->Request->environment()->HTTP_HOST . $prefix . trim($post->slug, '/') . '/';
             }
 
             return null;
@@ -298,7 +288,7 @@ class Post extends Helper
         {
             $prefix = !empty($this->parent->blog_location()) && $this->parent->post->type === 'post' ? '/' . $this->parent->blog_location() . '/' : '/';
 
-            return $this->container->get('Request')->environment()->HTTP_HOST . $prefix . trim($this->parent->post->slug, '/') . '/';
+            return $this->container->Request->environment()->HTTP_HOST . $prefix . trim($this->parent->post->slug, '/') . '/';
         }
 
         return null;
@@ -307,7 +297,6 @@ class Post extends Helper
     /**
      * Get the slug of the current post or a post by id.
      *
-     * @access public
      * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @return string|null
      */
@@ -336,7 +325,6 @@ class Post extends Helper
     /**
      * Gets the HTML content for current post or a post by id.
      *
-     * @access public
      * @param  int|null $post_id Post id or null for current post (optional) (Default NULL)
      * @param  bool     $raw     Return raw content not HTML formatted (optional) (default false)
      * @return string
@@ -378,7 +366,6 @@ class Post extends Helper
     /**
      * Gets an attachment object for the current post or a post by id.
      *
-     * @access public
      * @param  int|null                       $post_id Post id or null for current post (optional) (Default NULL)
      * @return \kanso\cms\wrappers\Media|null
      */
@@ -406,7 +393,6 @@ class Post extends Helper
     /**
      * Gets the thumbnail src for the current post or a post by id in a given size.
      *
-     * @access public
      * @param  int|null    $post_id Post id or null for current post (optional) (Default NULL)
      * @param  string      $size    The post thumbnail size "small"|"medium"|"large"|"original" (optional) (Default 'original')
      * @return string|null
@@ -454,24 +440,22 @@ class Post extends Helper
     /**
      * Get an array of POST objects of all static pages.
      *
-     * @access public
      * @param  bool  $published Return only published posts (optional) (default true)
      * @return array
      */
     public function all_static_pages(bool $published = true): array
     {
-        return $this->container->get('PostManager')->provider()->byKey('posts.type', 'page', false, $published);
+        return $this->container->PostManager->provider()->byKey('posts.type', 'page', false, $published);
     }
 
     /**
      * Get an array of POST objects of custom post types by type.
      *
-     * @access public
      * @param  bool  $published Return only published posts (optional) (default true)
      * @return array
      */
     public function all_custom_posts(string $type, bool $published = true): array
     {
-        return $this->container->get('PostManager')->provider()->byKey('posts.type', $type, false, $published);
+        return $this->container->PostManager->provider()->byKey('posts.type', $type, false, $published);
     }
 }

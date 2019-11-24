@@ -20,7 +20,7 @@ class QueryService extends Service
 	/**
 	 * {@inheritdoc}
 	 */
-	public function register()
+	public function register(): void
 	{
 		$this->container->singleton('Query', function($container)
 		{

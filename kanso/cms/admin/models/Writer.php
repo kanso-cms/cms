@@ -73,7 +73,6 @@ class Writer extends BaseModel
     /**
      * Parse the $_GET request variables and filter the articles for the requested page.
      *
-     * @access private
      * @return array
      */
     private function parseGet(): array
@@ -92,7 +91,6 @@ class Writer extends BaseModel
     /**
      * Publish an existing or new article.
      *
-     * @access private
      * @return array
      */
     private function publishArticle()
@@ -112,7 +110,6 @@ class Writer extends BaseModel
     /**
      * Save an existing article.
      *
-     * @access private
      * @return array|false
      */
     private function saveExistingArticle()
@@ -136,7 +133,7 @@ class Writer extends BaseModel
             'author'       => ['trim', 'integer'],
         ];
 
-        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
+        $validator = $this->container->Validator->create($this->post, $rules, $filters);
 
         if (!$validator->isValid())
         {
@@ -219,7 +216,6 @@ class Writer extends BaseModel
     /**
      * Save a new article.
      *
-     * @access private
      * @return array|false
      */
     private function saveNewArticle()
@@ -242,7 +238,7 @@ class Writer extends BaseModel
             'author'       => ['trim', 'integer'],
         ];
 
-        $validator = $this->container->get('Validator')->create($this->post, $rules, $filters);
+        $validator = $this->container->Validator->create($this->post, $rules, $filters);
 
         if (!$validator->isValid())
         {
@@ -297,7 +293,6 @@ class Writer extends BaseModel
     /**
      * Sorts and organises the post meta.
      *
-     * @access private
      * @return array|false
      */
     private function getPostMeta()

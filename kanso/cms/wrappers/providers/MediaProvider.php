@@ -27,7 +27,6 @@ class MediaProvider extends Provider
     /**
      * Override inherited constructor.
      *
-     * @access public
      * @param \kanso\framework\database\query\Builder $SQL            SQL query builder
      * @param array                                   $thumbnailSizes Assoc array of thumbnail sizes
      */
@@ -95,7 +94,6 @@ class MediaProvider extends Provider
     /**
      * Get all media objects.
      *
-     * @access public
      * @return array
      */
     public function all(): array

@@ -34,7 +34,6 @@ class Rewards extends UtilityBase
     /**
      * Constructor.
      *
-     * @access public
      * @param int|float $dollarsToPoints  1 Dollar = x loyalty points (optional) (default 0.5)
      * @param int|float $pointsToDiscount 100 loyalty point = x% discount (optional) (default 10)
      */
@@ -48,7 +47,6 @@ class Rewards extends UtilityBase
 	/**
 	 * Get user's un-used coupons.
 	 *
-	 * @access public
 	 * @param  int|null                 $userId user_id (optional) (default null)
 	 * @throws InvalidArgumentException If current user is not logged in and $userId is not provided
 	 * @return array
@@ -68,7 +66,6 @@ class Rewards extends UtilityBase
 	/**
 	 * Get users loyalty points balance.
 	 *
-	 * @access public
 	 * @param  int|null                 $userId user_id (optional) (default null)
 	 * @throws InvalidArgumentException If current user is not logged in and $userId is not provided
 	 * @return int
@@ -97,7 +94,6 @@ class Rewards extends UtilityBase
 	/**
 	 * Get user lifetime loyalty points.
 	 *
-	 * @access public
 	 * @param  int|null                 $userId user_id (optional) (default null)
 	 * @throws InvalidArgumentException If current user is not logged in and $userId is not provided
 	 * @return int
@@ -122,7 +118,6 @@ class Rewards extends UtilityBase
 	/**
 	 * Get user loyalty redemption history.
 	 *
-	 * @access public
 	 * @param  int|null                 $userId user_id (optional) (default null)
 	 * @throws InvalidArgumentException If current user is not logged in and $userId is not provided
 	 * @return array
@@ -158,7 +153,6 @@ class Rewards extends UtilityBase
 	/**
 	 * Add loyalty points to user's account.
 	 *
-	 * @access public
 	 * @param  int                      $points      How many points to add
 	 * @param  string                   $description Description of event
 	 * @param  int|null                 $userId      user_id (optional) (default null)
@@ -186,7 +180,6 @@ class Rewards extends UtilityBase
 	/**
 	 * Add loyalty points.
 	 *
-	 * @access public
 	 * @param  int                      $points      How many points to add
 	 * @param  string                   $description Description of event
 	 * @param  int|null                 $userId      user_id (optional) (default null)
@@ -214,7 +207,6 @@ class Rewards extends UtilityBase
 	/**
 	 * Redeem a coupon. Returns one-time coupon code.
 	 *
-	 * @access public
 	 * @param  string                   $name        Name of the coupon
 	 * @param  string                   $description Description of event
 	 * @param  int                      $discount    Discount percentage of coupon
@@ -254,7 +246,6 @@ class Rewards extends UtilityBase
 	/**
 	 * Calculate points earned from money spent.
 	 *
-	 * @access public
 	 * @param  float $spend How much did a user spend
 	 * @return int
 	 */
@@ -267,7 +258,6 @@ class Rewards extends UtilityBase
 	/**
 	 * Calculate discount from points.
 	 *
-	 * @access public
 	 * @param  int $points How much did a user spend
 	 * @return int
 	 */

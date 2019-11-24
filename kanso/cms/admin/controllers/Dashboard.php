@@ -16,10 +16,8 @@ class Dashboard extends BaseController
 {
 	/**
 	 * Dispatch posts request.
-	 *
-	 * @access public
 	 */
-	public function posts()
+	public function posts(): void
 	{
 		$this->init('posts');
 
@@ -30,10 +28,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch pages request.
-	 *
-	 * @access public
 	 */
-	public function pages()
+	public function pages(): void
 	{
 		$this->init('pages');
 
@@ -44,10 +40,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch tags request.
-	 *
-	 * @access public
 	 */
-	public function tags()
+	public function tags(): void
 	{
 		$this->init('tags');
 
@@ -56,10 +50,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch categories request.
-	 *
-	 * @access public
 	 */
-	public function categories()
+	public function categories(): void
 	{
 		$this->init('categories');
 
@@ -68,10 +60,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch comments request.
-	 *
-	 * @access public
 	 */
-	public function comments()
+	public function comments(): void
 	{
 		$this->init('comments');
 
@@ -80,10 +70,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch commentUsers request.
-	 *
-	 * @access public
 	 */
-	public function commentUsers()
+	public function commentUsers(): void
 	{
 		$this->init('commentUsers');
 
@@ -92,10 +80,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch mediaLibrary request.
-	 *
-	 * @access public
 	 */
-	public function mediaLibrary()
+	public function mediaLibrary(): void
 	{
 		$this->init('mediaLibrary');
 
@@ -104,10 +90,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch writer request.
-	 *
-	 * @access public
 	 */
-	public function writer()
+	public function writer(): void
 	{
 		$this->init('writer');
 
@@ -116,10 +100,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch settings request.
-	 *
-	 * @access public
 	 */
-	public function settings()
+	public function settings(): void
 	{
 		$this->init('settings');
 
@@ -128,10 +110,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch settingsAccount request.
-	 *
-	 * @access public
 	 */
-	public function settingsAccount()
+	public function settingsAccount(): void
 	{
 		$this->init('settingsAccount');
 
@@ -140,10 +120,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch settingsAuthor request.
-	 *
-	 * @access public
 	 */
-	public function settingsAuthor()
+	public function settingsAuthor(): void
 	{
 		$this->init('settingsAuthor');
 
@@ -152,10 +130,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch settingsKanso request.
-	 *
-	 * @access public
 	 */
-	public function settingsKanso()
+	public function settingsKanso(): void
 	{
 		$this->init('settingsKanso');
 
@@ -164,10 +140,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch settingsAccess request.
-	 *
-	 * @access public
 	 */
-	public function settingsAccess()
+	public function settingsAccess(): void
 	{
 		$this->init('settingsAccess');
 
@@ -176,10 +150,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch settingsUsers request.
-	 *
-	 * @access public
 	 */
-	public function settingsUsers()
+	public function settingsUsers(): void
 	{
 		$this->init('settingsUsers');
 
@@ -188,10 +160,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch settingsErrors request.
-	 *
-	 * @access public
 	 */
-	public function settingsErrors()
+	public function settingsErrors(): void
 	{
 		$this->init('settingsErrors');
 
@@ -200,10 +170,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch settingsTools request.
-	 *
-	 * @access public
 	 */
-	public function settingsTools()
+	public function settingsTools(): void
 	{
 		$this->init('settingsTools');
 
@@ -212,10 +180,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch settingsAnalytics request.
-	 *
-	 * @access public
 	 */
-	public function settingsAnalytics()
+	public function settingsAnalytics(): void
 	{
 		$this->init('settingsAnalytics');
 
@@ -224,10 +190,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch errorLogs request.
-	 *
-	 * @access public
 	 */
-	public function errorLogs()
+	public function errorLogs(): void
 	{
 		$this->init('errorLogs');
 
@@ -236,10 +200,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch emailLogs request.
-	 *
-	 * @access public
 	 */
-	public function emailLogs()
+	public function emailLogs(): void
 	{
 		$this->init('emailLogs');
 
@@ -248,10 +210,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch emailPreview request.
-	 *
-	 * @access public
 	 */
-	public function emailPreview()
+	public function emailPreview(): void
 	{
 		$this->init('emailPreview');
 
@@ -260,10 +220,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch custom page.
-	 *
-	 * @access public
 	 */
-	public function invoice()
+	public function invoice(): void
 	{
 		$this->init('invoice');
 
@@ -272,10 +230,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch leads request.
-	 *
-	 * @access public
 	 */
-	public function leads()
+	public function leads(): void
 	{
 		$this->init('leads');
 
@@ -284,10 +240,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch lead request.
-	 *
-	 * @access public
 	 */
-	public function lead()
+	public function lead(): void
 	{
 		$this->init('lead');
 
@@ -296,10 +250,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch custom page.
-	 *
-	 * @access public
 	 */
-	public function blankPage()
+	public function blankPage(): void
 	{
 		$this->init('customPage');
 
@@ -308,10 +260,8 @@ class Dashboard extends BaseController
 
 	/**
 	 * Dispatch custom post-type.
-	 *
-	 * @access public
 	 */
-	public function customPostType()
+	public function customPostType(): void
 	{
 		$this->init('customposts');
 

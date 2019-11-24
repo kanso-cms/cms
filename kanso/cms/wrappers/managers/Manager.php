@@ -33,7 +33,6 @@ abstract class Manager
     /**
      * Default constructor.
      *
-     * @access public
      * @param \kanso\framework\database\query\Builder $SQL      SQL query builder
      * @param mixed                                   $provider Provider manager
      */
@@ -47,7 +46,6 @@ abstract class Manager
     /**
      * Get the provider.
      *
-     * @access public
      * @return mixed
      */
     abstract public function provider();

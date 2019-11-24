@@ -20,7 +20,7 @@ class AdminService extends Service
 	/**
 	 * {@inheritdoc}
 	 */
-	public function register()
+	public function register(): void
 	{
 		$this->container->singleton('Admin', function($container)
 		{

@@ -21,7 +21,6 @@ class Files
 	/**
 	 * Constructor.
 	 *
-	 * @access public
 	 * @param array $parameters $_FILES upload (optional) (default [])
 	 */
 	public function __construct(array $parameters = [])
@@ -106,7 +105,7 @@ class Files
 	/**
 	 * {@inheritdoc}
 	 */
-	public function add(string $name, $value)
+	public function add(string $name, $value): void
 	{
 		if(is_array($value))
 		{

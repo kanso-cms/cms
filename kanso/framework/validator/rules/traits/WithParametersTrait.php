@@ -22,7 +22,7 @@ trait WithParametersTrait
 	 * {@inheritdoc}
 	 * @suppress PhanUndeclaredProperty
 	 */
-	public function setParameters(array $parameters)
+	public function setParameters(array $parameters): void
 	{
 		if (property_exists(self::class, 'parameters'))
 		{

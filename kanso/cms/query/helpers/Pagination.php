@@ -21,7 +21,6 @@ class Pagination extends Helper
      * Build the pagination links for the current page.
      * Works on home, search, tag, category, author requests.
      *
-     * @access public
      * @param  array|null $args Array of display arguments (optional) (default NULL)
      * @return string
      */
@@ -29,7 +28,7 @@ class Pagination extends Helper
     {
         // Default options
         $options = [
-          'base'               => $this->container->get('Request')->environment()->HTTP_HOST,
+          'base'               => $this->container->Request->environment()->HTTP_HOST,
           'format'             => '<li class="(:class)"><a href="(:link)">(:num)</a></li>',
           'format_disabled'    => '<li class="(:class)"><span>(:num)</span></li>',
           'white_space'        => ' ',
@@ -44,14 +43,14 @@ class Pagination extends Helper
         ];
 
         // Segment the reuest URI
-        $uri = explode('/', Str::queryFilterUri($this->container->get('Request')->environment()->REQUEST_URI));
+        $uri = explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI));
 
         // Declare the pagination string
         $pagination = '';
 
         // Count the posts
         $posts = $this->parent->helper('parser')->countQuery($this->parent->queryStr);
-        $pages = Arr::paginate($posts, $this->parent->pageIndex, $this->container->get('Config')->get('cms.posts_per_page'));
+        $pages = Arr::paginate($posts, $this->parent->pageIndex, $this->container->Config->get('cms.posts_per_page'));
 
         // If no args were defined, Kanso will figure it out for us
         if (!$args || !isset($args['current']) || !isset($args['total']))

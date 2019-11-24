@@ -56,7 +56,6 @@ class Comments extends BaseModel
     /**
      * Parse the $_GET request variables and filter the articles for the requested page.
      *
-     * @access private
      * @return array
      */
     private function parseGet(): array
@@ -79,7 +78,6 @@ class Comments extends BaseModel
     /**
      * Parse and validate the POST request from any submitted forms.
      *
-     * @access private
      * @return array|false
      */
     private function parsePost()
@@ -119,7 +117,6 @@ class Comments extends BaseModel
     /**
      * Validates all POST variables are set.
      *
-     * @access private
      * @return bool
      */
     private function validatePost(): bool
@@ -151,10 +148,9 @@ class Comments extends BaseModel
     /**
      * Delete comments by id.
      *
-     * @access private
      * @param array $ids List of post ids
      */
-    private function delete(array $ids)
+    private function delete(array $ids): void
     {
         foreach ($ids as $id)
         {
@@ -170,11 +166,10 @@ class Comments extends BaseModel
     /**
      * Update comment content.
      *
-     * @access private
      * @param int    $id      Comment id to update
      * @param string $content Content to set
      */
-    private function update(int $id, string $content)
+    private function update(int $id, string $content): void
     {
         $comment = $this->CommentManager->byId($id);
 
@@ -191,10 +186,9 @@ class Comments extends BaseModel
     /**
      * Change a list of comment statuses.
      *
-     * @access private
      * @param array $ids List of post ids
      */
-    private function changeStatus(array $ids, string $status)
+    private function changeStatus(array $ids, string $status): void
     {
         foreach ($ids as $id)
         {
@@ -211,7 +205,6 @@ class Comments extends BaseModel
     /**
      * Check if the GET URL queries are either empty or set to defaults.
      *
-     * @access private
      * @return bool
      */
     private function emptyQueries(): bool
@@ -229,7 +222,6 @@ class Comments extends BaseModel
     /**
      * Returns the requested GET queries with defaults.
      *
-     * @access private
      * @return array
      */
     private function getQueries(): array
@@ -249,7 +241,6 @@ class Comments extends BaseModel
     /**
      * Returns the list of comments for display.
      *
-     * @access private
      * @param  bool      $checkMaxPages Count the max pages
      * @return array|int
      */

@@ -20,7 +20,7 @@ class ValidatorTest extends TestCase
 	/**
 	 *
 	 */
-	public function testValids()
+	public function testValids(): void
 	{
 		$fields =
 		[
@@ -88,7 +88,7 @@ class ValidatorTest extends TestCase
 	/**
 	 *
 	 */
-	public function testInValids()
+	public function testInValids(): void
 	{
 		$fields =
 		[
@@ -153,7 +153,7 @@ class ValidatorTest extends TestCase
 	/**
 	 *
 	 */
-	public function testFiltersValid()
+	public function testFiltersValid(): void
 	{
 		$fields =
 		[
@@ -217,7 +217,7 @@ class ValidatorTest extends TestCase
 	/**
 	 *
 	 */
-	public function testFiltersInValid()
+	public function testFiltersInValid(): void
 	{
 		$fields =
 		[

@@ -19,7 +19,7 @@ class ProtocolTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSet()
+	public function testSet(): void
 	{
 		$protocol = new Protocol;
 
@@ -31,7 +31,7 @@ class ProtocolTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSecure()
+	public function testSecure(): void
 	{
 		$protocol = new Protocol;
 

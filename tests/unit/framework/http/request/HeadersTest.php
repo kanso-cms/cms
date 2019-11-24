@@ -33,7 +33,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testConstructor()
+	public function testConstructor(): void
 	{
 		$headers = new Headers($this->getAcceptHeaders());
 
@@ -45,7 +45,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCountSet()
+	public function testCountSet(): void
 	{
 		$headers = new Headers(['FOO' => 'bar']);
 
@@ -55,7 +55,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIterateSet()
+	public function testIterateSet(): void
 	{
 		$headers    = new Headers(['FOO' => 'bar']);
 
@@ -72,7 +72,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testReload()
+	public function testReload(): void
 	{
 		$headers = new Headers;
 
@@ -84,7 +84,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testSet()
+	public function testSet(): void
 	{
 		$headers = new Headers($this->getAcceptHeaders());
 
@@ -96,7 +96,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGet()
+	public function testGet(): void
 	{
 		$headers = new Headers(['foo' => 'bar']);
 
@@ -106,7 +106,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testUnset()
+	public function testUnset(): void
 	{
 		$headers = new Headers(['foo' => 'bar']);
 
@@ -120,7 +120,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAsArray()
+	public function testAsArray(): void
 	{
 		$headers = new Headers(['FOO' => 'bar']);
 
@@ -130,7 +130,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testIsset()
+	public function testIsset(): void
 	{
 		$headers = new Headers(['FOO' => 'bar', 'FOO_BAR' => 'foobar']);
 		$this->assertTrue(isset($headers->FOO));
@@ -142,7 +142,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAcceptableContentTypes()
+	public function testAcceptableContentTypes(): void
 	{
 		$headers = new Headers($this->getAcceptHeaders());
 
@@ -151,7 +151,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAcceptableContentTypesWithNoHeaders()
+	public function testAcceptableContentTypesWithNoHeaders(): void
 	{
 		$headers = new Headers;
 
@@ -160,7 +160,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAcceptableLanguages()
+	public function testAcceptableLanguages(): void
 	{
 		$headers = new Headers($this->getAcceptHeaders());
 
@@ -169,7 +169,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAcceptableLanguagesWithNoHeaders()
+	public function testAcceptableLanguagesWithNoHeaders(): void
 	{
 		$headers = new Headers;
 
@@ -178,7 +178,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAcceptableCharsets()
+	public function testAcceptableCharsets(): void
 	{
 		$headers = new Headers($this->getAcceptHeaders());
 
@@ -187,7 +187,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function acceptableCharsetsWithNoHeaders()
+	public function acceptableCharsetsWithNoHeaders(): void
 	{
 		$headers = new Headers;
 
@@ -196,7 +196,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAcceptableEncodings()
+	public function testAcceptableEncodings(): void
 	{
 		$headers = new Headers($this->getAcceptHeaders());
 
@@ -205,7 +205,7 @@ class HeadersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testAcceptableEncodingsWithNoHeaders()
+	public function testAcceptableEncodingsWithNoHeaders(): void
 	{
 		$headers = new Headers;
 

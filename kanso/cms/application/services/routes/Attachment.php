@@ -14,9 +14,9 @@
 // Attachments
 if ($config->get('cms.route_attachments') === true)
 {
-	$router->get("$blogPrefix/attachment/(:any)/", '\kanso\cms\application\Application::applyRoute', 'attachment');
-	$router->get("$blogPrefix/attachment/(:any)/feed/", '\kanso\cms\application\Application::loadRssFeed', 'attachment');
-	$router->get("$blogPrefix/attachment/(:any)/feed/rss/", '\kanso\cms\application\Application::loadRssFeed', 'attachment');
-	$router->get("$blogPrefix/attachment/(:any)/feed/atom/", '\kanso\cms\application\Application::loadRssFeed', 'attachment');
-	$router->get("$blogPrefix/attachment/(:any)/feed/rdf/", '\kanso\cms\application\Application::loadRssFeed', 'attachment');
+	$router->get("$blogPrefix/attachment/(:any)/", '\kanso\cms\query\controllers\Content@apply', '\kanso\cms\query\models\Attachment');
+	$router->get("$blogPrefix/attachment/(:any)/feed/", '\kanso\cms\query\controllers\Rss@load', '\kanso\cms\query\models\Attachment');
+	$router->get("$blogPrefix/attachment/(:any)/feed/rss/", '\kanso\cms\query\controllers\Rss@load', '\kanso\cms\query\models\Attachment');
+	$router->get("$blogPrefix/attachment/(:any)/feed/atom/", '\kanso\cms\query\controllers\Rss@load', '\kanso\cms\query\models\Attachment');
+	$router->get("$blogPrefix/attachment/(:any)/feed/rdf/", '\kanso\cms\query\controllers\Rss@load', '\kanso\cms\query\models\Attachment');
 }

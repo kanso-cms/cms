@@ -19,8 +19,6 @@ class Loader
 
 	/**
 	 * Constructor.
-	 *
-	 * @access public
 	 */
 	public function __construct(string $path)
 	{
@@ -37,7 +35,7 @@ class CascadingFilesystemTest extends TestCase
 	/**
 	 *
 	 */
-	public function testGetFilePath()
+	public function testGetFilePath(): void
 	{
 		$loader = new Loader(dirname(__FILE__));
 

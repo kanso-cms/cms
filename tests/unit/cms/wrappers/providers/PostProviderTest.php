@@ -20,7 +20,7 @@ class PostProviderTest extends TestCase
     /**
      *
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $cHandler         = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
@@ -116,7 +116,7 @@ class PostProviderTest extends TestCase
     /**
      *
      */
-    public function testById()
+    public function testById(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -152,7 +152,7 @@ class PostProviderTest extends TestCase
     /**
      *
      */
-    public function testByKey()
+    public function testByKey(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -188,7 +188,7 @@ class PostProviderTest extends TestCase
     /**
      *
      */
-    public function testByKeys()
+    public function testByKeys(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');
@@ -224,7 +224,7 @@ class PostProviderTest extends TestCase
     /**
      *
      */
-    public function testPublished()
+    public function testPublished(): void
     {
         $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
         $config           = Mockery::mock('\kanso\framework\config\Config');

@@ -20,7 +20,7 @@ class DeploymentTest extends TestCase
     /**
      *
      */
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $webhook  = Mockery::mock('\kanso\framework\deployment\webhooks\Github');
 

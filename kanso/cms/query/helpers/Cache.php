@@ -21,7 +21,6 @@ class Cache extends Helper
     /**
      * Get/set a post by id from the PostManager or cache.
      *
-     * @access public
      * @param  int                           $post_id Post id
      * @return \kanso\cms\wrappers\Post|null
      */
@@ -34,13 +33,12 @@ class Cache extends Helper
             return $this->get($key);
         }
 
-        return $this->set($key, $this->container->get('PostManager')->byId($post_id));
+        return $this->set($key, $this->container->PostManager->byId($post_id));
     }
 
     /**
      * Get/set an author by id from the UserManager or cache.
      *
-     * @access public
      * @param  int                           $author_id Author id
      * @return \kanso\cms\wrappers\User|null
      */
@@ -53,13 +51,12 @@ class Cache extends Helper
             return $this->get($key);
         }
 
-        return $this->set($key, $this->container->get('UserManager')->provider()->byId($author_id));
+        return $this->set($key, $this->container->UserManager->provider()->byId($author_id));
     }
 
     /**
      * Get/set a tag by id from the TagManager or cache.
      *
-     * @access public
      * @param  int                          $tag_id Tag id
      * @return \kanso\cms\wrappers\Tag|null
      */
@@ -72,13 +69,12 @@ class Cache extends Helper
             return $this->get($key);
         }
 
-        return $this->set($key, $this->container->get('TagManager')->provider()->byId($tag_id));
+        return $this->set($key, $this->container->TagManager->provider()->byId($tag_id));
     }
 
     /**
      * Get/set a category by id from the CategoryManager or cache.
      *
-     * @access public
      * @param  int                               $category_id Category id
      * @return \kanso\cms\wrappers\Category|null
      */
@@ -91,13 +87,12 @@ class Cache extends Helper
             return $this->get($key);
         }
 
-        return $this->set($key, $this->container->get('CategoryManager')->provider()->byId($category_id));
+        return $this->set($key, $this->container->CategoryManager->provider()->byId($category_id));
     }
 
     /**
      * Get/set a media attachment by id from the MediaManager or cache.
      *
-     * @access public
      * @param  int                            $thumb_id Media attachment id
      * @return \kanso\cms\wrappers\Media|null
      */
@@ -110,13 +105,12 @@ class Cache extends Helper
             return $this->get($key);
         }
 
-        return $this->set($key, $this->container->get('MediaManager')->provider()->byId($thumb_id));
+        return $this->set($key, $this->container->MediaManager->provider()->byId($thumb_id));
     }
 
     /**
      * Converts a function, args and args number to a key.
      *
-     * @access public
      * @param  string $func    Method name as string
      * @param  array  $argList List of arguments
      * @param  int    $numargs Number of provided args

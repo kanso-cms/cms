@@ -33,7 +33,6 @@ class Builder
 	/**
 	 * Constructor.
 	 *
-	 * @access public
 	 * @param \kanso\framework\database\connection\ConnectionHandler $connectionHandler Database connection handler
 	 * @param \kanso\framework\database\query\Query                  $query             Builder Query
 	 */
@@ -49,7 +48,6 @@ class Builder
     /**
      * Get the database connection.
      *
-     * @access public
      * @return \kanso\framework\database\connection\ConnectionHandler
      */
     public function connectionHandler(): ConnectionHandler
@@ -64,7 +62,6 @@ class Builder
     /**
      * Create a new table with given columns and paramters.
      *
-     * @access public
      * @param  string                                  $tableName Table name to create
      * @param  array                                   $params    Table parameters
      * @return \kanso\framework\database\query\Builder
@@ -103,7 +100,6 @@ class Builder
     /**
      * Drop an existing table.
      *
-     * @access public
      * @param  string                                  $tableName Table name to use
      * @return \kanso\framework\database\query\Builder
      */
@@ -121,7 +117,6 @@ class Builder
     /**
      * Truncate an existing table.
      *
-     * @access public
      * @param  string                                  $tableName Table name to use
      * @return \kanso\framework\database\query\Builder
      */
@@ -139,7 +134,6 @@ class Builder
     /**
      * Initialize an alter statement.
      *
-     * @access public
      * @param  string                                $tableName
      * @return \kanso\framework\database\query\Alter
      */
@@ -159,7 +153,6 @@ class Builder
     /**
      * Set the query to query a given table.
      *
-     * @access public
      * @param  string                                  $tableName The table name to use
      * @return \kanso\framework\database\query\Builder
      */
@@ -177,7 +170,6 @@ class Builder
     /**
      * Set the query to UPDATE a given table.
      *
-     * @access public
      * @param  string                                  $tableName The table name to use
      * @return \kanso\framework\database\query\Builder
      */
@@ -193,7 +185,6 @@ class Builder
     /**
      * Set the query to INSERT INTO a given table.
      *
-     * @access public
      * @param  string                                  $tableName The table name to use
      * @return \kanso\framework\database\query\Builder
      */
@@ -211,7 +202,6 @@ class Builder
     /**
      * Add the values to set.
      *
-     * @access public
      * @param  array                                   $values The values to apply
      * @return \kanso\framework\database\query\Builder
      */
@@ -225,7 +215,6 @@ class Builder
     /**
      * Set the query to SET and load values.
      *
-     * @access public
      * @param  array                                   $values The values to apply
      * @return \kanso\framework\database\query\Builder
      */
@@ -239,7 +228,6 @@ class Builder
     /**
      * Set the query to DELETE and load table.
      *
-     * @access public
      * @param  string                                  $tableName The table name to use
      * @return \kanso\framework\database\query\Builder
      */
@@ -257,7 +245,6 @@ class Builder
     /**
      * Execute an INSERT, DELETE, UPDATE, SET statement.
      *
-     * @access public
      * @return mixed Result from the SQL query
      */
     public function QUERY()
@@ -272,7 +259,6 @@ class Builder
     /**
      * Select values from a table.
      *
-     * @access public
      * @param  string                                  $columnNames Column names to select
      * @return \kanso\framework\database\query\Builder
      */
@@ -288,7 +274,6 @@ class Builder
     /**
      * Set a where clause.
      *
-     * @access public
      * @param  string                                  $column Column name
      * @param  string                                  $op     Logical operator
      * @param  mixed                                   $value  Value
@@ -306,7 +291,6 @@ class Builder
     /**
      * Set an and_where clause.
      *
-     * @access public
      * @param  string                                  $column Column name
      * @param  string                                  $op     Logical operator
      * @param  mixed                                   $value  Value
@@ -324,7 +308,6 @@ class Builder
     /**
      * Set an or_where clause.
      *
-     * @access public
      * @param  string                                  $column Column name
      * @param  string                                  $op     Logical operator
      * @param  mixed                                   $value  Value
@@ -342,7 +325,6 @@ class Builder
     /**
      * Set an join clause.
      *
-     * @access public
      * @param  string                                  $tableName The table name to join
      * @param  string                                  $query     Column comparison e.g table1.id = table2.column_name
      * @return \kanso\framework\database\query\Builder
@@ -361,7 +343,6 @@ class Builder
     /**
      * Set an inner join clause.
      *
-     * @access public
      * @param  string                                  $tableName The table name to join
      * @param  string                                  $query     Column comparison e.g table1.id = table2.column_name
      * @return \kanso\framework\database\query\Builder
@@ -380,7 +361,6 @@ class Builder
     /**
      * Set a left join clause.
      *
-     * @access public
      * @param  string                                  $tableName The table name to join
      * @param  string                                  $query     Column comparison e.g table1.id = table2.column_name
      * @return \kanso\framework\database\query\Builder
@@ -399,7 +379,6 @@ class Builder
     /**
      * Set a right join clause.
      *
-     * @access public
      * @param  string                                  $tableName The table name to join
      * @param  string                                  $query     Column comparison e.g table1.id = table2.column_name
      * @return \kanso\framework\database\query\Builder
@@ -418,7 +397,6 @@ class Builder
     /**
      * Set an outer join clause.
      *
-     * @access public
      * @param  string                                  $table The table name to join
      * @param  string                                  $query Column comparison e.g table1.id = table2.column_name
      * @return \kanso\framework\database\query\Builder
@@ -437,7 +415,6 @@ class Builder
     /**
      * Set the orderby.
      *
-     * @access public
      * @param  string                                  $key       The column name to use
      * @param  string                                  $direction 'DESC'|'ASC' (optional) (default 'DESC')
      * @return \kanso\framework\database\query\Builder
@@ -454,7 +431,6 @@ class Builder
     /**
      * Set group by.
      *
-     * @access public
      * @param  string                                  $key The column name to group on
      * @return \kanso\framework\database\query\Builder
      */
@@ -470,7 +446,6 @@ class Builder
     /**
      * Add group concat.
      *
-     * @access public
      * @param  string                                  $keys Concat keys
      * @param  string                                  $as   As value
      * @return \kanso\framework\database\query\Builder
@@ -487,7 +462,6 @@ class Builder
     /**
      * Set the limit/offset.
      *
-     * @access public
      * @param  int                                     $offset Offset to start at
      * @param  int|null                                $limit  Limit results (optional) (default null)
      * @return \kanso\framework\database\query\Builder
@@ -502,7 +476,6 @@ class Builder
     /**
      * Execute a query and limit to single row.
      *
-     * @access public
      * @return mixed
      */
     public function ROW()
@@ -514,7 +487,6 @@ class Builder
      * Execute a query and limit to single row
      * and/or find a single row by id.
      *
-     * @access public
      * @param  int|null $id Row id to find (optional) (default null)
      * @return mixed
      */
@@ -526,7 +498,6 @@ class Builder
     /**
      * Execute a query and find all rows.
      *
-     * @access public
      * @return mixed
      */
     public function FIND_ALL()
@@ -541,7 +512,6 @@ class Builder
     /**
      * Filter a column name to valid SQL.
      *
-     * @access private
      * @param  string $str Table index
      * @return string
      */
@@ -554,7 +524,6 @@ class Builder
     /**
      * Filter a column name to valid SQL.
      *
-     * @access private
      * @param  string $query Table index
      * @return string
      */

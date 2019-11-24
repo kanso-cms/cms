@@ -72,7 +72,6 @@ class LeadProvider extends Provider
     /**
      * Get all visitors.
      *
-     * @access public
      * @return array
      */
     public function all(): array
@@ -92,7 +91,6 @@ class LeadProvider extends Provider
     /**
      * Get all leads.
      *
-     * @access public
      * @return array
      */
     public function leads(): array

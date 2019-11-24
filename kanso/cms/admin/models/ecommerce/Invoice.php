@@ -69,7 +69,7 @@ class Invoice extends BaseModel
     /**
      * {@inheritdoc}
      */
-    public function getInvoice()
+    public function getInvoice(): void
     {
 
     }

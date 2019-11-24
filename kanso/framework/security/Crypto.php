@@ -49,7 +49,6 @@ class Crypto
 	/**
 	 * Constructor.
 	 *
-	 * @access public
 	 * @param \kanso\framework\security\crypto\Signer                          $signer    Encryption/Decryption signer
 	 * @param \kanso\framework\security\crypto\encrypters\EncrypterInterface   $encrytper Encryption/Decryption library
 	 * @param \kanso\framework\security\password\encrypters\EncrypterInterface $password  Password hashing library
@@ -68,7 +67,6 @@ class Crypto
     /**
      * Encrypt a string.
      *
-     * @access public
      * @param  string $str String to encrypt
      * @return string
      */
@@ -86,7 +84,6 @@ class Crypto
     /**
      * Decrypt a string.
      *
-     * @access public
      * @param  string       $str Encrypted string to decrypt
      * @return string|false
      */
@@ -111,7 +108,6 @@ class Crypto
 	/**
 	 * Get the password hasher.
 	 *
-	 * @access public
 	 * @return \kanso\framework\security\password\encrypters\EncrypterInterface
 	 */
 	public function password(): PasswordEncrypter
@@ -122,7 +118,6 @@ class Crypto
     /**
      * Get the data signer.
      *
-     * @access public
      * @return \kanso\framework\security\crypto\Signer
      */
     public function signer(): Signer
@@ -133,7 +128,6 @@ class Crypto
     /**
      * Get the default memory limit.
      *
-     * @access private
      * @return string
      */
     private function getDefaultMemory()
@@ -143,20 +137,16 @@ class Crypto
 
     /**
      * Boost the memory to 1GB during encryption.
-     *
-     * @access private
      */
-    private function boostMemory()
+    private function boostMemory(): void
     {
         ini_set('memory_limit', '1024M');
     }
 
     /**
      * Restore the memory after encryption.
-     *
-     * @access private
      */
-    private function restoreMemory()
+    private function restoreMemory(): void
     {
         ini_set('memory_limit', $this->defaultMemory);
     }

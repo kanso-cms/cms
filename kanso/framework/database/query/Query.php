@@ -72,7 +72,6 @@ class Query
 	/**
 	 * Constructor.
 	 *
-	 * @access public
 	 * @param \kanso\framework\database\connection\ConnectionHandler $connectionHandler
 	 */
 	public function __construct(ConnectionHandler $connectionHandler)
@@ -90,10 +89,9 @@ class Query
 	/**
 	 * Set the table to operate on.
 	 *
-	 * @access public
 	 * @param string $table Table name to set
 	 */
-	public function setTable(string $table)
+	public function setTable(string $table): void
 	{
 		// Set the table
 		$this->table = $table;
@@ -111,11 +109,10 @@ class Query
 	/**
 	 * Set the current operation.
 	 *
-	 * @access public
 	 * @param string $operation Operation to set query to - SET | DELETE | SELECT FROM | INSERT
 	 * @param array  $values    Values to use on the query (optional) (default [])
 	 */
-	public function setOperation(string $operation, $values = [])
+	public function setOperation(string $operation, $values = []): void
 	{
 		// Set the operation
 		$this->operation = $operation;
@@ -130,7 +127,6 @@ class Query
 	/**
 	 * Select a single column in a query.
 	 *
-	 * @access public
 	 * @param string $column Column name
 	 */
 	public function column(string $column)
@@ -156,7 +152,6 @@ class Query
 	/**
 	 * Set an SQL Select statement.
 	 *
-	 * @access public
 	 * @param string $columns Column name or names
 	 */
 	public function select(string $columns)
@@ -211,13 +206,12 @@ class Query
 	/**
 	 * Set an SQL WHERE clases.
 	 *
-	 * @access public
 	 * @param string $column Column name to use
 	 * @param string $op     Logical operator
 	 * @param mixed  $value  Comparison value
 	 * @param string $type   'and'|'or'
 	 */
-	public function where(string $column, string $op, $value, string $type = 'and')
+	public function where(string $column, string $op, $value, string $type = 'and'): void
 	{
 		$table = $this->table;
 
@@ -265,7 +259,6 @@ class Query
 	/**
 	 * Set an SQL AND WHERE statement.
 	 *
-	 * @access public
 	 * @param string $column Column name to use
 	 * @param string $op     Logical operator
 	 * @param mixed  $value  Comparison value
@@ -278,7 +271,6 @@ class Query
 	/**
 	 * Set an SQL and OR WHERE statement.
 	 *
-	 * @access public
 	 * @param string $column Column name to use
 	 * @param string $op     Logical operator
 	 * @param mixed  $value  Comparison value
@@ -291,11 +283,10 @@ class Query
 	/**
 	 * Join a table.
 	 *
-	 * @access public
 	 * @param string $tableName The table name to join
 	 * @param string $columns   Column comparison e.g table1.id = table2.column_name
 	 */
-	public function join(string $tableName, string $columns)
+	public function join(string $tableName, string $columns): void
 	{
 		$this->pending['inner_join'][] = ['table' => $tableName, 'columns' => $columns];
 
@@ -308,7 +299,6 @@ class Query
 	/**
 	 * Inner join a table.
 	 *
-	 * @access public
 	 * @param string $tableName The table name to join
 	 * @param string $columns   Column comparison e.g table1.id = table2.column_name
 	 */
@@ -320,11 +310,10 @@ class Query
 	/**
 	 * Left join a table.
 	 *
-	 * @access public
 	 * @param string $tableName The table name to join
 	 * @param string $columns   Column comparison e.g table1.id = table2.column_name
 	 */
-	public function left_join(string $tableName, string $columns)
+	public function left_join(string $tableName, string $columns): void
 	{
 		$this->pending['left_join'][] = ['table' => $tableName, 'columns' => $columns];
 
@@ -337,11 +326,10 @@ class Query
 	/**
 	 * Right join a table.
 	 *
-	 * @access public
 	 * @param string $tableName The table name to join
 	 * @param string $columns   Column comparison e.g table1.id = table2.column_name
 	 */
-	public function right_join(string $tableName, string $columns)
+	public function right_join(string $tableName, string $columns): void
 	{
 		$this->pending['right_join'][] = ['table' => $tableName, 'columns' => $columns];
 
@@ -354,11 +342,10 @@ class Query
 	/**
 	 * Outer join a table.
 	 *
-	 * @access public
 	 * @param string $tableName The table name to join
 	 * @param string $columns   Column comparison e.g table1.id = table2.column_name
 	 */
-	public function full_outer_join(string $tableName, string $columns)
+	public function full_outer_join(string $tableName, string $columns): void
 	{
 		$this->pending['full_outer_join'][] = ['table' => $tableName, 'columns' => $columns];
 
@@ -371,11 +358,10 @@ class Query
 	/**
 	 * Set sort order of SQL results.
 	 *
-	 * @access public
 	 * @param string $column    The column name to use
 	 * @param string $direction 'DESC'|'ASC' (optional) (default 'DESC')
 	 */
-	public function order_by(string $column, string $direction = 'DESC')
+	public function order_by(string $column, string $direction = 'DESC'): void
 	{
 		$table  = $this->table;
 
@@ -399,10 +385,9 @@ class Query
 	/**
 	 * Set group by.
 	 *
-	 * @access public
 	 * @param string $column Column name
 	 */
-	public function group_by(string $column)
+	public function group_by(string $column): void
 	{
 		$this->pending['group_by'] = $column;
 	}
@@ -410,11 +395,10 @@ class Query
 	/**
 	 * Concatinate a SELECT group.
 	 *
-	 * @access public
 	 * @param string $keys Concat keys
 	 * @param string $as   As value
 	 */
-	public function group_concat(string $keys, string $as)
+	public function group_concat(string $keys, string $as): void
 	{
 		$this->pending['group_concat'][] = [$keys, $as];
 	}
@@ -422,11 +406,10 @@ class Query
 	/**
 	 * Limit/ offset results.
 	 *
-	 * @access public
 	 * @param int      $offset Offset to start at
 	 * @param int|null $value  Limit results (optional) (default null)
 	 */
-	public function limit(int $offset, int $value = null)
+	public function limit(int $offset, int $value = null): void
 	{
 		if ($value)
 		{
@@ -441,7 +424,6 @@ class Query
 	/**
 	 * Execute a SELECT query and limit to single row.
 	 *
-	 * @access public
 	 * @return mixed
 	 */
 	public function row()
@@ -453,7 +435,6 @@ class Query
 	 * Execute a SELECT query and limit to single row
 	 * and/or find a single row by id.
 	 *
-	 * @access public
 	 * @param  int|null $id Row id to find (optional) (default null)
 	 * @return mixed
 	 */
@@ -476,7 +457,6 @@ class Query
 	/**
 	 * Execute a SELECT query and find all results.
 	 *
-	 * @access public
 	 * @return mixed
 	 */
 	public function find_all()
@@ -501,7 +481,6 @@ class Query
 	/**
 	 * Execute a SET|INSERT|DELETE query.
 	 *
-	 * @access public
 	 * @return mixed
 	 */
 	public function query()
@@ -558,10 +537,8 @@ class Query
 
 	/**
 	 * Build and SQL SELECT statement.
-	 *
-	 * @access private
 	 */
-	private function buildQuery()
+	private function buildQuery(): void
 	{
 		// Build the select statement
 		$SELECT = $this->operation === 'QUERY' ? $this->selectPending() : '';
@@ -590,7 +567,6 @@ class Query
 	/**
 	 * Execute the current SQL query.
 	 *
-	 * @access private
 	 * @return mixed
 	 */
 	private function execSQL()
@@ -610,7 +586,6 @@ class Query
 	/**
 	 * Add all the WHERE statements to current SQL query.
 	 *
-	 * @access private
 	 * @return string
 	 */
 	private function wherePending(): string
@@ -662,7 +637,6 @@ class Query
 	/**
 	 * Add the GROUP BY statement to the current SQL query if it exists.
 	 *
-	 * @access private
 	 * @return string
 	 */
 	private function groupByPending(): string
@@ -678,7 +652,6 @@ class Query
 	/**
 	 * Add the ORDER BY statement to the current SQL query if it exists.
 	 *
-	 * @access private
 	 * @return string
 	 */
 	private function orderByPending(): string
@@ -702,7 +675,6 @@ class Query
 	/**
 	 * Add the LIMIT statement to the current SQL query if it exists.
 	 *
-	 * @access private
 	 * @return string
 	 */
 	private function limitPending(): string
@@ -727,7 +699,6 @@ class Query
 	/**
 	 * Add the SELECT statement to the current SQL query if it exists.
 	 *
-	 * @access private
 	 * @return string
 	 */
 	private function selectPending(): string
@@ -779,7 +750,6 @@ class Query
 	/**
 	 * Add the GROUP_CONCAT statement to the current SQL query if it exists.
 	 *
-	 * @access private
 	 * @return string
 	 */
 	private function groupConcatPending(): string
@@ -800,7 +770,6 @@ class Query
 	/**
 	 * Add the join statements to the current SQL query if it exists.
 	 *
-	 * @access private
 	 * @return string
 	 */
 	private function joinsPending(): string
@@ -840,9 +809,8 @@ class Query
 
 	/**
 	 * Reset the pending query parts to default.
-	 * @access private
 	 */
-	private function setPending()
+	private function setPending(): void
 	{
 		$this->pending =
 		[

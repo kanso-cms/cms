@@ -17,7 +17,6 @@ interface ProcessorInterface
     /**
      * Load image parameters for internal use.
      *
-     * @access public
      * @param  string            $filename Absolute path to file
      * @throws \RuntimeException If file is not an image
      */
@@ -26,7 +25,6 @@ interface ProcessorInterface
     /**
      * Get the image width in px.
      *
-     * @access public
      * @return int
      */
     public function width(): int;
@@ -34,7 +32,6 @@ interface ProcessorInterface
     /**
      * Get the image height in px.
      *
-     * @access public
      * @return int
      */
     public function height(): int;
@@ -42,7 +39,6 @@ interface ProcessorInterface
     /**
      * Save the new file to disk.
      *
-     * @access public
      * @param  string   $filename    Absolute path to file
      * @param  int|null $image_type  PHP image type constant (optional) (default NULL)
      * @param  int|null $quality     Quality of image to save (optional)
@@ -54,7 +50,6 @@ interface ProcessorInterface
     /**
      * Resize to height.
      *
-     * @access public
      * @param  int                                                $height        Height in px
      * @param  bool                                               $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
      * @return \kanso\framework\pixl\processor\ProcessorInterface
@@ -64,7 +59,6 @@ interface ProcessorInterface
     /**
      * Resize to width.
      *
-     * @access public
      * @param  int                                                $width         Width in px
      * @param  bool                                               $allow_enlarge Allow image to be enlarged ? (optional) (default FALSE)
      * @return \kanso\framework\pixl\processor\ProcessorInterface

@@ -19,7 +19,7 @@ class DatabaseService extends Service
 	/**
 	 * {@inheritdoc}
 	 */
-	public function register()
+	public function register(): void
 	{
 		$this->container->singleton('Database', function($container)
 		{

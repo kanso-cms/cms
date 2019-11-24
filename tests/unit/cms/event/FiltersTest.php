@@ -57,7 +57,7 @@ class FiltersTest extends TestCase
 	/**
 	 *
 	 */
-	public function testCallbacks()
+	public function testCallbacks(): void
 	{
 		$_this = $this;
 

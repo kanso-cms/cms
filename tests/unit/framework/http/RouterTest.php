@@ -20,7 +20,7 @@ class RouterTest extends TestCase
 	/**
 	 *
 	 */
-	public function testMethods()
+	public function testMethods(): void
 	{
 		$request = Mockery::mock('\kanso\framework\http\request\Request');
 		$onion   = Mockery::mock('\kanso\framework\onion\Onion');
@@ -49,7 +49,7 @@ class RouterTest extends TestCase
 	/**
 	 *
 	 */
-	public function testDispatch()
+	public function testDispatch(): void
 	{
 		$request = Mockery::mock('\kanso\framework\http\request\Request');
 		$onion   = Mockery::mock('\kanso\framework\onion\Onion');
@@ -74,7 +74,7 @@ class RouterTest extends TestCase
 	/**
 	 *
 	 */
-	public function testRegex()
+	public function testRegex(): void
 	{
 		$regex =
 		[
@@ -118,7 +118,7 @@ class RouterTest extends TestCase
 	/**
 	 * @expectedException kanso\framework\http\response\exceptions\NotFoundException
 	 */
-	public function testNotFound()
+	public function testNotFound(): void
 	{
 		$request = Mockery::mock('\kanso\framework\http\request\Request');
 		$onion   = Mockery::mock('\kanso\framework\onion\Onion');
@@ -141,7 +141,7 @@ class RouterTest extends TestCase
 	/**
 	 * @expectedException kanso\framework\http\response\exceptions\MethodNotAllowedException
 	 */
-	public function testInvalidMethod()
+	public function testInvalidMethod(): void
 	{
 		$request = Mockery::mock('\kanso\framework\http\request\Request');
 		$onion   = Mockery::mock('\kanso\framework\onion\Onion');

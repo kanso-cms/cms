@@ -19,7 +19,6 @@ class Author extends Helper
     /**
      * Get the author of the current post or a post by id.
      *
-     * @access public
      * @param  int|null                      $post_id Post id (optional) (Default NULL)
      * @return \kanso\cms\wrappers\User|null
      */
@@ -48,7 +47,6 @@ class Author extends Helper
     /**
      * Checks whether a given author exists by name or id.
      *
-     * @access  public
      * @param  string|int $usernameOrId Username or id
      * @return bool
      */
@@ -58,7 +56,7 @@ class Author extends Helper
 
         $usernameOrId = is_numeric($usernameOrId) ? intval($usernameOrId) : $usernameOrId;
 
-        $author = $this->container->get('UserManager')->provider()->byKey($index, $usernameOrId, true);
+        $author = $this->container->UserManager->provider()->byKey($index, $usernameOrId, true);
 
         if ($author)
         {
@@ -71,7 +69,6 @@ class Author extends Helper
     /**
      * Does the author of the current post or an author by id have a thumbnail attachment.
      *
-     * @access  public
      * @param  int|null $author_id Author id or null for author of current post (optional) (Default NULL)
      * @return bool
      */
@@ -105,7 +102,6 @@ class Author extends Helper
     /**
      * Get the author name of the current post or an author by id.
      *
-     * @access  public
      * @param  int|null    $author_id Author id or null for author of current post (optional) (default NULL)
      * @return string|null
      */
@@ -139,7 +135,6 @@ class Author extends Helper
     /**
      * Get the author's full URL of the current post or an author by id.
      *
-     * @access  public
      * @param  int|null    $author_id Author id or null for author of current post (optional) (default NULL)
      * @return string|null
      */
@@ -153,7 +148,7 @@ class Author extends Helper
             {
                 $prefix = !empty($this->parent->blog_location()) ? '/' . $this->parent->blog_location() . '/' : '/';
 
-                return $this->container->get('Request')->environment()->HTTP_HOST . $prefix . 'author/' . $author->slug . '/';
+                return $this->container->Request->environment()->HTTP_HOST . $prefix . 'author/' . $author->slug . '/';
             }
 
             return null;
@@ -167,7 +162,7 @@ class Author extends Helper
             {
                 $prefix = !empty($this->parent->blog_location()) ? '/' . $this->parent->blog_location() . '/' : '/';
 
-                return $this->container->get('Request')->environment()->HTTP_HOST . $prefix . 'author/' . $author->slug . '/';
+                return $this->container->Request->environment()->HTTP_HOST . $prefix . 'author/' . $author->slug . '/';
             }
         }
 
@@ -177,7 +172,6 @@ class Author extends Helper
     /**
      * Get the authors thumbnail attachment of the current post or an author by id.
      *
-     * @access  public
      * @param  int|null                       $author_id Author id or null for author of current post (optional) (default NULL)
      * @return \kanso\cms\wrappers\Media|null
      */
@@ -213,7 +207,6 @@ class Author extends Helper
     /**
      * Get the authors bio of the current post or an author by id.
      *
-     * @access  public
      * @param  int|null    $author_id Author id or null for author of current post (optional) (default NULL)
      * @return string|null
      */
@@ -248,7 +241,6 @@ class Author extends Helper
     /**
      * Get the authors twitter URL of the current post or an author by id.
      *
-     * @access  public
      * @param  int|null    $author_id Author id or null for author of current post (optional) (default NULL)
      * @return string|null
      */
@@ -283,7 +275,6 @@ class Author extends Helper
     /**
      * Get the authors google URL of the current post or an author by id.
      *
-     * @access  public
      * @param  int|null    $author_id Author id or null for author of current post (optional) (default NULL)
      * @return string|null
      */
@@ -318,7 +309,6 @@ class Author extends Helper
     /**
      * Get the authors facebook URL of the current post or an author by id.
      *
-     * @access  public
      * @param  int|null    $author_id Author id or null for author of current post (optional) (default NULL)
      * @return string|null
      */
@@ -352,7 +342,6 @@ class Author extends Helper
     /**
      * Get the authors instagram URL of the current post or an author by id.
      *
-     * @access  public
      * @param  int|null    $author_id Author id or null for author of current post (optional) (default NULL)
      * @return string|null
      */
@@ -385,7 +374,6 @@ class Author extends Helper
     /**
      * Get an array of user object of all authors.
      *
-     * @access public
      * @return array
      */
     public function all_the_authors(): array
@@ -399,7 +387,7 @@ class Author extends Helper
 
         $authors = [];
 
-        $rows = $this->sql()->SELECT('id, role')->FROM('users')->FIND_ALL();
+        $rows = $this->sql()->SELECT('id, role')->FROM('users')->ORDER_BY('name', 'ASC')->FIND_ALL();
 
         foreach ($rows as $row)
         {
@@ -408,7 +396,7 @@ class Author extends Helper
                 continue;
             }
 
-            $authors[] = $this->container->get('UserManager')->byId($row['id']);
+            $authors[] = $this->container->UserManager->byId($row['id']);
         }
 
         return $this->parent->helper('cache')->set($key, $authors);
@@ -417,7 +405,6 @@ class Author extends Helper
     /**
      * Ge an array of Post objects objects by author id.
      *
-     * @access public
      * @param  int   $author_id The author id
      * @param  bool  $published Get only published articles (optional) (Default TRUE)
      * @return array
@@ -433,7 +420,7 @@ class Author extends Helper
 
         if ($this->parent->author_exists($author_id))
         {
-            return $this->parent->helper('cache')->set($key, $this->container->get('PostManager')->provider()->byKey('posts.author_id', $author_id, false, $published));
+            return $this->parent->helper('cache')->set($key, $this->container->PostManager->provider()->byKey('posts.author_id', $author_id, false, $published));
         }
 
         return $this->parent->helper('cache')->set($key, []);

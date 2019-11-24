@@ -12,4 +12,4 @@
  */
 
 // Search
-$router->get('/search-results/', '\kanso\cms\application\Application::applyRoute', 'search');
+$router->get('/search-results/', '\kanso\cms\query\controllers\Content@apply', '\kanso\cms\query\models\Search');

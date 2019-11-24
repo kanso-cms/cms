@@ -74,7 +74,6 @@ class Github implements WebhookInterface
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\http\request\Request   $request  Request object
      * @param \kanso\framework\http\response\Response $response Response object
      * @param \kanso\framework\shell\Shell            $shell    Shell utility
@@ -138,7 +137,7 @@ class Github implements WebhookInterface
     /**
      * {@inheritdoc}
      */
-    public function deploy()
+    public function deploy(): void
     {
         $this->gitPull();
 
@@ -150,7 +149,7 @@ class Github implements WebhookInterface
      *
      * @throws \Exception if 'git pull' was unsuccefull
      */
-    private function gitPull()
+    private function gitPull(): void
     {
         $this->shell->cd($this->request->environment()->DOCUMENT_ROOT);
 
@@ -214,15 +213,13 @@ class Github implements WebhookInterface
 
     /**
      * Validate the github signature and decode the payload.
-     *
-     * @access private
      */
     private function verifySignature(): bool
     {
         $token = $this->request->headers()->HTTP_X_HUB_SIGNATURE;
 
         // Split signature into algorithm and hash
-        list($algo, $hash) = explode('=', $token, 2);
+        [$algo, $hash] = explode('=', $token, 2);
 
         // Get payload
         $payload = file_get_contents($this->_fileIn);

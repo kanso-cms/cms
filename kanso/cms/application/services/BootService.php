@@ -7,7 +7,7 @@
 
 namespace kanso\cms\application\services;
 
-use kanso\cms\application\Application;
+use kanso\cms\application\Cms;
 use kanso\framework\application\services\Service;
 
 /**
@@ -20,12 +20,8 @@ class BootService extends Service
 	/**
 	 * {@inheritdoc}
 	 */
-	public function register()
+	public function register(): void
 	{
-		$this->container->singleton('CMS', function($container)
-		{
-			return Application::instance($container);
-		})
-		->CMS->boot();
+		$this->container->setInstance('CMS', new Cms($this->container));
 	}
 }

@@ -17,14 +17,14 @@ mb_internal_encoding('UTF-8');
  * This is REQUIRED for the application to function
  * properly.
  */
-define('KANSO_DIR', dirname(dirname(__FILE__)) . '/kanso');
+define('KANSO_DIR', dirname(__FILE__, 2) . '/kanso');
 
 /*
  * Path to the Kanso app directory.
  * This is REQUIRED for the application to function
  * properly.
  */
-define('APP_DIR', dirname(dirname(__FILE__)) . '/app');
+define('APP_DIR', dirname(__FILE__, 2) . '/app');
 
 /*
  * Kanso env for testing

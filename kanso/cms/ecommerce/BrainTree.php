@@ -38,7 +38,6 @@ class BrainTree extends UtilityBase
     /**
      * Generate and return a token for JS nonce.
      *
-     * @access public
      * @return string
      */
     public function token()
@@ -60,7 +59,6 @@ class BrainTree extends UtilityBase
     /**
      * Find an existing customer's card by id.
      *
-     * @access public
      * @param  array       $sale Transaction configuration
      * @return Transaction
      */
@@ -74,7 +72,6 @@ class BrainTree extends UtilityBase
     /**
      * Find an existing customer's card by id.
      *
-     * @access public
      * @param  int                 $cardId The card id from our database
      * @param  int                 $userId The user id
      * @return PaymentMethod|false
@@ -103,7 +100,6 @@ class BrainTree extends UtilityBase
     /**
      * Get logged in user's stored credit cards from BT.
      *
-     * @access public
      * @return array
      */
     public function cards()
@@ -138,7 +134,6 @@ class BrainTree extends UtilityBase
     /**
      * Get the logged in customer.
      *
-     * @access public
      * @return Customer|null
      */
     public function customer()
@@ -151,7 +146,6 @@ class BrainTree extends UtilityBase
     /**
      * Create New Braintree customer.
      *
-     * @access public
      * @throws Exception                                            If customer couldn't be created
      * @return \Braintree\Result\Error|\Braintree\Result\Successful
      */
@@ -180,7 +174,6 @@ class BrainTree extends UtilityBase
     /**
      * Create New Braintree customer.
      *
-     * @access public
      * @return \Braintree\PaymentMethod|false
      */
     public function addCard(string $nonce)
@@ -209,10 +202,8 @@ class BrainTree extends UtilityBase
 
     /**
      * Instantiate braintree.
-     *
-     * @access private
      */
-    private function configure()
+    private function configure(): void
     {
         if (!$this->btConfigured)
         {
@@ -233,7 +224,6 @@ class BrainTree extends UtilityBase
     /**
      * Find braintree customer.
      *
-     * @access private
      * @return \Braintree\Result\Error|\Braintree\Result\Successful|null
      */
     private function getBtCustomer()

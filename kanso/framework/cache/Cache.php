@@ -33,7 +33,6 @@ class Cache
     /**
      * Constructor.
      *
-     * @access public
      * @param int                                          $lifetime Date the cache will expire (unix timestamp)
      * @param \kanso\framework\cache\stores\StoreInterface $store    Storage impementation
      */
@@ -47,7 +46,6 @@ class Cache
     /**
      * Load a key value.
      *
-     * @access public
      * @param string $key Key to load
      */
     public function get(string $key): string
@@ -58,11 +56,10 @@ class Cache
     /**
      * Save a key value.
      *
-     * @access public
      * @param string $key  Key to save the output
      * @param string $data Data to store
      */
-    public function put(string $key, string $data)
+    public function put(string $key, string $data): void
     {
         $this->store->put($key, $data);
     }
@@ -70,7 +67,6 @@ class Cache
     /**
      * Check if a key is stored.
      *
-     * @access public
      * @param string $key Key to check
      */
     public function has(string $key): bool
@@ -81,10 +77,9 @@ class Cache
     /**
      * Remove a key value.
      *
-     * @access public
      * @param string $key Key to delete
      */
-    public function delete(string $key)
+    public function delete(string $key): void
     {
         $this->store->delete($key);
     }
@@ -92,7 +87,6 @@ class Cache
     /**
      * Checks is key value is expired.
      *
-     * @access public
      * @param string $key Key to check
      */
     public function expired(string $key): bool
@@ -102,10 +96,8 @@ class Cache
 
     /**
      * Clear the entire cache.
-     *
-     * @access public
      */
-    public function clear()
+    public function clear(): void
     {
         $this->store->clear();
     }

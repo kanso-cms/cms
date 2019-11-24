@@ -54,7 +54,6 @@ class Queue
     /**
      * Constructor.
      *
-     * @access public
      * @param \kanso\framework\file\Filesystem $filesystem Filesystem instance
      * @param \kanso\cms\email\utility\Sender  $sender     Email sender instance
      * @param string                           $logDir     Log directory
@@ -76,7 +75,6 @@ class Queue
     /**
      * Is email queuing enabled ?
      *
-     * @access public
      * @return bool
      */
     public function enabled(): bool
@@ -87,7 +85,6 @@ class Queue
     /**
      * Is email queuing disabled ?
      *
-     * @access public
      * @return bool
      */
     public function disabled(): bool
@@ -97,8 +94,6 @@ class Queue
 
     /**
      * Enable email queuing.
-     *
-     * @access public
      */
     public function enable()
     {
@@ -107,8 +102,6 @@ class Queue
 
     /**
      * Disable email queuing.
-     *
-     * @access public
      */
     public function disable()
     {
@@ -118,10 +111,9 @@ class Queue
     /**
      * Add an email to the queue.
      *
-     * @access public
      * @param string $id The email id from the log
      */
-    public function add(string $id)
+    public function add(string $id): void
     {
         if (!$this->filesystem->exists($this->queueFile))
         {
@@ -134,7 +126,6 @@ class Queue
     /**
      * Get the email queue as an array.
      *
-     * @access public
      * @return array
      */
     public function get(): array
@@ -156,10 +147,8 @@ class Queue
 
     /**
      * Process the email queue.
-     *
-     * @access public
      */
-    public function process()
+    public function process(): void
     {
         $queue = $this->get();
 

@@ -62,7 +62,6 @@ class OpenSSL extends Encrypter implements EncrypterInterface
 	/**
 	 * Constructor.
 	 *
-	 * @access public
 	 * @param string $key    Encryption key
 	 * @param string $cipher Cipher (optional) (default 'AES-256-ECB')
 	 */
@@ -79,10 +78,8 @@ class OpenSSL extends Encrypter implements EncrypterInterface
 
 	/**
 	 * Load compatible ciphers.
-	 *
-	 * @access private
 	 */
-	private function loadCyphers()
+	private function loadCyphers(): void
 	{
 		$this->ciphers = array_filter(openssl_get_cipher_methods(), function($cypher)
 		{

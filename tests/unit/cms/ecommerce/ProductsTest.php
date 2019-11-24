@@ -20,7 +20,7 @@ class ProductsTest extends TestCase
 	/**
 	 *
 	 */
-	public function testOffer()
+	public function testOffer(): void
 	{
 		$postManager  = Mockery::mock('\kanso\cms\wrappers\managers\PostManager');
 		$product      = $this->fakeProduct();
@@ -50,7 +50,7 @@ class ProductsTest extends TestCase
 	/**
 	 *
 	 */
-	public function testOffers()
+	public function testOffers(): void
 	{
 		$postManager  = Mockery::mock('\kanso\cms\wrappers\managers\PostManager');
 		$product      = $this->fakeProduct();

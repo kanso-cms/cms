@@ -20,7 +20,7 @@ class TagManagerTest extends TestCase
     /**
      *
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
         $provider = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
@@ -37,7 +37,7 @@ class TagManagerTest extends TestCase
     /**
      *
      */
-    public function testById()
+    public function testById(): void
     {
         $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
         $provider = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
@@ -52,7 +52,7 @@ class TagManagerTest extends TestCase
     /**
      *
      */
-    public function testByName()
+    public function testByName(): void
     {
         $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
         $provider = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
@@ -67,7 +67,7 @@ class TagManagerTest extends TestCase
     /**
      *
      */
-    public function testBySlug()
+    public function testBySlug(): void
     {
         $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
         $provider = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
@@ -82,7 +82,7 @@ class TagManagerTest extends TestCase
     /**
      *
      */
-    public function testDelete()
+    public function testDelete(): void
     {
         $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
         $provider = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
@@ -113,7 +113,7 @@ class TagManagerTest extends TestCase
     /**
      *
      */
-    public function testClear()
+    public function testClear(): void
     {
         $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
         $provider = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');

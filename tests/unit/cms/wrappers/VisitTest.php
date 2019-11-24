@@ -20,7 +20,7 @@ class VisitTest extends TestCase
     /**
      *
      */
-    public function testInstantiate()
+    public function testInstantiate(): void
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
 
@@ -32,7 +32,7 @@ class VisitTest extends TestCase
     /**
      *
      */
-    public function testSetGet()
+    public function testSetGet(): void
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
 
@@ -46,7 +46,7 @@ class VisitTest extends TestCase
     /**
      *
      */
-    public function testHas()
+    public function testHas(): void
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
 
@@ -62,7 +62,7 @@ class VisitTest extends TestCase
     /**
      *
      */
-    public function testRemove()
+    public function testRemove(): void
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
 
@@ -78,7 +78,7 @@ class VisitTest extends TestCase
     /**
      *
      */
-    public function testAsArray()
+    public function testAsArray(): void
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
 
@@ -90,7 +90,7 @@ class VisitTest extends TestCase
     /**
      *
      */
-    public function testDeleteEmpty()
+    public function testDeleteEmpty(): void
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
 
@@ -102,7 +102,7 @@ class VisitTest extends TestCase
     /**
      *
      */
-    public function testDeleteTrue()
+    public function testDeleteTrue(): void
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
 
@@ -120,7 +120,7 @@ class VisitTest extends TestCase
     /**
      *
      */
-    public function testDeleteFalse()
+    public function testDeleteFalse(): void
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
 
@@ -132,7 +132,7 @@ class VisitTest extends TestCase
     /**
      *
      */
-    public function testSaveNew()
+    public function testSaveNew(): void
     {
         $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
 
@@ -158,7 +158,7 @@ class VisitTest extends TestCase
     /**
      *
      */
-    public function testSaveExisting()
+    public function testSaveExisting(): void
     {
         $sql = Mockery::mock('\kanso\framework\database\query\Builder');
 

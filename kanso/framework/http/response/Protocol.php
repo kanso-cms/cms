@@ -24,7 +24,6 @@ class Protocol
     /**
      * Constructor.
      *
-     * @access public
      * @param string $protocol HTTP protocol (optional) (default 'http')
      */
     public function __construct(string $protocol = 'http')
@@ -35,10 +34,9 @@ class Protocol
     /**
      * Set the protocol.
      *
-     * @access public
      * @param string $protocol HTTP protocol
      */
-    public function set(string $protocol)
+    public function set(string $protocol): void
     {
         $this->protocol = $protocol;
     }
@@ -46,7 +44,6 @@ class Protocol
     /**
      * Get the protocol.
      *
-     * @access public
      * @return string
      */
     public function get(): string
@@ -57,7 +54,6 @@ class Protocol
     /**
      * Are we sending over HTTPS ?
      *
-     * @access public
      * @return bool
      */
     public function isSecure(): bool
