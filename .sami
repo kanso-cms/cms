@@ -21,10 +21,6 @@ $iterator = Finder::create()
 
 // generate documentation for all v2.0.* tags, the 2.0 branch, and the master one
 $versions = GitVersionCollection::create($dir)
-    ->addFromTags('2.*')
-    ->addFromTags('3.*')
-    ->addFromTags('4.*')
-    ->addFromTags('5.*')
     ->addFromTags('6.*')
     ->add('master', 'master branch')
 ;
