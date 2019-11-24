@@ -246,19 +246,15 @@ class Console
 	{
 		$commandInstance = $this->commandInstance($command);
 
-		$this->output->writeLn('<yellow>Command:</yellow>');
+		$this->output->write('<yellow>Command: </yellow>');
+
+		$this->output->write("php console {$command}");
 
 		$this->output->write(PHP_EOL);
 
-		$this->output->writeLn("php console {$command}");
+		$this->output->write('<yellow>Description: </yellow>');
 
-		$this->output->write(PHP_EOL);
-
-		$this->output->writeLn('<yellow>Description:</yellow>');
-
-		$this->output->write(PHP_EOL);
-
-		$this->output->writeLn($commandInstance->getDescription());
+		$this->output->write($commandInstance->getDescription());
 
 		$this->drawArgumentTable('Arguments and options:', $commandInstance->getArguments());
 	}

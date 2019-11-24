@@ -89,6 +89,21 @@ class Input
     }
 
     /**
+     * Returns a parameter by key.
+     *
+     * @return mixed
+     */
+    public function parameter(string $key)
+    {
+        if (array_key_exists($key, $this->params))
+        {
+            return $this->params[$key];
+        }
+
+        return null;
+    }
+
+    /**
      * Returns the option flags.
      *
      * @return array
@@ -96,6 +111,16 @@ class Input
     public function options(): array
     {
         return $this->options;
+    }
+
+    /**
+     * Returns true if option is set.
+     *
+     * @return mixed
+     */
+    public function option(string $key): bool
+    {
+        return in_array($key, $this->options);
     }
 
     /**

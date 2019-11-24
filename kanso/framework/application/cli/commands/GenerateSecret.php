@@ -27,8 +27,8 @@ class GenerateSecret extends Command
 	 */
 	public function execute(): void
 	{
-		$secret = Key::generateEncoded();
+		$this->container->Config->set('application.secret', Key::generateEncoded());
 
-		$this->output->writeLn('<green>Success: A new application secret has been generated.</green>');
+		$this->write('Success: A new application secret has been generated.', 'green');
 	}
 }

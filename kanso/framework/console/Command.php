@@ -18,6 +18,8 @@ use kanso\framework\ioc\Container;
  */
 abstract class Command
 {
+	use CommandHelperTrait;
+
 	/**
 	 * Input.
 	 *
@@ -40,11 +42,25 @@ abstract class Command
 	protected $container;
 
 	/**
+	 * Command name.
+	 *
+	 * @var string
+	 */
+	protected $commandName;
+
+	/**
 	 * Command description.
 	 *
 	 * @var string
 	 */
 	protected $description;
+
+	/**
+	 * Command information.
+	 *
+	 * @var array
+	 */
+	protected $commandInformation = [];
 
 	/**
 	 * Available params.
@@ -89,7 +105,7 @@ abstract class Command
 	 */
 	public function getArguments(): array
 	{
-		return array_merge($this->options, $this->params);
+		return $this->commandInformation;
 	}
 
 	/**
