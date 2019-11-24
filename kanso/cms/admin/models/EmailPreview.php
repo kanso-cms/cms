@@ -7,8 +7,6 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\framework\utility\Str;
-
 /**
  * Admin panel sent email preview.
  *
@@ -56,7 +54,7 @@ class EmailPreview extends BaseModel
      */
     public function parseGet()
     {
-        $id = explode('/', Str::queryFilterUri($this->Request->environment()->REQUEST_URI));
+        $id = explode('/', $this->Request->environment()->REQUEST_PATH);
         $id = array_pop($id);
 
         $path         = $this->Config->get('email.log_dir');

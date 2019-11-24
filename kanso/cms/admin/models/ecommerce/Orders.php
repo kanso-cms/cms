@@ -217,7 +217,7 @@ class Orders extends BaseModel
             'max_page'      => 0,
             'queries'       => $this->getQueries(),
             'empty_queries' => $this->emptyQueries(),
-            'active_tab'    => Str::getAfterLastChar(Str::queryFilterUri($this->Request->environment()->REQUEST_URI), '/'),
+            'active_tab'    => Str::getAfterLastChar($this->Request->environment()->REQUEST_PATH, '/'),
         ];
 
         if ($response['active_tab'] === 'e-commerce')

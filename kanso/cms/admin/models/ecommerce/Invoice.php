@@ -8,7 +8,6 @@
 namespace kanso\cms\admin\models\ecommerce;
 
 use kanso\cms\admin\models\BaseModel;
-use kanso\framework\utility\Str;
 
 /**
  * Admin panel invoice model.
@@ -22,7 +21,7 @@ class Invoice extends BaseModel
      */
     public function onGET()
     {
-        $transactionId = explode('/', Str::queryFilterUri($this->Request->environment()->REQUEST_URI));
+        $transactionId = explode('/', $this->Request->environment()->REQUEST_PATH);
         $transactionId = array_pop($transactionId);
 
         // SQL Builder

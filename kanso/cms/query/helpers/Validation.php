@@ -126,7 +126,7 @@ class Validation extends Helper
     {
         if ($slug)
         {
-            $uri = strtolower(Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI));
+            $uri = strtolower($this->container->Request->environment()->REQUEST_PATH);
 
             $slug = strtolower(trim($slug, '/'));
 

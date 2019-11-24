@@ -147,7 +147,7 @@ class Admin
         // If this is a child menu item is this page being requested ?
         if ($parent)
         {
-            $requestSlug = explode('/', Str::queryFilterUri($this->Request->environment()->REQUEST_URI));
+            $requestSlug = explode('/', $this->Request->environment()->REQUEST_PATH);
             array_shift($requestSlug);
             $requestSlug = implode('/', $requestSlug);
             $isPage      = $slug === $requestSlug;
@@ -155,7 +155,7 @@ class Admin
         else
         {
             // Is this page being requested ?
-            $requestSlug = Str::getAfterLastChar(Str::queryFilterUri($this->Request->environment()->REQUEST_URI), '/');
+            $requestSlug = Str::getAfterLastChar($this->Request->environment()->REQUEST_PATH, '/');
             $isPage      = $slug === $requestSlug;
         }
 

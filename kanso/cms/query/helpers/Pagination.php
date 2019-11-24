@@ -8,7 +8,6 @@
 namespace kanso\cms\query\helpers;
 
 use kanso\framework\utility\Arr;
-use kanso\framework\utility\Str;
 
 /**
  * CMS Query pagination methods.
@@ -43,7 +42,7 @@ class Pagination extends Helper
         ];
 
         // Segment the reuest URI
-        $uri = explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI));
+        $uri = explode('/', $this->container->Request->environment()->REQUEST_PATH);
 
         // Declare the pagination string
         $pagination = '';

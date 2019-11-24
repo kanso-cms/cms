@@ -7,7 +7,6 @@
 
 namespace kanso\cms\admin\models;
 
-use kanso\framework\utility\Str;
 use Sinergi\BrowserDetector\Browser;
 use Sinergi\BrowserDetector\Os;
 
@@ -56,7 +55,7 @@ class Lead extends BaseModel
     private function parseGet()
     {
         // Find lead
-        $visitorId = explode('/', Str::queryFilterUri($this->Request->environment()->REQUEST_URI));
+        $visitorId = explode('/', $this->Request->environment()->REQUEST_PATH);
         $visitorId = array_pop($visitorId);
         $visitor   = $this->LeadProvider->byKey('visitor_id', $visitorId);
 

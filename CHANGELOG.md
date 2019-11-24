@@ -1,3 +1,27 @@
+### 6.0.0 <small> (24-11-2019)</small>
+
+Update using ```git fetch```.
+
+#### Breaking Changes
+* Added `web` and `cli` configurations to `services` in `app/configurations/application.php`
+* Added `commands` configuration option in `app/configurations/application.php`
+* Updated the `CMS` core object in `kanso\cms\application\Cms`
+
+#### New
+* Added new `cli` component to framework
+* Added new `console` component to framework
+* Added new `REQUEST_PATH` to request environment
+
+#### Changes
+* Updated to latest PHP Phan
+* Downgraded `symfony/process` to `4.1`
+* Modularized the cms `query` component and how it filters posts
+* Updated internal logic of `kanso\framework\http\request\Environment`
+* Added in development files to `.bin` directory
+* Minor bugfixes
+
+--------------------------------------------------------
+
 ### 5.2.0 <small> (21-10-2019)</small>
 
 Update using ```git fetch```.

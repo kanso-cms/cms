@@ -43,7 +43,7 @@ class Comments extends Model
             'email-reply'  => ['boolean'],
         ];
 
-        $validator = $this->container->get('Validator')->create($this->Request->fetch(), $rules, $filters);
+        $validator = $this->container->Validator->create($this->Request->fetch(), $rules, $filters);
 
         if (!$validator->isValid())
         {

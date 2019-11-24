@@ -88,7 +88,7 @@ class Meta extends Helper
      */
     public function the_meta_title(): string
     {
-        $uri        = explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI));
+        $uri        = explode('/', $this->container->Request->environment()->REQUEST_PATH);
         $titleBase  = $this->parent->website_title();
         $titlePage  = $this->parent->pageIndex > 0 ? 'Page ' . ($this->parent->pageIndex+1) . ' | ' : '';
         $titleTitle = '';
@@ -124,7 +124,7 @@ class Meta extends Helper
      */
     public function the_canonical_url(): string
     {
-        $urlParts = array_filter(explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI)));
+        $urlParts = array_filter(explode('/', $this->container->Request->environment()->REQUEST_PATH));
         $last     = isset($urlParts[0]) ? array_values(array_slice($urlParts, -1))[0] : false;
 
         if (!$last || is_home())
@@ -273,7 +273,7 @@ class Meta extends Helper
         if (!empty($posts))
         {
             $prevpage   = $this->parent->pageIndex;
-            $uri        = explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI));
+            $uri        = explode('/', $this->container->Request->environment()->REQUEST_PATH);
 
             $titleBase  = $this->parent->website_title();
             $titlePage  = $prevpage > 1 ? 'Page ' . $prevpage . ' | ' : '';
@@ -363,7 +363,7 @@ class Meta extends Helper
         if (!empty($posts))
         {
             $nextPage   = $this->parent->pageIndex + 2;
-            $uri        = explode('/', Str::queryFilterUri($this->container->Request->environment()->REQUEST_URI));
+            $uri        = explode('/', $this->container->Request->environment()->REQUEST_PATH);
             $titleBase  = $this->parent->website_title();
             $titlePage  = $nextPage > 1 ? 'Page ' . $nextPage . ' | ' : '';
             $titleTitle = '';

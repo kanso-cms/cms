@@ -85,7 +85,7 @@ class Posts extends BaseModel
             'queries'       => $this->getQueries(),
             'empty_queries' => $this->emptyQueries(),
             'postType'      => $this->postType,
-            'postSlug'      => Str::getAfterLastChar(Str::queryFilterUri($this->Request->environment()->REQUEST_URI), '/'),
+            'postSlug'      => Str::getAfterLastChar($this->Request->environment()->REQUEST_PATH, '/'),
             'postName'      => Humanizer::pluralize(ucfirst(Str::camel2case($this->postType))),
         ];
 
