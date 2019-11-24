@@ -10,6 +10,7 @@ namespace kanso\framework\application\cli;
 use kanso\framework\application\Application as BaseApplication;
 use kanso\framework\application\cli\commands\GenerateSecret;
 use kanso\framework\application\cli\commands\Encrypt;
+use kanso\framework\application\cli\commands\ServicesList;
 use kanso\framework\cli\Cli;
 use kanso\framework\cli\Environment;
 use kanso\framework\cli\input\Input;
@@ -78,6 +79,7 @@ class Application extends BaseApplication
         $commands =
         [
             'generate_secret' => GenerateSecret::class,
+            'list_services'   => ServicesList::class,
             'encrypt'         => Encrypt::class,
         ];
 
