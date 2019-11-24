@@ -32,6 +32,16 @@ trait CommandHelperTrait
 	}
 
 	/**
+	 * Dumps data to output
+	 *
+	 * @param mixed $data Data to dump
+	 */
+	protected function dump($data): void
+	{
+		$this->output->dump($data);
+	}
+
+	/**
 	 * Writes string to output using the error writer.
 	 *
 	 * @param string $string String to write

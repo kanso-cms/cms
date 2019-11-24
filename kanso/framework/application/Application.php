@@ -205,7 +205,7 @@ class Application
      *
      * @return bool
      */
-    protected function isCommandLine(): bool
+    public function isCommandLine(): bool
     {
         return PHP_SAPI === 'cli';
     }
@@ -215,13 +215,13 @@ class Application
      */
     protected function registerServices(): void
     {
-        if (!$this->isCommandLine())
+        if ($this->isCommandLine())
         {
-            $this->registerWebServices();
+            $this->registerClisServices();
         }
         else
         {
-            $this->registerClisServices();
+            $this->registerWebServices();
         }
     }
 
