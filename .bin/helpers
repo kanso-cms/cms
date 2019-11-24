@@ -7,3 +7,5 @@ vendor/bin/phpunit
 .bin/precommit
 
 php .bin/sami.phar update .bin/sami.php
+
+php console -h
