@@ -19,14 +19,14 @@ class Encrypt extends Command
 	/**
 	 * {@inheritdoc}
 	 */
-	protected $description = 'Secularly encrypts a string.';
+	protected $description = 'Secularly encrypts a string';
 
 	/**
 	 * {@inheritdoc}
 	 */
 	protected $commandInformation = 
 	[
-		['string', 'String to encrypt', 'No']
+		['--string', 'String to encrypt', 'No']
 	];
 
 	/**

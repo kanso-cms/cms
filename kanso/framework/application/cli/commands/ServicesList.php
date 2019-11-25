@@ -19,7 +19,7 @@ class ServicesList extends Command
 	/**
 	 * {@inheritdoc}
 	 */
-	protected $description = 'Lists available services.';
+	protected $description = 'Lists available container services.';
 
 	/**
 	 * {@inheritdoc}
