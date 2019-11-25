@@ -246,9 +246,15 @@ class Application
      */
     protected function registerClisServices(): void
     {
-        $this->registerPackage('framework');
+        foreach (array_keys($this->container->Config->get('application.services')) as $package)
+        {
+            if ($package === 'web')
+            {
+                continue;
+            }
 
-        $this->registerPackage('cli');
+            $this->registerPackage($package);
+        }
     }
 
     /**
