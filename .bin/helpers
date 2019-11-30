@@ -8,4 +8,6 @@ vendor/bin/phpunit
 
 php sami.phar update /Users/joe/Github/kanso/.sami
 
+/Applications/MAMP/bin/php/php7.1.26/bin/php console
+
 php console -h
