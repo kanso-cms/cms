@@ -116,7 +116,7 @@ class Input
     /**
      * Returns true if option is set.
      *
-     * @return mixed
+     * @return bool
      */
     public function option(string $key): bool
     {

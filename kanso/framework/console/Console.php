@@ -169,9 +169,12 @@ class Console
 
 		foreach($this->commands as $name => $class)
 		{
-			$command = new $class($this->input, $this->output);
+			if (is_string($name) && is_string($class))
+			{
+				$command = new $class($this->input, $this->output);
 
-			$info[$name] = [$name, $command->getDescription()];
+				$info[$name] = [$name, $command->getDescription()];
+			}
 		}
 
 		ksort($info);

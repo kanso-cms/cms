@@ -7,8 +7,8 @@
 
 namespace kanso\framework\console;
 
-use kanso\framework\cli\output\helpers\Table;
 use kanso\framework\cli\output\helpers\OrderedList;
+use kanso\framework\cli\output\helpers\Table;
 use kanso\framework\cli\output\helpers\UnorderedList;
 
 /**
@@ -18,6 +18,13 @@ use kanso\framework\cli\output\helpers\UnorderedList;
  */
 trait CommandHelperTrait
 {
+	/**
+	 * Output.
+	 *
+	 * @var \kanso\framework\cli\output\Output
+	 */
+	protected $output;
+
 	/**
 	 * Writes string to output.
 	 *
@@ -32,7 +39,7 @@ trait CommandHelperTrait
 	}
 
 	/**
-	 * Dumps data to output
+	 * Dumps data to output.
 	 *
 	 * @param mixed $data Data to dump
 	 */

@@ -56,15 +56,13 @@ class RouterTest extends TestCase
 		$env     = Mockery::mock('\kanso\framework\http\request\Environment');
 		$router  = new Router($request, $onion);
 
-		$env->REQUEST_URI = 'foobar/';
+		$env->REQUEST_PATH = 'foobar';
 
 		$router->get('/foobar/', '\directory\ClassName@exampleMethod', 'foobar');
 
 		$request->shouldReceive('getMethod')->andReturn('GET');
 
 		$request->shouldReceive('environment')->andReturn($env);
-
-		$request->shouldReceive('path')->andReturn('foobar/');
 
 		$onion->shouldReceive('addLayer')->withArgs(['\directory\ClassName@exampleMethod', 'foobar']);
 
@@ -78,7 +76,7 @@ class RouterTest extends TestCase
 	{
 		$regex =
 		[
-			'(:any)'      => 'barfdf-343423-fsd#$@43/',
+			'(:any)'      => 'barfdf-343423-fsd#$@43',
 			'(:num)'      => '4324',
 			'(:all)'      => 'fsdfp/fdsfs/fasd/?fdfs=3242',
 			'(:year)'     => '2003',
@@ -87,9 +85,9 @@ class RouterTest extends TestCase
 			'(:hour)'     => '33',
 			'(:minute)'   => '55',
 			'(:second)'   => '34',
-			'(:postname)' => 'fdfso-fsdfs-fsf423/',
-			'(:category)' => 'fdfso-fsdfs-f43sf/',
-			'(:author)'   => 'fdfso-fsdfs-fs432f/',
+			'(:postname)' => 'fdfso-fsdfs-fsf423',
+			'(:category)' => 'fdfso-fsdfs-f43sf',
+			'(:author)'   => 'fdfso-fsdfs-fs432f',
 		];
 
 		foreach ($regex as $regex => $url)
@@ -99,15 +97,13 @@ class RouterTest extends TestCase
 			$env     = Mockery::mock('\kanso\framework\http\request\Environment');
 			$router  = new Router($request, $onion);
 
-			$env->REQUEST_URI = 'foobar/' . $url;
+			$env->REQUEST_PATH = 'foobar/' . $url;
 
 			$router->get('/foobar/' . $regex . '/', '\directory\ClassName@exampleMethod', 'foobar');
 
 			$request->shouldReceive('getMethod')->andReturn('GET');
 
 			$request->shouldReceive('environment')->andReturn($env);
-
-			$request->shouldReceive('path')->andReturn('foobar/' . $url);
 
 			$onion->shouldReceive('addLayer')->withArgs(['\directory\ClassName@exampleMethod', 'foobar']);
 
@@ -125,15 +121,13 @@ class RouterTest extends TestCase
 		$env     = Mockery::mock('\kanso\framework\http\request\Environment');
 		$router  = new Router($request, $onion);
 
-		$env->REQUEST_URI = 'foobaz/';
+		$env->REQUEST_PATH = 'foobaz/';
 
 		$router->get('/foobar/', '\directory\ClassName@exampleMethod', 'foobar');
 
 		$request->shouldReceive('getMethod')->andReturn('GET');
 
 		$request->shouldReceive('environment')->andReturn($env);
-
-		$request->shouldReceive('path')->andReturn('foobaz/');
 
 		$router->dispatch();
 	}
@@ -148,15 +142,13 @@ class RouterTest extends TestCase
 		$env     = Mockery::mock('\kanso\framework\http\request\Environment');
 		$router  = new Router($request, $onion);
 
-		$env->REQUEST_URI = 'foobar/';
+		$env->REQUEST_PATH = 'foobar';
 
 		$router->get('/foobar/', '\directory\ClassName@exampleMethod', 'foobar');
 
 		$request->shouldReceive('getMethod')->andReturn('POST');
 
 		$request->shouldReceive('environment')->andReturn($env);
-
-		$request->shouldReceive('path')->andReturn('foobar/');
 
 		$router->dispatch();
 	}
