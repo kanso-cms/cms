@@ -57,7 +57,7 @@ class BrainTree extends UtilityBase
     }
 
     /**
-     * Find an existing customer's card by id.
+     * Make a transaction
      *
      * @param  array       $sale Transaction configuration
      * @return Transaction
