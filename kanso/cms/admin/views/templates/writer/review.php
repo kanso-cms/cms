@@ -44,7 +44,7 @@
 			<div class="form-field row floor-xs">
 				<label for="excerpt">Excerpt</label>
 				<p class="color-gray">Excerpts are used for SEO as well as templating. Leave blank to have it generated automatically.</p>
-				<textarea type="text" name="excerpt" id="excerpt" rows="5"><?php echo $the_post ? $the_post->excerpt : null; ?></textarea>
+				<textarea name="excerpt" id="excerpt" rows="5"><?php echo $the_post ? $the_post->excerpt : null; ?></textarea>
 			</div>
 
 			<div class="form-field row floor-xs">
@@ -91,6 +91,18 @@
 	            </span>
 	        </div>
 
+	        <div class="form-field row floor-xs">
+				<label for="meta_title">SEO Meta Title</label>
+				<p class="color-gray">The SEO meta title for this post.</p>
+				<input type="text" name="meta_title" id="meta_title" value="<?php echo isset(the_post_meta($the_post->id)['meta_title']) ? the_post_meta($the_post->id)['meta_title'] : ''; ?>" autocomplete="off"/>
+			</div>
+
+			 <div class="form-field row floor-xs">
+				<label for="meta_description">SEO Meta Description</label>
+				<p class="color-gray">The SEO meta description for this post.</p>
+				<textarea name="meta_description" id="meta_description" rows="5"><?php echo isset(the_post_meta($the_post->id)['meta_description']) ? the_post_meta($the_post->id)['meta_description'] : ''; ?></textarea>
+			</div>
+
 	        <div class="form-field row">
 				<label>Post Meta</label>
 		        <p class="color-gray">Post meta allows you to save additional data to a post.</p>
@@ -102,7 +114,7 @@
 	            <div class="row floor-sm js-post-meta-container">
 	            	<?php if ($the_post) :
             		$post_meta = the_post_meta($the_post->id);
-            		if (is_array($post_meta) && !empty($post_meta)) : foreach ($post_meta as $key => $value) : if (is_array($value)) continue; ?>
+            		if (is_array($post_meta) && !empty($post_meta)) : foreach ($post_meta as $key => $value) : if (is_array($value) || $key === 'meta_description' || $key === 'meta_title') continue; ?>
             			<div class="row roof-xs js-meta-row">
 	            			<div class="form-field floor-xs">
 							    <label>Key</label>

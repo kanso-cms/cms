@@ -293,13 +293,32 @@ class Writer extends BaseModel
     /**
      * Sorts and organises the post meta.
      *
-     * @return array|false
+     * @return array
      */
-    private function getPostMeta()
+    private function getPostMeta(): array
     {
         $keys     = [];
         $values   = [];
         $response = [];
+
+        if (isset($_POST['meta_title']))
+        {
+            $title = strip_tags(trim($_POST['meta_title']));
+
+            if ($title !== '')
+            {
+                $response['meta_title'] = $title;
+            }
+        }
+        if (isset($_POST['meta_description']))
+        {
+            $desc = strip_tags(trim($_POST['meta_description']));
+
+            if ($desc !== '')
+            {
+                $response['meta_description'] = $desc;
+            }
+        }        
 
         if (isset($_POST['post-meta-keys']))
         {
@@ -310,19 +329,12 @@ class Writer extends BaseModel
             $values = json_decode($_POST['post-meta-values'], true);
         }
 
-        if (!is_array($values) || !is_array($keys))
+        if (is_array($values) && is_array($keys) && count($values) === count($keys))
         {
-            return false;
-        }
-
-        if (count($values) !== count($keys))
-        {
-            return false;
-        }
-
-        foreach ($keys as $i => $k)
-        {
-            $response[trim($k, '\'')] = trim($values[$i], '\'');
+            foreach ($keys as $i => $k)
+            {
+                $response[trim($k, '\'')] = trim($values[$i], '\'');
+            }
         }
 
         $offers = [];

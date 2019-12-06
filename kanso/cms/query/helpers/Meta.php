@@ -62,7 +62,14 @@ class Meta extends Helper
 
         if ($this->parent->is_single() || $this->parent->is_page() || $this->parent->is_custom_post())
         {
-            $description = $this->parent->post->excerpt;
+            if (isset($this->parent->the_post_meta()['meta_description']))
+            {
+                $description = $this->parent->the_post_meta()['meta_description'];
+            }
+            elseif ($this->parent->have_posts())
+            {
+                $description = $this->parent->post->excerpt;
+            }
         }
         elseif ($this->parent->is_tag() || $this->parent->is_category() || $this->parent->is_author())
         {
@@ -100,7 +107,11 @@ class Meta extends Helper
 
         if ($this->parent->is_single() || $this->parent->is_page() || $this->parent->is_custom_post())
         {
-            if ($this->parent->have_posts())
+            if (isset($this->parent->the_post_meta()['meta_title']))
+            {
+                $titleTitle = $this->parent->the_post_meta()['meta_title']. ' | ';
+            }
+            elseif ($this->parent->have_posts())
             {
                 $titleTitle = $this->parent->post->title . ' | ';
             }
