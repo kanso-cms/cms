@@ -70,7 +70,7 @@ class Coupons extends UtilityBase
                 // Validate the user has not already used the coupon before
                 if ($this->Gatekeeper->isLoggedIn())
                 {
-                    if ($this->sql()->SELECT('*')->FROM('used_public_coupons')->WHERE('coupon_name', '=', $couponName)->AND_WHERE('user_id', '=', $this->Gatekeeper->getUser()->id)->ROW())
+                    if ($this->sql()->SELECT('id')->FROM('used_public_coupons')->WHERE('coupon_name', '=', $couponName)->AND_WHERE('user_id', '=', $this->Gatekeeper->getUser()->id)->ROW())
                     {
                         return true;
                     }
