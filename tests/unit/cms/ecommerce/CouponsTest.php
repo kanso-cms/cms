@@ -21,9 +21,8 @@ class CouponsTest extends TestCase
 	 */
 	public function testExistsConfig(): void
 	{
-		$coupons    = Mockery::mock('\kanso\cms\ecommerce\Coupons')->makePartial();
-		$config     = Mockery::mock('\kanso\framework\config\Config');
-		$coupons->Config = $config;
+		$mocks = $this->getCouponMocks();
+		extract($mocks);
 
 		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(15);
 
@@ -35,12 +34,8 @@ class CouponsTest extends TestCase
 	 */
 	public function testNoExistsConfig(): void
 	{
-		$coupons    = Mockery::mock('\kanso\cms\ecommerce\Coupons')->makePartial();
-		$config     = Mockery::mock('\kanso\framework\config\Config');
-		$gatekeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
-			
-		$coupons->Gatekeeper = $gatekeeper;
-		$coupons->Config = $config;
+		$mocks = $this->getCouponMocks();
+		extract($mocks);
 
 		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(false);
 		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(false);
@@ -53,22 +48,13 @@ class CouponsTest extends TestCase
 	 */
 	public function testExistsDB(): void
 	{
-		$coupons    = Mockery::mock('\kanso\cms\ecommerce\Coupons')->makePartial();
-		$sql        = Mockery::mock('\kanso\framework\database\query\Builder');
-		$config     = Mockery::mock('\kanso\framework\config\Config');
-		$gatekeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
-		$user       = Mockery::mock('\kanso\cms\wrappers\User');
+		$mocks = $this->getCouponMocks();
+		extract($mocks);
 		
-
-		$user->id = 1;
-		$coupons->Gatekeeper = $gatekeeper;
-		$coupons->Config = $config;
-		
-
 		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(false);
 		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
 		$gatekeeper->shouldReceive('getUser')->andReturn($user);
-		$coupons->shouldAllowMockingProtectedMethods();
+		
 		$coupons->shouldReceive('sql')->andReturn($sql);
 		$sql->shouldReceive('SELECT')->with('*')->andReturn($sql);
 		$sql->shouldReceive('FROM')->with('loyalty_coupons')->andReturn($sql);
@@ -84,21 +70,13 @@ class CouponsTest extends TestCase
 	 */
 	public function testNotExistsDB(): void
 	{
-		$coupons    = Mockery::mock('\kanso\cms\ecommerce\Coupons')->makePartial();
-		$sql        = Mockery::mock('\kanso\framework\database\query\Builder');
-		$config     = Mockery::mock('\kanso\framework\config\Config');
-		$gatekeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
-		$user       = Mockery::mock('\kanso\cms\wrappers\User');
-
-		$user->id = 1;
-		$coupons->Gatekeeper = $gatekeeper;
-		$coupons->Config = $config;
-		
+		$mocks = $this->getCouponMocks();
+		extract($mocks);
 
 		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(false);
 		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
 		$gatekeeper->shouldReceive('getUser')->andReturn($user);
-		$coupons->shouldAllowMockingProtectedMethods();
+		
 		$coupons->shouldReceive('sql')->andReturn($sql);
 		$sql->shouldReceive('SELECT')->with('*')->andReturn($sql);
 		$sql->shouldReceive('FROM')->with('loyalty_coupons')->andReturn($sql);
@@ -114,21 +92,13 @@ class CouponsTest extends TestCase
 	 */
 	public function testUsedPublicCouponLoggedIn(): void
 	{
-		$coupons    = Mockery::mock('\kanso\cms\ecommerce\Coupons')->makePartial();
-		$sql        = Mockery::mock('\kanso\framework\database\query\Builder');
-		$config     = Mockery::mock('\kanso\framework\config\Config');
-		$gatekeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
-		$user       = Mockery::mock('\kanso\cms\wrappers\User');
-
-		$user->id            = 1;
-		$user->email         = 'foo@bar.com';
-		$coupons->Gatekeeper = $gatekeeper;
-		$coupons->Config     = $config;
+		$mocks = $this->getCouponMocks();
+		extract($mocks);
 		
 		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(true);
 		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
 		$gatekeeper->shouldReceive('getUser')->andReturn($user);
-		$coupons->shouldAllowMockingProtectedMethods();
+		
 		$coupons->shouldReceive('sql')->andReturn($sql);
 		$sql->shouldReceive('SELECT')->with('*')->times(2)->andReturn($sql);
 		$sql->shouldReceive('FROM')->with('used_public_coupons')->times(2)->andReturn($sql);
@@ -146,21 +116,13 @@ class CouponsTest extends TestCase
 	 */
 	public function testUnUsedPublicCouponLoggedIn(): void
 	{
-		$coupons    = Mockery::mock('\kanso\cms\ecommerce\Coupons')->makePartial();
-		$sql        = Mockery::mock('\kanso\framework\database\query\Builder');
-		$config     = Mockery::mock('\kanso\framework\config\Config');
-		$gatekeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
-		$user       = Mockery::mock('\kanso\cms\wrappers\User');
-
-		$user->id            = 1;
-		$user->email         = 'foo@bar.com';
-		$coupons->Gatekeeper = $gatekeeper;
-		$coupons->Config     = $config;
+		$mocks = $this->getCouponMocks();
+		extract($mocks);
 		
 		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(true);
 		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
 		$gatekeeper->shouldReceive('getUser')->andReturn($user);
-		$coupons->shouldAllowMockingProtectedMethods();
+		
 		$coupons->shouldReceive('sql')->andReturn($sql);
 		$sql->shouldReceive('SELECT')->with('*')->times(2)->andReturn($sql);
 		$sql->shouldReceive('FROM')->with('used_public_coupons')->times(2)->andReturn($sql);
@@ -178,21 +140,13 @@ class CouponsTest extends TestCase
 	 */
 	public function testUsedFromEmailLoggedIn(): void
 	{
-		$coupons    = Mockery::mock('\kanso\cms\ecommerce\Coupons')->makePartial();
-		$sql        = Mockery::mock('\kanso\framework\database\query\Builder');
-		$config     = Mockery::mock('\kanso\framework\config\Config');
-		$gatekeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
-		$user       = Mockery::mock('\kanso\cms\wrappers\User');
-
-		$user->id            = 1;
-		$user->email         = 'foo@bar.com';
-		$coupons->Gatekeeper = $gatekeeper;
-		$coupons->Config     = $config;
+		$mocks = $this->getCouponMocks();
+		extract($mocks);
 		
 		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(true);
 		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
 		$gatekeeper->shouldReceive('getUser')->andReturn($user);
-		$coupons->shouldAllowMockingProtectedMethods();
+		
 		$coupons->shouldReceive('sql')->andReturn($sql);
 		$sql->shouldReceive('SELECT')->with('*')->times(2)->andReturn($sql);
 		$sql->shouldReceive('FROM')->with('used_public_coupons')->times(2)->andReturn($sql);
@@ -208,7 +162,217 @@ class CouponsTest extends TestCase
 	/**
 	 * 
 	 */
+	public function testUnUsedFromEmail(): void
+	{
+		$mocks = $this->getCouponMocks();
+		extract($mocks);
+		
+		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(true);
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(false);
+		
+		$coupons->shouldReceive('sql')->andReturn($sql);
+		$sql->shouldReceive('SELECT')->with('*')->times(1)->andReturn($sql);
+		$sql->shouldReceive('FROM')->with('used_public_coupons')->times(1)->andReturn($sql);
+		$sql->shouldReceive('WHERE')->with('coupon_name', '=', 'FOOBAR')->times(1)->andReturn($sql);
+		$sql->shouldReceive('AND_WHERE')->with('email', '=', 'foo@bar.com')->times(1)->andReturn($sql);
+		$sql->shouldReceive('ROW')->times(1)->andReturn([]);
+		
+		$this->assertFalse($coupons->used('FOOBAR', 'foo@bar.com'));
+	}
+
+	/**
+	 * 
+	 */
 	public function testUsedFromEmail(): void
+	{
+		$mocks = $this->getCouponMocks();
+		extract($mocks);
+		
+		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(true);
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(false);
+		
+		$coupons->shouldReceive('sql')->andReturn($sql);
+		$sql->shouldReceive('SELECT')->with('*')->times(1)->andReturn($sql);
+		$sql->shouldReceive('FROM')->with('used_public_coupons')->times(1)->andReturn($sql);
+		$sql->shouldReceive('WHERE')->with('coupon_name', '=', 'FOOBAR')->times(1)->andReturn($sql);
+		$sql->shouldReceive('AND_WHERE')->with('email', '=', 'foo@bar.com')->times(1)->andReturn($sql);
+		$sql->shouldReceive('ROW')->times(1)->andReturn($this->couponDbRow());
+		
+		$this->assertTrue($coupons->used('FOOBAR', 'foo@bar.com'));
+	}
+
+	/**
+	 * 
+	 */
+	public function testUsedNoExists(): void
+	{
+		$mocks = $this->getCouponMocks();
+		extract($mocks);
+		
+		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(false);
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
+		$gatekeeper->shouldReceive('getUser')->andReturn($user);
+		
+		$coupons->shouldReceive('sql')->andReturn($sql);
+		$sql->shouldReceive('SELECT')->with('*')->times(1)->andReturn($sql);
+		$sql->shouldReceive('FROM')->with('loyalty_coupons')->times(1)->andReturn($sql);
+		$sql->shouldReceive('WHERE')->with('code', '=', 'FOOBAR')->times(1)->andReturn($sql);
+		$sql->shouldReceive('AND_WHERE')->with('user_id', '=', 1)->times(1)->andReturn($sql);
+		$sql->shouldReceive('AND_WHERE')->with('used', '=', true)->times(1)->andReturn($sql);
+		$sql->shouldReceive('ROW')->times(1)->andReturn([]);
+		
+		$this->assertFalse($coupons->used('FOOBAR'));
+	}
+	/**
+	 * 
+	 */
+	public function testUnusedNoExists(): void
+	{
+		$mocks = $this->getCouponMocks();
+		extract($mocks);
+		
+		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(false);
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(false);
+		$this->assertTrue($coupons->used('FOOBAR'));
+	}
+
+	/**
+	 * 
+	 */
+	public function testDiscountExists(): void
+	{
+		$mocks = $this->getCouponMocks();
+		extract($mocks);
+		
+		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(15);
+		$this->assertEquals($coupons->discount('FOOBAR'), 15);
+	}
+
+	/**
+	 * 
+	 */
+	public function testDiscountFromDb(): void
+	{
+		$mocks = $this->getCouponMocks();
+		extract($mocks);
+		
+		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(false);
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
+		$gatekeeper->shouldReceive('getUser')->andReturn($user);
+		$coupons->shouldReceive('sql')->andReturn($sql);
+		
+		$sql->shouldReceive('SELECT')->with('*')->times(1)->andReturn($sql);
+		$sql->shouldReceive('FROM')->with('loyalty_coupons')->times(1)->andReturn($sql);
+		$sql->shouldReceive('WHERE')->with('code', '=', 'FOOBAR')->times(1)->andReturn($sql);
+		$sql->shouldReceive('AND_WHERE')->with('user_id', '=', 1)->times(1)->andReturn($sql);
+		$sql->shouldReceive('AND_WHERE')->with('used', '=', false)->times(1)->andReturn($sql);
+		$sql->shouldReceive('ROW')->times(1)->andReturn($this->couponDbRow());
+
+		$this->assertEquals($coupons->discount('FOOBAR'), 15);
+	}
+
+	/**
+	 * 
+	 */
+	public function testNoDiscountFromDb(): void
+	{
+		$mocks = $this->getCouponMocks();
+		extract($mocks);
+		
+		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(false);
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
+		$gatekeeper->shouldReceive('getUser')->andReturn($user);
+		$coupons->shouldReceive('sql')->andReturn($sql);
+		
+		$sql->shouldReceive('SELECT')->with('*')->times(1)->andReturn($sql);
+		$sql->shouldReceive('FROM')->with('loyalty_coupons')->times(1)->andReturn($sql);
+		$sql->shouldReceive('WHERE')->with('code', '=', 'FOOBAR')->times(1)->andReturn($sql);
+		$sql->shouldReceive('AND_WHERE')->with('user_id', '=', 1)->times(1)->andReturn($sql);
+		$sql->shouldReceive('AND_WHERE')->with('used', '=', false)->times(1)->andReturn($sql);
+		$sql->shouldReceive('ROW')->times(1)->andReturn([]);
+
+		$this->assertEquals($coupons->discount('FOOBAR'), false);
+	}
+
+	/**
+	 * 
+	 */
+	public function testSetUsedPublic(): void
+	{
+		$mocks = $this->getCouponMocks();
+		extract($mocks);
+		
+		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(15);
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
+		$gatekeeper->shouldReceive('getUser')->andReturn($user);
+		$coupons->shouldReceive('sql')->andReturn($sql);
+		
+		$sql->shouldReceive('INSERT_INTO')->with('used_public_coupons')->times(1)->andReturn($sql);
+		$sql->shouldReceive('VALUES')->with(['user_id' => 1, 'email' =>'foo@bar.com', 'coupon_name' => 'FOOBAR'])->times(1)->andReturn($sql);
+		$sql->shouldReceive('QUERY')->times(1)->andReturn([1]);
+
+		$this->assertTrue($coupons->setUsed('FOOBAR', 'foo@bar.com'));
+	}
+
+	/**
+	 * 
+	 */
+	public function testSetUsedPrivate(): void
+	{
+		$mocks = $this->getCouponMocks();
+		extract($mocks);
+		
+		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(false);
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
+		$gatekeeper->shouldReceive('getUser')->andReturn($user);
+		$coupons->shouldReceive('sql')->andReturn($sql);
+
+		$sql->shouldReceive('SELECT')->with('*')->times(1)->andReturn($sql);
+		$sql->shouldReceive('FROM')->with('loyalty_coupons')->times(1)->andReturn($sql);
+		$sql->shouldReceive('WHERE')->with('code', '=', 'FOOBAR')->times(1)->andReturn($sql);
+		$sql->shouldReceive('AND_WHERE')->with('user_id', '=', 1)->times(1)->andReturn($sql);
+		$sql->shouldReceive('AND_WHERE')->with('used', '=', false)->times(1)->andReturn($sql);
+		$sql->shouldReceive('ROW')->times(1)->andReturn($this->couponDbRow());
+
+		$update = $this->couponDbRow();
+		unset($update['id']);
+		
+		$sql->shouldReceive('UPDATE')->with('loyalty_coupons')->times(1)->andReturn($sql);
+		$sql->shouldReceive('SET')->with($update)->times(1)->andReturn($sql);
+		$sql->shouldReceive('WHERE')->with('id', '=', 1)->times(1)->andReturn($sql);
+		$sql->shouldReceive('QUERY')->times(1)->andReturn([1]);
+
+		$this->assertTrue($coupons->setUsed('FOOBAR'));
+	}
+
+	/**
+	 * 
+	 */
+	public function testSetUsedPrivateNoExists(): void
+	{
+		$mocks = $this->getCouponMocks();
+		extract($mocks);
+		
+		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(false);
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
+		$gatekeeper->shouldReceive('getUser')->andReturn($user);
+		$coupons->shouldReceive('sql')->andReturn($sql);
+
+		$sql->shouldReceive('SELECT')->with('*')->times(1)->andReturn($sql);
+		$sql->shouldReceive('FROM')->with('loyalty_coupons')->times(1)->andReturn($sql);
+		$sql->shouldReceive('WHERE')->with('code', '=', 'FOOBAR')->times(1)->andReturn($sql);
+		$sql->shouldReceive('AND_WHERE')->with('user_id', '=', 1)->times(1)->andReturn($sql);
+		$sql->shouldReceive('AND_WHERE')->with('used', '=', false)->times(1)->andReturn($sql);
+		$sql->shouldReceive('ROW')->times(1)->andReturn([]);
+
+		$this->assertFalse($coupons->setUsed('FOOBAR'));
+	}
+
+
+	/**
+	 * 
+	 */
+	private function getCouponMocks(): array
 	{
 		$coupons    = Mockery::mock('\kanso\cms\ecommerce\Coupons')->makePartial();
 		$sql        = Mockery::mock('\kanso\framework\database\query\Builder');
@@ -220,18 +384,16 @@ class CouponsTest extends TestCase
 		$user->email         = 'foo@bar.com';
 		$coupons->Gatekeeper = $gatekeeper;
 		$coupons->Config     = $config;
-		
-		$config->shouldReceive('get')->with('ecommerce.coupons.FOOBAR')->andReturn(true);
-		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(false);
 		$coupons->shouldAllowMockingProtectedMethods();
-		$coupons->shouldReceive('sql')->andReturn($sql);
-		$sql->shouldReceive('SELECT')->with('*')->times(1)->andReturn($sql);
-		$sql->shouldReceive('FROM')->with('used_public_coupons')->times(1)->andReturn($sql);
-		$sql->shouldReceive('WHERE')->with('coupon_name', '=', 'FOOBAR')->times(1)->andReturn($sql);
-		$sql->shouldReceive('AND_WHERE')->with('email', '=', 'foo@bar.com')->times(1)->andReturn($sql);
-		$sql->shouldReceive('ROW')->times(1)->andReturn([]);
-		
-		$this->assertTrue($coupons->used('FOOBAR'));
+
+		return
+		[
+			'coupons'    => $coupons,
+			'sql'        => $sql,
+			'config'     => $config,
+			'gatekeeper' => $gatekeeper,
+			'user'       => $user,
+		];
 	}
 
 	/**

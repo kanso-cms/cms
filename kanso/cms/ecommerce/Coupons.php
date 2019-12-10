@@ -70,7 +70,7 @@ class Coupons extends UtilityBase
                 // Validate the user has not already used the coupon before
                 if ($this->Gatekeeper->isLoggedIn())
                 {
-                    if ($this->sql()->SELECT('id')->FROM('used_public_coupons')->WHERE('coupon_name', '=', $couponName)->AND_WHERE('user_id', '=', $this->Gatekeeper->getUser()->id)->ROW())
+                    if ($this->sql()->SELECT('*')->FROM('used_public_coupons')->WHERE('coupon_name', '=', $couponName)->AND_WHERE('user_id', '=', $this->Gatekeeper->getUser()->id)->ROW())
                     {
                         return true;
                     }
@@ -143,9 +143,11 @@ class Coupons extends UtilityBase
 	/**
 	 * Set a coupon as used.
 	 *
-	 * @param string $couponName The coupon name or code
+	 * @param  string $couponName The coupon name or code
+     * @param  string $email      Email address associated with coupon (optional) (default '') 
+     * @return bool 
 	 */
-	public function setUsed(string $couponName = '', string $email = '')
+	public function setUsed(string $couponName = '', string $email = ''): bool
 	{
 		$couponName = strtoupper(trim($couponName));
 
@@ -167,7 +169,7 @@ class Coupons extends UtilityBase
                 'coupon_name' => $couponName,
             ];
 
-            return $this->sql()->INSERT_INTO('used_public_coupons')->VALUES($couponRow)->QUERY();
+            return boolval($this->sql()->INSERT_INTO('used_public_coupons')->VALUES($couponRow)->QUERY());
         }
         // Coupon could be a loyalty redemption
         elseif ($this->Gatekeeper->isLoggedIn())
@@ -180,7 +182,7 @@ class Coupons extends UtilityBase
         		unset($coupon['id']);
         		$coupon['used'] = true;
 
-        		return $this->sql()->UPDATE('loyalty_coupons')->SET($coupon)->WHERE('id', '=', $id)->QUERY();
+        		return boolval($this->sql()->UPDATE('loyalty_coupons')->SET($coupon)->WHERE('id', '=', $id)->QUERY());
         	}
         }
 
