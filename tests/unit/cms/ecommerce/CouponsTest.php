@@ -368,7 +368,6 @@ class CouponsTest extends TestCase
 		$this->assertFalse($coupons->setUsed('FOOBAR'));
 	}
 
-
 	/**
 	 * 
 	 */
