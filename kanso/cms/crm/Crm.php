@@ -42,36 +42,7 @@ class Crm
      */
     public function __construct()
     {
-        // Only load if not in CLI
-        if (!$this->Application->isCommandLine())
-        {
-            // Real humans
-            if (!$this->UserAgent->isCrawler())
-            {
-                $this->findVisitor();
-
-                // Only save current visit if this is a GET request
-                if ($this->Request->isGet())
-                {
-                    if (!$this->Query->is_admin())
-                    {
-                        $this->visitor->addVisit($this->newVisitRow());
-                    }
-                }
-            }
-
-            // Crawlers/bots get merged by user agent rather than cookies
-            else
-            {
-                if ($this->Request->isGet())
-                {
-                    $this->findCrawler();
-
-                    $this->visitor->addVisit($this->newVisitRow());
-                }
-            }
-        }
-
+       
     }
 
     /**

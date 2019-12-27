@@ -157,9 +157,9 @@ class Rewards extends UtilityBase
 	 * @param  string                   $description Description of event
 	 * @param  int|null                 $userId      user_id (optional) (default null)
 	 * @throws InvalidArgumentException If current user is not logged in and $userId is not provided
-	 * @return int
+	 * @return bool
 	 */
-	public function addPoints(int $points, string $description, int $userId = null)
+	public function addPoints(int $points, string $description, int $userId = null): bool
 	{
 		if (!$userId && !$this->Gatekeeper->isLoggedIn())
 		{
@@ -174,7 +174,7 @@ class Rewards extends UtilityBase
 			'points_add'  => $points,
 		];
 
-		return $this->sql()->INSERT_INTO('loyalty_points')->VALUES($row)->QUERY();
+		return $this->sql()->INSERT_INTO('loyalty_points')->VALUES($row)->QUERY() === 1;
 	}
 
 	/**
@@ -184,9 +184,9 @@ class Rewards extends UtilityBase
 	 * @param  string                   $description Description of event
 	 * @param  int|null                 $userId      user_id (optional) (default null)
 	 * @throws InvalidArgumentException If current user is not logged in and $userId is not provided
-	 * @return int
+	 * @return bool
 	 */
-	public function minusPoints(int $points, string $description, int $userId = null)
+	public function minusPoints(int $points, string $description, int $userId = null): bool
 	{
 		if (!$userId && !$this->Gatekeeper->isLoggedIn())
 		{
@@ -201,7 +201,7 @@ class Rewards extends UtilityBase
 			'points_minus' => $points,
 		];
 
-		return $this->sql()->INSERT_INTO('loyalty_points')->VALUES($row)->QUERY();
+		return $this->sql()->INSERT_INTO('loyalty_points')->VALUES($row)->QUERY() === 1;
 	}
 
 	/**
