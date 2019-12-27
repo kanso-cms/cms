@@ -11,7 +11,6 @@ use kanso\framework\cli\output\Formatter;
 use kanso\framework\cli\output\helpers\Table;
 use kanso\framework\cli\output\Output;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -25,7 +24,7 @@ class TableTest extends TestCase
 	public function testBasicTable(): void
 	{
 		$formatter = new Formatter;
-		$output    = Mockery::mock(Output::class);
+		$output    = $this->mock(Output::class);
 
 		$output->shouldReceive('formatter')->once()->andReturn($formatter);
 
@@ -47,7 +46,7 @@ class TableTest extends TestCase
 	public function testTableWithMultipleRows(): void
 	{
 		$formatter = new Formatter;
-		$output    = Mockery::mock(Output::class);
+		$output    = $this->mock(Output::class);
 
 		$output->shouldReceive('formatter')->once()->andReturn($formatter);
 
@@ -70,7 +69,7 @@ class TableTest extends TestCase
 	public function testTableWithMultipleColumns(): void
 	{
 		$formatter = new Formatter;
-		$output    = Mockery::mock(Output::class);
+		$output    = $this->mock(Output::class);
 
 		$output->shouldReceive('formatter')->once()->andReturn($formatter);
 
@@ -92,7 +91,7 @@ class TableTest extends TestCase
 	public function testTableWithMultipleColumnsAndRows(): void
 	{
 		$formatter = new Formatter;
-		$output    = Mockery::mock(Output::class);
+		$output    = $this->mock(Output::class);
 
 		$output->shouldReceive('formatter')->once()->andReturn($formatter);
 
@@ -115,7 +114,7 @@ class TableTest extends TestCase
 	public function testStyledContent(): void
 	{
 		$formatter = new Formatter;
-		$output    = Mockery::mock(Output::class);
+		$output    = $this->mock(Output::class);
 
 		$output->shouldReceive('formatter')->once()->andReturn($formatter);
 
@@ -139,7 +138,7 @@ class TableTest extends TestCase
 		$this->expectException(\RuntimeException::class);
 
 		$formatter = new Formatter;
-		$output    = Mockery::mock(Output::class);
+		$output    = $this->mock(Output::class);
 
 		$output->shouldReceive('formatter')->once()->andReturn($formatter);
 

@@ -12,7 +12,6 @@ use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
 use kanso\framework\onion\Onion;
 use kanso\tests\TestCase;
-use Mockery;
 
 class OnionCallbackTest
 {
@@ -45,9 +44,9 @@ class OnionTest extends TestCase
 	{
 		$callback = '\directory\ClassName::method';
 
-		$request = Mockery::mock('\kanso\framework\http\request\Request');
+		$request = $this->mock('\kanso\framework\http\request\Request');
 
-		$response = Mockery::mock('\kanso\framework\http\response\Response');
+		$response = $this->mock('\kanso\framework\http\response\Response');
 
 		$onion = new Onion($request, $response);
 
@@ -67,9 +66,9 @@ class OnionTest extends TestCase
 
 		$callbackTwo = '\directory\ClassName::methodTwo';
 
-		$request = Mockery::mock('\kanso\framework\http\request\Request');
+		$request = $this->mock('\kanso\framework\http\request\Request');
 
-		$response = Mockery::mock('\kanso\framework\http\response\Response');
+		$response = $this->mock('\kanso\framework\http\response\Response');
 
 		$onion = new Onion($request, $response);
 
@@ -89,9 +88,9 @@ class OnionTest extends TestCase
 
 		$callback = '\kanso\tests\unit\framework\onion\OnionCallbackTest@normalMethod';
 
-		$request = Mockery::mock('\kanso\framework\http\request\Request');
+		$request = $this->mock('\kanso\framework\http\request\Request');
 
-		$response = Mockery::mock('\kanso\framework\http\response\Response');
+		$response = $this->mock('\kanso\framework\http\response\Response');
 
 		$onion = new Onion($request, $response);
 
@@ -111,9 +110,9 @@ class OnionTest extends TestCase
 
 		$callback = '\kanso\tests\unit\framework\onion\OnionCallbackTest::staticFunc';
 
-		$request = Mockery::mock('\kanso\framework\http\request\Request');
+		$request = $this->mock('\kanso\framework\http\request\Request');
 
-		$response = Mockery::mock('\kanso\framework\http\response\Response');
+		$response = $this->mock('\kanso\framework\http\response\Response');
 
 		$onion = new Onion($request, $response);
 
@@ -136,9 +135,9 @@ class OnionTest extends TestCase
 			echo $foo;
 		};
 
-		$request = Mockery::mock('\kanso\framework\http\request\Request');
+		$request = $this->mock('\kanso\framework\http\request\Request');
 
-		$response = Mockery::mock('\kanso\framework\http\response\Response');
+		$response = $this->mock('\kanso\framework\http\response\Response');
 
 		$onion = new Onion($request, $response);
 
@@ -168,9 +167,9 @@ class OnionTest extends TestCase
 			echo $bar;
 		};
 
-		$request = Mockery::mock('\kanso\framework\http\request\Request');
+		$request = $this->mock('\kanso\framework\http\request\Request');
 
-		$response = Mockery::mock('\kanso\framework\http\response\Response');
+		$response = $this->mock('\kanso\framework\http\response\Response');
 
 		$onion = new Onion($request, $response);
 
@@ -193,11 +192,11 @@ class OnionTest extends TestCase
 			$next();
 		};
 
-		$request = Mockery::mock('\kanso\framework\http\request\Request');
+		$request = $this->mock('\kanso\framework\http\request\Request');
 
-		$response = Mockery::mock('\kanso\framework\http\response\Response');
+		$response = $this->mock('\kanso\framework\http\response\Response');
 
-		$status = Mockery::mock('\kanso\framework\http\response\status');
+		$status = $this->mock('\kanso\framework\http\response\status');
 
 		$onion = new Onion($request, $response);
 

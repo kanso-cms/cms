@@ -9,7 +9,6 @@ namespace kanso\tests\unit\framework\http\cookie;
 
 use kanso\framework\http\cookie\storage\NativeCookieStorage;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -39,7 +38,7 @@ class NativeStorageTest extends TestCase
 
 		$_COOKIE['foobar_cookie'] = 's:0{fdf[$@#$!sd23fs==}';
 
-		$crypto = Mockery::mock('kanso\framework\security\Crypto');
+		$crypto = $this->mock('kanso\framework\security\Crypto');
 
 		$store = new NativeCookieStorage($crypto, $this->getCookieConfig());
 
@@ -55,7 +54,7 @@ class NativeStorageTest extends TestCase
 	{
 		$_COOKIE = [];
 
-		$crypto = Mockery::mock('kanso\framework\security\Crypto');
+		$crypto = $this->mock('kanso\framework\security\Crypto');
 
 		$store = new NativeCookieStorage($crypto, $this->getCookieConfig());
 
@@ -71,7 +70,7 @@ class NativeStorageTest extends TestCase
 	{
 		$_COOKIE = [];
 
-		$crypto = Mockery::mock('kanso\framework\security\Crypto');
+		$crypto = $this->mock('kanso\framework\security\Crypto');
 
 		$store = new NativeCookieStorage($crypto, $this->getCookieConfig());
 

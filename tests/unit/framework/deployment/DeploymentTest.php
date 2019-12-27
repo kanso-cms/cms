@@ -9,7 +9,6 @@ namespace kanso\tests\unit\framework\deployment;
 
 use kanso\framework\deployment\Deployment;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,7 +21,7 @@ class DeploymentTest extends TestCase
      */
     public function testUpdate(): void
     {
-        $webhook  = Mockery::mock('\kanso\framework\deployment\webhooks\Github');
+        $webhook  = $this->mock('\kanso\framework\deployment\webhooks\Github');
 
         $deployment = new Deployment($webhook);
 

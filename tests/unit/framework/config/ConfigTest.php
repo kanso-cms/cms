@@ -9,7 +9,6 @@ namespace kanso\tests\unit\framework\config;
 
 use kanso\framework\config\Config;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,7 +21,7 @@ class ConfigTest extends TestCase
 	 */
 	public function getLoader()
 	{
-		return Mockery::mock('\kanso\framework\config\Loader');
+		return $this->mock('\kanso\framework\config\Loader');
 	}
 
 	/**

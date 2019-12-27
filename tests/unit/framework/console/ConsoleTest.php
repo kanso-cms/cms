@@ -14,7 +14,6 @@ use kanso\framework\console\Command;
 use kanso\framework\console\Console;
 use kanso\framework\ioc\Container;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -27,9 +26,9 @@ class ConsoleTest extends TestCase
 	 */
 	public function testNoCommand(): void
 	{
-		$container = Mockery::mock(Container::class);
-		$input     = Mockery::mock(Input::class);
-		$output    = Mockery::mock(Output::class);
+		$container = $this->mock(Container::class);
+		$input     = $this->mock(Input::class);
+		$output    = $this->mock(Output::class);
 		$formatter = new Formatter;
 		$console   = new Console($input, $output, $container);
 
@@ -62,9 +61,9 @@ class ConsoleTest extends TestCase
 	 */
 	public function testWrongCommand(): void
 	{
-		$container = Mockery::mock(Container::class);
-		$input     = Mockery::mock(Input::class);
-		$output    = Mockery::mock(Output::class);
+		$container = $this->mock(Container::class);
+		$input     = $this->mock(Input::class);
+		$output    = $this->mock(Output::class);
 		$formatter = new Formatter;
 		$console   = new Console($input, $output, $container);
 
@@ -96,9 +95,9 @@ class ConsoleTest extends TestCase
 	 */
 	public function testRunCommand(): void
 	{
-		$container = Mockery::mock(Container::class);
-		$input     = Mockery::mock(Input::class);
-		$output    = Mockery::mock(Output::class);
+		$container = $this->mock(Container::class);
+		$input     = $this->mock(Input::class);
+		$output    = $this->mock(Output::class);
 		$formatter = new Formatter;
 		$console   = new Console($input, $output, $container);
 

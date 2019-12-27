@@ -10,7 +10,6 @@ namespace kanso\tests\unit\framework\database\connection;
 use kanso\framework\database\connection\Cache;
 use kanso\framework\database\connection\ConnectionHandler;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -23,11 +22,11 @@ class ConnectionHandlerTest extends TestCase
      */
     public function testBind(): void
     {
-    	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
+    	$connection = $this->mock('\kanso\framework\database\connection\Connection');
 
-    	$pdo = Mockery::mock('\PDO');
+    	$pdo = $this->mock('\PDO');
 
-    	$pdoStatement = Mockery::mock('\PDOStatement');
+    	$pdoStatement = $this->mock('\PDOStatement');
 
     	$handler = new ConnectionHandler($connection, new Cache);
 
@@ -55,11 +54,11 @@ class ConnectionHandlerTest extends TestCase
      */
     public function testBindAgain(): void
     {
-    	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
+    	$connection = $this->mock('\kanso\framework\database\connection\Connection');
 
-    	$pdo = Mockery::mock('\PDO');
+    	$pdo = $this->mock('\PDO');
 
-    	$pdoStatement = Mockery::mock('\PDOStatement');
+    	$pdoStatement = $this->mock('\PDOStatement');
 
     	$handler = new ConnectionHandler($connection, new Cache);
 
@@ -91,11 +90,11 @@ class ConnectionHandlerTest extends TestCase
      */
     public function testBindMore(): void
     {
-    	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
+    	$connection = $this->mock('\kanso\framework\database\connection\Connection');
 
-    	$pdo = Mockery::mock('\PDO');
+    	$pdo = $this->mock('\PDO');
 
-    	$pdoStatement = Mockery::mock('\PDOStatement');
+    	$pdoStatement = $this->mock('\PDOStatement');
 
     	$handler = new ConnectionHandler($connection, new Cache);
 
@@ -125,11 +124,11 @@ class ConnectionHandlerTest extends TestCase
      */
     public function testBindFromQueryArgs(): void
     {
-    	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
+    	$connection = $this->mock('\kanso\framework\database\connection\Connection');
 
-    	$pdo = Mockery::mock('\PDO');
+    	$pdo = $this->mock('\PDO');
 
-    	$pdoStatement = Mockery::mock('\PDOStatement');
+    	$pdoStatement = $this->mock('\PDOStatement');
 
     	$handler = new ConnectionHandler($connection, new Cache);
 
@@ -157,11 +156,11 @@ class ConnectionHandlerTest extends TestCase
      */
     public function testAllBindings(): void
     {
-    	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
+    	$connection = $this->mock('\kanso\framework\database\connection\Connection');
 
-    	$pdo = Mockery::mock('\PDO');
+    	$pdo = $this->mock('\PDO');
 
-    	$pdoStatement = Mockery::mock('\PDOStatement');
+    	$pdoStatement = $this->mock('\PDOStatement');
 
     	$handler = new ConnectionHandler($connection, new Cache);
 
@@ -191,11 +190,11 @@ class ConnectionHandlerTest extends TestCase
      */
     public function testWithCaching(): void
     {
-    	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
+    	$connection = $this->mock('\kanso\framework\database\connection\Connection');
 
-    	$pdo = Mockery::mock('\PDO');
+    	$pdo = $this->mock('\PDO');
 
-    	$pdoStatement = Mockery::mock('\PDOStatement');
+    	$pdoStatement = $this->mock('\PDOStatement');
 
     	$handler = new ConnectionHandler($connection, new Cache);
 
@@ -221,11 +220,11 @@ class ConnectionHandlerTest extends TestCase
      */
     public function testClearCaching(): void
     {
-    	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
+    	$connection = $this->mock('\kanso\framework\database\connection\Connection');
 
-    	$pdo = Mockery::mock('\PDO');
+    	$pdo = $this->mock('\PDO');
 
-    	$pdoStatement = Mockery::mock('\PDOStatement');
+    	$pdoStatement = $this->mock('\PDOStatement');
 
     	$handler = new ConnectionHandler($connection, new Cache);
 
@@ -259,11 +258,11 @@ class ConnectionHandlerTest extends TestCase
      */
     public function testClearCachingDifferentTable(): void
     {
-    	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
+    	$connection = $this->mock('\kanso\framework\database\connection\Connection');
 
-    	$pdo = Mockery::mock('\PDO');
+    	$pdo = $this->mock('\PDO');
 
-    	$pdoStatement = Mockery::mock('\PDOStatement');
+    	$pdoStatement = $this->mock('\PDOStatement');
 
     	$handler = new ConnectionHandler($connection, new Cache);
 
@@ -297,9 +296,9 @@ class ConnectionHandlerTest extends TestCase
      */
     public function testLastInsertedId(): void
     {
-    	$connection = Mockery::mock('\kanso\framework\database\connection\Connection');
+    	$connection = $this->mock('\kanso\framework\database\connection\Connection');
 
-    	$pdo = Mockery::mock('\PDO');
+    	$pdo = $this->mock('\PDO');
 
     	$handler = new ConnectionHandler($connection, new Cache);
 

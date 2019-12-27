@@ -11,7 +11,6 @@ use ErrorException;
 use InvalidArgumentException;
 use kanso\framework\exception\ErrorHandler;
 use kanso\tests\TestCase;
-use Mockery;
 use Throwable;
 
 /**
@@ -26,8 +25,8 @@ class ErrorHandlerTest extends TestCase
     public function testWebHandler(): void
     {
         $handler    = new ErrorHandler(true, E_ALL | E_STRICT);
-        $logger     = Mockery::mock('\kanso\framework\exception\ErrorLogger');
-        $webHandler = Mockery::mock('\kanso\framework\exception\handlers\WebHandler');
+        $logger     = $this->mock('\kanso\framework\exception\ErrorLogger');
+        $webHandler = $this->mock('\kanso\framework\exception\handlers\WebHandler');
 
         $handler->handle(ErrorException::class, function($exception) use ($handler, $logger, $webHandler)
         {
@@ -51,8 +50,8 @@ class ErrorHandlerTest extends TestCase
     public function testDifferentError(): void
     {
         $handler    = new ErrorHandler(true, E_ALL | E_STRICT);
-        $logger     = Mockery::mock('\kanso\framework\exception\ErrorLogger');
-        $webHandler = Mockery::mock('\kanso\framework\exception\handlers\WebHandler');
+        $logger     = $this->mock('\kanso\framework\exception\ErrorLogger');
+        $webHandler = $this->mock('\kanso\framework\exception\handlers\WebHandler');
 
         $handler->handle(Throwable::class, function($exception) use ($handler, $logger, $webHandler)
         {
@@ -76,8 +75,8 @@ class ErrorHandlerTest extends TestCase
     public function testDisableLogging(): void
     {
         $handler    = new ErrorHandler(true, E_ALL | E_STRICT);
-        $logger     = Mockery::mock('\kanso\framework\exception\ErrorLogger');
-        $webHandler = Mockery::mock('\kanso\framework\exception\handlers\WebHandler');
+        $logger     = $this->mock('\kanso\framework\exception\ErrorLogger');
+        $webHandler = $this->mock('\kanso\framework\exception\handlers\WebHandler');
 
         $handler->handle(Throwable::class, function($exception) use ($handler, $logger, $webHandler)
         {
@@ -99,8 +98,8 @@ class ErrorHandlerTest extends TestCase
     public function testDisplayErrors(): void
     {
         $handler    = new ErrorHandler(false, E_ALL | E_STRICT);
-        $logger     = Mockery::mock('\kanso\framework\exception\ErrorLogger');
-        $webHandler = Mockery::mock('\kanso\framework\exception\handlers\WebHandler');
+        $logger     = $this->mock('\kanso\framework\exception\ErrorLogger');
+        $webHandler = $this->mock('\kanso\framework\exception\handlers\WebHandler');
 
         $handler->handle(Throwable::class, function($exception) use ($handler, $logger, $webHandler)
         {

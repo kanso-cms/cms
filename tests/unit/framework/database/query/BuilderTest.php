@@ -10,7 +10,6 @@ namespace kanso\tests\unit\framework\database\query;
 use kanso\framework\database\query\Builder;
 use kanso\framework\database\query\Query;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -33,7 +32,7 @@ class BuilderTest extends TestCase
 
         $query = 'CREATE TABLE `prefixed_my_table_name` ( `id` INT UNSIGNED UNIQUE AUTO_INCREMENT, `description` VARCHAR(255), `thumbnail_id` INTEGER UNSIGNED, `notifications` BOOLEAN DEFAULT TRUE, PRIMARY KEY (id) ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;';
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -54,7 +53,7 @@ class BuilderTest extends TestCase
      */
     public function testDropTable(): void
     {
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -75,7 +74,7 @@ class BuilderTest extends TestCase
      */
     public function testTruncateTable(): void
     {
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -100,7 +99,7 @@ class BuilderTest extends TestCase
 
         $bindings = ['prefixedmytablenameandfoobar' => 'bar'];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -125,7 +124,7 @@ class BuilderTest extends TestCase
 
         $bindings = ['prefixedmytablenameandfoobar' => 'bar', 'column' => 'value'];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -150,7 +149,7 @@ class BuilderTest extends TestCase
 
         $bindings = ['column1' => 'value1', 'column2' => 'value2'];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -173,7 +172,7 @@ class BuilderTest extends TestCase
     {
         $query = 'SELECT * FROM prefixed_my_table_name';
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -196,7 +195,7 @@ class BuilderTest extends TestCase
     {
         $query = 'SELECT id, name FROM prefixed_my_table_name';
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -219,7 +218,7 @@ class BuilderTest extends TestCase
     {
         $query = 'SELECT * FROM prefixed_my_table_name LIMIT 1';
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -242,7 +241,7 @@ class BuilderTest extends TestCase
     {
         $query = 'SELECT * FROM prefixed_my_table_name LIMIT 1';
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -267,7 +266,7 @@ class BuilderTest extends TestCase
 
         $bindings = ['prefixedmytablenameandfoobar' => 'bar'];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -292,7 +291,7 @@ class BuilderTest extends TestCase
 
         $bindings = ['prefixedmytablenameandfoobar' => 'bar', 'prefixedmytablenameorbarfoo' => 'foo'];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -317,7 +316,7 @@ class BuilderTest extends TestCase
 
         $bindings = ['prefixedmytablenameandfoobar' => 'bar', 'prefixedmytablenameandbarfoo' => 'foo'];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -342,7 +341,7 @@ class BuilderTest extends TestCase
 
         $bindings = ['prefixedmytablenameandfoofoo' => 'foo', 'prefixedmytablenameandfoobar' => 'bar', 'prefixedmytablenameandfoofoobaz' => 'foobaz'];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -365,7 +364,7 @@ class BuilderTest extends TestCase
     {
         $query = 'SELECT * FROM prefixed_my_table_name INNER JOIN prefixed_foo_table ON prefixed_table1.column_name = prefixed_table2.column_name';
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -388,7 +387,7 @@ class BuilderTest extends TestCase
     {
         $query = 'SELECT * FROM prefixed_my_table_name INNER JOIN prefixed_foo_table ON prefixed_table1.column_name = prefixed_table2.column_name';
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -411,7 +410,7 @@ class BuilderTest extends TestCase
     {
         $query = 'SELECT * FROM prefixed_my_table_name LEFT JOIN prefixed_foo_table ON prefixed_table1.column_name = prefixed_table2.column_name';
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -434,7 +433,7 @@ class BuilderTest extends TestCase
     {
         $query = 'SELECT * FROM prefixed_my_table_name RIGHT JOIN prefixed_foo_table ON prefixed_table1.column_name = prefixed_table2.column_name';
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -457,7 +456,7 @@ class BuilderTest extends TestCase
     {
         $query = 'SELECT * FROM prefixed_my_table_name FULL OUTER JOIN prefixed_foo_table ON prefixed_table1.column_name = prefixed_table2.column_name';
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -480,7 +479,7 @@ class BuilderTest extends TestCase
     {
         $query = 'SELECT * FROM prefixed_my_table_name ORDER BY foo DESC';
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -503,7 +502,7 @@ class BuilderTest extends TestCase
     {
         $query = 'SELECT * FROM prefixed_my_table_name ORDER BY foo ASC';
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -526,7 +525,7 @@ class BuilderTest extends TestCase
     {
         $query = 'SELECT * FROM prefixed_my_table_name GROUP BY foo';
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -549,7 +548,7 @@ class BuilderTest extends TestCase
     {
         $query = 'SELECT *, GROUP_CONCAT(foo) AS bar FROM prefixed_my_table_name';
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -572,7 +571,7 @@ class BuilderTest extends TestCase
     {
         $query = 'SELECT * FROM prefixed_my_table_name LIMIT 1';
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -595,7 +594,7 @@ class BuilderTest extends TestCase
     {
         $query = 'SELECT * FROM prefixed_my_table_name LIMIT 0, 3';
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 

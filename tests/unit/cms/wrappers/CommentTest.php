@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\wrappers;
 
 use kanso\cms\wrappers\Comment;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,7 +21,7 @@ class CommentTest extends TestCase
      */
     public function testInstantiate(): void
     {
-    	$sql = Mockery::mock('\kanso\framework\database\query\Builder');
+    	$sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$comment = new Comment($sql, ['post_id' => 'foo']);
 
@@ -34,7 +33,7 @@ class CommentTest extends TestCase
      */
     public function testSetGet(): void
     {
-       	$sql = Mockery::mock('\kanso\framework\database\query\Builder');
+       	$sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$comment = new Comment($sql);
 
@@ -48,7 +47,7 @@ class CommentTest extends TestCase
      */
     public function testHas(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$comment = new Comment($sql);
 
@@ -64,7 +63,7 @@ class CommentTest extends TestCase
      */
     public function testRemove(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$comment = new Comment($sql);
 
@@ -80,7 +79,7 @@ class CommentTest extends TestCase
      */
     public function testAsArray(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$comment = new Comment($sql, ['post_id' => 'foo']);
 
@@ -92,7 +91,7 @@ class CommentTest extends TestCase
      */
     public function testDeleteEmpty(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$comment = new Comment($sql, ['post_id' => 'foo']);
 
@@ -104,7 +103,7 @@ class CommentTest extends TestCase
      */
     public function testDeleteTrue(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$comment = new Comment($sql, ['id' => 2, 'post_id' => 'foo']);
 
@@ -124,9 +123,9 @@ class CommentTest extends TestCase
      */
     public function testSaveNew(): void
     {
-    	$cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+    	$cHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$comment = new Comment($sql, ['post_id' => 'foobar']);
 
@@ -150,9 +149,9 @@ class CommentTest extends TestCase
      */
     public function testSaveExisting(): void
     {
-    	$cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+    	$cHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$comment = new Comment($sql, ['id' => 3, 'post_id' => 'foobar']);
 
@@ -172,7 +171,7 @@ class CommentTest extends TestCase
      */
     public function testChildren(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $comment = new Comment($sql, ['id' => 3, 'post_id' => 'foobar', 'parent' => null]);
 

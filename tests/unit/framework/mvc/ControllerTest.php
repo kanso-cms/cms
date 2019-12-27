@@ -10,7 +10,6 @@ namespace kanso\tests\unit\framework\mvc;
 use kanso\framework\mvc\controller\Controller;
 use kanso\framework\mvc\model\Model;
 use kanso\tests\TestCase;
-use Mockery;
 
 class TestController extends Controller
 {
@@ -35,9 +34,9 @@ class ControllerTest extends TestCase
      */
     public function testInstantiate(): void
     {
-        $request = Mockery::mock('\kanso\framework\http\request\Request');
+        $request = $this->mock('\kanso\framework\http\request\Request');
 
-        $response = Mockery::mock('\kanso\framework\http\response\Response');
+        $response = $this->mock('\kanso\framework\http\response\Response');
 
         $next = function(): void
         {

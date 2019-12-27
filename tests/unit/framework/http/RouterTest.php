@@ -9,7 +9,6 @@ namespace kanso\tests\unit\framework\http;
 
 use kanso\framework\http\route\Router;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,8 +21,8 @@ class RouterTest extends TestCase
 	 */
 	public function testMethods(): void
 	{
-		$request = Mockery::mock('\kanso\framework\http\request\Request');
-		$onion   = Mockery::mock('\kanso\framework\onion\Onion');
+		$request = $this->mock('\kanso\framework\http\request\Request');
+		$onion   = $this->mock('\kanso\framework\onion\Onion');
 		$router  = new Router($request, $onion);
 
 		$router->get('/foo', 'FooController::fooAction');
@@ -51,9 +50,9 @@ class RouterTest extends TestCase
 	 */
 	public function testDispatch(): void
 	{
-		$request = Mockery::mock('\kanso\framework\http\request\Request');
-		$onion   = Mockery::mock('\kanso\framework\onion\Onion');
-		$env     = Mockery::mock('\kanso\framework\http\request\Environment');
+		$request = $this->mock('\kanso\framework\http\request\Request');
+		$onion   = $this->mock('\kanso\framework\onion\Onion');
+		$env     = $this->mock('\kanso\framework\http\request\Environment');
 		$router  = new Router($request, $onion);
 
 		$env->REQUEST_PATH = 'foobar';
@@ -92,9 +91,9 @@ class RouterTest extends TestCase
 
 		foreach ($regex as $regex => $url)
 		{
-			$request = Mockery::mock('\kanso\framework\http\request\Request');
-			$onion   = Mockery::mock('\kanso\framework\onion\Onion');
-			$env     = Mockery::mock('\kanso\framework\http\request\Environment');
+			$request = $this->mock('\kanso\framework\http\request\Request');
+			$onion   = $this->mock('\kanso\framework\onion\Onion');
+			$env     = $this->mock('\kanso\framework\http\request\Environment');
 			$router  = new Router($request, $onion);
 
 			$env->REQUEST_PATH = 'foobar/' . $url;
@@ -116,9 +115,9 @@ class RouterTest extends TestCase
 	 */
 	public function testNotFound(): void
 	{
-		$request = Mockery::mock('\kanso\framework\http\request\Request');
-		$onion   = Mockery::mock('\kanso\framework\onion\Onion');
-		$env     = Mockery::mock('\kanso\framework\http\request\Environment');
+		$request = $this->mock('\kanso\framework\http\request\Request');
+		$onion   = $this->mock('\kanso\framework\onion\Onion');
+		$env     = $this->mock('\kanso\framework\http\request\Environment');
 		$router  = new Router($request, $onion);
 
 		$env->REQUEST_PATH = 'foobaz/';
@@ -137,9 +136,9 @@ class RouterTest extends TestCase
 	 */
 	public function testInvalidMethod(): void
 	{
-		$request = Mockery::mock('\kanso\framework\http\request\Request');
-		$onion   = Mockery::mock('\kanso\framework\onion\Onion');
-		$env     = Mockery::mock('\kanso\framework\http\request\Environment');
+		$request = $this->mock('\kanso\framework\http\request\Request');
+		$onion   = $this->mock('\kanso\framework\onion\Onion');
+		$env     = $this->mock('\kanso\framework\http\request\Environment');
 		$router  = new Router($request, $onion);
 
 		$env->REQUEST_PATH = 'foobar';

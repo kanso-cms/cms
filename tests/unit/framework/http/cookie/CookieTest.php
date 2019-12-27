@@ -9,7 +9,6 @@ namespace kanso\tests\unit\framework\http\cookie;
 
 use kanso\framework\http\cookie\Cookie;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,7 +21,7 @@ class CookieTest extends TestCase
 	 */
 	public function testConstructor(): void
 	{
-		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
+		$store = $this->mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(['foo' => 'bar']);
 
@@ -36,7 +35,7 @@ class CookieTest extends TestCase
 	 */
 	public function testIsLoggedIn(): void
 	{
-		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
+		$store = $this->mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(['foo' => 'bar']);
 
@@ -52,7 +51,7 @@ class CookieTest extends TestCase
 	 */
 	public function testLogin(): void
 	{
-		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
+		$store = $this->mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(['foo' => 'bar']);
 
@@ -70,7 +69,7 @@ class CookieTest extends TestCase
 	 */
 	public function testLogout(): void
 	{
-		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
+		$store = $this->mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(['foo' => 'bar']);
 
@@ -88,7 +87,7 @@ class CookieTest extends TestCase
 	 */
 	public function testSend(): void
 	{
-		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
+		$store = $this->mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(['last_active' => strtotime('-1 hour'), 'foo' => 'bar']);
 
@@ -108,7 +107,7 @@ class CookieTest extends TestCase
 	 */
 	public function testExpired(): void
 	{
-		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
+		$store = $this->mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(['last_active' => strtotime('-34 days'), 'foo' => 'bar']);
 
@@ -128,7 +127,7 @@ class CookieTest extends TestCase
 	 */
 	public function testSent(): void
 	{
-		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
+		$store = $this->mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(null);
 
@@ -152,7 +151,7 @@ class CookieTest extends TestCase
 	 */
 	public function testDestroy(): void
 	{
-		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
+		$store = $this->mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(['last_active' => strtotime('-1 hour'), 'foo' => 'bar']);
 
@@ -174,7 +173,7 @@ class CookieTest extends TestCase
 	 */
 	public function testSet(): void
 	{
-		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
+		$store = $this->mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(null);
 
@@ -192,7 +191,7 @@ class CookieTest extends TestCase
 	 */
 	public function testSetMultiple(): void
 	{
-		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
+		$store = $this->mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(null);
 
@@ -212,7 +211,7 @@ class CookieTest extends TestCase
 	 */
 	public function testGetAll(): void
 	{
-		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
+		$store = $this->mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(null);
 
@@ -230,7 +229,7 @@ class CookieTest extends TestCase
 	 */
 	public function testHas(): void
 	{
-		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
+		$store = $this->mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(null);
 
@@ -250,7 +249,7 @@ class CookieTest extends TestCase
 	 */
 	public function testRemove(): void
 	{
-		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
+		$store = $this->mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(null);
 
@@ -272,7 +271,7 @@ class CookieTest extends TestCase
 	 */
 	public function testClear(): void
 	{
-		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
+		$store = $this->mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(null);
 
@@ -291,7 +290,7 @@ class CookieTest extends TestCase
 	public function testAsArray(): void
 	{
 
-		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
+		$store = $this->mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn(null);
 
@@ -307,7 +306,7 @@ class CookieTest extends TestCase
 	 */
 	public function testIterator(): void
 	{
-		$store = Mockery::mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
+		$store = $this->mock('kanso\framework\http\cookie\storage\NativeCookieStorage');
 
 		$store->shouldReceive('read')->withArgs(['cookie_name'])->andReturn([]);
 

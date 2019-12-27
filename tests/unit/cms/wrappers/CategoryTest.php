@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\wrappers;
 
 use kanso\cms\wrappers\Category;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,7 +21,7 @@ class CategoryTest extends TestCase
      */
     public function testInstantiate(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $category = new Category($sql, ['name' => 'foo']);
 
@@ -34,7 +33,7 @@ class CategoryTest extends TestCase
      */
     public function testSetGet(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $category = new Category($sql);
 
@@ -48,7 +47,7 @@ class CategoryTest extends TestCase
      */
     public function testHas(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $category = new Category($sql);
 
@@ -64,7 +63,7 @@ class CategoryTest extends TestCase
      */
     public function testRemove(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $category = new Category($sql);
 
@@ -80,7 +79,7 @@ class CategoryTest extends TestCase
      */
     public function testAsArray(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $category = new Category($sql, ['name' => 'foo']);
 
@@ -92,7 +91,7 @@ class CategoryTest extends TestCase
      */
     public function testDeleteEmpty(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $category = new Category($sql, ['name' => 'foo']);
 
@@ -104,7 +103,7 @@ class CategoryTest extends TestCase
      */
     public function testDeleteTrue(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $category = new Category($sql, ['id' => 2, 'name' => 'foo', 'parent_id' => null]);
 
@@ -126,7 +125,7 @@ class CategoryTest extends TestCase
      */
     public function testDeleteFalse(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $category = new Category($sql, ['name' => 'foo']);
 
@@ -138,7 +137,7 @@ class CategoryTest extends TestCase
      */
     public function testDeleteAdmin(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $category = new Category($sql, ['id' => 1, 'name' => 'foo']);
 
@@ -150,9 +149,9 @@ class CategoryTest extends TestCase
      */
     public function testSaveNew(): void
     {
-        $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $cHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $category = new Category($sql, ['slug' => 'categorieslug']);
 
@@ -176,7 +175,7 @@ class CategoryTest extends TestCase
      */
     public function testSaveExisting(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $category = new Category($sql, ['id' => 1, 'slug' => 'categorieslug']);
 
@@ -204,7 +203,7 @@ class CategoryTest extends TestCase
      */
     public function testClear(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $category = new Category($sql, ['id' => 2, 'slug' => 'categorieslug']);
 
@@ -220,7 +219,7 @@ class CategoryTest extends TestCase
      */
     public function testChildren(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $category = new Category($sql, ['id' => 2, 'slug' => 'categorieslug']);
 

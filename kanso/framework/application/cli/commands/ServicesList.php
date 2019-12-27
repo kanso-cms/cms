@@ -34,7 +34,7 @@ class ServicesList extends Command
 
 		foreach ($services as $service)
 		{
-			$rows[] = [$service, '<yellow>$kanso->'. $service . '</yellow>'];
+			$rows[] = [$service, '<yellow>$kanso->' . $service . '</yellow>'];
 		}
 
 		$this->write($this->container->count() . ' available services:');

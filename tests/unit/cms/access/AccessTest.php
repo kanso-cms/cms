@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\access;
 
 use kanso\cms\access\Access;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,10 +21,10 @@ class AccessTest extends TestCase
 	 */
 	public function testEnabled(): void
 	{
-		$request    = Mockery::mock('\kanso\framework\http\request\Request');
-		$response   = Mockery::mock('\kanso\framework\http\response\Response');
-		$env        = Mockery::mock('\kanso\framework\http\request\Environment');
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
+		$request    = $this->mock('\kanso\framework\http\request\Request');
+		$response   = $this->mock('\kanso\framework\http\response\Response');
+		$env        = $this->mock('\kanso\framework\http\request\Environment');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
 		$whiteList  = ['192.168.1.1'];
 
 		$env->DOCUMENT_ROOT = '/foo/bar';
@@ -42,10 +41,10 @@ class AccessTest extends TestCase
 	 */
 	public function testDisabled(): void
 	{
-		$request    = Mockery::mock('\kanso\framework\http\request\Request');
-		$response   = Mockery::mock('\kanso\framework\http\response\Response');
-		$env        = Mockery::mock('\kanso\framework\http\request\Environment');
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
+		$request    = $this->mock('\kanso\framework\http\request\Request');
+		$response   = $this->mock('\kanso\framework\http\response\Response');
+		$env        = $this->mock('\kanso\framework\http\request\Environment');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
 		$whiteList  = ['192.168.1.1'];
 
 		$env->DOCUMENT_ROOT = '/foo/bar';
@@ -62,10 +61,10 @@ class AccessTest extends TestCase
 	 */
 	public function testIpAllowed(): void
 	{
-		$request    = Mockery::mock('\kanso\framework\http\request\Request');
-		$response   = Mockery::mock('\kanso\framework\http\response\Response');
-		$env        = Mockery::mock('\kanso\framework\http\request\Environment');
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
+		$request    = $this->mock('\kanso\framework\http\request\Request');
+		$response   = $this->mock('\kanso\framework\http\response\Response');
+		$env        = $this->mock('\kanso\framework\http\request\Environment');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
 		$whiteList  = ['192.168.1.1'];
 
 		$env->DOCUMENT_ROOT = '/foo/bar';
@@ -84,10 +83,10 @@ class AccessTest extends TestCase
 	 */
 	public function testIpNotAllowed(): void
 	{
-		$request    = Mockery::mock('\kanso\framework\http\request\Request');
-		$response   = Mockery::mock('\kanso\framework\http\response\Response');
-		$env        = Mockery::mock('\kanso\framework\http\request\Environment');
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
+		$request    = $this->mock('\kanso\framework\http\request\Request');
+		$response   = $this->mock('\kanso\framework\http\response\Response');
+		$env        = $this->mock('\kanso\framework\http\request\Environment');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
 		$whiteList  = ['192.168.1.2'];
 
 		$env->DOCUMENT_ROOT = '/foo/bar';
@@ -106,10 +105,10 @@ class AccessTest extends TestCase
 	 */
 	public function testBlock(): void
 	{
-		$request    = Mockery::mock('\kanso\framework\http\request\Request');
-		$response   = Mockery::mock('\kanso\framework\http\response\Response');
-		$env        = Mockery::mock('\kanso\framework\http\request\Environment');
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
+		$request    = $this->mock('\kanso\framework\http\request\Request');
+		$response   = $this->mock('\kanso\framework\http\response\Response');
+		$env        = $this->mock('\kanso\framework\http\request\Environment');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
 		$whiteList  = ['192.168.1.1'];
 
 		$env->DOCUMENT_ROOT = '/foo/bar';
@@ -128,10 +127,10 @@ class AccessTest extends TestCase
 	 */
 	public function testSaveRobots(): void
 	{
-		$request    = Mockery::mock('\kanso\framework\http\request\Request');
-		$response   = Mockery::mock('\kanso\framework\http\response\Response');
-		$env        = Mockery::mock('\kanso\framework\http\request\Environment');
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
+		$request    = $this->mock('\kanso\framework\http\request\Request');
+		$response   = $this->mock('\kanso\framework\http\response\Response');
+		$env        = $this->mock('\kanso\framework\http\request\Environment');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
 		$whiteList  = ['192.168.1.1'];
 
 		$env->DOCUMENT_ROOT = '/foo/bar';
@@ -152,10 +151,10 @@ class AccessTest extends TestCase
 	 */
 	public function testDeleteRobots(): void
 	{
-		$request    = Mockery::mock('\kanso\framework\http\request\Request');
-		$response   = Mockery::mock('\kanso\framework\http\response\Response');
-		$env        = Mockery::mock('\kanso\framework\http\request\Environment');
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
+		$request    = $this->mock('\kanso\framework\http\request\Request');
+		$response   = $this->mock('\kanso\framework\http\response\Response');
+		$env        = $this->mock('\kanso\framework\http\request\Environment');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
 		$whiteList  = ['192.168.1.1'];
 
 		$env->DOCUMENT_ROOT = '/foo/bar';

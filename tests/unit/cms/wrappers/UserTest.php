@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\wrappers;
 
 use kanso\cms\wrappers\User;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,7 +21,7 @@ class UserTest extends TestCase
      */
     public function testInstantiate(): void
     {
-    	$sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+    	$sql  = $this->mock('\kanso\framework\database\query\Builder');
 
 		$user = new User($sql, ['name' => 'foo']);
 
@@ -34,7 +33,7 @@ class UserTest extends TestCase
      */
     public function testSetGet(): void
     {
-       	$sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+       	$sql  = $this->mock('\kanso\framework\database\query\Builder');
 
 		$user = new User($sql);
 
@@ -48,7 +47,7 @@ class UserTest extends TestCase
      */
     public function testHas(): void
     {
-        $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql  = $this->mock('\kanso\framework\database\query\Builder');
 
 		$user = new User($sql);
 
@@ -64,7 +63,7 @@ class UserTest extends TestCase
      */
     public function testRemove(): void
     {
-        $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql  = $this->mock('\kanso\framework\database\query\Builder');
 
 		$user = new User($sql);
 
@@ -80,7 +79,7 @@ class UserTest extends TestCase
      */
     public function testAsArray(): void
     {
-        $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql  = $this->mock('\kanso\framework\database\query\Builder');
 
 		$user = new User($sql, ['name' => 'foo']);
 
@@ -92,7 +91,7 @@ class UserTest extends TestCase
      */
     public function testGenerateAccessToken(): void
     {
-        $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql  = $this->mock('\kanso\framework\database\query\Builder');
 
 		$user = new User($sql, ['name' => 'foo']);
 
@@ -106,7 +105,7 @@ class UserTest extends TestCase
      */
     public function testDeleteEmpty(): void
     {
-        $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql  = $this->mock('\kanso\framework\database\query\Builder');
 
 		$user = new User($sql, ['name' => 'foo']);
 
@@ -118,7 +117,7 @@ class UserTest extends TestCase
      */
     public function testDeleteTrue(): void
     {
-        $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql  = $this->mock('\kanso\framework\database\query\Builder');
 
 		$user = new User($sql, ['id' => 2, 'name' => 'foo']);
 
@@ -148,9 +147,9 @@ class UserTest extends TestCase
      */
     public function testSaveNew(): void
     {
-    	$cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+    	$cHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$user = new User($sql, ['email' => 'foo@bar.com', 'access_token' => 'foobar']);
 
@@ -174,9 +173,9 @@ class UserTest extends TestCase
      */
     public function testSaveExisting(): void
     {
-    	$cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+    	$cHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$user = new User($sql, ['id' => 3, 'email' => 'foo@bar.com', 'access_token' => 'foobar']);
 
@@ -196,7 +195,7 @@ class UserTest extends TestCase
      */
     public function testDeleteAdmin(): void
     {
-        $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql  = $this->mock('\kanso\framework\database\query\Builder');
 
 		$user = new User($sql, ['id' => 1, 'name' => 'foo']);
 

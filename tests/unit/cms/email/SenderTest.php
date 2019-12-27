@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\email;
 
 use kanso\cms\email\utility\Sender;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,7 +21,7 @@ class SenderTest extends TestCase
 	 */
 	public function testSendNormal(): void
 	{
-		$mailer     = Mockery::mock('\PHPMailer\PHPMailer\PHPMailer');
+		$mailer     = $this->mock('\PHPMailer\PHPMailer\PHPMailer');
 		$sender     = new Sender($mailer, false);
 		$this->assertTrue($sender->send('foo@bar.com', 'Foo Bar', 'bar@foo.com', 'Foo Subject', 'html content'));
 	}
@@ -32,7 +31,7 @@ class SenderTest extends TestCase
 	 */
 	public function testSendNormalPlainTxt(): void
 	{
-		$mailer     = Mockery::mock('\PHPMailer\PHPMailer\PHPMailer');
+		$mailer     = $this->mock('\PHPMailer\PHPMailer\PHPMailer');
 		$sender     = new Sender($mailer, false);
 		$this->assertTrue($sender->send('foo@bar.com', 'Foo Bar', 'bar@foo.com', 'Foo Subject', 'html content', 'plain text'));
 	}
@@ -42,7 +41,7 @@ class SenderTest extends TestCase
 	 */
 	public function testSendSmtpHtml(): void
 	{
-		$mailer     = Mockery::mock('\PHPMailer\PHPMailer\PHPMailer');
+		$mailer     = $this->mock('\PHPMailer\PHPMailer\PHPMailer');
 		$sender     = new Sender($mailer, true, $this->getSmtpSettings());
 
 		$mailer->shouldReceive('isSMTP');
@@ -64,7 +63,7 @@ class SenderTest extends TestCase
 	 */
 	public function testSendSmtpPlainText(): void
 	{
-		$mailer     = Mockery::mock('\PHPMailer\PHPMailer\PHPMailer');
+		$mailer     = $this->mock('\PHPMailer\PHPMailer\PHPMailer');
 		$sender     = new Sender($mailer, true, $this->getSmtpSettings());
 
 		$mailer->shouldReceive('isSMTP');
@@ -85,7 +84,7 @@ class SenderTest extends TestCase
 	 */
 	public function testSendSmtpOAuthHtml(): void
 	{
-		$mailer     = Mockery::mock('\PHPMailer\PHPMailer\PHPMailer');
+		$mailer     = $this->mock('\PHPMailer\PHPMailer\PHPMailer');
 		$config     = $this->getSmtpSettings();
 		$sender     = new Sender($mailer, true, $this->getSmtpOauthSettings());
 
@@ -110,7 +109,7 @@ class SenderTest extends TestCase
 	 */
 	public function testSendSmtpOAutPlainText(): void
 	{
-		$mailer     = Mockery::mock('\PHPMailer\PHPMailer\PHPMailer');
+		$mailer     = $this->mock('\PHPMailer\PHPMailer\PHPMailer');
 		$config     = $this->getSmtpSettings();
 		$sender     = new Sender($mailer, true, $this->getSmtpOauthSettings());
 

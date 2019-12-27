@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\sitemap;
 
 use kanso\cms\sitemap\SiteMap;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,12 +21,12 @@ class SitemapTest extends TestCase
 	 */
 	public function testRss(): void
 	{
-		$request  = Mockery::mock('\kanso\framework\http\request\Request');
-		$response = Mockery::mock('\kanso\framework\http\response\Response');
-		$format   = Mockery::mock('\kanso\framework\http\response\Format');
-		$body     = Mockery::mock('\kanso\framework\http\response\Body');
-		$view     = Mockery::mock('\kanso\framework\mvc\view\View');
-		$status   = Mockery::mock('\kanso\framework\http\response\Status');
+		$request  = $this->mock('\kanso\framework\http\request\Request');
+		$response = $this->mock('\kanso\framework\http\response\Response');
+		$format   = $this->mock('\kanso\framework\http\response\Format');
+		$body     = $this->mock('\kanso\framework\http\response\Body');
+		$view     = $this->mock('\kanso\framework\mvc\view\View');
+		$status   = $this->mock('\kanso\framework\http\response\Status');
 
 		$sitemap = new SiteMap($request, $response, true, true, true, true, ['foo']);
 

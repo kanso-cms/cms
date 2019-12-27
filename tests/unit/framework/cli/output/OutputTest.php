@@ -9,7 +9,6 @@ namespace kanso\tests\unit\framework\cli\output;
 
 use kanso\framework\cli\output\Output;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,7 +21,7 @@ class OutputTest extends TestCase
 	 */
 	public function getFormatter()
 	{
-		return Mockery::mock('\kanso\framework\cli\output\Formatter');
+		return $this->mock('\kanso\framework\cli\output\Formatter');
 	}
 
 	/**
@@ -30,7 +29,7 @@ class OutputTest extends TestCase
 	 */
 	public function getEnvironment()
 	{
-		return Mockery::mock('\kanso\framework\cli\Environment');
+		return $this->mock('\kanso\framework\cli\Environment');
 	}
 
 	/**

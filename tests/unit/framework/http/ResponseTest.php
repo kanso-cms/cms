@@ -9,7 +9,6 @@ namespace kanso\tests\unit\framework\http\response;
 
 use kanso\framework\http\response\Response;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,17 +21,17 @@ class ResponseTest extends TestCase
 	 */
 	private function mockResponse()
 	{
-		$protocol = Mockery::mock('\kanso\framework\http\response\Protocol');
-		$format   = Mockery::mock('\kanso\framework\http\response\Format');
-		$body     = Mockery::mock('\kanso\framework\http\response\Body');
-		$status   = Mockery::mock('\kanso\framework\http\response\Status');
-		$headers  = Mockery::mock('\kanso\framework\http\response\Headers');
-		$cookie   = Mockery::mock('\kanso\framework\http\cookie\Cookie');
-		$session  = Mockery::mock('\kanso\framework\http\session\Session');
-		$cdn      = Mockery::mock('\kanso\framework\http\response\CDN');
-		$view     = Mockery::mock('\kanso\framework\mvc\view\View');
-		$request  = Mockery::mock('\kanso\framework\http\request\Request');
-		$rHeaders = Mockery::mock('\kanso\framework\http\request\Headers');
+		$protocol = $this->mock('\kanso\framework\http\response\Protocol');
+		$format   = $this->mock('\kanso\framework\http\response\Format');
+		$body     = $this->mock('\kanso\framework\http\response\Body');
+		$status   = $this->mock('\kanso\framework\http\response\Status');
+		$headers  = $this->mock('\kanso\framework\http\response\Headers');
+		$cookie   = $this->mock('\kanso\framework\http\cookie\Cookie');
+		$session  = $this->mock('\kanso\framework\http\session\Session');
+		$cdn      = $this->mock('\kanso\framework\http\response\CDN');
+		$view     = $this->mock('\kanso\framework\mvc\view\View');
+		$request  = $this->mock('\kanso\framework\http\request\Request');
+		$rHeaders = $this->mock('\kanso\framework\http\request\Headers');
 
 		$format->shouldReceive('set')->withArgs(['text/html']);
 		$format->shouldReceive('setEncoding')->withArgs(['utf-8']);

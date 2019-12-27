@@ -24,9 +24,9 @@ class Encrypt extends Command
 	/**
 	 * {@inheritdoc}
 	 */
-	protected $commandInformation = 
+	protected $commandInformation =
 	[
-		['--string', 'String to encrypt', 'No']
+		['--string', 'String to encrypt', 'No'],
 	];
 
 	/**

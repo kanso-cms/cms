@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\wrappers\managers;
 
 use kanso\cms\wrappers\managers\CategoryManager;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,9 +21,9 @@ class CategoryManagerTest extends TestCase
      */
     public function testCreate(): void
     {
-        $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
-        $provider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
-        $cat      = Mockery::mock('\kanso\cms\wrappers\Category');
+        $sql      = $this->mock('\kanso\framework\database\query\Builder');
+        $provider = $this->mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $cat      = $this->mock('\kanso\cms\wrappers\Category');
         $manager  = new CategoryManager($sql, $provider);
 
         $provider->shouldReceive('byKey')->with('slug', 'bar', true)->once()->andReturn(null);
@@ -39,9 +38,9 @@ class CategoryManagerTest extends TestCase
      */
     public function testById(): void
     {
-        $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
-        $provider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
-        $cat      = Mockery::mock('\kanso\cms\wrappers\Category');
+        $sql      = $this->mock('\kanso\framework\database\query\Builder');
+        $provider = $this->mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $cat      = $this->mock('\kanso\cms\wrappers\Category');
         $manager  = new CategoryManager($sql, $provider);
 
         $provider->shouldReceive('byId')->with(44)->once()->andReturn($cat);
@@ -54,9 +53,9 @@ class CategoryManagerTest extends TestCase
      */
     public function testByName(): void
     {
-        $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
-        $provider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
-        $cat      = Mockery::mock('\kanso\cms\wrappers\Category');
+        $sql      = $this->mock('\kanso\framework\database\query\Builder');
+        $provider = $this->mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $cat      = $this->mock('\kanso\cms\wrappers\Category');
         $manager  = new CategoryManager($sql, $provider);
 
         $provider->shouldReceive('byKey')->with('name', 'foo', true)->once()->andReturn($cat);
@@ -69,9 +68,9 @@ class CategoryManagerTest extends TestCase
      */
     public function testBySlug(): void
     {
-        $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
-        $provider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
-        $cat      = Mockery::mock('\kanso\cms\wrappers\Category');
+        $sql      = $this->mock('\kanso\framework\database\query\Builder');
+        $provider = $this->mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $cat      = $this->mock('\kanso\cms\wrappers\Category');
         $manager  = new CategoryManager($sql, $provider);
 
         $provider->shouldReceive('byKey')->with('slug', 'foo', true)->once()->andReturn($cat);
@@ -84,9 +83,9 @@ class CategoryManagerTest extends TestCase
      */
     public function testDelete(): void
     {
-        $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
-        $provider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
-        $cat      = Mockery::mock('\kanso\cms\wrappers\Category');
+        $sql      = $this->mock('\kanso\framework\database\query\Builder');
+        $provider = $this->mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $cat      = $this->mock('\kanso\cms\wrappers\Category');
         $manager  = new CategoryManager($sql, $provider);
 
         $provider->shouldReceive('byId')->with(44)->once()->andReturn($cat);
@@ -115,9 +114,9 @@ class CategoryManagerTest extends TestCase
      */
     public function testClear(): void
     {
-        $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
-        $provider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
-        $cat      = Mockery::mock('\kanso\cms\wrappers\Category');
+        $sql      = $this->mock('\kanso\framework\database\query\Builder');
+        $provider = $this->mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $cat      = $this->mock('\kanso\cms\wrappers\Category');
         $manager  = new CategoryManager($sql, $provider);
 
         $provider->shouldReceive('byId')->with(44)->once()->andReturn($cat);

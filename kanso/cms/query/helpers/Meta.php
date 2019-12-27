@@ -109,7 +109,7 @@ class Meta extends Helper
         {
             if (isset($this->parent->the_post_meta()['meta_title']))
             {
-                $titleTitle = $this->parent->the_post_meta()['meta_title']. ' | ';
+                $titleTitle = $this->parent->the_post_meta()['meta_title'] . ' | ';
             }
             elseif ($this->parent->have_posts())
             {

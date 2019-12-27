@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\email;
 
 use kanso\cms\email\utility\Log;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,7 +21,7 @@ class LogTest extends TestCase
 	 */
 	public function testSave(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
 		$logDir     = '/foo/bar';
 		$log        = new Log($filesystem, $logDir);
 		$content    = 'htmlemailcontent';

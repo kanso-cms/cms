@@ -10,7 +10,6 @@ namespace kanso\tests\unit\framework\cli\output\helpers;
 use kanso\framework\cli\output\helpers\UnorderedList;
 use kanso\framework\cli\output\Output;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -23,7 +22,7 @@ class UnorderedListTest extends TestCase
 	 */
 	public function testBasicList(): void
 	{
-		$output = Mockery::mock(Output::class);
+		$output = $this->mock(Output::class);
 
 		$list = new UnorderedList($output);
 
@@ -40,7 +39,7 @@ class UnorderedListTest extends TestCase
 	 */
 	public function testNestedLists(): void
 	{
-		$output = Mockery::mock(Output::class);
+		$output = $this->mock(Output::class);
 
 		$list = new UnorderedList($output);
 
@@ -61,7 +60,7 @@ class UnorderedListTest extends TestCase
 	 */
 	public function testCustomMarker(): void
 	{
-		$output = Mockery::mock(Output::class);
+		$output = $this->mock(Output::class);
 
 		$list = new UnorderedList($output);
 

@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\wrappers;
 
 use kanso\cms\wrappers\Tag;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,7 +21,7 @@ class TagTest extends TestCase
      */
     public function testInstantiate(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $tag = new Tag($sql, ['name' => 'foo']);
 
@@ -34,7 +33,7 @@ class TagTest extends TestCase
      */
     public function testSetGet(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $tag = new Tag($sql);
 
@@ -48,7 +47,7 @@ class TagTest extends TestCase
      */
     public function testHas(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $tag = new Tag($sql);
 
@@ -64,7 +63,7 @@ class TagTest extends TestCase
      */
     public function testRemove(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $tag = new Tag($sql);
 
@@ -80,7 +79,7 @@ class TagTest extends TestCase
      */
     public function testAsArray(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $tag = new Tag($sql, ['name' => 'foo']);
 
@@ -92,7 +91,7 @@ class TagTest extends TestCase
      */
     public function testDeleteEmpty(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $tag = new Tag($sql, ['name' => 'foo']);
 
@@ -104,7 +103,7 @@ class TagTest extends TestCase
      */
     public function testDeleteTrue(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $tag = new Tag($sql, ['id' => 2, 'name' => 'foo']);
 
@@ -124,7 +123,7 @@ class TagTest extends TestCase
      */
     public function testDeleteFalse(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $tag = new Tag($sql, ['name' => 'foo']);
 
@@ -136,7 +135,7 @@ class TagTest extends TestCase
      */
     public function testDeleteAdmin(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $tag = new Tag($sql, ['id' => 1, 'name' => 'foo']);
 
@@ -148,9 +147,9 @@ class TagTest extends TestCase
      */
     public function testSaveNew(): void
     {
-        $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $cHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $tag = new Tag($sql, ['slug' => 'tagslug']);
 
@@ -174,7 +173,7 @@ class TagTest extends TestCase
      */
     public function testSaveExisting(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $tag = new Tag($sql, ['id' => 1, 'slug' => 'tagslug']);
 
@@ -202,7 +201,7 @@ class TagTest extends TestCase
      */
     public function testClear(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $tag = new Tag($sql, ['id' => 2, 'slug' => 'tagslug']);
 

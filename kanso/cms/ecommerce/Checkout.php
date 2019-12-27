@@ -433,7 +433,8 @@ class Checkout extends UtilityBase
      */
     private function getShippingRow(array $options, int $userId = null)
     {
-        return [
+        return
+        [
             'user_id'          => $options['shipping_save_address'] === true ? $userId : null,
             'email'            => $options['shipping_email'],
             'first_name'       => ucfirst($options['shipping_first_name']),
@@ -469,7 +470,7 @@ class Checkout extends UtilityBase
             'shipping_id'       => null,
             'date'              => time(),
             'status'            => 'received',
-            'shipped'           => -1,
+            'shipped'           => false,
             'eta'               => strtotime('+7 days'),
             'card_type'         => $options['billing_card_type'],
             'card_last_four'    => $options['billing_card_last_four'],

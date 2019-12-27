@@ -12,7 +12,6 @@ use kanso\framework\deployment\webhooks\Github;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -45,10 +44,10 @@ class GithubTest extends TestCase
      */
     public function testValidate(): void
     {
-        $request        = Mockery::mock('\kanso\framework\http\request\Request');
-        $headers        = Mockery::mock('\kanso\framework\http\request\Headers');
-        $response       = Mockery::mock('\kanso\framework\http\response\Response');
-        $shell          = Mockery::mock('\kanso\framework\shell\Shell');
+        $request        = $this->mock('\kanso\framework\http\request\Request');
+        $headers        = $this->mock('\kanso\framework\http\request\Headers');
+        $response       = $this->mock('\kanso\framework\http\response\Response');
+        $shell          = $this->mock('\kanso\framework\shell\Shell');
         $github         = new Github($request, $response, $shell, $this->secret);
         $requestHeaders = $this->validHeaders();
 
@@ -73,10 +72,10 @@ class GithubTest extends TestCase
      */
     public function testNoPayload(): void
     {
-        $request        = Mockery::mock('\kanso\framework\http\request\Request');
-        $headers        = Mockery::mock('\kanso\framework\http\request\Headers');
-        $response       = Mockery::mock('\kanso\framework\http\response\Response');
-        $shell          = Mockery::mock('\kanso\framework\shell\Shell');
+        $request        = $this->mock('\kanso\framework\http\request\Request');
+        $headers        = $this->mock('\kanso\framework\http\request\Headers');
+        $response       = $this->mock('\kanso\framework\http\response\Response');
+        $shell          = $this->mock('\kanso\framework\shell\Shell');
         $github         = new Github($request, $response, $shell, $this->secret);
         $requestHeaders = $this->validHeaders();
 
@@ -99,10 +98,10 @@ class GithubTest extends TestCase
      */
     public function testWrongHeaders(): void
     {
-        $request        = Mockery::mock('\kanso\framework\http\request\Request');
-        $headers        = Mockery::mock('\kanso\framework\http\request\Headers');
-        $response       = Mockery::mock('\kanso\framework\http\response\Response');
-        $shell          = Mockery::mock('\kanso\framework\shell\Shell');
+        $request        = $this->mock('\kanso\framework\http\request\Request');
+        $headers        = $this->mock('\kanso\framework\http\request\Headers');
+        $response       = $this->mock('\kanso\framework\http\response\Response');
+        $shell          = $this->mock('\kanso\framework\shell\Shell');
         $github         = new Github($request, $response, $shell, 'invalid_secret');
         $requestHeaders = $this->validHeaders();
 
@@ -129,10 +128,10 @@ class GithubTest extends TestCase
      */
     public function testWrongUserAgent(): void
     {
-        $request        = Mockery::mock('\kanso\framework\http\request\Request');
-        $headers        = Mockery::mock('\kanso\framework\http\request\Headers');
-        $response       = Mockery::mock('\kanso\framework\http\response\Response');
-        $shell          = Mockery::mock('\kanso\framework\shell\Shell');
+        $request        = $this->mock('\kanso\framework\http\request\Request');
+        $headers        = $this->mock('\kanso\framework\http\request\Headers');
+        $response       = $this->mock('\kanso\framework\http\response\Response');
+        $shell          = $this->mock('\kanso\framework\shell\Shell');
         $github         = new Github($request, $response, $shell, $this->secret);
         $requestHeaders = $this->validHeaders();
 
@@ -161,10 +160,10 @@ class GithubTest extends TestCase
      */
     public function testInvalidSignature(): void
     {
-        $request        = Mockery::mock('\kanso\framework\http\request\Request');
-        $headers        = Mockery::mock('\kanso\framework\http\request\Headers');
-        $response       = Mockery::mock('\kanso\framework\http\response\Response');
-        $shell          = Mockery::mock('\kanso\framework\shell\Shell');
+        $request        = $this->mock('\kanso\framework\http\request\Request');
+        $headers        = $this->mock('\kanso\framework\http\request\Headers');
+        $response       = $this->mock('\kanso\framework\http\response\Response');
+        $shell          = $this->mock('\kanso\framework\shell\Shell');
         $github         = new Github($request, $response, $shell, $this->secret);
         $requestHeaders = $this->validHeaders();
 
@@ -193,10 +192,10 @@ class GithubTest extends TestCase
      */
     public function testInvalidPayload(): void
     {
-        $request        = Mockery::mock('\kanso\framework\http\request\Request');
-        $headers        = Mockery::mock('\kanso\framework\http\request\Headers');
-        $response       = Mockery::mock('\kanso\framework\http\response\Response');
-        $shell          = Mockery::mock('\kanso\framework\shell\Shell');
+        $request        = $this->mock('\kanso\framework\http\request\Request');
+        $headers        = $this->mock('\kanso\framework\http\request\Headers');
+        $response       = $this->mock('\kanso\framework\http\response\Response');
+        $shell          = $this->mock('\kanso\framework\shell\Shell');
         $github         = new Github($request, $response, $shell, $this->secret);
         $requestHeaders = $this->validHeaders();
 
@@ -225,10 +224,10 @@ class GithubTest extends TestCase
      */
     public function testEvent(): void
     {
-        $request        = Mockery::mock('\kanso\framework\http\request\Request');
-        $headers        = Mockery::mock('\kanso\framework\http\request\Headers');
-        $response       = Mockery::mock('\kanso\framework\http\response\Response');
-        $shell          = Mockery::mock('\kanso\framework\shell\Shell');
+        $request        = $this->mock('\kanso\framework\http\request\Request');
+        $headers        = $this->mock('\kanso\framework\http\request\Headers');
+        $response       = $this->mock('\kanso\framework\http\response\Response');
+        $shell          = $this->mock('\kanso\framework\shell\Shell');
         $github         = new Github($request, $response, $shell, $this->secret);
         $requestHeaders = $this->validHeaders();
 
@@ -257,10 +256,10 @@ class GithubTest extends TestCase
      */
     public function testPayload(): void
     {
-        $request        = Mockery::mock('\kanso\framework\http\request\Request');
-        $headers        = Mockery::mock('\kanso\framework\http\request\Headers');
-        $response       = Mockery::mock('\kanso\framework\http\response\Response');
-        $shell          = Mockery::mock('\kanso\framework\shell\Shell');
+        $request        = $this->mock('\kanso\framework\http\request\Request');
+        $headers        = $this->mock('\kanso\framework\http\request\Headers');
+        $response       = $this->mock('\kanso\framework\http\response\Response');
+        $shell          = $this->mock('\kanso\framework\shell\Shell');
         $github         = new Github($request, $response, $shell, $this->secret);
         $requestHeaders = $this->validHeaders();
 
@@ -289,13 +288,13 @@ class GithubTest extends TestCase
      */
     public function testDeploySuccessful(): void
     {
-        $request        = Mockery::mock('\kanso\framework\http\request\Request');
-        $env            = Mockery::mock('\kanso\framework\http\request\Environment');
-        $headers        = Mockery::mock('\kanso\framework\http\request\Headers');
-        $response       = Mockery::mock('\kanso\framework\http\response\Response');
-        $body           = Mockery::mock('\kanso\framework\http\response\Body');
-        $format         = Mockery::mock('\kanso\framework\http\response\Format');
-        $shell          = Mockery::mock('\kanso\framework\shell\Shell');
+        $request        = $this->mock('\kanso\framework\http\request\Request');
+        $env            = $this->mock('\kanso\framework\http\request\Environment');
+        $headers        = $this->mock('\kanso\framework\http\request\Headers');
+        $response       = $this->mock('\kanso\framework\http\response\Response');
+        $body           = $this->mock('\kanso\framework\http\response\Body');
+        $format         = $this->mock('\kanso\framework\http\response\Format');
+        $shell          = $this->mock('\kanso\framework\shell\Shell');
         $github         = new Github($request, $response, $shell, $this->secret);
         $requestHeaders = $this->validHeaders();
 
@@ -342,13 +341,13 @@ class GithubTest extends TestCase
      */
     public function testDeployFailGit(): void
     {
-        $request        = Mockery::mock('\kanso\framework\http\request\Request');
-        $env            = Mockery::mock('\kanso\framework\http\request\Environment');
-        $headers        = Mockery::mock('\kanso\framework\http\request\Headers');
-        $response       = Mockery::mock('\kanso\framework\http\response\Response');
-        $body           = Mockery::mock('\kanso\framework\http\response\Body');
-        $format         = Mockery::mock('\kanso\framework\http\response\Format');
-        $shell          = Mockery::mock('\kanso\framework\shell\Shell');
+        $request        = $this->mock('\kanso\framework\http\request\Request');
+        $env            = $this->mock('\kanso\framework\http\request\Environment');
+        $headers        = $this->mock('\kanso\framework\http\request\Headers');
+        $response       = $this->mock('\kanso\framework\http\response\Response');
+        $body           = $this->mock('\kanso\framework\http\response\Body');
+        $format         = $this->mock('\kanso\framework\http\response\Format');
+        $shell          = $this->mock('\kanso\framework\shell\Shell');
         $github         = new Github($request, $response, $shell, $this->secret);
         $requestHeaders = $this->validHeaders();
 

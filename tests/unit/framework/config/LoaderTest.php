@@ -9,7 +9,6 @@ namespace kanso\tests\unit\framework\config;
 
 use kanso\framework\config\Loader;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,7 +21,7 @@ class LoaderTest extends TestCase
      */
     public function getFilesystem()
     {
-        return Mockery::mock('\kanso\framework\file\Filesystem');
+        return $this->mock('\kanso\framework\file\Filesystem');
     }
 
     /**

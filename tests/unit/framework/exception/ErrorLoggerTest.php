@@ -10,7 +10,6 @@ namespace kanso\tests\unit\framework\exception;
 use ErrorException;
 use kanso\framework\exception\ErrorLogger;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -24,8 +23,8 @@ class ErrorLoggerTest extends TestCase
     public function testWebHandler(): void
     {
         $path        = dirname(__FILE__);
-        $environment = Mockery::mock('\kanso\framework\http\request\Environment');
-        $fileSystem  = Mockery::mock('\kanso\framework\file\Filesystem');
+        $environment = $this->mock('\kanso\framework\http\request\Environment');
+        $fileSystem  = $this->mock('\kanso\framework\file\Filesystem');
         $logger      = new ErrorLogger(new ErrorException, $fileSystem, $environment, $path);
 
         $environment->shouldReceive('__get')->withArgs(['REQUEST_URL'])->andReturn('http:/foo.com/bar');

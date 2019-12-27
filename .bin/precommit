@@ -86,12 +86,21 @@ $fixer = trim(shell_exec('which php-cs-fixer'));
 
 exec('git diff --name-only', $output);
 
+$count = 0;
+
 foreach($output as $file)
 {
 	if(file_exists($file) && pathinfo($file, PATHINFO_EXTENSION) === 'php')
 	{
-		echo 'Cleaning up "' . $file . '"...';
+		$count++;
 
-		exec($fixer . ' fix ' . $file . " --using-cache=no --allow-risky=yes --rules='" . json_encode($rules) . "'");
+		echo "Cleaning: [$file] \n";
+
+		echo shell_exec($fixer . ' fix ' . $file . " --using-cache=no --allow-risky=yes --rules='" . json_encode($rules) . "'");
+
+		echo "Completed: [$file] \n\n";
 	}
 }
+
+echo "Complete\n\n";
+echo "Cleaned $count files\n";

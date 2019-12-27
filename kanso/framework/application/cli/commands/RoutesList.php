@@ -24,9 +24,9 @@ class RoutesList extends Command
 	/**
 	 * {@inheritdoc}
 	 */
-	protected $commandInformation = 
+	protected $commandInformation =
 	[
-		['--method', 'Filter by HTTP request method [GET|POST|HEAD|PUT]', 'Yes']
+		['--method', 'Filter by HTTP request method [GET|POST|HEAD|PUT]', 'Yes'],
 	];
 
 	/**
@@ -52,7 +52,7 @@ class RoutesList extends Command
 			}
 
 			$route['args'] = is_array($route['args']) ? implode(', ', $route['args']) : $route['args'];
-			
+
 			$rows[] = array_values($route);
 		}
 

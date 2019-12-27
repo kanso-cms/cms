@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\wrappers\managers;
 
 use kanso\cms\wrappers\managers\PostManager;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,9 +21,9 @@ class PostManagerTest extends TestCase
      */
     public function testById(): void
     {
-        $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
-        $provider = Mockery::mock('\kanso\cms\wrappers\providers\PostProvider');
-        $post     = Mockery::mock('\kanso\cms\wrappers\Post');
+        $sql      = $this->mock('\kanso\framework\database\query\Builder');
+        $provider = $this->mock('\kanso\cms\wrappers\providers\PostProvider');
+        $post     = $this->mock('\kanso\cms\wrappers\Post');
         $manager  = new PostManager($sql, $provider);
 
         $provider->shouldReceive('byId')->with(44)->once()->andReturn($post);
@@ -37,9 +36,9 @@ class PostManagerTest extends TestCase
      */
     public function testDelete(): void
     {
-        $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
-        $provider = Mockery::mock('\kanso\cms\wrappers\providers\PostProvider');
-        $post     = Mockery::mock('\kanso\cms\wrappers\Post');
+        $sql      = $this->mock('\kanso\framework\database\query\Builder');
+        $provider = $this->mock('\kanso\cms\wrappers\providers\PostProvider');
+        $post     = $this->mock('\kanso\cms\wrappers\Post');
         $manager  = new PostManager($sql, $provider);
 
         $provider->shouldReceive('byId')->with(44)->once()->andReturn($post);
@@ -54,9 +53,9 @@ class PostManagerTest extends TestCase
      */
     public function testCreate(): void
     {
-        $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
-        $provider = Mockery::mock('\kanso\cms\wrappers\providers\PostProvider');
-        $post     = Mockery::mock('\kanso\cms\wrappers\Post');
+        $sql      = $this->mock('\kanso\framework\database\query\Builder');
+        $provider = $this->mock('\kanso\cms\wrappers\providers\PostProvider');
+        $post     = $this->mock('\kanso\cms\wrappers\Post');
         $manager  = new PostManager($sql, $provider);
 
         $provider->shouldReceive('create')->with(['foo' => 'bar'])->once()->andReturn($post);

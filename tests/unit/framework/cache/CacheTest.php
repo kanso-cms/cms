@@ -9,7 +9,6 @@ namespace kanso\tests\unit\framework\cache;
 
 use kanso\framework\cache\Cache;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,7 +21,7 @@ class CacheTest extends TestCase
 	 */
 	public function getStore()
 	{
-		return Mockery::mock('\kanso\framework\cache\stores\FileStore');
+		return $this->mock('\kanso\framework\cache\stores\FileStore');
 	}
 
 	/**

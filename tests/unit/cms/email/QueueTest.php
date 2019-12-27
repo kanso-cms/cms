@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\email;
 
 use kanso\cms\email\utility\Queue;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,8 +21,8 @@ class QueueTest extends TestCase
 	 */
 	public function testEnabled(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$logDir     = '/foo/bar';
 		$enabled    = true;
 		$queue      = new Queue($filesystem, $sender, $logDir, $enabled);
@@ -36,8 +35,8 @@ class QueueTest extends TestCase
 	 */
 	public function testNotEnabled(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$logDir     = '/foo/bar';
 		$enabled    = false;
 		$queue      = new Queue($filesystem, $sender, $logDir, $enabled);
@@ -50,8 +49,8 @@ class QueueTest extends TestCase
 	 */
 	public function testDisabled(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$logDir     = '/foo/bar';
 		$enabled    = false;
 		$queue      = new Queue($filesystem, $sender, $logDir, $enabled);
@@ -64,8 +63,8 @@ class QueueTest extends TestCase
 	 */
 	public function testNotDisabled(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$logDir     = '/foo/bar';
 		$enabled    = true;
 		$queue      = new Queue($filesystem, $sender, $logDir, $enabled);
@@ -78,8 +77,8 @@ class QueueTest extends TestCase
 	 */
 	public function testEnable(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$logDir     = '/foo/bar';
 		$queue      = new Queue($filesystem, $sender, $logDir);
 
@@ -93,8 +92,8 @@ class QueueTest extends TestCase
 	 */
 	public function testDisable(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$logDir     = '/foo/bar';
 		$queue      = new Queue($filesystem, $sender, $logDir);
 
@@ -108,8 +107,8 @@ class QueueTest extends TestCase
 	 */
 	public function testAddFirst(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$logDir     = '/foo/bar';
 		$queue      = new Queue($filesystem, $sender, $logDir);
 
@@ -128,8 +127,8 @@ class QueueTest extends TestCase
 	 */
 	public function testAddSecond(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$logDir     = '/foo/bar';
 		$queue      = new Queue($filesystem, $sender, $logDir);
 
@@ -146,8 +145,8 @@ class QueueTest extends TestCase
 	 */
 	public function testGet(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$logDir     = '/foo/bar';
 		$queue      = new Queue($filesystem, $sender, $logDir);
 
@@ -163,8 +162,8 @@ class QueueTest extends TestCase
 	 */
 	public function testGetEmpty(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$logDir     = '/foo/bar';
 		$queue      = new Queue($filesystem, $sender, $logDir);
 
@@ -180,8 +179,8 @@ class QueueTest extends TestCase
 	 */
 	public function testGetNoFile(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$logDir     = '/foo/bar';
 		$queue      = new Queue($filesystem, $sender, $logDir);
 
@@ -195,8 +194,8 @@ class QueueTest extends TestCase
 	 */
 	public function testProcess(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$logDir     = '/foo/bar';
 		$queue      = new Queue($filesystem, $sender, $logDir);
 		$content    = 'htmlemailcontent';
@@ -233,8 +232,8 @@ class QueueTest extends TestCase
 	 */
 	public function testProcessEmpty(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$logDir     = '/foo/bar';
 		$queue      = new Queue($filesystem, $sender, $logDir);
 		$content    = 'htmlemailcontent';

@@ -144,7 +144,9 @@ class Analytics extends Model
     {
         $this->Query->rewind_posts();
 
-        $offer = $this->Ecommerce->products()->offers($this->Query->the_post_id())[0];
+        $postId = $this->Query->the_post_id();
+
+        $offer = $this->Ecommerce->products()->offers($postId)[0];
 
         return $this->cleanWhiteSpace("
         <script type=\"text/javascript\">
@@ -152,10 +154,10 @@ class Analytics extends Model
             {
                 'event_label'  : '" . $this->Query->the_title() . "',
                 'items'        : [{
-                    'id'       : '" . $this->Query->the_post_id() . "',
+                    'id'       : '" . $postId . "',
                     'name'     : '" . $this->Query->the_title() . "',
                     'brand'    : '" . $this->Config->get('cms.site_title') . "',
-                    'category' : 'Products > " . $this->Query->the_categories_list(the_post_id(), ' > ') . "',
+                    'category' : 'Products > " . $this->Query->the_categories_list($postId, ' > ') . "',
                     'price'    : '" . $offer['sale_price'] . "',
                     'variant'  : '" . $offer['name'] . "',
                 }]
@@ -173,17 +175,18 @@ class Analytics extends Model
     {
         $this->Query->rewind_posts();
 
+        $postId = $this->Query->the_post_id();
+
         return $this->cleanWhiteSpace("
         <script type=\"text/javascript\">
             fbq('track', 'ViewContent',
             {
                 content_name     : '" . $this->Query->the_title() . "',
-                content_category : 'Products > " . $this->Query->the_categories_list(the_post_id(), ' > ') . "',
-                content_ids      : ['" . $this->Query->the_post_id() . "'],
+                content_category : 'Products > " . $this->Query->the_categories_list($postId, ' > ') . "',
+                content_ids      : ['" . $postId . "'],
                 content_type     : 'product',
-                value            : " . $this->Ecommerce->products()->offers($this->Query->the_post_id())[0]['sale_price'] . ",
-                currency         : 'AUD',
-                userAgent        : '" . $this->Request->environment()->HTTP_USER_AGENT . "'
+                value            : " . $this->Ecommerce->products()->offers($postId)[0]['sale_price'] . ",
+                currency         : 'AUD'
             });
         </script>");
     }
@@ -193,11 +196,14 @@ class Analytics extends Model
      *
      * @return string
      */
-    public function googleTrackingStartCheckout(array $order): string
+    public function googleTrackingStartCheckout(): string
     {
-        $items = [];
+        $items    = [];
+        $cart     = $this->Ecommerce->cart()->items();
+        $subtotal = $this->Ecommerce->cart()->subTotal();
+        $shipping = $this->Ecommerce->cart()->shippingCost();
 
-        foreach($order['cart'] as $item)
+        foreach($cart as $item)
         {
             $items[] =
             [
@@ -215,7 +221,7 @@ class Analytics extends Model
         <script type=\"text/javascript\">
             gtag('event', 'begin_checkout',
             {
-                'value'    : '" . number_format(($order['sub-total'] + $order['shipping-cost']), 2, '.', '') . "',
+                'value'    : '" . number_format(($subtotal + $shipping), 2, '.', '') . "',
                 'currency' : 'AUD',
                 'items'    : " . str_replace('\u003E', '>', json_encode($items)) . '
             });
@@ -227,11 +233,15 @@ class Analytics extends Model
      *
      * @return string
      */
-    public function facebookTrackingStartCheckout(array $order): string
+    public function facebookTrackingStartCheckout(): string
     {
-        $items   = 0;
-        $itemIds = [];
-        foreach($order['cart'] as $item)
+        $cart     = $this->Ecommerce->cart()->items();
+        $subtotal = $this->Ecommerce->cart()->subTotal();
+        $shipping = $this->Ecommerce->cart()->shippingCost();
+        $items    = 0;
+        $itemIds  = [];
+
+        foreach($cart as $item)
         {
             $items     += intval($item['quantity']);
             $itemIds[]  = strval($item['product']);
@@ -244,7 +254,7 @@ class Analytics extends Model
                 num_items     : " . $items . ',
                 content_ids   : ' . json_encode($itemIds) . ",
                 content_type  : 'product',
-                value         : " . number_format(($order['sub-total'] + $order['shipping-cost']), 2, '.', '') . ",
+                value         : " . number_format(($subtotal + $shipping), 2, '.', '') . ",
                 currency      : 'AUD'
             });
         </script>");
@@ -253,7 +263,7 @@ class Analytics extends Model
     /**
      * Track a checkout complete for Google Analytics.
      *
-     * @param  array  $order Order variables
+     * @param  array  $order Transaction row from the database
      * @return string
      */
     public function googleTrackCheckoutComplete(array $order): string
@@ -300,7 +310,7 @@ class Analytics extends Model
     /**
      * Track a checkout complete for Facebook.
      *
-     * @param  array  $order Order variables
+     * @param  array  $order Transaction row from the database
      * @return string
      */
     public function facebookTrackCheckoutComplete(array $order): string

@@ -10,7 +10,6 @@ namespace kanso\tests\unit\framework\database\query;
 use kanso\framework\database\query\Builder;
 use kanso\framework\database\query\Query;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -37,7 +36,7 @@ class AlterTest extends TestCase
             ],
         ];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -74,7 +73,7 @@ class AlterTest extends TestCase
             ],
         ];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -111,7 +110,7 @@ class AlterTest extends TestCase
             ],
         ];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -146,7 +145,7 @@ class AlterTest extends TestCase
             ],
         ];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -185,7 +184,7 @@ class AlterTest extends TestCase
             ],
         ];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -222,7 +221,7 @@ class AlterTest extends TestCase
             ],
         ];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -261,7 +260,7 @@ class AlterTest extends TestCase
             ],
         ];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -298,7 +297,7 @@ class AlterTest extends TestCase
             ],
         ];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -335,7 +334,7 @@ class AlterTest extends TestCase
             ],
         ];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -372,7 +371,7 @@ class AlterTest extends TestCase
             ],
         ];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -409,7 +408,7 @@ class AlterTest extends TestCase
             ],
         ];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -446,7 +445,7 @@ class AlterTest extends TestCase
             ],
         ];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -481,7 +480,7 @@ class AlterTest extends TestCase
             ],
         ];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -516,7 +515,7 @@ class AlterTest extends TestCase
             ],
         ];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -551,7 +550,7 @@ class AlterTest extends TestCase
             ],
         ];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -586,7 +585,7 @@ class AlterTest extends TestCase
             ],
         ];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 
@@ -621,7 +620,7 @@ class AlterTest extends TestCase
             ],
         ];
 
-        $connectionHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $connectionHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
         $connectionHandler->shouldReceive('tablePrefix')->andReturn('prefixed_');
 

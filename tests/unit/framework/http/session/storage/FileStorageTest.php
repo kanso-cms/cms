@@ -10,7 +10,6 @@ namespace kanso\tests\unit\framework\http\session\storage;
 use kanso\framework\http\session\storage\FileSessionStorage;
 use kanso\framework\utility\UUID;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -36,7 +35,7 @@ class FileStorageTest extends TestCase
 	 */
 	private function mockFilesystem()
 	{
-		return Mockery::mock('\kanso\framework\file\Filesystem');
+		return $this->mock('\kanso\framework\file\Filesystem');
 	}
 
 	/**
@@ -44,7 +43,7 @@ class FileStorageTest extends TestCase
 	 */
 	private function mockCrypto()
 	{
-		return Mockery::mock('\kanso\framework\security\Crypto');
+		return $this->mock('\kanso\framework\security\Crypto');
 	}
 
 	/**

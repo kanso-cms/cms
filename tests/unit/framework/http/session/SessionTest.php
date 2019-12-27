@@ -9,7 +9,6 @@ namespace kanso\tests\unit\framework\http\session;
 
 use kanso\framework\http\session\Session;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -35,11 +34,11 @@ class SessionTest extends TestCase
 	 */
 	private function mockSession()
 	{
-		$token = Mockery::mock('kanso\framework\http\session\Token');
+		$token = $this->mock('kanso\framework\http\session\Token');
 
-		$flash = Mockery::mock('kanso\framework\http\session\Flash');
+		$flash = $this->mock('kanso\framework\http\session\Flash');
 
-		$store = Mockery::mock('kanso\framework\http\session\storage\NativeSessionStorage');
+		$store = $this->mock('kanso\framework\http\session\storage\NativeSessionStorage');
 
 		$store->shouldReceive('session_name')->withArgs(['kanso_session'])->andReturn('kanso_session');
 
@@ -211,11 +210,11 @@ class SessionTest extends TestCase
 	 */
 	public function testSave(): void
 	{
-		$token = Mockery::mock('kanso\framework\http\session\Token');
+		$token = $this->mock('kanso\framework\http\session\Token');
 
-		$flash = Mockery::mock('kanso\framework\http\session\Flash');
+		$flash = $this->mock('kanso\framework\http\session\Flash');
 
-		$store = Mockery::mock('kanso\framework\http\session\storage\NativeSessionStorage');
+		$store = $this->mock('kanso\framework\http\session\storage\NativeSessionStorage');
 
 		$store->shouldReceive('session_name')->withArgs(['kanso_session'])->andReturn('kanso_session');
 
@@ -253,11 +252,11 @@ class SessionTest extends TestCase
 	 */
 	public function testConfigure(): void
 	{
-		$token = Mockery::mock('kanso\framework\http\session\Token');
+		$token = $this->mock('kanso\framework\http\session\Token');
 
-		$flash = Mockery::mock('kanso\framework\http\session\Flash');
+		$flash = $this->mock('kanso\framework\http\session\Flash');
 
-		$store = Mockery::mock('kanso\framework\http\session\storage\NativeSessionStorage');
+		$store = $this->mock('kanso\framework\http\session\storage\NativeSessionStorage');
 
 		$store->shouldReceive('session_name')->once()->withArgs(['kanso_session'])->andReturn('kanso_session');
 
@@ -289,11 +288,11 @@ class SessionTest extends TestCase
 	 */
 	public function testDestroy(): void
 	{
-		$token = Mockery::mock('kanso\framework\http\session\Token');
+		$token = $this->mock('kanso\framework\http\session\Token');
 
-		$flash = Mockery::mock('kanso\framework\http\session\Flash');
+		$flash = $this->mock('kanso\framework\http\session\Flash');
 
-		$store = Mockery::mock('kanso\framework\http\session\storage\NativeSessionStorage');
+		$store = $this->mock('kanso\framework\http\session\storage\NativeSessionStorage');
 
 		$store->shouldReceive('session_name')->withArgs(['kanso_session'])->andReturn('kanso_session');
 

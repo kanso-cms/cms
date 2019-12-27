@@ -7,8 +7,8 @@
 
 namespace kanso\tests;
 
+use Mockery;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
-
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
 /**
@@ -19,4 +19,14 @@ use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 abstract class TestCase extends PHPUnitTestCase
 {
 	use MockeryPHPUnitIntegration;
+
+	protected function mock(string $class, array $args = [])
+	{
+		if (!empty($args))
+		{
+			return Mockery::mock($class, $args);
+		}
+
+		return Mockery::mock($class);
+	}
 }

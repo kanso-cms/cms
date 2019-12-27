@@ -153,6 +153,7 @@ class NativeStorageTest extends TestCase
 			'domain'   => '',
 			'secure'   => false,
 			'httponly' => false,
+			'samesite' => '',
 		];
 
 		$this->assertEquals($expected, $storage->session_get_cookie_params());

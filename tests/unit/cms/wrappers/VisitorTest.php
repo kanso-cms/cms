@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\wrappers;
 
 use kanso\cms\wrappers\Visitor;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,7 +21,7 @@ class VisitorTest extends TestCase
      */
     public function testInstantiate(): void
     {
-    	$sql = Mockery::mock('\kanso\framework\database\query\Builder');
+    	$sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$visitor = new Visitor($sql, ['name' => 'foo']);
 
@@ -34,7 +33,7 @@ class VisitorTest extends TestCase
      */
     public function testSetGet(): void
     {
-       	$sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+       	$sql  = $this->mock('\kanso\framework\database\query\Builder');
 
 		$visitor = new Visitor($sql);
 
@@ -48,7 +47,7 @@ class VisitorTest extends TestCase
      */
     public function testHas(): void
     {
-        $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql  = $this->mock('\kanso\framework\database\query\Builder');
 
 		$visitor = new Visitor($sql);
 
@@ -64,7 +63,7 @@ class VisitorTest extends TestCase
      */
     public function testRemove(): void
     {
-        $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql  = $this->mock('\kanso\framework\database\query\Builder');
 
 		$visitor = new Visitor($sql);
 
@@ -80,7 +79,7 @@ class VisitorTest extends TestCase
      */
     public function testAsArray(): void
     {
-        $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql  = $this->mock('\kanso\framework\database\query\Builder');
 
 		$visitor = new Visitor($sql, ['name' => 'foo']);
 
@@ -92,7 +91,7 @@ class VisitorTest extends TestCase
      */
     public function testGenerateId(): void
     {
-        $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql  = $this->mock('\kanso\framework\database\query\Builder');
 
 		$visitor = new Visitor($sql, ['name' => 'foo']);
 
@@ -108,7 +107,7 @@ class VisitorTest extends TestCase
      */
     public function testDeleteEmpty(): void
     {
-        $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql  = $this->mock('\kanso\framework\database\query\Builder');
 
 		$visitor = new Visitor($sql, ['name' => 'foo']);
 
@@ -120,7 +119,7 @@ class VisitorTest extends TestCase
      */
     public function testDeleteTrue(): void
     {
-        $sql  = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql  = $this->mock('\kanso\framework\database\query\Builder');
 
 		$visitor = new Visitor($sql, ['id' => 2, 'visitor_id' => 'ggs3432', 'name' => 'foo']);
 
@@ -144,9 +143,9 @@ class VisitorTest extends TestCase
      */
     public function testSaveNew(): void
     {
-        $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $cHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['email' => 'foo@bar.com']);
 
@@ -172,9 +171,9 @@ class VisitorTest extends TestCase
      */
     public function testSaveExisting(): void
     {
-        $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $cHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['id' => 3, 'email' => 'foo@bar.com']);
 
@@ -194,7 +193,7 @@ class VisitorTest extends TestCase
      */
     public function testAddVisit(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['id' => 3, 'visitor_id' => '342fd', 'name' => 'foo']);
 
@@ -210,7 +209,7 @@ class VisitorTest extends TestCase
      */
     public function testGetVisit(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['id' => 3, 'visitor_id' => '342fd', 'name' => 'foo']);
 
@@ -228,7 +227,7 @@ class VisitorTest extends TestCase
      */
     public function tesIsLeadFalse(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['id' => 3, 'visitor_id' => '342fd', 'name' => 'foo']);
 
@@ -240,7 +239,7 @@ class VisitorTest extends TestCase
      */
     public function tesIsLeadTrue(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['id' => 3, 'visitor_id' => '342fd', 'email' => 'foo']);
 
@@ -252,7 +251,7 @@ class VisitorTest extends TestCase
      */
     public function tesIsFirstVisitTrue(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['id' => 3, 'visitor_id' => '342fd', 'email' => 'foo']);
 
@@ -264,7 +263,7 @@ class VisitorTest extends TestCase
      */
     public function tesIsFirstVisitFalse(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['id' => 3, 'visitor_id' => '342fd', 'name' => 'foo']);
 
@@ -282,7 +281,7 @@ class VisitorTest extends TestCase
      */
     public function testVisits(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['id' => 3, 'visitor_id' => '342fd', 'name' => 'foo']);
 
@@ -312,7 +311,7 @@ class VisitorTest extends TestCase
      */
     public function testCountVisits(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['id' => 3, 'visitor_id' => '342fd', 'name' => 'foo']);
 
@@ -338,7 +337,7 @@ class VisitorTest extends TestCase
      */
     public function testPreviousVisit(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['id' => 3, 'visitor_id' => '342fd', 'name' => 'foo']);
 
@@ -368,7 +367,7 @@ class VisitorTest extends TestCase
      */
     public function testTimeSincePrevVisit(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['id' => 3, 'visitor_id' => '342fd', 'name' => 'foo']);
 
@@ -398,7 +397,7 @@ class VisitorTest extends TestCase
      */
     public function testFirstVisit(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['id' => 3, 'visitor_id' => '342fd', 'name' => 'foo']);
 
@@ -426,9 +425,9 @@ class VisitorTest extends TestCase
      */
     public function testHeartBeat(): void
     {
-        $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $cHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['email' => 'foo@bar.com']);
 
@@ -454,9 +453,9 @@ class VisitorTest extends TestCase
      */
     public function testMakeLead(): void
     {
-        $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $cHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['email' => 'foo@bar.com']);
 
@@ -484,7 +483,7 @@ class VisitorTest extends TestCase
      */
     public function testBouncedTrue(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['id' => 3, 'visitor_id' => '342fd', 'name' => 'foo']);
 
@@ -510,7 +509,7 @@ class VisitorTest extends TestCase
      */
     public function testChannel(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['id' => 3, 'visitor_id' => '342fd', 'name' => 'foo']);
 
@@ -538,7 +537,7 @@ class VisitorTest extends TestCase
      */
     public function testGrade(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['id' => 3, 'visitor_id' => '342fd', 'name' => 'foo']);
 
@@ -572,7 +571,7 @@ class VisitorTest extends TestCase
      */
     public function testMedium(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $visitor = new Visitor($sql, ['id' => 3, 'visitor_id' => '342fd', 'name' => 'foo']);
 

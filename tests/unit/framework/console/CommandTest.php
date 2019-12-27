@@ -14,7 +14,6 @@ use kanso\framework\console\Command;
 use kanso\framework\console\Console;
 use kanso\framework\ioc\Container;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -27,9 +26,9 @@ class CommandTest extends TestCase
 	 */
 	public function testRunCommand(): void
 	{
-		$container = Mockery::mock(Container::class);
-		$input     = Mockery::mock(Input::class);
-		$output    = Mockery::mock(Output::class);
+		$container = $this->mock(Container::class);
+		$input     = $this->mock(Input::class);
+		$output    = $this->mock(Output::class);
 		$formatter = new Formatter;
 		$console   = new Console($input, $output, $container);
 

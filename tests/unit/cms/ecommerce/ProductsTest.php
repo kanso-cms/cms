@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\ecommerce;
 
 use kanso\cms\ecommerce\Products;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,7 +21,7 @@ class ProductsTest extends TestCase
 	 */
 	public function testOffer(): void
 	{
-		$postManager  = Mockery::mock('\kanso\cms\wrappers\managers\PostManager');
+		$postManager  = $this->mock('\kanso\cms\wrappers\managers\PostManager');
 		$product      = $this->fakeProduct();
 		$products     = new Products;
 		$meta         =
@@ -52,7 +51,7 @@ class ProductsTest extends TestCase
 	 */
 	public function testOffers(): void
 	{
-		$postManager  = Mockery::mock('\kanso\cms\wrappers\managers\PostManager');
+		$postManager  = $this->mock('\kanso\cms\wrappers\managers\PostManager');
 		$product      = $this->fakeProduct();
 		$products     = new Products;
 		$meta         =

@@ -96,7 +96,7 @@ class Reviews extends UtilityBase
      * @param  int $commentId Comment id
      * @return int
      */
-    public function upVote(int $commentId): int
+    public function upVote(int $commentId): bool
     {
         $row =
         [
@@ -105,7 +105,7 @@ class Reviews extends UtilityBase
             'ip_address' => $this->Request->environment()->REMOTE_ADDR,
         ];
 
-        return $this->sql()->INSERT_INTO('product_review_votes')->VALUES($row)->QUERY();
+        return $this->sql()->INSERT_INTO('product_review_votes')->VALUES($row)->QUERY() === 1;
     }
 
     /**
@@ -114,7 +114,7 @@ class Reviews extends UtilityBase
      * @param  int $commentId Comment id
      * @return int
      */
-    public function downVote(int $commentId): int
+    public function downVote(int $commentId): bool
     {
         $row =
         [
@@ -123,7 +123,7 @@ class Reviews extends UtilityBase
             'ip_address' => $this->Request->environment()->REMOTE_ADDR,
         ];
 
-        return $this->sql()->INSERT_INTO('product_review_votes')->VALUES($row)->QUERY();
+        return $this->sql()->INSERT_INTO('product_review_votes')->VALUES($row)->QUERY() === 1;
     }
 
     /**

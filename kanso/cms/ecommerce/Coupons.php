@@ -144,8 +144,8 @@ class Coupons extends UtilityBase
 	 * Set a coupon as used.
 	 *
 	 * @param  string $couponName The coupon name or code
-     * @param  string $email      Email address associated with coupon (optional) (default '') 
-     * @return bool 
+	 * @param  string $email      Email address associated with coupon (optional) (default '')
+	 * @return bool
 	 */
 	public function setUsed(string $couponName = '', string $email = ''): bool
 	{

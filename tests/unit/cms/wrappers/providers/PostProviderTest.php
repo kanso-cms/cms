@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\wrappers\providers;
 
 use kanso\cms\wrappers\providers\PostProvider;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,32 +21,32 @@ class PostProviderTest extends TestCase
      */
     public function testCreate(): void
     {
-        $cHandler         = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
-        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
-        $config           = Mockery::mock('\kanso\framework\config\Config');
-        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
-        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
-        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
-        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
-        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+        $cHandler         = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
+        $sql              = $this->mock('\kanso\framework\database\query\Builder');
+        $config           = $this->mock('\kanso\framework\config\Config');
+        $tagProvider      = $this->mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = $this->mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = $this->mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = $this->mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = $this->mock('\kanso\cms\wrappers\providers\UserProvider');
 
         $provider = new PostProvider($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider);
 
         $config->shouldReceive('get')->with('cms.permalinks')->andReturn('year/month/postname/');
 
-        $tag = Mockery::mock('\kanso\cms\wrappers\Tag');
+        $tag = $this->mock('\kanso\cms\wrappers\Tag');
         $tag->name = 'html';
         $tag->slug = 'html';
         $tag->id   = 1;
         $tagProvider->shouldReceive('byId')->with(1)->once()->andReturn($tag);
 
-        $cat = Mockery::mock('\kanso\cms\wrappers\Category');
+        $cat = $this->mock('\kanso\cms\wrappers\Category');
         $cat->name = 'html';
         $cat->slug = 'html';
         $cat->id   = 1;
         $categoryProvider->shouldReceive('byId')->with(1)->once()->andReturn($cat);
 
-        $user = Mockery::mock('\kanso\cms\wrappers\User');
+        $user = $this->mock('\kanso\cms\wrappers\User');
         $user->name = 'foo';
         $user->slug = 'foo';
         $user->id   = 1;
@@ -118,13 +117,13 @@ class PostProviderTest extends TestCase
      */
     public function testById(): void
     {
-        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
-        $config           = Mockery::mock('\kanso\framework\config\Config');
-        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
-        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
-        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
-        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
-        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+        $sql              = $this->mock('\kanso\framework\database\query\Builder');
+        $config           = $this->mock('\kanso\framework\config\Config');
+        $tagProvider      = $this->mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = $this->mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = $this->mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = $this->mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = $this->mock('\kanso\cms\wrappers\providers\UserProvider');
 
         $provider = new PostProvider($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider);
 
@@ -154,13 +153,13 @@ class PostProviderTest extends TestCase
      */
     public function testByKey(): void
     {
-        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
-        $config           = Mockery::mock('\kanso\framework\config\Config');
-        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
-        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
-        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
-        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
-        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+        $sql              = $this->mock('\kanso\framework\database\query\Builder');
+        $config           = $this->mock('\kanso\framework\config\Config');
+        $tagProvider      = $this->mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = $this->mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = $this->mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = $this->mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = $this->mock('\kanso\cms\wrappers\providers\UserProvider');
 
         $provider = new PostProvider($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider);
 
@@ -190,13 +189,13 @@ class PostProviderTest extends TestCase
      */
     public function testByKeys(): void
     {
-        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
-        $config           = Mockery::mock('\kanso\framework\config\Config');
-        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
-        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
-        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
-        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
-        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+        $sql              = $this->mock('\kanso\framework\database\query\Builder');
+        $config           = $this->mock('\kanso\framework\config\Config');
+        $tagProvider      = $this->mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = $this->mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = $this->mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = $this->mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = $this->mock('\kanso\cms\wrappers\providers\UserProvider');
 
         $provider = new PostProvider($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider);
 
@@ -226,13 +225,13 @@ class PostProviderTest extends TestCase
      */
     public function testPublished(): void
     {
-        $sql              = Mockery::mock('\kanso\framework\database\query\Builder');
-        $config           = Mockery::mock('\kanso\framework\config\Config');
-        $tagProvider      = Mockery::mock('\kanso\cms\wrappers\providers\TagProvider');
-        $categoryProvider = Mockery::mock('\kanso\cms\wrappers\providers\CategoryProvider');
-        $mediaProvider    = Mockery::mock('\kanso\cms\wrappers\providers\MediaProvider');
-        $commentProvider  = Mockery::mock('\kanso\cms\wrappers\providers\CommentProvider');
-        $userProvider     = Mockery::mock('\kanso\cms\wrappers\providers\UserProvider');
+        $sql              = $this->mock('\kanso\framework\database\query\Builder');
+        $config           = $this->mock('\kanso\framework\config\Config');
+        $tagProvider      = $this->mock('\kanso\cms\wrappers\providers\TagProvider');
+        $categoryProvider = $this->mock('\kanso\cms\wrappers\providers\CategoryProvider');
+        $mediaProvider    = $this->mock('\kanso\cms\wrappers\providers\MediaProvider');
+        $commentProvider  = $this->mock('\kanso\cms\wrappers\providers\CommentProvider');
+        $userProvider     = $this->mock('\kanso\cms\wrappers\providers\UserProvider');
 
         $provider = new PostProvider($sql, $config, $tagProvider, $categoryProvider, $mediaProvider, $commentProvider, $userProvider);
 
@@ -277,12 +276,12 @@ class PostProviderTest extends TestCase
             ['id' => 2, 'slug' => 'css',  'name' => 'css'],
         ])->once();
 
-        $tag1 = Mockery::mock('\kanso\cms\wrappers\Tag');
+        $tag1 = $this->mock('\kanso\cms\wrappers\Tag');
         $tag1->name = 'html';
         $tag1->slug = 'html';
         $tag1->id   = 1;
 
-        $tag2 = Mockery::mock('\kanso\cms\wrappers\Tag');
+        $tag2 = $this->mock('\kanso\cms\wrappers\Tag');
         $tag2->name = 'css';
         $tag2->slug = 'css';
         $tag2->id   = 2;
@@ -312,12 +311,12 @@ class PostProviderTest extends TestCase
             ['id' => 2, 'slug' => 'css',  'name' => 'css'],
         ])->once();
 
-        $cat1 = Mockery::mock('\kanso\cms\wrappers\Category');
+        $cat1 = $this->mock('\kanso\cms\wrappers\Category');
         $cat1->name = 'html';
         $cat1->slug = 'html';
         $cat1->id   = 1;
 
-        $cat2 = Mockery::mock('\kanso\cms\wrappers\Category');
+        $cat2 = $this->mock('\kanso\cms\wrappers\Category');
         $cat2->name = 'css';
         $cat2->slug = 'css';
         $cat2->id   = 2;
@@ -334,7 +333,7 @@ class PostProviderTest extends TestCase
      */
     private function getTheAuthor($userProvider)
     {
-        $author = Mockery::mock('\kanso\cms\wrappers\User');
+        $author = $this->mock('\kanso\cms\wrappers\User');
         $author->name = 'foobar';
         $author->slug = 'foobar';
         $author->id = 1;

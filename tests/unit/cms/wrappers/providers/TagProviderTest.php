@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\wrappers\providers;
 
 use kanso\cms\wrappers\providers\TagProvider;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,8 +21,8 @@ class TagProviderTest extends TestCase
      */
     public function testCreate(): void
     {
-        $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
-        $sql      = Mockery::mock('\kanso\framework\database\query\Builder');
+        $cHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
+        $sql      = $this->mock('\kanso\framework\database\query\Builder');
         $provider = new TagProvider($sql);
 
         $sql->shouldReceive('INSERT_INTO')->with('tags')->once()->andReturn($sql);
@@ -46,7 +45,7 @@ class TagProviderTest extends TestCase
      */
     public function testById(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $provider = new TagProvider($sql);
 
@@ -66,7 +65,7 @@ class TagProviderTest extends TestCase
      */
     public function testByKey(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $provider = new TagProvider($sql);
 
@@ -86,7 +85,7 @@ class TagProviderTest extends TestCase
      */
     public function testByKeys(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $provider = new TagProvider($sql);
 

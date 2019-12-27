@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\email;
 
 use kanso\cms\email\Email;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,11 +21,11 @@ class EmailTest extends TestCase
 	 */
 	public function testGetQueue(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
-		$log        = Mockery::mock('\kanso\cms\email\utility\Log');
-		$queue      = Mockery::mock('\kanso\cms\email\utility\Queue');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$smtp       = $this->mock('\kanso\cms\email\phpmailer\PHPMailer');
+		$log        = $this->mock('\kanso\cms\email\utility\Log');
+		$queue      = $this->mock('\kanso\cms\email\utility\Queue');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$email      = new Email($filesystem, $log, $sender, $queue);
 
 		$this->assertEquals($queue, $email->queue());
@@ -37,11 +36,11 @@ class EmailTest extends TestCase
 	 */
 	public function testGetLog(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
-		$log        = Mockery::mock('\kanso\cms\email\utility\Log');
-		$queue      = Mockery::mock('\kanso\cms\email\utility\Queue');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$smtp       = $this->mock('\kanso\cms\email\phpmailer\PHPMailer');
+		$log        = $this->mock('\kanso\cms\email\utility\Log');
+		$queue      = $this->mock('\kanso\cms\email\utility\Queue');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$email      = new Email($filesystem, $log, $sender, $queue);
 
 		$this->assertEquals($log, $email->log());
@@ -52,11 +51,11 @@ class EmailTest extends TestCase
 	 */
 	public function testGetSender(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
-		$log        = Mockery::mock('\kanso\cms\email\utility\Log');
-		$queue      = Mockery::mock('\kanso\cms\email\utility\Queue');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$smtp       = $this->mock('\kanso\cms\email\phpmailer\PHPMailer');
+		$log        = $this->mock('\kanso\cms\email\utility\Log');
+		$queue      = $this->mock('\kanso\cms\email\utility\Queue');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$email      = new Email($filesystem, $log, $sender, $queue);
 
 		$this->assertEquals($sender, $email->sender());
@@ -67,11 +66,11 @@ class EmailTest extends TestCase
 	 */
 	public function testPresets(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
-		$log        = Mockery::mock('\kanso\cms\email\utility\Log');
-		$queue      = Mockery::mock('\kanso\cms\email\utility\Queue');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$smtp       = $this->mock('\kanso\cms\email\phpmailer\PHPMailer');
+		$log        = $this->mock('\kanso\cms\email\utility\Log');
+		$queue      = $this->mock('\kanso\cms\email\utility\Queue');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$email      = new Email($filesystem, $log, $sender, $queue);
 
 		$filesystem->shouldReceive('ob_read')->with(KANSO_DIR . '/cms/email/templates/body.php', $email->theme())->once()->andReturn('foo');
@@ -94,11 +93,11 @@ class EmailTest extends TestCase
 	 */
 	public function testHtml(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
-		$log        = Mockery::mock('\kanso\cms\email\utility\Log');
-		$queue      = Mockery::mock('\kanso\cms\email\utility\Queue');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$smtp       = $this->mock('\kanso\cms\email\phpmailer\PHPMailer');
+		$log        = $this->mock('\kanso\cms\email\utility\Log');
+		$queue      = $this->mock('\kanso\cms\email\utility\Queue');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$email      = new Email($filesystem, $log, $sender, $queue);
 		$theme      = $email->theme();
 
@@ -119,11 +118,11 @@ class EmailTest extends TestCase
 	 */
 	public function testSendNoQueue(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
-		$log        = Mockery::mock('\kanso\cms\email\utility\Log');
-		$queue      = Mockery::mock('\kanso\cms\email\utility\Queue');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$smtp       = $this->mock('\kanso\cms\email\phpmailer\PHPMailer');
+		$log        = $this->mock('\kanso\cms\email\utility\Log');
+		$queue      = $this->mock('\kanso\cms\email\utility\Queue');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$email      = new Email($filesystem, $log, $sender, $queue);
 
 		$log->shouldReceive('save')->with('foo@bar.com', 'Foo Bar', 'bar@foo.com', 'Foo Subject', 'html content', 'html');
@@ -138,11 +137,11 @@ class EmailTest extends TestCase
 	 */
 	public function testSendWithQue(): void
 	{
-		$filesystem = Mockery::mock('\kanso\framework\file\Filesystem');
-		$smtp       = Mockery::mock('\kanso\cms\email\phpmailer\PHPMailer');
-		$log        = Mockery::mock('\kanso\cms\email\utility\Log');
-		$queue      = Mockery::mock('\kanso\cms\email\utility\Queue');
-		$sender     = Mockery::mock('\kanso\cms\email\utility\Sender');
+		$filesystem = $this->mock('\kanso\framework\file\Filesystem');
+		$smtp       = $this->mock('\kanso\cms\email\phpmailer\PHPMailer');
+		$log        = $this->mock('\kanso\cms\email\utility\Log');
+		$queue      = $this->mock('\kanso\cms\email\utility\Queue');
+		$sender     = $this->mock('\kanso\cms\email\utility\Sender');
 		$email      = new Email($filesystem, $log, $sender, $queue);
 
 		$log->shouldReceive('save')->with('foo@bar.com', 'Foo Bar', 'bar@foo.com', 'Foo Subject', 'html content', 'html');

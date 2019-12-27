@@ -8,7 +8,6 @@
 namespace kanso\tests\unit\cms\ecommerce;
 
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -21,8 +20,8 @@ class CartTest extends TestCase
 	 */
 	public function testNotEmptySession(): void
 	{
-		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
+		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
+		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
 		$session    = $this->fakeSession();
 
 		$cart->Session    = $session;
@@ -38,8 +37,8 @@ class CartTest extends TestCase
 	 */
 	public function testEmptySession(): void
 	{
-		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
+		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
+		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
 		$session    = $this->fakeSessionEmpty();
 
 		$cart->Session    = $session;
@@ -55,9 +54,9 @@ class CartTest extends TestCase
 	 */
 	public function testNotEmptyDB(): void
 	{
-		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
-		$sql        = Mockery::mock('\kanso\framework\database\query\Builder');
+		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
+		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
+		$sql        = $this->mock('\kanso\framework\database\query\Builder');
 		$user       = $this->fakeUser();
 
 		$cart->shouldAllowMockingProtectedMethods();
@@ -85,9 +84,9 @@ class CartTest extends TestCase
 	 */
 	public function testEmptyDb(): void
 	{
-		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
-		$sql        = Mockery::mock('\kanso\framework\database\query\Builder');
+		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
+		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
+		$sql        = $this->mock('\kanso\framework\database\query\Builder');
 		$user       = $this->fakeUser();
 
 		$cart->shouldAllowMockingProtectedMethods();
@@ -115,8 +114,8 @@ class CartTest extends TestCase
 	 */
 	public function testCountSession(): void
 	{
-		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
+		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
+		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
 		$session    = $this->fakeSession();
 
 		$cart->Session    = $session;
@@ -132,8 +131,8 @@ class CartTest extends TestCase
 	 */
 	public function testCountSessionEmpty(): void
 	{
-		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
+		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
+		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
 		$session    = $this->fakeSessionEmpty();
 
 		$cart->Session    = $session;
@@ -149,9 +148,9 @@ class CartTest extends TestCase
 	 */
 	public function testCountDb(): void
 	{
-		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
-		$sql        = Mockery::mock('\kanso\framework\database\query\Builder');
+		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
+		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
+		$sql        = $this->mock('\kanso\framework\database\query\Builder');
 		$user       = $this->fakeUser();
 
 		$cart->shouldAllowMockingProtectedMethods();
@@ -179,9 +178,9 @@ class CartTest extends TestCase
 	 */
 	public function testCountDbEmpty(): void
 	{
-		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
-		$sql        = Mockery::mock('\kanso\framework\database\query\Builder');
+		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
+		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
+		$sql        = $this->mock('\kanso\framework\database\query\Builder');
 		$user       = $this->fakeUser();
 
 		$cart->shouldAllowMockingProtectedMethods();
@@ -209,9 +208,9 @@ class CartTest extends TestCase
 	 */
 	public function testClearSession(): void
 	{
-		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
-		$session    = Mockery::mock('\kanso\framework\http\session\Session');
+		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
+		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
+		$session    = $this->mock('\kanso\framework\http\session\Session');
 
 		$cart->Session    = $session;
 		$cart->Gatekeeper = $gateKeeper;
@@ -227,10 +226,10 @@ class CartTest extends TestCase
 	 */
 	public function testClearDB(): void
 	{
-		$cart       = Mockery::mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = Mockery::mock('\kanso\cms\auth\Gatekeeper');
-		$sql        = Mockery::mock('\kanso\framework\database\query\Builder');
-		$session    = Mockery::mock('\kanso\framework\http\session\Session');
+		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
+		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
+		$sql        = $this->mock('\kanso\framework\database\query\Builder');
+		$session    = $this->mock('\kanso\framework\http\session\Session');
 		$user       = $this->fakeUser();
 
 		$cart->shouldAllowMockingProtectedMethods();

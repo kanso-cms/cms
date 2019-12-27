@@ -11,7 +11,6 @@ use Closure;
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
 use kanso\framework\onion\Middleware;
-use Mockery;
 
 class MiddleWareCallbackTest
 {
@@ -43,9 +42,9 @@ class MiddlewareTest
 	{
 		ob_start();
 
-		$request = Mockery::mock('\kanso\framework\http\request\Request');
+		$request = $this->mock('\kanso\framework\http\request\Request');
 
-		$response = Mockery::mock('\kanso\framework\http\response\Response');
+		$response = $this->mock('\kanso\framework\http\response\Response');
 
 		$layer = new Middleware('\tests\unit\framework\onion\MiddleWareCallbackTest@normalMethod', ['foo', 'bar']);
 
@@ -66,9 +65,9 @@ class MiddlewareTest
 	{
 		ob_start();
 
-		$request = Mockery::mock('\kanso\framework\http\request\Request');
+		$request = $this->mock('\kanso\framework\http\request\Request');
 
-		$response = Mockery::mock('\kanso\framework\http\response\Response');
+		$response = $this->mock('\kanso\framework\http\response\Response');
 
 		$layer = new Middleware('\tests\unit\framework\onion\MiddleWareCallbackTest::staticFunc', ['foo', 'bar']);
 
@@ -94,9 +93,9 @@ class MiddlewareTest
 			echo $foo;
 		};
 
-		$request = Mockery::mock('\kanso\framework\http\request\Request');
+		$request = $this->mock('\kanso\framework\http\request\Request');
 
-		$response = Mockery::mock('\kanso\framework\http\response\Response');
+		$response = $this->mock('\kanso\framework\http\response\Response');
 
 		$layer = new Middleware($callback, ['foo', 'bar']);
 

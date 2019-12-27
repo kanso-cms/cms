@@ -7,12 +7,8 @@
 
 namespace kanso\cms\ecommerce;
 
-use Braintree\ClientToken;
-use Braintree\Configuration;
-use Braintree\Customer;
-use Braintree\PaymentMethod;
-use Braintree\Transaction;
-use Exception;
+use Braintree\Exception\NotFound;
+use Braintree\Gateway;
 
 /**
  * Coupon manager utility class.
@@ -26,14 +22,24 @@ class BrainTree extends UtilityBase
      *
      * @var bool
      */
-    private $btConfigured;
+    private $btConfigured = false;
 
     /**
      * Braintree customer object.
      *
-     * @var \Braintree\Customer|null
+     * @var \Braintree\Gateway|null
      */
-    private $btCustomer;
+    private $gateway;
+
+    /**
+     * Constructor.
+     *
+     * @param \Braintree\Gateway $gateway Braintree gateway instance (optional) (default null)
+     */
+    public function __construct(Gateway $gateway = null)
+    {
+        $this->gateway = $gateway;
+    }
 
     /**
      * Generate and return a token for JS nonce.
@@ -42,39 +48,35 @@ class BrainTree extends UtilityBase
      */
     public function token()
     {
-        // Configure BT
         $this->configure();
 
         if ($this->Gatekeeper->isLoggedIn())
         {
-            if ($this->btCustomer)
-            {
-                return ClientToken::generate(['customerId' => $this->btCustomer->id]);
-            }
+            return $this->gateway->clientToken()->generate(['customerId' => $this->Gatekeeper->getUser()->id]);
         }
 
-        return ClientToken::generate();
+        return $this->gateway->clientToken()->generate();
     }
 
     /**
-     * Make a transaction
+     * Make a transaction.
      *
-     * @param  array       $sale Transaction configuration
-     * @return Transaction
+     * @param  array                                               $sale Transaction configuration
+     * @return \Braintree\Result\Successful|Braintree\Result\Error
      */
     public function transaction(array $sale)
     {
         $this->configure();
 
-        return Transaction::sale($sale);
+        return $this->gateway->transaction()->sale($sale);
     }
 
     /**
      * Find an existing customer's card by id.
      *
-     * @param  int                 $cardId The card id from our database
-     * @param  int                 $userId The user id
-     * @return PaymentMethod|false
+     * @param  int                            $cardId The card id from our database
+     * @param  int                            $userId The user id
+     * @return \Braintree\PaymentMethod|false
      */
     public function findCustomerCard(int $cardId, int $userId)
     {
@@ -87,117 +89,123 @@ class BrainTree extends UtilityBase
             return false;
         }
 
-        $card = PaymentMethod::find($cardRow['token']);
+        $card = $this->gateway->paymentMethod()->find($cardRow['token']);
 
-        if ($card)
+        if ($card instanceof NotFound)
         {
-            return $card;
+            return false;
         }
 
-        return false;
+        return $card;
     }
 
     /**
-     * Get logged in user's stored credit cards from BT.
+     * Get a user's credit cards by id or current logged in user.
      *
+     * @param  int   $id User id from the database (optional) (default null)
      * @return array
      */
-    public function cards()
+    public function cards(int $id = null)
     {
         $this->configure();
 
-        $cards = [];
+        $customer = $this->customer($id);
 
-        if ($this->btCustomer)
+        if (!$customer)
         {
-            $tokens = $this->sql()->SELECT('*')->FROM('payment_tokens')->WHERE('user_id', '=', $this->Gatekeeper->getUser()->id)->FIND_ALL();
-
-            if ($tokens)
-            {
-                foreach ($tokens as $row)
-                {
-                    $paymentMethod = PaymentMethod::find($row['token']);
-
-                    if ($paymentMethod)
-                    {
-                        $paymentMethod->id = $row['id'];
-
-                        $cards[] = $paymentMethod;
-                    }
-                }
-            }
+            return [];
         }
 
-        return $cards;
+        return $customer->paymentMethods;
     }
 
     /**
-     * Get the logged in customer.
+     * Get a customer by id or the currently logged in user.
      *
-     * @return Customer|null
+     * @param  int                       $id User id from the database (optional) (default null)
+     * @return \Braintree\Customer|false
      */
-    public function customer()
+    public function customer(int $id = null)
     {
         $this->configure();
 
-        return $this->btCustomer;
+        if (!$id && !$this->Gatekeeper->isLoggedIn())
+        {
+            return false;
+        }
+
+        $id = !$id ? $this->Gatekeeper->getUser()->id : $id;
+
+        $customer = $this->gateway->customer()->find($id);
+
+        if ($customer instanceof NotFound)
+        {
+            return false;
+        }
+
+        return $customer;
     }
 
     /**
      * Create New Braintree customer.
      *
-     * @throws Exception                                            If customer couldn't be created
-     * @return \Braintree\Result\Error|\Braintree\Result\Successful
+     * @param  int                       $id User id from the database (optional) (default null)
+     * @return \Braintree\Customer|false
      */
-    public function createCustomer()
+    public function createCustomer(int $id = null)
     {
         $this->configure();
 
-        $user = $this->Gatekeeper->getUser();
-        $name = explode(' ', $user->name);
+        if (!$id && !$this->Gatekeeper->isLoggedIn())
+        {
+            return false;
+        }
 
-        $customer = Customer::create([
+        $id = !$id ? $this->Gatekeeper->getUser()->id : $id;
+
+        $user = $this->sql()->SELECT('*')->FROM('users')->WHERE('id', '=', $id)->ROW();
+
+        if (!$user)
+        {
+            return false;
+        }
+
+        $name = explode(' ', $user['name']);
+
+        $result = $this->gateway->customer()->create([
             'firstName' => array_shift($name),
             'lastName'  => trim(implode(' ', $name)),
-            'email'     => $user->email,
-            'id'        => $user->id,
+            'email'     => $user['email'],
+            'id'        => $id,
         ]);
 
-        if ($customer->success)
-        {
-            return $customer;
-        }
-
-        throw new Exception('Error creating new customer. The customer could not be created.');
+        return $result->success ? $result->customer : false;
     }
 
     /**
      * Create New Braintree customer.
      *
+     * @param  string                         $nonce Client nonce
+     * @param  int                            $id    User/customer id
      * @return \Braintree\PaymentMethod|false
      */
-    public function addCard(string $nonce)
+    public function addCard(string $nonce, int $id = null)
     {
-        if ($this->Gatekeeper->isLoggedIn())
+        $this->configure();
+
+        if (!$id && !$this->Gatekeeper->isLoggedIn())
         {
-            $this->configure();
-
-            // Save the card
-            $paymentMethod = PaymentMethod::create([
-                'customerId'         => $this->Gatekeeper->getUser()->id,
-                'paymentMethodNonce' => $nonce,
-            ]);
-
-            // Validate the method
-            if (!$paymentMethod->success)
-            {
-                return false;
-            }
-
-            return $paymentMethod;
+            return false;
         }
 
-        return false;
+        $id = !$id ? $this->Gatekeeper->getUser()->id : $id;
+
+        $result = $this->gateway->paymentMethod()->create([
+            'customerId'         => $id,
+            'paymentMethodNonce' => $nonce,
+        ]);
+
+        return $result->success ? $result->paymentMethod : false;
     }
 
     /**
@@ -207,39 +215,19 @@ class BrainTree extends UtilityBase
     {
         if (!$this->btConfigured)
         {
-            // Configure braintree
-            $btConfig = $this->Config->get('ecommerce.braintree');
+            if (!$this->gateway)
+            {
+                $btConfig = $this->Config->get('ecommerce.braintree');
 
-            Configuration::environment($btConfig['environment']);
-            Configuration::merchantId($btConfig['merchant_id']);
-            Configuration::publicKey($btConfig['public_key']);
-            Configuration::privateKey($btConfig['private_key']);
-
-            $this->getBtCustomer();
+                $this->gateway = new Gateway([
+                    'environment' => $btConfig['environment'],
+                    'merchantId'  => $btConfig['merchant_id'],
+                    'publicKey'   => $btConfig['public_key'],
+                    'privateKey'  => $btConfig['private_key'],
+                ]);
+            }
 
             $this->btConfigured = true;
         }
-    }
-
-    /**
-     * Find braintree customer.
-     *
-     * @return \Braintree\Result\Error|\Braintree\Result\Successful|null
-     */
-    private function getBtCustomer()
-    {
-        if ($this->Gatekeeper->isLoggedIn())
-        {
-            try
-            {
-                $this->btCustomer = Customer::find($this->Gatekeeper->getUser()->id);
-            }
-            catch(Exception $e)
-            {
-                $this->btCustomer = null;
-            }
-        }
-
-        return $this->btCustomer;
     }
 }

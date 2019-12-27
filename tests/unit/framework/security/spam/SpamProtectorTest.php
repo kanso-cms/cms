@@ -9,7 +9,6 @@ namespace kanso\tests\unit\framework\security\spam;
 
 use kanso\framework\security\spam\SpamProtector;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,9 +21,9 @@ class SpamProtectorTest extends TestCase
 	 */
 	public function testIpUnWhitelist(): void
 	{
-		$gibberish = Mockery::mock('\kanso\framework\security\spam\gibberish\Gibberish');
+		$gibberish = $this->mock('\kanso\framework\security\spam\gibberish\Gibberish');
 
-		$config = Mockery::mock('\kanso\framework\config\Config');
+		$config = $this->mock('\kanso\framework\config\Config');
 
 		$spam = new SpamProtector($gibberish, $config);
 
@@ -40,9 +39,9 @@ class SpamProtectorTest extends TestCase
 	 */
 	public function testIpWhitelist(): void
 	{
-		$gibberish = Mockery::mock('\kanso\framework\security\spam\gibberish\Gibberish');
+		$gibberish = $this->mock('\kanso\framework\security\spam\gibberish\Gibberish');
 
-		$config = Mockery::mock('\kanso\framework\config\Config');
+		$config = $this->mock('\kanso\framework\config\Config');
 
 		$spam = new SpamProtector($gibberish, $config);
 
@@ -58,9 +57,9 @@ class SpamProtectorTest extends TestCase
 	 */
 	public function testIpUnBlacklist(): void
 	{
-		$gibberish = Mockery::mock('\kanso\framework\security\spam\gibberish\Gibberish');
+		$gibberish = $this->mock('\kanso\framework\security\spam\gibberish\Gibberish');
 
-		$config = Mockery::mock('\kanso\framework\config\Config');
+		$config = $this->mock('\kanso\framework\config\Config');
 
 		$spam = new SpamProtector($gibberish, $config);
 
@@ -76,9 +75,9 @@ class SpamProtectorTest extends TestCase
 	 */
 	public function testIpBlacklist(): void
 	{
-		$gibberish = Mockery::mock('\kanso\framework\security\spam\gibberish\Gibberish');
+		$gibberish = $this->mock('\kanso\framework\security\spam\gibberish\Gibberish');
 
-		$config = Mockery::mock('\kanso\framework\config\Config');
+		$config = $this->mock('\kanso\framework\config\Config');
 
 		$spam = new SpamProtector($gibberish, $config);
 
@@ -94,9 +93,9 @@ class SpamProtectorTest extends TestCase
 	 */
 	public function testIsIpBlacklisted(): void
 	{
-		$gibberish = Mockery::mock('\kanso\framework\security\spam\gibberish\Gibberish');
+		$gibberish = $this->mock('\kanso\framework\security\spam\gibberish\Gibberish');
 
-		$config = Mockery::mock('\kanso\framework\config\Config');
+		$config = $this->mock('\kanso\framework\config\Config');
 
 		$spam = new SpamProtector($gibberish, $config);
 
@@ -112,9 +111,9 @@ class SpamProtectorTest extends TestCase
 	 */
 	public function testIsIpWhitelisted(): void
 	{
-		$gibberish = Mockery::mock('\kanso\framework\security\spam\gibberish\Gibberish');
+		$gibberish = $this->mock('\kanso\framework\security\spam\gibberish\Gibberish');
 
-		$config = Mockery::mock('\kanso\framework\config\Config');
+		$config = $this->mock('\kanso\framework\config\Config');
 
 		$spam = new SpamProtector($gibberish, $config);
 
@@ -130,9 +129,9 @@ class SpamProtectorTest extends TestCase
 	 */
 	public function testIsSpam(): void
 	{
-		$gibberish = Mockery::mock('\kanso\framework\security\spam\gibberish\Gibberish');
+		$gibberish = $this->mock('\kanso\framework\security\spam\gibberish\Gibberish');
 
-		$config = Mockery::mock('\kanso\framework\config\Config');
+		$config = $this->mock('\kanso\framework\config\Config');
 
 		$spam = new SpamProtector($gibberish, $config);
 
@@ -166,9 +165,9 @@ class SpamProtectorTest extends TestCase
 	 */
 	public function testRating(): void
 	{
-		$gibberish = Mockery::mock('\kanso\framework\security\spam\gibberish\Gibberish');
+		$gibberish = $this->mock('\kanso\framework\security\spam\gibberish\Gibberish');
 
-		$config = Mockery::mock('\kanso\framework\config\Config');
+		$config = $this->mock('\kanso\framework\config\Config');
 
 		$spam = new SpamProtector($gibberish, $config);
 

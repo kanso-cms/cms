@@ -9,7 +9,6 @@ namespace kanso\tests\unit\framework\pixl;
 
 use kanso\framework\pixl\Image;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,7 +21,7 @@ class ImageTest extends TestCase
 	 */
 	public function getProcessor()
 	{
-		return Mockery::mock('\kanso\framework\pixl\processor\ProcessorInterface');
+		return $this->mock('\kanso\framework\pixl\processor\ProcessorInterface');
 	}
 
 	/**

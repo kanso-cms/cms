@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\wrappers;
 
 use kanso\cms\wrappers\Media;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,7 +21,7 @@ class MediaTest extends TestCase
      */
     public function testInstantiate(): void
     {
-    	$sql = Mockery::mock('\kanso\framework\database\query\Builder');
+    	$sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$media = new Media($sql, [], ['name' => 'foo']);
 
@@ -34,7 +33,7 @@ class MediaTest extends TestCase
      */
     public function testSetGet(): void
     {
-       	$sql = Mockery::mock('\kanso\framework\database\query\Builder');
+       	$sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$media = new Media($sql);
 
@@ -48,7 +47,7 @@ class MediaTest extends TestCase
      */
     public function testHas(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$media = new Media($sql);
 
@@ -64,7 +63,7 @@ class MediaTest extends TestCase
      */
     public function testRemove(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$media = new Media($sql);
 
@@ -80,7 +79,7 @@ class MediaTest extends TestCase
      */
     public function testAsArray(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$media = new Media($sql, [], ['name' => 'foo']);
 
@@ -92,7 +91,7 @@ class MediaTest extends TestCase
      */
     public function testDeleteEmpty(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
 		$media = new Media($sql, [], ['name' => 'foo']);
 
@@ -104,7 +103,7 @@ class MediaTest extends TestCase
      */
     public function testDeleteTrue(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $media = new Media($sql, [], ['id' => 2, 'path' => '/foo/bar/foo.jpg']);
 
@@ -128,9 +127,9 @@ class MediaTest extends TestCase
      */
     public function testSaveNew(): void
     {
-        $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $cHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $media = new Media($sql, [], ['id' => 2, 'path' => '/foo/bar/foo.jpg']);
 
@@ -162,9 +161,9 @@ class MediaTest extends TestCase
      */
     public function testSaveExisting(): void
     {
-        $cHandler = Mockery::mock('\kanso\framework\database\connection\ConnectionHandler');
+        $cHandler = $this->mock('\kanso\framework\database\connection\ConnectionHandler');
 
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $media = new Media($sql, [], ['id' => 2, 'path' => '/foo/bar/foo.jpg']);
 
@@ -192,7 +191,7 @@ class MediaTest extends TestCase
      */
     public function testIsImage(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $media = new Media($sql, [], ['id' => 2, 'url' => '/foo/bar/foo.jpg']);
 
@@ -212,7 +211,7 @@ class MediaTest extends TestCase
      */
     public function testImgSize(): void
     {
-        $sql = Mockery::mock('\kanso\framework\database\query\Builder');
+        $sql = $this->mock('\kanso\framework\database\query\Builder');
 
         $media = new Media($sql, [], ['id' => 2, 'url' => '/foo/bar/foo.jpg']);
 

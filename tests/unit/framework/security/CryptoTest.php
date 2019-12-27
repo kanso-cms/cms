@@ -9,7 +9,6 @@ namespace kanso\tests\unit\framework\security\crypto;
 
 use kanso\framework\security\Crypto;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -24,11 +23,11 @@ class CryptoTest extends TestCase
 	{
 		$data = 'foobar!!$#$@#"$#@!$P:{';
 
-		$signer = Mockery::mock('\kanso\framework\security\crypto\Signer');
+		$signer = $this->mock('\kanso\framework\security\crypto\Signer');
 
-		$encrypter = Mockery::mock('\kanso\framework\security\crypto\encrypters\OpenSSL');
+		$encrypter = $this->mock('\kanso\framework\security\crypto\encrypters\OpenSSL');
 
-		$password = Mockery::mock('\kanso\framework\security\password\encrypters\NativePHP');
+		$password = $this->mock('\kanso\framework\security\password\encrypters\NativePHP');
 
 		$crypto = new Crypto($signer, $encrypter, $password);
 
@@ -44,11 +43,11 @@ class CryptoTest extends TestCase
 	 */
 	public function testDecrypt(): void
 	{
-		$signer = Mockery::mock('\kanso\framework\security\crypto\Signer');
+		$signer = $this->mock('\kanso\framework\security\crypto\Signer');
 
-		$encrypter = Mockery::mock('\kanso\framework\security\crypto\encrypters\OpenSSL');
+		$encrypter = $this->mock('\kanso\framework\security\crypto\encrypters\OpenSSL');
 
-		$password = Mockery::mock('\kanso\framework\security\password\encrypters\NativePHP');
+		$password = $this->mock('\kanso\framework\security\password\encrypters\NativePHP');
 
 		$crypto = new Crypto($signer, $encrypter, $password);
 

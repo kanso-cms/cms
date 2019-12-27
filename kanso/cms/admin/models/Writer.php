@@ -318,7 +318,7 @@ class Writer extends BaseModel
             {
                 $response['meta_description'] = $desc;
             }
-        }        
+        }
 
         if (isset($_POST['post-meta-keys']))
         {

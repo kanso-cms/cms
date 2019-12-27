@@ -8,7 +8,7 @@
 namespace kanso\framework\common;
 
 use kanso\framework\database\query\Builder;
-use kanso\Kanso;
+use kanso\framework\ioc\Container;
 
 /**
  * SQL Builder Trait.
@@ -33,7 +33,7 @@ trait SqlBuilderTrait
     {
         if (is_null($this->sql))
         {
-            $this->sql = Kanso::instance()->Database->connection()->builder();
+            $this->sql = Container::instance()->Database->connection()->builder();
         }
 
         return $this->sql;

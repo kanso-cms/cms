@@ -9,7 +9,6 @@ namespace kanso\tests\unit\framework\cache\stores;
 
 use kanso\framework\cache\stores\FileStore;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,7 +21,7 @@ class FileStoreTest extends TestCase
 	 */
 	public function getFilesystem()
 	{
-		return Mockery::mock('\kanso\framework\file\Filesystem');
+		return $this->mock('\kanso\framework\file\Filesystem');
 	}
 
 	/**

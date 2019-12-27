@@ -9,7 +9,6 @@ namespace kanso\tests\unit\cms\rss;
 
 use kanso\cms\rss\Feed;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -22,12 +21,12 @@ class FeedTest extends TestCase
 	 */
 	public function testRss(): void
 	{
-		$request  = Mockery::mock('\kanso\framework\http\request\Request');
-		$response = Mockery::mock('\kanso\framework\http\response\Response');
-		$format   = Mockery::mock('\kanso\framework\http\response\Format');
-		$body     = Mockery::mock('\kanso\framework\http\response\Body');
-		$view     = Mockery::mock('\kanso\framework\mvc\view\View');
-		$status   = Mockery::mock('\kanso\framework\http\response\Status');
+		$request  = $this->mock('\kanso\framework\http\request\Request');
+		$response = $this->mock('\kanso\framework\http\response\Response');
+		$format   = $this->mock('\kanso\framework\http\response\Format');
+		$body     = $this->mock('\kanso\framework\http\response\Body');
+		$view     = $this->mock('\kanso\framework\mvc\view\View');
+		$status   = $this->mock('\kanso\framework\http\response\Status');
 
 		$feed = new Feed($request, $response, 'rss');
 
@@ -57,12 +56,12 @@ class FeedTest extends TestCase
 	 */
 	public function testAtom(): void
 	{
-		$request  = Mockery::mock('\kanso\framework\http\request\Request');
-		$response = Mockery::mock('\kanso\framework\http\response\Response');
-		$format   = Mockery::mock('\kanso\framework\http\response\Format');
-		$body     = Mockery::mock('\kanso\framework\http\response\Body');
-		$view     = Mockery::mock('\kanso\framework\mvc\view\View');
-		$status   = Mockery::mock('\kanso\framework\http\response\Status');
+		$request  = $this->mock('\kanso\framework\http\request\Request');
+		$response = $this->mock('\kanso\framework\http\response\Response');
+		$format   = $this->mock('\kanso\framework\http\response\Format');
+		$body     = $this->mock('\kanso\framework\http\response\Body');
+		$view     = $this->mock('\kanso\framework\mvc\view\View');
+		$status   = $this->mock('\kanso\framework\http\response\Status');
 
 		$feed = new Feed($request, $response, 'atom');
 
@@ -92,12 +91,12 @@ class FeedTest extends TestCase
 	 */
 	public function testRdf(): void
 	{
-		$request  = Mockery::mock('\kanso\framework\http\request\Request');
-		$response = Mockery::mock('\kanso\framework\http\response\Response');
-		$format   = Mockery::mock('\kanso\framework\http\response\Format');
-		$body     = Mockery::mock('\kanso\framework\http\response\Body');
-		$view     = Mockery::mock('\kanso\framework\mvc\view\View');
-		$status   = Mockery::mock('\kanso\framework\http\response\Status');
+		$request  = $this->mock('\kanso\framework\http\request\Request');
+		$response = $this->mock('\kanso\framework\http\response\Response');
+		$format   = $this->mock('\kanso\framework\http\response\Format');
+		$body     = $this->mock('\kanso\framework\http\response\Body');
+		$view     = $this->mock('\kanso\framework\mvc\view\View');
+		$status   = $this->mock('\kanso\framework\http\response\Status');
 
 		$feed = new Feed($request, $response, 'rdf');
 

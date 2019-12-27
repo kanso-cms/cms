@@ -11,7 +11,6 @@ use kanso\framework\cli\output\Formatter;
 use kanso\framework\cli\output\helpers\OrderedList;
 use kanso\framework\cli\output\Output;
 use kanso\tests\TestCase;
-use Mockery;
 
 /**
  * @group unit
@@ -25,7 +24,7 @@ class OrderedListTest extends TestCase
 	public function testBasicList(): void
 	{
 		$formatter = new Formatter;
-		$output    = Mockery::mock(Output::class);
+		$output    = $this->mock(Output::class);
 		$output->shouldReceive('formatter')->once()->andReturn($formatter);
 		$list = new OrderedList($output);
 		$expected  = '';
@@ -40,7 +39,7 @@ class OrderedListTest extends TestCase
 	public function testNestedLists(): void
 	{
 		$formatter = new Formatter;
-		$output    = Mockery::mock(Output::class);
+		$output    = $this->mock(Output::class);
 		$output->shouldReceive('formatter')->once()->andReturn($formatter);
 		$list = new OrderedList($output);
 		$expected  = '';
@@ -59,7 +58,7 @@ class OrderedListTest extends TestCase
 	public function testCustomMarker(): void
 	{
 		$formatter = new Formatter;
-		$output    = Mockery::mock(Output::class);
+		$output    = $this->mock(Output::class);
 		$output->shouldReceive('formatter')->once()->andReturn($formatter);
 		$list = new OrderedList($output);
 		$expected  = '';

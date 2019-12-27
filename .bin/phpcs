@@ -123,12 +123,14 @@ foreach(getDirContents($dir) as $file)
 	{
 		$count++;
 
-		echo "Cleaning $file \n";
+		echo "Cleaning: [$file] \n";
 
-		exec($fixer . ' fix ' . $file . " --using-cache=no --allow-risky=yes --rules='" . json_encode($rules) . "'");
+		echo shell_exec($fixer . ' fix ' . $file . " --using-cache=no --allow-risky=yes --rules='" . json_encode($rules) . "'");
+
+		echo "Completed: [$file] \n\n";
 	}
 }
 
 
-echo "Complete\n";
+echo "Complete\n\n";
 echo "Cleaned $count files\n";
