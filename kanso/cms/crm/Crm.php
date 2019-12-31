@@ -8,10 +8,12 @@
 namespace kanso\cms\crm;
 
 use Exception;
-use kanso\cms\wrappers\providers\LeadProvider;
 use kanso\cms\wrappers\Visitor;
-use kanso\framework\common\SqlBuilderTrait;
-use kanso\framework\ioc\ContainerAwareTrait;
+use kanso\framework\database\query\Builder;
+use kanso\framework\http\request\Request;
+use kanso\framework\http\response\Response;
+use kanso\cms\auth\Gatekeeper;
+use kanso\cms\wrappers\providers\LeadProvider;
 
 /**
  * CRM Utility Class.
@@ -20,15 +22,40 @@ use kanso\framework\ioc\ContainerAwareTrait;
  */
 class Crm
 {
-    use ContainerAwareTrait;
-    use SqlBuilderTrait;
+    /**
+     * Request instance
+     *
+     * @var \kanso\framework\http\request\Request
+     */
+    private $request;
 
     /**
-     * The cookie key to be used to identify visitors.
+     * Response instance
      *
-     * @var string
+     * @var \kanso\framework\http\response\Response
      */
-    protected $cookieKey = 'crm_visitor_id';
+    private $response;
+
+    /**
+     * Gatekeeper instance
+     *
+     * @var \kanso\cms\auth\Gatekeeper
+     */
+    private $gatekeeper;
+
+     /**
+     * Gatekeeper instance
+     *
+     * @var \kanso\cms\wrappers\providers\LeadProvider
+     */
+    private $leadProvider;
+
+     /**
+     * Sql builder instance
+     *
+     * @var \kanso\framework\database\query\Builder
+     */
+    private $sql;
 
     /**
      * The current visitor making the request.
@@ -38,22 +65,68 @@ class Crm
     private $visitor;
 
     /**
-     * Constructor.
+     * Is this request via the CLI?
+     *
+     * @var bool
      */
-    public function __construct()
+    private $isCommandLine;
+
+    /**
+     * Is this a request to the admin panel?
+     *
+     * @var bool
+     */
+    private $isAdmin;
+
+    /**
+     * The current visitor a bot
+     *
+     * @var bool
+     */
+    private $isCrawler;
+
+    /**
+     * The cookie key to be used to identify visitors.
+     *
+     * @var string
+     */
+    private $cookieKey = 'crm_visitor_id';
+
+    /**
+     * Constructor.
+     * 
+     * @param \kanso\framework\http\request\Request $request Request instance
+     * @param \kanso\framework\http\response\Response $response Response instance
+     * @param \kanso\cms\auth\Gatekeeper $gatekeeper Gatekeeper instance
+     * @param \kanso\cms\wrappers\providers\LeadProvider LeadProvider instance
+     * @param \kanso\framework\database\query\Builder SQL builder instance
+     * @param  bool $isCommandLine Is the CMS running via command line? (optional) (default false)
+     * @param  bool $isCrawler Is this a request from a bot? (optional) (default false)
+     * @param  bool $isAdmin Is this a request for the admin panel? (optional) (default false)
+     */
+    public function __construct(Request $request, Response $response, Gatekeeper $gatekeeper, LeadProvider $leadProvider, Builder $sql, bool $isCommandLine = false, bool $isCrawler = false, bool $isAdmin = false)
     {
+        $this->request       = $request;
+        $this->response      = $response;
+        $this->gatekeeper    = $gatekeeper;
+        $this->sql           = $sql;
+        $this->leadProvider  = $leadProvider;
+        $this->isCommandLine = $isCommandLine;
+        $this->isAdmin       = $isAdmin;
+        $this->isCrawler     = $isCrawler;
+
         // Only load if not in CLI
-        if (!$this->Application->isCommandLine())
+        if (!$this->isCommandLine)
         {
             // Real humans
-            if (!$this->UserAgent->isCrawler())
+            if (!$this->isCrawler)
             {
                 $this->findVisitor();
 
                 // Only save current visit if this is a GET request
-                if ($this->Request->isGet())
+                if ($this->request->isGet())
                 {
-                    if (!$this->Query->is_admin())
+                    if (!$this->isAdmin)
                     {
                         $this->visitor->addVisit($this->newVisitRow());
                     }
@@ -63,7 +136,7 @@ class Crm
             // Crawlers/bots get merged by user agent rather than cookies
             else
             {
-                if ($this->Request->isGet())
+                if ($this->request->isGet())
                 {
                     $this->findCrawler();
 
@@ -85,13 +158,13 @@ class Crm
     }
 
     /**
-     * Get the visitor provider.
+     * Get the lead provider.
      *
      * @return \kanso\cms\wrappers\providers\LeadProvider
      */
     public function leadProvider(): LeadProvider
     {
-        return $this->LeadManager->provider();
+        return $this->leadProvider;
     }
 
     /**
@@ -99,13 +172,13 @@ class Crm
      */
     public function login(): void
     {
-        if (!$this->Gatekeeper->isLoggedIn())
+        if (!$this->gatekeeper->isLoggedIn())
         {
             throw new Exception('Error logging in CRM visitor. The user is not logged in via the Gatekeeper.');
         }
 
         // Update the user with the visitor
-        $user = $this->Gatekeeper->getUser();
+        $user = $this->gatekeeper->getUser();
 
         $user->visitor_id = $this->visitor->visitor_id;
 
@@ -118,7 +191,7 @@ class Crm
 
         $this->visitor->save();
 
-        $this->Response->cookie()->put($this->cookieKey, $this->visitor->visitor_id);
+        $this->response->cookie()->put($this->cookieKey, $this->visitor->visitor_id);
     }
 
     /**
@@ -128,7 +201,7 @@ class Crm
     public function logout(): void
     {
         // Add the crm visitor cookie again
-        $this->Response->cookie()->put($this->cookieKey, $this->visitor->visitor_id);
+        $this->response->cookie()->put($this->cookieKey, $this->visitor->visitor_id);
     }
 
     /**
@@ -141,15 +214,15 @@ class Crm
     {
         if ($newVisitorId !== $this->visitor->visitor_id)
         {
-            $newVisitor = $this->sql()->SELECT('*')->FROM('crm_visitors')->WHERE('visitor_id', '=', $newVisitorId)->ROW();
+            $newVisitor = $this->sql->SELECT('*')->FROM('crm_visitors')->WHERE('visitor_id', '=', $newVisitorId)->ROW();
 
             if ($newVisitor)
             {
                 if (isset($this->visitor->id))
                 {
-                    $this->sql()->DELETE_FROM('crm_visitors')->WHERE('id', '=', $this->visitor->id)->QUERY();
+                    $this->sql->DELETE_FROM('crm_visitors')->WHERE('id', '=', $this->visitor->id)->QUERY();
 
-                    $this->sql()->UPDATE('crm_visits')->SET(['visitor_id' => $newVisitorId])->WHERE('visitor_id', '=', $this->visitor->visitor_id)->QUERY();
+                    $this->sql->UPDATE('crm_visits')->SET(['visitor_id' => $newVisitorId])->WHERE('visitor_id', '=', $this->visitor->visitor_id)->QUERY();
                 }
 
                 foreach ($newVisitor as $key => $value)
@@ -157,7 +230,7 @@ class Crm
                     $this->visitor->$key = $value;
                 }
 
-                $this->Response->cookie()->set($this->cookieKey, $newVisitorId);
+                $this->response->cookie()->put($this->cookieKey, $newVisitorId);
 
                 $this->visitor->save();
 
@@ -176,9 +249,9 @@ class Crm
     private function findVisitor(): Visitor
     {
         // Logged in users
-        if ($this->Gatekeeper->isLoggedIn())
+        if ($this->gatekeeper->isLoggedIn())
         {
-            $this->visitor = $this->leadProvider()->byKey('visitor_id', $this->Gatekeeper->getUser()->visitor_id);
+            $this->visitor = $this->leadProvider()->byKey('visitor_id', $this->gatekeeper->getUser()->visitor_id);
 
             if (!$this->visitor)
             {
@@ -188,9 +261,9 @@ class Crm
             }
         }
         // Returning visitors
-        elseif ($this->Response->cookie()->has($this->cookieKey))
+        elseif ($this->response->cookie()->has($this->cookieKey))
         {
-            $this->visitor = $this->leadProvider()->byKey('visitor_id', $this->Response->cookie()->get($this->cookieKey));
+            $this->visitor = $this->leadProvider()->byKey('visitor_id', $this->response->cookie()->get($this->cookieKey));
         }
         else
         {
@@ -204,7 +277,7 @@ class Crm
             $this->visitor = $this->leadProvider()->create($this->newVisitorRow());
         }
 
-        $this->Response->cookie()->put($this->cookieKey, $this->visitor->visitor_id);
+        $this->response->cookie()->put($this->cookieKey, $this->visitor->visitor_id);
 
         return $this->visitor;
     }
@@ -216,13 +289,13 @@ class Crm
      */
     private function findCrawler(): Visitor
     {
-        $this->visitor = $this->leadProvider()->byKey('user_agent', $this->Request->environment()->HTTP_USER_AGENT);
+        $this->visitor = $this->leadProvider()->byKey('user_agent', $this->request->environment()->HTTP_USER_AGENT);
 
         // If we couldn't find the bot by user_agent,
         // try to find them by IP
         if (!$this->visitor)
         {
-            $this->visitor = $this->leadProvider()->byKey('ip_address', $this->Request->environment()->REMOTE_ADDR);
+            $this->visitor = $this->leadProvider()->byKey('ip_address', $this->request->environment()->REMOTE_ADDR);
         }
 
         // Fallback to new visitor
@@ -231,7 +304,7 @@ class Crm
             $this->visitor = $this->leadProvider()->create($this->newVisitorRow());
         }
 
-        $this->Response->cookie()->put($this->cookieKey, $this->visitor->visitor_id);
+        $this->response->cookie()->put($this->cookieKey, $this->visitor->visitor_id);
 
         return $this->visitor;
     }
@@ -245,12 +318,12 @@ class Crm
     {
         return
         [
-            'ip_address'  => $this->Request->environment()->REMOTE_ADDR,
+            'ip_address'  => $this->request->environment()->REMOTE_ADDR,
             'name'        => '',
             'email'       => '',
             'last_active' => time(),
-            'user_agent'  => $this->Request->environment()->HTTP_USER_AGENT,
-            'is_bot'      => $this->UserAgent->isCrawler(),
+            'user_agent'  => $this->request->environment()->HTTP_USER_AGENT,
+            'is_bot'      => $this->isCrawler,
         ];
     }
 
@@ -271,20 +344,20 @@ class Crm
      */
     private function newVisitRow(): array
     {
-        $queries = $this->Request->queries();
+        $queries = $this->request->queries();
 
         return
         [
             'visitor_id'   => $this->visitor->visitor_id,
-            'ip_address'   => $this->Request->environment()->REMOTE_ADDR,
-            'page'         => substr($this->Request->environment()->REQUEST_URL, 0, 255),
+            'ip_address'   => $this->request->environment()->REMOTE_ADDR,
+            'page'         => substr($this->request->environment()->REQUEST_URL, 0, 255),
             'date'         => time(),
             'medium'       => isset($queries['md']) ? $queries['md'] : null,
             'channel'      => isset($queries['ch']) ? $queries['ch'] : 'direct',
             'campaign'     => isset($queries['cp']) ? $queries['cp'] : null,
             'keyword'      => isset($queries['kw']) ? $queries['kw'] : null,
             'creative'     => isset($queries['cr']) ? $queries['cr'] : null,
-            'browser'      => $this->Request->environment()->HTTP_USER_AGENT,
+            'browser'      => $this->request->environment()->HTTP_USER_AGENT,
         ];
     }
 }

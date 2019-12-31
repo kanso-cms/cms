@@ -22,9 +22,9 @@ class CrmService extends Service
 	 */
 	public function register(): void
 	{
-		$this->container->singleton('Crm', function()
+		$this->container->singleton('Crm', function($container)
 		{
-			return new Crm;
+			return new Crm($container->Request, $container->Response, $container->Gatekeeper, $container->LeadProvider, $container->Database->connection()->builder(), $container->UserAgent->isCrawler(), $container->Query->is_admin());
 		});
 	}
 }

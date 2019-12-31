@@ -5,9 +5,10 @@
  * @license   https://github.com/kanso-cms/cms/blob/master/LICENSE
  */
 
-namespace kanso\tests\unit\crm;
+namespace kanso\tests\unit\cms\crm;
 
 use kanso\tests\TestCase;
+use kanso\cms\crm\Crm;
 
 /**
  * @group unit
@@ -18,316 +19,485 @@ class CrmTest extends TestCase
 	/**
 	 *
 	 */
-	public function testNotEmptySession(): void
+	public function testConstructorNewVisitor()
 	{
-		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
-		$session    = $this->fakeSession();
-
-		$cart->Session    = $session;
-		$cart->Gatekeeper = $gateKeeper;
-
-		$gateKeeper->shouldReceive('isLoggedIn')->andReturn(false);
-
-		$this->assertFalse($cart->isEmpty());
-	}
-
-	/**
-	 *
-	 */
-	public function testEmptySession(): void
-	{
-		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
-		$session    = $this->fakeSessionEmpty();
-
-		$cart->Session    = $session;
-		$cart->Gatekeeper = $gateKeeper;
-
-		$gateKeeper->shouldReceive('isLoggedIn')->andReturn(false);
-
-		$this->assertTrue($cart->isEmpty());
-	}
-
-	/**
-	 *
-	 */
-	public function testNotEmptyDB(): void
-	{
-		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
-		$sql        = $this->mock('\kanso\framework\database\query\Builder');
-		$user       = $this->fakeUser();
-
-		$cart->shouldAllowMockingProtectedMethods();
-		$cart->Gatekeeper = $gateKeeper;
-
-		$gateKeeper->shouldReceive('isLoggedIn')->andReturn(true);
-
-		$gateKeeper->shouldReceive('getUser')->andReturn($user);
-
-		$cart->shouldReceive('sql')->andReturn($sql);
-
-		$sql->shouldReceive('SELECT')->with('*')->andReturn($sql);
-
-		$sql->shouldReceive('FROM')->with('shopping_cart_items')->andReturn($sql);
-
-		$sql->shouldReceive('WHERE')->with('user_id', '=', 1)->andReturn($sql);
-
-		$sql->shouldReceive('FIND_ALL')->andReturn($this->shoppingCartEntries());
-
-		$this->assertFalse($cart->isEmpty());
-	}
-
-	/**
-	 *
-	 */
-	public function testEmptyDb(): void
-	{
-		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
-		$sql        = $this->mock('\kanso\framework\database\query\Builder');
-		$user       = $this->fakeUser();
-
-		$cart->shouldAllowMockingProtectedMethods();
-		$cart->Gatekeeper = $gateKeeper;
-
-		$gateKeeper->shouldReceive('isLoggedIn')->andReturn(true);
-
-		$gateKeeper->shouldReceive('getUser')->andReturn($user);
-
-		$cart->shouldReceive('sql')->andReturn($sql);
-
-		$sql->shouldReceive('SELECT')->with('*')->andReturn($sql);
-
-		$sql->shouldReceive('FROM')->with('shopping_cart_items')->andReturn($sql);
-
-		$sql->shouldReceive('WHERE')->with('user_id', '=', 1)->andReturn($sql);
-
-		$sql->shouldReceive('FIND_ALL')->andReturn([]);
-
-		$this->assertTrue($cart->isEmpty());
-	}
-
-	/**
-	 *
-	 */
-	public function testCountSession(): void
-	{
-		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
-		$session    = $this->fakeSession();
-
-		$cart->Session    = $session;
-		$cart->Gatekeeper = $gateKeeper;
-
-		$gateKeeper->shouldReceive('isLoggedIn')->andReturn(false);
-
-		$this->assertEquals(3, $cart->count());
-	}
-
-	/**
-	 *
-	 */
-	public function testCountSessionEmpty(): void
-	{
-		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
-		$session    = $this->fakeSessionEmpty();
-
-		$cart->Session    = $session;
-		$cart->Gatekeeper = $gateKeeper;
-
-		$gateKeeper->shouldReceive('isLoggedIn')->andReturn(false);
-
-		$this->assertEquals(0, $cart->count());
-	}
-
-	/**
-	 *
-	 */
-	public function testCountDb(): void
-	{
-		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
-		$sql        = $this->mock('\kanso\framework\database\query\Builder');
-		$user       = $this->fakeUser();
-
-		$cart->shouldAllowMockingProtectedMethods();
-		$cart->Gatekeeper = $gateKeeper;
-
-		$gateKeeper->shouldReceive('isLoggedIn')->andReturn(true);
-
-		$gateKeeper->shouldReceive('getUser')->andReturn($user);
-
-		$cart->shouldReceive('sql')->andReturn($sql);
-
-		$sql->shouldReceive('SELECT')->with('*')->andReturn($sql);
-
-		$sql->shouldReceive('FROM')->with('shopping_cart_items')->andReturn($sql);
-
-		$sql->shouldReceive('WHERE')->with('user_id', '=', 1)->andReturn($sql);
-
-		$sql->shouldReceive('FIND_ALL')->andReturn($this->shoppingCartEntries());
-
-		$this->assertEquals(3, $cart->count());
-	}
-
-	/**
-	 *
-	 */
-	public function testCountDbEmpty(): void
-	{
-		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
-		$sql        = $this->mock('\kanso\framework\database\query\Builder');
-		$user       = $this->fakeUser();
-
-		$cart->shouldAllowMockingProtectedMethods();
-		$cart->Gatekeeper = $gateKeeper;
-
-		$gateKeeper->shouldReceive('isLoggedIn')->andReturn(true);
-
-		$gateKeeper->shouldReceive('getUser')->andReturn($user);
-
-		$cart->shouldReceive('sql')->andReturn($sql);
-
-		$sql->shouldReceive('SELECT')->with('*')->andReturn($sql);
-
-		$sql->shouldReceive('FROM')->with('shopping_cart_items')->andReturn($sql);
-
-		$sql->shouldReceive('WHERE')->with('user_id', '=', 1)->andReturn($sql);
-
-		$sql->shouldReceive('FIND_ALL')->andReturn([]);
-
-		$this->assertEquals(0, $cart->count());
-	}
-
-	/**
-	 *
-	 */
-	public function testClearSession(): void
-	{
-		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
-		$session    = $this->mock('\kanso\framework\http\session\Session');
-
-		$cart->Session    = $session;
-		$cart->Gatekeeper = $gateKeeper;
-
-		$gateKeeper->shouldReceive('isLoggedIn')->andReturn(false);
-		$session->shouldReceive('remove')->with('shopping_cart_items');
-
-		$cart->clear();
-	}
-
-	/**
-	 *
-	 */
-	public function testClearDB(): void
-	{
-		$cart       = $this->mock('\kanso\cms\ecommerce\Cart')->makePartial();
-		$gateKeeper = $this->mock('\kanso\cms\auth\Gatekeeper');
-		$sql        = $this->mock('\kanso\framework\database\query\Builder');
-		$session    = $this->mock('\kanso\framework\http\session\Session');
-		$user       = $this->fakeUser();
-
-		$cart->shouldAllowMockingProtectedMethods();
-		$cart->Session = $session;
-		$cart->Gatekeeper = $gateKeeper;
-		$cart->shouldReceive('sql')->andReturn($sql);
-		$gateKeeper->shouldReceive('isLoggedIn')->andReturn(true);
-		$gateKeeper->shouldReceive('getUser')->andReturn($user);
-		$session->shouldReceive('remove')->with('shopping_cart_items');
-		$sql->shouldReceive('DELETE_FROM')->with('shopping_cart_items')->andReturn($sql);
-		$sql->shouldReceive('WHERE')->with('user_id', '=', 1)->andReturn($sql);
-		$sql->shouldReceive('QUERY')->andReturn(3);
-
-		$cart->clear();
-	}
-
-	/**
-	 *
-	 */
-	private function fakeSession()
-	{
-		return new fakeSessionWithProducts;
-	}
-
-	/**
-	 *
-	 */
-	private function fakeSessionEmpty()
-	{
-		return new fakeSessionWithoutProducts;
-	}
-
-	/**
-	 *
-	 */
-	private function fakeUser()
-	{
-		return new fakeUser;
-	}
-
-	/**
-	 *
-	 */
-	private function shoppingCartEntries()
-	{
-		return
+		$request       = $this->mock('\kanso\framework\http\request\Request');
+		$response      = $this->mock('\kanso\framework\http\response\Response');
+		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$user          = $this->mock('\kanso\cms\wrappers\User');
+		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
+		$sql           = $this->mock('\kanso\framework\database\query\Builder');
+		$env           = $this->mock('\kanso\framework\http\request\Environment');
+		$visitor       = $this->mock('\kanso\cms\wrappers\Visitor');
+		$user->id             = 1;
+		$user->email          = 'foo@bar.com';
+		$env->HTTP_USER_AGENT = 'Safari 11.2';
+		$env->REMOTE_ADDR     = '192.168.1.1';
+
+		$leadArgs =
 		[
-			[
-				'id'         => 1,
-				'product_id' => 1,
-				'offer_id'   => 'offer-id-1',
-				'quantity'   => 1,
-			],
-			[
-				'id'         => 2,
-				'product_id' => 2,
-				'offer_id'   => 'offer-id-2',
-				'quantity'   => 2,
-			],
+			'ip_address'  => '192.168.1.1',
+			'name'        => '',
+			'email'       => '',
+			'last_active' => time(),
+			'user_agent'  => 'Safari 11.2',
+			'is_bot'      => false
 		];
+
+		$response->shouldReceive('cookie')->andReturn($cookie);
+		$cookie->shouldReceive('has')->with('crm_visitor_id')->andReturn(false);
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(false);
+		
+		$request->shouldReceive('isGet')->andReturn(true);
+		$request->shouldReceive('queries')->andReturn([]);
+		$request->shouldReceive('environment')->andReturn($env);
+
+		$leadProvider->shouldReceive('create')->with($leadArgs)->andReturn($visitor);
+		$cookie->shouldReceive('put');
+
+		$visitor->shouldReceive('addVisit');
+
+		$crm = new Crm($request, $response, $gatekeeper, $leadProvider, $sql, false, false, false);
 	}
 
-}
-
-class fakeUser
-{
-	public $id = 1;
-}
-
-class fakeSessionWithoutProducts
-{
-	public function get(string $key)
+	/**
+	 *
+	 */
+	public function testConstructorLoggedIn()
 	{
-		return false;
-	}
-}
+		$request       = $this->mock('\kanso\framework\http\request\Request');
+		$response      = $this->mock('\kanso\framework\http\response\Response');
+		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$user          = $this->mock('\kanso\cms\wrappers\User');
+		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
+		$sql           = $this->mock('\kanso\framework\database\query\Builder');
+		$env           = $this->mock('\kanso\framework\http\request\Environment');
+		$visitor       = $this->mock('\kanso\cms\wrappers\Visitor');
+		$visitor->visitor_id  = 'visitor_lead_id';
+		$user->id             = 1;
+		$user->email          = 'foo@bar.com';
+		$user->visitor_id     = 'visitor_lead_id';
+		$env->HTTP_USER_AGENT = 'Safari 11.2';
+		$env->REMOTE_ADDR     = '192.168.1.1';
 
-class fakeSessionWithProducts
-{
-	public function get(string $key)
-	{
-		if ($key === 'shopping_cart_items')
-		{
-			return
-			[
-				[
-					'id'         => 1,
-					'product_id' => 1,
-					'offer_id'   => 'offer-id-1',
-					'quantity'   => 1,
-				],
-				[
-					'id'         => 2,
-					'product_id' => 2,
-					'offer_id'   => 'offer-id-2',
-					'quantity'   => 2,
-				],
-			];
-		}
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
+		$gatekeeper->shouldReceive('getUser')->andReturn($user);
+		$leadProvider->shouldReceive('byKey')->with('visitor_id', 'visitor_lead_id')->andReturn($visitor);
+
+		$response->shouldReceive('cookie')->andReturn($cookie);
+		$cookie->shouldReceive('put')->with('crm_visitor_id', 'visitor_lead_id');
+
+		$request->shouldReceive('isGet')->andReturn(true);
+		$request->shouldReceive('queries')->andReturn([]);
+		$request->shouldReceive('environment')->andReturn($env);
+		$visitor->shouldReceive('addVisit');
+
+		$crm = new Crm($request, $response, $gatekeeper, $leadProvider, $sql, false, false, false);
 	}
+
+	/**
+	 *
+	 */
+	public function testConstructorReturning()
+	{
+		$request       = $this->mock('\kanso\framework\http\request\Request');
+		$response      = $this->mock('\kanso\framework\http\response\Response');
+		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$user          = $this->mock('\kanso\cms\wrappers\User');
+		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
+		$sql           = $this->mock('\kanso\framework\database\query\Builder');
+		$env           = $this->mock('\kanso\framework\http\request\Environment');
+		$visitor       = $this->mock('\kanso\cms\wrappers\Visitor');
+		$visitor->visitor_id  = 'visitor_lead_id';
+		$user->id             = 1;
+		$user->email          = 'foo@bar.com';
+		$user->visitor_id     = 'visitor_lead_id';
+		$env->HTTP_USER_AGENT = 'Safari 11.2';
+		$env->REMOTE_ADDR     = '192.168.1.1';
+
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(false);
+
+		$cookie->shouldReceive('has')->with('crm_visitor_id')->andReturn(true);
+		$cookie->shouldReceive('get')->with('crm_visitor_id')->andReturn('visitor_lead_id');
+		$cookie->shouldReceive('put')->with('crm_visitor_id', 'visitor_lead_id');
+		$leadProvider->shouldReceive('byKey')->with('visitor_id', 'visitor_lead_id')->andReturn($visitor);
+
+		$response->shouldReceive('cookie')->andReturn($cookie);
+		$request->shouldReceive('isGet')->andReturn(true);
+		$request->shouldReceive('queries')->andReturn([]);
+		$request->shouldReceive('environment')->andReturn($env);
+		$visitor->shouldReceive('addVisit');
+
+		$crm = new Crm($request, $response, $gatekeeper, $leadProvider, $sql, false, false, false);
+	}
+
+	/**
+	 *
+	 */
+	public function testConstructorReturningNoCookie()
+	{
+		$request       = $this->mock('\kanso\framework\http\request\Request');
+		$response      = $this->mock('\kanso\framework\http\response\Response');
+		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$user          = $this->mock('\kanso\cms\wrappers\User');
+		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
+		$sql           = $this->mock('\kanso\framework\database\query\Builder');
+		$env           = $this->mock('\kanso\framework\http\request\Environment');
+		$visitor       = $this->mock('\kanso\cms\wrappers\Visitor');
+		$visitor->visitor_id  = 'visitor_lead_id';
+		$user->id             = 1;
+		$user->email          = 'foo@bar.com';
+		$user->visitor_id     = 'visitor_lead_id';
+		$env->HTTP_USER_AGENT = 'Safari 11.2';
+		$env->REMOTE_ADDR     = '192.168.1.1';
+
+		$leadArgs =
+		[
+			'ip_address'  => '192.168.1.1',
+			'name'        => '',
+			'email'       => '',
+			'last_active' => time(),
+			'user_agent'  => 'Safari 11.2',
+			'is_bot'      => false
+		];
+
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(false);
+
+		$cookie->shouldReceive('has')->with('crm_visitor_id')->andReturn(true);
+		$cookie->shouldReceive('get')->with('crm_visitor_id')->andReturn('visitor_lead_id');
+		$cookie->shouldReceive('put')->with('crm_visitor_id', 'visitor_lead_id');
+		$leadProvider->shouldReceive('byKey')->with('visitor_id', 'visitor_lead_id')->andReturn(false);
+		$leadProvider->shouldReceive('create')->with($leadArgs)->andReturn($visitor);
+
+		$response->shouldReceive('cookie')->andReturn($cookie);
+		$request->shouldReceive('isGet')->andReturn(true);
+		$request->shouldReceive('queries')->andReturn([]);
+		$request->shouldReceive('environment')->andReturn($env);
+		$visitor->shouldReceive('addVisit');
+
+		$crm = new Crm($request, $response, $gatekeeper, $leadProvider, $sql, false, false, false);
+	}
+
+	/**
+	 *
+	 */
+	public function testConstructorLoggedInNoCookie()
+	{
+		$request       = $this->mock('\kanso\framework\http\request\Request');
+		$response      = $this->mock('\kanso\framework\http\response\Response');
+		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$user          = $this->mock('\kanso\cms\wrappers\User');
+		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
+		$sql           = $this->mock('\kanso\framework\database\query\Builder');
+		$env           = $this->mock('\kanso\framework\http\request\Environment');
+		$visitor       = $this->mock('\kanso\cms\wrappers\Visitor');
+		$visitor->visitor_id  = 'visitor_lead_id';
+		$user->id             = 1;
+		$user->email          = 'foo@bar.com';
+		$user->visitor_id     = 'visitor_lead_id';
+		$env->HTTP_USER_AGENT = 'Safari 11.2';
+		$env->REMOTE_ADDR     = '192.168.1.1';
+
+		$leadArgs =
+		[
+			'ip_address'  => '192.168.1.1',
+			'name'        => '',
+			'email'       => '',
+			'last_active' => time(),
+			'user_agent'  => 'Safari 11.2',
+			'is_bot'      => false
+		];
+
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
+		$gatekeeper->shouldReceive('getUser')->andReturn($user);
+		$leadProvider->shouldReceive('byKey')->with('visitor_id', 'visitor_lead_id')->andReturn(false);
+		$leadProvider->shouldReceive('create')->with($leadArgs)->andReturn($visitor);
+		$user->shouldReceive('save');
+		$visitor->shouldReceive('save');
+
+		$response->shouldReceive('cookie')->andReturn($cookie);
+		$cookie->shouldReceive('put')->with('crm_visitor_id', 'visitor_lead_id');
+
+		$request->shouldReceive('isGet')->andReturn(true);
+		$request->shouldReceive('queries')->andReturn([]);
+		$request->shouldReceive('environment')->andReturn($env);
+		$visitor->shouldReceive('addVisit');
+
+		$crm = new Crm($request, $response, $gatekeeper, $leadProvider, $sql, false, false, false);
+	}
+
+	/**
+	 *
+	 */
+	public function testVisitor()
+	{
+		$request       = $this->mock('\kanso\framework\http\request\Request');
+		$response      = $this->mock('\kanso\framework\http\response\Response');
+		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$user          = $this->mock('\kanso\cms\wrappers\User');
+		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
+		$sql           = $this->mock('\kanso\framework\database\query\Builder');
+		$env           = $this->mock('\kanso\framework\http\request\Environment');
+		$visitor       = $this->mock('\kanso\cms\wrappers\Visitor');
+		$visitor->visitor_id  = 'visitor_lead_id';
+		$user->id             = 1;
+		$user->email          = 'foo@bar.com';
+		$user->visitor_id     = 'visitor_lead_id';
+		$env->HTTP_USER_AGENT = 'Safari 11.2';
+		$env->REMOTE_ADDR     = '192.168.1.1';
+
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(false);
+
+		$cookie->shouldReceive('has')->with('crm_visitor_id')->andReturn(true);
+		$cookie->shouldReceive('get')->with('crm_visitor_id')->andReturn('visitor_lead_id');
+		$cookie->shouldReceive('put')->with('crm_visitor_id', 'visitor_lead_id');
+		$leadProvider->shouldReceive('byKey')->with('visitor_id', 'visitor_lead_id')->andReturn($visitor);
+
+		$response->shouldReceive('cookie')->andReturn($cookie);
+		$request->shouldReceive('isGet')->andReturn(true);
+		$request->shouldReceive('queries')->andReturn([]);
+		$request->shouldReceive('environment')->andReturn($env);
+		$visitor->shouldReceive('addVisit');
+
+		$crm = new Crm($request, $response, $gatekeeper, $leadProvider, $sql, false, false, false);
+		
+		$this->assertTrue($crm->visitor() === $visitor);
+	}
+
+	/**
+	 *
+	 */
+	public function testLeadProvider()
+	{
+		$request       = $this->mock('\kanso\framework\http\request\Request');
+		$response      = $this->mock('\kanso\framework\http\response\Response');
+		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$user          = $this->mock('\kanso\cms\wrappers\User');
+		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
+		$sql           = $this->mock('\kanso\framework\database\query\Builder');
+		$env           = $this->mock('\kanso\framework\http\request\Environment');
+		$visitor       = $this->mock('\kanso\cms\wrappers\Visitor');
+		$visitor->visitor_id  = 'visitor_lead_id';
+		$user->id             = 1;
+		$user->email          = 'foo@bar.com';
+		$user->visitor_id     = 'visitor_lead_id';
+		$env->HTTP_USER_AGENT = 'Safari 11.2';
+		$env->REMOTE_ADDR     = '192.168.1.1';
+
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(false);
+
+		$cookie->shouldReceive('has')->with('crm_visitor_id')->andReturn(true);
+		$cookie->shouldReceive('get')->with('crm_visitor_id')->andReturn('visitor_lead_id');
+		$cookie->shouldReceive('put')->with('crm_visitor_id', 'visitor_lead_id');
+		$leadProvider->shouldReceive('byKey')->with('visitor_id', 'visitor_lead_id')->andReturn($visitor);
+
+		$response->shouldReceive('cookie')->andReturn($cookie);
+		$request->shouldReceive('isGet')->andReturn(true);
+		$request->shouldReceive('queries')->andReturn([]);
+		$request->shouldReceive('environment')->andReturn($env);
+		$visitor->shouldReceive('addVisit');
+
+		$crm = new Crm($request, $response, $gatekeeper, $leadProvider, $sql, false, false, false);
+		
+		$this->assertTrue($crm->leadProvider() === $leadProvider);
+	}
+
+	/**
+	 *
+	 */
+	public function testLogin()
+	{
+		$request       = $this->mock('\kanso\framework\http\request\Request');
+		$response      = $this->mock('\kanso\framework\http\response\Response');
+		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$user          = $this->mock('\kanso\cms\wrappers\User');
+		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
+		$sql           = $this->mock('\kanso\framework\database\query\Builder');
+		$env           = $this->mock('\kanso\framework\http\request\Environment');
+		$visitor       = $this->mock('\kanso\cms\wrappers\Visitor');
+		$visitor->visitor_id  = 'visitor_lead_id';
+		$user->id             = 1;
+		$user->email          = 'foo@bar.com';
+		$user->visitor_id     = 'visitor_lead_id';
+		$env->HTTP_USER_AGENT = 'Safari 11.2';
+		$env->REMOTE_ADDR     = '192.168.1.1';
+
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
+		$gatekeeper->shouldReceive('getUser')->andReturn($user);
+		$leadProvider->shouldReceive('byKey')->with('visitor_id', 'visitor_lead_id')->andReturn($visitor);
+
+		$response->shouldReceive('cookie')->andReturn($cookie);
+		$cookie->shouldReceive('put')->with('crm_visitor_id', 'visitor_lead_id');
+
+		$request->shouldReceive('isGet')->andReturn(true);
+		$request->shouldReceive('queries')->andReturn([]);
+		$request->shouldReceive('environment')->andReturn($env);
+		$visitor->shouldReceive('addVisit');
+
+		$visitor->shouldReceive('save');
+		$user->shouldReceive('save');
+
+		$crm = new Crm($request, $response, $gatekeeper, $leadProvider, $sql, false, false, false);
+
+		$crm->login();
+		
+		$this->assertTrue($visitor->email === $user->email);
+	}
+
+	/**
+	 *
+	 */
+	public function testLogout()
+	{
+		$request       = $this->mock('\kanso\framework\http\request\Request');
+		$response      = $this->mock('\kanso\framework\http\response\Response');
+		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$user          = $this->mock('\kanso\cms\wrappers\User');
+		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
+		$sql           = $this->mock('\kanso\framework\database\query\Builder');
+		$env           = $this->mock('\kanso\framework\http\request\Environment');
+		$visitor       = $this->mock('\kanso\cms\wrappers\Visitor');
+		$visitor->visitor_id  = 'visitor_lead_id';
+		$user->id             = 1;
+		$user->email          = 'foo@bar.com';
+		$user->visitor_id     = 'visitor_lead_id';
+		$env->HTTP_USER_AGENT = 'Safari 11.2';
+		$env->REMOTE_ADDR     = '192.168.1.1';
+
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
+		$gatekeeper->shouldReceive('getUser')->andReturn($user);
+		$leadProvider->shouldReceive('byKey')->with('visitor_id', 'visitor_lead_id')->andReturn($visitor);
+
+		$response->shouldReceive('cookie')->andReturn($cookie);
+		$cookie->shouldReceive('put')->with('crm_visitor_id', 'visitor_lead_id');
+
+		$request->shouldReceive('isGet')->andReturn(true);
+		$request->shouldReceive('queries')->andReturn([]);
+		$request->shouldReceive('environment')->andReturn($env);
+		$visitor->shouldReceive('addVisit');
+
+		$visitor->shouldReceive('save');
+		$user->shouldReceive('save');
+
+		$crm = new Crm($request, $response, $gatekeeper, $leadProvider, $sql, false, false, false);
+
+		$crm->logout();
+ 	}
+
+ 	/**
+	 *
+	 */
+	public function testMerge()
+	{
+		$request       = $this->mock('\kanso\framework\http\request\Request');
+		$response      = $this->mock('\kanso\framework\http\response\Response');
+		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$user          = $this->mock('\kanso\cms\wrappers\User');
+		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
+		$sql           = $this->mock('\kanso\framework\database\query\Builder');
+		$env           = $this->mock('\kanso\framework\http\request\Environment');
+		$visitor       = $this->mock('\kanso\cms\wrappers\Visitor');
+		$visitor->visitor_id  = 'visitor_lead_id';
+		$user->id             = 1;
+		$user->email          = 'foo@bar.com';
+		$user->visitor_id     = 'visitor_lead_id';
+		$env->HTTP_USER_AGENT = 'Safari 11.2';
+		$env->REMOTE_ADDR     = '192.168.1.1';
+
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
+		$gatekeeper->shouldReceive('getUser')->andReturn($user);
+		$leadProvider->shouldReceive('byKey')->with('visitor_id', 'visitor_lead_id')->andReturn($visitor);
+
+		$response->shouldReceive('cookie')->andReturn($cookie);
+		$cookie->shouldReceive('put')->with('crm_visitor_id', 'visitor_lead_id');
+
+		$request->shouldReceive('isGet')->andReturn(true);
+		$request->shouldReceive('queries')->andReturn([]);
+		$request->shouldReceive('environment')->andReturn($env);
+		$visitor->shouldReceive('addVisit');
+
+		$visitor->shouldReceive('save');
+
+		$crm = new Crm($request, $response, $gatekeeper, $leadProvider, $sql, false, false, false);
+
+		$sql->shouldReceive('SELECT')->with('*')->times(1)->andReturn($sql);
+		$sql->shouldReceive('FROM')->with('crm_visitors')->times(1)->andReturn($sql);
+		$sql->shouldReceive('WHERE')->with('visitor_id', '=', 'new_visitor_id')->times(1)->andReturn($sql);
+		$sql->shouldReceive('ROW')->times(1)->andReturn(['visitor_id' => 'new_visitor_id', 'name' => 'changed']);
+
+		$cookie->shouldReceive('put')->with('crm_visitor_id', 'new_visitor_id');
+
+		$crm->mergeVisitor('new_visitor_id');
+
+		$this->assertTrue($visitor->visitor_id === 'new_visitor_id');
+ 	}
+
+ 	/**
+	 *
+	 */
+	public function testMergeReturning()
+	{
+		$request       = $this->mock('\kanso\framework\http\request\Request');
+		$response      = $this->mock('\kanso\framework\http\response\Response');
+		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$user          = $this->mock('\kanso\cms\wrappers\User');
+		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
+		$sql           = $this->mock('\kanso\framework\database\query\Builder');
+		$env           = $this->mock('\kanso\framework\http\request\Environment');
+		$visitor       = $this->mock('\kanso\cms\wrappers\Visitor');
+		$visitor->visitor_id  = 'visitor_lead_id';
+		$visitor->id          = 2;
+		$user->id             = 1;
+		$user->email          = 'foo@bar.com';
+		$user->visitor_id     = 'visitor_lead_id';
+		$env->HTTP_USER_AGENT = 'Safari 11.2';
+		$env->REMOTE_ADDR     = '192.168.1.1';
+
+		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
+		$gatekeeper->shouldReceive('getUser')->andReturn($user);
+		$leadProvider->shouldReceive('byKey')->with('visitor_id', 'visitor_lead_id')->andReturn($visitor);
+
+		$response->shouldReceive('cookie')->andReturn($cookie);
+		$cookie->shouldReceive('put')->with('crm_visitor_id', 'visitor_lead_id');
+
+		$request->shouldReceive('isGet')->andReturn(true);
+		$request->shouldReceive('queries')->andReturn([]);
+		$request->shouldReceive('environment')->andReturn($env);
+		$visitor->shouldReceive('addVisit');
+
+		$visitor->shouldReceive('save');
+
+		$crm = new Crm($request, $response, $gatekeeper, $leadProvider, $sql, false, false, false);
+
+		$sql->shouldReceive('SELECT')->with('*')->times(1)->andReturn($sql);
+		$sql->shouldReceive('FROM')->with('crm_visitors')->times(1)->andReturn($sql);
+		$sql->shouldReceive('WHERE')->with('visitor_id', '=', 'new_visitor_id')->times(1)->andReturn($sql);
+		$sql->shouldReceive('ROW')->times(1)->andReturn(['visitor_id' => 'new_visitor_id', 'name' => 'changed']);
+
+		$sql->shouldReceive('DELETE_FROM')->with('crm_visitors')->times(1)->andReturn($sql);
+		$sql->shouldReceive('WHERE')->with('id', '=', 2)->times(1)->andReturn($sql);
+		$sql->shouldReceive('QUERY')->times(1)->andReturn(1);
+
+		$sql->shouldReceive('UPDATE')->with('crm_visits')->times(1)->andReturn($sql);
+		$sql->shouldReceive('SET')->with(['visitor_id' => 'new_visitor_id'])->times(1)->andReturn($sql);
+		$sql->shouldReceive('WHERE')->with('visitor_id', '=', 'visitor_lead_id')->times(1)->andReturn($sql);
+		$sql->shouldReceive('QUERY')->times(1)->andReturn(1);
+
+
+		$cookie->shouldReceive('put')->with('crm_visitor_id', 'new_visitor_id');
+
+		$crm->mergeVisitor('new_visitor_id');
+		$this->assertTrue($visitor->visitor_id === 'new_visitor_id');
+ 	}
 }
