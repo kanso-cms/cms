@@ -30,7 +30,7 @@ class Connection
 	/**
 	 * Database host.
 	 *
-	 * @var string.
+	 * @var string
 	 */
 	protected $host;
 

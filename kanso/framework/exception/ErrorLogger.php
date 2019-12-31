@@ -31,7 +31,7 @@ class ErrorLogger
     /**
      * HttpEnv instance.
      *
-     * @var \kanso\framework\http\request\Environment;
+     * @var \kanso\framework\http\request\Environment
      */
     private $environment;
 

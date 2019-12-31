@@ -19,7 +19,7 @@ class Builder
 	/**
 	 * Connection handler.
 	 *
-	 * @var \kanso\framework\database\connection\ConnectionHandler;
+	 * @var \kanso\framework\database\connection\ConnectionHandler
 	 */
 	private $connectionHandler;
 

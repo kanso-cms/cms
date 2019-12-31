@@ -95,14 +95,14 @@ class Crm
     /**
      * Constructor.
      *
-     * @param \kanso\framework\http\request\Request   $request    Request instance
-     * @param \kanso\framework\http\response\Response $response   Response instance
-     * @param \kanso\cms\auth\Gatekeeper              $gatekeeper Gatekeeper instance
-     * @param \kanso\cms\wrappers\providers\LeadProvider LeadProvider instance
-     * @param \kanso\framework\database\query\Builder SQL builder instance
-     * @param bool $isCommandLine Is the CMS running via command line? (optional) (default false)
-     * @param bool $isCrawler     Is this a request from a bot? (optional) (default false)
-     * @param bool $isAdmin       Is this a request for the admin panel? (optional) (default false)
+     * @param \kanso\framework\http\request\Request       $request       Request instance
+     * @param \kanso\framework\http\response\Response     $response      Response instance
+     * @param \kanso\cms\auth\Gatekeeper                  $gatekeeper    Gatekeeper instance
+     * @param \kanso\cms\wrappers\providers\LeadProvider  $leadProvider  LeadProvider instance
+     * @param \kanso\framework\database\query\Builder     $sql           SQL builder instance
+     * @param bool                                        $isCommandLine Is the CMS running via command line? (optional) (default false)
+     * @param bool                                        $isCrawler     Is this a request from a bot? (optional) (default false)
+     * @param bool                                        $isAdmin       Is this a request for the admin panel? (optional) (default false)
      */
     public function __construct(Request $request, Response $response, Gatekeeper $gatekeeper, LeadProvider $leadProvider, Builder $sql, bool $isCommandLine = false, bool $isCrawler = false, bool $isAdmin = false)
     {

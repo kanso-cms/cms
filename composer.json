@@ -43,7 +43,7 @@
 		"mockery/mockery": "^1.0",
 		"php-mock/php-mock": "^1.0",
 		"friendsofphp/php-cs-fixer": "^2.13",
-		"phan/phan": "^1.1"
+		"phan/phan": "^2.4"
 	},
 	"prefer-stable": true,
 	"minimum-stability": "dev"

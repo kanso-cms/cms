@@ -34,7 +34,7 @@ class BrainTree extends UtilityBase
     /**
      * Constructor.
      *
-     * @param \Braintree\Gateway $gateway Braintree gateway instance (optional) (default null)
+     * @param \Braintree\Gateway|null $gateway Braintree gateway instance (optional) (default null)
      */
     public function __construct(Gateway $gateway = null)
     {
@@ -62,7 +62,7 @@ class BrainTree extends UtilityBase
      * Make a transaction.
      *
      * @param  array                                               $sale Transaction configuration
-     * @return \Braintree\Result\Successful|Braintree\Result\Error
+     * @return \Braintree\Result\Successful|\Braintree\Result\Error
      */
     public function transaction(array $sale)
     {
@@ -76,7 +76,7 @@ class BrainTree extends UtilityBase
      *
      * @param  int                            $cardId The card id from our database
      * @param  int                            $userId The user id
-     * @return \Braintree\PaymentMethod|false
+     * @return \Braintree\CreditCard|\Braintree\PayPalAccount|false
      */
     public function findCustomerCard(int $cardId, int $userId)
     {
@@ -102,7 +102,7 @@ class BrainTree extends UtilityBase
     /**
      * Get a user's credit cards by id or current logged in user.
      *
-     * @param  int   $id User id from the database (optional) (default null)
+     * @param  int|null   $id User id from the database (optional) (default null)
      * @return array
      */
     public function cards(int $id = null)
@@ -122,7 +122,7 @@ class BrainTree extends UtilityBase
     /**
      * Get a customer by id or the currently logged in user.
      *
-     * @param  int                       $id User id from the database (optional) (default null)
+     * @param  int|null                       $id User id from the database (optional) (default null)
      * @return \Braintree\Customer|false
      */
     public function customer(int $id = null)
@@ -149,7 +149,7 @@ class BrainTree extends UtilityBase
     /**
      * Create New Braintree customer.
      *
-     * @param  int                       $id User id from the database (optional) (default null)
+     * @param  int|null                       $id User id from the database (optional) (default null)
      * @return \Braintree\Customer|false
      */
     public function createCustomer(int $id = null)
@@ -186,7 +186,7 @@ class BrainTree extends UtilityBase
      * Create New Braintree customer.
      *
      * @param  string                         $nonce Client nonce
-     * @param  int                            $id    User/customer id
+     * @param  int|null                       $id    User/customer id
      * @return \Braintree\PaymentMethod|false
      */
     public function addCard(string $nonce, int $id = null)
