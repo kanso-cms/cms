@@ -7,8 +7,8 @@
 
 namespace kanso\tests\unit\cms\crm;
 
-use kanso\tests\TestCase;
 use kanso\cms\crm\Crm;
+use kanso\tests\TestCase;
 
 /**
  * @group unit
@@ -19,12 +19,12 @@ class CrmTest extends TestCase
 	/**
 	 *
 	 */
-	public function testConstructorNewVisitor()
+	public function testConstructorNewVisitor(): void
 	{
 		$request       = $this->mock('\kanso\framework\http\request\Request');
 		$response      = $this->mock('\kanso\framework\http\response\Response');
 		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
-		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');
 		$user          = $this->mock('\kanso\cms\wrappers\User');
 		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
 		$sql           = $this->mock('\kanso\framework\database\query\Builder');
@@ -42,13 +42,13 @@ class CrmTest extends TestCase
 			'email'       => '',
 			'last_active' => time(),
 			'user_agent'  => 'Safari 11.2',
-			'is_bot'      => false
+			'is_bot'      => false,
 		];
 
 		$response->shouldReceive('cookie')->andReturn($cookie);
 		$cookie->shouldReceive('has')->with('crm_visitor_id')->andReturn(false);
 		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(false);
-		
+
 		$request->shouldReceive('isGet')->andReturn(true);
 		$request->shouldReceive('queries')->andReturn([]);
 		$request->shouldReceive('environment')->andReturn($env);
@@ -64,12 +64,12 @@ class CrmTest extends TestCase
 	/**
 	 *
 	 */
-	public function testConstructorLoggedIn()
+	public function testConstructorLoggedIn(): void
 	{
 		$request       = $this->mock('\kanso\framework\http\request\Request');
 		$response      = $this->mock('\kanso\framework\http\response\Response');
 		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
-		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');
 		$user          = $this->mock('\kanso\cms\wrappers\User');
 		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
 		$sql           = $this->mock('\kanso\framework\database\query\Builder');
@@ -100,12 +100,12 @@ class CrmTest extends TestCase
 	/**
 	 *
 	 */
-	public function testConstructorReturning()
+	public function testConstructorReturning(): void
 	{
 		$request       = $this->mock('\kanso\framework\http\request\Request');
 		$response      = $this->mock('\kanso\framework\http\response\Response');
 		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
-		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');
 		$user          = $this->mock('\kanso\cms\wrappers\User');
 		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
 		$sql           = $this->mock('\kanso\framework\database\query\Builder');
@@ -137,12 +137,12 @@ class CrmTest extends TestCase
 	/**
 	 *
 	 */
-	public function testConstructorReturningNoCookie()
+	public function testConstructorReturningNoCookie(): void
 	{
 		$request       = $this->mock('\kanso\framework\http\request\Request');
 		$response      = $this->mock('\kanso\framework\http\response\Response');
 		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
-		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');
 		$user          = $this->mock('\kanso\cms\wrappers\User');
 		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
 		$sql           = $this->mock('\kanso\framework\database\query\Builder');
@@ -162,7 +162,7 @@ class CrmTest extends TestCase
 			'email'       => '',
 			'last_active' => time(),
 			'user_agent'  => 'Safari 11.2',
-			'is_bot'      => false
+			'is_bot'      => false,
 		];
 
 		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(false);
@@ -185,12 +185,12 @@ class CrmTest extends TestCase
 	/**
 	 *
 	 */
-	public function testConstructorLoggedInNoCookie()
+	public function testConstructorLoggedInNoCookie(): void
 	{
 		$request       = $this->mock('\kanso\framework\http\request\Request');
 		$response      = $this->mock('\kanso\framework\http\response\Response');
 		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
-		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');
 		$user          = $this->mock('\kanso\cms\wrappers\User');
 		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
 		$sql           = $this->mock('\kanso\framework\database\query\Builder');
@@ -210,7 +210,7 @@ class CrmTest extends TestCase
 			'email'       => '',
 			'last_active' => time(),
 			'user_agent'  => 'Safari 11.2',
-			'is_bot'      => false
+			'is_bot'      => false,
 		];
 
 		$gatekeeper->shouldReceive('isLoggedIn')->andReturn(true);
@@ -234,12 +234,12 @@ class CrmTest extends TestCase
 	/**
 	 *
 	 */
-	public function testVisitor()
+	public function testVisitor(): void
 	{
 		$request       = $this->mock('\kanso\framework\http\request\Request');
 		$response      = $this->mock('\kanso\framework\http\response\Response');
 		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
-		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');
 		$user          = $this->mock('\kanso\cms\wrappers\User');
 		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
 		$sql           = $this->mock('\kanso\framework\database\query\Builder');
@@ -266,19 +266,19 @@ class CrmTest extends TestCase
 		$visitor->shouldReceive('addVisit');
 
 		$crm = new Crm($request, $response, $gatekeeper, $leadProvider, $sql, false, false, false);
-		
+
 		$this->assertTrue($crm->visitor() === $visitor);
 	}
 
 	/**
 	 *
 	 */
-	public function testLeadProvider()
+	public function testLeadProvider(): void
 	{
 		$request       = $this->mock('\kanso\framework\http\request\Request');
 		$response      = $this->mock('\kanso\framework\http\response\Response');
 		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
-		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');
 		$user          = $this->mock('\kanso\cms\wrappers\User');
 		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
 		$sql           = $this->mock('\kanso\framework\database\query\Builder');
@@ -305,19 +305,19 @@ class CrmTest extends TestCase
 		$visitor->shouldReceive('addVisit');
 
 		$crm = new Crm($request, $response, $gatekeeper, $leadProvider, $sql, false, false, false);
-		
+
 		$this->assertTrue($crm->leadProvider() === $leadProvider);
 	}
 
 	/**
 	 *
 	 */
-	public function testLogin()
+	public function testLogin(): void
 	{
 		$request       = $this->mock('\kanso\framework\http\request\Request');
 		$response      = $this->mock('\kanso\framework\http\response\Response');
 		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
-		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');
 		$user          = $this->mock('\kanso\cms\wrappers\User');
 		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
 		$sql           = $this->mock('\kanso\framework\database\query\Builder');
@@ -348,19 +348,19 @@ class CrmTest extends TestCase
 		$crm = new Crm($request, $response, $gatekeeper, $leadProvider, $sql, false, false, false);
 
 		$crm->login();
-		
+
 		$this->assertTrue($visitor->email === $user->email);
 	}
 
 	/**
 	 *
 	 */
-	public function testLogout()
+	public function testLogout(): void
 	{
 		$request       = $this->mock('\kanso\framework\http\request\Request');
 		$response      = $this->mock('\kanso\framework\http\response\Response');
 		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
-		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');
 		$user          = $this->mock('\kanso\cms\wrappers\User');
 		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
 		$sql           = $this->mock('\kanso\framework\database\query\Builder');
@@ -393,15 +393,15 @@ class CrmTest extends TestCase
 		$crm->logout();
  	}
 
- 	/**
+	/**
 	 *
 	 */
-	public function testMerge()
+	public function testMerge(): void
 	{
 		$request       = $this->mock('\kanso\framework\http\request\Request');
 		$response      = $this->mock('\kanso\framework\http\response\Response');
 		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
-		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');
 		$user          = $this->mock('\kanso\cms\wrappers\User');
 		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
 		$sql           = $this->mock('\kanso\framework\database\query\Builder');
@@ -442,15 +442,15 @@ class CrmTest extends TestCase
 		$this->assertTrue($visitor->visitor_id === 'new_visitor_id');
  	}
 
- 	/**
+	/**
 	 *
 	 */
-	public function testMergeReturning()
+	public function testMergeReturning(): void
 	{
 		$request       = $this->mock('\kanso\framework\http\request\Request');
 		$response      = $this->mock('\kanso\framework\http\response\Response');
 		$cookie        = $this->mock('\kanso\framework\http\cookie\Cookie');
-		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');		
+		$gatekeeper    = $this->mock('\kanso\cms\auth\Gatekeeper');
 		$user          = $this->mock('\kanso\cms\wrappers\User');
 		$leadProvider  = $this->mock('\kanso\cms\wrappers\providers\LeadProvider');
 		$sql           = $this->mock('\kanso\framework\database\query\Builder');
@@ -493,7 +493,6 @@ class CrmTest extends TestCase
 		$sql->shouldReceive('SET')->with(['visitor_id' => 'new_visitor_id'])->times(1)->andReturn($sql);
 		$sql->shouldReceive('WHERE')->with('visitor_id', '=', 'visitor_lead_id')->times(1)->andReturn($sql);
 		$sql->shouldReceive('QUERY')->times(1)->andReturn(1);
-
 
 		$cookie->shouldReceive('put')->with('crm_visitor_id', 'new_visitor_id');
 

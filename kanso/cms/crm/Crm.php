@@ -8,12 +8,12 @@
 namespace kanso\cms\crm;
 
 use Exception;
+use kanso\cms\auth\Gatekeeper;
+use kanso\cms\wrappers\providers\LeadProvider;
 use kanso\cms\wrappers\Visitor;
 use kanso\framework\database\query\Builder;
 use kanso\framework\http\request\Request;
 use kanso\framework\http\response\Response;
-use kanso\cms\auth\Gatekeeper;
-use kanso\cms\wrappers\providers\LeadProvider;
 
 /**
  * CRM Utility Class.
@@ -23,35 +23,35 @@ use kanso\cms\wrappers\providers\LeadProvider;
 class Crm
 {
     /**
-     * Request instance
+     * Request instance.
      *
      * @var \kanso\framework\http\request\Request
      */
     private $request;
 
     /**
-     * Response instance
+     * Response instance.
      *
      * @var \kanso\framework\http\response\Response
      */
     private $response;
 
     /**
-     * Gatekeeper instance
+     * Gatekeeper instance.
      *
      * @var \kanso\cms\auth\Gatekeeper
      */
     private $gatekeeper;
 
-     /**
-     * Gatekeeper instance
+    /**
+     * Gatekeeper instance.
      *
      * @var \kanso\cms\wrappers\providers\LeadProvider
      */
     private $leadProvider;
 
-     /**
-     * Sql builder instance
+    /**
+     * Sql builder instance.
      *
      * @var \kanso\framework\database\query\Builder
      */
@@ -79,7 +79,7 @@ class Crm
     private $isAdmin;
 
     /**
-     * The current visitor a bot
+     * The current visitor a bot.
      *
      * @var bool
      */
@@ -94,15 +94,15 @@ class Crm
 
     /**
      * Constructor.
-     * 
-     * @param \kanso\framework\http\request\Request $request Request instance
-     * @param \kanso\framework\http\response\Response $response Response instance
-     * @param \kanso\cms\auth\Gatekeeper $gatekeeper Gatekeeper instance
+     *
+     * @param \kanso\framework\http\request\Request   $request    Request instance
+     * @param \kanso\framework\http\response\Response $response   Response instance
+     * @param \kanso\cms\auth\Gatekeeper              $gatekeeper Gatekeeper instance
      * @param \kanso\cms\wrappers\providers\LeadProvider LeadProvider instance
      * @param \kanso\framework\database\query\Builder SQL builder instance
-     * @param  bool $isCommandLine Is the CMS running via command line? (optional) (default false)
-     * @param  bool $isCrawler Is this a request from a bot? (optional) (default false)
-     * @param  bool $isAdmin Is this a request for the admin panel? (optional) (default false)
+     * @param bool $isCommandLine Is the CMS running via command line? (optional) (default false)
+     * @param bool $isCrawler     Is this a request from a bot? (optional) (default false)
+     * @param bool $isAdmin       Is this a request for the admin panel? (optional) (default false)
      */
     public function __construct(Request $request, Response $response, Gatekeeper $gatekeeper, LeadProvider $leadProvider, Builder $sql, bool $isCommandLine = false, bool $isCrawler = false, bool $isAdmin = false)
     {
