@@ -110,8 +110,6 @@ class Checkout extends UtilityBase
 
     'create_account'            => false,
     'password'                  => 'password1',
-    'apply_coupon'              => false,
-    'coupon'                    => 'SPECIAL_10',
 
     'billing_use_new_card'      => false,
     'billing_save_card_info'    => false,
@@ -132,47 +130,47 @@ class Checkout extends UtilityBase
         // Validate and sanitize the configuration options
         $options = $this->normaliseOptions($options);
 
+        // Validate CC options
         $this->validateCreditCardOptions($options);
 
+        // Validate address options
         $this->validateAddressOptions($options);
 
-        $couponValidation = $this->validateCouponOptions($options);
+        // Validate account options
+        $this->validateAccountOptions($options);
 
+        // Validate coupon
+        $couponValidation = $this->validateCouponOptions($options);
         if ($couponValidation !== true)
         {
             return $couponValidation;
         }
 
-        $cartValidation = $this->validateCartOptions();
-
+        // Validate cart items
+        $cartValidation = $this->validateCartItems();
         if ($cartValidation !== true)
         {
             return $cartValidation;
         }
 
-        $this->validateAccountOptions($options);
-
-        if (!$this->validateUserExists($options))
+        // Validate user exists
+        $validteUserOptions = $this->validteUserOptions($options);
+        if ($validteUserOptions !== true)
         {
-            $this->processError(self::USER_EXISTS, 'A user already exists under the provided email address.');
-
-            return self::USER_EXISTS;
+            return $validteUserOptions;
         }
 
-        // Get the coupon
-        $coupon = !empty($options['coupon']) && $options['apply_coupon'] === true ? $this->Ecommerce->coupons()->discount($options['coupon']) : false;
-
-        // Get the shopping cart
-        $cart = $this->Ecommerce->cart()->items();
-
-        // Figure out the amount to charge
-        $prices = $this->getCheckoutPrice($coupon);
+        // Get the shopping cart for use later
+        $cart = clone $this->Ecommerce->cart();
 
         // Get the card if it was provided
         $card = $options['billing_use_new_card'] === false ? $this->Ecommerce->braintree()->findCustomerCard($options['billing_existing_card'], $this->Gatekeeper->getUser()->id) : false;
 
+        // Nonce or token
+        $nonceOrToken = $options['billing_use_new_card'] === false ? $card->token : $options['billing_method_nonce'];
+
         // If the user is not logged in create an account if options say to create one
-        $user        = false;
+        $user        = null;
         $createdUser = false;
 
         if (!$this->Gatekeeper->isLoggedIn())
@@ -205,13 +203,12 @@ class Checkout extends UtilityBase
         $userId = !$user ? null : $user->id;
 
         // Attempt the transaction with Braintree
-        $nonceOrToken = $options['billing_use_new_card'] === false ? $card->token : $options['billing_method_nonce'];
-        $transaction  = $this->processTransaction($nonceOrToken, $prices['total'], !$this->Ecommerce->braintree()->customer(), $options['billing_use_new_card'], $userId);
+        $transaction = $this->processTransaction($options, $nonceOrToken, $userId);
 
         // Validate the transaction
         // If the transaction fails for any reason, we need to delete the user
         // we created, if we created one
-        if (!$transaction || is_int($transaction))
+        if (is_int($transaction))
         {
             if ($createdUser && $user)
             {
@@ -222,7 +219,7 @@ class Checkout extends UtilityBase
         }
 
         // Prep the base row for the transaction
-        $transactionRow = $this->getTransactionRow($options, $this->getTransactionItems($cart), $transaction->id, $prices, $coupon, $userId);
+        $transactionRow = $this->getTransactionRow($options, $cart, $transaction->id, $userId);
 
         // Prep the shipping row
         if ($options['shipping_use_new_address'] === false)
@@ -279,39 +276,34 @@ class Checkout extends UtilityBase
             $this->Crm->login();
         }
 
-        // Delete the items from the user's cart
-        $this->Ecommerce->cart()->clear();
-
         // Set the coupon as used
-        if ($coupon)
-        {
-            $this->Ecommerce->coupons()->setUsed($options['coupon'], $options['shipping_email']);
-        }
+        $this->setCouponsAsUsed($options['shipping_email']);
 
         // Apply points to rewards based on transaction net price
         if ($user)
         {
-            $this->Ecommerce->rewards()->addPoints($this->Ecommerce->rewards()->calcPoints($prices['sub-total']), 'Online Products Purchase ($' . number_format($prices['sub-total'], 2, '.', '') . ')');
+            $subtotal = $this->Ecommerce->cart()->subtotalWithDiscounts();
+
+            $message = 'Online Products Purchase ($' . number_format($subtotal, 2, '.', '') . ')';
+
+            $this->Ecommerce->rewards()->addPoints($this->Ecommerce->rewards()->calcPoints($subtotal), $message);
         }
 
         // Send order confirmation email
-        $emailOrder              = $transactionRow;
-        $emailOrder['items']     = unserialize($emailOrder['items']);
-        $emailOrder['shipping']  = $shippingRow;
-        $emailOrder['reference'] = $transaction->id;
-        $emailName               = $shippingRow['first_name'] . ' ' . $shippingRow['last_name'];
-        $emailEmail              = $shippingRow['email'];
+        $emailData               = $transactionRow;
+        $emailData['cart']       = $cart;
+        $emailData['shipping']   = $shippingRow;
 
         // Send confirmation email to customer
-        $this->sendConfirmationEmail($emailName, $emailEmail, $emailOrder);
+        $this->sendConfirmationEmail($emailData);
 
         // Send confirmation email to admin
-        $this->sendAdminEmail($emailEmail, $transactionRow, $shippingRow, $emailOrder['items']);
+        $this->sendAdminEmail($emailData);
 
         // Mark the visitor as having made a purchase
-        $visitor = $this->Crm->visitor();
-        $visitor->email = $emailEmail;
-        $visitor->name  = $emailName;
+        $visitor                = $this->Crm->visitor();
+        $visitor->email         = $shippingRow['email'];
+        $visitor->name          = $shippingRow['first_name'] . ' ' . $shippingRow['last_name'];
         $visitor->made_purchase = true;
         $visitor->save();
 
@@ -326,6 +318,9 @@ class Checkout extends UtilityBase
         $this->transactionId = $transactionRow['bt_transaction_id'];
 
         $this->errorMessage = null;
+
+        // Finally clear the customers cart contents
+        $this->Ecommerce->cart()->clear();
 
         return self::SUCCESS;
     }
@@ -361,67 +356,53 @@ class Checkout extends UtilityBase
     }
 
     /**
+     * If a any coupons were used in the transaction, mark them as used.
+     *
+     * @param string $email
+     */
+    private function setCouponsAsUsed(string $email): void
+    {
+        if ($this->Ecommerce->cart()->hasDiscount())
+        {
+            $discounts = $this->Ecommerce->cart()->discounts();
+
+            foreach ($discounts as $discount)
+            {
+                $this->Ecommerce->coupons()->setUsed($discount->name, $email);
+            }
+        }
+    }
+
+    /**
      * Send order confirmation to admin.
      *
-     * @param string $userEmail]  Email address of user that made order
-     * @param array  $transaction Transaction row from database
-     * @param array  $shipping    Shipping row from databse
-     * @param array  $items       Array Of order items
+     * @param array $data Transaction/shipping/cart details
      */
-    private function sendAdminEmail(string $userEmail, array $transaction, array $shipping, array $items): void
+    private function sendAdminEmail(array $data): void
     {
-        $domain      = $this->Request->environment()->DOMAIN_NAME;
+        // Email credentials
         $toEmail     = $this->Config->get('ecommerce.confirmation_email');
         $senderName  = $this->Config->get('cms.site_title');
-        $senderEmail = 'info@' . $domain;
-        $subject     = 'Order Received';
-        $content     = "A new order on $domain has been received.\n\n";
-        $content    .= 'Date: ' . date('l jS F Y h:i:s A') . "\n";
-        $content    .= 'Price: $' . number_format($transaction['total'], 2, '.', '') . "\n";
-        $content    .= 'Refernce: #' . $transaction['bt_transaction_id'] . "\n";
-        $content    .= 'Email: ' . $userEmail . "\n\n";
-        $content    .= "Items: \n";
+        $senderEmail = 'info@' . $this->Request->environment()->DOMAIN_NAME;
+        $content     = $this->View->display(KANSO_DIR . '/cms/email/templates/admin-order-confirmation.php', $data);
 
-        foreach($items as $item)
-        {
-            $content .= $item['quantity'] . 'x - ' . $item['name'] . ' - ' . $item['offer'] . "\n";
-        }
-
-        $content .= "\nShipping Details: \n";
-        $content .= $shipping['first_name'] . ' ' . $shipping['last_name'] . "\n";
-        $content .= $shipping['suburb'] . ' ' . $shipping['state'] . ' ' . $shipping['zip_code'] . "\n";
-        $content .= 'Telephone: ' . $shipping['telephone'] . "\n";
-
-        $this->Email->send($toEmail, $senderName, $senderEmail, $subject, $content, 'plain text');
+        $this->Email->send($toEmail, $senderName, $senderEmail, 'Order Received', $content, 'plain text');
     }
 
     /**
      * Send newly registered users their order confirmation.
      *
-     * @param string $name  User name
-     * @param string $email User email
-     * @param array  $order Order details
+     * @param array $data Transaction/shipping/cart details
      */
-    private function sendConfirmationEmail(string $name, string $email, array $order): void
+    private function sendConfirmationEmail(array $data): void
     {
-        $domain  = $this->Request->environment()->DOMAIN_NAME;
-        $name    = ucfirst(explode(' ', trim($name))[0]);
-
-        $emailData =
-        [
-            'name'        => $name,
-            'order'       => $order,
-            'subject'     => 'Your Order Confirmation',
-        ];
-
         // Email credentials
         $senderName   = $this->Config->get('cms.site_title');
-        $senderEmail  = 'orders@' . $domain;
-        $emailSubject = 'Your Order Confirmation';
-        $emailTo      = $email;
-        $emailContent = $this->Email->preset('order-confirmed', $emailData, true);
+        $senderEmail  = 'orders@' . $this->Request->environment()->DOMAIN_NAME;
+        $emailTo      = $data['shipping']['email'];
+        $content      = $this->Email->preset('order-confirmed', $data, true);
 
-        $this->Email->send($emailTo, $senderName, $senderEmail, $emailSubject, $emailContent);
+        $this->Email->send($emailTo, $senderName, $senderEmail, 'Your Order Confirmation', $content);
     }
 
     /**
@@ -440,7 +421,7 @@ class Checkout extends UtilityBase
             'first_name'       => ucfirst($options['shipping_first_name']),
             'last_name'        => ucfirst($options['shipping_last_name']),
             'street_address_1' => $options['shipping_address_1'],
-            'street_address_2' => isset($options['shipping_address_2']) ? $options['shipping_address_2'] : '',
+            'street_address_2' => $options['shipping_address_2'] ?? '',
             'suburb'           => ucfirst($options['shipping_suburb']),
             'zip_code'         => $options['shipping_zip'],
             'state'            => $options['shipping_state'],
@@ -452,16 +433,14 @@ class Checkout extends UtilityBase
     /**
      * Get the base transaction row to insert into the DB.
      *
-     * @param array    $options       Array with credit card details
-     * @param array    $items         Cart item descriptions to serialize
-     * @param string   $transactionId Braintree transaction id
-     * @param array    $prices        Array of price breakdown
-     * @param int|null $coupon        Coupon discount percentage (optional) (default null)
-     * @param int|null $userId        Current user id (optional) (default null)
+     * @param array                             $options       Array with credit card details
+     * @param \kanso\cms\ecommerce\ShoppingCart $cart          Cart to serialize
+     * @param string                            $transactionId Braintree transaction id
+     * @param int|null                          $userId        Current user id (optional) (default null)
      *
      * @return array
      */
-    private function getTransactionRow(array $options, array $items, string $transactionId, array $prices, $coupon = null, int $userId = null): array
+    private function getTransactionRow(array $options, ShoppingCart $cart, string $transactionId, int $userId = null): array
     {
         return
         [
@@ -475,42 +454,15 @@ class Checkout extends UtilityBase
             'card_type'         => $options['billing_card_type'],
             'card_last_four'    => $options['billing_card_last_four'],
             'card_expiry'       => $options['billing_card_mm'] . '/' . $options['billing_card_yy'],
-            'items'             => serialize($items),
-            'coupon'            => $coupon,
-            'sub_total'         => $prices['sub-total'],
-            'shipping_costs'    => $prices['shipping-cost'],
-            'total'             => $prices['total'],
+            'items'             => serialize($cart),
+            'sub_total'         => $this->Ecommerce->cart()->subtotalWithDiscounts(),
+            'shipping_costs'    => $this->Ecommerce->cart()->shippingCost(),
+            'total'             => $this->Ecommerce->cart()->total(),
         ];
     }
 
     /**
-     * Find an existing customer's card by id.
-     *
-     * @param  array $cart Cart items
-     * @return array
-     */
-    private function getTransactionItems(array $cart): array
-    {
-        $items = [];
-
-        foreach ($cart as $item)
-        {
-            $items[] =
-            [
-                'product_id' => $item['product'],
-                'offer_id'   => $item['offer']['offer_id'],
-                'quantity'   => $item['quantity'],
-                'name'       => $this->Query->the_title($item['product']),
-                'offer'      => $item['offer']['name'],
-                'price'      => number_format(($item['offer']['sale_price'] * $item['quantity']), 2, '.', ''),
-            ];
-        }
-
-        return $items;
-    }
-
-    /**
-     * Find an existing customer's card by id.
+     * Find an existing customer's address by id.
      *
      * @param  int   $addressId The address id from our database
      * @param  int   $userId    The user id
@@ -522,51 +474,21 @@ class Checkout extends UtilityBase
     }
 
     /**
-     * Get the price to checkout.
-     *
-     * @param  float|int|false $coupon The amount of the transaction
-     * @return array
-     */
-    private function getCheckoutPrice($coupon = false): array
-    {
-        $subtotal     = $this->Ecommerce->cart()->subTotal();
-        $shippingCost = $this->Ecommerce->cart()->shippingCost();
-        $GST          = $this->Ecommerce->cart()->gst();
-        $priceTotal   = $subtotal + $shippingCost;
-
-        $response =
-        [
-            'sub-total'     => $subtotal,
-            'shipping-cost' => $shippingCost,
-            'total'         => $subtotal + $shippingCost,
-        ];
-
-        if ($coupon)
-        {
-            $price = $subtotal;
-            $price = $price * ((100-$coupon) / 100);
-            $response['total']     = round($price + $shippingCost, 2);
-            $response['sub-total'] = $price;
-        }
-
-        return $response;
-    }
-
-    /**
      * Process the transaction with Braintree.
      *
-     * @param  string                     $nonceOrToken   A payment method nonce or existing card token
-     * @param  float                      $amount         The amount of the transaction
-     * @param  bool                       $createCustomer Create a new customer
-     * @param  bool                       $useNonce       Pay using a new card
-     * @param  int|null                   $userId         User id to create customer from (optional) (default null)
+     * @param  array                      $options      Checkout options
+     * @param  string                     $nonceOrToken A payment method nonce or existing card token
+     * @param  int|null                   $userId       User id to create customer from (optional) (default null)
      * @return int|\Braintree\Transaction
      */
-    private function processTransaction($nonceOrToken, $amount, bool $createCustomer, $useNonce = false, int $userId = null)
+    private function processTransaction(array $options, string $nonceOrToken, int $userId = null)
     {
+        $createBtCustomer = $this->Ecommerce->braintree()->customer() ? false : true;
+        $useNonce         = $options['billing_use_new_card'];
+
         $sale =
         [
-            'amount'  => $amount,
+            'amount'  => $this->Ecommerce->cart()->total(),
             'options' =>
             [
                 'storeInVaultOnSuccess' => true,
@@ -585,7 +507,7 @@ class Checkout extends UtilityBase
 
         if ($userId)
         {
-            if ($createCustomer === true)
+            if ($createBtCustomer === true)
             {
                 $sale['customer'] = ['id' => $userId];
             }
@@ -653,7 +575,6 @@ class Checkout extends UtilityBase
             'shipping_use_new_address' => ['required'],
             'billing_save_card_info'   => ['required'],
             'shipping_save_address'    => ['required'],
-            'apply_coupon'             => ['required'],
         ];
 
         $filters =
@@ -662,8 +583,6 @@ class Checkout extends UtilityBase
             'shipping_use_new_address' => ['boolean'],
             'billing_save_card_info'   => ['boolean'],
             'shipping_save_address'    => ['boolean'],
-            'apply_coupon'             => ['boolean'],
-            'coupon'                   => ['string', 'trim'],
         ];
 
         if (Str::bool($options['billing_use_new_card']) === true)
@@ -746,7 +665,6 @@ class Checkout extends UtilityBase
         $options['shipping_use_new_address']  = Str::bool($options['shipping_use_new_address']);
         $options['billing_save_card_info']    = Str::bool($options['billing_save_card_info']);
         $options['shipping_save_address']     = Str::bool($options['shipping_save_address']);
-        $options['apply_coupon']              = Str::bool($options['apply_coupon']);
         $options['create_account']            = isset($options['create_account']) ? Str::bool($options['create_account']) : false;
 
         // If the user is logged in the 'shipping_email'
@@ -763,10 +681,10 @@ class Checkout extends UtilityBase
      * If the user is not logged in and is creating an account
      * validate that the email address they entered does not already exist.
      *
-     * @param  array $options Array of configuration options
-     * @return bool
+     * @param  array    $options Array of configuration options
+     * @return true|int
      */
-    private function validateUserExists(array $options): bool
+    private function validteUserOptions(array $options)
     {
         if (!$this->Gatekeeper->isLoggedIn() && $options['create_account'] === true)
         {
@@ -774,7 +692,9 @@ class Checkout extends UtilityBase
 
             if ($user)
             {
-                return false;
+                $this->processError(self::USER_EXISTS, 'A user already exists under the provided email address.');
+
+                return self::USER_EXISTS;
             }
         }
 
@@ -843,24 +763,30 @@ class Checkout extends UtilityBase
      * If a coupon is being used, validate it exists and is not used.
      *
      * @param  array    $options Array of configuration options
-     * @return bool|int
+     * @return true|int
      */
     private function validateCouponOptions(array $options)
     {
-        if (!empty($options['coupon']) && $options['apply_coupon'] === true)
+        // Get the coupon from the session
+        if ($this->Ecommerce->cart()->hasDiscount())
         {
-            if (!$this->Ecommerce->coupons()->exists($options['coupon']))
+            $discounts = $this->Ecommerce->cart()->discounts();
+
+            foreach ($discounts as $discount)
             {
-                $this->processError(self::COUPON_INVALID, 'The provided coupon does not exist.');
+                if (!$this->Ecommerce->coupons()->exists($discount->name))
+                {
+                    $this->processError(self::COUPON_INVALID, 'The provided coupon does not exist.');
 
-                return self::COUPON_INVALID;
-            }
+                    return self::COUPON_INVALID;
+                }
 
-            if ($this->Ecommerce->coupons()->used($options['coupon'], $options['shipping_email']))
-            {
-                $this->processError(self::COUPON_USED, 'The provided coupon has already been used.');
+                if ($this->Ecommerce->coupons()->used($discount->name, $options['shipping_email']))
+                {
+                    $this->processError(self::COUPON_USED, 'The provided coupon has already been used.');
 
-                return self::COUPON_USED;
+                    return self::COUPON_USED;
+                }
             }
         }
 
@@ -868,11 +794,11 @@ class Checkout extends UtilityBase
     }
 
     /**
-     * If a coupon is being used, validate it exists and is not used.
+     * If a cart is not empty.
      *
      *  @return bool|int
      */
-    private function validateCartOptions()
+    private function validateCartItems()
     {
         // Load the client's shopping cart
         $cart = $this->Ecommerce->cart()->items();

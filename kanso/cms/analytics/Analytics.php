@@ -192,6 +192,36 @@ class Analytics extends Model
     }
 
     /**
+     * Track a product category view for Facebook.
+     *
+     * @return string
+     */
+    public function facebookTrackingProductsView(): string
+    {
+        $this->Query->rewind_posts();
+
+        $name     = $this->Query->is_page('products') ? 'Products' : $this->Query->the_taxonomy()->name;
+        $category = $this->Query->is_page('products') ? 'Products' : 'Products > ' . $this->Query->the_categories_list(the_post_id(), ' > ');
+        $ids      = [];
+
+        foreach ($this->Query->the_posts() as $post)
+        {
+           $ids[] = strval($post->id);
+        }
+
+        return $this->cleanWhiteSpace("
+        <script type=\"text/javascript\">
+            fbq('trackCustom', 'ViewCategory',
+            {
+                content_name     : '" . $name . "',
+                content_category : '" . $category . "',
+                content_ids      : ['" . implode('\',\'', $ids) . "'],
+                content_type     : 'product'
+            });
+        </script>");
+    }
+
+    /**
      * Track a checkout started event for Google Analytics.
      *
      * @return string
@@ -200,7 +230,7 @@ class Analytics extends Model
     {
         $items    = [];
         $cart     = $this->Ecommerce->cart()->items();
-        $subtotal = $this->Ecommerce->cart()->subTotal();
+        $subtotal = $this->Ecommerce->cart()->subtotal();
         $shipping = $this->Ecommerce->cart()->shippingCost();
 
         foreach($cart as $item)
@@ -236,23 +266,28 @@ class Analytics extends Model
     public function facebookTrackingStartCheckout(): string
     {
         $cart     = $this->Ecommerce->cart()->items();
-        $subtotal = $this->Ecommerce->cart()->subTotal();
+        $subtotal = $this->Ecommerce->cart()->subtotal();
         $shipping = $this->Ecommerce->cart()->shippingCost();
-        $items    = 0;
-        $itemIds  = [];
+        $count    = 0;
+        $items    = [];
 
         foreach($cart as $item)
         {
-            $items     += intval($item['quantity']);
-            $itemIds[]  = strval($item['product']);
+            $count += intval($item['quantity']);
+            $items[] =
+            [
+                'id'         => strval($item['product']),
+                'quantity'   => $item['quantity'],
+                'item_price' => strval($item['offer']['sale_price']),
+            ];
         }
 
         return $this->cleanWhiteSpace("
         <script type=\"text/javascript\">
             fbq('track', 'InitiateCheckout',
             {
-                num_items     : " . $items . ',
-                content_ids   : ' . json_encode($itemIds) . ",
+                num_items     : " . $count . ',
+                contents      : ' . json_encode($items) . ",
                 content_type  : 'product',
                 value         : " . number_format(($subtotal + $shipping), 2, '.', '') . ",
                 currency      : 'AUD'

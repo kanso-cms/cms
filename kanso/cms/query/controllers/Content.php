@@ -25,6 +25,15 @@ class Content extends Controller
     	$filter      = $this->model->filter();
     	$template    = $this->getTemplate($requestType);
 
+    	if ($filter)
+    	{
+    		$this->Response->status()->set(200);
+    	}
+    	else
+    	{
+    		$this->Response->status()->set(404);
+    	}
+
 		if ($filter && $template)
 		{
 			if ($requestType !== 'page' && $requestType !== 'single')
@@ -136,6 +145,12 @@ class Content extends Controller
 		{
 			$waterfall[] = 'page-products';
 			$waterfall[] = 'products';
+			$waterfall[] = 'index';
+		}
+		elseif ($requestType === 'bundles')
+		{
+			$waterfall[] = 'page-bundles';
+			$waterfall[] = 'bundles';
 			$waterfall[] = 'index';
 		}
 

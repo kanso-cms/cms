@@ -73,6 +73,8 @@ abstract class BaseModel extends Model
 	 */
 	protected function postMessage(string $class, string $msg): array
 	{
+		$icon = '';
+
 		if ($class === 'danger')
 		{
 			$icon = 'times';

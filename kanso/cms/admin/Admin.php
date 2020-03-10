@@ -29,7 +29,7 @@ class Admin
      * @param string $icon  Icon to be used in admin panel sidebar
      * @param string $route Route for front end
      */
-    public function registerPostType($title, $type, $icon, $route): void
+    public function registerPostType(string $title, string $type, string $icon, string $route): void
     {
         // Sanitize the type
         $slug = Str::slug($type);

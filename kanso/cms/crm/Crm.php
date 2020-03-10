@@ -95,14 +95,14 @@ class Crm
     /**
      * Constructor.
      *
-     * @param \kanso\framework\http\request\Request       $request       Request instance
-     * @param \kanso\framework\http\response\Response     $response      Response instance
-     * @param \kanso\cms\auth\Gatekeeper                  $gatekeeper    Gatekeeper instance
-     * @param \kanso\cms\wrappers\providers\LeadProvider  $leadProvider  LeadProvider instance
-     * @param \kanso\framework\database\query\Builder     $sql           SQL builder instance
-     * @param bool                                        $isCommandLine Is the CMS running via command line? (optional) (default false)
-     * @param bool                                        $isCrawler     Is this a request from a bot? (optional) (default false)
-     * @param bool                                        $isAdmin       Is this a request for the admin panel? (optional) (default false)
+     * @param \kanso\framework\http\request\Request      $request       Request instance
+     * @param \kanso\framework\http\response\Response    $response      Response instance
+     * @param \kanso\cms\auth\Gatekeeper                 $gatekeeper    Gatekeeper instance
+     * @param \kanso\cms\wrappers\providers\LeadProvider $leadProvider  LeadProvider instance
+     * @param \kanso\framework\database\query\Builder    $sql           SQL builder instance
+     * @param bool                                       $isCommandLine Is the CMS running via command line? (optional) (default false)
+     * @param bool                                       $isCrawler     Is this a request from a bot? (optional) (default false)
+     * @param bool                                       $isAdmin       Is this a request for the admin panel? (optional) (default false)
      */
     public function __construct(Request $request, Response $response, Gatekeeper $gatekeeper, LeadProvider $leadProvider, Builder $sql, bool $isCommandLine = false, bool $isCrawler = false, bool $isAdmin = false)
     {
@@ -118,33 +118,14 @@ class Crm
         // Only load if not in CLI
         if (!$this->isCommandLine)
         {
+            $this->findVisitor();
+
             // Real humans
-            if (!$this->isCrawler)
+            if (!$this->isCrawler && $this->request->isGet() && !$this->isAdmin)
             {
-                $this->findVisitor();
-
-                // Only save current visit if this is a GET request
-                if ($this->request->isGet())
-                {
-                    if (!$this->isAdmin)
-                    {
-                        $this->visitor->addVisit($this->newVisitRow());
-                    }
-                }
-            }
-
-            // Crawlers/bots get merged by user agent rather than cookies
-            else
-            {
-                if ($this->request->isGet())
-                {
-                    $this->findCrawler();
-
-                    $this->visitor->addVisit($this->newVisitRow());
-                }
+                $this->visitor->addVisit($this->newVisitRow());
             }
         }
-
     }
 
     /**
@@ -352,11 +333,11 @@ class Crm
             'ip_address'   => $this->request->environment()->REMOTE_ADDR,
             'page'         => substr($this->request->environment()->REQUEST_URL, 0, 255),
             'date'         => time(),
-            'medium'       => isset($queries['md']) ? $queries['md'] : null,
-            'channel'      => isset($queries['ch']) ? $queries['ch'] : 'direct',
-            'campaign'     => isset($queries['cp']) ? $queries['cp'] : null,
-            'keyword'      => isset($queries['kw']) ? $queries['kw'] : null,
-            'creative'     => isset($queries['cr']) ? $queries['cr'] : null,
+            'medium'       => $queries['md'] ?? null,
+            'channel'      => $queries['ch'] ?? 'direct',
+            'campaign'     => $queries['cp'] ?? null,
+            'keyword'      => $queries['kw'] ?? null,
+            'creative'     => $queries['cr'] ?? null,
             'browser'      => $this->request->environment()->HTTP_USER_AGENT,
         ];
     }

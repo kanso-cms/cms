@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <!--<![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><?php echo $subject; ?></title>
+    <title>Your Order Confirmation</title>
     <style type="text/css">
     html
     {
@@ -214,7 +214,7 @@
                                         <table align="center" width="90%" border="0" cellspacing="0" cellpadding="0">
                                             <tr>
                                                 <td align="left" style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#1d1d1d; font-size:13px; line-height: 28px;">
-                                                    Hi <?php echo $name; ?>,<br>We're getting your order packed and ready to be posted out to you. We hope you'll love it!
+                                                    Hi <?php echo $shipping['first_name']; ?>,<br>We're getting your order packed and ready to be posted out to you. We hope you'll love it!
                                                 </td>
                                             </tr>
                                             <tr>
@@ -300,7 +300,7 @@
         </tr>
     </table>
 
-    <?php foreach($order['items'] as $item) : ?>
+    <?php foreach($cart->items() as $item) : ?>
     <table bgcolor="#eceff3" align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td align="center">
@@ -320,7 +320,7 @@
                                                                     <table border="0" align="center" cellpadding="0" cellspacing="0">
                                                                         <tr>
                                                                             <td align="center" style="line-height: 0px;">
-                                                                                <img style="display:block; line-height:0px; font-size:0px; border:0px;" width="180" height="180" src="<?php echo $kanso->Query->the_post_thumbnail_src($item['product_id'], 'small'); ?>" alt="<?php echo $item['name']; ?>" />
+                                                                                <img style="display:block; line-height:0px; font-size:0px; border:0px;" width="180" height="180" src="<?php echo $kanso->Query->the_post_thumbnail_src($item->options['product_id'], 'small'); ?>" alt="<?php echo $item->name; ?>">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
@@ -340,14 +340,14 @@
                                                                             <td height="30"></td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#1d1d1d;font-size:12px;font-weight:500;text-transform: uppercase;letter-spacing:1px;line-height: 28px;"><?php echo $item['name']; ?></td>
+                                                                            <td style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#1d1d1d;font-size:12px;font-weight:500;text-transform: uppercase;letter-spacing:1px;line-height: 28px;"><?php echo $item->name; ?></td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td height="5"></td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#7f8c8d; font-size:14px; line-height: 20px;"><?php echo $item['quantity']; ?>x - <?php echo $item['offer']; ?></td>
-                                                                        </tr>                                                                        
+                                                                            <td style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#7f8c8d; font-size:14px; line-height: 20px;"><?php echo $item->quantity; ?>x - <?php echo $item->options['variant']; ?></td>
+                                                                        </tr>
                                                                         <tr>
                                                                             <td height="20"></td>
                                                                         </tr>
@@ -434,14 +434,14 @@
                                                                     <table align="left" width="240" border="0" cellspacing="0" cellpadding="0" style="width:240px;border-collapse: collapse;">
                                                                         <tbody>
                                                                             <tr>
-                                                                                <td valign="top" align="left" style="font-family:Arial,sans-serif;font-size:13px;color:#7f8c8d;line-height:20px;padding-bottom:12px">Name: <span style="color:#1d1d1d;"><?php echo $order['shipping']['first_name'] . ' ' . $order['shipping']['last_name']; ?></span></td>
+                                                                                <td valign="top" align="left" style="font-family:Arial,sans-serif;font-size:13px;color:#7f8c8d;line-height:20px;padding-bottom:12px">Name: <span style="color:#1d1d1d;"><?php echo $shipping['first_name'] . ' ' . $shipping['last_name']; ?></span></td>
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
                                                                     <table align="left" width="265" border="0" cellspacing="0" cellpadding="0" style="width:265px;border-collapse: collapse;">
                                                                         <tbody>
                                                                             <tr>
-                                                                                <td valign="top" align="left" style="font-family:Arial,sans-serif;font-size:13px;color:#7f8c8d;line-height:20px;padding-bottom:12px">Order date: <span style="color:#1d1d1d;"><?php echo date('l jS F Y', $order['date']); ?></span></td>
+                                                                                <td valign="top" align="left" style="font-family:Arial,sans-serif;font-size:13px;color:#7f8c8d;line-height:20px;padding-bottom:12px">Order date: <span style="color:#1d1d1d;"><?php echo date('l jS F Y', $date); ?></span></td>
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
@@ -452,14 +452,14 @@
                                                                     <table align="left" width="240" border="0" cellspacing="0" cellpadding="0" style="width:240px;border-collapse: collapse;">
                                                                         <tbody>
                                                                             <tr>
-                                                                                <td valign="top" align="left" style="font-family:Arial,sans-serif;font-size:13px;color:#7f8c8d;line-height:20px;padding-bottom:12px">Order Reference: <span style="color:#1d1d1d;"><?php echo strtoupper($order['bt_transaction_id']); ?></span></td>
+                                                                                <td valign="top" align="left" style="font-family:Arial,sans-serif;font-size:13px;color:#7f8c8d;line-height:20px;padding-bottom:12px">Order Reference: <span style="color:#1d1d1d;"><?php echo strtoupper($bt_transaction_id); ?></span></td>
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
                                                                     <table align="left" width="265" border="0" cellspacing="0" cellpadding="0" style="width:265px;border-collapse: collapse;">
                                                                         <tbody>
                                                                             <tr>
-                                                                                <td valign="top" align="left" style="font-family:Arial,sans-serif;font-size:13px;color:#7f8c8d;line-height:20px;padding-bottom:12px">Email: <span style="color:#1d1d1d;"><?php echo $order['shipping']['email']; ?></span></td>
+                                                                                <td valign="top" align="left" style="font-family:Arial,sans-serif;font-size:13px;color:#7f8c8d;line-height:20px;padding-bottom:12px">Email: <span style="color:#1d1d1d;"><?php echo $shipping['email']; ?></span></td>
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
@@ -477,7 +477,7 @@
                                                                     <table align="left" width="265" border="0" cellspacing="0" cellpadding="0" style="width:265px;border-collapse: collapse;">
                                                                         <tbody>
                                                                             <tr>
-                                                                                <td valign="top" align="left" style="font-family:Arial,sans-serif;font-size:13px;color:#7f8c8d;line-height:20px;padding-bottom:12px">Card Type: <span style="color:#1d1d1d;"><?php echo ucfirst($order['card_type']); ?></span></td>
+                                                                                <td valign="top" align="left" style="font-family:Arial,sans-serif;font-size:13px;color:#7f8c8d;line-height:20px;padding-bottom:12px">Card Type: <span style="color:#1d1d1d;"><?php echo ucfirst($card_type); ?></span></td>
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
@@ -488,14 +488,14 @@
                                                                     <table align="left" width="240" border="0" cellspacing="0" cellpadding="0" style="width:240px;border-collapse: collapse;">
                                                                         <tbody>
                                                                             <tr>
-                                                                                <td valign="top" align="left" style="font-family:Arial,sans-serif;font-size:13px;color:#7f8c8d;line-height:20px;padding-bottom:12px">Card Number: <span style="color:#1d1d1d;">&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; <?php echo $order['card_last_four']; ?></span></td>
+                                                                                <td valign="top" align="left" style="font-family:Arial,sans-serif;font-size:13px;color:#7f8c8d;line-height:20px;padding-bottom:12px">Card Number: <span style="color:#1d1d1d;">&bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; <?php echo $card_last_four; ?></span></td>
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
                                                                     <table align="left" width="265" border="0" cellspacing="0" cellpadding="0" style="width:265px;border-collapse: collapse;">
                                                                         <tbody>
                                                                             <tr>
-                                                                                <td valign="top" align="left" style="font-family:Arial,sans-serif;font-size:13px;color:#7f8c8d;line-height:20px;padding-bottom:12px">Total: <span style="color:#1d1d1d;">$<?php echo number_format($order['total'], 2, '.', ''); ?></span></td>
+                                                                                <td valign="top" align="left" style="font-family:Arial,sans-serif;font-size:13px;color:#7f8c8d;line-height:20px;padding-bottom:12px">Total: <span style="color:#1d1d1d;">$<?php echo number_format($total, 2, '.', ''); ?></span></td>
                                                                             </tr>
                                                                         </tbody>
                                                                     </table>
@@ -592,29 +592,29 @@
                                     <td align="center">
                                         <table style="border-collapse: collapse;border-spacing: 0;display: table;width: 90%;font-size: 12px;color: #444;" width="90%">
                                             <tbody>
-                                                <?php foreach($order['items'] as $item) : ?>
+                                                <?php foreach($cart->items() as $item) : ?>
                                                 <tr>
-                                                    <th style="margin: 0;padding: 12px 0px;font-style: normal;font-weight: 400;text-align: left;border-bottom: 1px solid #e9e9e9;"><span style="font-weight: 600;"><?php echo $item['quantity']; ?>x</span> - <?php echo $item['name'] . ' - ' . $item['offer']; ?></th>
-                                                    <td style="margin: 0;padding: 12px 0px;text-align: left;border-bottom: 1px solid #e9e9e9;"><span style="display: block;text-align: right;">$<?php echo number_format($item['price'], 2, '.', ''); ?></span></td>
+                                                    <th style="margin: 0;padding: 12px 0px;font-style: normal;font-weight: 400;text-align: left;border-bottom: 1px solid #e9e9e9;"><span style="font-weight: 600;"><?php echo $item->quantity; ?>x</span> - <?php echo $item->name . ' - ' . $item->options['variant']; ?></th>
+                                                    <td style="margin: 0;padding: 12px 0px;text-align: left;border-bottom: 1px solid #e9e9e9;"><span style="display: block;text-align: right;">$<?php echo number_format($item->price, 2, '.', ''); ?></span></td>
                                                 </tr>
                                                 <?php endforeach; ?>
-                                                <?php if (!empty($order['coupon'])) : ?>
+                                                <?php if ($cart->hasDiscount()) : foreach ($cart->discounts() as $discount) : ?>
                                                 <tr>
-                                                    <th style="margin: 0;padding: 12px 0px;font-style: normal;font-weight: 400;text-align: left;border-bottom: 1px solid #e9e9e9;"><span style="color: #65d28d;font-weight: 700;">Coupon Promotion</span></th>
-                                                    <td style="margin: 0;padding: 12px 0px;text-align: left;border-bottom: 1px solid #e9e9e9;"><span style="color: #65d28d;display: block;font-weight: 700;text-align: right;">-<?php echo $order['coupon']; ?>%</span></td>
+                                                    <th style="margin: 0;padding: 12px 0px;font-style: normal;font-weight: 400;text-align: left;border-bottom: 1px solid #e9e9e9;"><span style="color: #65d28d;font-weight: 700;">Coupon "<?php echo $discount->name; ?>"</span></th>
+                                                    <td style="margin: 0;padding: 12px 0px;text-align: left;border-bottom: 1px solid #e9e9e9;"><span style="color: #65d28d;display: block;font-weight: 700;text-align: right;">-<?php echo $discount->amount; ?>%</span></td>
                                                 </tr>
-                                                <?php endif; ?>
+                                                <?php endforeach; endif; ?>
                                                 <tr>
                                                     <th style="margin: 0;padding: 12px 0px;font-style: normal;font-weight: 400;text-align: left;border-bottom: 1px solid #e9e9e9;border-top: 3px solid #f0f1f3;">Sub Total</th>
-                                                    <td style="margin: 0;padding: 12px 0px;text-align: left;border-bottom: 1px solid #e9e9e9;border-top: 3px solid #f0f1f3;"><span style="display: block;text-align: right;"><span>$<?php echo number_format($order['sub_total'], 2, '.', ''); ?></span></span></td>
+                                                    <td style="margin: 0;padding: 12px 0px;text-align: left;border-bottom: 1px solid #e9e9e9;border-top: 3px solid #f0f1f3;"><span style="display: block;text-align: right;"><span>$<?php echo number_format($sub_total, 2, '.', ''); ?></span></span></td>
                                                 </tr>
                                                 <tr>
                                                     <th style="margin: 0;padding: 12px 0px;font-style: normal;font-weight: 400;text-align: left;border-bottom: 1px solid #e9e9e9;">Shipping &amp; Handling</th>
-                                                    <td style="margin: 0;padding: 12px 0px;text-align: left;border-bottom: 1px solid #e9e9e9;"><span style="display: block;text-align: right;">$<span><?php echo number_format($order['shipping_costs'], 2, '.', ''); ?></span></span></td>
+                                                    <td style="margin: 0;padding: 12px 0px;text-align: left;border-bottom: 1px solid #e9e9e9;"><span style="display: block;text-align: right;">$<span><?php echo number_format($shipping_costs, 2, '.', ''); ?></span></span></td>
                                                 </tr>
                                                 <tr>
                                                     <th style="margin: 0;padding: 12px 0px;font-style: normal;font-weight: 400;text-align: left;border-bottom: 2px solid #bec2c7;border-top: 3px solid #f0f1f3;"><span style="font-weight: 600;color: #212121;">Total</span></th>
-                                                    <td style="margin: 0;padding: 12px 0px;text-align: left;border-bottom: 2px solid #bec2c7;border-top: 3px solid #f0f1f3;"><span style="font-weight: 600;color: #212121;display: block;text-align: right;">$<span><?php echo number_format($order['total'], 2, '.', ''); ?></span></span></td>
+                                                    <td style="margin: 0;padding: 12px 0px;text-align: left;border-bottom: 2px solid #bec2c7;border-top: 3px solid #f0f1f3;"><span style="font-weight: 600;color: #212121;display: block;text-align: right;">$<span><?php echo number_format($total, 2, '.', ''); ?></span></span></td>
                                                 </tr>
                                             </tbody>
                                         </table>

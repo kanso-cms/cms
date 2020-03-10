@@ -56,7 +56,7 @@ class Output
     /**
      * Returns the formatter.
      *
-     * @return \\kanso\framework\cli\output\Formatter
+     * @return \kanso\framework\cli\output\Formatter
      */
     public function formatter(): Formatter
     {

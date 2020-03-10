@@ -26,8 +26,9 @@ class Pagination extends Helper
     public function pagination_links(array $args = null): string
     {
         // Default options
-        $options = [
-          'base'               => $this->container->Request->environment()->HTTP_HOST,
+        $options =
+        [
+          'base'               => $this->parent->base_url(),
           'format'             => '<li class="(:class)"><a href="(:link)">(:num)</a></li>',
           'format_disabled'    => '<li class="(:class)"><span>(:num)</span></li>',
           'white_space'        => ' ',
@@ -41,8 +42,8 @@ class Pagination extends Helper
           'next_text'          => 'Next »',
         ];
 
-        // Segment the reuest URI
-        $uri = explode('/', $this->container->Request->environment()->REQUEST_PATH);
+        // Query string for search results
+        $queryStr = $this->parent->is_search() ? '?q=' . $this->parent->searchQuery : '';
 
         // Declare the pagination string
         $pagination = '';
@@ -74,9 +75,6 @@ class Pagination extends Helper
 
         // Clean the base url
         $options['base'] = rtrim($options['base'], '/');
-
-        // Update the base url depending on the page type
-        $options['base'] = $this->parent->base_url();
 
         // loop always at the current minus the context, minus 1
         $loopStart  = ($options['current'] - $options['context']);
@@ -114,8 +112,8 @@ class Pagination extends Helper
         if ($options['prev_next'] === true)
         {
             $class  = $options['current'] === 1  ? 'disabled' : '';
-            $link   = $options['current'] === 1  ? '#' : $options['base'] . DIRECTORY_SEPARATOR . 'page' . DIRECTORY_SEPARATOR . ($options['current']-1) . DIRECTORY_SEPARATOR;
-            $link   = $options['current'] === 2  ? $options['base'] : $link;
+            $link   = $options['current'] === 1  ? '#' : $options['base'] . DIRECTORY_SEPARATOR . 'page' . DIRECTORY_SEPARATOR . ($options['current']-1) . DIRECTORY_SEPARATOR . $queryStr;
+            $link   = $options['current'] === 2  ? $options['base'] . DIRECTORY_SEPARATOR . $queryStr : $link;
             $format = $options['current'] === 1  ? $options['format_disabled'] : $options['format'];
             $replacements = [$class, $link, $options['prev_text']];
             $pagination  .= preg_replace($patterns, $replacements, $format) . $options['white_space'];
@@ -124,7 +122,7 @@ class Pagination extends Helper
 
         // Show the first page
         $class = $options['current'] === 1  ? 'active' : '';
-        $link  = $options['current'] === 1  ? '#' : $options['base'] . DIRECTORY_SEPARATOR;
+        $link  = $options['current'] === 1  ? '#' : $options['base'] . DIRECTORY_SEPARATOR . $queryStr;
         $replacements = [$class, $link, 1];
         $pagination  .= preg_replace($patterns, $replacements, $options['format']) . $options['white_space'];
         $replacements = [];
@@ -137,7 +135,7 @@ class Pagination extends Helper
         for ($i = $loopStart; $i < $loopEnd; $i++)
         {
             $class = $i === $options['current'] ? 'active' : '';
-            $link  = $i === $options['current'] ? '#' : $options['base'] . DIRECTORY_SEPARATOR . 'page' . DIRECTORY_SEPARATOR . ($i) . DIRECTORY_SEPARATOR;
+            $link  = $i === $options['current'] ? '#' : $options['base'] . DIRECTORY_SEPARATOR . 'page' . DIRECTORY_SEPARATOR . ($i) . DIRECTORY_SEPARATOR . $queryStr;
             $replacements = [$class, $link, $i];
             $pagination  .= preg_replace($patterns, $replacements, $options['format']) . $options['white_space'];
             $replacements = [];
@@ -148,7 +146,7 @@ class Pagination extends Helper
 
         // Show the last page
         $class = $options['current'] === $options['total'] ? 'active' : '';
-        $link  = $options['current'] === $options['total'] ? '#' : $options['base'] . DIRECTORY_SEPARATOR . 'page' . DIRECTORY_SEPARATOR . $options['total'] . DIRECTORY_SEPARATOR;
+        $link  = $options['current'] === $options['total'] ? '#' : $options['base'] . DIRECTORY_SEPARATOR . 'page' . DIRECTORY_SEPARATOR . $options['total'] . DIRECTORY_SEPARATOR . $queryStr;
         $replacements = [$class, $link, $options['total']];
         $pagination  .= preg_replace($patterns, $replacements, $options['format']) . $options['white_space'];
         $replacements = [];
@@ -158,7 +156,7 @@ class Pagination extends Helper
         {
             $class  = $options['current'] <  $options['total'] ? '' : 'disabled';
             $format = $options['current'] <  $options['total'] ? $options['format'] : $options['format_disabled'];
-            $link   = $options['current'] <  $options['total'] ? $options['base'] . DIRECTORY_SEPARATOR . 'page' . DIRECTORY_SEPARATOR . ($options['current']+1) . DIRECTORY_SEPARATOR : '#';
+            $link   = $options['current'] <  $options['total'] ? $options['base'] . DIRECTORY_SEPARATOR . 'page' . DIRECTORY_SEPARATOR . ($options['current']+1) . DIRECTORY_SEPARATOR . $queryStr : '#';
             $replacements = [$class, $link, $options['next_text']];
             $pagination  .= preg_replace($patterns, $replacements, $format) . $options['white_space'];
         }

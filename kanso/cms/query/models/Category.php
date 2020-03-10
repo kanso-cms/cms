@@ -47,7 +47,7 @@ class Category extends FilterBase implements FilterInterface
         $postCount = count($posts);
 
         // If there are no posts and the page is more than 2 return false
-        if ($this->Query->postCount === 0 && $this->Query->pageIndex >= 1)
+        if ($postCount === 0 && $this->Query->pageIndex >= 1)
         {
             return false;
         }

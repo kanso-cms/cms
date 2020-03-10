@@ -10,6 +10,5 @@
  *
  * @author Joe J. Howard
  */
-
-// Search
 $router->get('/search-results/', '\kanso\cms\query\controllers\Content@apply', '\kanso\cms\query\models\Search');
+$router->get('/search-results/page/(:num)/', '\kanso\cms\query\controllers\Content@apply', '\kanso\cms\query\models\Search');

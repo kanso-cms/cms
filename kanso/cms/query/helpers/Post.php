@@ -355,6 +355,9 @@ class Post extends Helper
             return '';
         }
 
+        // Parse through shortcode filter
+        $content = $this->container->Shortcodes->filter($content);
+
         if ($raw)
         {
             return Markdown::plainText(trim($content));

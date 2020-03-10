@@ -339,6 +339,8 @@ class Response
         else
         {
             $this->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+
+            $this->headers->set('ETag', '"' . hash('sha256', strval(time())) . '"');
         }
 
         $this->headers->set('HTTP', $this->status->get() . ' ' . $this->status->message());

@@ -1,9 +1,11 @@
 <!-- PAGE WRAP -->
-<div class="dash-wrap js-dash-wrap">
+<div class="dash-wrap js-dash-wrap <?php echo strtolower($postName); ?>">
 
 	<!-- HEADING -->
 	<section class="page-heading">
 		<h1><?php echo $postName; ?></h1>
+		<a href="/admin/writer/?post-type=<?php echo strtolower($postType); ?>" class="btn btn-primary add-btn">
+			<span class="glyph-icon glyph-icon-plus"></span>&nbsp;&nbsp;&nbsp;Add New <?php echo ucfirst($postType); ?></a>
 	</section>
 
 	<?php require_once($_TEMPLATES_DIR . DIRECTORY_SEPARATOR . 'post-message.php'); ?>

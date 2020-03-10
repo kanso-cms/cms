@@ -46,7 +46,7 @@ class BrainTree extends UtilityBase
      *
      * @return string
      */
-    public function token()
+    public function token(): string
     {
         $this->configure();
 
@@ -61,7 +61,7 @@ class BrainTree extends UtilityBase
     /**
      * Make a transaction.
      *
-     * @param  array                                               $sale Transaction configuration
+     * @param  array                                                $sale Transaction configuration
      * @return \Braintree\Result\Successful|\Braintree\Result\Error
      */
     public function transaction(array $sale)
@@ -74,8 +74,8 @@ class BrainTree extends UtilityBase
     /**
      * Find an existing customer's card by id.
      *
-     * @param  int                            $cardId The card id from our database
-     * @param  int                            $userId The user id
+     * @param  int                                                  $cardId The card id from our database
+     * @param  int                                                  $userId The user id
      * @return \Braintree\CreditCard|\Braintree\PayPalAccount|false
      */
     public function findCustomerCard(int $cardId, int $userId)
@@ -102,27 +102,46 @@ class BrainTree extends UtilityBase
     /**
      * Get a user's credit cards by id or current logged in user.
      *
-     * @param  int|null   $id User id from the database (optional) (default null)
+     * @param  int|null $id User id from the database (optional) (default null)
      * @return array
      */
-    public function cards(int $id = null)
+    public function cards(int $id = null): array
     {
         $this->configure();
 
-        $customer = $this->customer($id);
-
-        if (!$customer)
+        if (!$id && !$this->Gatekeeper->isLoggedIn())
         {
             return [];
         }
 
-        return $customer->paymentMethods;
+        $cards  = [];
+        $id     = !$id ? $this->Gatekeeper->getUser()->id : $id;
+        $tokens = $this->sql()->SELECT('*')->FROM('payment_tokens')->WHERE('user_id', '=', $id)->FIND_ALL();
+
+        if ($tokens)
+        {
+            foreach ($tokens as $row)
+            {
+                $paymentMethod = $this->gateway->paymentMethod()->find($row['token']);
+
+                if ($paymentMethod instanceof NotFound)
+                {
+                    continue;
+                }
+
+                $paymentMethod->id = $row['id'];
+
+                $cards[] = $paymentMethod;
+            }
+        }
+
+        return $cards;
     }
 
     /**
      * Get a customer by id or the currently logged in user.
      *
-     * @param  int|null                       $id User id from the database (optional) (default null)
+     * @param  int|null                  $id User id from the database (optional) (default null)
      * @return \Braintree\Customer|false
      */
     public function customer(int $id = null)
@@ -149,7 +168,7 @@ class BrainTree extends UtilityBase
     /**
      * Create New Braintree customer.
      *
-     * @param  int|null                       $id User id from the database (optional) (default null)
+     * @param  int|null                  $id User id from the database (optional) (default null)
      * @return \Braintree\Customer|false
      */
     public function createCustomer(int $id = null)

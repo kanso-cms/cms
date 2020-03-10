@@ -93,7 +93,7 @@ class Reviews extends UtilityBase
     /**
      * Get the downvotes from a product review.
      *
-     * @param  int $commentId Comment id
+     * @param  int  $commentId Comment id
      * @return bool
      */
     public function upVote(int $commentId): bool
@@ -111,7 +111,7 @@ class Reviews extends UtilityBase
     /**
      * Get the downvotes from a product review.
      *
-     * @param  int $commentId Comment id
+     * @param  int  $commentId Comment id
      * @return bool
      */
     public function downVote(int $commentId): bool

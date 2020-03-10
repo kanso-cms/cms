@@ -110,7 +110,7 @@ class Urls extends Helper
 
         if ($this->parent->is_search())
         {
-            $base = DIRECTORY_SEPARATOR . 'search-results' . DIRECTORY_SEPARATOR . '?q=' . $this->parent->searchQuery;
+            $base = 'search-results' . DIRECTORY_SEPARATOR;
         }
         elseif ($this->parent->is_tag() || $this->parent->is_category() || $this->parent->is_author())
         {

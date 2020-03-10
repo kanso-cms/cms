@@ -1,10 +1,44 @@
 <?php $config = $kanso->Config->get('ecommerce'); ?>
 <div class="col-8 floor-sm">
-    <form method="post" class="js-validation-form" id="configuration">
+    <form method="post" class="js-validation-form js-shipping-config-form" id="configuration">
 
         <h5 class="roof-xs">Shipping</h5>
 
         <p class="color-gray">Manage your shipping configuration options.</p>
+
+        <div class="form-field">
+            <div class="row floor-xs">
+                <p class="color-gray text-italic no-margin">Provide free shipping all orders.</p>
+                <span class="radio radio-primary">
+                    <input type="radio" name="shipping_type" id="free_shipping" <?php echo $config['shipping']['is_free'] === true ? 'checked' : ''; ?> value="free">
+                    <label for="free_shipping">Free</label>
+                </span>
+            </div>
+
+            <div class="row floor-xs">
+                <p class="color-gray text-italic no-margin">Use flat rate shipping.</p>
+                <span class="radio radio-primary">
+                    <input type="radio" name="shipping_type" id="flat_rate_shipping" value="flat_rate" <?php echo $config['shipping']['is_flat_rate'] === true ? 'checked' : ''; ?>>
+                    <label for="flat_rate_shipping">Flat Rate</label>
+                </span>
+            </div>
+
+            <div class="row floor-xs">
+                <p class="color-gray text-italic no-margin">Use tiered shipping rates based on weight.</p>
+                <span class="radio radio-primary">
+                    <input type="radio" name="shipping_type" id="tiered_shipping" value="flat_rate" <?php echo $config['shipping']['is_flat_rate'] === false &&  $config['shipping']['is_free'] === false ? 'checked' : ''; ?>>
+                    <label for="tiered_shipping">Tiered</label>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-field row floor-sm">
+            <label for="company_address">Shipping </label>
+            <p class="color-gray">Your company address will appear on invoices.</p>
+            <input type="text" name="company_address" id="company_address" placeholder="<strong>Powered By Kanso CMS</strong><br>1 City Road<br>Melbourne, VIC 3148<br>AUSTRALIA" value="<?php echo $config['company_address']; ?>" data-js-required="true">
+        </div>
+
+        
 
         <div class="form-field row floor-sm">
             <label for="company_address">Company Address</label>
@@ -18,17 +52,6 @@
             <input type="text" name="tracking_url" id="tracking_url" placeholder="https://postalservice/tracking/search/" value="<?php echo $config['tracking_url']; ?>" data-js-required="true">
         </div>
 
-        <div class="form-field row floor-sm">
-            <label for="shipping_price">Shipping Price</label>
-            <p class="color-gray">Your flat rate shipping price on all orders.</p>
-            <input type="text" name="shipping_price" id="shipping_price" placeholder="9.95" value="<?php echo $config['shipping_price']; ?>" data-js-required="true">
-        </div>
-
-        <div class="form-field row floor-sm">
-            <label for="free_shipping_products">Free Shipping</label>
-            <p class="color-gray">Enter a comma separated list of product ids that have free shipping.</p>
-            <input type="text" name="free_shipping_products" id="free_shipping_products" placeholder="1, 2, 3, 4" value="<?php echo implode(', ', $config['free_shipping_products']); ?>">
-        </div>
 
         <div class="form-field row floor-sm">
             <label for="confirmation_email">Confirmation Email</label>

@@ -17,33 +17,33 @@ return
     'braintree' =>
     [
         'environment' => 'sandbox',
-        'merchant_id' => 'fdsfsdfs',
-        'public_key'  => 'YKFNR7U6YEfsdfs',
-        'private_key' => 'fdfkuryfdnlidusshsdKTKUFYKFNR7U6YEfsdfs',
+        'merchant_id' => 'de232f435t3',
+        'public_key'  => 'dasfdfsDac32',
+        'private_key' => 'fsadfdsgdsff3e32e423',
     ],
 
     /*
-     * Confirmation email address to send orders to
+     * Used as the default key to store session data
      */
-    'confirmation_email' => 'info@example.com',
+    'session_id' => 'kanso_shopping_cart',
 
     /*
-     * The default shipping price to use
+     * Currency code
+     *
+     * @see https://www.xe.com/iso4217.php
      */
-    'shipping_price' => 9.95,
+    'currency' => 'AUD',
 
     /*
-     * Array of product post_ids that have free shipping
+     * All tax calculations are inclusive (rather than added to pricing)
+     * Set your tax amount as a percentage. Usually GST is 10%
      */
-    'free_shipping_products' =>
-    [
-
-    ],
+    'tax' => 10,
 
     /*
-     * Threshold for free shipping
+     * Allow customers to use multiple coupons on their cart
      */
-    'free_shipping_threshold' => 99,
+    'multiple_coupons' => false,
 
     /*
      * 1 Dollar = x loyalty points
@@ -56,6 +56,11 @@ return
     'points_to_discount' => 10,
 
     /*
+     * Confirmation email address to send orders to
+     */
+    'confirmation_email' => 'info@example.com',
+
+    /*
      * URL to tracking website
      */
     'tracking_url' => 'https://auspost.com.au/mypost/track/#/search',
@@ -66,13 +71,49 @@ return
     'company_address' => '<strong>Powered By Kanso CMS</strong><br>1 City Road<br>Melbourne, VIC 3148<br>AUSTRALIA',
 
     /*
+     * ---------------------------------------------------------
+     * Shipping configurations
+     * ---------------------------------------------------------
+     *
+     *
+     * is_free        : Use free shipping on all items (overrides all other options)
+     * is_flat_rate   : Use a flat rate shipping price  (overrides 'weight_rates')
+     * free_threshold : If 'is_flat_rate' is set to TRUE, the minimum cart price that gives free shipping.
+     * flat_rate      : If 'is_flat_rate' is set to TRUE, the flat rate for shipping.
+     * weight_rates   : If 'is_flat_rate' is set to FALSE, the tiered shipping rates per weight (weight is in grams)
+     */
+    'shipping'         =>
+    [
+        'is_free'        => false,
+        'is_flat_rate'   => true,
+        'free_threshold' => 99.99,
+        'flat_rate'      => 9.95,
+        'weight_rates'   =>
+        [
+            [
+                'max_weight' => 500,
+                'price'      => 9.95,
+            ],
+            [
+                'max_weight' => 1000,
+                'price'      => 13.95,
+            ],
+            [
+                'max_weight' => 3000,
+                'price'      => 16.95,
+            ],
+            [
+                'max_weight' => 1000000000,
+                'price'      => 19.95,
+            ],
+        ],
+    ],
+
+    /*
      * Array of coupons - COUPON_CODE => Discount as percentage
      */
     'coupons' =>
     [
-        'SPECIAL_10' => 10,
-        'SPECIAL_20' => 20,
-        'SPECIAL_30' => 30,
     ],
 
 ];

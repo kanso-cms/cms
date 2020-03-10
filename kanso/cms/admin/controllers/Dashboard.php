@@ -259,6 +259,16 @@ class Dashboard extends BaseController
 	}
 
 	/**
+	 * Dispatch add bundle page.
+	 */
+	public function addBundle(): void
+	{
+		$this->init('addBundle');
+
+		$this->dispatch();
+	}
+
+	/**
 	 * Dispatch custom post-type.
 	 */
 	public function customPostType(): void

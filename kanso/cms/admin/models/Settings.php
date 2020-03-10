@@ -129,6 +129,8 @@ class Settings extends BaseModel
                 return $this->submitDeleteUser();
             }
         }
+
+        return false;
     }
 
     /**

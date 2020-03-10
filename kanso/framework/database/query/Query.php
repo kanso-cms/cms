@@ -175,13 +175,13 @@ class Query
 
 					foreach ($tableCols as $col)
 					{
-					   $this->column("$table.$col");
+					   $this->column("{$table}.{$col}");
 					}
 				}
 				// e.g table1_name(column1, column2)
 				else
 				{
-					$this->column("$table.$tableCols");
+					$this->column("{$table}.{$tableCols}");
 				}
 			}
 		}
@@ -231,7 +231,7 @@ class Query
 
 		if (!is_array($value))
 		{
-			$key = $this->queryFilter("$query[table]$query[type]$query[column]$value");
+			$key = $this->queryFilter($query['table'] . $query['type'] . $query['column'] . $value);
 
 			$query['value'] = $key;
 
@@ -245,7 +245,7 @@ class Query
 
 			foreach ($value as $val)
 			{
-				$key = $this->queryFilter("$query[table]$query[type]$query[column]" . $val);
+				$key = $this->queryFilter($query['table'] . $query['type'] . $query['column'] . $val);
 
 				$this->SQL_bindings[$key] = $val;
 
@@ -605,23 +605,23 @@ class Query
 				{
 					$_value = array_shift($clause['value']);
 
-					$SQL = $hasJoin ? "$clause[table].$clause[column] $clause[op] :$_value" : "$clause[column] $clause[op] :$_value";
+					$SQL = $hasJoin ? "{$clause['table']}.{$clause['column']} {$clause['op']} :{$_value}" : "{$clause['column']} {$clause['op']} :{$_value}";
 
 					foreach ($clause['value'] as $value)
 					{
-						$SQL .= $hasJoin ? " OR $clause[table].$clause[column] $clause[op] :$value" : " OR $clause[column] $clause[op] :$value";
+						$SQL .= $hasJoin ? " OR {$clause['table']}.{$clause['column']} {$clause['op']} :{$value}" : " OR {$clause['column']} {$clause['op']} :{$value}";
 					}
 
 					$SQL = "($SQL)";
 				}
 				else
 				{
-					$SQL = $hasJoin ? "$clause[table].$clause[column] $clause[op] :$clause[value]" : "$clause[column] $clause[op] :$clause[value]";
+					$SQL = $hasJoin ? "{$clause['table']}.{$clause['column']} {$clause['op']} :{$clause['value']}" : "{$clause['column']} {$clause['op']} :{$clause['value']}";
 				}
 
 				if ($count > 0)
 				{
-					$SQL = strtoupper($clause['type']) . " $SQL";
+					$SQL = strtoupper($clause['type']) . " {$SQL}";
 				}
 
 				$wheres[] = $SQL;
@@ -760,7 +760,7 @@ class Query
 		{
 			foreach ($this->pending['group_concat'] as $query)
 			{
-				$SQL .= "GROUP_CONCAT($query[0]) AS $query[1], ";
+				$SQL .= "GROUP_CONCAT({$query[0]}) AS {$query[1]}, ";
 			}
 		}
 
@@ -790,7 +790,7 @@ class Query
 			{
 				foreach ($joinTypeJoin as $join)
 				{
-					$SQL[] = strtoupper(str_replace('_', ' ', $joinType)) . " $join[table] ON $join[columns]";
+					$SQL[] = strtoupper(str_replace('_', ' ', $joinType)) . " {$join['table']} ON {$join['columns']}";
 				}
 			}
 		}

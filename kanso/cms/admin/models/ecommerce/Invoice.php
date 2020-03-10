@@ -21,6 +21,11 @@ class Invoice extends BaseModel
      */
     public function onGET()
     {
+        if (!$this->isLoggedIn())
+        {
+            return false;
+        }
+
         $transactionId = explode('/', $this->Request->environment()->REQUEST_PATH);
         $transactionId = array_pop($transactionId);
 

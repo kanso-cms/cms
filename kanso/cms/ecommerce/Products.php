@@ -51,9 +51,52 @@ class Products extends UtilityBase
         {
             $postMeta = $product->meta;
 
-            return isset($postMeta['offers']) ? $postMeta['offers'] : [];
+            return $postMeta['offers'] ?? [];
         }
 
         return [];
+    }
+
+    /**
+     * Get all of a products.
+     *
+     * @param  bool  $published Return only published bundles (optional) (default true)
+     * @return array
+     */
+    public function all(bool $published = true): array
+    {
+        return $this->PostManager->provider()->byKey('type', 'product', false, $published);
+    }
+
+    /**
+     * Get all products by key.
+     *
+     * @param  string                         $index     Column name
+     * @param  mixed                          $value     Column value
+     * @param  bool                           $single    Return the first single row (optional) (default false)
+     * @param  bool                           $published Return only published posts
+     * @return array|\kanso\cms\wrappers\Post
+     */
+    public function byKey(string $index, $value, bool $single = false, bool $published = true)
+    {
+        $response = [];
+        $posts    = $this->PostManager->provider()->byKey($index, $value, $single, $published);
+
+        if ($single === true && $posts !== null && $posts->type === 'product')
+        {
+            return $posts;
+        }
+        elseif(is_array($posts))
+        {
+            foreach ($posts as $post)
+            {
+                if ($post->type === 'product')
+                {
+                    $response[] = $post;
+                }
+            }
+        }
+
+        return $response;
     }
 }

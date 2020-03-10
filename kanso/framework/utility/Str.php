@@ -434,4 +434,14 @@ class Str
 	{
 		return trim(str_ireplace("<$tag>", '', str_ireplace("</$tag>", '', $str)));
 	}
+
+    /**
+     * Hash data.
+     *
+     * @param mixed $data Data to hash
+     */
+    public static function hash($data): string
+    {
+        return md5(json_encode($data));
+    }
 }

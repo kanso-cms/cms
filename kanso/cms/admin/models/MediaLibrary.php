@@ -127,9 +127,13 @@ class MediaLibrary extends BaseModel
 
         foreach ($rows as $image)
         {
-            if (!file_exists($image['path'])) continue;
+            if (!file_exists($image['path']))
+            {
+                continue;
+            }
+
             $image['date']    = Humanizer::timeAgo($image['date']) . ' ago';
-            $image['size']    = Humanizer::fileSize($image['size']);
+            $image['size']    = Humanizer::fileSize(intval($image['size']));
             $image['user']    = $this->sql()->SELECT('name')->FROM('users')->WHERE('id', '=', $image['uploader_id'])->ROW()['name'];
             $image['type']    = Mime::fromExt(Str::getAfterLastChar($image['path'], '.'));
             $image['preview'] = $image['url'];

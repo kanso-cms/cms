@@ -332,7 +332,7 @@ class Comment extends Helper
      */
     public function get_gravatar(string $email_or_md5, int $size = 160, bool $srcOnly = false)
     {
-        $isMd5   = $this->isValidMd5($email_or_md5);
+        $isMd5 = $this->isValidMd5($email_or_md5);
 
         $isEmail = !filter_var($email_or_md5, FILTER_VALIDATE_EMAIL) === false;
 
@@ -350,11 +350,13 @@ class Comment extends Helper
             return '<img src="' . $domain . '/avatar/0?s=' . $size . '&d=mm"/>';
         }
 
+        $md5 = '';
+
         if ($isEmail)
         {
             $md5 = md5(strtolower(trim($email_or_md5)));
         }
-        if ($isMd5)
+        elseif ($isMd5)
         {
             $md5 = $email_or_md5;
         }
@@ -363,6 +365,7 @@ class Comment extends Helper
         {
             return $domain . '/avatar/' . $md5 . '?s=' . $size . '&d=mm';
         }
+
         return '<img src="' . $domain . '/avatar/' . $md5 . '?s=' . $size . '&d=mm"/>';
     }
 

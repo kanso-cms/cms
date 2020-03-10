@@ -177,7 +177,7 @@ class Environment
      */
     private function documentRoot(): string
     {
-        return isset($this->server['DOCUMENT_ROOT']) ? $this->server['DOCUMENT_ROOT'] : dirname(__FILE__, 5);
+        return $this->server['DOCUMENT_ROOT'] ?? dirname(__FILE__, 5);
     }
 
     /**
@@ -212,7 +212,7 @@ class Environment
      */
     private function requestUri(): string
     {
-        return isset($this->server['REQUEST_URI']) ? $this->server['REQUEST_URI'] : '/';
+        return $this->server['REQUEST_URI'] ?? '/';
     }
 
     /**
@@ -300,7 +300,7 @@ class Environment
      */
     private function referer(): string
     {
-        return isset($this->server['HTTP_REFERER']) ? $this->server['HTTP_REFERER'] : '';
+        return $this->server['HTTP_REFERER'] ?? '';
     }
 
     /**
@@ -308,9 +308,9 @@ class Environment
      *
      * @return string
      */
-    private function httpUserAgent()
+    private function httpUserAgent(): string
     {
-        return isset($this->server['HTTP_USER_AGENT']) ? $this->server['HTTP_USER_AGENT'] : '';
+        return $this->server['HTTP_USER_AGENT'] ?? '';
     }
 
     /**
@@ -320,7 +320,7 @@ class Environment
      */
     private function requestTime(): int
     {
-       return isset($this->server['REQUEST_TIME']) ? $this->server['REQUEST_TIME'] : time();
+       return $this->server['REQUEST_TIME'] ?? time();
     }
 
     /**
@@ -330,6 +330,6 @@ class Environment
      */
     private function requestTimeFloat(): float
     {
-        return isset($this->server['REQUEST_TIME_FLOAT']) ? $this->server['REQUEST_TIME_FLOAT'] : microtime(true);
+        return $this->server['REQUEST_TIME_FLOAT'] ?? microtime(true);
     }
 }

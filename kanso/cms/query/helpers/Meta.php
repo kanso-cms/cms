@@ -289,7 +289,9 @@ class Meta extends Helper
             $titleBase  = $this->parent->website_title();
             $titlePage  = $prevpage > 1 ? 'Page ' . $prevpage . ' | ' : '';
             $titleTitle = '';
+            $slug       = '';
             $base       = !empty($this->parent->blog_location()) && ($this->parent->is_tag() || $this->parent->is_category() || $this->parent->is_author() || $this->parent->is_home() || $this->parent->is_blog_location()) ? $this->parent->blog_location() . '/' : '';
+
 
             if ($this->parent->is_home())
             {
@@ -317,6 +319,7 @@ class Meta extends Helper
                 $titleTitle = 'Search Results | ';
                 $slug       =  $prevpage > 1 ? $uri[0] . '/' . $uri[1] . '/page/' . $prevpage . '/' : $uri[0] . '/' . $uri[1] . '/';
             }
+
             return $this->parent->helper('cache')->set($key, [
                 'title' => $titleTitle . $titlePage . $titleBase,
                 'slug'  => $slug,
@@ -378,6 +381,7 @@ class Meta extends Helper
             $titleBase  = $this->parent->website_title();
             $titlePage  = $nextPage > 1 ? 'Page ' . $nextPage . ' | ' : '';
             $titleTitle = '';
+            $slug       = '';
 
             if ($this->parent->is_home())
             {

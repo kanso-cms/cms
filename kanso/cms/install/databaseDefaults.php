@@ -186,9 +186,7 @@ $KANSO_DEFAULTS_SHOPPING_CART_TABLE =
 [
 	'id'           => 'INTEGER(11) | UNSIGNED | PRIMARY KEY | UNIQUE | AUTO INCREMENT',
 	'user_id'  	   => 'INTEGER(11) | UNSIGNED',
-	'product_id'   => 'INTEGER(11) | UNSIGNED',
-	'offer_id'     => 'VARCHAR(255)',
-	'quantity'     => 'INTEGER(11) | UNSIGNED',
+	'contents'     => 'TEXT',
 ];
 
 // Shipping addresses

@@ -55,6 +55,8 @@ class BoolVal extends FilterBase implements FilterInterface
 			{
 				return false;
 			}
+
+			return false;
 		}
 
 		return boolval($value);

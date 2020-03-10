@@ -1,0 +1,108 @@
+.reviewer .card
+{
+	background-color: transparent;
+}
+.reviewer .table
+{
+	margin-bottom: 20px;
+}
+.reviewer .table
+{
+	position: relative;
+	background-color: transparent;
+}
+.reviewer .bundle-options
+{
+	display: none;
+}
+.reviewer .bundle-options.active
+{
+	display: block;
+}
+.reviewer .empty-table:after
+{
+	content: "";
+    position: absolute;
+    top: 23px;
+    width: 100%;
+    height: 100px;
+    border: 1px solid #dadada;
+    border-radius: 0 0 3px 3px;
+    border-top: none;
+}
+.reviewer .empty-table:before
+{
+	content: "No products to display. Click the \"Select Products\" button to add products!";
+    position: absolute;
+    top: 46px;
+    color: #76828f;
+    font-style: italic;
+    font-size: 13px;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 310px;
+    text-align: center;   
+}
+.reviewer .empty-table
+{
+	margin-bottom: 120px;
+}
+.reviewer .group-summary-price
+{
+	font-size: 16px;
+    color: #575757;
+}
+.bundle-product-list li
+{
+	padding: 10px 0 10px 15px;
+    border-top: 1px solid #dadada;
+    cursor: pointer;
+    position: relative;
+}
+.bundle-product-list li.active
+{
+	background-color: #76afe1;
+	color:#fff;
+	border-top: 1px solid #76afe1;
+}
+.bundle-product-list li.active *
+{
+	color:#fff !important;
+}
+.bundle-product-list li.active:after
+{
+	position: absolute;
+	top: 14px;
+    right: 18px;
+	content:"\f00c";
+	display:inline-block;font:normal normal normal 14px/1 'FontAwesome';
+	font-size:inherit;
+	text-rendering:auto;
+	-webkit-font-smoothing:antialiased;
+	-moz-osx-font-smoothing:grayscale
+}
+
+.bundle-selection-modal .bundle-product-list
+{
+	height: 300px;
+    overflow-y: scroll;
+    text-align: left;
+    border: 1px solid #dadada;
+    border-radius: 3px;
+    margin-bottom: 20px;
+}
+.bundle-selection-modal .bundle-product-list li:first-child
+{
+	border-top: 0;
+}
+.bundle-option
+{
+	display: none;
+}
+.bundle-option.active
+{
+	display: block;
+}

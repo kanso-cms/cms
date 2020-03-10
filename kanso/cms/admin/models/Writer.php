@@ -7,12 +7,14 @@
 
 namespace kanso\cms\admin\models;
 
+use kanso\cms\admin\models\ecommerce\Bundle;
+use kanso\cms\admin\models\ecommerce\Product;
 use kanso\framework\http\response\exceptions\InvalidTokenException;
 use kanso\framework\http\response\exceptions\RequestException;
 use kanso\framework\utility\Str;
 
 /**
- * Comments model.
+ * Writer model.
  *
  * @author Joe J. Howard
  */
@@ -181,10 +183,6 @@ class Writer extends BaseModel
             {
                 $article->excerpt = $post['excerpt'];
             }
-            else
-            {
-                $article->excerpt = $article->excerpt;
-            }
         }
 
         if ($article->save())
@@ -249,13 +247,13 @@ class Writer extends BaseModel
 
         // Get the article content directly from the _POST global
         // so it is not filtered in any way
-        $post['content'] = !empty($post['content']) ? $_POST['content'] : '';
-
-        // Default is to save as draft
-        $post['status'] = !isset($post['status']) ? 'draft' : $post['status'];
+        $post['content'] = isset($post['content']) && !empty($post['content']) ? $_POST['content'] : '';
 
         // Default excerpt
-        $post['excerpt'] = empty($post['excerpt']) ? $_POST['content'] : $post['excerpt'];
+        $post['excerpt'] = isset($post['excerpt']) && !empty($post['excerpt']) ? $_POST['excerpt'] : $post['content'];
+
+        // Default is to save as draft
+        $post['status'] = isset($post['status']) && !empty($post['status']) ? $post['status'] : 'draft';
 
         $postMeta = $this->getPostMeta();
 
@@ -270,7 +268,7 @@ class Writer extends BaseModel
             'author_id'        => $post['author'],
             'content'          => $post['content'],
             'comments_enabled' => $post['comments'],
-            'meta'             => !empty($postMeta) ? serialize($postMeta) : null,
+            'meta'             => !empty($postMeta) ? $postMeta : null,
         ]);
 
         if ($newPost)
@@ -301,6 +299,20 @@ class Writer extends BaseModel
         $values   = [];
         $response = [];
 
+        if (isset($_POST['post-meta-keys']))
+        {
+            $keys = json_decode($_POST['post-meta-keys'], true);
+        }
+        if (isset($_POST['post-meta-values']))
+        {
+            $values = json_decode($_POST['post-meta-values'], true);
+        }
+
+        foreach ($keys as $i => $key)
+        {
+            $response[$key] = $values[$i];
+        }
+
         if (isset($_POST['meta_title']))
         {
             $title = strip_tags(trim($_POST['meta_title']));
@@ -320,62 +332,17 @@ class Writer extends BaseModel
             }
         }
 
-        if (isset($_POST['post-meta-keys']))
+        if ($this->post['type'] === 'bundle')
         {
-            $keys = json_decode($_POST['post-meta-keys'], true);
+            $bundle = new Bundle;
+
+            $response['bundle_configuration'] = $bundle->parse($this->post);
         }
-        if (isset($_POST['post-meta-values']))
+        elseif ($this->post['type'] === 'product')
         {
-            $values = json_decode($_POST['post-meta-values'], true);
-        }
+            $product = new product;
 
-        if (is_array($values) && is_array($keys) && count($values) === count($keys))
-        {
-            foreach ($keys as $i => $k)
-            {
-                $response[trim($k, '\'')] = trim($values[$i], '\'');
-            }
-        }
-
-        $offers = [];
-
-        $offerKeys =
-        [
-            'product_offer_X_id'         => 'offer_id',
-            'product_offer_X_name'       => 'name',
-            'product_offer_X_price'      => 'price',
-            'product_offer_X_sale_price' => 'sale_price',
-            'product_offer_X_instock'    => 'instock',
-        ];
-
-        for ($i=1; $i <= 20; $i++)
-        {
-            $offer = [];
-
-            foreach ($offerKeys as $postKey => $offerKey)
-            {
-                $postKey = str_replace('X', strval($i), $postKey);
-
-                if (isset($_POST[$postKey]))
-                {
-                    $offer[$offerKey] = $offerKey === 'instock' ? Str::bool($_POST[$postKey]) : trim($_POST[$postKey]);
-
-                    if ($offerKey === 'sale_price' || $offerKey === 'price')
-                    {
-                        $offer[$offerKey] = floatval($_POST[$postKey]);
-                    }
-                }
-            }
-
-            if (!empty($offer))
-            {
-                $offers[] = $offer;
-            }
-        }
-
-        if (!empty($offers))
-        {
-            $response['offers'] = $offers;
+            $response['offers'] = $product->parse($this->post);
         }
 
         return $response;

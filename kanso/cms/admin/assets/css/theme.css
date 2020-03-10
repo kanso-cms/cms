@@ -712,3 +712,13 @@ hr.divider
   padding: .8em 0;
   opacity: .7;
 }
+.dash-wrap .page-heading
+{
+  position: relative;
+}
+.dash-wrap .page-heading .add-btn
+{
+  position: absolute;
+  top: 17px;
+  right: 0;
+}

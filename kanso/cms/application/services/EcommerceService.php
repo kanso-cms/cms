@@ -8,13 +8,16 @@
 namespace kanso\cms\application\services;
 
 use kanso\cms\ecommerce\BrainTree;
-use kanso\cms\ecommerce\Cart;
+use kanso\cms\ecommerce\Bundles;
+use kanso\cms\ecommerce\cart\Shipping;
 use kanso\cms\ecommerce\Checkout;
 use kanso\cms\ecommerce\Coupons;
 use kanso\cms\ecommerce\Ecommerce;
+use kanso\cms\ecommerce\helpers\Helpers;
 use kanso\cms\ecommerce\Products;
 use kanso\cms\ecommerce\Reviews;
 use kanso\cms\ecommerce\Rewards;
+use kanso\cms\ecommerce\ShoppingCart;
 use kanso\framework\application\services\Service;
 
 /**
@@ -29,8 +32,18 @@ class EcommerceService extends Service
 	 */
 	public function register(): void
 	{
-		$this->container->setInstance('Ecommerce', new Ecommerce($this->getBrainTree(), $this->getCheckout(), $this->getProducts(), $this->getShoppingCart(), $this->getRewards(), $this->getCoupons(), $this->getReviews()));
+		$this->container->setInstance('Ecommerce', new Ecommerce($this->getBrainTree(), $this->getCheckout(), $this->getProducts(), $this->getBundles(), $this->getShoppingCart(), $this->getRewards(), $this->getCoupons(), $this->getReviews(), $this->getHelpers()));
 	}
+
+    /**
+     * Create and return new checkout utility instance.
+     *
+     * @return \kanso\cms\ecommerce\cart\Shipping
+     */
+    private function getShipping(): Shipping
+    {
+        return new Shipping($this->container->Config->get('ecommerce.shipping'));
+    }
 
     /**
      * Create and return new checkout utility instance.
@@ -63,13 +76,23 @@ class EcommerceService extends Service
     }
 
     /**
+     * Create and return new bundles utility instance.
+     *
+     * @return \kanso\cms\ecommerce\Bundles
+     */
+    private function getBundles(): Bundles
+    {
+        return new Bundles;
+    }
+
+    /**
      * Create and return new shopping cart utility instance.
      *
-     * @return \kanso\cms\ecommerce\Cart
+     * @return \kanso\cms\ecommerce\ShoppingCart
      */
-    private function getShoppingCart(): Cart
+    private function getShoppingCart(): ShoppingCart
     {
-        return new Cart;
+        return new ShoppingCart($this->getShipping(), $this->container->Session, $this->container->Config->get('ecommerce'));
     }
 
     /**
@@ -102,5 +125,15 @@ class EcommerceService extends Service
     private function getReviews(): Reviews
     {
         return new Reviews;
+    }
+
+    /**
+     * Create and return new reviews utility instance.
+     *
+     * @return \kanso\cms\ecommerce\helpers\Helpers
+     */
+    private function getHelpers(): Helpers
+    {
+        return new Helpers($this->container, $this->container->Query);
     }
 }

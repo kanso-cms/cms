@@ -49,10 +49,11 @@ abstract class Provider
 	abstract public function byId(int $id);
 
 	/**
-	 * Deletes the row item.
+	 * Return items by key.
 	 *
-	 * @param  string $key   Column name
-	 * @param  mixed  $value Column value
+	 * @param  string $key    Column name
+	 * @param  mixed  $value  Column value
+	 * @param  bool   $single Return the first single row (optional) (default false)
 	 * @return mixed
 	 */
 	abstract public function byKey(string $key, $value, bool $single = false);

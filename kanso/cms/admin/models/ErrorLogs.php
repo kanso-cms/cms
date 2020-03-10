@@ -229,11 +229,11 @@ class ErrorLogs extends BaseModel
             $aDate = str_replace('_', '-', Str::getBeforeLastChar(Str::getBeforeLastChar($a, '_'), '_'));
             $bdate = str_replace('_', '-', Str::getBeforeLastChar(Str::getBeforeLastChar($b, '_'), '_'));
 
-            if ($sort === 'newest')
+            if ($sort === 'oldest')
             {
                 return strtotime($bdate) - strtotime($aDate);
             }
-            elseif ($sort === 'oldest')
+            elseif ($sort === 'newest')
             {
                 return strtotime($aDate) - strtotime($bdate);
             }

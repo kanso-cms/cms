@@ -19,7 +19,7 @@ use kanso\framework\utility\Markdown;
 use kanso\framework\utility\Str;
 
 /**
- * Category utility wrapper.
+ * Post wrapper.
  *
  * @author Joe J. Howard
  */
@@ -223,7 +223,7 @@ class Post extends Wrapper
 		}
 		elseif ($key === 'excerpt')
 		{
-			$this->data['excerpt'] = Str::reduce(Markdown::plainText($value), 350);
+			$this->data['excerpt'] = Str::mysqlEncode(Str::reduce(Markdown::plainText($value), 350));
 		}
 		elseif ($key === 'content')
 		{
@@ -509,7 +509,7 @@ class Post extends Wrapper
 		}
 
 		// Slug may or may not have been set manually
-		$row['slug'] = isset($row['slug']) ? $row['slug'] : false;
+		$row['slug'] = $row['slug'] ?? false;
 
 		// Create a slug based on the category, tags, slug, author
 		$row['slug'] = trim(preg_replace('/-+/', '-', $this->titleToSlug($row['title'], $row['categories'][0]->slug, $row['author']->slug, $row['created'], $row['type'], $row['slug'])), '-');

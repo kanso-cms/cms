@@ -66,71 +66,92 @@ function admin_the_title()
 			$title = 'Write | ' . the_title(intval($postId));
 		}
 	}
-	elseif ($requestName === 'posts') {
+	elseif ($requestName === 'posts')
+	{
 		$title = 'Posts | Kanso';
 	}
-	elseif ($requestName === 'pages') {
+	elseif ($requestName === 'pages')
+	{
 		$title = 'Pages | Kanso';
 	}
-	elseif ($requestName === 'tags') {
+	elseif ($requestName === 'tags')
+	{
 		$title = 'Tags | Kanso';
 	}
-	elseif ($requestName === 'comments') {
+	elseif ($requestName === 'comments')
+	{
 		$title = 'Comments | Kanso';
 	}
-	elseif ($requestName === 'commentUsers') {
+	elseif ($requestName === 'commentUsers')
+	{
 		$title = 'Commenters | Kanso';
 	}
-	elseif ($requestName === 'categories') {
+	elseif ($requestName === 'categories')
+	{
 		$title = 'Categories | Kanso';
 	}
-	elseif ($requestName === 'mediaLibrary') {
+	elseif ($requestName === 'mediaLibrary')
+	{
 		$title = 'Media Library | Kanso';
 	}
-	elseif ($requestName === 'settings' || $requestName === 'settingsAccount') {
+	elseif ($requestName === 'settings' || $requestName === 'settingsAccount')
+	{
 		$title = 'Account Settings | Kanso';
 	}
-	elseif ($requestName === 'settingsAuthor') {
+	elseif ($requestName === 'settingsAuthor')
+	{
 		$title = 'Author Settings | Kanso';
 	}
-	elseif ($requestName === 'settingsKanso') {
+	elseif ($requestName === 'settingsKanso')
+	{
 		$title = 'Kanso Settings | Kanso';
 	}
-	elseif ($requestName === 'settingsAccess') {
+	elseif ($requestName === 'settingsAccess')
+	{
 		$title = 'Access & Security Settings | Kanso';
 	}
-	elseif ($requestName === 'settingsUsers') {
+	elseif ($requestName === 'settingsUsers')
+	{
 		$title = 'Users | Kanso';
 	}
-	elseif ($requestName === 'settingsTools') {
+	elseif ($requestName === 'settingsTools')
+	{
 		$title = 'Tools | Kanso';
 	}
-	elseif ($requestName === 'errorLogs') {
+	elseif ($requestName === 'errorLogs')
+	{
 		$title = 'Error Logs | Kanso';
 	}
-	elseif ($requestName === 'emailLogs') {
+	elseif ($requestName === 'emailLogs')
+	{
 		$title = 'Email Logs | Kanso';
 	}
 
 	// Account pages
-	elseif ($requestName === 'login') {
+	elseif ($requestName === 'login')
+	{
 		$title = 'Login | Kanso';
 	}
-	elseif ($requestName === 'forgotpassword') {
+	elseif ($requestName === 'forgotpassword')
+	{
 		$title = 'Forgot Your Password | Kanso';
 	}
-	elseif ($requestName === 'forgotusername') {
+	elseif ($requestName === 'forgotusername')
+	{
 		$title = 'Forgot Your Username | Kanso';
 	}
-	elseif ($requestName === 'register') {
+	elseif ($requestName === 'register')
+	{
 		$title = 'Register | Kanso';
 	}
-	elseif ($requestName === 'resetpassword') {
+	elseif ($requestName === 'resetpassword')
+	{
 		$title = 'Reset Your Password | Kanso';
 	}
 
 	// Fallback
-	else {
+	else
+	{
 		$title = ucfirst($requestName) . ' | Kanso';
 	}
 
@@ -167,6 +188,7 @@ function admin_header_scripts()
 		'<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900">',
 		'<link rel="stylesheet" href="' . admin_assets_url() . '/css/hubble.min.css?v=' . admin_assets_version() . '">',
 		'<link rel="stylesheet" href="' . admin_assets_url() . '/css/theme.min.css?v=' . admin_assets_version() . '">',
+		'<link rel="stylesheet" href="' . admin_assets_url() . '/css/ecommerce.min.css?v=' . admin_assets_version() . '">',
 		'<link rel="stylesheet" href="' . admin_assets_url() . '/css/vendor/dropzone.min.css?v=' . admin_assets_version() . '">',
 	];
 
@@ -243,47 +265,56 @@ function admin_footer_scripts()
  */
 function admin_sirebar_links()
 {
-	$links = [
-		'visit' => [
+	$links =
+	[
+		'visit' =>
+		[
 			'link'     => '/" target="blank',
 			'text'     => 'Visit Site',
 			'icon'     => 'globe',
 			'children' => [],
 		],
-		'writer' => [
+		'writer' =>
+		[
 			'link'     => '/admin/writer/',
 			'text'     => 'Writer',
 			'icon'     => 'font',
 			'children' => [],
 		],
-		'content' => [
+		'content' =>
+		[
 			'link'     => '/admin/posts/',
 			'text'     => 'Content',
 			'icon'     => 'align-left',
 			'children' =>
 			[
-				'posts' => [
+				'posts' =>
+				[
 					'link'     => '/admin/posts/',
 					'text'     => 'Posts',
 					'icon'     => 'align-left',
 				],
-				'pages' => [
+				'pages' =>
+				[
 					'link'     => '/admin/pages/',
 					'text'     => 'Pages',
 					'icon'     => 'file',
 				],
-				'tags' => [
+				'tags' =>
+				[
 					'link'     => '/admin/tags/',
 					'text'     => 'Tags',
 					'icon'     => 'tags',
 				],
-				'categories' => [
+				'categories' =>
+				[
 					'link'     => '/admin/categories/',
 					'text'     => 'Categories',
 					'icon'     => 'bookmark',
 					'children' => [],
 				],
-				'mediaLibrary' => [
+				'mediaLibrary' =>
+				[
 					'link'     => '/admin/media/',
 					'text'     => 'Media',
 					'icon'     => 'camera',
@@ -291,39 +322,47 @@ function admin_sirebar_links()
 				],
 			],
 		],
-		'settings' => [
+		'settings' =>
+		[
 			'link'     => '/admin/settings/',
 			'text'     => 'Settings',
 			'icon'     => 'cog',
 			'children' => [
-				'settingsAccount' => [
+				'settingsAccount' =>
+				[
 					'link'     => '/admin/settings/account/',
 					'text'     => 'Account',
 					'icon'     => 'user-circle-o',
 				],
-				'settingsAuthor' => [
+				'settingsAuthor' =>
+				[
 					'link'     => '/admin/settings/author/',
 					'text'     => 'Author',
 					'icon'     => 'address-card',
 				],
 			],
 		],
-		'crm' => [
+		'crm' =>
+		[
 			'link'     => '/admin/leads/',
 			'text'     => 'CRM',
 			'icon'     => 'users',
-			'children' => [
-				'leads' => [
+			'children' =>
+			[
+				'leads' =>
+				[
 					'link'     => '/admin/leads/',
 					'text'     => 'Leads',
 					'icon'     => 'users',
 				],
-				'comments' => [
+				'comments' =>
+				[
 					'link'     => '/admin/comments/',
 					'text'     => 'Comments',
 					'icon'     => 'comments',
 				],
-				'commentUsers' => [
+				'commentUsers' =>
+				[
 					'link'     => '/admin/comment-users/',
 					'text'     => 'Commenters',
 					'icon'     => 'user-secret',
@@ -334,43 +373,51 @@ function admin_sirebar_links()
 
 	if (Kanso::instance()->Gatekeeper->getUser()->role === 'administrator')
 	{
-		$links['settings']['children']['settingsKanso'] = [
+		$links['settings']['children']['settingsKanso'] =
+		[
 			'link'     => '/admin/settings/kanso/',
 			'text'     => 'Kanso',
 			'icon'     => 'columns',
 		];
-		$links['settings']['children']['settingsAccess'] = [
+		$links['settings']['children']['settingsAccess'] =
+		[
 			'link'     => '/admin/settings/access/',
 			'text'     => 'Access & Security',
 			'icon'     => 'shield',
 		];
-		$links['settings']['children']['settingsUsers'] = [
+		$links['settings']['children']['settingsUsers'] =
+		[
 			'link'     => '/admin/settings/users/',
 			'text'     => 'Users',
 			'icon'     => 'users',
 		];
-		$links['settings']['children']['settingsAnalytics'] = [
+		$links['settings']['children']['settingsAnalytics'] =
+		[
 			'link'     => '/admin/settings/analytics/',
 			'text'     => 'Analytics',
 			'icon'     => 'bar-chart',
 		];
-		$links['settings']['children']['settingsTools'] = [
+		$links['settings']['children']['settingsTools'] =
+		[
 			'link'     => '/admin/settings/tools/',
 			'text'     => 'Tools',
 			'icon'     => 'wrench',
 		];
-		$links['logs'] = [
+		$links['logs'] =
+		[
 			'link'     => '/admin/logs/error-logs/',
 			'text'     => 'Logs',
 			'icon'     => 'terminal',
 			'children' =>
 			[
-				'errorLogs' => [
+				'errorLogs' =>
+				[
 					'link'     => '/admin/logs/error-logs/',
 					'text'     => 'Error Logs',
 					'icon'     => 'bug',
 				],
-				'emailLogs' => [
+				'emailLogs' =>
+				[
 					'link'     => '/admin/logs/email-logs/',
 					'text'     => 'Email Logs',
 					'icon'     => 'envelope',
@@ -383,7 +430,8 @@ function admin_sirebar_links()
 	$links = Kanso::instance()->Filters->apply('adminSidebar', $links);
 
 	// Logout should always be at the bottom
-	$links['logout'] = [
+	$links['logout'] =
+	[
 		'link'     => '/admin/logout/',
 		'text'     => 'Logout',
 		'icon'     => 'sign-out',
@@ -465,4 +513,15 @@ function admin_writer_categories(int $postId): string
 	}
 
 	return implode(', ', array_unique(array_merge($parents, $children)));
+}
+
+/**
+ * Formats a price to 2 decimals.
+ *
+ * @param  mixed  $price
+ * @return string
+ */
+function admin_format_price($price): string
+{
+	return number_format(floatval($price), 2, '.', '');
 }

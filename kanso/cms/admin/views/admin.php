@@ -104,6 +104,10 @@ elseif ($ADMIN_PAGE_TYPE === 'customPage')
 {
 	require_once('dash-custom-page.php');
 }
+elseif ($ADMIN_PAGE_TYPE === 'addBundle')
+{
+	require_once('dash-bundle.php');
+}
 
 // Include the sidebar
 if (admin_is_dash())

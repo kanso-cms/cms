@@ -49,6 +49,8 @@ class CacheService extends Service
 		{
 			return $this->fileStore($cacheConfiguration['path']);
 		}
+
+		return false;
 	}
 
 	/**
