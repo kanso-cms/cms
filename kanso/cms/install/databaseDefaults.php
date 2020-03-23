@@ -405,14 +405,14 @@ $KANSO_DEFAULT_ARTICLES =
 			'offers' =>
 			[
 				[
-					'offer_id'   => 'SKU3424',
+					'sku'   => 'SKU3424',
 					'name'       => 'XXS',
 					'price'      => 19.95,
 					'sale_price' => 9.95,
 					'instock'    => true,
 				],
 				[
-					'offer_id'   => 'SKU3436',
+					'sku'   => 'SKU3436',
 					'name'       => 'XXL',
 					'price'      => 19.95,
 					'sale_price' => 9.95,

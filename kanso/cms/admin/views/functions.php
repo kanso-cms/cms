@@ -9,7 +9,7 @@ use kanso\Kanso;
  */
 function admin_assets_version()
 {
-	return Kanso::VERSION;
+	return time();
 }
 
 /*

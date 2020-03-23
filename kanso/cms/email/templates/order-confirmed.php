@@ -320,7 +320,7 @@
                                                                     <table border="0" align="center" cellpadding="0" cellspacing="0">
                                                                         <tr>
                                                                             <td align="center" style="line-height: 0px;">
-                                                                                <img style="display:block; line-height:0px; font-size:0px; border:0px;" width="180" height="180" src="<?php echo $kanso->Query->the_post_thumbnail_src($item->options['product_id'], 'small'); ?>" alt="<?php echo $item->name; ?>">
+                                                                                <img style="display:block; line-height:0px; font-size:0px; border:0px;" width="180" height="180" src="<?php echo $kanso->Query->the_post_thumbnail_src($item->product_id, 'small'); ?>" alt="<?php echo $item->name; ?>">
                                                                             </td>
                                                                         </tr>
                                                                         <tr>
@@ -346,7 +346,7 @@
                                                                             <td height="5"></td>
                                                                         </tr>
                                                                         <tr>
-                                                                            <td style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#7f8c8d; font-size:14px; line-height: 20px;"><?php echo $item->quantity; ?>x - <?php echo $item->options['variant']; ?></td>
+                                                                            <td style="font-family:Helvetica Neue,Helvetica,Arial,sans-serif; color:#7f8c8d; font-size:14px; line-height: 20px;"><?php echo $item->quantity; ?>x - <?php echo $item->variant; ?></td>
                                                                         </tr>
                                                                         <tr>
                                                                             <td height="20"></td>
@@ -594,7 +594,7 @@
                                             <tbody>
                                                 <?php foreach($cart->items() as $item) : ?>
                                                 <tr>
-                                                    <th style="margin: 0;padding: 12px 0px;font-style: normal;font-weight: 400;text-align: left;border-bottom: 1px solid #e9e9e9;"><span style="font-weight: 600;"><?php echo $item->quantity; ?>x</span> - <?php echo $item->name . ' - ' . $item->options['variant']; ?></th>
+                                                    <th style="margin: 0;padding: 12px 0px;font-style: normal;font-weight: 400;text-align: left;border-bottom: 1px solid #e9e9e9;"><span style="font-weight: 600;"><?php echo $item->quantity; ?>x</span> - <?php echo $item->name . ' - ' . $item->variant; ?></th>
                                                     <td style="margin: 0;padding: 12px 0px;text-align: left;border-bottom: 1px solid #e9e9e9;"><span style="display: block;text-align: right;">$<?php echo number_format($item->price, 2, '.', ''); ?></span></td>
                                                 </tr>
                                                 <?php endforeach; ?>

@@ -292,7 +292,6 @@ class Meta extends Helper
             $slug       = '';
             $base       = !empty($this->parent->blog_location()) && ($this->parent->is_tag() || $this->parent->is_category() || $this->parent->is_author() || $this->parent->is_home() || $this->parent->is_blog_location()) ? $this->parent->blog_location() . '/' : '';
 
-
             if ($this->parent->is_home())
             {
                 if (!empty($this->parent->blog_location()))

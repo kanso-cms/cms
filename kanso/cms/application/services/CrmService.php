@@ -24,7 +24,7 @@ class CrmService extends Service
 	{
 		$this->container->singleton('Crm', function($container)
 		{
-			return new Crm($container->Request, $container->Response, $container->Gatekeeper, $container->LeadProvider, $container->Database->connection()->builder(), $container->UserAgent->isCrawler(), $container->Query->is_admin());
+			return new Crm($container->Request, $container->Response, $container->Gatekeeper, $container->LeadProvider, $container->Database->connection()->builder(), $container->Application->isCommandLine(), $container->UserAgent->isCrawler(), $container->Query->is_admin());
 		});
 	}
 }

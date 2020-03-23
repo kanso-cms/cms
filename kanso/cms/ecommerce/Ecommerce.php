@@ -32,20 +32,6 @@ class Ecommerce extends Model
     private $checkout;
 
     /**
-     * Products utility instance.
-     *
-     * @var \kanso\cms\ecommerce\Products
-     */
-    private $products;
-
-    /**
-     * Bundles utility instance.
-     *
-     * @var \kanso\cms\ecommerce\Bundles
-     */
-    private $bundles;
-
-    /**
      * Cart utility instance.
      *
      * @var \kanso\cms\ecommerce\ShoppingCart
@@ -85,23 +71,17 @@ class Ecommerce extends Model
      *
      * @param \kanso\cms\ecommerce\BrainTree       $braintree BrainTree utility
      * @param \kanso\cms\ecommerce\Checkout        $checkout  Checkout utility
-     * @param \kanso\cms\ecommerce\Products        $products  Products utility
-     * @param \kanso\cms\ecommerce\Bundles         $bundles   Bundles utility
      * @param \kanso\cms\ecommerce\ShoppingCart    $cart      Shopping cart utility
      * @param \kanso\cms\ecommerce\Rewards         $rewards   Rewards utility
      * @param \kanso\cms\ecommerce\Coupons         $coupons   Coupons utility
      * @param \kanso\cms\ecommerce\Reviews         $reviews   Reviews utility
      * @param \kanso\cms\ecommerce\helpers\Helpers $helpers   View include helper methods
      */
-    public function __construct(BrainTree $braintree, Checkout $checkout, Products $products, Bundles $bundles, ShoppingCart $cart, Rewards $rewards, Coupons $coupons, Reviews $reviews, Helpers $helpers)
+    public function __construct(BrainTree $braintree, Checkout $checkout, ShoppingCart $cart, Rewards $rewards, Coupons $coupons, Reviews $reviews, Helpers $helpers)
     {
         $this->braintree = $braintree;
 
         $this->checkout = $checkout;
-
-        $this->products = $products;
-
-        $this->bundles = $bundles;
 
         $this->cart = $cart;
 
@@ -120,6 +100,8 @@ class Ecommerce extends Model
         $this->customizeAdminPanel();
 
         $this->registerViewIncludes();
+
+        $this->customizeQuery();
     }
 
     /**
@@ -140,26 +122,6 @@ class Ecommerce extends Model
     public function checkout(): Checkout
     {
         return $this->checkout;
-    }
-
-    /**
-     * Returns products instance.
-     *
-     * @return \kanso\cms\ecommerce\Products
-     */
-    public function products(): Products
-    {
-        return $this->products;
-    }
-
-    /**
-     * Returns bundles instance.
-     *
-     * @return \kanso\cms\ecommerce\Bundles
-     */
-    public function bundles(): Bundles
-    {
-        return $this->bundles;
     }
 
     /**
@@ -227,6 +189,13 @@ class Ecommerce extends Model
         $this->Router->get('/products/feed/', '\kanso\cms\query\controllers\Rss@load', '\kanso\cms\query\models\Products');
         $this->Router->get('/products/', '\kanso\cms\query\controllers\Content@apply', '\kanso\cms\query\models\Products');
 
+        // Nested product categories
+        $this->Router->get('/products/(:all)/feed/rss/', '\kanso\cms\query\controllers\Rss@load', '\kanso\cms\query\models\Products');
+        $this->Router->get('/products/(:all)/feed/atom/', '\kanso\cms\query\controllers\Rss@load', '\kanso\cms\query\models\Products');
+        $this->Router->get('/products/(:all)/feed/rdf/', '\kanso\cms\query\controllers\Rss@load', '\kanso\cms\query\models\Products');
+        $this->Router->get('/products/(:all)/feed/', '\kanso\cms\query\controllers\Rss@load', '\kanso\cms\query\models\Products');
+        $this->Router->get('/products/(:all)/', '\kanso\cms\query\controllers\Content@apply', '\kanso\cms\query\models\Products');
+
         // Bundles page
         $this->Router->get('/bundles/feed/rss/', '\kanso\cms\query\controllers\Rss@load', '\kanso\cms\query\models\Bundles');
         $this->Router->get('/bundles/feed/atom/', '\kanso\cms\query\controllers\Rss@load', '\kanso\cms\query\models\Bundles');
@@ -267,5 +236,13 @@ class Ecommerce extends Model
         $this->Admin->addPage('Coupons', 'coupons', 'ticket', '\kanso\cms\admin\models\ecommerce\Coupons', KANSO_DIR . '/cms/admin/views/dash-ecommerce-coupons.php', 'e-commerce', true);
 
         $this->Admin->addPage('Configuration', 'configuration', 'cog', '\kanso\cms\admin\models\ecommerce\Config', KANSO_DIR . '/cms/admin/views/dash-ecommerce-config.php', 'e-commerce', true);
+    }
+
+    /**
+     * Add helper methods to query.
+     */
+    private function customizeQuery(): void
+    {
+        $this->Query->addHelper('ecommerce', $this->helpers);
     }
 }

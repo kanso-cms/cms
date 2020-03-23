@@ -5,10 +5,10 @@
 	<?php if ($isBunldeBogo) : foreach ($post_meta['bundle_configuration']['products_in'] as $entry) : ?>
 	<?php
 	    $product = $kanso->PostManager->byId($entry['product_id']);
-	    $offer   = $kanso->Ecommerce->products()->offer($entry['product_id'], $entry['offer_id']);
-	    if (!$offer || !$product) continue;
+	    $sku   = $kanso->ProductProvider->sku($entry['product_id'], $entry['sku']);
+	    if (!$sku || !$product) continue;
 	?>
-	<tr class="js-product-entry" data-quantity="<?php echo $entry['quantity']; ?>" data-product-id="<?php echo $entry['product_id']; ?>" data-offer-id="<?php echo $entry['offer_id']; ?>" data-product-title="<?php echo $product->title; ?>" data-product-offer="<?php echo $offer['name']; ?>" data-product-price="<?php echo admin_format_price($offer['price']); ?>" data-product-sale-price="<?php echo admin_format_price($offer['sale_price']); ?>">
+	<tr class="js-product-entry" data-quantity="<?php echo $entry['quantity']; ?>" data-product-id="<?php echo $entry['product_id']; ?>" data-sku="<?php echo $entry['sku']; ?>" data-product-title="<?php echo $product->title; ?>" data-product-offer="<?php echo $sku['name']; ?>" data-product-price="<?php echo admin_format_price($sku['price']); ?>" data-product-sale-price="<?php echo admin_format_price($sku['sale_price']); ?>">
 	    <th>
 	        <span class="form-field">
 	            <select name="bundle_product_bogo_in_quantities[]" class="js-product-qnty-select">
@@ -21,15 +21,15 @@
 	    <th>
 	        <img width="100" height="100" src="<?php echo the_post_thumbnail_src($product->id); ?>" alt="Product image">
 	    </th>
-	    <td><strong><?php echo $product->title; ?></strong> - <?php echo $offer['name']; ?></td>
-	    <td><span class="color-gray"><del>$<span class="js-reg-price"><?php echo admin_format_price($offer['price']); ?></span></del></span></td>
-	    <td>$<span class="js-sale-price"><?php echo admin_format_price($offer['sale_price']); ?></span></td>
+	    <td><strong><?php echo $product->title; ?></strong> - <?php echo $sku['name']; ?></td>
+	    <td><span class="color-gray"><del>$<span class="js-reg-price"><?php echo admin_format_price($sku['price']); ?></span></del></span></td>
+	    <td>$<span class="js-sale-price"><?php echo admin_format_price($sku['sale_price']); ?></span></td>
 	    <td>
 	        <button type="button" class="btn btn-outline btn-xs js-remove-product-row">
 	            <span class="glyph-icon glyph-icon-minus"></span>
 	        </button>
 	        <input type="hidden" class="hidden" name="bundle_product_bogo_in_ids[]" value="<?php echo $entry['product_id']; ?>">
-	        <input type="hidden" class="hidden" name="bundle_product_offer_bogo_in_ids[]" value="<?php echo $entry['offer_id']; ?>">
+	        <input type="hidden" class="hidden" name="bundle_product_offer_bogo_in_ids[]" value="<?php echo $entry['sku']; ?>">
 	    </td>
 	</tr>
 	<?php endforeach; ?>
@@ -52,10 +52,10 @@
 	<?php if ($isBunldeBogo) : $total = 0; foreach ($post_meta['bundle_configuration']['products_out'] as $entry) : ?>
 	<?php
 	    $product = $kanso->PostManager->byId($entry['product_id']);
-	    $offer   = $kanso->Ecommerce->products()->offer($entry['product_id'], $entry['offer_id']);
-	    if (!$offer || !$product) continue;
+	    $sku   = $kanso->ProductProvider->sku($entry['product_id'], $entry['sku']);
+	    if (!$sku || !$product) continue;
 	?>
-	<tr class="js-product-entry" data-quantity="<?php echo $entry['quantity']; ?>" data-product-id="<?php echo $entry['product_id']; ?>" data-offer-id="<?php echo $entry['offer_id']; ?>" data-product-title="<?php echo $product->title; ?>" data-product-offer="<?php echo $offer['name']; ?>" data-product-price="<?php echo admin_format_price($offer['price']); ?>" data-product-sale-price="<?php echo admin_format_price($offer['sale_price']); ?>">
+	<tr class="js-product-entry" data-quantity="<?php echo $entry['quantity']; ?>" data-product-id="<?php echo $entry['product_id']; ?>" data-sku="<?php echo $entry['sku']; ?>" data-product-title="<?php echo $product->title; ?>" data-product-offer="<?php echo $sku['name']; ?>" data-product-price="<?php echo admin_format_price($sku['price']); ?>" data-product-sale-price="<?php echo admin_format_price($sku['sale_price']); ?>">
 	    <th>
 	        <span class="form-field">
 	            <select name="bundle_product_bogo_out_quantities[]" class="js-product-qnty-select">
@@ -68,15 +68,15 @@
 	    <th>
 	        <img width="100" height="100" src="<?php echo the_post_thumbnail_src($product->id); ?>" alt="Product image">
 	    </th>
-	    <td><strong><?php echo $product->title; ?></strong> - <?php echo $offer['name']; ?></td>
-	    <td><span class="color-gray"><del>$<span class="js-reg-price"><?php echo admin_format_price($offer['price']); ?></span></del></span></td>
-	    <td>$<span class="js-sale-price"><?php echo admin_format_price($offer['sale_price']); ?></span></td>
+	    <td><strong><?php echo $product->title; ?></strong> - <?php echo $sku['name']; ?></td>
+	    <td><span class="color-gray"><del>$<span class="js-reg-price"><?php echo admin_format_price($sku['price']); ?></span></del></span></td>
+	    <td>$<span class="js-sale-price"><?php echo admin_format_price($sku['sale_price']); ?></span></td>
 	    <td>
 	        <button type="button" class="btn btn-outline btn-xs js-remove-product-row">
 	            <span class="glyph-icon glyph-icon-minus"></span>
 	        </button>
 	        <input type="hidden" class="hidden" name="bundle_product_bogo_out_ids[]" value="<?php echo $entry['product_id']; ?>">
-	        <input type="hidden" class="hidden" name="bundle_product_offer_bogo_out_ids[]" value="<?php echo $entry['offer_id']; ?>">
+	        <input type="hidden" class="hidden" name="bundle_product_offer_bogo_out_ids[]" value="<?php echo $entry['sku']; ?>">
 	    </td>
 	</tr>
 	<?php endforeach; ?>

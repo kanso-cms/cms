@@ -24,6 +24,8 @@ class ForbiddenException extends RequestException
 	 */
 	public function __construct(string $message = null, Throwable $previous = null)
 	{
+		$message = !$message ? 'You are not authorized to access the requested resource.' : $message;
+
 		parent::__construct(403, $message, $previous);
 	}
 }

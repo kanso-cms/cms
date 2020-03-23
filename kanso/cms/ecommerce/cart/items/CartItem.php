@@ -18,12 +18,16 @@ class CartItem extends Item implements \ArrayAccess
 {
     protected $defaults =
     [
+        'name'          => '',
+        'variant'       => '',
+        'product_id'    => 0,
+        'sku'           => '',
         'quantity'      => 1,
         'price'         => 0.00,
         'tax'           => 0.00,
-        'options'       => [],
         'free_shipping' => false,
         'weight'        => 0,
+        'options'       => [],
     ];
 
     /**

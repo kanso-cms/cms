@@ -90,6 +90,8 @@ class Scripts extends Helper
 
         $html .= implode("\n", $this->parent->headerScripts);
 
+        $html .= PHP_EOL . '<script type="application/ld+json">' . PHP_EOL . json_encode($this->container->Schema->graph(), JSON_PRETTY_PRINT) . PHP_EOL . '</script>';
+
         return trim($html);
     }
 

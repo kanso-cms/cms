@@ -264,33 +264,6 @@ class Crm
     }
 
     /**
-     * Find the current bot visitor.
-     *
-     * @return \kanso\cms\wrappers\Visitor
-     */
-    private function findCrawler(): Visitor
-    {
-        $this->visitor = $this->leadProvider()->byKey('user_agent', $this->request->environment()->HTTP_USER_AGENT);
-
-        // If we couldn't find the bot by user_agent,
-        // try to find them by IP
-        if (!$this->visitor)
-        {
-            $this->visitor = $this->leadProvider()->byKey('ip_address', $this->request->environment()->REMOTE_ADDR);
-        }
-
-        // Fallback to new visitor
-        if (!$this->visitor)
-        {
-            $this->visitor = $this->leadProvider()->create($this->newVisitorRow());
-        }
-
-        $this->response->cookie()->put($this->cookieKey, $this->visitor->visitor_id);
-
-        return $this->visitor;
-    }
-
-    /**
      * Returns the base array for a new visitor.
      *
      * @return array

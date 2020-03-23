@@ -85,14 +85,16 @@ trait CartItemTrait
         switch ($key)
         {
             case 'quantity':
+            case 'product_id':
                 $this->setCheckTypeInteger($key, $value);
             break;
+
             case 'price':
             case 'tax':
             case 'amount':
                 $this->setCheckIsNumeric($key, $value);
 
-                $value = (float) $value;
+                $value = floatval($value);
         }
 
         $this->data[$key] = $value;

@@ -140,71 +140,40 @@ class WebHandler
 	 */
 	protected function getGenericError(bool $returnAsJson, bool $isBot): string
 	{
-		$code = $this->exception->getCode();
+		$code        = $this->exception->getCode();
+		$message     = $this->response->status()->message($code);
+		$description = $this->response->status()->description($code);
 
 		if ($isBot)
 		{
-			switch($code)
-			{
-				case 403:
-					$message = 'You don\'t have permission to access the requested resource.';
-					break;
-				case 404:
-					$message = 'The resource you requested could not be found. It may have been moved or deleted.';
-					break;
-				case 405:
-					$message = 'The request method that was used is not supported by this resource.';
-					break;
-				default:
-					$message = 'An error has occurred while processing your request.';
-			}
-
-			return $message;
+			return $description;
 		}
 		elseif ($returnAsJson)
 		{
-			switch($code)
-			{
-				case 403:
-					$message = 'You don\'t have permission to access the requested resource.';
-					break;
-				case 404:
-					$message = 'The resource you requested could not be found. It may have been moved or deleted.';
-					break;
-				case 405:
-					$message = 'The request method that was used is not supported by this resource.';
-					break;
-				default:
-					$message = 'An error has occurred while processing your request.';
-			}
-
 			return json_encode(['message' => $message]);
 		}
 		else
 		{
-			$dir = dirname(__FILE__) . '/views';
+			$data =
+			[
+				'code'        => $code,
+				'message'     => $message,
+				'description' => $description,
+			];
 
-			$view = $dir . '/500.php';
+			$view = dirname(__FILE__) . '/views/generic.php';
 
-			if($this->exception instanceof RequestException)
-			{
-				if (file_exists($dir . '/' . $code . '.php'))
-				{
-					$view = $dir . '/' . $code . '.php';
-				}
-			}
-
-			return $this->view->display($view);
+			return $this->view->display($view, $data);
 		}
 	}
 
 	/**
 	 * Display an error page to end user.
 	 *
-	 * @param  bool  $showDetails Should we show a detailed error page
+	 * @param  bool  $debug Is debugging enabled
 	 * @return false
 	 */
-	public function handle(bool $showDetails = true): bool
+	public function handle(bool $debug = true): bool
 	{
 		// Set appropriate content type header
 		if (($returnAsJson = $this->returnAsJson()) === true)
@@ -217,7 +186,7 @@ class WebHandler
 		}
 
 		// Set the response body
-		if ($showDetails)
+		if ($debug)
 		{
 			$this->response->body()->set($this->getDetailedError($returnAsJson, $this->request->isBot()));
 		}

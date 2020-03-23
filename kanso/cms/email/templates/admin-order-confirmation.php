@@ -8,7 +8,7 @@ $content .= 'Email     : ' . $shipping['email'] . PHP_EOL;
 $content .= 'Items     : ' . PHP_EOL;
 foreach($cart->items() as $item)
 {
-    $content .= '    - ' . $item->name . ' - ' . $item->options['variant'] . ' - x ' . $item->quantity . PHP_EOL;
+    $content .= '    - ' . $item->name . ' - ' . $item->variant . ' - x ' . $item->quantity . PHP_EOL;
 }
 $content .= PHP_EOL . 'Shipping Details : ' . PHP_EOL;
 $content .= $shipping['first_name'] . ' ' . $shipping['last_name'] . PHP_EOL;

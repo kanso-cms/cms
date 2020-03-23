@@ -9,6 +9,7 @@ namespace kanso\cms\ecommerce;
 
 use Braintree\Exception\NotFound;
 use Braintree\Gateway;
+use Exception;
 
 /**
  * Coupon manager utility class.
@@ -32,6 +33,13 @@ class BrainTree extends UtilityBase
     private $gateway;
 
     /**
+     * Braintree customer object.
+     *
+     * @var \Braintree\Customer|null
+     */
+    private $btCustomer;
+
+    /**
      * Constructor.
      *
      * @param \Braintree\Gateway|null $gateway Braintree gateway instance (optional) (default null)
@@ -50,9 +58,9 @@ class BrainTree extends UtilityBase
     {
         $this->configure();
 
-        if ($this->Gatekeeper->isLoggedIn())
+        if ($this->Gatekeeper->isLoggedIn() && $this->btCustomer)
         {
-            return $this->gateway->clientToken()->generate(['customerId' => $this->Gatekeeper->getUser()->id]);
+            return $this->gateway->clientToken()->generate(['customerId' => $this->btCustomer->id]);
         }
 
         return $this->gateway->clientToken()->generate();
@@ -244,9 +252,33 @@ class BrainTree extends UtilityBase
                     'publicKey'   => $btConfig['public_key'],
                     'privateKey'  => $btConfig['private_key'],
                 ]);
+
+                $this->getBtCustomer();
             }
 
             $this->btConfigured = true;
         }
+    }
+
+    /**
+     * Find braintree customer.
+     *
+     * @return \Braintree\Result\Error|\Braintree\Result\Successful|null
+     */
+    private function getBtCustomer()
+    {
+        if ($this->Gatekeeper->isLoggedIn())
+        {
+            try
+            {
+                $this->btCustomer = $this->gateway->customer()->find($this->Gatekeeper->getUser()->id);
+            }
+            catch(Exception $e)
+            {
+                $this->btCustomer = null;
+            }
+        }
+
+        return $this->btCustomer;
     }
 }

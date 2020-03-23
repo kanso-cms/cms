@@ -70,6 +70,7 @@ class Bundle extends Model
         ];
 
         $count = count(json_decode($data['bundle_combo_names'], true)) + 1;
+
         for ($i = 1; $i < $count; $i++)
         {
         	$rules['bundle_product_combo_' . $i . '_ids']        = ['required', 'json'];
@@ -110,24 +111,24 @@ class Bundle extends Model
         	$selection  = [];
         	$productIds = $data['bundle_product_combo_' . $x . '_ids'];
         	$quantities = $data['bundle_product_combo_' . $x . '_quantities'];
-        	$offers     = $data['bundle_product_offer_combo_' . $x . '_ids'];
+        	$skus       = $data['bundle_product_offer_combo_' . $x . '_ids'];
 
         	foreach ($productIds as $i => $productId)
         	{
         		$productId = intval($productIds[$i]);
         		$quantity  = intval($quantities[$i]);
-        		$offerId   = $offers[$i];
-        		$offer     = $this->Ecommerce->products()->offer($productId, $offerId);
+        		$skuId   = $skus[$i];
+        		$sku     = $this->ProductProvider->sku($productId, $skuId);
 
-	        	if (!$offer)
+	        	if (!$sku)
 	    		{
-	    			throw new Exception('Error parsing bundle configuration. Could not find a product with id "' . $productId . '" and offer id "' . $offerId . '".');
+	    			throw new Exception('Error parsing bundle configuration. Could not find a product with id "' . $productId . '" and offer id "' . $skuId . '".');
 	    		}
 
         		$selection[] =
         		[
         			'product_id' => $productId,
-	            	'offer_id'   => $offerId,
+	            	'sku'        => $skuId,
 	            	'quantity'   => $quantity,
         		];
         	}
@@ -189,18 +190,18 @@ class Bundle extends Model
         {
         	$productId = intval($id);
         	$quantity  = intval($data['bundle_product_bogo_in_quantities'][$index]);
-        	$offerId   = $data['bundle_product_offer_bogo_in_ids'][$index];
-        	$offer     = $this->Ecommerce->products()->offer($productId, $offerId);
+        	$skuId   = $data['bundle_product_offer_bogo_in_ids'][$index];
+        	$sku     = $this->ProductProvider->sku($productId, $skuId);
 
-        	if (!$offer)
+        	if (!$sku)
     		{
-    			throw new Exception('Error parsing bundle configuration. Could not find a product with id "' . $productId . '" and offer id "' . $offerId . '".');
+    			throw new Exception('Error parsing bundle configuration. Could not find a product with id "' . $productId . '" and offer id "' . $skuId . '".');
     		}
 
     		$response['products_in'][] =
     		[
     			'product_id' => $productId,
-	            'offer_id'   => $offerId,
+	            'sku'   => $skuId,
 	            'quantity'   => $quantity,
     		];
     	}
@@ -209,18 +210,18 @@ class Bundle extends Model
         {
         	$productId = intval($id);
         	$quantity  = intval($data['bundle_product_bogo_out_quantities'][$index]);
-        	$offerId   = $data['bundle_product_offer_bogo_out_ids'][$index];
-        	$offer     = $this->Ecommerce->products()->offer($productId, $offerId);
+        	$skuId   = $data['bundle_product_offer_bogo_out_ids'][$index];
+        	$sku     = $this->ProductProvider->sku($productId, $skuId);
 
-        	if (!$offer)
+        	if (!$sku)
     		{
-    			throw new Exception('Error parsing bundle configuration. Could not find a product with id "' . $productId . '" and offer id "' . $offerId . '".');
+    			throw new Exception('Error parsing bundle configuration. Could not find a product with id "' . $productId . '" and offer id "' . $skuId . '".');
     		}
 
     		$response['products_out'][] =
     		[
     			'product_id' => $productId,
-	            'offer_id'   => $offerId,
+	            'sku'   => $skuId,
 	            'quantity'   => $quantity,
     		];
     	}
@@ -284,20 +285,20 @@ class Bundle extends Model
         {
         	$productId = intval($id);
         	$quantity  = intval($data['bundle_product_quantities'][$index]);
-        	$offerId   = $data['bundle_product_offer_ids'][$index];
-        	$offer     = $this->Ecommerce->products()->offer($productId, $offerId);
+        	$skuId     = $data['bundle_product_offer_ids'][$index];
+        	$sku       = $this->ProductProvider->sku($productId, $skuId);
 
-        	if (!$offer)
+        	if (!$sku)
     		{
-    			throw new Exception('Error parsing bundle configuration. Could not find a product with id "' . $productId . '" and offer id "' . $offerId . '".');
+    			throw new Exception('Error parsing bundle configuration. Could not find a product with id "' . $productId . '" and offer id "' . $skuId . '".');
     		}
 
-    		$price  = $price + ($quantity * $offer['sale_price']);
+    		$price  = $price + ($quantity * $sku['sale_price']);
 
         	$response['products'][] =
         	[
 	        	'product_id' => $productId,
-	            'offer_id'   => $offerId,
+	            'sku'        => $skuId,
 	            'quantity'   => $quantity,
 	        ];
         }

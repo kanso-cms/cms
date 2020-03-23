@@ -45,8 +45,43 @@ class Products extends FilterBase implements FilterInterface
             }
         }
 
-        $this->Query->requestType  = $this->requestType();
-        $this->Query->queryStr     = 'post_status = published : post_type = product : orderBy = post_created, DESC';
+        $lastSlug = end($urlParts); reset($urlParts);
+
+        if ($lastSlug === 'products')
+        {
+            $this->Query->requestType  = $this->requestType();
+            $this->Query->queryStr     = 'post_status = published : post_type = product : orderBy = post_created, DESC';
+            $this->Query->posts        = $this->parseQueryStr($this->Query->queryStr);
+            $this->Query->postCount    = count($this->Query->posts);
+
+            return true;
+        }
+
+        // remove 'products'
+        array_shift($urlParts);
+
+        $parentId = false;
+
+        foreach ($urlParts as $slug)
+        {
+            $category = $this->CategoryManager->bySlug($slug);
+
+            if (!$category)
+            {
+                return false;
+            }
+
+            if ($parentId && $category->parent_id !== $parentId)
+            {
+                return false;
+            }
+
+            $parentId = $category->id;
+        }
+
+        $this->Query->requestType  = 'category';
+        $this->Query->taxonomySlug = array_pop($urlParts);
+        $this->Query->queryStr     = 'post_status = published : post_type = product : category_slug = ' . $this->Query->taxonomySlug . ' : orderBy = post_created, DESC';
         $this->Query->posts        = $this->parseQueryStr($this->Query->queryStr);
         $this->Query->postCount    = count($this->Query->posts);
 

@@ -7,7 +7,9 @@
 
 namespace kanso\cms\analytics;
 
+use kanso\cms\ecommerce\ShoppingCart;
 use kanso\framework\mvc\model\Model;
+use kanso\framework\utility\Money;
 
 /**
  * Google/Facebook Analytics Utility.
@@ -144,26 +146,21 @@ class Analytics extends Model
     {
         $this->Query->rewind_posts();
 
-        $postId = $this->Query->the_post_id();
+        $post = $this->Query->the_post();
 
-        $offer = $this->Ecommerce->products()->offers($postId)[0];
-
-        return $this->cleanWhiteSpace("
-        <script type=\"text/javascript\">
-            gtag('event', 'view_item',
-            {
-                'event_label'  : '" . $this->Query->the_title() . "',
-                'items'        : [{
-                    'id'       : '" . $postId . "',
-                    'name'     : '" . $this->Query->the_title() . "',
-                    'brand'    : '" . $this->Config->get('cms.site_title') . "',
-                    'category' : 'Products > " . $this->Query->the_categories_list($postId, ' > ') . "',
-                    'price'    : '" . $offer['sale_price'] . "',
-                    'variant'  : '" . $offer['name'] . "',
-                }]
-            });
-        </script>
-        ");
+        return $this->gtag('view_item',
+        [
+            'event_label' => $this->Query->the_title(),
+            'items'       =>
+            [[
+                'id'       => strval($post->id),
+                'name'     => $this->Query->the_title(),
+                'brand'    => $this->Config->get('cms.site_title'),
+                'category' => 'Products > ' . $this->Query->the_categories_list($post->id, ' > '),
+                'price'    => $this->Query->the_price(),
+                'variant'  => $post->type === 'product' ? $this->Query->the_skus()[0]['name'] : '',
+            ]],
+        ]);
     }
 
     /**
@@ -175,20 +172,64 @@ class Analytics extends Model
     {
         $this->Query->rewind_posts();
 
-        $postId = $this->Query->the_post_id();
+        $post = $this->Query->the_post();
 
-        return $this->cleanWhiteSpace("
-        <script type=\"text/javascript\">
-            fbq('track', 'ViewContent',
-            {
-                content_name     : '" . $this->Query->the_title() . "',
-                content_category : 'Products > " . $this->Query->the_categories_list($postId, ' > ') . "',
-                content_ids      : ['" . $postId . "'],
-                content_type     : 'product',
-                value            : " . $this->Ecommerce->products()->offers($postId)[0]['sale_price'] . ",
-                currency         : 'AUD'
-            });
-        </script>");
+        return $this->fbq('ViewContent',
+        [
+            'content_name'     => $this->Query->the_title(),
+            'content_category' => 'Products > ' . $this->Query->the_categories_list($post->id, ' > '),
+            'content_ids'      => [strval($post->id)],
+            'content_type'     => 'product',
+            'value'            => $this->Query->the_price(),
+            'currency'         => $this->Query->the_currency(),
+        ]);
+    }
+
+    /**
+     * Track a products category view for Google.
+     *
+     * @return string
+     */
+    public function googleTrackingProductsView(): string
+    {
+        $this->Query->rewind_posts();
+
+        $listName = $this->Query->the_title();
+        $items    = [];
+
+        if ($this->Query->is_page('products'))
+        {
+            $listName = 'Products';
+        }
+        elseif ($this->Query->is_page('bundles'))
+        {
+            $listName = 'Bundles';
+        }
+        elseif ($this->Query->the_taxonomy())
+        {
+            $listName = $this->Query->the_taxonomy()->name;
+        }
+
+        foreach ($this->Query->the_posts() as $i => $post)
+        {
+            $items[] =
+            [
+                'id'            => strval($post->id),
+                'name'          => $this->Query->the_title($post->id),
+                'list_name'     => $listName,
+                'brand'         => $this->Config->get('cms.site_title'),
+                'category'      => 'Products > ' . $this->Query->the_categories_list($post->id, ' > '),
+                'variant'       => $post->type === 'product' ? $this->Query->the_skus($post->id)[0]['name'] : '',
+                'list_position' => $i + 1,
+                'quantity'      => 1,
+                'price'         =>  $this->Query->the_price($post->id),
+            ];
+        }
+
+        return $this->gtag('view_item_list',
+        [
+            'items' => $items,
+        ]);
     }
 
     /**
@@ -200,25 +241,37 @@ class Analytics extends Model
     {
         $this->Query->rewind_posts();
 
-        $name     = $this->Query->is_page('products') ? 'Products' : $this->Query->the_taxonomy()->name;
-        $category = $this->Query->is_page('products') ? 'Products' : 'Products > ' . $this->Query->the_categories_list(the_post_id(), ' > ');
-        $ids      = [];
-
-        foreach ($this->Query->the_posts() as $post)
+        $name     = $this->Query->the_title();
+        $category = 'Products';
+        $ids      = array_map(function($post)
         {
-           $ids[] = strval($post->id);
+            return strval($post->id);
+
+        }, $this->Query->the_posts());
+
+        if ($this->Query->is_page('products'))
+        {
+            $name     = 'Products';
+            $category = 'Products';
+        }
+        elseif ($this->Query->is_page('bundles'))
+        {
+            $name     = 'Bundles';
+            $category = 'Bundles';
+        }
+        elseif ($this->Query->the_taxonomy())
+        {
+            $name     = $this->Query->the_taxonomy()->name;
+            $category = 'Products > ' . $this->Query->the_categories_list(the_post_id(), ' > ');
         }
 
-        return $this->cleanWhiteSpace("
-        <script type=\"text/javascript\">
-            fbq('trackCustom', 'ViewCategory',
-            {
-                content_name     : '" . $name . "',
-                content_category : '" . $category . "',
-                content_ids      : ['" . implode('\',\'', $ids) . "'],
-                content_type     : 'product'
-            });
-        </script>");
+        return $this->fbq('ViewContent',
+        [
+            'content_name'     => $name,
+            'content_category' => $category,
+            'content_ids'      => $ids,
+            'content_type'     => 'product',
+        ]);
     }
 
     /**
@@ -230,32 +283,27 @@ class Analytics extends Model
     {
         $items    = [];
         $cart     = $this->Ecommerce->cart()->items();
-        $subtotal = $this->Ecommerce->cart()->subtotal();
-        $shipping = $this->Ecommerce->cart()->shippingCost();
 
         foreach($cart as $item)
         {
             $items[] =
             [
-                'id'       => strval($item['product']),
-                'name'     => $this->Query->the_title($item['product']),
+                'id'       => strval($item->product_id),
+                'name'     => $this->Query->the_title($item->product_id),
                 'brand'    => $this->Config->get('cms.site_title'),
-                'category' => 'Products > ' . $this->Query->the_categories_list($item['product'], ' > '),
-                'price'    => strval($item['offer']['sale_price']),
-                'quantity' => $item['quantity'],
-                'variant'  => $item['offer']['name'],
+                'category' => 'Products > ' . $this->Query->the_categories_list($item->product_id, ' > '),
+                'price'    => $item->getSinglePrice(),
+                'quantity' => $item->quantity,
+                'variant'  => $item->variant,
             ];
         }
 
-        return $this->cleanWhiteSpace("
-        <script type=\"text/javascript\">
-            gtag('event', 'begin_checkout',
-            {
-                'value'    : '" . number_format(($subtotal + $shipping), 2, '.', '') . "',
-                'currency' : 'AUD',
-                'items'    : " . str_replace('\u003E', '>', json_encode($items)) . '
-            });
-        </script>');
+        return $this->gtag('begin_checkout',
+        [
+            'value'    => $this->Ecommerce->cart()->total(),
+            'currency' => $this->Ecommerce->cart()->currency(),
+            'items'    => $items,
+        ]);
     }
 
     /**
@@ -265,114 +313,107 @@ class Analytics extends Model
      */
     public function facebookTrackingStartCheckout(): string
     {
-        $cart     = $this->Ecommerce->cart()->items();
-        $subtotal = $this->Ecommerce->cart()->subtotal();
-        $shipping = $this->Ecommerce->cart()->shippingCost();
-        $count    = 0;
-        $items    = [];
+        $count = 0;
+        $items = [];
 
-        foreach($cart as $item)
+        foreach($this->Ecommerce->cart()->items() as $item)
         {
-            $count += intval($item['quantity']);
+            $count += intval($item->quantity);
             $items[] =
             [
-                'id'         => strval($item['product']),
-                'quantity'   => $item['quantity'],
-                'item_price' => strval($item['offer']['sale_price']),
+                'id'         => strval($item->product_id),
+                'quantity'   => $item->quantity,
+                'value'      => $item->getSinglePrice(),
             ];
         }
 
-        return $this->cleanWhiteSpace("
-        <script type=\"text/javascript\">
-            fbq('track', 'InitiateCheckout',
-            {
-                num_items     : " . $count . ',
-                contents      : ' . json_encode($items) . ",
-                content_type  : 'product',
-                value         : " . number_format(($subtotal + $shipping), 2, '.', '') . ",
-                currency      : 'AUD'
-            });
-        </script>");
+        return $this->fbq('InitiateCheckout',
+        [
+            'num_items'    => $count,
+            'contents'     => $items,
+            'content_type' => 'product',
+            'value'        => $this->Ecommerce->cart()->total(true),
+            'currency'     => $this->Ecommerce->cart()->currency(),
+        ]);
     }
 
     /**
      * Track a checkout complete for Google Analytics.
      *
-     * @param  array  $order Transaction row from the database
+     * @param  kanso\cms\ecommerce\ShoppingCart $cart          Shopping cart object
+     * @param  string                           $transactionId Transaction id
      * @return string
      */
-    public function googleTrackCheckoutComplete(array $order): string
+    public function googleTrackCheckoutComplete(ShoppingCart $cart, string $transactionId): string
     {
         $items = [];
 
-        foreach($order['items'] as $item)
+        foreach($cart->items() as $i => $item)
         {
             $items[] =
             [
-                'id'       => strval($item['product_id']),
-                'name'     => $item['name'],
-                'brand'    => $this->Config->get('cms.site_title'),
-                'category' => 'Products > ' . $this->Query->the_categories_list($item['product_id'], ' > '),
-                'price'    => strval($item['price']),
-                'quantity' => $item['quantity'],
-                'variant'  => $item['offer'],
+                'id'            => strval($item->product_id),
+                'name'          => $item->name,
+                'list_name'     => 'Shopping Cart',
+                'list_position' => $i + 1,
+                'brand'         => $this->Config->get('cms.site_title'),
+                'category'      => 'Products > ' . $this->Query->the_categories_list($item->product_id, ' > '),
+                'price'         => $item->getSinglePrice(),
+                'quantity'      => $item->quantity,
+                'variant'       => $item->variant,
             ];
         }
 
-        return $this->cleanWhiteSpace("
-        <script type=\"text/javascript\">
-            gtag('event', 'purchase',
-            {
-                'transaction_id' : '" . $order['bt_transaction_id'] . "',
-                'value'          : " . $order['total'] . ",
-                'currency'       : 'AUD',
-                'tax'            : " . number_format((10 / 100) * $order['total'], 2, '.', '') . ",
-                'shipping'       : " . number_format($order['shipping_costs'], 2, '.', '') . ",
-                'items'          : " . str_replace('\u003E', '>', json_encode($items)) . "
-            });
-        </script>
-        <script>
-            gtag('event', 'conversion',
-            {
-                'send_to'  : '" . $this->googleAwCvId . "',
-                'value'    : " . $order['total'] . ",
-                'currency' : 'AUD',
-                'transaction_id' : '" . $order['bt_transaction_id'] . "'
-            });
-        </script>");
+        $purchase =
+        [
+            'transaction_id' => $transactionId,
+            'value'          => $cart->total(),
+            'tax'            => $cart->tax(),
+            'shipping'       => $cart->shippingCost(),
+            'items'          => $items,
+        ];
+
+        $conversion =
+        [
+            'send_to'        => $this->googleAwCvId,
+            'value'          => $cart->total(),
+            'currency'       => $cart->currency(),
+            'transaction_id' => $transactionId,
+        ];
+
+        return $this->gtag('purchase', $purchase) . PHP_EOL . $this->gtag('conversion', $conversion);
     }
 
     /**
      * Track a checkout complete for Facebook.
      *
-     * @param  array  $order Transaction row from the database
+     * @param  kanso\cms\ecommerce\ShoppingCart $cart Shopping cart object
+     *                                                string                           $transactionId Transaction id
      * @return string
      */
-    public function facebookTrackCheckoutComplete(array $order): string
+    public function facebookTrackCheckoutComplete(ShoppingCart $cart, string $transactionId): string
     {
         $contents = [];
 
-        foreach($order['items'] as $i => $item)
+        foreach($cart->items() as $item)
         {
             $contents[] =
             [
-                'id'         => strval($item['product_id']),
-                'quantity'   => $item['quantity'],
-                'item_price' => floatval($item['price']),
+                'id'         => strval($item->product_id),
+                'quantity'   => $item->quantity,
+                'item_price' => Money::format($item->getSinglePrice(), $cart->currency()),
             ];
         }
 
-        return $this->cleanWhiteSpace("
-        <script type=\"text/javascript\">
-            fbq('track', 'Purchase',
-            {
-                contents     : " . json_encode($contents) . ",
-                content_type : 'product',
-                value        : " . $order['total'] . ",
-                currency     : 'AUD'
-            });
-        </script>
-        ");
+        $purchase =
+        [
+            'contents'     => $contents,
+            'content_type' => 'product',
+            'value'        => $cart->total(true),
+            'currency'     => $cart->currency(),
+        ];
+
+        return $this->fbq('Purchase', $purchase);
     }
 
     /**
@@ -416,6 +457,38 @@ class Analytics extends Model
         {
             return '{}';
         }
+    }
+
+    /**
+     * Format HTML nicely.
+     *
+     * @param  string $html HTML to format
+     * @return string
+     */
+    private function fbq(string $event, array $eventObj): string
+    {
+        $script  = '<script type="text/javascript">' . PHP_EOL;
+        $script .= 'fbq(\'track\', \'' . $event . '\',  ' . PHP_EOL;
+        $script .= str_replace('\u003E', '>', json_encode($eventObj, JSON_PRETTY_PRINT)) . ');' . PHP_EOL;
+        $script .= '</script>' . PHP_EOL;
+
+        return $script;
+    }
+
+    /**
+     * Format HTML nicely.
+     *
+     * @param  string $html HTML to format
+     * @return string
+     */
+    private function gtag(string $event, array $eventObj): string
+    {
+        $script  = '<script type="text/javascript">' . PHP_EOL;
+        $script .= 'gtag(\'event\', \'' . $event . '\',  ' . PHP_EOL;
+        $script .= str_replace('\u003E', '>', json_encode($eventObj, JSON_PRETTY_PRINT)) . ');' . PHP_EOL;
+        $script .= '</script>' . PHP_EOL;
+
+        return $script;
     }
 
     /**

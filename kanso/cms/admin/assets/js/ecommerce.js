@@ -715,7 +715,7 @@
 
         for (var i = 0; i < products.length; i++)
         {
-            var li = Helper.$('li[data-offer-id="' + products[i].dataset.offerId + '"][data-product-id="' + products[i].dataset.productId + '"]', modal);
+            var li = Helper.$('li[data-sku="' + products[i].dataset.sku + '"][data-product-id="' + products[i].dataset.productId + '"]', modal);
 
             li.dataset.quantity = products[i].dataset.quantity;
             Helper.addClass(li, 'active');
@@ -787,7 +787,7 @@
                 products.push({
                     quantity    : li.dataset.quantity,
                     product_id  : li.dataset.productId,
-                    offer_id    : li.dataset.offerId,
+                    sku    : li.dataset.sku,
                     image       : li.dataset.productImage,
                     title       : li.dataset.productTitle,
                     offer_name  : li.dataset.productOffer,
@@ -869,13 +869,13 @@
                     '<span class="glyph-icon glyph-icon-minus"></span>',
                 '</button>',
                 '<input type="hidden" class="hidden" name="bundle_product' + input_suffix + '_ids[]" value="' + product['product_id'] + '">',
-                '<input type="hidden" class="hidden" name="bundle_product_offer' + input_suffix + '_ids[]" value="' + product['offer_id'] + '">',
+                '<input type="hidden" class="hidden" name="bundle_product_offer' + input_suffix + '_ids[]" value="' + product['sku'] + '">',
             '</td>'
         ].join('');
 
         row.dataset.quantity         = product['quantity'];
         row.dataset.productId        = product['product_id'];
-        row.dataset.offerId          = product['offer_id'];
+        row.dataset.sku          = product['sku'];
         row.dataset.productTitle     = product['title'];
         row.dataset.productOffer     = product['offer_name'];
         row.dataset.productPrice     = product['price'];

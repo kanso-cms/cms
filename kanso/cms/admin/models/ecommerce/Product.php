@@ -26,10 +26,10 @@ class Product extends Model
 	 */
 	public function parse(array $data): array
     {
-    	$offers    = [];
-        $offerKeys =
+    	$skus    = [];
+        $skuKeys =
         [
-            'product_offer_X_id'            => 'offer_id',
+            'product_offer_X_id'            => 'sku',
             'product_offer_X_name'          => 'name',
             'product_offer_X_price'         => 'price',
             'product_offer_X_sale_price'    => 'sale_price',
@@ -41,39 +41,39 @@ class Product extends Model
 
         for ($i=1; $i <= 20; $i++)
         {
-            $offer = [];
+            $sku = [];
 
-            foreach ($offerKeys as $postKey => $offerKey)
+            foreach ($skuKeys as $postKey => $skuKey)
             {
                 $postKey = str_replace('X', strval($i), $postKey);
 
                 if (isset($data[$postKey]))
                 {
-                    if ($offerKey === 'sale_price' || $offerKey === 'price')
+                    if ($skuKey === 'sale_price' || $skuKey === 'price')
                     {
-                        $offer[$offerKey] = floatval($data[$postKey]);
+                        $sku[$skuKey] = floatval($data[$postKey]);
                     }
-                    elseif ($offerKey === 'weight')
+                    elseif ($skuKey === 'weight')
                     {
-                        $offer[$offerKey] = intval($data[$postKey]);
+                        $sku[$skuKey] = intval($data[$postKey]);
                     }
-                    elseif ($offerKey === 'instock' || $offerKey === 'free_shipping')
+                    elseif ($skuKey === 'instock' || $skuKey === 'free_shipping')
                     {
-                        $offer[$offerKey] = Str::bool($data[$postKey]);
+                        $sku[$skuKey] = Str::bool($data[$postKey]);
                     }
                     else
                     {
-                        $offer[$offerKey] = trim($data[$postKey]);
+                        $sku[$skuKey] = trim($data[$postKey]);
                     }
                 }
             }
 
-            if (!empty($offer))
+            if (!empty($sku))
             {
-                $offers[] = $offer;
+                $skus[] = $sku;
             }
         }
 
-        return $offers;
+        return $skus;
     }
 }

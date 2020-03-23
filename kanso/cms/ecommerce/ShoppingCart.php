@@ -217,8 +217,10 @@ class ShoppingCart
     /**
      * Add an item to the cart.
      *
-     * @param  string                                   $name         Name of the item
-     * @param  string                                   $sku          Item SKU
+     * @param  string                                   $name         Name of the item (e.g "Black T shirt")
+     * @param  string                                   $variant      Variant description (e.g "Large")
+     * @param  int                                      $productId    The product unique id (e.g 13)
+     * @param  string                                   $sku          Item SKU ID (e.g "119203")
      * @param  int                                      $qty          Item Quantity
      * @param  float                                    $price        Item price (of 1)
      * @param  int                                      $weight       Item weight (optional) (default 0)
@@ -226,16 +228,18 @@ class ShoppingCart
      * @param  array                                    $options      Array of options (optional) (default)
      * @return \kanso\cms\ecommerce\cart\items\CartItem
      */
-    public function add(string $name, string $sku, int $qty, float $price, int $weight = 0, bool $freeShipping = false, array $options = []): CartItem
+    public function add(string $name, string $variant, int $productId, string $sku, int $qty, float $price, int $weight = 0, bool $freeShipping = false, array $options = []): CartItem
     {
         return $this->addItem(new CartItem(
         [
-            'name'     => $name,
-            'sku'      => $sku,
-            'quantity' => $qty,
-            'price'    => $price,
-            'tax'      => $this->options['tax'],
-            'options'  => $options,
+            'name'        => $name,
+            'variant'     => $variant,
+            'product_id'  => $productId,
+            'sku'         => $sku,
+            'quantity'    => $qty,
+            'price'       => $price,
+            'tax'         => $this->options['tax'],
+            'options'     => $options,
         ]));
     }
 
@@ -266,12 +270,14 @@ class ShoppingCart
 
             $cartItems[] = new CartItem(
             [
-                'name'     => $item['name'],
-                'sku'      => $item['sku'],
-                'quantity' => $item['quantity'],
-                'price'    => $item['price'],
-                'tax'      => $this->options['tax'],
-                'options'  => $item['options'],
+                'name'       => $item['name'],
+                'variant'    => $item['variant'],
+                'product_id' => $item['product_id'],
+                'sku'        => $item['sku'],
+                'quantity'   => $item['quantity'],
+                'price'      => $item['price'],
+                'tax'        => $this->options['tax'],
+                'options'    => $item['options'] ?? [],
             ]);
         }
 
@@ -313,12 +319,14 @@ class ShoppingCart
             }
             $cartItemsIn[] = new CartItem(
             [
-                'name'     => $item['name'],
-                'sku'      => $item['sku'],
-                'quantity' => $item['quantity'],
-                'price'    => $item['price'],
-                'tax'      => $this->options['tax'],
-                'options'  => $item['options'],
+                'name'       => $item['name'],
+                'variant'    => $item['variant'],
+                'product_id' => $item['product_id'],
+                'sku'        => $item['sku'],
+                'quantity'   => $item['quantity'],
+                'price'      => $item['price'],
+                'tax'        => $this->options['tax'],
+                'options'    => $item['options'] ?? [],
             ]);
         }
 
@@ -335,12 +343,14 @@ class ShoppingCart
 
             $cartItemsOut[] = new CartItem(
             [
-                'name'     => $item['name'],
-                'sku'      => $item['sku'],
-                'quantity' => $item['quantity'],
-                'options'  => $item['options'],
-                'price'    => 0.00,
-                'tax'      => 0.00,
+                'name'       => $item['name'],
+                'variant'    => $item['variant'],
+                'product_id' => $item['product_id'],
+                'sku'        => $item['sku'],
+                'quantity'   => $item['quantity'],
+                'options'    => $item['options'] ?? [],
+                'price'      => 0.00,
+                'tax'        => 0.00,
             ]);
         }
 
@@ -612,9 +622,9 @@ class ShoppingCart
     /**
      * Update an item in the cart.
      *
-     * @param  string                                                                                                                                        $id    Item id
-     * @param  string                                                                                                                                        $key   Property name to update
-     * @param  mixed                                                                                                                                         $value The value to set
+     * @param  string                                                                                                                                           $id    Item id
+     * @param  string                                                                                                                                           $key   Property name to update
+     * @param  mixed                                                                                                                                            $value The value to set
      * @return ?\kanso\cms\ecommerce\cart\items\CartBundleBogo|?\kanso\cms\ecommerce\cart\items\CartBundleGroup|?\kanso\cms\ecommerce\cart\items\CartItem|false
      */
     public function update(string $id, string $key, $value)
@@ -933,6 +943,16 @@ class ShoppingCart
     }
 
     /**
+     * Returns the currency.
+     *
+     * @return string
+     */
+    public function currency(): string
+    {
+        return $this->options['currency'];
+    }
+
+    /**
      * Adds a cart item to the cart.
      *
      * @param  \kanso\cms\ecommerce\cart\items\CartItem|\kanso\cms\ecommerce\cart\items\CartFee|\kanso\cms\ecommerce\cart\items\CartDiscount|\kanso\cms\ecommerce\cart\items\CartBundleGroup|\kanso\cms\ecommerce\cart\items\CartBundleBogo $item Item to add to cart
@@ -1013,7 +1033,7 @@ class ShoppingCart
     /**
      * Save the cart state.
      */
-    private function save(): void
+    public function save(): void
     {
         if (!$this->reading)
         {

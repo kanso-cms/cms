@@ -132,39 +132,39 @@
 					    <button class="btn js-add-product-offer" type="button">Add offer +</button>
 				        <div class="col-12 col-md-5 roof-xs">
 				        	<ul class="tab-nav tab-border js-tab-nav">
-						    	<?php if (isset($post_meta['offers'])) : foreach ($post_meta['offers'] as $i => $offer) : ?>
+						    	<?php if (isset($post_meta['skus'])) : foreach ($post_meta['skus'] as $i => $sku) : ?>
 					            <li><a href="#" <?php echo $i === 0 ? 'class="active"' : ''; ?> data-tab="offer-<?php echo $i + 1; ?>">Offer <?php echo $i + 1; ?></a></li>
 					        	<?php endforeach; else : ?>
 					        	<li><a href="#" data-tab="offer-1" class="active">Offer 1</a></li>
 					        	<?php endif; ?>
 					        </ul>
 					        <div class="tab-panels-wrap js-tab-panels-wrap">
-				        		<?php if (isset($post_meta['offers'])) : foreach ($post_meta['offers'] as $i => $offer) : ?>
+				        		<?php if (isset($post_meta['skus'])) : foreach ($post_meta['skus'] as $i => $sku) : ?>
 						        <div class="tab-panel <?php echo $i === 0 ? 'active' : ''; ?>" data-tab-panel="offer-<?php echo $i + 1; ?>">
 					        		<div class="form-field row floor-xs">
-										<label>SKU</label><input type="text" name="product_offer_<?php echo $i + 1; ?>_id" value="<?php echo $offer['offer_id']; ?>" autocomplete="off" placeholder="SKU001">
+										<label>SKU</label><input type="text" name="product_offer_<?php echo $i + 1; ?>_id" value="<?php echo $sku['sku']; ?>" autocomplete="off" placeholder="SKU001">
 									</div>
 									<div class="form-field row floor-xs">
-										<label>Name</label><input type="text" name="product_offer_<?php echo $i + 1; ?>_name" value="<?php echo $offer['name']; ?>" autocomplete="off" placeholder="XXS">
+										<label>Name</label><input type="text" name="product_offer_<?php echo $i + 1; ?>_name" value="<?php echo $sku['name']; ?>" autocomplete="off" placeholder="XXS">
 									</div>
 									<div class="form-field row floor-xs">
-										<label>Price</label><input type="text" name="product_offer_<?php echo $i + 1; ?>_price" value="<?php echo admin_format_price($offer['price']); ?>" autocomplete="off" placeholder="19.95">
+										<label>Price</label><input type="text" name="product_offer_<?php echo $i + 1; ?>_price" value="<?php echo admin_format_price($sku['price']); ?>" autocomplete="off" placeholder="19.95">
 									</div>
 									<div class="form-field row floor-xs">
-										<label>Sale Price</label><input type="text" name="product_offer_<?php echo $i + 1; ?>_sale_price" value="<?php echo admin_format_price($offer['sale_price']); ?>" autocomplete="off" placeholder="9.95">
+										<label>Sale Price</label><input type="text" name="product_offer_<?php echo $i + 1; ?>_sale_price" value="<?php echo admin_format_price($sku['sale_price']); ?>" autocomplete="off" placeholder="9.95">
 									</div>
 									<div class="form-field row floor-xs">
-										<label>Weight (g)</label><input type="text" name="product_offer_<?php echo $i + 1; ?>_weight" value="<?php echo $offer['weight']; ?>" autocomplete="off" placeholder="500">
+										<label>Weight (g)</label><input type="text" name="product_offer_<?php echo $i + 1; ?>_weight" value="<?php echo $sku['weight']; ?>" autocomplete="off" placeholder="500">
 									</div>
 									<div class="form-field row floor-xs">
 							            <span class="checkbox checkbox-primary">
-							                <input type="checkbox" name="product_offer_<?php echo $i + 1; ?>_free_shipping" id="product_offer_<?php echo $i + 1; ?>_free_shipping" <?php echo $offer['free_shipping'] === true ? 'checked' : ''; ?>>
+							                <input type="checkbox" name="product_offer_<?php echo $i + 1; ?>_free_shipping" id="product_offer_<?php echo $i + 1; ?>_free_shipping" <?php echo $sku['free_shipping'] === true ? 'checked' : ''; ?>>
 							                <label for="product_offer_<?php echo $i + 1; ?>_free_shipping">Free Shipping</label>
 							            </span>
 							        </div>
 									<div class="form-field row floor-xs">
 							            <span class="checkbox checkbox-primary">
-							                <input type="checkbox" name="product_offer_<?php echo $i + 1; ?>_instock" id="product_offer_<?php echo $i + 1; ?>_instock" <?php echo $offer['instock'] === true ? 'checked' : ''; ?>>
+							                <input type="checkbox" name="product_offer_<?php echo $i + 1; ?>_instock" id="product_offer_<?php echo $i + 1; ?>_instock" <?php echo $sku['instock'] === true ? 'checked' : ''; ?>>
 							                <label for="product_offer_<?php echo $i + 1; ?>_instock">In Stock</label>
 							            </span>
 							        </div>

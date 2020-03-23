@@ -40,7 +40,7 @@ class Invoice extends BaseModel
             return false;
         }
 
-        $transaction['items'] = unserialize($transaction['items']);
+        $transaction['cart'] = unserialize($transaction['items']);
 
         $customer = $sql->SELECT('*')->FROM('users')->WHERE('id', '=', $transaction['user_id'])->ROW();
 

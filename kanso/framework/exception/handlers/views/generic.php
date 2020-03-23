@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>500 Internal Server Error</title>
+	<title><?php echo $code . ' ' . $message; ?></title>
 	<?php include 'style.css.php'; ?>
 </head>
 	<body>
 		<div class="interstitial-wrapper">
 			<div class="icon" alt="" style=""></div>
 			<div class="content">
-				<h1>500 Internal Server Error</h1>
+				<h1><?php echo $code . ' ' . $message; ?></h1>
 				<div class="error-desc">
 					<p>
-						<span class="uppercase">[500]</span> Aw, snap! An error has occurred while processing your request.
+						<span class="uppercase">[<?php echo $code; ?>]</span> <?php echo $description; ?>
 					</p>
 				</div>
 				<div class="row">

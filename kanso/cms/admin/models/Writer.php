@@ -342,7 +342,7 @@ class Writer extends BaseModel
         {
             $product = new product;
 
-            $response['offers'] = $product->parse($this->post);
+            $response['skus'] = $product->parse($this->post);
         }
 
         return $response;

@@ -8,16 +8,18 @@
 namespace kanso\cms\application\services;
 
 use kanso\cms\ecommerce\BrainTree;
-use kanso\cms\ecommerce\Bundles;
 use kanso\cms\ecommerce\cart\Shipping;
 use kanso\cms\ecommerce\Checkout;
 use kanso\cms\ecommerce\Coupons;
 use kanso\cms\ecommerce\Ecommerce;
 use kanso\cms\ecommerce\helpers\Helpers;
-use kanso\cms\ecommerce\Products;
 use kanso\cms\ecommerce\Reviews;
 use kanso\cms\ecommerce\Rewards;
 use kanso\cms\ecommerce\ShoppingCart;
+use kanso\cms\ecommerce\managers\ProductManager;
+use kanso\cms\ecommerce\managers\BundleManager;
+use kanso\cms\ecommerce\providers\ProductProvider;
+use kanso\cms\ecommerce\providers\BundleProvider;
 use kanso\framework\application\services\Service;
 
 /**
@@ -32,8 +34,60 @@ class EcommerceService extends Service
 	 */
 	public function register(): void
 	{
-		$this->container->setInstance('Ecommerce', new Ecommerce($this->getBrainTree(), $this->getCheckout(), $this->getProducts(), $this->getBundles(), $this->getShoppingCart(), $this->getRewards(), $this->getCoupons(), $this->getReviews(), $this->getHelpers()));
+		$this->container->setInstance('Ecommerce', new Ecommerce($this->getBrainTree(), $this->getCheckout(), $this->getShoppingCart(), $this->getRewards(), $this->getCoupons(), $this->getReviews(), $this->getHelpers()));
+
+        $this->registerProviders();
+
+        $this->registerManagers();
 	}
+
+    /**
+     * Registers the provider managers.
+     */
+    private function registerManagers(): void
+    {
+        $this->container->singleton('ProductManager', function($container)
+        {
+            return new ProductManager($container->Database->connection()->builder(), $container->ProductProvider);
+        });
+
+        $this->container->singleton('BundleManager', function($container)
+        {
+            return new BundleManager($container->Database->connection()->builder(), $container->BundleProvider);
+        });
+    }
+
+    /**
+     * Registers the wrapper providers.
+     */
+    private function registerProviders(): void
+    {
+        $this->container->singleton('ProductProvider', function($container)
+        {
+            return new ProductProvider(
+                $container->Database->connection()->builder(),
+                $container->Config,
+                $container->TagProvider,
+                $container->CategoryProvider,
+                $container->MediaProvider,
+                $container->CommentProvider,
+                $container->UserProvider
+            );
+        });
+
+        $this->container->singleton('BundleProvider', function($container)
+        {
+            return new BundleProvider(
+                $container->Database->connection()->builder(),
+                $container->Config,
+                $container->TagProvider,
+                $container->CategoryProvider,
+                $container->MediaProvider,
+                $container->CommentProvider,
+                $container->UserProvider
+            );
+        });
+    }
 
     /**
      * Create and return new checkout utility instance.

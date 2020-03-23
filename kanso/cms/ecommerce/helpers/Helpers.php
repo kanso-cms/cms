@@ -19,6 +19,16 @@ use kanso\framework\utility\Str;
 class Helpers extends Helper
 {
     /**
+     * Returns the currency.
+     *
+     * @return string
+     */
+    public function the_currency(): string
+    {
+        return $this->container->Ecommerce->cart()->currency();
+    }
+
+    /**
      * Checks if the cart is empty.
      *
      * @return bool
@@ -161,7 +171,7 @@ class Helpers extends Helper
 
         foreach ($this->cart_items() as $item)
         {
-            $total += ($this->the_price($item->options['product_id'], $item->options['offer_id']) * $item->quantity);
+            $total += ($this->the_price($item->product_id, $item->sku) * $item->quantity);
         }
 
         return !$format ? Money::float($total) : Money::format($total);
@@ -278,26 +288,26 @@ class Helpers extends Helper
     	{
     		if ($sku !== '')
     		{
-    			foreach ($post->meta['offers'] as $offer)
+    			foreach ($post->meta['skus'] as $sku)
     			{
-    				if ($offer['offer_id'] === $sku)
+    				if ($sku['sku'] === $sku)
     				{
-    					if ($offer['sale_price'] < $offer['price'])
+    					if ($sku['sale_price'] < $sku['price'])
     					{
-    						return Money::float($offer['sale_price']);
+    						return Money::float($sku['sale_price']);
     					}
 
-    					return Money::float($offer['price']);
+    					return Money::float($sku['price']);
     				}
     			}
     		}
 
-    		if ($post->meta['offers'][0]['sale_price'] < $post->meta['offers'][0]['price'])
+    		if ($post->meta['skus'][0]['sale_price'] < $post->meta['skus'][0]['price'])
 			{
-				return Money::float($post->meta['offers'][0]['sale_price']);
+				return Money::float($post->meta['skus'][0]['sale_price']);
 			}
 
-			return Money::float($post->meta['offers'][0]['price']);
+			return Money::float($post->meta['skus'][0]['price']);
     	}
     	elseif ($post->type === 'bundle')
     	{
@@ -313,7 +323,7 @@ class Helpers extends Helper
 
 			foreach ($entries as $entry)
 			{
-				$total += ($this->the_price($entry['product_id'], $entry['offer_id']) * $entry['quantity']);
+				$total += ($this->the_price($entry['product_id'], $entry['sku']) * $entry['quantity']);
 			}
 
 			if (isset($config['discount']) && $config['discount'] > 0)
@@ -352,16 +362,16 @@ class Helpers extends Helper
     	{
     		if ($sku !== '')
     		{
-    			foreach ($post->meta['offers'] as $offer)
+    			foreach ($post->meta['skus'] as $sku)
     			{
-    				if ($offer['offer_id'] === $sku)
+    				if ($sku['sku'] === $sku)
     				{
-    					return Money::float($offer['price']);
+    					return Money::float($sku['price']);
     				}
     			}
     		}
 
-			return Money::float($post->meta['offers'][0]['price']);
+			return Money::float($post->meta['skus'][0]['price']);
     	}
     	elseif ($post->type === 'bundle')
     	{
@@ -373,12 +383,12 @@ class Helpers extends Helper
     		{
     			foreach ($config['products_in'] as $entry)
     			{
-					$price += ($this->the_price($entry['product_id'], $entry['offer_id']) * $entry['quantity']);
+					$price += ($this->the_price($entry['product_id'], $entry['sku']) * $entry['quantity']);
     			}
 
                 foreach ($config['products_out'] as $entry)
                 {
-                    $price += ($this->the_price($entry['product_id'], $entry['offer_id']) * $entry['quantity']);
+                    $price += ($this->the_price($entry['product_id'], $entry['sku']) * $entry['quantity']);
                 }
 
     			return Money::float($price);
@@ -391,7 +401,7 @@ class Helpers extends Helper
 					$entry = array_values($entry)[0];
 				}
 
-				$price += ($this->the_price($entry['product_id'], $entry['offer_id']) * $entry['quantity']);
+				$price += ($this->the_price($entry['product_id'], $entry['sku']) * $entry['quantity']);
 			}
 
 	        return Money::float($price);
@@ -420,24 +430,24 @@ class Helpers extends Helper
     	{
     		if ($sku !== '')
     		{
-    			foreach ($post->meta['offers'] as $offer)
+    			foreach ($post->meta['skus'] as $sku)
 	    		{
-	    			if ($offer['offer_id'] === $sku)
+	    			if ($sku['sku'] === $sku)
 	    			{
-	    				return Str::bool($offer['instock']);
+	    				return Str::bool($sku['instock']);
 	    			}
 	    		}
     		}
 
-    		return Str::bool($post->meta['offers'][0]['instock']);
+    		return Str::bool($post->meta['skus'][0]['instock']);
     	}
     	elseif ($post->type === 'bundle')
     	{
     		foreach ($this->the_bundle_products($post_id) as $product)
     		{
-    			foreach ($product->meta['offers'] as $offer)
+    			foreach ($product->meta['skus'] as $sku)
                 {
-                    if (!Str::bool($offer['instock']))
+                    if (!Str::bool($sku['instock']))
                     {
                         return false;
                     }
@@ -467,24 +477,24 @@ class Helpers extends Helper
     	{
     		if ($sku !== '')
     		{
-    			foreach ($post->meta['offers'] as $offer)
+    			foreach ($post->meta['skus'] as $sku)
 	    		{
-	    			if ($offer['offer_id'] === $sku)
+	    			if ($sku['sku'] === $sku)
 	    			{
-	    				return Str::bool($offer['free_shipping']);
+	    				return Str::bool($sku['free_shipping']);
 	    			}
 	    		}
     		}
 
-    		return Str::bool($post->meta['offers'][0]['free_shipping']);
+    		return Str::bool($post->meta['skus'][0]['free_shipping']);
     	}
     	elseif ($post->type === 'bundle')
     	{
     		foreach ($this->the_bundle_products($post_id) as $product)
     		{
-                foreach ($product->meta['offers'] as $offer)
+                foreach ($product->meta['skus'] as $sku)
                 {
-                    if (!Str::bool($offer['free_shipping']))
+                    if (!Str::bool($sku['free_shipping']))
                     {
                         return false;
                     }
@@ -505,12 +515,30 @@ class Helpers extends Helper
     {
     	$post = !$post_id ? $this->parent->post : $this->container->PostManager->byId($post_id);
 
-        if (!$post || $post->type !== 'product')
+        if (!$post)
         {
-        	return [];
+            return [];
         }
 
-    	return $post->meta['offers'];
+        return $this->container->ProductProvider->skus($post->id);
+    }
+
+    /**
+     * Get a product's sku by SKU or the first SKU
+     *
+     * @param  int|null $post_id Post id or null for current post (optional) (Default NULL)
+     * @return array|false
+     */
+    public function the_sku(int $post_id = null, string $sku = '')
+    {
+        $post = !$post_id ? $this->parent->post : $this->container->PostManager->byId($post_id);
+
+        if (!$post)
+        {
+            return [];
+        }
+
+        return $this->container->ProductProvider->sku($post->id, $sku);
     }
 
     /**
@@ -521,9 +549,9 @@ class Helpers extends Helper
      */
     public function the_bundle_products(int $post_id = null): array
     {
-    	$post = !$post_id ? $this->parent->post : $this->container->PostManager->byId($post_id);
+    	$post = !$post_id ? $this->parent->post : $this->container->BundleManager->byId($post_id);
 
-        if (!$post || $post->type !== 'bundle')
+        if (!$post)
         {
         	return [];
         }
@@ -538,12 +566,12 @@ class Helpers extends Helper
 			{
 				foreach ($entry as $product)
 				{
-					$products[] = $this->get_bundle_product($product['product_id'], $product['offer_id'], 1);
+					$products[] = $this->get_bundle_product($product['product_id'], $product['sku'], 1);
 				}
 			}
 			else
 			{
-				$products[] = $this->get_bundle_product($entry['product_id'], $entry['offer_id'], $entry['quantity']);
+				$products[] = $this->get_bundle_product($entry['product_id'], $entry['sku'], $entry['quantity']);
 			}
 		}
 
@@ -551,7 +579,7 @@ class Helpers extends Helper
 		{
 			foreach ($config['products_out'] as $entry)
 			{
-				$products[] = $this->get_bundle_product($entry['product_id'], $entry['offer_id'], $entry['quantity'], true);
+				$products[] = $this->get_bundle_product($entry['product_id'], $entry['sku'], $entry['quantity'], true);
 			}
 		}
 
@@ -586,7 +614,6 @@ class Helpers extends Helper
      */
     private function get_bundle_product(int $post_id, string $sku, int $quantity, bool $isFree = false)
     {
-
     	$post = $this->container->PostManager->byId($post_id);
 
     	if ($post)
@@ -594,20 +621,20 @@ class Helpers extends Helper
 			$meta = $post->meta;
 			$post->meta = [];
 
-			foreach ($meta['offers'] as $i => $offer)
+			foreach ($meta['skus'] as $i => $_sku)
 			{
-				if ($offer['offer_id'] !== $sku)
+				if ($_sku['sku'] !== $sku)
 				{
-					unset($meta['offers'][$i]);
+					unset($meta['skus'][$i]);
 				}
 				elseif ($isFree)
 				{
-					$meta['offers'][$i]['price']      = 0.00;
-					$meta['offers'][$i]['sale_price'] = 0.00;
+					$meta['skus'][$i]['price']      = 0.00;
+					$meta['skus'][$i]['sale_price'] = 0.00;
 				}
 			}
 
-			$meta['offers'] = array_values($meta['offers']);
+			$meta['skus'] = array_values($meta['skus']);
 
             $meta['quantity'] = $quantity;
 

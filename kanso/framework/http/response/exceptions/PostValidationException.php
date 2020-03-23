@@ -10,11 +10,11 @@ namespace kanso\framework\http\response\exceptions;
 use Throwable;
 
 /**
- * 498 Exception.
+ * POST Validation Exception.
  *
  * @author Joe J. Howard
  */
-class InvalidTokenException extends RequestException
+class PostValidationException extends RequestException
 {
 	/**
 	 * Constructor.
@@ -24,8 +24,8 @@ class InvalidTokenException extends RequestException
 	 */
 	public function __construct(string $message = null, Throwable $previous = null)
 	{
-		$message = !$message ? 'The provided CSRF token was invalid.' : $message;
+		$message = empty($message) ? 'The request did not meet the validation requirements set by the server.' : $message;
 
-		parent::__construct(498, $message, $previous);
+		parent::__construct(401, $message, $previous);
 	}
 }
